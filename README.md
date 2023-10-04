@@ -13,4 +13,4 @@ In the ~scripts/ folder you can find a script (geuned for linux geouned.py for w
 * GEOUNED to convert from CAD to CSG for both MCNP and OpenMC codes.
 * GEOReverse to convert from CSG to CAD for MCNP.
 
-Detailed explanations are given in the manual located in ~docs/ folder
+Detailed descriptions of all the user options are given in the manual located in ~docs/ folder
