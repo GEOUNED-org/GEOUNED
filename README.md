@@ -9,7 +9,7 @@ Install directly from the repository:
 pip install git+https://github.com/GEOUNED-code/GEOUNED.git
 ```
 
-In the ~scripts/ folder you can find a script (geuned for linux geouned.py for windows) to call both modules:
+In the ~scripts/ folder you can find a script (geouned for linux or geouned.py for windows) to call both modules:
 * GEOUNED to convert from CAD to CSG for both MCNP and OpenMC codes.
 * GEOReverse to convert from CSG to CAD for MCNP.
 
