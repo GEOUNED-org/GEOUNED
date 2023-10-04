@@ -1,0 +1,293 @@
+ 
+  comment.  Physics models disabled.
+         1-       Input Test
+         2-       C   ______ _______  _____      _     _ __   _ _______ ______
+         3-       C  |  ____ |______ |     | ___ |     | | \  | |______ |     \
+         4-       C  |_____| |______ |_____|     |_____| |  \_| |______ |_____/
+         5-       C Version : 0.9.8.1     09/06/2023
+         6-       C FreeCAD Version : 0.20.2
+         7-       C
+         8-       C *************************************************************
+         9-       C Original Step file : inputSTEP/Torus/dobleCodo.stp
+        10-       C
+        11-       C Creation Date : 2023-06-11 18:12:14.504036
+        12-       C Solid Cells   : 4
+        13-       C Total Cells   : 7
+        14-       C Surfaces      : 21
+        15-       C Materials     : 0
+        16-       C
+        17-       C **************************************************************
+        18-       1     0      -3 -2 -1 4
+        19-                  imp:n=1.0   imp:p=1.0
+        20-       2     0      -7 5 -6 8
+        21-                  imp:n=1.0   imp:p=1.0
+        22-       3     0      -10 2 -9 11
+        23-                  imp:n=1.0   imp:p=1.0
+        24-       4     0      -12 6 1 13
+        25-                  imp:n=1.0   imp:p=1.0
+        26-       C
+        27-       C ##########################################################
+        28-       C              VOIDS
+        29-       C ##########################################################
+        30-       C
+        31-       5     0      15 17 19 -20 -18 -16 (1:3:-4:2) (-8:6:7:-5) (-11:10:-2:9) (-1:-13:
+        32-                  -6:12)
+        33-                  imp:n=1.0   imp:p=1.0
+        34-                  $Automatic Generated Void Cell. Enclosure(-2.407109860380112, 2.407109860380112, -2.0, 4.0, -1.3, 1.3)
+        35-                  $Enclosed cells : (1, 2, 3, 4)
+        36-       6     0      -21 (-15:16:-17:18:-19:20)
+        37-                  imp:n=1.0   imp:p=1.0
+        38-                  $Graveyard_in
+        39-       7     0      21
+        40-                  imp:n=0     imp:p=0
+        41-                  $Graveyard
+        42-       
+        43-       C ##########################################################
+        44-       C                  SURFACE DEFINITION
+        45-       C ##########################################################
+        46-       1      PX  -2.2100000e-16
+        47-       2      PY   2.0000000e+00
+        48-       3      TZ   0.0000000e+00  2.0000000e+00  0.0000000e+00
+        49-                   1.0000000e+00  3.0000000e-01  3.0000000e-01
+        50-       4      TZ   0.0000000e+00  2.0000000e+00  0.0000000e+00
+        51-                   1.0000000e+00  2.0000000e-01  2.0000000e-01
+        52-       5      PY  -1.0000000e+00
+        53-       6      PY   0.0000000e+00
+        54-       7      C/Y      1.000000     0.000000     0.300000
+        55-       8      C/Y      1.000000     0.000000     0.200000
+        56-       9      PY   3.0000000e+00
+        57-       10     C/Y     -1.000000     0.000000     0.300000
+        58-       11     C/Y     -1.000000     0.000000     0.200000
+        59-       12     TZ   0.0000000e+00  0.0000000e+00  0.0000000e+00
+        60-                   1.0000000e+00  3.0000000e-01  3.0000000e-01
+        61-       13     TZ   0.0000000e+00  0.0000000e+00  0.0000000e+00
+        62-                   1.0000000e+00  2.0000000e-01  2.0000000e-01
+        63-       14     P   -8.3844362e-01 -5.4498835e-01  0.0000000e+00 -1.0899767e+00
+        64-       15     PX  -2.4071099e+00
+        65-       16     PX   2.4071099e+00
+        66-       17     PY  -2.0000000e+00
+        67-       18     PY   4.0000000e+00
+        68-       19     PZ  -1.3000000e+00
+        69-       20     PZ   1.3000000e+00
+        70-       21     S   0.0000000e+00  1.0000000e+00  0.0000000e+00  4.1412726e+00
+  warning.  this surface has been replaced by a surface of type sy
+        71-       
+        72-       C
+        73-       MODE P
+        74-       VOID
+        75-       NPS 1e6
+        76-       PRDMP 2J -1
+        77-       C SDEF PAR=P X=D1 Y=D2 Z=D3
+        78-       C SI1 -2.4071099e+00 2.4071099e+00
+        79-       C SI2 -2.0000000e+00 4.0000000e+00
+        80-       C SI3 -1.3000000e+00 1.3000000e+00
+        81-       C SP1 0  1
+        82-       C SP2 0  1
+        83-       C SP3 0  1
+        84-       SDEF PAR=P NRM=-1 SUR=21 WGT=5.3878750e+01 DIR=d1
+        85-       SI1 0 1
+        86-       SP1 -21 1
+        87-       F4:P  1 2 3 4
+        88-       SD4   2.4674011e-01 1.5707963e-01 1.5707963e-01 2.4674011e-01
+
+ ***************************************************
+ * Random Number Generator  =                    1 *
+ * Random Number Seed       =       19073486328125 *
+ * Random Number Multiplier =       19073486328125 *
+ * Random Number Adder      =                    0 *
+ * Random Number Bits Used  =                   48 *
+ * Random Number Stride     =               152917 *
+ ***************************************************
+
+ 
+  warning.  no cross-section tables are called for in this problem.
+1cells                                                                                                  print table 60
+
+                               atom        gram                                            neutron    photon                           
+              cell      mat   density     density     volume       mass            pieces importance importance                        
+
+        1        1        0  0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00           0  1.0000E+00 1.0000E+00                        
+        2        2        0  0.00000E+00 0.00000E+00 1.57080E-01 0.00000E+00           1  1.0000E+00 1.0000E+00                        
+        3        3        0  0.00000E+00 0.00000E+00 1.57080E-01 0.00000E+00           1  1.0000E+00 1.0000E+00                        
+        4        4        0  0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00           0  1.0000E+00 1.0000E+00                        
+        5        5        0  0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00           0  1.0000E+00 1.0000E+00                        
+        6        6        0  0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00           0  1.0000E+00 1.0000E+00                        
+        7        7        0  0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00           0  0.0000E+00 0.0000E+00                        
+
+ total                                               3.14159E-01 0.00000E+00
+ 
+  warning.  surface       14 is not used for anything.
+
+    minimum source weight = 5.3879E+01    maximum source weight = 5.3879E+01
+
+         3 warning messages so far.
+
+         3 warning messages so far.
+1problem summary                                                                                                           
+
+      run terminated when     1000000  particle histories were done.
+
+ photon creation     tracks      weight        energy            photon loss         tracks      weight        energy
+                                 (per source particle)                                           (per source particle)
+
+ source             1000000    5.3879E+01    1.4000E+01          escape             1000000    5.3879E+01    1.4000E+01
+ nucl. interaction        0    0.            0.                  energy cutoff            0    0.            0.        
+ particle decay           0    0.            0.                  time cutoff              0    0.            0.        
+ weight window            0    0.            0.                  weight window            0    0.            0.        
+ cell importance          0    0.            0.                  cell importance          0    0.            0.        
+ weight cutoff            0    0.            0.                  weight cutoff            0    0.            0.        
+ e or t importance        0    0.            0.                  e or t importance        0    0.            0.        
+ dxtran                   0    0.            0.                  dxtran                   0    0.            0.        
+ forced collisions        0    0.            0.                  forced collisions        0    0.            0.        
+ exp. transform           0    0.            0.                  exp. transform           0    0.            0.        
+ from neutrons            0    0.            0.                  compton scatter          0    0.            0.        
+ bremsstrahlung           0    0.            0.                  capture                  0    0.            0.        
+ p-annihilation           0    0.            0.                  pair production          0    0.            0.        
+ photonuclear             0    0.            0.                  photonuclear abs         0    0.            0.        
+ electron x-rays          0    0.            0.                  loss to photofis         0    0.            0.        
+ compton fluores          0    0.            0.                                                                        
+ muon capt fluores        0    0.            0.                                                                        
+ 1st fluorescence         0    0.            0.                                                                        
+ 2nd fluorescence         0    0.            0.                                                                        
+ cerenkov                 0    0.            0.                                                                        
+ (gamma,xgamma)           0    0.            0.                                                                        
+ tabular sampling         0    0.            0.                                                                        
+ prompt photofis          0    0.            0.                                                                        
+     total          1000000    5.3879E+01    1.4000E+01              total          1000000    5.3879E+01    1.4000E+01
+
+   number of photons banked                        0        average time of (shakes)              cutoffs
+   photon tracks per source particle      1.0000E+00          escape            1.8413E-02          tco   1.0000E+33
+   photon collisions per source particle  0.0000E+00          capture           0.0000E+00          eco   1.0000E-03
+   total photon collisions                         0          capture or escape 1.8413E-02          wc1  -5.0000E-01
+                                                              any termination   1.8413E-02          wc2  -2.5000E-01
+
+ computer time so far in this run     0.00 minutes            maximum number ever in bank         0
+ computer time in mcrun               0.00 minutes            bank overflows to backup file       0
+ source particles per minute            0.0000E+00
+ random numbers generated                  6091998            most random numbers used was          33 in history      347006
+
+ range of sampled source weights = 5.3879E+01 to 5.3879E+01
+1photon   activity in each cell                                                                         print table 126
+
+                       tracks     population   collisions   collisions     number        flux        average      average
+              cell    entering                               * weight     weighted     weighted   track weight   track mfp
+                                                          (per history)    energy       energy     (relative)      (cm)
+
+        1        1       24146        16207            0    0.0000E+00   1.4000E+01   1.4000E+01   5.3879E+01   0.0000E+00
+        2        2       15729        11150            0    0.0000E+00   1.4000E+01   1.4000E+01   5.3879E+01   0.0000E+00
+        3        3       16013        11283            0    0.0000E+00   1.4000E+01   1.4000E+01   5.3879E+01   0.0000E+00
+        4        4       24206        16184            0    0.0000E+00   1.4000E+01   1.4000E+01   5.3879E+01   0.0000E+00
+        5        5      604460       528716            0    0.0000E+00   1.4000E+01   1.4000E+01   5.3879E+01   0.0000E+00
+        6        6     1528716      1000000            0    0.0000E+00   1.4000E+01   1.4000E+01   5.3879E+01   0.0000E+00
+
+           total       2213270      1583540            0    0.0000E+00
+
+1tally        4        nps =     1000000
+           tally type 4    track length estimate of particle flux.      units   1/cm**2        
+           particle(s): photons  
+
+           volumes 
+                   cell:       1            2            3            4                                            
+                         2.46740E-01  1.57080E-01  1.57080E-01  2.46740E-01
+ 
+ cell  1                                                                                                                               
+                 9.92365E-01 0.0088
+ 
+ cell  2                                                                                                                               
+                 9.89133E-01 0.0107
+ 
+ cell  3                                                                                                                               
+                 9.96124E-01 0.0106
+ 
+ cell  4                                                                                                                               
+                 1.00220E+00 0.0088
+
+
+ ===================================================================================================================================
+
+           results of 10 statistical checks for the estimated answer for the tally fluctuation chart (tfc) bin of tally        4
+
+ tfc bin     --mean--      ---------relative error---------      ----variance of the variance----      --figure of merit--     -pdf-
+ behavior    behavior      value   decrease   decrease rate      value   decrease   decrease rate       value     behavior     slope
+
+ desired      random       <0.10      yes      1/sqrt(nps)       <0.10      yes        1/nps           constant    random      >3.00
+ observed     random        0.01      yes          yes            0.00      yes         yes                                    10.00
+ passed?        yes          yes      yes          yes             yes      yes         yes                                      yes
+
+ ===================================================================================================================================
+
+
+ this tally meets the statistical criteria used to form confidence intervals: check the tally fluctuation chart to verify.
+ the results in other bins associated with this tally may not meet these statistical criteria.
+
+ ----- estimated confidence intervals:  -----
+
+ estimated asymmetric confidence interval(1,2,3 sigma): 9.8366E-01 to 1.0012E+00; 9.7490E-01 to 1.0099E+00; 9.6614E-01 to 1.0187E+00
+ estimated  symmetric confidence interval(1,2,3 sigma): 9.8361E-01 to 1.0011E+00; 9.7485E-01 to 1.0099E+00; 9.6609E-01 to 1.0186E+00
+
+1analysis of the results in the tally fluctuation chart bin (tfc) for tally 4 with nps = 1000000             print table 160
+
+
+ normed average tally per history  = 9.92365E-01          unnormed average tally per history  = 2.44856E-01
+ estimated tally relative error    = 0.0088               estimated variance of the variance  = 0.0002
+ relative error from zero tallies  = 0.0078               relative error from nonzero scores  = 0.0041
+
+ number of nonzero history tallies =       16207          efficiency for the nonzero tallies  = 0.0162
+ history number of largest  tally  =      465651          largest  unnormalized history tally = 7.45642E+01
+ (largest  tally)/(average tally)  = 3.04522E+02          (largest  tally)/(avg nonzero tally)= 4.93539E+00
+
+ (confidence interval shift)/mean  = 0.0000               shifted confidence interval center  = 9.92413E-01
+
+
+ if the largest  history score sampled so far were to occur on the next history, the tfc bin quantities would change as follows:
+
+      estimated quantities           value at nps           value at nps+1           value(nps+1)/value(nps)-1.
+
+      mean                            9.92365E-01             9.92666E-01                     0.000304
+      relative error                  8.82417E-03             8.82670E-03                     0.000287
+      variance of the variance        1.57674E-04             1.58694E-04                     0.006470
+      shifted center                  9.92413E-01             9.92413E-01                     0.000000
+      figure of merit                 0.00000E+00             0.00000E+00                     0.000000
+
+ the estimated slope of the 200 largest  tallies starting at  4.15803E+01 appears to be decreasing at least exponentially.
+ the large score tail of the empirical history score probability density function appears to have no unsampled regions.
+
+ fom = (histories/minute)*(f(x) signal-to-noise ratio)**2 = (0.000E+00)*( 1.133E-01)**2 = (0.000E+00)*(1.284E-02) = 0.000E+00
+
+1status of the statistical checks used to form confidence intervals for the mean for each tally bin
+
+
+ tally   result of statistical checks for the tfc bin (the first check not passed is listed) and error magnitude check for all bins
+
+        4   passed the 10 statistical checks for the tally fluctuation chart bin result               
+         passed all bin error check:     4 tally bins all have relative errors less than 0.10 with no zero bins
+
+
+ the 10 statistical checks are only for the tally fluctuation chart bin and do not apply to other tally bins.
+
+1tally fluctuation charts                              
+
+                            tally        4
+          nps      mean     error   vov  slope    fom
+        64000   9.7852E-01 0.0347 0.0025 10.0        
+       128000   1.0113E+00 0.0242 0.0012 10.0        
+       192000   9.9674E-01 0.0199 0.0008 10.0        
+       256000   9.9941E-01 0.0173 0.0006 10.0        
+       320000   9.9664E-01 0.0155 0.0005 10.0        
+       384000   9.9717E-01 0.0141 0.0004 10.0        
+       448000   9.9316E-01 0.0132 0.0003 10.0        
+       512000   9.8811E-01 0.0124 0.0003 10.0        
+       576000   9.9449E-01 0.0116 0.0003 10.0        
+       640000   9.9726E-01 0.0110 0.0003 10.0        
+       704000   9.9868E-01 0.0105 0.0002 10.0        
+       768000   9.9952E-01 0.0100 0.0002 10.0        
+       832000   9.9917E-01 0.0096 0.0002 10.0        
+       896000   9.9429E-01 0.0093 0.0002 10.0        
+       960000   9.9293E-01 0.0090 0.0002 10.0        
+      1000000   9.9236E-01 0.0088 0.0002 10.0        
+ tally data written to file dobleCodo.m
+
+         3 warning messages so far.
+
+
+ run terminated when     1000000  particle histories were done.

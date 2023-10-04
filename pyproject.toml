@@ -1,0 +1,26 @@
+[project]
+name = "GEOUNED"
+version = "1.0.0"
+authors = [
+  { name="Juan-Pablo Catalan", email="jpcatalan@ind.uned.es" },
+  { name="Patrick Sauvan", email="psauvan@ind.uned.es" },
+]
+maintainers = [
+  { name="Patrick Sauvan", email="psauvan@ind.uned.es" },
+  { name="Juan-Pablo Catalan", email="jpcatalan@ind.uned.es" },
+  { name="Francisco Ogando", email="fogando@ind.uned.es" },
+  { name="Javier Alguacil", email="jalguacil@ind.uned.es" },
+]
+description = "Conversion tool from CAD to CGS/CGS to CAD for Monte Carlo particle transport codes (MCNP & OpenMC)"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: GNU General Public License v3.0",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/GEOUNED-code"
+Repository = "https://github.com/GEOUNED-code/GEOUNED"
+Documentation = "https://github.com/GEOUNED-code/GEOUNED/docs"
