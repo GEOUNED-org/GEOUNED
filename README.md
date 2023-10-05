@@ -25,7 +25,7 @@ In that case you can install directly de module using:
 ```bash
 C:\Program Files\FreeCAD 0.XX\bin\python.exe -m pip install git+https://github.com/GEOUNED-code/GEOUNED.git
 ```
-with that using this python you have directly access to both FreeCAD and GEOUNED python modules.
+using this python you have directly access to both FreeCAD and GEOUNED python modules.
 
 ## How to use
 
