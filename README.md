@@ -26,7 +26,7 @@ In that case you can install directly de module using:
 C:\Program Files\FreeCAD 0.XX\bin\python.exe -m pip install git+https://github.com/GEOUNED-code/GEOUNED.git
 ```
 using this option you have directly access to both FreeCAD and GEOUNED python modules. 
-Furthermore, using this python compabilities problems between different versions of python are avoided (some dynamic libraries of FreeCAD depends on the version of python used during the built process) 
+Furthermore, using this python compabilities problems between different versions of python are avoided (some dynamic libraries of FreeCAD depends on the version of python used during the built process). 
 
 ## How to use
 
@@ -67,10 +67,10 @@ windows (forward and reverse):
 /~>python geouned.py -r file_config_name
 ```
 
-linux:
+linux (forward and reverse):
 ```bash
 /~>geouned file_config_name
 /~>geouned -r file_config_name
 ```
 
-Detailed descriptions of all options of the config files are given in the manual located in ~docs/ folder.
+Detailed descriptions of all options of the config files (forward ans reverse) are given in the manual located in ~docs/ folder.
