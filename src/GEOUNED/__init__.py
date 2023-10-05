@@ -129,7 +129,9 @@ class GEOUNED() :
              
          else:
             print('bad section name : {}'.format(section))
-                  
+
+      if self.__dict__['geometryName'] == '' :
+         self.__dict__['geometryName'] = self.__dict__['stepFile'][:-4]
       print(self.__dict__)
 
    def set(self,kwrd,value):
