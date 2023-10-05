@@ -73,6 +73,4 @@ linux:
 /~>geouned -r file_config_name
 ```
 
-
-
-Detailed descriptions of all options for the user are given in the manual located in ~docs/ folder.
+Detailed descriptions of all options of the config files are given in the manual located in ~docs/ folder.
