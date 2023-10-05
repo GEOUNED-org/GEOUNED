@@ -73,4 +73,4 @@ linux (forward and reverse):
 /~>geouned -r file_config_name
 ```
 
-Detailed descriptions of all options of the config files (forward ans reverse) are given in the manual located in ~docs/ folder.
+Detailed descriptions of all options of the config files (forward ans reverse) are given in the manual located in ~docs/ folder. Prueba 1
