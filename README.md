@@ -32,7 +32,7 @@ Furthermore, using this python compabilities problems between different versions
 
 The code is used via python scripting.  
 
-The first step is to call the python modules of both FreeCAD and GEOUNED (This can be avoided if you have installed GEOUNED as commented in the previous section and using the python distributed with FreeCAD).
+The first step is to call the python modules of both FreeCAD and GEOUNED (this can be avoided if you have installed GEOUNED as commented in the previous section and using the python distributed with FreeCAD).
 
 ```python
 import sys
