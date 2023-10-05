@@ -19,11 +19,11 @@ sys.path.append('GEO_path')
 
 the same should be made for FreeCAD libraries. 
 
-If you are using FreeCAD in windows there is included a python distribution within FreeCAD (by default located in C:\Program Files\FreeCAD =.XX\bin\).
+If you are using FreeCAD in windows there is included a python distribution within FreeCAD (by default located in C:\Program Files\FreeCAD 0.XX\bin\).
 In that case you can install directly de module using:
 
 ```bash
-C:\Program Files\FreeCAD =.XX\bin\python.exe -m pip install git+https://github.com/GEOUNED-code/GEOUNED.git
+C:\Program Files\FreeCAD 0.XX\bin\python.exe -m pip install git+https://github.com/GEOUNED-code/GEOUNED.git
 ```
 with that using this python you have directly access to both FreeCAD and GEOUNED python modules.
 
