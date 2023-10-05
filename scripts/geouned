@@ -3,9 +3,11 @@
 # Path to GEOUNED Package
 import sys
 
-sys.path.append('/opt/geouned/v1.0/')
-sys.path.append('/opt/geouned/v1.0/GEOReverse')
-sys.path.append('/opt/geouned/v1.0/GEOReverse/Modules')
+geo_path="/opt/geouned/v1.0/"
+
+sys.path.append(geo_path)
+
+# linux distribution
 sys.path.append('/usr/lib64/freecad/lib64/')
 
 import GEOUNED

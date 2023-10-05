@@ -1,18 +1,13 @@
 #!/usr/bin/python
 
 # Path to GEOUNED Package
+
+
+# only if modules are not in the PYTHONPATH or directly installed in the python distribution used
 import sys
-
-geo_path="C:\\Users\\Juan\\Documents\\work\\GEOUNED\\RepoGit\\GitHub\\GEOUNEDcode\\src"
-
-sys.path.append(geo_path)
-#sys.path.append([geo_path+"\\GEOUNED",geo_path+\GEOReverse\])
-#sys.path.append("C:\\Users\\Juan\\Documents\\work\\GEOUNED\\RepoGit\\GitHub\\GEOUNEDcode\\src\\GEOUNED")
-
-#sys.path.append(geo_path+'\\GEOReverse')
-
-# linux distributions
-# sys.path.append('/usr/lib64/freecad/lib64/')
+#geo_path="C:\\Users\\Juan\\Documents\\work\\GEOUNED\\RepoGit\\GitHub\\GEOUNEDcode\\src"
+#sys.path.append(geo_path)
+#sys.path.append('C:\\Program Files\\FreeCAD 0.19\\bin...')
 
 import GEOUNED 
 from  GEOReverse import reverse
@@ -44,7 +39,7 @@ else:
 
 
 if not runReverse :
-  GEO = GEOUNED(inifile)
+  GEO = GEOUNED.GEOUNED(inifile)
   GEO.SetOptions()
   GEO.Start()
 
