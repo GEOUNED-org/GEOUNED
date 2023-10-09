@@ -237,7 +237,11 @@ class VoidBox ():
     if voidSolidDef.level == 0:
        compSeq = voidSolidDef.getComplementary()
     else:
-       compSeq = BoolSequence(operator='AND')
+       if voidSolidDef.level == 1 and voidSolidDef.operator == 'AND':
+           compSeq = BoolSequence(operator='OR')
+       else:
+           compSeq = BoolSequence(operator='AND')
+
        for comp in voidSolidDef.elements :
           if simplify == 'no':
              chk =  comp.check()
