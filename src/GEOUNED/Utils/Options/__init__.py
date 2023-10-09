@@ -10,6 +10,8 @@ enlargeBox     = 2                              # Enlarge box Boundary when eval
 nPlaneReverse  = 0                              # numbers of plane thresold whether cut of parallel planes are made fisrt with lowest or highest number
 splitTolerance = 0                              # Fuzzy tolerance used in BOPTOOL Split function
 quadricPY      = False                          # use quadric form of cones and cylinder not align with X,Y,Z axis when write openMC script file
+Facets         = False                          # use alternative conversion module when geometry is defined by cells compound by only triangular plane faces
+prnt3PPlane    = False
 
 tolValueDict = { 'relativeTol'        : False ,      
               'relativePrecision'  : 1.e-6 ,   # relative precision
@@ -53,6 +55,8 @@ setattr(Options,'verbose'       ,verbose)
 setattr(Options,'nPlaneReverse' ,nPlaneReverse)  
 setattr(Options,'splitTolerance',splitTolerance)  
 setattr(Options,'quadricPY'     ,quadricPY)  
+setattr(Options,'Facets'        ,Facets)  
+setattr(Options,'prnt3PPlane'   ,prnt3PPlane)  
 
 # Set default  attributes to Tolerances class
 for key in tolValueDict.keys():

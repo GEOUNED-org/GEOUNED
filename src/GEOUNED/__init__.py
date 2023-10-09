@@ -19,6 +19,7 @@ from GEOUNED.Write.WriteFiles import writeGeometry
 from GEOUNED.CodeVersion import *
 from GEOUNED.Utils.Options.Classes import Tolerances, MCNP_numeric_format, Options 
 from GEOUNED.Utils.BooleanSolids import buildCTableFromSolids
+from GEOUNED.Cuboid.translate import translate
 
 import GEOUNED.Void.Void as Void
 
@@ -112,7 +113,7 @@ class GEOUNED() :
 
          elif section == 'Options':
             for key in config['Options'].keys() :
-               if key in ('forceCylinder','newSplitPlane','delLastNumber','verbose','quadricPY') :
+               if key in ('forceCylinder','newSplitPlane','delLastNumber','verbose','quadricPY','Facets','prnt3PPlane') :
                    setattr(Options,key, config.getboolean('Options',key))
                elif key in ('enlargeBox','nPlaneReverse','splitTolerance'):
                    setattr(Options,key, config.getfloat('Options',key))
@@ -250,31 +251,41 @@ class GEOUNED() :
        Surfaces    = UF.Surfaces_dict(offset=surfOffset)
 
 
-       # decompose all solids in elementary solids (convex ones)
-       warningSolidList = DecomposeSolids(MetaList,Surfaces,UniverseBox,code_setting,True)
-
-       # decompose Enclosure solids
-       if code_setting['voidGen'] and EnclosureList :
-          warningEnclosureList = DecomposeSolids(EnclosureList,Surfaces,UniverseBox,code_setting,False)
-           
-       print('End of decomposition phase')
-       tempstr2 = str(datetime.now()-tempTime)
-       print(tempstr2)
-
-       # start Building CGS cells phase   
-       tempTime0 = datetime.now()
        warnSolids     = []
        warnEnclosures = []
+       tempTime0 = datetime.now()
+       if not Options.Facets:
+
+          # decompose all solids in elementary solids (convex ones)
+          warningSolidList = DecomposeSolids(MetaList,Surfaces,UniverseBox,code_setting,True)
+
+          # decompose Enclosure solids
+          if code_setting['voidGen'] and EnclosureList :
+             warningEnclosureList = DecomposeSolids(EnclosureList,Surfaces,UniverseBox,code_setting,False)
+           
+          print('End of decomposition phase')
+
+          # start Building CGS cells phase   
  
-       for j,m in enumerate(MetaList):
-           if m.IsEnclosure : continue
-           print('Building cell: ', j)
-           Conv.cellDef(m,Surfaces,UniverseBox)
-           if j in warningSolidList:
-               warnSolids.append(m)
-           if not m.Solids:
-              print('none',j,m.__id__)
-              print(m.Definition)
+          for j,m in enumerate(MetaList):
+              if m.IsEnclosure : continue
+              print('Building cell: ', j)
+              Conv.cellDef(m,Surfaces,UniverseBox)
+              if j in warningSolidList:
+                  warnSolids.append(m)
+              if not m.Solids:
+                 print('none',j,m.__id__)
+                 print(m.Definition)
+
+       else:
+          translate(MetaList,Surfaces,UniverseBox,code_setting)
+          # decompose Enclosure solids
+          if code_setting['voidGen'] and EnclosureList :
+             warningEnclosureList = DecomposeSolids(EnclosureList,Surfaces,UniverseBox,code_setting,False)
+
+       tempstr2 = str(datetime.now()-tempTime)
+       print(tempstr2)
+         
 
        #  building enclosure solids       
 

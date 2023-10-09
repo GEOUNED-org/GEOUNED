@@ -1,11 +1,9 @@
 #
 # Set of useful functions used in different parts of the code
 #
-
 import GEOUNED.Utils.BasicFunctions_part2 as BF
-
 from GEOUNED.Utils.BasicFunctions_part1 import isParallel,\
-     PlaneParams, CylinderParams, ConeParams, SphereParams, TorusParams 
+     Plane3PtsParams, PlaneParams, CylinderParams, ConeParams, SphereParams, TorusParams 
 from GEOUNED.Utils.Options.Classes import Tolerances as tol
 import copy
 import FreeCAD, Part
@@ -202,18 +200,25 @@ class GEOUNED_Surface:
     
     def __init__(self,params,boundBox,Face=None) :
        
-       self.Type    = params[0]
        self.Index   = 0
        self.__boundBox__ = boundBox
-       if self.Type == 'Plane':
+       if params[0] == 'Plane':
+          self.Type  = 'Plane'
           self.Surf  = PlaneParams(params[1])  #plane point defined as the shortest distance to origin
-       elif self.Type == 'Cylinder' :   
+       elif params[0] == 'Plane3Pts' :   
+          self.Type  = 'Plane'
+          self.Surf  = Plane3PtsParams(params[1])  #plane point defined with 3 points
+       elif params[0] == 'Cylinder' :   
+          self.Type  = params[0]
           self.Surf  = CylinderParams(params[1])
-       elif  self.Type == 'Cone' :
+       elif  params[0] == 'Cone' :
+          self.Type  = params[0]
           self.Surf  = ConeParams(params[1])
-       elif self.Type == 'Sphere' :
+       elif params[0] == 'Sphere' :
+          self.Type  = params[0]
           self.Surf  = SphereParams(params[1])
-       elif self.Type == 'Torus' :
+       elif params[0] == 'Torus' :
+          self.Type  = params[0]
           self.Surf  = TorusParams(params[1])
        
        self.shape = Face
@@ -396,7 +401,22 @@ class Surfaces_dict(dict):
         ex = FreeCAD.Vector(1,0,0)
         ey = FreeCAD.Vector(0,1,0)
         ez = FreeCAD.Vector(0,0,1)
-        if isParallel(plane.Surf.Axis,ex,tol.pln_angle) :
+      
+        if plane.Surf.pointDef :
+           addPlane = True
+           for i,p in enumerate(self['P']):
+              if BF.isSame3PtsPlane(plane.Surf,p.Surf,dtol=tol.pln_distance,relTol=tol.relativeTol,fuzzy=(fuzzy,p.Index)) : 
+                 addPlane = False
+                 index = p.Index
+                 self.__last_obj__ = ('P',i)
+                 break
+           if addPlane :
+              self.surfaceNumber += 1 
+              plane.Index = self.surfaceNumber + self.IndexOffset             
+              self.__last_obj__ = ('P',len(self['P']))
+              self['P'].append(plane)
+
+        elif isParallel(plane.Surf.Axis,ex,tol.pln_angle) :
            addPlane = True
            for i,p in enumerate(self['PX']):
               if BF.isSamePlane(plane.Surf,p.Surf,dtol=tol.pln_distance,atol=tol.pln_angle,relTol=tol.relativeTol,fuzzy=(fuzzy,p.Index)): 

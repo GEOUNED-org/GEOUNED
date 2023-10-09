@@ -4,9 +4,10 @@
 from datetime import datetime
 
 from GEOUNED.Utils.Functions import Surfaces_dict
-from GEOUNED.Write.Functions import MCNPSurface, changeSurfSign, writeMCNPCellDef,CardLine
+from GEOUNED.Write.Functions import MCNPSurface, changeSurfSign, writeMCNPCellDef,CardLine, plane3PtsPositive
 from GEOUNED.Utils.Options.Classes import MCNP_numeric_format as nf
 from GEOUNED.Utils.Options.Classes import Tolerances as tol
+from GEOUNED.Utils.Options.Classes import Options as opt
 from GEOUNED.CodeVersion import *
 import FreeCAD
 import copy
@@ -306,6 +307,13 @@ C **************************************************************\n""".format(sel
           if p.Surf.Axis[2] < 0 :
             p.Surf.Axis = FreeCAD.Vector(0,0,1)
             self.__changeSurfSign__(p)          
+
+       if opt.prnt3PPlane: 
+          for p in Surfaces['P']:
+             if p.Surf.pointDef :
+                pos = plane3PtsPositive(p.Surf)
+                if not pos:
+                  self.__changeSurfSign__(p)          
        return
     
     def __sortedSurfaces__(self,Surfaces):

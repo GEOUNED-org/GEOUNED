@@ -58,13 +58,32 @@ def signPlane(Point,plane):
         sign=-1
     return sign
 
+class Plane3PtsParams:
+   def __init__(self,params,real=True):
+      self.Points   = params[0] 
+      self.dimL1    = params[1]
+      self.dimL2    = params[2]
+      self.real     = real
+      self.Axis     = params[3]
+      self.Position = params[0][0]
+      self.pointDef = True
+      
+
+   def __str__(self):
+      outstr = '''Plane :
+    Point 1  : {P1[0]}  {P1[1]}  {P1[2]} 
+    Point 2  : {P2[0]}  {P2[1]}  {P2[2]} 
+    Point 3  : {P3[0]}  {P3[1]}  {P3[2]} '''.format(P1=self.Points[0], P2=self.Points[1], P3=self.Points[2])
+      return outstr
+
 class PlaneParams:
    def __init__(self,params,real=True):
       self.Position = params[0] 
       self.Axis     = params[1]
-      self.dimL     = params[2]
-      self.solidID  = params[3]
+      self.dimL1    = params[2]
+      self.dimL2    = params[3]
       self.real     = real
+      self.pointDef = False
       
 
    def __str__(self):

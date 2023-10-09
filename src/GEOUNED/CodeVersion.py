@@ -42,10 +42,15 @@ Modification in 0.9.7 Release Date 06/12/2022
     mncp input file will have ".mcnp" extension and openMC XML the ".xml" extension.
   - new entry "outFormat" is added in FILES section. "outFormat" is used to select the output geometry format (mcnp and/or openMC_xml). 
     Default value is only mcnp
-  . new entry splitTolerance. Change the Tolerance value of the FreeCAD function split. Default Value  0.
-  . new entry Verbose. Print on screen warning. Default False.
+  - new entry splitTolerance. Change the Tolerance value of the FreeCAD function split. Default Value  0.
+  - new entry Verbose. Print on screen warning. Default False.
+
+ new in version 1.0.1
+  - implement new conversion module when all cells are made of triangular plane faces
+  - bug fixed void complementary of level1 'AND' sequence
  '''
 
-GEOUNED_Version = '1.0'
-GEOUNED_ReleaseDate = '25/09/2023'
+
+GEOUNED_Version = '1.0.1'
+GEOUNED_ReleaseDate = '09/10/2023'
 

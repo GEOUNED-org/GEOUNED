@@ -46,6 +46,21 @@ def isSamePlane(p1,p2,dtol=1e-6,atol=1e-6,relTol=True,fuzzy=(False,0)):
       return isSame 
     return False     
 
+def isSame3PtsPlane(p1,p2,dtol=1e-6,relTol=True,fuzzy=(False,0)):     
+    if not p1.pointDef or not p2.pointDef : return False
+    for pt1 in p1.Points:
+       found = False
+       for pt2 in p2.Points :
+          p = pt1 - pt2  
+          if p.Length < dtol : 
+             found = True 
+             break
+       if not found :
+          break  
+
+    return found
+      
+
 def isSameCylinder(cyl1,cyl2,dtol=1e-6, atol=1e-6, relTol=True, fuzzy=(False,0)):
     if relTol :
        rtol = dtol * max(cyl2.Radius,cyl1.Radius)

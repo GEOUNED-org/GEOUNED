@@ -2,6 +2,7 @@ import GEOUNED.Utils.Qform as Qform
 from GEOUNED.Utils.BasicFunctions_part1 import isParallel, isOposite
 from GEOUNED.Utils.Options.Classes import MCNP_numeric_format as nf
 from GEOUNED.Utils.Options.Classes import Tolerances as tol
+from GEOUNED.Utils.Options.Classes import Options as opt
 from GEOUNED.Write.StringFunctions import remove_redundant
 
 import FreeCAD
@@ -163,18 +164,26 @@ def writeSequenceOMCPY(Seq,prefix='S'):
 def MCNPSurface(id,Type,surf):
     MCNP_def = ''
     if (Type=='Plane'):
-        A=surf.Axis.x
-        B=surf.Axis.y
-        C=surf.Axis.z
-        D=surf.Axis.dot(surf.Position)
-        if   surf.Axis.isEqual(FreeCAD.Vector(1,0,0),tol.pln_angle) :
-           MCNP_def='{:<6d} PX  {:{x}}'.format(id,D/10.0,x=nf.P_xyz)
-        elif surf.Axis.isEqual(FreeCAD.Vector(0,1,0),tol.pln_angle) :
-           MCNP_def='{:<6d} PY  {:{y}}'.format(id,D/10.0,y=nf.P_xyz)
-        elif surf.Axis.isEqual(FreeCAD.Vector(0,0,1),tol.pln_angle) :
-           MCNP_def='{:<6d} PZ  {:{z}}'.format(id,D/10.0,z=nf.P_xyz) 
-        else:
-           MCNP_def='{:<6d} P   {:{abc}} {:{abc}} {:{abc}} {:{d}}'.format(id,A,B,C,D/10.0,abc=nf.P_abc,d=nf.P_d)  
+      if surf.pointDef and opt.prnt3PPlane:
+         P1 = surf.Points[0]
+         P2 = surf.Points[1]
+         P3 = surf.Points[2]
+         MCNP_def="""{:<6d} P   {P1[0]:{d}} {P1[1]:{d}} {P1[2]:{d}} 
+           {P2[0]:{d}} {P2[1]:{d}} {P2[2]:{d}}
+           {P3[0]:{d}} {P3[1]:{d}} {P3[2]:{d}}""".format(id,P1=P1/10,P2=P2/10,P3=P3/10,d=nf.P_d)  
+      else:
+         A=surf.Axis.x
+         B=surf.Axis.y
+         C=surf.Axis.z
+         D=surf.Axis.dot(surf.Position)
+         if   surf.Axis.isEqual(FreeCAD.Vector(1,0,0),tol.pln_angle) :
+            MCNP_def='{:<6d} PX  {:{x}}'.format(id,D/10.0,x=nf.P_xyz)
+         elif surf.Axis.isEqual(FreeCAD.Vector(0,1,0),tol.pln_angle) :
+            MCNP_def='{:<6d} PY  {:{y}}'.format(id,D/10.0,y=nf.P_xyz)
+         elif surf.Axis.isEqual(FreeCAD.Vector(0,0,1),tol.pln_angle) :
+            MCNP_def='{:<6d} PZ  {:{z}}'.format(id,D/10.0,z=nf.P_xyz) 
+         else:
+            MCNP_def='{:<6d} P   {:{abc}} {:{abc}} {:{abc}} {:{d}}'.format(id,A,B,C,D/10.0,abc=nf.P_abc,d=nf.P_d)  
     
     elif (Type == 'Cylinder'):
         Pos = copy.deepcopy(surf.Center)
@@ -457,6 +466,34 @@ def OpenMCSurface(Type,surf,outXML=True,quadricForm=False):
 
     if outXML : coeffs = ' '.join(coeffs.split())
     return OMCsurf,coeffs
+
+def plane3PtsPositive(surf):
+    tol=1e-8
+    dist =  surf.Axis.dot(surf.Position)
+    if dist > tol : 
+       return True 
+    elif dist < -tol :
+       return False
+
+    elif surf.Axis.z > tol :
+       return True 
+    elif surf.Axis.z < tol :
+       return False
+
+    elif surf.Axis.y > tol :
+       return True 
+    elif surf.Axis.y < tol :
+       return False
+
+    elif surf.Axis.x > tol :
+       return True 
+    elif surf.Axis.x < tol :
+       return False
+
+    else:
+      print ('The 3 plane points are aligned')
+      return None
+             
 
 def trim(surfDef,lineLength=80):
 

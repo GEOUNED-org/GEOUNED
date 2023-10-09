@@ -23,13 +23,22 @@ class Surfaces_GU(object):
         
 class Plane_GU(Surfaces_GU):
 
-    def __init__(self,face):
+    def __init__(self,face,plane3Pts=False):
     
         Surfaces_GU.__init__(self,face)
         self.Axis = face.Surface.Axis
         self.Position = face.Surface.Position
-        self.dim1     = face.ParameterRange[1]-face.ParameterRange[0]
-        self.dim2     = face.ParameterRange[3]-face.ParameterRange[2]
+        self.pointDef = plane3Pts
+        if plane3Pts:
+           self.Points   = tuple( v.Point for v in face.Vertexes)
+           d1 = self.Points[0]-self.Points[1]
+           d2 = self.Points[0]-self.Points[2]
+           d3 = self.Points[1]-self.Points[2]
+           self.dim1 = max(d1.Length, d2.Length, d3.Length)
+           self.dim2 = min(d1.Length, d2.Length, d3.Length)
+        else:
+           self.dim1     = face.ParameterRange[1]-face.ParameterRange[0]
+           self.dim2     = face.ParameterRange[3]-face.ParameterRange[2]
 
 class Cylinder_GU(Surfaces_GU):
 
@@ -74,9 +83,9 @@ class Torus_GU(Surfaces_GU):
         
 class solid_GU():
 
-    def __init__(self,solid):
+    def __init__(self,solid,plane3Pts = False):
         self.solid=solid
-        faces = DefineListFace_GU(solid.Faces)
+        faces = DefineListFace_GU(solid.Faces,plane3Pts)
         self.Faces=faces
         self.Solids=solid.Solids
         self.BoundBox=solid.BoundBox
@@ -193,10 +202,10 @@ class solid_GU():
 
 # FACES
 class Faces_GU(object):
-    def __init__(self,face):
+    def __init__(self,face,Plane3Pts=False):
         # GEOUNED based atributes
         self.__face__       = face
-        self.Surface        = DefineSurface(face) # Define the appropiate GU Surface of the face
+        self.Surface        = DefineSurface(face,Plane3Pts) # Define the appropiate GU Surface of the face
 
         # FreeCAD based Atributes
         self.Area           = face.Area
@@ -204,6 +213,8 @@ class Faces_GU(object):
         self.ParameterRange = face.ParameterRange
         self.Orientation    = face.Orientation
         self.OuterWire      = face.OuterWire
+        self.Edges          = face.Edges
+        self.Vertexes       = face.Vertexes
         return
 
     def tessellate(self,val):
@@ -227,14 +238,14 @@ class Faces_GU(object):
         
 
 # Aux functions
-def DefineListFace_GU(face_list):
+def DefineListFace_GU(face_list,plane3Pts=False):
     """ Return the list of the  corresponding Face_GU  object of a FaceList"""
-    return tuple( Faces_GU(face) for face in face_list )
+    return tuple( Faces_GU(face, plane3Pts) for face in face_list )
 
-def DefineSurface(face):
+def DefineSurface(face,plane3Pts):
     kind_surf=str(face.Surface)
     if kind_surf=='<Plane object>':
-        Surf_GU=Plane_GU(face)
+        Surf_GU=Plane_GU(face,plane3Pts)
     elif kind_surf=='<Cylinder object>':
         Surf_GU=Cylinder_GU(face)
     elif kind_surf=='<Cone object>':
@@ -243,6 +254,9 @@ def DefineSurface(face):
         Surf_GU=Sphere_GU(face)
     elif kind_surf == '<Toroid object>':
         Surf_GU=Torus_GU(face)
+    else:
+        print('bad Surface type',kind_surf)
+        Surf_GU = None
     return Surf_GU
 
 

@@ -201,7 +201,11 @@ def ExtractSurfaces(solid,kind,UniverseBox,MakeObj=False):
          solidParts.append(GU.solid_GU(s))
     else:
         fuzzy = False
-        solidParts = [GU.solid_GU(solid)] 
+        if kind == 'Plane3Pts' :
+           P3P = True
+        else:
+           P3P = False
+        solidParts = [GU.solid_GU(solid,P3P)] 
 
     ex = FreeCAD.Vector(1,0,0)
     ey = FreeCAD.Vector(0,1,0)
@@ -282,6 +286,18 @@ def ExtractSurfaces(solid,kind,UniverseBox,MakeObj=False):
               for p in TorusBoundPlanes(face,UniverseBox) :
                  if MakeObj : p.buildSurface()
                  Surfaces.addPlane(p)
+
+         elif surf == '<Plane object>' and kind == 'Plane3Pts' :
+            Points = tuple(v.Point for v in face.Vertexes)
+            d1 = Points[0]-Points[1]
+            d2 = Points[0]-Points[2]
+            d3 = Points[1]-Points[2]
+            dim1 = max(d1.Length, d2.Length, d3.Length)
+            dim2 = min(d1.Length, d2.Length, d3.Length)
+            normal = face.Surface.Axis
+            plane = UF.GEOUNED_Surface(('Plane3Pts',(Points,dim1,dim2,normal)),UniverseBox)
+            if MakeObj : plane.buildSurface()
+            Surfaces.addPlane(plane,fuzzy)
          
     return Surfaces                  
  
