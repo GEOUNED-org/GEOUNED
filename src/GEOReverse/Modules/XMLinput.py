@@ -2,21 +2,25 @@ import os
 import sys
 import re
 import FreeCAD
-from GEOReverse.Modules.Parser import parser  as mp
 from GEOReverse.Modules.remh import cell_card_string, remove_hash
 from GEOReverse.Modules.Objects import *
+from GEOReverse.Modules.XMLParser import get_cards
 import math
 import numpy as np
 from numpy import linalg as LA
+import xml.etree.ElementTree as ET 
 
-class MCNPinput:
+class XMLinput:
     def __init__(self,name):
         if not os.path.isfile(name):
             print("File %s does not exist" %name)
             sys.exit()
             return
-        self.__inputcards__  = list(mp.get_cards(name))
-        self.Transformations = self.__getTransList__()
+        
+        tree = ET.parse(name)
+        root = tree.getroot()
+        
+        self.__inputcards__  = list(get_cards(root))
         return
 
     def GetFilteredCells(self,Surfaces,config):
@@ -54,7 +58,6 @@ class MCNPinput:
 
         
         for U,universe in FilteredCells.items() :
-            substituteLikeCell(universe,newSurfaces)
             
             # set cell as CAD cell Object
             for cname,c in universe.items():
@@ -70,20 +73,8 @@ class MCNPinput:
         Universe_dict = {}
         cellCards = {}
 
-        
-                
         for c in self.__inputcards__ :
-          if c.ctype != mp.CID.cell : continue
-          c.get_values()
-          cstr = cell_card_string(''.join(c.lines))
-
-          if cstr.TRCL : cstr.TRCL = TransformationMatrix(cstr.TRCL,self.Transformations)
-          if cstr.TR   : cstr.TR   = TransformationMatrix(cstr.TR,self.Transformations)
-          cellCards[c.name] = cstr
- 
-        setExplicitCellDefinition(cellCards)  
-        for cname,c in cellCards.items():  
-          if c.U is None: c.U = 0
+          if c.type != 'cell' : continue
           if c.U not in Universe_dict.keys(): Universe_dict[c.U] = {}
           Universe_dict[c.U].update({c.name:c})
 
@@ -120,10 +111,9 @@ class MCNPinput:
     def GetCells(self,U=None,Fill=None):
         cell_cards = {}
         for c in self.__inputcards__ :
-          if c.ctype != mp.CID.cell : continue
-          c.get_values()
-          U_cell = c.get_u()
-          Fill_cell = c.get_f()
+          if c.type != 'cell' : continue
+          U_cell = c.U
+          Fill_cell = c.FILL
           if ( U is None and Fill is None) :
             cell_cards[c.name] = c
           elif U_cell == U and U is not None:
@@ -137,82 +127,15 @@ class MCNPinput:
         surf_cards = {}
         number = 1
         for c in self.__inputcards__ :
-          if c.ctype != mp.CID.surface : continue
-          c.get_values()
-          c.TR = TransformationMatrix(c.TR,self.Transformations)
-          surf_cards[c.name] = (c.stype,c.scoefs,c.TR,number)
+          if c.type != 'surface' : continue
+          surf_cards[c.name] = (c.stype,c.scoefs,number)
           number += 1
 
         # return surface as surface Objects type
         return Get_primitive_surfaces(surf_cards,scale)
 
-    def __getTransList__(self):
-        trl = {}
-        for c in self.__inputcards__ :
-          if c.ctype != mp.CID.data : continue
-          c.get_values()
-          if c.dtype == 'TRn' :
-             trValues = []
-             for v in c.values[1:]:
-                trValues.append(v[0])
-             trl[c.name]= getTransMatrix(trValues,c.unit)     
-        return trl     
 
-
-def getTransMatrix(trsf,unit='',scale=10.):
     
-    if len(trsf) == 3 :
-       trsfMat = FreeCAD.Matrix(1,0,0, trsf[0]*scale,
-                                0,1,0, trsf[1]*scale,
-                                0,0,1, trsf[2]*scale,
-                                0,0,0, 1)
-    else:
-       if unit == '*':
-          coeff = tuple(map(math.radians,trsf[3:12] )) 
-          coeff = tuple(map(math.cos,coeff))
-       else:
-          coeff = trsf[3:12] 
-
-       trsfMat = FreeCAD.Matrix(coeff[0],coeff[3] ,coeff[6], trsf[0]*scale,
-                                coeff[1],coeff[4] ,coeff[7], trsf[1]*scale,
-                                coeff[2],coeff[5] ,coeff[8], trsf[2]*scale,
-                                0,0,0, 1)
-    
-def substituteLikeCell(universe,Surfaces):
-    number = re.compile(r"\#?\s*\d+")
-    newId = len(Surfaces)
-
-    # create new cells objects for like cell cells    
-    for c in universe.values(): 
-       if c.likeCell : c.geom = universe[c.likeCell].geom.copy()
-       if not c.TRCL : continue   # likebut cell should have TRCL card
-
-    # transform change cell the parameters if needed
-    for c in universe.values():
-       if not c.TRCL : continue 
-       cellSurf = c.geom.getSurfacesNumbers()
-       surfDict = {}
-       for surf in cellSurf:
-           newId += 1
-           surfDict[surf] = newId
-           Surfaces[newId] = Surfaces[surf].copy()
-           Surfaces[newId].id = newId
-           Surfaces[newId].transform(c.TRCL)
-       if c.FILL : c.TR = c.TRCL
-       c.TRCL = None
-           
-       # rename the surface of the like cell
-       pos = 0
-       while True:
-         m = number.search(c.geom.str,pos)
-         if not m : break
-         if "#" in m.group():
-               pos = m.end()
-               continue
-         surf = int(m.group())
-         pos = c.geom.replace(surf,surfDict[surf],pos)
-         if pos < 0 : break            
-       
 def selectCells(cellList,config):
     selected = {}
     # options are 'all' material                     
@@ -286,31 +209,16 @@ def selectCells(cellList,config):
 
 
     # remove complementary in cell of the universe
-    for cname,c in selected.items() :
-       c.geom = remove_hash(cellList,cname)
+    # for cname,c in selected.items() :
+    #   c.geom = remove_hash(cellList,cname)
 
     return selected    
         
-#Change implicit cell definition (like-but type or cell with #)
-# to explicit cell definition (only surface number)
-def setExplicitCellDefinition(universeCells):
-    for cname,c in universeCells.items():
-        if c.likeCell :
-           lkc = universeCells[c.likeCell]
-           c.geom = lkc.geom
-           if not c.U     : c.U    = lkc.U
-           if not c.FILL  : c.FILL = lkc.FILL
-           if not c.MAT   : c.MAT  = lkc.MAT
-           if not c.TR    : c.TR   = lkc.TR
-           if not c.TRCL  : c.TRCL = lkc.TRCL
-    return         
-
 
 def processSurfaces(UCells,Surfaces):          
     number = re.compile(r"\#?\s*\d+")
 
     for cname,c in UCells.items() :
-        c.geom.remove_comments(full=True) 
         pos = 0
         while True:
            m = number.search(c.geom.str,pos)
@@ -324,39 +232,6 @@ def processSurfaces(UCells,Surfaces):
               print(m)
               print(c.geom.str)
            pos = c.geom.replace(surf,Surfaces[surf].id,pos)
-
-
-def getTransMatrix(trsf,unit='',scale=10.):
-
-    if len(trsf) == 3 :
-       trsfMat = FreeCAD.Matrix(1,0,0, trsf[0]*scale,
-                                0,1,0, trsf[1]*scale,
-                                0,0,1, trsf[2]*scale,
-                                0,0,0, 1)
-    else:
-       if unit == '*':
-          coeff = tuple(map(math.radians,trsf[3:12] )) 
-          coeff = tuple(map(math.cos,coeff))
-       else:
-          coeff = trsf[3:12] 
-
-       trsfMat = FreeCAD.Matrix(coeff[0],coeff[3] ,coeff[6], trsf[0]*scale,
-                                coeff[1],coeff[4] ,coeff[7], trsf[1]*scale,
-                                coeff[2],coeff[5] ,coeff[8], trsf[2]*scale,
-                                0,0,0, 1)
-    return trsfMat   
-       
-def TransformationMatrix(TRSF,Transformations):
-
-    if TRSF :
-       if type(TRSF) is int :
-          return Transformations[TRSF]
-
-       else:
-          return getTransMatrix(TRSF) 
-    else:      
-       return TRSF      
-
 
 
 def getSubUniverses(Ustart,Universes):
@@ -404,68 +279,41 @@ def Get_primitive_surfaces(mcnp_surfaces,scale=10.) :
 
       surfaces = {}
       for Sid in mcnp_surfaces.keys() :      
-         MCNPtype   = mcnp_surfaces[Sid][0].upper()
+         MCNPtype   = mcnp_surfaces[Sid][0]
          MCNPparams = mcnp_surfaces[Sid][1]
-         trsf       = mcnp_surfaces[Sid][2]   
-         number     = mcnp_surfaces[Sid][3]
+         number     = mcnp_surfaces[Sid][2]
          
          params = []
          Stype = None
-         if MCNPtype in ('P','PX','PY','PZ'):
+         if MCNPtype in ('plane','x-plane','y-plane','z-plane'):
             Stype = 'plane'
-            if MCNPtype == 'P':
-                if len(MCNPparams) == 4 :
-                   normal = FreeCAD.Vector(MCNPparams[0:3])
-                   params = (normal, MCNPparams[3]*scale)
-                else:
-                   normal,point = get3PtsPlaneParameters(MCNPparams[0:9])
-                   params = (normal, point*scale)
-            elif MCNPtype == 'PX':
+            if MCNPtype == 'plane':
+                normal = FreeCAD.Vector(MCNPparams[0:3])
+                params = (normal, MCNPparams[3]*scale)
+            elif MCNPtype == 'x-plane':
                 params = (X_vec, MCNPparams[0]*scale )
-            elif MCNPtype == 'PY':
+            elif MCNPtype == 'y-plane':
                 params = ( Y_vec, MCNPparams[0]*scale )
-            elif MCNPtype == 'PZ':
+            elif MCNPtype == 'z-plane':
                 params = ( Z_vec, MCNPparams[0]*scale )
                 
-         elif MCNPtype in ['S','SX','SY','SZ','SO'] :
+         elif MCNPtype == 'sphere' :
             Stype = 'sphere'
-            if MCNPtype == 'S':
-                params = (FreeCAD.Vector(MCNPparams[0:3])*scale, MCNPparams[3]*scale)
-            elif MCNPtype == 'SX':
-                params = ( FreeCAD.Vector(MCNPparams[0]*scale, 0.0, 0.0), MCNPparams[1]*scale )
-            elif MCNPtype == 'SY':
-                params = ( FreeCAD.Vector(0.0, MCNPparams[0]*scale, 0.0), MCNPparams[1]*scale )
-            elif MCNPtype == 'SZ':
-                params = ( FreeCAD.Vector(0.0, 0.0, MCNPparams[0]*scale), MCNPparams[1]*scale )
-            elif MCNPtype == 'SO':
-                params = ( origin, MCNPparams[0]*scale )
+            params = (FreeCAD.Vector(MCNPparams[0:3])*scale, MCNPparams[3]*scale)
 
-         elif MCNPtype in ['CX','C/X','CY','C/Y','CZ','C/Z'] :
-            if MCNPtype in ['CX','CY','CZ']:
-               R = MCNPparams[0]
-            else:
-               R = MCNPparams[2]
-               x1 = MCNPparams[0]
-               x2 = MCNPparams[1]
-               
+         elif MCNPtype in ('x-cylinder','y-cylinder','z-cylinder') :
+            R = MCNPparams[2]
+            x1 = MCNPparams[0]
+            x2 = MCNPparams[1]
             Stype = 'cylinder'
         
-            if MCNPtype == 'CX':
-                v = X_vec
-                p = origin
-            elif MCNPtype == 'CY':
-                v = Y_vec
-                p = origin
-            elif MCNPtype == 'CZ':
-                v = Z_vec
-                p = origin
-            elif MCNPtype ==  'C/X':
+            if MCNPtype ==  'x-cylinder':
                 v = X_vec
                 p = FreeCAD.Vector(0., x1, x2)
-            elif MCNPtype == 'C/Y':
+            elif MCNPtype == 'y-cylinder':
                 v = Y_vec
                 p = FreeCAD.Vector(x1, 0., x2)
-            elif MCNPtype == 'C/Z':
+            elif MCNPtype == 'z-cylinder':
                 v = Z_vec
                 p = FreeCAD.Vector(x1, x2, 0.)
 
@@ -475,43 +323,8 @@ def Get_primitive_surfaces(mcnp_surfaces,scale=10.) :
 
             params = ( p,v,R )  
 
-         elif MCNPtype in ['KX','KY','KZ'] :
-            Stype = 'cone' 
-            x1 = MCNPparams[0]
-            t2 = MCNPparams[1]
-            t  = math.sqrt(t2)
-            dblsht = True
-
-            if len(MCNPparams) == 3:
-              dblsht = False
-              sht = MCNPparams[2]  
-              if sht == 0. :
-                dblsht = True
-
-            if MCNPtype == 'KX':
-                p  = FreeCAD.Vector(x1,0.0,0.0)
-                v  = X_vec
-                if not dblsht :
-                  if sht < 0 :
-                    v = negX_vec
-            elif MCNPtype == 'KY':
-                p  = FreeCAD.Vector(0.0,x1,0.0)
-                v  = Y_vec
-                if not dblsht :
-                  if sht < 0 :
-                     v = negY_vec
-            elif MCNPtype == 'KZ':
-                p  = FreeCAD.Vector(0.0,0.0,x1)
-                v  = Z_vec
-                if not dblsht :
-                  if sht < 0 :
-                     v = negZ_vec             
-
-            p = p.multiply(scale)
-            params = (p,v,t,dblsht)
-
                          
-         elif MCNPtype in ['K/X','K/Y','K/Z'] :
+         elif MCNPtype in ('x-cone','y-cone','z-cone') :
             Stype = 'cone' 
             x1 = MCNPparams[0]
             x2 = MCNPparams[1]
@@ -521,32 +334,17 @@ def Get_primitive_surfaces(mcnp_surfaces,scale=10.) :
             t  = math.sqrt(t2)
             dblsht = True
 
-            if len(MCNPparams) == 5:
-              dblsht = False
-              sht = MCNPparams[4]  
-              if sht == 0. :
-                dblsht = True
-
-            if MCNPtype == 'K/X':
-              v  = X_vec
-              if not dblsht :
-                 if sht < 0 :
-                    v = negX_vec
-            elif MCNPtype == 'K/Y':
+            if MCNPtype == 'x-cone':
+                v  = X_vec
+            elif MCNPtype == 'y-cone':
                 v  = Y_vec
-                if not dblsht :
-                   if sht < 0 :
-                      v = negY_vec
-            elif MCNPtype == 'K/Z':
+            elif MCNPtype == 'z-cone':
                 v  = Z_vec
-                if not dblsht :
-                   if sht < 0 :
-                      v = negZ_vec             
 
             p = p.multiply(scale)
             params = (p,v,t,dblsht)
 
-         elif MCNPtype in ['TX','TY','TZ'] :
+         elif MCNPtype in ['x-torus','y-torus','z-torus'] :
             Stype = 'torus'
             x1 = MCNPparams[0]
             x2 = MCNPparams[1]
@@ -559,11 +357,11 @@ def Get_primitive_surfaces(mcnp_surfaces,scale=10.) :
                print('ellipsoid torus not implemented : {} {}'.format(r1,r2) )
             R = (r1+r2)*0.5         
 
-            if   MCNPtype == 'TX':
+            if   MCNPtype == 'x-torus':
               v  = X_vec
-            elif MCNPtype == 'TY':
+            elif MCNPtype == 'y-torus':
               v  = Y_vec
-            elif MCNPtype == 'TZ':
+            elif MCNPtype == 'z-torus':
               v  = Z_vec
                 
             if scale != 1.0 :
@@ -573,7 +371,7 @@ def Get_primitive_surfaces(mcnp_surfaces,scale=10.) :
 
             params = ( p,v,Ra,R)  
 
-         elif MCNPtype == 'GQ' :
+         elif MCNPtype == 'quadric' :
             Qparams = tuple(MCNPparams[0:10])   
             Stype,quadric = gq2cyl(Qparams)
 
@@ -602,110 +400,16 @@ def Get_primitive_surfaces(mcnp_surfaces,scale=10.) :
                 params = None
 #                get_quadric_surface(params)
 
-         elif MCNPtype == 'X' :
-             if len(MCNPparams) == 2 :
-                Stype = 'plane'
-                params = (X_vec, MCNPparams[0]*scale )
-             elif len(MCNPparams) == 4 :
-                 if ( abs(MCNPparams[1] - MCNPparams[3]) ) > 1.e-12 :
-                    Stype = 'cone'
-                    dblsht = False
-                    t = (MCNPparams[3] - MCNPparams[1])/(MCNPparams[2] - MCNPparams[0])
-                    x =  MCNPparams[0] - MCNPparams[1]/t 
-                    if (MCNPparams[0]-x)*(MCNPparams[2]-x) > 0 :
-                        p = FreeCAD.Vector(x,0.,0.)
-                        if (MCNPparams[0]-x) > 0 :
-                           v = X_vec
-                        else:
-                           v = negX_vec 
-                        if scale != 1.0 : p *= scale
-                        params = (p,v,abs(t),dblsht)
-                 elif  abs(MCNPparams[1]) < 1.e-12 :
-                    Stype = 'plane' 
-                    if ( abs(MCNPparams[0] - MCNPparams[2]) ) < 1.e-12 :
-                        params = (X_vec, MCNPparams[0]*scale )
-                 else:    
-                    Stype = 'cylinder'
-                    if scale != 1.0 :
-                       p = p.multiply(scale)
-                       R *= scale
-                    params = ( origin,X_vec,MCNPparams[1] )
-             else:
-                 print('not implemented surfaces defined by point with more than 2couples of value')  
-
-         elif MCNPtype == 'Y' :
-             if len(MCNPparams) == 2 :
-                Stype = 'plane'
-                params = (Y_vec, MCNPparams[0]*scale )
-             elif len(MCNPparams) == 4 :
-                 if ( abs(MCNPparams[1] - MCNPparams[3]) ) > 1.e-12 :
-                    Stype = 'cone'
-                    dblsht = False
-                    t = (MCNPparams[3] - MCNPparams[1])/(MCNPparams[2] - MCNPparams[0])
-                    y = MCNPparams[0] - MCNPparams[1]/t
-                    if (MCNPparams[0]-y)*(MCNPparams[2]-y) > 0 :
-                        p = FreeCAD.Vector(0.,y,0.)
-                        if (MCNPparams[0]-y) > 0 :
-                           v = Y_vec
-                        else:
-                           v = negY_vec 
-                        if scale != 1.0 : p = p.multiply(scale)
-                        params = (p,v,abs(t),dblsht)
-                 elif  abs(MCNPparams[1]) < 1.e-12 :
-                    Stype = 'plane' 
-                    if ( abs(MCNPparams[0] - MCNPparams[2]) ) < 1.e-12 :
-                        params = (Y_vec, MCNPparams[0]*scale )
-                 else:    
-                    Stype = 'cylinder'
-                    if scale != 1.0 :
-                       p = p.multiply(scale)
-                       R *= scale
-                    params = ( origin,Y_vec,MCNPparams[1] )
-             else:
-                 print('not implemented surfaces defined by point with more than 2couples of value')
-                 
-         elif MCNPtype == 'Z' :
-             if len(MCNPparams) == 2 :
-                Stype = 'plane'
-                params = (Z_vec, MCNPparams[0]*scale )
-             elif len(MCNPparams) == 4 :
-                 if ( abs(MCNPparams[1] - MCNPparams[3]) ) > 1.e-12 :
-                    Stype = 'cone'
-                    dblsht = False
-                    t = (MCNPparams[3] - MCNPparams[1])/(MCNPparams[2] - MCNPparams[0])
-                    z = MCNPparams[0] - MCNPparams[1]/t
-                    if (MCNPparams[0]-z)*(MCNPparams[2]-z) > 0 :
-                        p = FreeCAD.Vector(0.,0.,z)
-                        if (MCNPparams[0]-z) > 0 :
-                           v = Z_vec
-                        else:
-                           v = negZ_vec 
-                        if scale != 1.0 : p = p.multiply(scale)
-                        params = (p,v,abs(t),dblsht)
-                 elif  abs(MCNPparams[1]) < 1.e-12 :
-                    Stype = 'plane' 
-                    if ( abs(MCNPparams[0] - MCNPparams[2]) ) < 1.e-12 :
-                        params = (Z_vec, MCNPparams[0]*scale )
-                 else:    
-                    Stype = 'cylinder'
-                    if scale != 1.0 :
-                       p = p.multiply(scale)
-                       R *= scale
-                    params = ( origin,Z_vec,MCNPparams[1] )
-             else:
-                 print('not implemented surfaces defined by point with more than 2couples of value')                 
-     
-
          if Stype == 'plane':
-             surfaces[Sid] = Plane(number, params, trsf)
+             surfaces[Sid] = Plane(number, params)
          elif Stype == 'sphere':
-             surfaces[Sid] = Sphere(number, params, trsf)    
+             surfaces[Sid] = Sphere(number, params)    
          elif Stype == 'cylinder':
-             surfaces[Sid] = Cylinder(number, params,trsf)
+             surfaces[Sid] = Cylinder(number, params)
          elif Stype == 'cone':
-             surfaces[Sid] = Cone(number, params,trsf)
+             surfaces[Sid] = Cone(number, params)
          elif Stype == 'torus':
-             surfaces[Sid] = Torus(number, params,trsf)
+             surfaces[Sid] = Torus(number, params)
          else :
              print('Undefined',Sid)
              print( MCNPtype ,number,MCNPparams) 

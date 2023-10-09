@@ -15,7 +15,12 @@ def buildCAD(UnivCell,data,config):
     UnivCell.Fill = config['Ustart']
     
     # read all surfaces definition
-    modelSurfaces        = data.GetSurfaces(scale=10) # scale change cm in mcnp to mm in CAD Obj
+    if config['format'] == 'mcnp' :
+       factor = 10
+    else:
+       factor = 1
+
+    modelSurfaces        = data.GetSurfaces(scale=factor) # scale change cm in mcnp to mm in CAD Obj
     
     # read Cells and group into universes
     print(config)

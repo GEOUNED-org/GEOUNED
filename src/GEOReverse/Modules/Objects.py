@@ -192,6 +192,9 @@ class Plane:
         if tr :
            self.transform(tr)
 
+    def __str__(self):
+        return 'plane : {}\nParameters : {}'.format(self.id,self.params)
+
     def copy(self):
         return Plane(self.id,self.params)
     
