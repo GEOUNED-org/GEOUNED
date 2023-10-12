@@ -103,6 +103,13 @@ def writeMCNPCellDef(Definition,tabspace=0,offset=0):
        sdef.wrapLine(offset)
        return  sdef.str
 
+def writeSerpentCellDef(Definition,tabspace=0,offset=0):
+       sdef = CellString(tabspace=tabspace)
+       strDef = remove_redundant(writeSequenceMCNP(Definition))
+       sdef.add(strDef)
+       sdef.wrapLine(offset)
+       return  sdef.str
+
 def writeOpenMCregion(Definition,Wtype='XML'):
        if Wtype == 'XML':
            return writeSequenceOMCXML(Definition)
@@ -162,7 +169,8 @@ def writeSequenceOMCPY(Seq,prefix='S'):
      return line
 
 def MCNPSurface(id,Type,surf):
-    MCNP_def = ''
+    Serpent_def = ''
+
     if (Type=='Plane'):
       if surf.pointDef and opt.prnt3PPlane:
          P1 = surf.Points[0]
@@ -467,6 +475,99 @@ def OpenMCSurface(Type,surf,outXML=True,quadricForm=False):
     if outXML : coeffs = ' '.join(coeffs.split())
     return OMCsurf,coeffs
 
+def SerpentSurface(id, Type, surf):
+    Serpent_def = ''
+
+    if Type == 'Plane':
+        if surf.pointDef and opt.prnt3PPlane:
+            P1 = surf.Points[0]
+            P2 = surf.Points[1]
+            P3 = surf.Points[2]
+            Serpent_def = f"{id} plane {P1.x/10:.5f} {P1.y/10:.5f} {P1.z/10:.5f}\n"
+            Serpent_def += f"      {P2.x/10:.5f} {P2.y/10:.5f} {P2.z/10:.5f}\n"
+            Serpent_def += f"      {P3.x/10:.5f} {P3.y/10:.5f} {P3.z/10:.5f}"
+
+        else:
+            A = surf.Axis.x
+            B = surf.Axis.y
+            C = surf.Axis.z
+            D = surf.Axis.dot(surf.Position)
+            if surf.Axis.isEqual(FreeCAD.Vector(1, 0, 0), tol.pln_angle):
+                Serpent_def = f"{id} px {D/10:.5f}"
+            elif surf.Axis.isEqual(FreeCAD.Vector(0, 1, 0), tol.pln_angle):
+                Serpent_def = f"{id} py {D/10:.5f}"
+            elif surf.Axis.isEqual(FreeCAD.Vector(0, 0, 1), tol.pln_angle):
+                Serpent_def = f"{id} pz {D/10:.5f}"
+            else:
+                Serpent_def = f"{id} p {A:.5f} {B:.5f} {C:.5f} {D/10:.5f}"
+
+    elif Type == 'Cylinder':
+        Pos = surf.Center.multiply(0.1)
+        Dir = surf.Axis.normalize()
+        rad = surf.Radius / 10.0
+        if isParallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle):
+            Serpent_def = f"{id} cylx {Pos.y:.5f} {Pos.z:.5f} {rad:.5f}"
+        elif isParallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle):
+            Serpent_def = f"{id} cyly {Pos.x:.5f} {Pos.z:.5f} {rad:.5f}"
+        elif isParallel(Dir, FreeCAD.Vector(0, 0, 1), tol.angle):
+            Serpent_def = f"{id} cylz {rad:.5f}"
+        else:
+            pass # Need to implement 
+
+    elif Type == 'Cone':
+        Apex = surf.Apex.multiply(0.1)
+        Dir = surf.Axis.multiply(0.1)
+        tan = math.tan(surf.SemiAngle)
+        X_dir = FreeCAD.Vector(1, 0, 0)
+        Y_dir = FreeCAD.Vector(0, 1, 0)
+        Z_dir = FreeCAD.Vector(0, 0, 1)
+
+        # Need to check this 
+        # Serpent has no specific card for cone at origin, explicit origin only
+
+        if (isParallel(Dir,X_dir,tol.angle)):
+          sheet=1
+          if (isOposite(Dir,X_dir,tol.angle)): sheet=-1
+          Serpent_def = f"{id:<6d} ckx {Apex.x:.5f} {Apex.y:.5f} {Apex.z:.5f} {tan**2:.5f} {sheet} {nf.K_xyz:.5f} {nf.K_tan2:.5f}"
+        elif (isParallel(Dir,Y_dir,tol.angle)):
+          sheet=1
+          if (isOposite(Dir,Y_dir,tol.angle)): sheet=-1
+          Serpent_def = f"{id:<6d} cky {Apex.x:.5f} {Apex.y:.5f} {Apex.z:.5f} {tan**2:.5f} {sheet} {nf.K_xyz:.5f} {nf.K_tan2:.5f}"
+        elif (isParallel(Dir,Z_dir,tol.angle)):
+          sheet=1
+          if (isOposite(Dir,Z_dir,tol.angle)): sheet=-1
+          Serpent_def = f"{id:<6d} ckz {Apex.x:.5f} {Apex.y:.5f} {Apex.z:.5f} {tan**2:.5f} {sheet} {nf.K_xyz:.5f} {nf.K_tan2:.5f}"
+        else:
+            # Calculate Q form parameters for the cone (you should implement the Qform.QFormCone function)
+            Q = Qform.QFormCone(Dir, Apex, tan)
+            # Define the Serpent format surface
+            Serpent_def = f"{id} quadratic {Q[0]:.5f} {Q[1]:.5f} {Q[2]:.5f}\n"
+            Serpent_def += f"      {Q[3]:.5f} {Q[4]:.5f} {Q[5]:.5f}\n"
+            Serpent_def += f"      {Q[6]:.0f} {Q[7]:.0f} {Q[8]:.0f} {Q[9]:.0f}"
+
+
+    elif Type == 'Sphere':
+        rad = surf.Radius / 10.0
+        pnt = surf.Center.multiply(0.1)
+        # Serpent has only explicit spheres at the origin
+        Serpent_def = f"{id} sph {pnt.x:.5f} {pnt.y:.5f} {pnt.z:.5f} {rad:.5f}"
+
+    elif Type == 'Torus':
+        Pos = surf.Center.multiply(0.1)
+        Dir = surf.Axis.normalize()
+        radMaj = surf.MajorRadius / 10.0
+        radMin = surf.MinorRadius / 10.0
+        if (isParallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle)):
+            Serpent_def = f"{id} torx {Pos.x:.5f} {Pos.y:.5f} {Pos.z:.5f}\n"
+            Serpent_def += f"      {radMaj:.5f} {radMin:.5f} {radMin:.5f}"
+        elif (isParallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle)):
+            Serpent_def = f"{id} tory {Pos.x:.5f} {Pos.y:.5f} {Pos.z:.5f}\n"
+            Serpent_def += f"      {radMaj:.5f} {radMin:.5f} {radMin:.5f}"
+        elif (isParallel(Dir, FreeCAD.Vector(0, 0, 1), tol.angle)):
+            Serpent_def = f"{id} torz {Pos.x:.5f} {Pos.y:.5f} {Pos.z:.5f}\n"
+            Serpent_def += f"      {radMaj:.5f} {radMin:.5f} {radMin:.5f}"
+
+    return Serpent_def
 
 
 def trim(surfDef,lineLength=80):
