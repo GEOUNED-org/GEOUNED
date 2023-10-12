@@ -565,13 +565,13 @@ def cellDef(metaObj,Surfaces,UniverseBox):
                      #SurfPiece.append(str(id))
                      #SurfObj.append(p.shape)
 
-                if surfaceType == '<Cylinder object>' and False:    # temporary disabled doesn't work properly
-                   PlanesId = ExtraPlaneCylFace(face,UniverseBox,Surfaces)
-                   for id in PlanesId:
-                     var = id
-                     if (not(str(var) in SurfPiece)):
-                       SurfPiece.append(str(var))
-                       SurfObj.append(Surfaces.getSurface(abs(id)).shape)
+                #if surfaceType == '<Cylinder object>' :    # temporary disabled doesn't work properly
+                #   PlanesId = ExtraPlaneCylFace(face,UniverseBox,Surfaces)
+                #   for id in PlanesId:
+                #     var = id
+                #     if (not(str(var) in SurfPiece)):
+                #       SurfPiece.append(str(var))
+                #       SurfObj.append(Surfaces.getSurface(abs(id)).shape)
 
             elif (surfaceType == '<Cone object>'): # this only if GQ is used
                 if (isParallel(face.Surface.Axis,FreeCAD.Vector(1,0,0),tol.angle) or \

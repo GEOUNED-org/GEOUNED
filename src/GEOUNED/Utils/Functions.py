@@ -401,22 +401,8 @@ class Surfaces_dict(dict):
         ex = FreeCAD.Vector(1,0,0)
         ey = FreeCAD.Vector(0,1,0)
         ez = FreeCAD.Vector(0,0,1)
-      
-        if plane.Surf.pointDef :
-           addPlane = True
-           for i,p in enumerate(self['P']):
-              if BF.isSame3PtsPlane(plane.Surf,p.Surf,dtol=tol.pln_distance,relTol=tol.relativeTol,fuzzy=(fuzzy,p.Index)) : 
-                 addPlane = False
-                 index = p.Index
-                 self.__last_obj__ = ('P',i)
-                 break
-           if addPlane :
-              self.surfaceNumber += 1 
-              plane.Index = self.surfaceNumber + self.IndexOffset             
-              self.__last_obj__ = ('P',len(self['P']))
-              self['P'].append(plane)
 
-        elif isParallel(plane.Surf.Axis,ex,tol.pln_angle) :
+        if isParallel(plane.Surf.Axis,ex,tol.pln_angle) :
            addPlane = True
            for i,p in enumerate(self['PX']):
               if BF.isSamePlane(plane.Surf,p.Surf,dtol=tol.pln_distance,atol=tol.pln_angle,relTol=tol.relativeTol,fuzzy=(fuzzy,p.Index)): 

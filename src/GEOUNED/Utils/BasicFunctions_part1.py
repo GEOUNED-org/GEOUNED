@@ -1,6 +1,7 @@
 #
 # Set of useful functions used in different parts of the code
 #
+import FreeCAD
 import math
 
 def isSameValue(v1,v2,tolerance=1e-6):
@@ -58,22 +59,57 @@ def signPlane(Point,plane):
         sign=-1
     return sign
 
+def pointsToCoeffs(Points):
+    p1,p2,p3 = Points[0:3]
+    scf = (p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, p3.x, p3.y, p3.z) 
+
+    # mcnp implementation to convert 3 point plane to
+    # plane parameters
+
+    tpp = [0]*4
+    for i in range(1,4) :
+       j = i%3 + 1
+       k = 6 -i -j
+       k -= 1
+       j -= 1
+       tpp[i-1] =  scf[j  ]*(scf[k+3]-scf[k+6]) \
+                 +scf[j+3]*(scf[k+6]-scf[k  ]) \
+                 +scf[j+6]*(scf[k  ]-scf[k+3])
+       tpp[3]  += scf[i-1]*(scf[j+3]*scf[k+6]-scf[j+6]*scf[k+3])
+
+    xm = 0
+    coeff = [0]*4
+    for i in range(1,5):
+       if  xm == 0 and tpp[4-i] != 0  : xm = 1/tpp[4-i]
+       coeff[4-i] = tpp[4-i]*xm
+
+    Axis     = FreeCAD.Vector(coeff[0:3])
+    Distance = coeff[3]/Axis.Length
+    Axis.normalize()
+
+    return Axis,Distance
+
+
 class Plane3PtsParams:
    def __init__(self,params,real=True):
-      self.Points   = params[0] 
-      self.dimL1    = params[1]
-      self.dimL2    = params[2]
+      self.Position = params[0] 
+      self.Axis     = params[1]
+      self.dimL1    = params[2]
+      self.dimL2    = params[3]
+      self.Points   = params[4] 
       self.real     = real
-      self.Axis     = params[3]
-      self.Position = params[0][0]
       self.pointDef = True
       
 
    def __str__(self):
+#      outstr = '''Plane :
+#    Point 1  : {P1[0]}  {P1[1]}  {P1[2]} 
+#    Point 2  : {P2[0]}  {P2[1]}  {P2[2]} 
+#    Point 3  : {P3[0]}  {P3[1]}  {P3[2]} '''.format(P1=self.Points[0], P2=self.Points[1], P3=self.Points[2])
+      pos = self.Axis.dot(self.Position)
       outstr = '''Plane :
-    Point 1  : {P1[0]}  {P1[1]}  {P1[2]} 
-    Point 2  : {P2[0]}  {P2[1]}  {P2[2]} 
-    Point 3  : {P3[0]}  {P3[1]}  {P3[2]} '''.format(P1=self.Points[0], P2=self.Points[1], P3=self.Points[2])
+    Axis     : {}  {}  {} 
+    Position : {}  '''.format(self.Axis.x    ,self.Axis.y    ,self.Axis.z, pos)
       return outstr
 
 class PlaneParams:
@@ -87,10 +123,10 @@ class PlaneParams:
       
 
    def __str__(self):
+      pos = self.Axis.dot(self.Position)
       outstr = '''Plane :
     Axis     : {}  {}  {} 
-    Position : {}  {}  {}'''.format(self.Axis.x    ,self.Axis.y    ,self.Axis.z,\
-                                    self.Position.x,self.Position.y,self.Position.z)
+    Position : {}  '''.format(self.Axis.x    ,self.Axis.y    ,self.Axis.z, pos)
       return outstr
 
 class CylinderParams:

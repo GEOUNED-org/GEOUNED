@@ -288,14 +288,13 @@ def ExtractSurfaces(solid,kind,UniverseBox,MakeObj=False):
                  Surfaces.addPlane(p)
 
          elif surf == '<Plane object>' and kind == 'Plane3Pts' :
-            Points = tuple(v.Point for v in face.Vertexes)
-            d1 = Points[0]-Points[1]
-            d2 = Points[0]-Points[2]
-            d3 = Points[1]-Points[2]
-            dim1 = max(d1.Length, d2.Length, d3.Length)
-            dim2 = min(d1.Length, d2.Length, d3.Length)
+            pos=face.CenterOfMass
             normal = face.Surface.Axis
-            plane = UF.GEOUNED_Surface(('Plane3Pts',(Points,dim1,dim2,normal)),UniverseBox)
+            dim1 = face.ParameterRange[1]-face.ParameterRange[0]
+            dim2 = face.ParameterRange[3]-face.ParameterRange[2]
+            points = tuple(v.Point for v in face.Vertexes)
+
+            plane = UF.GEOUNED_Surface(('Plane3Pts',(pos,normal,dim1,dim2,points)),UniverseBox)
             if MakeObj : plane.buildSurface()
             Surfaces.addPlane(plane,fuzzy)
          

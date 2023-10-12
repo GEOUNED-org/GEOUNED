@@ -4,7 +4,8 @@
 from datetime import datetime
 
 from GEOUNED.Utils.Functions import Surfaces_dict
-from GEOUNED.Write.Functions import MCNPSurface, changeSurfSign, writeMCNPCellDef,CardLine, plane3PtsPositive
+from GEOUNED.Utils.BasicFunctions_part1 import pointsToCoeffs,isOposite
+from GEOUNED.Write.Functions import MCNPSurface, changeSurfSign, writeMCNPCellDef,CardLine
 from GEOUNED.Utils.Options.Classes import MCNP_numeric_format as nf
 from GEOUNED.Utils.Options.Classes import Tolerances as tol
 from GEOUNED.Utils.Options.Classes import Options as opt
@@ -308,12 +309,13 @@ C **************************************************************\n""".format(sel
             p.Surf.Axis = FreeCAD.Vector(0,0,1)
             self.__changeSurfSign__(p)          
 
-       if opt.prnt3PPlane: 
-          for p in Surfaces['P']:
-             if p.Surf.pointDef :
-                pos = plane3PtsPositive(p.Surf)
-                if not pos:
+       if opt.prnt3PPlane :
+         for p in Surfaces['P']:
+            if p.Surf.pointDef:
+                axis,d = pointsToCoeffs(p.Surf.Points)
+                if isOposite(axis,p.Surf.Axis) :
                   self.__changeSurfSign__(p)          
+
        return
     
     def __sortedSurfaces__(self,Surfaces):

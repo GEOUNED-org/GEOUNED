@@ -467,33 +467,7 @@ def OpenMCSurface(Type,surf,outXML=True,quadricForm=False):
     if outXML : coeffs = ' '.join(coeffs.split())
     return OMCsurf,coeffs
 
-def plane3PtsPositive(surf):
-    tol=1e-8
-    dist =  surf.Axis.dot(surf.Position)
-    if dist > tol : 
-       return True 
-    elif dist < -tol :
-       return False
 
-    elif surf.Axis.z > tol :
-       return True 
-    elif surf.Axis.z < tol :
-       return False
-
-    elif surf.Axis.y > tol :
-       return True 
-    elif surf.Axis.y < tol :
-       return False
-
-    elif surf.Axis.x > tol :
-       return True 
-    elif surf.Axis.x < tol :
-       return False
-
-    else:
-      print ('The 3 plane points are aligned')
-      return None
-             
 
 def trim(surfDef,lineLength=80):
 

@@ -125,14 +125,21 @@ class GEOUNED() :
                  elif key in toleranceKwrd : setattr(Tolerances,tolKwrdEquiv[key], config.getfloat('Tolerances',key))   
 
          elif section == 'MCNP_Numeric_Format':
+            PdEntry = False
             for key in config['MCNP_Numeric_Format'].keys() :
                  if key in numericKwrd : setattr(MCNP_numeric_format,key, config.get('MCNP_Numeric_Format',key))   
+                 if key == 'P_d':  PdEntry = True
+                    
              
          else:
             print('bad section name : {}'.format(section))
 
       if self.__dict__['geometryName'] == '' :
          self.__dict__['geometryName'] = self.__dict__['stepFile'][:-4]
+
+      if Options.prnt3PPlane and not PdEntry :
+         MCNP_numeric_format.P_d = '22.15e'          
+
       print(self.__dict__)
 
    def set(self,kwrd,value):

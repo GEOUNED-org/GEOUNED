@@ -60,25 +60,20 @@ def isInverted(solid):
 
 def getId(facein, Surfaces):
     
-    if facein.pointDef :
-       for s in Surfaces['P'] :
-          if BF.isSame3PtsPlane(facein,s.Surf,dtol=tol.pln_distance,relTol=tol.relativeTol) :
-             return s.Index
+    surfin = str(facein)
+    if   isParallel(facein.Axis,FreeCAD.Vector(1,0,0),tol.pln_angle) :
+       P = 'PX'
+    elif isParallel(facein.Axis,FreeCAD.Vector(0,1,0),tol.pln_angle) :
+       P = 'PY'
+    elif isParallel(facein.Axis,FreeCAD.Vector(0,0,1),tol.pln_angle) :
+       P = 'PZ'
     else:
-       surfin = str(facein)
-       if   isParallel(facein.Axis,FreeCAD.Vector(1,0,0),tol.pln_angle) :
-          P = 'PX'
-       elif isParallel(facein.Axis,FreeCAD.Vector(0,1,0),tol.pln_angle) :
-          P = 'PY'
-       elif isParallel(facein.Axis,FreeCAD.Vector(0,0,1),tol.pln_angle) :
-          P = 'PZ'
-       else:
-          P = 'P'
+       P = 'P'
 
-       for s in Surfaces[P] :
-          if BF.isSamePlane(facein,s.Surf,dtol=tol.pln_distance,atol=tol.pln_angle,relTol=tol.relativeTol) :
-             return s.Index
-    
+    for s in Surfaces[P] :
+       if BF.isSamePlane(facein,s.Surf,dtol=tol.pln_distance,atol=tol.pln_angle,relTol=tol.relativeTol) :
+          return s.Index
+ 
     return 0
 
 def translate(MetaList,Surfaces,UniverseBox,setting):
@@ -95,13 +90,6 @@ def translate(MetaList,Surfaces,UniverseBox,setting):
 
         Surfaces.extend(Decom.ExtractSurfaces(Part.makeCompound(m.Solids),'Plane3Pts',UniverseBox,MakeObj=False))
         setDefinition(m,Surfaces)
-
-        #fullDef = BoolSequence(operator='AND')
-        #fullDef.append(m.Definition)
-        #for cm in MetaList[0:i] :
-        #   fullDef.append(cm.Definition.getComplementary())
-        #m.setDefinition(fullDef)
-
 
 
 def setDefinition(metaObj,Surfaces):
