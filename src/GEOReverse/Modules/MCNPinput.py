@@ -418,7 +418,10 @@ def Get_primitive_surfaces(mcnp_surfaces,scale=10.) :
                    normal = FreeCAD.Vector(MCNPparams[0:3])
                    params = (normal, MCNPparams[3]*scale)
                 else:
-                   normal,point = get3PtsPlaneParameters(MCNPparams[0:9])
+                   coeffs = pointsToCoeffs(MCNPparams[0:9])
+                   normal = FreeCAD.Vector(coeffs[0:3])
+                   point  = coeffs[3]/normal.Length
+                   normal.normalize()
                    params = (normal, point*scale)
             elif MCNPtype == 'PX':
                 params = (X_vec, MCNPparams[0]*scale )
@@ -790,46 +793,29 @@ def gq2cyl(x):
        rv = [0]
   return tp,rv
 
-def get3PtsPlaneParameters(params):
-    P1 = FreeCAD.Vector(params[0:3])
-    P2 = FreeCAD.Vector(params[3:6])
-    P3 = FreeCAD.Vector(params[6:9])
-    v1 = P2-P1
-    v2 = P3-P1
-    v1.normalize()
-    v2.normalize()
-    normal = v1.cross(v2)
-    normal.normalize()
-    if not plane3PtsPositive(normal,P1):
-       normal = -normal 
+def pointsToCoeffs(scf):
+    # mcnp implementation to convert 3 point plane to
+    # plane parameters
 
-    d = normal.dot(P1)
-    return normal,d
-    
-def plane3PtsPositive(normal,position):
-    tol=1e-8
-    dist =  normal.dot(position)
-    if dist > tol :
-       return True
-    elif dist < -tol :
-       return False
+    tpp = [0]*4
+    for i in range(1,4) :
+       j = i%3 + 1
+       k = 6 -i -j
+       k -= 1
+       j -= 1
+       tpp[i-1] =  scf[j  ]*(scf[k+3]-scf[k+6]) \
+                 +scf[j+3]*(scf[k+6]-scf[k  ]) \
+                 +scf[j+6]*(scf[k  ]-scf[k+3])
+       tpp[3]  += scf[i-1]*(scf[j+3]*scf[k+6]-scf[j+6]*scf[k+3])
 
-    elif normal.z > tol :
-       return True
-    elif normal.z < tol :
-       return False
+    xm = 0
+    coeff = [0]*4
+    for i in range(1,5):
+       if  xm == 0 and tpp[4-i] != 0  : xm = 1/tpp[4-i]
+       coeff[4-i] = tpp[4-i]*xm
 
-    elif normal.y > tol :
-       return True
-    elif normal.y < tol :
-       return False
-
-    elif normal.x > tol :
-       return True
-    elif normal.x < tol :
-       return False
-
-    else:
-      print ('The 3 plane points are aligned')
-      return None
+    # coeff [0:3] a,b,c plane parameters
+    # coeff [3]   d plane parameter
+    # normalization is d set to one if origin is not in the plane
+    return coeff
 
