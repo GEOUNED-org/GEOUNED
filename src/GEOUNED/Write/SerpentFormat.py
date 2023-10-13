@@ -150,13 +150,16 @@ class Serpent_input:
         else:
             if cell.Material == 0:
                 cellHeader = f'cell {index:<5d} 0 {"void":<5d}  '
+            elif cell.Material == 'Graveyard':
+                self.Materials.add(cell.Material)
+                cellHeader = f'cell {index:<5d}  0  outside '
             else:
                 self.Materials.add(cell.Material)
-                cellHeader = f'cell {index:<5d}  0  {cell.Material:<5d} '
+                cellHeader = f'cell {index:<5d}  0  {cell.Material:<5d} '               
 
             serpent_cell = f'{cellHeader}{self.cell_format(cell.Definition, offset=len(cellHeader))}' \
                         f'{self.option_format(cell)}{self.comment_format(cell.Comments, cell.MatInfo)}'
-            self.inpfile.write(serpent_cell)         
+            self.inpfile.write(serpent_cell)    
           
         return
 
@@ -223,7 +226,7 @@ class Serpent_input:
        
 # Function not relevant for Serpent : No importance setting, universes assigned elsewhere.
 # Volumes only defined on tally cards. 
-    # def __optionFormat__(self,cell):
+    #def __optionFormat__(self,cell):
         
     #    option = ''
     #    if self.Options['Volume']:
