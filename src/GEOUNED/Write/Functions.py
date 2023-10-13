@@ -105,7 +105,7 @@ def writeMCNPCellDef(Definition,tabspace=0,offset=0):
 
 def writeSerpentCellDef(Definition,tabspace=0,offset=0):
        sdef = CellString(tabspace=tabspace)
-       strDef = remove_redundant(writeSequenceMCNP(Definition))
+       strDef = remove_redundant(writeSequenceSerpent(Definition))
        sdef.add(strDef)
        sdef.wrapLine(offset)
        return  sdef.str
@@ -117,6 +117,23 @@ def writeOpenMCregion(Definition,Wtype='XML'):
            return writeSequenceOMCPY(Definition)
 
 def writeSequenceMCNP(Seq):
+     if Seq.level == 0 :
+        if Seq.operator == 'AND' : line = '({})'.format(' '.join(map(str,Seq.elements)))
+        else  :                    line = '({})'.format(':'.join(map(str,Seq.elements)))
+     else :
+        terms = []
+        for e in Seq.elements:
+           if type(e) is int :
+              terms.append(str(e))
+           else :
+              terms.append(writeSequenceMCNP(e))
+
+        if Seq.operator == 'AND' : line = '({})'.format(' '.join(terms))
+        else  :                    line = '({})'.format(':'.join(terms))
+
+     return line
+
+def writeSequenceSerpent(Seq):
      if Seq.level == 0 :
         if Seq.operator == 'AND' : line = '({})'.format(' '.join(map(str,Seq.elements)))
         else  :                    line = '({})'.format(':'.join(map(str,Seq.elements)))
