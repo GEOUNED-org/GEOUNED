@@ -5,7 +5,7 @@ from datetime import datetime
 
 from GEOUNED.Utils.Functions import Surfaces_dict
 from GEOUNED.Utils.BasicFunctions_part1 import pointsToCoeffs,isOposite
-from GEOUNED.Write.Functions import SerpentSurface, changeSurfSign, writeMCNPCellDef,CardLine
+from GEOUNED.Write.Functions import SerpentSurface, changeSurfSign, writeSerpentCellDef,CardLine
 from GEOUNED.Utils.Options.Classes import MCNP_numeric_format as nf
 from GEOUNED.Utils.Options.Classes import Tolerances as tol
 from GEOUNED.Utils.Options.Classes import Options as opt
@@ -24,7 +24,7 @@ class Serpent_input:
        self.dummyMat = setting['dummyMat']
        self.Cells    = Meta
        self.Options  = {'Volume':self.VolCARD,'Particle':('n','p'),'Universe':self.U0CARD}
-       self.part     = 'P'
+       self.part     = 'p'
 
        self.StepFile = setting['stepFile']
        if isinstance(self.StepFile,(tuple,list)):
@@ -136,21 +136,29 @@ class Serpent_input:
             comment = self.comment_line(cell.Comments)
             self.inpfile.write(comment)
             return
-
-        if cell.Material == 0:
-            cellHeader = f'{index:<5d} {0:<5d}  '
-        else:
-            self.Materials.add(cell.Material)
-            if abs(cell.Density) < 1e-2:
-                cellHeader = f'{index:<5d} {cell.Material:<5d} {cell.Density:.4e} '
+        
+        if self.Options['Universe'] is not None:
+            if cell.Material == 0:
+                cellHeader = f'cell {index:<5d} {self.Options["Universe"]} {"void":<5d}  '
             else:
-                cellHeader = f'{index:<5d} {cell.Material:<5d} {cell.Density:.7f} '
+                self.Materials.add(cell.Material)
+                cellHeader = f'cell {index:<5d} {self.Options["Universe"]} {cell.Material:<5d} '
 
-        serpent_cell = f'{cellHeader}{self.cell_format(cell.Definition, offset=len(cellHeader))}' \
-                    f'{self.option_format(cell)}{self.comment_format(cell.Comments, cell.MatInfo)}'
-        self.inpfile.write(serpent_cell)
+            serpent_cell = f'{cellHeader}{self.cell_format(cell.Definition, offset=len(cellHeader))}' \
+                        f'{self.option_format(cell)}{self.comment_format(cell.Comments, cell.MatInfo)}'
+            self.inpfile.write(serpent_cell)
+        else:
+            if cell.Material == 0:
+                cellHeader = f'cell {index:<5d} 0 {"void":<5d}  '
+            else:
+                self.Materials.add(cell.Material)
+                cellHeader = f'cell {index:<5d}  0  {cell.Material:<5d} '
+
+            serpent_cell = f'{cellHeader}{self.cell_format(cell.Definition, offset=len(cellHeader))}' \
+                        f'{self.option_format(cell)}{self.comment_format(cell.Comments, cell.MatInfo)}'
+            self.inpfile.write(serpent_cell)         
+          
         return
-
 
 
     def __write_surfaces__(self,surface):
@@ -164,78 +172,78 @@ class Serpent_input:
           print('Surface {} cannot be written in Serpent input'.format(surface.Type))
        return 
 
-#to_mod
+# No void all option in Serpent. 
 
     def __write_source_block__(self):
        
        if self.SDEF_sphere is None:  return
-       
-       MODE = 'MODE {}\nVOID \nNPS 1e6\n'.format(self.part)
+       MODE = 'MODE {}\n VOID \nset nps 1e6\n'.format(self.part)
        if self.dummyMat :
           mat = list(self.Materials)
           mat.sort()
           MATCARD = ''
           for m in mat:
-             MATCARD += 'M{:<6d} 1001 1\n'.format(m)           
-          Block = MATCARD+'C \n'+MODE
+             MATCARD += 'mat {:<6d} 1001 1\n'.format(m)           
+          Block = MATCARD+'% \n'+MODE
        else:
           Block = MODE
- 
-       if self.VolSDEF:
-          Block += 'PRDMP 2J -1\n'
-          for line in self.SDEF_box : 
-             Block += 'C ' + line
-          for line in self.SDEF_sphere:   
-             Block += line
-          
-          celList,volList = self.__get_solidCellVolume__()
-       
-          F4Tally = CardLine('F4:{} '.format(self.part))
-          F4Tally.extend(celList)
-          SD4     = CardLine('SD4  ',fmt='13.7e')
-          SD4.extend(volList)
 
-          Block += F4Tally.str+'\n'
-          if not self.VolCARD :
-             Block += SD4.str
-          else :   
-             Block += 'C Cell volume normalization is set in cell cards VOL\n'
-       else :
-          for line in self.SDEF_sphere : 
-             Block += 'C ' + line
-          for line in self.SDEF_box : 
-             Block +=  line
+ # Not included for Serpent 
+    #    if self.VolSDEF:
+    #       Block += 'PRDMP 2J -1\n'
+    #       for line in self.SDEF_box : 
+    #          Block += 'C ' + line
+    #       for line in self.SDEF_sphere:   
+    #          Block += line
+          
+    #       celList,volList = self.__get_solidCellVolume__()
+       
+    #       F4Tally = CardLine('F4:{} '.format(self.part))
+    #       F4Tally.extend(celList)
+    #       SD4     = CardLine('SD4  ',fmt='13.7e')
+    #       SD4.extend(volList)
+
+    #       Block += F4Tally.str+'\n'
+    #       if not self.VolCARD :
+    #          Block += SD4.str
+    #       else :   
+    #          Block += 'C Cell volume normalization is set in cell cards VOL\n'
+    #    else :
+    #       for line in self.SDEF_sphere : 
+    #          Block += 'C ' + line
+    #       for line in self.SDEF_box : 
+    #          Block +=  line
           
 
        self.inpfile.write(Block)
        
-        
-#to_mod
+ 
     def __cellFormat__(self,Definition,offset=11):
-       return writeMCNPCellDef(Definition,tabspace=11,offset=offset)
+       return writeSerpentCellDef(Definition,tabspace=11,offset=offset)
        
-
-    def __optionFormat__(self,cell):
+# Function not relevant for Serpent : No importance setting, universes assigned elsewhere.
+# Volumes only defined on tally cards. 
+    # def __optionFormat__(self,cell):
         
-       option = ''
-       if self.Options['Volume']:
-          if not cell.Void : 
-            option ='{:11s}Vol={:e}\n'.format('',cell.Volume*1e-3)
-          else:
-            option = '{:11s}Vol=1.0\n'.format('')
+    #    option = ''
+    #    if self.Options['Volume']:
+    #       if not cell.Void : 
+    #         option ='{:11s}Vol={:e}\n'.format('',cell.Volume*1e-3)
+    #       else:
+    #         option = '{:11s}Vol=1.0\n'.format('')
 
-       option +=  '{:11s}'.format('')          
-       for p in self.Options['Particle']:
-         if cell.MatInfo == 'Graveyard' :
-           option +=  'imp:{}=0     '.format(p)
-         else:    
-           option +=  'imp:{}=1.0   '.format(p)
+    #    option +=  '{:11s}'.format('')          
+    #    for p in self.Options['Particle']:
+    #      if cell.MatInfo == 'Graveyard' :
+    #        option +=  'imp:{}=0     '.format(p)
+    #      else:    
+    #        option +=  'imp:{}=1.0   '.format(p)
 
-       if self.Options['Universe'] is not None:
-            option += 'U={}  '.format(self.Options['Universe'])
-       option += '\n'
+    #    if self.Options['Universe'] is not None:
+    #         option += 'U={}  '.format(self.Options['Universe'])
+    #    option += '\n'
 
-       return option
+    #    return option
 
     def comment_format(self, cComment, mComment=None):
         comment = ''
@@ -262,6 +270,7 @@ class Serpent_input:
                     comment += '% {}\n'.format(c)
             comment += '% \n'
         return comment
+
 
     def __getSurfaceTable__(self):
        self.surfaceTable = {}
