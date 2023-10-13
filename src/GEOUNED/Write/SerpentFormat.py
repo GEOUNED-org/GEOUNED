@@ -41,23 +41,23 @@ class Serpent_input:
        
        return
 
-    def setSRC(self,data):
+    # def setSRC(self,data):
     
-        if data[0] is not None:
-          sdef     = f'src point {self.part}\n'
-          self.src_sphere = (sdef)
-        else:  
-          self.src_sphere = None
-        xmin,xmax,ymin,ymax,zmin,zmax = data[1]
+    #     if data[0] is not None:
+    #       sdef     = f'src point {self.part}\n'
+    #       self.src_sphere = (sdef)
+    #     else:  
+    #       self.src_sphere = None
+    #     xmin,xmax,ymin,ymax,zmin,zmax = data[1]
 
-        sdef = 'SDEF PAR={} X=D1 Y=D2 Z=D3 \n'.format(self.part)
-        SI1  = 'SI1 {:13.7e} {:13.7e} \n'.format(xmin*0.1,xmax*0.1)
-        SI2  = 'SI2 {:13.7e} {:13.7e} \n'.format(ymin*0.1,ymax*0.1)
-        SI3  = 'SI3 {:13.7e} {:13.7e} \n'.format(zmin*0.1,zmax*0.1)
-        SP1  = 'SP1 0  1 \n'
-        SP2  = 'SP2 0  1 \n'
-        SP3  = 'SP3 0  1 \n'
-        self.SDEF_box    = (sdef,SI1,SI2,SI3,SP1,SP2,SP3)
+    #     sdef = 'SDEF PAR={} X=D1 Y=D2 Z=D3 \n'.format(self.part)
+    #     SI1  = 'SI1 {:13.7e} {:13.7e} \n'.format(xmin*0.1,xmax*0.1)
+    #     SI2  = 'SI2 {:13.7e} {:13.7e} \n'.format(ymin*0.1,ymax*0.1)
+    #     SI3  = 'SI3 {:13.7e} {:13.7e} \n'.format(zmin*0.1,zmax*0.1)
+    #     SP1  = 'SP1 0  1 \n'
+    #     SP2  = 'SP2 0  1 \n'
+    #     SP3  = 'SP3 0  1 \n'
+    #     self.SDEF_box    = (sdef,SI1,SI2,SI3,SP1,SP2,SP3)
 
     def writeInput(self,filename):
        print (f'write Serpent file {filename}')
@@ -175,12 +175,12 @@ class Serpent_input:
           print('Surface {} cannot be written in Serpent input'.format(surface.Type))
        return 
 
-# No void all option in Serpent. 
+# No void all option in Serpent. For now remove addition of source. 
 
     def __write_source_block__(self):
        
-       if self.SDEF_sphere is None:  return
-       MODE = 'MODE {}\n VOID \nset nps 1e6\n'.format(self.part)
+#       if self.SDEF_sphere is None:  return
+       MODE = f'\nset nps 1e6\nset bc 1'
        if self.dummyMat :
           mat = list(self.Materials)
           mat.sort()
