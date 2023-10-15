@@ -210,6 +210,11 @@ class GEOUNED() :
           
        stepfile = code_setting['stepFile']
        matfile  = code_setting['matFile']
+
+       if not path.isfile(stepfile) :
+          print('Step file {} not found.\nStop.'.format(stepfile))
+          exit()
+
        startTime = datetime.now()
 
        if isinstance(stepfile,(list,tuple)):
