@@ -176,7 +176,7 @@ class Serpent_input:
 
 # No void all option in Serpent. For now remove addition of source. 
 
-    def __write_source_block__(self):
+    def __write_source_block__(self,cell):
        
 #       if self.SDEF_sphere is None:  return
        MODE = f'\nset nps 1e6\nset bc 1'
@@ -185,7 +185,7 @@ class Serpent_input:
           mat.sort()
           MATCARD = ''
           for m in mat:
-             MATCARD += 'mat {:<6d} 1001 1\n'.format(m)           
+             MATCARD += 'mat {:<6d} {:11.4e} \n1001 1 \n'.format(m, cell.Density)           
           Block = MATCARD+'% \n'+MODE
        else:
           Block = MODE

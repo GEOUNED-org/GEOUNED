@@ -516,7 +516,7 @@ def SerpentSurface(id, Type, surf):
             elif surf.Axis.isEqual(FreeCAD.Vector(0, 0, 1), tol.pln_angle):
                 Serpent_def = f"surf {id} pz {D/10:.5f}"
             else:
-                Serpent_def = f"surf {id} p {A:.5f} {B:.5f} {C:.5f} {D/10:.5f}"
+                Serpent_def = f"surf {id} plane {A:.5f} {B:.5f} {C:.5f} {D/10:.5f}"
 
     elif Type == 'Cylinder':
         Pos = surf.Center.multiply(0.1)
