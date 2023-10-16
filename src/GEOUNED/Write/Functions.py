@@ -545,15 +545,15 @@ def SerpentSurface(id, Type, surf):
         if (isParallel(Dir,X_dir,tol.angle)):
           sheet=1
           if (isOposite(Dir,X_dir,tol.angle)): sheet=-1
-          Serpent_def = f"{id:<6d} ckx {Apex.x:.5f} {Apex.y:.5f} {Apex.z:.5f} {tan**2:.5f} {sheet} {nf.K_xyz:.5f} {nf.K_tan2:.5f}"
+          Serpent_def = '{:<6d} ckx  {:{xyz}} {:{xyz}} {:{xyz}} {:{t2}} {}'.format(id,Apex.x,Apex.y,Apex.z,tan**2,sheet,xyz=nf.K_xyz,t2=nf.K_tan2)
         elif (isParallel(Dir,Y_dir,tol.angle)):
           sheet=1
           if (isOposite(Dir,Y_dir,tol.angle)): sheet=-1
-          Serpent_def = f"{id:<6d} cky {Apex.x:.5f} {Apex.y:.5f} {Apex.z:.5f} {tan**2:.5f} {sheet} {nf.K_xyz:.5f} {nf.K_tan2:.5f}"
+          Serpent_def = '{:<6d} cky  {:{xyz}} {:{xyz}} {:{xyz}} {:{t2}} {}'.format(id,Apex.x,Apex.y,Apex.z,tan**2,sheet,xyz=nf.K_xyz,t2=nf.K_tan2)
         elif (isParallel(Dir,Z_dir,tol.angle)):
           sheet=1
           if (isOposite(Dir,Z_dir,tol.angle)): sheet=-1
-          Serpent_def = f"{id:<6d} ckz {Apex.x:.5f} {Apex.y:.5f} {Apex.z:.5f} {tan**2:.5f} {sheet} {nf.K_xyz:.5f} {nf.K_tan2:.5f}"
+          Serpent_def = '{:<6d} ckz {:{xyz}} {:{xyz}} {:{xyz}} {:{t2}} {}'.format(id,Apex.x,Apex.y,Apex.z,tan**2,sheet,xyz=nf.K_xyz,t2=nf.K_tan2)
         else:
             # Calculate Q form parameters for the cone (you should implement the Qform.QFormCone function)
             Q = Qform.QFormCone(Dir, Apex, tan)

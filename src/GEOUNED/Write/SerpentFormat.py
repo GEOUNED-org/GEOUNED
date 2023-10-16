@@ -144,22 +144,21 @@ class Serpent_input:
                 self.Materials.add(cell.Material)
                 cellHeader = f'cell {index:<5d} {self.Options["Universe"]} {cell.Material:<5d} '
 
-            serpent_cell = f'{cellHeader}{self.cell_format(cell.Definition, offset=len(cellHeader))}' \
-                        f'{self.option_format(cell)}{self.comment_format(cell.Comments, cell.MatInfo)}'
+            serpent_cell = f'{cellHeader}{self.__cellFormat__(cell.Definition, offset=len(cellHeader))}' \
+                        f'{self.comment_format(cell.Comments, cell.MatInfo)}'
             self.inpfile.write(serpent_cell)
         else:
-            if cell.Material == 0:
-                cellHeader = f'cell {index:<5d} 0 {"void":<5d}  '
-            elif cell.Material == 'Graveyard':
-                self.Materials.add(cell.Material)
+            if cell.Material == 0 & cell.MatInfo != 'Graveyard' :
+                cellHeader = f'cell {index:<5d} 0 void '
+            elif cell.Material == 0 & cell.MatInfo == 'Graveyard' :
                 cellHeader = f'cell {index:<5d}  0  outside '
             else:
                 self.Materials.add(cell.Material)
                 cellHeader = f'cell {index:<5d}  0  {cell.Material:<5d} '               
 
-            serpent_cell = f'{cellHeader}{self.cell_format(cell.Definition, offset=len(cellHeader))}' \
-                        f'{self.option_format(cell)}{self.comment_format(cell.Comments, cell.MatInfo)}'
-            self.inpfile.write(serpent_cell)    
+        serpent_cell = f'{cellHeader}{self.__cellFormat__(cell.Definition, offset=len(cellHeader))}' \
+                        f'{self.comment_format(cell.Comments, cell.MatInfo)}'
+        self.inpfile.write(serpent_cell)    
           
         return
 
