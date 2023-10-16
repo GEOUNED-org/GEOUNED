@@ -97,8 +97,36 @@ class BoolSequence:
        else:
           return 'AND'
 
+    def simplify(self,CT):
+        if self.level > 0 :
+           for seq in self.elements :
+              seq.simplify(CT)
+           self.clean()
 
-    def simplify(self,CT,loop=0):
+        if type(self.elements) is not bool and (self.level !=0 or len(self.elements) > 1) :
+           levIn = self.level
+           self.simplifySequence(CT)
+           if self.level > levIn: self.simplify(CT)
+
+            
+
+    def simplifySequence(self,CT):
+       surfNames = self.getSurfacesNumbers()
+       if not surfNames : return
+
+       #print(CT)
+       #print('start',self)
+       newNames = surfNames
+       for valname in surfNames:
+          #print('factorise',valname)
+          if valname in newNames: 
+             self.factorize(valname,CT)
+             if type(self.elements) is bool: return
+             newNames = self.getSurfacesNumbers()
+       self.joinOperators()
+       
+
+    def simplify_old(self,CT,loop=0):
        surfNames = self.getSurfacesNumbers()
        if not surfNames : return
        #print(CT)
@@ -286,11 +314,11 @@ class BoolSequence:
         else:
            trueSet,falseSet =  CT.getConstraintSet(valname)
 
-        if trueSet is None: 
+        if trueSet is None:                    # valname cannot take True value 
              self.substitute(valname,False)
              return True
 
-        funcVal = self.evaluate(trueSet,CT)
+        funcVal = self.evaluate(trueSet)
         if funcVal == False :   
             newSeq = BoolSequence(operator='AND')
             #self.substitute(valname,False)
@@ -308,11 +336,11 @@ class BoolSequence:
             self.assign(newSeq)
             return True
 
-        if falseSet is None: 
+        if falseSet is None:                  # valname cannot take false value
              self.substitute(valname,True)
              return True
 
-        funcVal = self.evaluate(falseSet,CT)
+        funcVal = self.evaluate(falseSet)
         if funcVal == False :   
             newSeq = BoolSequence(operator='AND')
             #self.substitute(valname,True)
@@ -355,13 +383,13 @@ class BoolSequence:
             if trueSet is None:
                 trueVal = True
             else:       
-                trueVal  = newSeq.evaluate(trueSet,CT)
+                trueVal  = newSeq.evaluate(trueSet)
                 if trueVal is None : return None
                
             if falseSet is None:
                 falseVal = False
             else:       
-                falseVal  = newSeq.evaluate(falseSet,CT)
+                falseVal  = newSeq.evaluate(falseSet)
                 if falseVal is None : return None
                     
             if trueVal != falseVal :
@@ -370,7 +398,7 @@ class BoolSequence:
                 return trueVal 
 
 
-    def evaluate(self,valueSet,CT=None):
+    def evaluate(self,valueSet):
         if type(self.elements) is bool : return self.elements
         self.groupSingle()
         op = self.operator
