@@ -152,10 +152,10 @@ class Serpent_input:
                         f'{self.comment_format(cell.Comments, cell.MatInfo)}'
             self.inpfile.write(serpent_cell)
         else:
-            if cell.Material == 0 & cell.MatInfo != 'Graveyard' :
+            if cell.Material == 0 and cell.MatInfo != 'Graveyard' :
                 cellHeader = f'cell {index:<5d} 0 void '
-            elif cell.Material == 0 & cell.MatInfo == 'Graveyard' :
-                cellHeader = f'cell {index:<5d}  0 outside '
+            elif cell.Material == 0 and cell.MatInfo == 'Graveyard' :
+                cellHeader = f'cell {index:<5d} 0 outside '
             else:
                 self.Materials.add(cell.Material)
                 cellHeader = f'cell {index:<5d}  0  {cell.Material:<5d} '               
@@ -180,7 +180,7 @@ class Serpent_input:
 
 # No void all option in Serpent. For now remove addition of source. 
 
-    def __write_source_block__(self,cell):
+    def __write_source_block__(self):
        
 #       if self.SDEF_sphere is None:  return
        MODE = f'\nset nps 1e6\nset bc 1'
@@ -189,7 +189,7 @@ class Serpent_input:
           mat.sort()
           MATCARD = ''
           for m in mat:
-             MATCARD += 'mat {:<6d} {:11.4e} \n1001 1 \n'.format(m, cell.Density)           
+             MATCARD += 'mat {:<6d} {:11.4e} \n1001 1 \n'.format(m, self.cell.Density)           
           Block = MATCARD+'% \n'+MODE
        else:
           Block = MODE

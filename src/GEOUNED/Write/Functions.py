@@ -532,7 +532,7 @@ def SerpentSurface(id, Type, surf):
         # Is not still working fine
           Q=Qform.QFormCyl(Dir,Pos,rad)
           Serpent_def='''\
-surf {:<6d} quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
+surf quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
           {v[3]:{aTof}} {v[4]:{aTof}} {v[5]:{aTof}}
           {v[6]:{gToi}} {v[7]:{gToi}} {v[8]:{gToi}}
           {v[9]:{j}} '''.format(id,v=Q,aTof=nf.GQ_1to6,gToi=nf.GQ_7to9,j=nf.GQ_10)
@@ -551,19 +551,19 @@ surf {:<6d} quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
         if (isParallel(Dir,X_dir,tol.angle)):
           sheet=1
           if (isOposite(Dir,X_dir,tol.angle)): sheet=-1
-          Serpent_def = 'surf {:<6d} ckx  {:{xyz}} {:{xyz}} {:{xyz}} {:{t2}} {}'.format(id,Apex.x,Apex.y,Apex.z,tan**2,sheet,xyz=nf.K_xyz,t2=nf.K_tan2)
+          Serpent_def = 'surf ckx {:{xyz}} {:{xyz}} {:{xyz}} {:{t2}} {}'.format(id,Apex.x,Apex.y,Apex.z,tan**2,sheet,xyz=nf.K_xyz,t2=nf.K_tan2)
         elif (isParallel(Dir,Y_dir,tol.angle)):
           sheet=1
           if (isOposite(Dir,Y_dir,tol.angle)): sheet=-1
-          Serpent_def = 'surf {:<6d} cky  {:{xyz}} {:{xyz}} {:{xyz}} {:{t2}} {}'.format(id,Apex.x,Apex.y,Apex.z,tan**2,sheet,xyz=nf.K_xyz,t2=nf.K_tan2)
+          Serpent_def = 'surf cky {:{xyz}} {:{xyz}} {:{xyz}} {:{t2}} {}'.format(id,Apex.x,Apex.y,Apex.z,tan**2,sheet,xyz=nf.K_xyz,t2=nf.K_tan2)
         elif (isParallel(Dir,Z_dir,tol.angle)):
           sheet=1
           if (isOposite(Dir,Z_dir,tol.angle)): sheet=-1
-          Serpent_def = 'surf {:<6d} ckz {:{xyz}} {:{xyz}} {:{xyz}} {:{t2}} {}'.format(id,Apex.x,Apex.y,Apex.z,tan**2,sheet,xyz=nf.K_xyz,t2=nf.K_tan2)
+          Serpent_def = 'surf ckz {:{xyz}} {:{xyz}} {:{xyz}} {:{t2}} {}'.format(id,Apex.x,Apex.y,Apex.z,tan**2,sheet,xyz=nf.K_xyz,t2=nf.K_tan2)
         else:
           Q=Qform.QFormCone(Dir,Apex,tan)
           MCNP_def='''\
-surf {:<6d} quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
+surf quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
           {v[3]:{aTof}} {v[4]:{aTof}} {v[5]:{aTof}}
           {v[6]:{gToi}} {v[7]:{gToi}} {v[8]:{gToi}}
           {v[9]:{j}} '''.format(id,v=Q,aTof=nf.GQ_1to6,gToi=nf.GQ_7to9,j=nf.GQ_10)
