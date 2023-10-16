@@ -372,7 +372,7 @@ class GEOUNED() :
 
           lineComment = """\
 ##########################################################
-             VOIDS 
+             VOID CELLS
 ##########################################################"""
           mc = UF.GEOUNED_Solid(None)
           mc.Comments = lineComment
@@ -394,7 +394,7 @@ class GEOUNED() :
        # write outputformat input
        writeGeometry(UniverseBox,MetaList,Surfaces,code_setting)
    
-       print('End of MCNP translation phase')
+       print('End of MCNP, OpenMC and Serpent translation phase')
 
        print('Process finished')
        print(datetime.now()-startTime)

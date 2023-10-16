@@ -63,6 +63,10 @@ class Serpent_input:
        print (f'write Serpent file {filename}')
        self.inpfile=open(filename,'w',encoding='utf-8')
        self.__write_header__(filename)
+       cellblockHeader="""\
+% --- CELL DEFINITIONS 
+"""
+       self.inpfile.write(cellblockHeader)      
        self.__write_cell_block__()
        self.inpfile.write(' \n')
        
@@ -151,7 +155,7 @@ class Serpent_input:
             if cell.Material == 0 & cell.MatInfo != 'Graveyard' :
                 cellHeader = f'cell {index:<5d} 0 void '
             elif cell.Material == 0 & cell.MatInfo == 'Graveyard' :
-                cellHeader = f'cell {index:<5d}  0  outside '
+                cellHeader = f'cell {index:<5d}  0 outside '
             else:
                 self.Materials.add(cell.Material)
                 cellHeader = f'cell {index:<5d}  0  {cell.Material:<5d} '               
