@@ -456,11 +456,11 @@ def OpenMCSurface(Type,surf,outXML=True,quadricForm=False):
            coeffs ='x0={},y0={},z0={},r{},r1={},r2={}'.format(surf.Center.x, surf.Center.y, surf.Center.z, surf.MajorRadius, surf.MinorRadius, surf.MinorRadius)
 
         if (isParallel(Dir,FreeCAD.Vector(1,0,0),tol.angle)):
-             OMCsurf = 'x-torus' if outXML else XTorus
+             OMCsurf = 'x-torus' if outXML else 'XTorus'
         elif (isParallel(Dir,FreeCAD.Vector(0,1,0),tol.angle)):
-             OMCsurf = 'y-torus' if outXML else YTorus
+             OMCsurf = 'y-torus' if outXML else 'YTorus'
         elif (isParallel(Dir,FreeCAD.Vector(0,0,1),tol.angle)):
-             OMCsurf = 'z-torus' if outXML else ZTorus
+             OMCsurf = 'z-torus' if outXML else 'ZTorus'
         else:
              OMCsurf = None
 
