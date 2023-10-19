@@ -186,7 +186,7 @@ def writeSequenceOMCPY(Seq,prefix='S'):
      return line
 
 def MCNPSurface(id,Type,surf):
-    Serpent_def = ''
+    MCNP_def = ''
 
     if (Type=='Plane'):
       if surf.pointDef and opt.prnt3PPlane:
