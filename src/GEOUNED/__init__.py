@@ -90,6 +90,7 @@ class GEOUNED() :
                         if   v.lower() == 'mcnp'       : outFormat.append('mcnp')
                         elif v.lower() == 'openmc_xml' : outFormat.append('openMC_XML')
                         elif v.lower() == 'openmc_py'  : outFormat.append('openMC_PY')
+                        elif v.lower() == 'serpent'    : outFormat.append('serpent')
                      self.set(key, tuple(outFormat))   
                      
 
@@ -376,7 +377,7 @@ class GEOUNED() :
 
           lineComment = """\
 ##########################################################
-             VOIDS 
+             VOID CELLS
 ##########################################################"""
           mc = UF.GEOUNED_Solid(None)
           mc.Comments = lineComment
@@ -398,7 +399,7 @@ class GEOUNED() :
        # write outputformat input
        writeGeometry(UniverseBox,MetaList,Surfaces,code_setting)
    
-       print('End of MCNP translation phase')
+       print('End of MCNP, OpenMC and Serpent translation phase')
 
        print('Process finished')
        print(datetime.now()-startTime)
