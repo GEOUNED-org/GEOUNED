@@ -399,7 +399,7 @@ def GenTorusAnnexUPlanes(face,Uparams):
         else:
           return ((center,d1,face.Surface.MajorRadius,face.Surface.MajorRadius),(center,d2,face.Surface.MajorRadius,face.Surface.MajorRadius)),True  # (d1 : d2)
         
-def GenTorusAnnexVSurface(face,Vparams,forceCylinder=True):
+def GenTorusAnnexVSurface(face,Vparams,forceCylinder=False):
     if   isParallel(face.Surface.Axis,FreeCAD.Vector(1,0,0),tol.tor_angle) :
         axis = FreeCAD.Vector(1,0,0)
     elif isParallel(face.Surface.Axis,FreeCAD.Vector(0,1,0),tol.tor_angle) :
@@ -407,19 +407,19 @@ def GenTorusAnnexVSurface(face,Vparams,forceCylinder=True):
     elif isParallel(face.Surface.Axis,FreeCAD.Vector(0,0,1),tol.tor_angle) :
         axis = FreeCAD.Vector(0,0,1)
         
-    p1 = face.valueAt(0.,Vparams[0])
+    p1 = face.valueAt(0.,Vparams[0]) - face.Surface.Center
     z1 = p1.dot(axis)
     d1 = p1.cross(axis).Length
     
-    p2 = face.valueAt(0.,Vparams[1])
+    p2 = face.valueAt(0.,Vparams[1]) - face.Surface.Center
     z2 = p2.dot(axis)
     d2 = p2.cross(axis).Length
 
     if isSameValue(z1,z2,tol.distance) :
        surfType = 'Plane'
-       center   = face.Surface.Center + (z1 - face.Surface.Center.dot(axis)) *axis
+       center   = face.Surface.Center + z1 * axis
        Vmid = (Vparams[0]+Vparams[1])*0.5
-       pMid = face.valueAt(0,Vmid)
+       pMid = face.valueAt(0,Vmid) - face.Surface.Center
        if pMid.dot(axis) < z1 :
            inSurf = True
        else:
@@ -432,7 +432,7 @@ def GenTorusAnnexVSurface(face,Vparams,forceCylinder=True):
        center   = face.Surface.Center
        if isSameValue(d1,face.Surface.MajorRadius,tol.distance) :
            Vmid = (Vparams[0]+Vparams[1])*0.5
-           pMid = face.valueAt(0,Vmid)
+           pMid = face.valueAt(0,Vmid) - center
            if pMid.cross(axis).Length < face.Surface.MajorRadius :
                inSurf = True
            else:
@@ -446,23 +446,18 @@ def GenTorusAnnexVSurface(face,Vparams,forceCylinder=True):
     
     else :
        surfType = 'Cone'
-       zc = (d1*z2-d2*z1)/(d1-d2)
-       Apex   = face.Surface.Center + (zc - face.Surface.Center.dot(axis)) *axis
-       semiAngle = abs(math.atan(d1/(z1-zc)))
-       if z1-zc < 0 :
-          ConeAxis = -axis
-       else:
-          ConeAxis = axis 
+       za =  (z2*d1 - z1*d2)/(d1-d2)
+       Apex   = face.Surface.Center + za * axis
+       semiAngle = abs(math.atan(d1/(z1-za)))
+       ConeAxis = axis if za < 0 else -axis
 
        Vmid = (Vparams[0]+Vparams[1])*0.5
-       pMid = face.valueAt(0,Vmid)
+       pMid = face.valueAt(0,Vmid) - face.Surface.Center
        zMid = pMid.dot(axis) 
        dMid = pMid.cross(axis).Length
-       dCone= d1*(zMid-zc)/(z1-zc)
-       if dMid < dCone :
-          inSurf = True
-       else:
-          inSurf = False          
+
+       dCone= d1 * (zMid-za)/(z1-za)
+       inSurf = True if dMid < dCone  else False
        return (Apex,ConeAxis,semiAngle,face.Surface.MinorRadius,face.Surface.MajorRadius),surfType,inSurf      
 
 
