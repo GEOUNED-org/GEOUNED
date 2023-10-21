@@ -136,7 +136,7 @@ class solid_GU():
              removeList = [temp[0]] 
              while len(temp) > 0 and i < len(current) :
                 for tindex in temp:
-                    if self.Faces[current[i]].distToShape(self.Faces[tindex]) < tol.distance :
+                    if self.Faces[current[i]].distToShape(self.Faces[tindex])[0] < tol.distance :
                         if tindex not in current :
                             current.append(tindex)
                             removeList.append(tindex)
@@ -238,9 +238,9 @@ class Faces_GU(object):
             shape2 = shape.__face__
 
         if shape1 is shape2 :
-           return 0
+           return (0,)
         else:
-           return  shape1.distToShape(shape2)[0]
+           return  shape1.distToShape(shape2)
   
 
 # Aux functions
