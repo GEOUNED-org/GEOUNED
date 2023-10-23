@@ -411,7 +411,7 @@ def GenTorusAnnexVSurface(face,Vparams,forceCylinder=False):
     z1 = p1.dot(axis)
     d1 = p1.cross(axis).Length
     
-    p2 = face.valueAt(0.,Vparams[1])) - face.Surface.Center
+    p2 = face.valueAt(0.,Vparams[1]) - face.Surface.Center
     z2 = p2.dot(axis)
     d2 = p2.cross(axis).Length
 
