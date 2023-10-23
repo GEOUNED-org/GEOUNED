@@ -220,10 +220,16 @@ class Faces_GU(object):
         return self.__face__.valueAt(u,v)
 
     def distToShape(self,shape):
+        shape1 = self.__face__
         if type(shape) is Part.Shape:
-          return self.__face__.distToShape(shape)
+            shape2 = shape
         else:
-          return self.__face__.distToShape(shape.__face__)
+            shape2 = shape.__face__
+
+        if shape1 is shape2 :
+           return (0,)
+        else:
+           return  shape1.distToShape(shape2)
         
 
 # Aux functions
