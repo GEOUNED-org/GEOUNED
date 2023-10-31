@@ -48,11 +48,14 @@ Modification in 0.9.7 Release Date 06/12/2022
  new in version 1.0.1
   - implement new conversion module when all cells are made of triangular plane faces
   - bug fixed void complementary of level1 'AND' sequence
+  - changes in simplify function of BoolSequence class
   - implementation of the geometry conversion to Serpent code input file (by A. Valentine UKAEA)
   - fixed bug with torodial surfaces.
- '''
+  - implementation of new, more robust, cell definition, where adjacent solid cell definition is rested to current solid cell definition (forcing no overlaping cell).
+  - fix bug additional plane with sphere
+  '''
 
 
 GEOUNED_Version = '1.0.1'
-GEOUNED_ReleaseDate = '21/10/2023'
+GEOUNED_ReleaseDate = '31/10/2023'
 

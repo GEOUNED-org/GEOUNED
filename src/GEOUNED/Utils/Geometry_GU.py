@@ -217,12 +217,12 @@ class Faces_GU(object):
         self.Vertexes       = face.Vertexes
         return
 
-    def tessellate(self,val):
-        self.__face__.tessellate(val) 
-        return
+    def tessellate(self,val,reset=False):
+        res = self.__face__.tessellate(val,reset) 
+        return res
 
     def getUVNodes(self):
-        return self.__face__.getUVNodes()
+        return self.__face__.getUVNodes() 
 
     def isEqual(self,face):
         return self.__face__.isEqual(face.__face__)

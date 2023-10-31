@@ -36,18 +36,26 @@ class BoolSequence:
              if s in self.elements :
                  continue
              elif -s in self.elements:
-                self.level = 0
+                self.level = -1
                 if self.operator == 'AND' :
                    self.elements = False 
                 else:
                    self.elements = True
                 return
+         elif type(s) is bool :
+             if self.operator == 'AND' and     s  or\
+                self.operator == 'OR'  and not s   : 
+                continue
+             else:
+                self.elements = s
+                self.level =  -1
+                return
          else:
              level = s.level 
              if type(s.elements) is bool:
-               if self.operator == 'AND' and s.elements == False  or\
-                  self.operator == 'OR'  and s.elements == True   : 
-                  self.level = 0
+               if self.operator == 'AND' and not s.elements  or\
+                  self.operator == 'OR'  and     s.elements     : 
+                  self.level =  -1
                   self.elements = s.elements 
                   return
                else:
@@ -102,11 +110,17 @@ class BoolSequence:
            for seq in self.elements :
               seq.simplify(CT)
            self.clean()
+           self.joinOperators()
+           self.levelUpdate()
 
         if type(self.elements) is not bool and (self.level !=0 or len(self.elements) > 1) :
            levIn = self.level
            self.simplifySequence(CT)
-           if self.level > levIn: self.simplify(CT)
+           self.joinOperators()
+           self.levelUpdate()
+ 
+           if self.level > levIn: 
+              self.simplify(CT)
 
             
 
@@ -124,6 +138,7 @@ class BoolSequence:
              if type(self.elements) is bool: return
              newNames = self.getSurfacesNumbers()
        self.joinOperators()
+       self.levelUpdate()
        
 
     def simplify_old(self,CT,loop=0):
@@ -267,6 +282,7 @@ class BoolSequence:
 
     # join redundant operators in sequence
     def joinOperators(self):
+        self.levelUpdate()
         if self.level == 0 : return
         if type(self.elements) is bool: return
         self.groupSingle()
@@ -318,6 +334,10 @@ class BoolSequence:
              self.substitute(valname,False)
              return True
 
+        if falseSet is None:                  # valname cannot take false value
+             self.substitute(valname,True)
+             return True
+
         funcVal = self.evaluate(trueSet)
         if funcVal == False :   
             newSeq = BoolSequence(operator='AND')
@@ -327,6 +347,7 @@ class BoolSequence:
             newSeq.append(-valname,self.copy())
             self.assign(newSeq)
             return True
+
         elif funcVal == True:
             newSeq = BoolSequence(operator='OR')
             #self.substitute(valname,False)
@@ -336,9 +357,6 @@ class BoolSequence:
             self.assign(newSeq)
             return True
 
-        if falseSet is None:                  # valname cannot take false value
-             self.substitute(valname,True)
-             return True
 
         funcVal = self.evaluate(falseSet)
         if funcVal == False :   
@@ -349,6 +367,7 @@ class BoolSequence:
             newSeq.append(valname,self.copy())
             self.assign(newSeq)
             return True
+
         elif funcVal == True:
             newSeq = BoolSequence(operator='OR')
             #self.substitute(valname,True)
@@ -372,7 +391,7 @@ class BoolSequence:
         if type(newSeq.elements) is bool :
             return newSeq.elements
         else :
-            surfNames = newSeq.getSurfacesNumbers()        
+            surfNames = tuple(newSeq.getSurfacesNumbers())        
             valname = surfNames[0]
             if CT is None :
                 trueSet  = {abs(valname) : True }
@@ -444,7 +463,7 @@ class BoolSequence:
          else:
             x = BoolSequence(t) 
             self.level = max(x.level+1,self.level)
-            self.elements.append(x)
+            self.append(x)
        
        # check if in integer sequence there is surface sequence s -s 
        if len(lev0Seq) != len(lev0SeqAbs) :
@@ -452,8 +471,9 @@ class BoolSequence:
              self.elements = False
           else:
              self.elements = True
+          self.level = -1
        else:
-           self.elements.extend(lev0Seq)
+           self.append(*lev0Seq)
           
        self.groupSingle()     
 
@@ -486,22 +506,39 @@ class BoolSequence:
                 surf.add(abs(e))
            else:
                 surf.update(e.getSurfacesNumbers())
-        return tuple(surf)             
+        return surf             
 
     def levelUpdate(self):
        if type(self.elements) is bool :
           self.level = 0
           return
-
-       newlev = 0
+     
+       self.level = 0
        for e in self.elements:
-          if type(e) is int :
-             lev=0
-          else:
-             lev=e.level+1
-          newlev = max(lev,newlev)
-       self.level = newlev
+          if type(e) is  int : continue
+          e.levelUpdate()
+          self.level = max(e.level+1,self.level)
 
+def insertInSequence(Seq,trgt,nsrf,operator):
+
+    if operator == 'OR' :
+        newSeq = BoolSequence(f'{trgt}:{nsrf}')
+    else:
+        newSeq = BoolSequence(f'{trgt} {nsrf}')
+
+    substituteIntegerElement(Seq,trgt,newSeq)        
+    Seq.joinOperators()
+
+
+def substituteIntegerElement(Seq,target,newElement):
+    for i,e in enumerate(Seq.elements):
+       if type(e) is int:
+          if e  == target :
+               Seq.elements[i] = newElement
+               Seq.level = max(Seq.level,1)
+       else:
+          substituteIntegerElement(e,target,newElement)
+          
 
 def outterTerms(expression,value='number'):
       if value == 'number' :

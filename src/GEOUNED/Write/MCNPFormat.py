@@ -136,11 +136,11 @@ C **************************************************************\n""".format(sel
 
     def __write_cells__(self,cell):
 
-       index = cell.__id__
+       index = cell.label
 
        # if index is None objet not contain cell definition
        # but a comment to insert between cells
-       if index is None :
+       if cell.__id__ is None :
            comment = self.__commentLine__(cell.Comments)
            self.inpfile.write(comment)
            return
@@ -347,7 +347,7 @@ C **************************************************************\n""".format(sel
         volumeList = []
         for m in self.Cells :
           if m.CellType == 'solid' and m.__id__ is not None:
-             solidList.append(m.__id__)
+             solidList.append(m.label)
              volumeList.append(m.Volume*1e-3)
                           
         return   solidList, volumeList                        

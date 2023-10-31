@@ -922,7 +922,7 @@ def removeSolids(Solids):
     Solids_Clean=[]
     for solid in Solids:
         if solid.Volume <= Vol_tol:
-            if opt.verbose : print('Warning: degenerated solids are produced')
+            if opt.verbose : print('Warning: removeSolids degenerated solids are produced',solid.Volume)
             err=2
             continue
         Solids_Clean.append(solid)
@@ -948,7 +948,7 @@ def splitComponent(solidShape,UniverseBox):
     Pieces = []
     for part in split:
        if part.Volume <= 1e-10:
-          if opt.verbose : print('Warning: degenerated solids are produced')
+          if opt.verbose : print('Warning: splitComponent degenerated solids are produced',part.Volume)
           err += 2
           continue
        Pieces.append(part)                  

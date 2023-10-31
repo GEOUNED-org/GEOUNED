@@ -2,7 +2,7 @@ import sys
 import os
 import subprocess
 
-sys.path.append('/work/patrick/GEOUNED/pruF4E/src/')
+sys.path.append('/work/patrick/GEOUNED/prualjaz/src')
 sys.path.append('/usr/lib64/freecad/lib64/')
 
 from GEOUNED import GEOUNED
@@ -39,7 +39,7 @@ minVoidSize =  100
 cellSummaryFile = False
 cellCommentFile = False
 debug       = False
-simplify   = full
+simplify   = no
 
 [Options]
 forceCylinder = False
@@ -149,10 +149,16 @@ def postProcess(folder):
       printResults(fmct[:-1]+'i',res,lost)
 
 # ****************************************************
-inpDir = 'inputSTEP/Misc'
-outDir = 'outMCNP/Misc'
-inpDir = 'inputSTEP/'
-outDir = 'outMCNP/'
+#inpDir = 'inputSTEP/Misc'
+#outDir = 'outMCNP/Misc'
+#inpDir = 'inputSTEP/DoubleCylinder'
+#outDir = 'outMCNP/DoubleCylinder'
+#inpDir = 'inputSTEP/Torus'
+#outDir = 'outMCNP/Torus'
+inpDir = 'inputSTEP/large'
+outDir = 'outMCNP/large'
+#inpDir = 'inputSTEP/'
+#outDir = 'outMCNP/'
 inifile = 'config.ini'
 
 
