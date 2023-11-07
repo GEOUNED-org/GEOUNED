@@ -167,7 +167,6 @@ class CADCell:
           if self.surfaces[s].params is None:
               undefined.append(s)
        if undefined:
-           print('undefined surfaces',undefined)
            self.definition.removeSurface(undefined)
 
        for s in undefined:
@@ -268,16 +267,17 @@ class Sphere:
      
 
 class Cylinder:
-    def __init__(self,Id,params,tr=None):
+    def __init__(self,Id,params,tr=None,truncated=False):
         self.type = 'cylinder'
         self.id = Id
         self.shape = None
         self.params = params
+        self.truncated = truncated
         if tr :
            self.transform(tr)
 
     def copy(self):
-        return Cylinder(self.id,self.params)
+        return Cylinder(self.id,self.params,truncated=self.truncated)
 
     def transform(self,matrix):
         p,v,R = self.params
@@ -288,61 +288,75 @@ class Cylinder:
     def buildShape(self,boundBox):
 
         p, vec, r = self.params
-
-        dmin = vec.dot(boundBox.getPoint(0)-p)
-        dmax = dmin
-        for i in range(1,8) :
-           d = vec.dot(boundBox.getPoint(i)-p)
-           dmin = min(d,dmin)
-           dmax = max(d,dmax)
-
-        height = dmax-dmin
-        dmin -= 0.1*height
-        dmax += 0.1*height
-        height = dmax-dmin
    
-        point = p + dmin * vec
-        self.shape = Part.makeCylinder( r,height,point,vec,360)
+        if not self.truncated :
+           dmin = vec.dot(boundBox.getPoint(0)-p)
+           dmax = dmin
+           for i in range(1,8) :
+              d = vec.dot(boundBox.getPoint(i)-p)
+              dmin = min(d,dmin)
+              dmax = max(d,dmax)
+
+           height = dmax-dmin
+           dmin -= 0.1*height
+           dmax += 0.1*height
+           height = dmax-dmin
+    
+           point = p + dmin * vec
+           self.shape = Part.makeCylinder( r,height,point,vec,360)
+        else:
+           self.shape = Part.makeCylinder( r,vec.Length,p,vec,360)
         return
 
 class Cone:
-    def __init__(self,Id,params,tr=None):
+    def __init__(self,Id,params,tr=None,truncated=False):
         self.type = 'cone'
         self.id = Id
         self.shape = None
         self.params = params
+        self.truncated = truncated
         if tr :
            self.transform(tr) 
 
     def copy(self):
-        return Cone(self.id,self.params)
+        return Cone(self.id,self.params,truncated=self.truncated)
 
     def transform(self,matrix):
-        p,v,t,dbl = self.params
-        v = matrix.submatrix(3).multVec(v)
-        p = matrix.multVec(p)
-        self.params = (p,v,t,dbl)
+        if not self.truncated :
+           p,v,t,dbl = self.params
+           v = matrix.submatrix(3).multVec(v)
+           p = matrix.multVec(p)
+           self.params = (p,v,t,dbl)
+        else:
+           p,v,r1,r2 = self.params
+           v = matrix.submatrix(3).multVec(v)
+           p = matrix.multVec(p)
+           self.params = (p,v,r1,r2)
     
     def buildShape(self,boundBox):
-        apex, axis, t, dblsht = self.params
+        if not self.truncated :
+           apex, axis, t, dblsht = self.params
         
-        dmin = axis.dot(boundBox.getPoint(0)-apex)
-        dmax = dmin
-        for i in range(1,8) :
-           d = axis.dot(boundBox.getPoint(i)-apex)
-           dmin = min(d,dmin)
-           dmax = max(d,dmax)
+           dmin = axis.dot(boundBox.getPoint(0)-apex)
+           dmax = dmin
+           for i in range(1,8) :
+              d = axis.dot(boundBox.getPoint(i)-apex)
+              dmin = min(d,dmin)
+              dmax = max(d,dmax)
 
-        length = max(abs(dmin),abs(dmax))
-        R = length * t
-        OneSheetCone = Part.makeCone( 0,R,length,apex,axis,360)
-        if not dblsht :
-           self.shape = OneSheetCone
+           length = max(abs(dmin),abs(dmax))
+           R = length * t
+           OneSheetCone = Part.makeCone( 0,R,length,apex,axis,360)
+           if not dblsht :
+              self.shape = OneSheetCone
+           else:
+              OtherSheet = Part.makeCone( 0,R,length,apex,-axis,360)
+              DoubleSheetCone = OneSheetCone.fuse([OtherSheet])
+              DoubleSheetCone.removeSplitter()
+              self.shape = DoubleSheetCone  
         else:
-           OtherSheet = Part.makeCone( 0,R,length,apex,-axis,360)
-           DoubleSheetCone = OneSheetCone.fuse([OtherSheet])
-           DoubleSheetCone.removeSplitter()
-           self.shape = DoubleSheetCone  
+           center, axis, r1, r2= self.params
+           self.shape = Part.makeCone( r1,r2,axis.Length,center,axis,360)
 
 class Torus:
     def __init__(self,Id,params,tr=None):
@@ -365,6 +379,43 @@ class Torus:
     def buildShape(self,boundBox):
         center, axis, majorR, minorR  = self.params  #Ra distance from torus axis; R radius of toroidal-cylinder
         self.shape = Part.makeTorus(majorR,minorR,center,axis)
+
+class Box:
+    def __init__(self,Id,params,tr=None):
+        self.type = 'box'
+        self.id = Id
+        self.shape = None
+        self.params = params
+        if tr :
+           self.transform(tr)
+
+    def copy(self):
+        return Box(self.id,self.params)
+    
+    def transform(self,matrix):
+        p,v1,v2,v3 = self.params
+        p = matrix.multVec(p)
+        v1= matrix.multVec(v1)
+        v2= matrix.multVec(v2)
+        v3= matrix.multVec(v3)
+        self.params = (p,v1,v2,v3)    
+
+    def buildShape(self,boundBox):
+        p,v1,v2,v3 = self.params
+        a1 = FreeCAD.Vector(v1)
+        a2 = FreeCAD.Vector(v2)
+        a3 = FreeCAD.Vector(v3)
+        a1.normalize()
+        a2.normalize()
+        a3.normalize()
+
+        m=FreeCAD.Matrix(a1.x, a2.x, a3.x, p.x,
+                         a1.y, a2.y, a3.y, p.y,
+                         a1.z, a2.z, a3.z, p.z,
+                         0,    0,    0,    1)
+        box = Part.makeBox(v1.Length,v2.Length,v3.Length)
+        self.shape = box.transformGeometry(m)
+
       
 
 class Undefined:
@@ -409,7 +460,6 @@ def FuseSolid(parts):
              else:
                 solid = Part.makeCompound(parts)
        else:
-         print('parts',parts)
          solid = Part.makeCompound(parts)
            
     if solid.Volume < 0 : solid.reverse()

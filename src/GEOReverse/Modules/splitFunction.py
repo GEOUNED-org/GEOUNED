@@ -229,19 +229,51 @@ def surface_side(p,surf):
         inout = p.dot(normal) - d
 
      elif surf.type == 'cylinder':
-         P,v,R = surf.params
-         D = p-P
-         inout = D.cross(v).Length - R
+         if not surf.truncated:
+            P,v,R = surf.params
+            D = p-P
+            inout = D.cross(v).Length - R
+         else:
+            P,v,R = surf.params
+            D = p-P
+
+            inCyl = D.cross(v).Length/v.Length - R  # <0 in cylinder
+            inPln = bwtPPlanes(p,P,v)    # <0  between planes
+
+            if (inCyl <0 ) and ( inPln < 0 )  :
+               inout = -1       # inside the can
+            else:
+               inout = 1        # outside the can
+             
          
      elif surf.type == 'cone':
-         P,v,t,dblsht = surf.params
-         X = p-P
-         X.normalize()
-         dprod = X.dot(v)
-         dprod = max(-1,min(1,dprod))
-         a = math.acos(dprod)
-         if dblsht : a = math.acos(abs(dprod))  
-         inout = a - math.atan(t)
+         if not surf.truncated:
+            P,v,t,dblsht = surf.params
+            X = p-P
+            X.normalize()
+            dprod = X.dot(v)
+            dprod = max(-1,min(1,dprod))
+            a = math.acos(dprod)
+            if dblsht : a = math.acos(abs(dprod))  
+            inout = a - math.atan(t)
+         else:
+            P,v,R1,R2 = surf.params
+            apex = P + R1/(R1-R2)*v
+           
+            X = p-apex
+            X.normalize()
+            dprod = X.dot(-v)/v.Length   # -v because reverse axis. in MCNP TRC r1 > r2
+            dprod = max(-1,min(1,dprod))
+            a = math.acos(dprod)
+
+            t = (R1-R2)/v.Length
+            inCone = a - math.atan(t)
+            inPln = bwtPPlanes(p,P,v)    # <0  between planes
+
+            if (inCone <0 ) and ( inPln < 0 ) :
+               inout = -1       # inside the can
+            else:
+               inout = 1        # outside the can
          
      elif surf.type == 'torus':
          P,v,Ra,R = surf.params
@@ -261,6 +293,12 @@ def surface_side(p,surf):
             sx3 = d.y*d.y
 
          inout = sx1/(R*R) + (math.sqrt(sx2+sx3)-Ra)**2/(R*R) -1 
+
+     elif surf.type == 'box':
+         P,v1,v2,v3 = surf.params
+         for v in (v1,v2,v3):
+            inout = bwtPPlanes(p,P,v)    # <0  between planes
+            if inout > 0 : break
         
      else:
        print ('surface type {} not considered'.format(surf[0]))
@@ -269,6 +307,17 @@ def surface_side(p,surf):
      return inout > 0 
 
 
+def bwtPPlanes(p,p0,v):
+
+    p1 = p0 + v 
+    inP0 = v.dot(p-p0)             # >0 plane(base plane) side inside the cylinder
+    inP1 = v.dot(p-p1)             # >0 plane(base plane) side inside the cylinder
+
+    if (inP0 >0 ) and (inP1 < 0 ) :
+       return -1
+    else:     
+       return  1
+ 
 #************************************************    
 
 def FuseSolid(parts):

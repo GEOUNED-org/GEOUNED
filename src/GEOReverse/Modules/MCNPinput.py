@@ -430,9 +430,9 @@ def Get_primitive_surfaces(mcnp_surfaces,scale=10.) :
             elif MCNPtype == 'PZ':
                 params = ( Z_vec, MCNPparams[0]*scale )
                 
-         elif MCNPtype in ['S','SX','SY','SZ','SO'] :
+         elif MCNPtype in ['S','SX','SY','SZ','SO','SPH'] :
             Stype = 'sphere'
-            if MCNPtype == 'S':
+            if MCNPtype in ['S','SPH']:
                 params = (FreeCAD.Vector(MCNPparams[0:3])*scale, MCNPparams[3]*scale)
             elif MCNPtype == 'SX':
                 params = ( FreeCAD.Vector(MCNPparams[0]*scale, 0.0, 0.0), MCNPparams[1]*scale )
@@ -697,18 +697,76 @@ def Get_primitive_surfaces(mcnp_surfaces,scale=10.) :
                     params = ( origin,Z_vec,MCNPparams[1] )
              else:
                  print('not implemented surfaces defined by point with more than 2couples of value')                 
-     
+
+         elif MCNPtype == 'BOX' :
+            Stype = 'box'
+            p  = FreeCAD.Vector(MCNPparams[0:3])
+            v1 = FreeCAD.Vector(MCNPparams[3:6])
+            v2 = FreeCAD.Vector(MCNPparams[6:9])
+            v3 = FreeCAD.Vector(MCNPparams[9:12])
+            if scale != 1.0 :
+               p  = p.multiply(scale)
+               v1 = v1.multiply(scale)
+               v2 = v2.multiply(scale)
+               v3 = v3.multiply(scale)
+            params = ( p,v1,v2,v3 )  
+
+         elif MCNPtype == 'RPP' :
+            Stype = 'box'
+            xmin,xmax,ymin,ymax,zmin,zmax = MCNPparams[0:6]
+            lx = xmax-xmin
+            ly = ymax-ymin
+            lz = zmax-zmin
+            p  = FreeCAD.Vector(xmin,ymin,zmin)
+            v1 = FreeCAD.Vector(lx,0,0)
+            v2 = FreeCAD.Vector(0,ly,0)
+            v3 = FreeCAD.Vector(0,0,lz)
+            if scale != 1.0 :
+               p  = p.multiply(scale)
+               v1 = v1.multiply(scale)
+               v2 = v2.multiply(scale)
+               v3 = v3.multiply(scale)
+            params = ( p,v1,v2,v3 )  
+
+         elif MCNPtype == 'RCC' :
+            Stype = 'can'
+            p  = FreeCAD.Vector(MCNPparams[0:3])
+            v  = FreeCAD.Vector(MCNPparams[3:6])
+            R = MCNPparams[6]
+            print('toto1',MCNPparams)
+            if scale != 1.0 :
+               p = p.multiply(scale)
+               v = v.multiply(scale)
+               R *= scale
+            params = ( p,v,R )  
+            print('toto2',params)
+
+         elif MCNPtype == 'TRC' :
+            Stype = 'tcone'
+            p  = FreeCAD.Vector(MCNPparams[0:3])
+            v  = FreeCAD.Vector(MCNPparams[3:6])
+            R1 = MCNPparams[6]
+            R2 = MCNPparams[7]
+            if scale != 1.0 :
+               p = p.multiply(scale)
+               v = v.multiply(scale)
+               R1 *= scale
+               R2 *= scale
+            params = ( p,v,R1,R2 )  
+           
 
          if Stype == 'plane':
              surfaces[Sid] = Plane(number, params, trsf)
          elif Stype == 'sphere':
              surfaces[Sid] = Sphere(number, params, trsf)    
-         elif Stype == 'cylinder':
-             surfaces[Sid] = Cylinder(number, params,trsf)
-         elif Stype == 'cone':
-             surfaces[Sid] = Cone(number, params,trsf)
+         elif Stype == 'cylinder' or Stype == 'can':
+             surfaces[Sid] = Cylinder(number, params,trsf, Stype == 'can' )
+         elif Stype == 'cone' or Stype == 'tcone' :
+             surfaces[Sid] = Cone(number, params,trsf, Stype == 'tcone')
          elif Stype == 'torus':
              surfaces[Sid] = Torus(number, params,trsf)
+         elif Stype == 'box':
+             surfaces[Sid] = Box(number, params,trsf)
          else :
              print('Undefined',Sid)
              print( MCNPtype ,number,MCNPparams) 

@@ -1171,7 +1171,8 @@ def is_commented(l):
 
     # remove newline chars at the end of l:
     l = l.splitlines()[0]
-    if 'c ' in l[0:6].lstrip().lower():
+    ls = l[0:6].lstrip().lower()
+    if 'c ' == ls[0:2] :
         res = True
         # print 'is_com "c "',
     elif 'c' == l.lower():
