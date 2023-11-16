@@ -129,15 +129,17 @@ def BuildUniverse(startInfo,ContainerCell,AllUniverses,universeCut=True,duplicat
            if type(NTcell.definition) is not BoolSequence:
                NTcell.definition = BoolSequence(NTcell.definition.str)
 
-           #bBox = NTcell.getBoundBox(ContainerCell.shape.BoundBox)
            bBox = ContainerCell.shape.BoundBox
-           #NTcell.buildShape(bBox,surfTR=CTRF,simplify=False,box=False)
-           NTcell.buildShape(bBox,surfTR=CTRF,simplify=False)
          
-          # try:
-          #    NTcell.buildShape(CC.shape.BoundBox,surfTR=CTRF,simplify=False)
-          # except:
-          #    fails.append(NTcell.name)
+           debug = False
+           if debug :
+              NTcell.buildShape(bBox,surfTR=CTRF,simplify=False)
+           else:
+              try:
+                NTcell.buildShape(bBox,surfTR=CTRF,simplify=False)
+              except:
+                print(f'fail converting cell {NTcell.name}') 
+                fails.append(NTcell.name)
        
            if NTcell.shape is None : continue
 
