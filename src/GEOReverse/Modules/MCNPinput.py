@@ -480,8 +480,7 @@ def Get_primitive_surfaces(mcnp_surfaces,scale=10.) :
 
          elif MCNPtype in ['KX','KY','KZ'] :
             Stype = 'cone' 
-            x1 = MCNPparams[0]
-            t2 = MCNPparams[1]
+            x1,t2 = MCNPparams[0:2]
             t  = math.sqrt(t2)
             dblsht = True
 
@@ -516,10 +515,7 @@ def Get_primitive_surfaces(mcnp_surfaces,scale=10.) :
                          
          elif MCNPtype in ['K/X','K/Y','K/Z'] :
             Stype = 'cone' 
-            x1 = MCNPparams[0]
-            x2 = MCNPparams[1]
-            x3 = MCNPparams[2]
-            p  = FreeCAD.Vector(x1,x2,x3)
+            p  = FreeCAD.Vector(MCNPparams[0:3])
             t2 = MCNPparams[3]
             t  = math.sqrt(t2)
             dblsht = True
@@ -551,13 +547,8 @@ def Get_primitive_surfaces(mcnp_surfaces,scale=10.) :
 
          elif MCNPtype in ['TX','TY','TZ'] :
             Stype = 'torus'
-            x1 = MCNPparams[0]
-            x2 = MCNPparams[1]
-            x3 = MCNPparams[2]
-            p  = FreeCAD.Vector(x1,x2,x3)
-            Ra = MCNPparams[3]
-            Rb = MCNPparams[4]
-            Rc = MCNPparams[5]
+            p        = FreeCAD.Vector(MCNPparams[0:3])
+            Ra,Rb,Rc = MCNPparams[3:6]
 
             if   MCNPtype == 'TX':
               v  = X_vec
@@ -791,12 +782,39 @@ def Get_primitive_surfaces(mcnp_surfaces,scale=10.) :
                R *= scale
             params = ( p,v,R )  
 
+         elif MCNPtype == 'REC' :
+            Stype = 'ecan'
+            p       = FreeCAD.Vector(MCNPparams[0:3])
+            v       = FreeCAD.Vector(MCNPparams[3:6])
+            majAxis = FreeCAD.Vector(MCNPparams[6:9])
+            majRad  = majAxis.Length
+            majAxis.normalize()
+            
+            if len(MCNPparams) == 12:
+               minAxis = FreeCAD.Vector(MCNPparams[9:12])
+               minRad  = minAxis.Length
+               minAxis.normalize()
+            else:
+               minRad = MCNPparams[9] 
+               minAxis = v.cross(majAxis)/v.Length
+
+            if scale != 1.0 :
+               p = p.multiply(scale)
+               v = v.multiply(scale)
+               majRad *= scale
+               minRad *= scale
+
+            if minRad > majRad :
+               minRad,majRad = majRad,minRad
+               minAxis,majAxis = majAxis,minAxis
+            
+            params = ( p,v,[minRad,majRad],[minAxis,majAxis])  
+
          elif MCNPtype == 'TRC' :
             Stype = 'tcone'
             p  = FreeCAD.Vector(MCNPparams[0:3])
             v  = FreeCAD.Vector(MCNPparams[3:6])
-            R1 = MCNPparams[6]
-            R2 = MCNPparams[7]
+            R1,R2 = MCNPparams[6:8]
             if scale != 1.0 :
                p = p.multiply(scale)
                v = v.multiply(scale)
@@ -811,8 +829,8 @@ def Get_primitive_surfaces(mcnp_surfaces,scale=10.) :
              surfaces[Sid] = Sphere(number, params, trsf)    
          elif Stype == 'cylinder' or Stype == 'can':
              surfaces[Sid] = Cylinder(number, params,trsf, Stype == 'can' )
-         elif Stype == 'cylinder_elliptic' :
-             surfaces[Sid] = EllipticCylinder(number, params,trsf )
+         elif Stype == 'cylinder_elliptic' or Stype == 'ecan':
+             surfaces[Sid] = EllipticCylinder(number, params,trsf, Stype == 'ecan' )
          elif Stype == 'cylinder_hyperbolic' :
              surfaces[Sid] = HyperbolicCylinder(number, params,trsf )
          elif Stype == 'cone' or Stype == 'tcone' :

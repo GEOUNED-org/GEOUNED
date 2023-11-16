@@ -460,16 +460,17 @@ class Ellipsoid:
         self.shape = makeEllipsoid(center,radii,rAxes,axis)
 
 class EllipticCylinder:
-    def __init__(self,Id,params,tr=None):
+    def __init__(self,Id,params,tr=None,truncated=False):
         self.type = 'cylinder_elliptic'
         self.id = Id
         self.shape = None
         self.params = params
+        self.truncated = truncated
         if tr :
            self.transform(tr) 
 
     def copy(self):
-        return EllipticCylinder(self.id,self.params)
+        return EllipticCylinder(self.id,self.params,truncated=self.truncated)
 
     def transform(self,matrix):
            p,v,radii,raxes = self.params
@@ -481,21 +482,24 @@ class EllipticCylinder:
     
     def buildShape(self,boundBox):
         center, axis, radii, rAxes = self.params
+        if not self.truncated :
+           dmin = axis.dot(boundBox.getPoint(0)-center)
+           dmax = dmin
+           for i in range(1,8) :
+              d = axis.dot(boundBox.getPoint(i)-center)
+              dmin = min(d,dmin)
+              dmax = max(d,dmax)
 
-        dmin = axis.dot(boundBox.getPoint(0)-center)
-        dmax = dmin
-        for i in range(1,8) :
-           d = axis.dot(boundBox.getPoint(i)-center)
-           dmin = min(d,dmin)
-           dmax = max(d,dmax)
+           height = dmax-dmin
+           dmin -= 0.1*height
+           dmax += 0.1*height
+           height = dmax-dmin
+           point = center + dmin * axis
 
-        height = dmax-dmin
-        dmin -= 0.1*height
-        dmax += 0.1*height
-        height = dmax-dmin
-        point = center + dmin * axis
-
-        self.shape = makeEllipticCylinder(point,radii,rAxes,axis,height)
+           self.shape = makeEllipticCylinder(point,radii,rAxes,axis,height)
+        else:
+           height = axis.Length
+           self.shape = makeEllipticCylinder(center,radii,rAxes,axis/height,height)
 
 class HyperbolicCylinder:
     def __init__(self,Id,params,tr=None):
