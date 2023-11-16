@@ -6,7 +6,6 @@ from GEOUNED.Utils.Options.Classes import Options as opt
 from GEOUNED.Write.StringFunctions import remove_redundant
 
 import FreeCAD
-import copy
 import math
 import re
 
@@ -211,9 +210,9 @@ def MCNPSurface(id,Type,surf):
             MCNP_def='{:<6d} P   {:{abc}} {:{abc}} {:{abc}} {:{d}}'.format(id,A,B,C,D/10.0,abc=nf.P_abc,d=nf.P_d)  
     
     elif (Type == 'Cylinder'):
-        Pos = copy.deepcopy(surf.Center)
+        Pos = FreeCAD.Vector(surf.Center)
         Pos.multiply(0.1)
-        Dir = copy.deepcopy(surf.Axis)
+        Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
         rad = surf.Radius/10.0
         if (isParallel(Dir,FreeCAD.Vector(1,0,0),tol.angle)):
@@ -253,9 +252,9 @@ def MCNPSurface(id,Type,surf):
         #    MCNP_def='%i  RCC  %13.7E %13.7E %13.7E %13.7E\n       %13.7E %13.7E %13.7E' %(id,Vx,Vy,Vz,Hx,Hy,Hz,rad)
         
     elif (Type == 'Cone'):
-        Apex = copy.deepcopy(surf.Apex)
+        Apex = FreeCAD.Vector(surf.Apex)
         Apex.multiply(0.1)
-        Dir = copy.deepcopy(surf.Axis)
+        Dir = FreeCAD.Vector(surf.Axis)
         Dir.multiply(0.1)
         tan = math.tan(surf.SemiAngle)
         X_dir=FreeCAD.Vector(1,0,0)
@@ -300,9 +299,9 @@ def MCNPSurface(id,Type,surf):
            MCNP_def='{:<6d} S  {:{xyz}} {:{xyz}} {:{xyz}} {:{r}}'.format(id,pnt.x,pnt.y,pnt.z,rad,xyz=nf.S_xyz,r=nf.S_r)
 
     elif (Type == 'Torus'):
-        Pos = copy.deepcopy(surf.Center)
+        Pos = FreeCAD.Vector(surf.Center)
         Pos.multiply(0.1)
-        Dir = copy.deepcopy(surf.Axis)
+        Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
         radMaj = surf.MajorRadius/10.0
         radMin = surf.MinorRadius/10.0
@@ -369,7 +368,7 @@ def OpenMCSurface(Type,surf,outXML=True,quadricForm=False):
     
     elif (Type == 'Cylinder'):
         Pos = surf.Center
-        Dir = copy.deepcopy(surf.Axis)
+        Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
 
         if (isParallel(Dir,FreeCAD.Vector(1,0,0),tol.angle)):
@@ -413,7 +412,7 @@ def OpenMCSurface(Type,surf,outXML=True,quadricForm=False):
         
     elif (Type == 'Cone'):
         Apex = surf.Apex
-        Dir = copy.deepcopy(surf.Axis)
+        Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
         tan  = math.tan(surf.SemiAngle)
         tan2 = tan * tan
@@ -471,14 +470,14 @@ def OpenMCSurface(Type,surf,outXML=True,quadricForm=False):
 
 
     elif (Type == 'Torus'):
-        Dir = copy.deepcopy(surf.Axis)
+        Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
         if outXML :
            coeffs ='{:{xyz}} {:{xyz}} {:{xyz}} {:{r}} {:{r}} {:{r}}'.format(surf.Center.x, surf.Center.y, surf.Center.z,  \
                                                                      surf.MajorRadius, surf.MinorRadius, surf.MinorRadius,\
                                                                      xyz=nf.T_xyz,r=nf.T_r)     
         else:
-           coeffs ='x0={},y0={},z0={},a={},b={},c={}'.format(surf.Center.x, surf.Center.y, surf.Center.z, surf.MajorRadius, surf.MinorRadius, surf.MinorRadius)
+           coeffs ='x0={},y0={},z0={},r{},r1={},r2={}'.format(surf.Center.x, surf.Center.y, surf.Center.z, surf.MajorRadius, surf.MinorRadius, surf.MinorRadius)
 
         if (isParallel(Dir,FreeCAD.Vector(1,0,0),tol.angle)):
              OMCsurf = 'x-torus' if outXML else 'XTorus'
