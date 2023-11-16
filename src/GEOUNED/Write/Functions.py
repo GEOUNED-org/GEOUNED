@@ -478,7 +478,7 @@ def OpenMCSurface(Type,surf,outXML=True,quadricForm=False):
                                                                      surf.MajorRadius, surf.MinorRadius, surf.MinorRadius,\
                                                                      xyz=nf.T_xyz,r=nf.T_r)     
         else:
-           coeffs ='x0={},y0={},z0={},r{},r1={},r2={}'.format(surf.Center.x, surf.Center.y, surf.Center.z, surf.MajorRadius, surf.MinorRadius, surf.MinorRadius)
+           coeffs ='x0={},y0={},z0={},a={},b={},c={}'.format(surf.Center.x, surf.Center.y, surf.Center.z, surf.MajorRadius, surf.MinorRadius, surf.MinorRadius)
 
         if (isParallel(Dir,FreeCAD.Vector(1,0,0),tol.angle)):
              OMCsurf = 'x-torus' if outXML else 'XTorus'
