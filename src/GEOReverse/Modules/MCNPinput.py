@@ -1181,7 +1181,7 @@ def conicSurface(eVal,vect,T,U) :
    elif ek == (1,-1) :
        # ellipsoid
        # function can return cylinder or cone if hyperboiloid can be aproximated by such surfaces (within some criterion)
-       stype,params = get_ellipsoid_parameters(eVal,vect,T,-k,iaxis)
+       stype,params = get_ellipsoid_parameters(eVal,vect,T,-k)
    else:
        stype  = 'unknown'
        params = None
