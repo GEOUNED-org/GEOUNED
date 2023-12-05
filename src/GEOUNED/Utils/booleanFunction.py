@@ -69,6 +69,35 @@ class BoolSequence:
         self.elements = Seq.elements
         self.level    = Seq.level 
 
+    def update(self,Seq,pos):
+        if len(pos)== 0:
+           self.assign(Seq)
+           return
+        elif len(pos) == 1:
+           base = self
+        else:
+           base = self.getElement(pos[:-1])
+
+        indexes = pos[-1]
+        indexes.sort()
+        for i in reversed(indexes):
+           del (base.elements[i])
+
+        if type(Seq.elements) is bool :
+           base.elements = Seq.elements
+           base.level = -1
+        else:
+           base.append(Seq)
+           base.joinOperators()
+        self.clean(selfLevel=True)
+        return
+
+    def getElement(self,pos):
+        if len(pos) == 1 :
+           return self.elements[pos[0]]
+        else:
+           return self.elements[pos[0]].getElement(pos[1:])
+
     def copy(self):
         cp = BoolSequence()
         cp.operator= self.operator
@@ -105,122 +134,135 @@ class BoolSequence:
        else:
           return 'AND'
 
-    def simplify(self,CT):
+    def simplify(self,CT,depth=0):
         if self.level > 0 :
            for seq in self.elements :
-              seq.simplify(CT)
+              seq.simplify(CT,depth+1)
            self.clean()
            self.joinOperators()
            self.levelUpdate()
 
-        if type(self.elements) is not bool and (self.level !=0 or len(self.elements) > 1) :
+        if type(self.elements) is not bool and (self.level > 0 or len(self.elements) > 1) :
            levIn = self.level
            self.simplifySequence(CT)
-           self.joinOperators()
-           self.levelUpdate()
  
-           if self.level > levIn: 
-              self.simplify(CT)
+           if self.level > levIn and depth < 10: 
+              self.simplify(CT,depth+1)
 
-            
 
     def simplifySequence(self,CT):
+       if self.level < 1 and CT is None: 
+           self.clean()
+           return
+
        surfNames = self.getSurfacesNumbers()
        if not surfNames : return
 
-       #print(CT)
-       #print('start',self)
        newNames = surfNames
        for valname in surfNames:
-          #print('factorise',valname)
           if valname in newNames: 
-             self.factorize(valname,CT)
+
+             if CT is None :
+                trueSet  = {abs(valname) : True }
+                falseSet = {abs(valname) : False }
+             else:
+                trueSet,falseSet =  CT.getConstraintSet(valname)
+
+             if not self.doFactorize(valname,trueSet,falseSet) : continue
+             self.factorize(valname,trueSet,falseSet)
              if type(self.elements) is bool: return
              newNames = self.getSurfacesNumbers()
-       self.joinOperators()
-       self.levelUpdate()
        
 
-    def simplify_old(self,CT,loop=0):
-       surfNames = self.getSurfacesNumbers()
-       if not surfNames : return
-       #print(CT)
-       #print('start',self)
-       newNames = surfNames
-       simplified = False
-       for valname in surfNames:
-          #print('factorise',valname)
-          if valname in newNames: 
-             chg = self.factorize(valname,CT)
-             simplified = simplified or chg
-             newNames = self.getSurfacesNumbers()
-       self.joinOperators()
-       
-       if self.level == 0 or (self.elements) is bool : return
+    def doFactorize(self,valname,trueSet,falseSet):
 
-       if loop == 0:
-          ANDSeq = BoolSequence(operator=self.operator)
-          ORSeq  = BoolSequence(operator=self.operator)
-          for e in self.elements:
-             if e.operator == 'AND':
-                ANDSeq.append(e) 
-             else:
-                ORSeq.append(e) 
+       if self.level > 0 : return True
+       valSet = self.getSurfacesNumbers()
+       TSet =  set(trueSet.keys()) & valSet
+       FSet =  set(falseSet.keys()) & valSet
+     
+       if len(TSet) == 1 and len(FSet) == 1 : return False
 
-          ANDSeq.simplify(CT,loop=1)
-          ORSeq.simplify(CT,loop=1)
-          newSeq = BoolSequence(operator=self.operator)
-          if ANDSeq.elements: newSeq.append(ANDSeq) 
-          if ORSeq.elements : newSeq.append(ORSeq) 
-          newSeq.joinOperators()
-          self.assign(newSeq)
-       else:
-          for e in reversed(self.elements):
-              e.simplify(CT,loop=0)
-              if type(e.elements) is bool:
-                 if self.operator == 'AND' and e.elements == False or \
-                    self.operator == 'OR' and e.elements == True  : 
-                    self.elements = e.elements
-                    self.level = 0
-                    break
-                 else:
-                    self.elements.remove(e)
+       value = None
+       for val in self.elements:
+           if abs(val) == valname : 
+               value = val
+               break
 
-          if self.elements == []:
-             self.level = 0
-             if self.operator == 'AND' : 
-                self.elements = True 
-             else:
-                self.elements = False
+       if value is None : return False
+
+       if len(TSet) == 1:
+          if self.operator == 'AND':
+             # if value > 0 and TSet[valname] or value < 0 and not TSet[valname] : return False           
+             if value > 0 : return False    # TrueSet[Valname] always True    
+          else:
+             #if value < 0 and TSet[valname] or value > 0 and not TSet[valname] : return False           
+             if value < 0  : return False           
+
+       elif len(FSet) == 1:
+          if self.operator == 'AND':
+             #if value > 0 and FSet[valname] or value < 0 and not FSet[valname] : return False           
+             if value < 0 : return False           
+          else:
+             # if value < 0 and FSet[valname] or value > 0 and not FSet[valname] : return False           
+             if value > 0 : return False           
+
+       return True
+
+
+
 
      # check if level 0 sequence have oposite value a & -a = 0  , a|-a = 1
      # return the value of the sequence None(unknown), True, False
-    def check(self):
+    def check(self,level0 = False):
+       if type(self.elements) is bool : return self.elements
        if self.level == 0:
-          if type(self.elements) is bool : return self.elements
-
           signedSurf = set(self.elements)
           surfname  = self.getSurfacesNumbers()
           if len(signedSurf) == len(surfname) :  return None  # means same surface has not positive and negative value
-          elif self.operator == 'AND' :          return False
-          else:                                  return True
-       else:
-           if type(self.elements) is bool : return self.elements
-
+          elif self.operator == 'AND' :          
+              self.elements = False
+              self.level    = -1
+              return False
+          else:                            
+              self.elements = True
+              self.level    = -1
+              return True
+       elif not level0:
            self.groupSingle()
            noneVal = False
-           for e in self.elements:
-              res = e.check()
+           for e in reversed(self.elements):
+              e.check()
+              if type(e.elements) is bool :
+                 res = e.elements 
+              else:
+                 res = None 
+
               if res is None : noneVal = True
-              elif self.operator == 'AND' and res is False : return False
-              elif self.operator == 'OR'  and res is True  : return True
+              elif self.operator == 'AND' and res is False : 
+                 self.level = -1
+                 self.elements = False
+                 return False
+              elif self.operator == 'OR'  and res is True  : 
+                 self.level = -1
+                 self.elements = True
+                 return True
+              else:
+                 self.elements.remove(e)
 
            if    noneVal :                return None
-           elif  self.operator == 'AND' : return True
-           else:                          return False
+           elif  self.operator == 'AND' : 
+               self.level = -1
+               self.elements = True
+               return True
+           else:                        
+               self.level = -1
+               self.elements = False
+               return False
 
 
     def substitute(self,var,val):
+       if   val is None : return
        if   type(self.elements) is bool: return
        name = abs(var)
        ic = len(self.elements)
@@ -238,53 +280,61 @@ class BoolSequence:
 
                    if self.operator == 'AND' and not boolValue :
                         self.elements = False
-                        self.level    = 0
+                        self.level    = -1
                         return
                    elif self.operator == 'OR' and boolValue :
                         self.elements = True
-                        self.level    = 0
+                        self.level    = -1 
                         return
                    else:
                         self.elements.remove(e)
+
           else:
              e.substitute(var,val) 
- 
-       self.clean()
-       self.levelUpdate()
 
-
+       if self.elements == [] :  
+          self.elements = True  if self.operator == 'AND' else False 
+          self.level    = -1 
+          return
+      
+       self.clean(selfLevel = True)
+       self.check(level0 = True)
+       self.joinOperators(selfLevel = True)  
 
     # remove sequence whom elements are boolean values instead of list
-    def clean(self):   
+    def clean(self,selfLevel = False):   
         if type(self.elements) is bool : return self.elements
         for e in reversed(self.elements) :
-           if type(e) is int : continue
-           eVal = e.clean()
+           if type(e) is int : continue 
+           eVal = e if selfLevel else e.clean()
+           if type(eVal) is not bool : eVal =  eVal.elements
+                    
            if type(eVal) is bool:
               if eVal and self.operator == 'OR'  : 
                  self.elements = True
-                 self.level = 0
+                 self.level = -1
                  return True
               elif not eVal and self.operator == 'AND' : 
                  self.elements = False
-                 self.level = 0
+                 self.level = -1
                  return False
               self.elements.remove(e)
 
         if self.elements == [] :
            if self.operator == 'OR' : self.elements = False
            else                     : self.elements = True
-           self.level = 0
+           self.level = -1
            return self.elements
         else:
-           return None 
+           return self 
 
 
     # join redundant operators in sequence
-    def joinOperators(self):
-        self.levelUpdate()
-        if self.level == 0 : return
+    def joinOperators(self,selfLevel = False):
         if type(self.elements) is bool: return
+        self.clean(selfLevel=True)
+        self.levelUpdate()
+        if self.level == 0 : return  
         self.groupSingle()
         ANDop = []
         ORop  = []
@@ -312,142 +362,153 @@ class BoolSequence:
 
         if self.level > 0  and len(self.elements)==1 :
            self.operator = self.elements[0].operator
-           self.elements = self.elements[0].elements
+           self.elements[:] = self.elements[0].elements[:]
            self.level -= 1
            self.joinOperators()
        
-        if self.level == 0 : return
-        for e in self.elements:
-           e.joinOperators()
+        if self.level == 0 : 
+             self.check()
+             return
+
+        if not selfLevel :
+           if type(self.elements) is bool : return
+           for e in self.elements:
+              e.joinOperators()
 
 
-
-    def factorize(self,valname,CT=None):
-
-        if CT is None :
-           trueSet  = {abs(valname) : True }
-           falseSet = {abs(valname) : False }
+    def getSubSequence(self,setIn):
+        if type(setIn) is set :
+           valSet = setIn 
+        elif type(setIn) is int :
+           valSet = {setIn}
         else:
-           trueSet,falseSet =  CT.getConstraintSet(valname)
+           valSet = set(setIn.keys())
+
+        if self.level == 0 : return ([],self)
+
+        position = []
+        subSeq = BoolSequence(operator = self.operator)
+
+        for pos,e in enumerate(self.elements) : 
+           surf =  e.getSurfacesNumbers()
+           if len(surf&valSet) != 0:
+              subSeq.append(e)
+              position.append(pos)
+
+        if len(position) == 1 and  subSeq.elements[0].level > 0 :
+           subList,subSeq = subSeq.elements[0].getSubSequence(valSet)
+           subList.insert(0,position[0])
+        else :
+           subList = [position]
+
+        return subList,subSeq
+
+
+    def factorize(self,valname,trueSet,falseSet):
 
         if trueSet is None:                    # valname cannot take True value 
-             self.substitute(valname,False)
+             pos,subSeq = self.getSubSequence(valname)
+             subSeq.substitute(valname,False)
              return True
 
         if falseSet is None:                  # valname cannot take false value
-             self.substitute(valname,True)
+             pos,subSeq = self.getSubSequence(valname)
+             subSeq.substitute(valname,True)
              return True
 
-        funcVal = self.evaluate(trueSet)
-        if funcVal == False :   
+        valSet = set(trueSet.keys())
+        valSet.update(falseSet.keys())
+        pos,subSeq = self.getSubSequence(valSet)
+        updt = True
+        if len(pos) == 0 : 
+           subSeq = self
+           updt   = False
+
+        trueFunc  = subSeq.evaluate(trueSet)
+
+        
+        falseFunc = subSeq.evaluate(falseSet)
+
+        if trueFunc == False :   
             newSeq = BoolSequence(operator='AND')
-            #self.substitute(valname,False)
-            for name,value in falseSet.items():
-               self.substitute(name,value)
-            newSeq.append(-valname,self.copy())
-            self.assign(newSeq)
+            if falseFunc == True :
+               newSeq.append(-valname)
+            elif falseFunc == False:
+               newSeq.elements = False
+               newSeq.level = -1
+            else:
+               newSeq.append(-valname,falseFunc)
+               newSeq.joinOperators(selfLevel=True)
+
+            if updt : 
+               self.update(newSeq,pos)
+            else:
+               self.assign(newSeq)
             return True
 
-        elif funcVal == True:
+        elif trueFunc == True:
             newSeq = BoolSequence(operator='OR')
-            #self.substitute(valname,False)
-            for name,value in falseSet.items():
-               self.substitute(name,value)
-            newSeq.append(valname,self.copy())
-            self.assign(newSeq)
+            if falseFunc == True :
+               newSeq.elements = True
+               newSeq.level = -1
+            elif falseFunc == False:
+               newSeq.append(valname)
+            else:
+               newSeq.append(valname,falseFunc)
+               newSeq.joinOperators(selfLevel=True)
+
+            if updt : 
+               self.update(newSeq,pos)
+            else:
+               self.assign(newSeq)
             return True
 
-
-        funcVal = self.evaluate(falseSet)
-        if funcVal == False :   
+        if falseFunc == False :   
             newSeq = BoolSequence(operator='AND')
-            #self.substitute(valname,True)
-            for name,value in trueSet.items():
-               self.substitute(name,value)
-            newSeq.append(valname,self.copy())
-            self.assign(newSeq)
+            if trueFunc == True :
+               newSeq.append(valname)
+            elif trueFunc == False:
+               newSeq.elements = False
+               newSeq.level = -1
+            else:
+               newSeq.append(valname,trueFunc)
+               newSeq.joinOperators(selfLevel=True)
+            if updt : 
+               self.update(newSeq,pos)
+            else:
+               self.assign(newSeq)
             return True
 
-        elif funcVal == True:
+        elif falseFunc == True:
             newSeq = BoolSequence(operator='OR')
-            #self.substitute(valname,True)
-            for name,value in trueSet.items():
-               self.substitute(name,value)
-            newSeq.append(-valname,self.copy())
-            self.assign(newSeq)
+            if trueFunc == True :
+               newSeq.elements = True
+               newSeq.level = -1
+            elif trueFunc == False:
+               newSeq.append(-valname)
+            else:
+               newSeq.append(-valname,trueFunc)
+               newSeq.joinOperators(selfLevel=True)
+            if updt : 
+               self.update(newSeq,pos)
+            else:
+               self.assign(newSeq)
             return True
 
-        return False
-  
 
-    def evaluate_newbad(self,valueSet,CT=None):
+    def evaluate(self,valueSet):
 
         if type(self.elements) is bool : return self.elements
         self.groupSingle()
         newSeq = self.copy()
         for name,value in valueSet.items():
             newSeq.substitute(name,value)
-        
-        if type(newSeq.elements) is bool :
-            return newSeq.elements
-        else :
-            surfNames = tuple(newSeq.getSurfacesNumbers())        
-            valname = surfNames[0]
-            if CT is None :
-                trueSet  = {abs(valname) : True }
-                falseSet = {abs(valname) : False }
-            else:
-                trueSet,falseSet =  CT.getConstraintSet(valname)
-                 
-            if trueSet is None:
-                trueVal = True
-            else:       
-                trueVal  = newSeq.evaluate(trueSet)
-                if trueVal is None : return None
-               
-            if falseSet is None:
-                falseVal = False
-            else:       
-                falseVal  = newSeq.evaluate(falseSet)
-                if falseVal is None : return None
-                    
-            if trueVal != falseVal :
-                return None
-            else:
-                return trueVal 
+            if type(newSeq.elements) is bool : 
+              return newSeq.elements
+       
+        return newSeq.elements if type(newSeq.elements) is bool else newSeq
 
 
-    def evaluate(self,valueSet):
-        if type(self.elements) is bool : return self.elements
-        self.groupSingle()
-        op = self.operator
-        noneVal = False
-        for e in self.elements:
-            if type(e) is int:
-               key = abs(e)
-               if key in valueSet.keys():
-                    val = valueSet[key]
-               else:
-                    val = None
-                    
-               if val is not None : 
-                  if e < 0 : val = not val
-               else:
-                  noneVal = True
-            else:
-               val = e.evaluate(valueSet)
-
-            if val is None : noneVal = True
-            elif op == 'AND' and val is False : return False
-            elif op == 'OR'  and val is True  : return True
-
-        if noneVal : 
-           return None      
-        if op == 'AND' :
-           return True
-        else:     
-           return False
-        
     def setDef(self,expression):
        terms,operator = outterTerms(expression)
        self.operator = operator

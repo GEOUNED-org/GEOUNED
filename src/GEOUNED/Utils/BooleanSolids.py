@@ -159,27 +159,31 @@ class ConstraintTable(dict):
       if self.diagonal :
          seqValues = dict()
          for s in surfs : 
-            seqValues[s] = BoolVals[self[s][s].val]
+            val = BoolVals[self[s][s].val]
+            if val is not None : seqValues[s] = val
          # if evaluate   None  : Box intersection Cell != 0      Part of the cell in the box
          #               True  : Box intersection Cell == Box    Cell cover the full region of the box. Void cell doesn't exist
          #               False : Box intersection Cell == 0      Cell out of the box 
-         return Seq.evaluate(seqValues)
+         res = Seq.evaluate(seqValues)
+         return  res if type(res) is bool else None
 
       else:
          trueSet,falseSet = self.getConstraintSet(surfs[0])
          if trueSet is not None:  
              trueVal  = Seq.evaluate(trueSet) 
+             trueVal  = trueVal if type(trueVal) is bool else None
              if trueVal is None : return None
              if falseSet is not None:  
                 falseVal = Seq.evaluate(falseSet) 
-                if falseVal is None    : return None     # Part of the cell in the box
-                if trueVal == falseVal : return trueVal  # True Cover full cell, False not in the box 
-                else                   : return None     # Part of the cell in the box                
+                falseVal = falseVal if type(falseVal) is bool else None
+                if falseVal is None     : return None     # Part of the cell in the box
+                if trueVal  == falseVal : return trueVal  # True Cover full cell, False not in the box 
+                else                    : return None     # Part of the cell in the box                
              else: 
                 return trueVal
          elif falseSet is not None:  
              falseVal = Seq.evaluate(falseSet) 
-             return falseVal
+             return falseVal if type(falseVal) is bool else None
          else:
             print('Bad trouble surfaces {} is on none side of the box!!')
             return False       
@@ -279,16 +283,20 @@ def removeExtraSurfaces(CellSeq,CTable):
         newSeq = BoolSequence(operator='AND')
         newSeq.append(CellSeq.copy())
         CellSeq.assign(newSeq)
-
+    
     for subCell in CellSeq.elements:
         nullcell = False 
-        chk = subCell.check()
+        subCell.check()
+        if type(subCell.elements) is bool :
+           chk = not subCell.elements
+        else:
+           chk = None
 
         if chk == False :    # the cell doesn't exist
            nullcell = True
         elif chk == True :   # the cell describe the full universe
            newDef.elements = True
-           newDef.level = 0
+           newDef.level = -1
            return  newDef
        
         #if subcell has finite volume check it intersection with the box        
@@ -311,7 +319,7 @@ def removeExtraSurfaces(CellSeq,CTable):
                       continue
                    else:                            # cell cover fully void box
                       newDef.elements = True
-                      newDef.level = 0
+                      newDef.level = -1
                       return  newDef
                 else:
                    newDef.append(subCell)
@@ -319,7 +327,7 @@ def removeExtraSurfaces(CellSeq,CTable):
            elif res == True :
               # subcell cover the full box region Void cell doesn't exist
               newDef.elements = True
-              newDef.level = 0
+              newDef.level = -1
               return  newDef
 
     newDef.clean()

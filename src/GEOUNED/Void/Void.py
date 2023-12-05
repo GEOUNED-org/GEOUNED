@@ -31,7 +31,7 @@ def voidGeneration(MetaList,EnclosureList,Surfaces,UniverseBox,setting,init):
         
 
     # get voids in 0 Level Enclosure (original Universe)
-    # if exist Level 1 enclosures are considered has material cells
+    # if exist Level 1 enclosures are considered as material cells
     print('Build Void highest enclosure')
        
     voids = GetVoidDef(newMetaList,Surfaces,EnclosureBox,setting,Lev0=True)
@@ -86,7 +86,7 @@ def GetVoidDef(MetaList,Surfaces,Enclosure,setting,Lev0=False):
       
       for iz,z in enumerate(Initial):
          nsurfaces,nbrackets = z.getNumbers()
-         if opt.verbose : print('{} {}/{} {} {}'.format(iloop,iz,nvoid,nsurfaces,nbrackets))      
+         if opt.verbose : print('{} {}/{} {} {}'.format(iloop,iz+1,nvoid,nsurfaces,nbrackets))      
 
          if nsurfaces > maxsurf and nbrackets > maxbracket:
             newspace = z.Split(minSize)
@@ -102,6 +102,7 @@ def GetVoidDef(MetaList,Surfaces,Enclosure,setting,Lev0=False):
                       z.BoundBox.ZMin*0.1,z.BoundBox.ZMax*0.1)
 
             print('build complementary {} {}'.format(iloop,iz))
+
             cell,CellIn = z.getVoidComplementary(Surfaces,simplify=simplifyVoid) 
             if cell is not None :					
                VoidCell = (cell,(boxDim,CellIn))

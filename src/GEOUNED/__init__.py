@@ -263,7 +263,7 @@ class GEOUNED() :
 
        surfOffset = code_setting['startSurf'] - 1
        Surfaces    = UF.Surfaces_dict(offset=surfOffset)
-
+  
 
        warnSolids     = []
        warnEnclosures = []
@@ -284,7 +284,7 @@ class GEOUNED() :
  
           for j,m in enumerate(MetaList):
               if m.IsEnclosure : continue
-              print('Building cell: ', j)
+              print('Building cell: ', j+1)
               cones = Conv.cellDef(m,Surfaces,UniverseBox)
               if cones : coneInfo[m.__id__] = cones
               if j in warningSolidList:
@@ -310,7 +310,7 @@ class GEOUNED() :
 
        if code_setting['voidGen'] and EnclosureList :
            for j,m in enumerate(EnclosureList):
-             print('Building Enclosure Cell: ', j)
+             print('Building Enclosure Cell: ', j+1)
              cones = Conv.cellDef(m,Surfaces,UniverseBox)
              if cones : coneInfo[m.__id__] =  cones
              if j in warningEnclosureList:
@@ -348,14 +348,10 @@ class GEOUNED() :
               print('simplify cell',c.__id__)
               Box =  UF.getBox(c)
               CT = buildCTableFromSolids(Box,(c.Surfaces,Surfs),option='full')
- 
-                   
               c.Definition.simplify(CT)
-              res = c.Definition.clean()
-              if res is not None:
-                  print('unexpected constant cell {} :{}'.format(cell.__id__,res)) 
-
-
+              c.Definition.clean()
+              if type(c.Definition.elements) is bool:
+                  print('unexpected constant cell {} :{}'.format(c.__id__,res)) 
 
        tempTime2 = datetime.now()
        print('build Time:',tempTime2-tempTime1)
@@ -372,7 +368,7 @@ class GEOUNED() :
        else:
           # remove Null Cell and apply cell numbering offset
           deleted = []
-          idLabel = {}
+          idLabel = {0:0}
           icount = cellOffSet
           for i,m in enumerate(MetaList):
               if m.NullCell or m.IsEnclosure :
@@ -430,7 +426,7 @@ def DecomposeSolids(MetaList,Surfaces,UniverseBox,setting,meta):
     warningSolids = []
     for i,m in enumerate(MetaList):
         if meta and m.IsEnclosure: continue
-        print('Decomposing solid: {}/{} '.format(i,totsolid))
+        print('Decomposing solid: {}/{} '.format(i+1,totsolid))
         if setting['debug'] :
             print(m.Comments)
             if m.IsEnclosure :
@@ -574,6 +570,7 @@ def sortEnclosure(MetaList,MetaVoid,offSet=0):
           newList[m.EnclosureID] = [m]
     
     icount = offSet
+    idLabel = {0:0}
     newMeta = []
     for m in MetaList:
       if m.NullCell : continue
@@ -589,6 +586,7 @@ def sortEnclosure(MetaList,MetaVoid,offSet=0):
             if e.NullCell : continue
             icount += 1
             e.label = icount
+            idLabel[e.__id__] = e.label
             newMeta.append(e)
          lineComment = """\
 ##########################################################
@@ -601,6 +599,7 @@ def sortEnclosure(MetaList,MetaVoid,offSet=0):
       else:
          icount += 1
          m.label = icount
+         idLabel[m.__id__] = m.label
          newMeta.append(m)
 
 
@@ -616,7 +615,13 @@ def sortEnclosure(MetaList,MetaVoid,offSet=0):
         if v.NullCell : continue
         icount += 1
         v.label = icount
+        idLabel[v.__id__] = v.label
         newMeta.append(v)
     
+    for m in newMeta:
+       if not m.Void: continue
+       if m.IsEnclosure: continue
+       updateComment(m,idLabel)
+
     return newMeta
 

@@ -53,9 +53,10 @@ Modification in 0.9.7 Release Date 06/12/2022
   - fixed bug with torodial surfaces.
   - implementation of new, more robust, cell definition, where adjacent solid cell definition is rested to current solid cell definition (forcing no overlaping cell).
   - fix bug additional plane with sphere
+  - improvement of cell simplification method
   '''
 
 
 GEOUNED_Version = '1.0.1'
-GEOUNED_ReleaseDate = '31/10/2023'
+GEOUNED_ReleaseDate = '30/11/2023'
 
