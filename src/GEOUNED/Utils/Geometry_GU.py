@@ -240,7 +240,11 @@ class Faces_GU(object):
         if shape1 is shape2 :
            return (0,)
         else:
-           return  shape1.distToShape(shape2)
+           try :
+              dist2Shape = shape1.distToShape(shape2)
+           except:
+              dist2Shape = shape2.distToShape(shape1)
+           return  dist2Shape
   
 
 # Aux functions

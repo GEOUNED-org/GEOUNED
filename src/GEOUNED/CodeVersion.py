@@ -58,5 +58,5 @@ Modification in 0.9.7 Release Date 06/12/2022
 
 
 GEOUNED_Version = '1.0.1'
-GEOUNED_ReleaseDate = '30/11/2023'
+GEOUNED_ReleaseDate = '24/12/2023'
 
