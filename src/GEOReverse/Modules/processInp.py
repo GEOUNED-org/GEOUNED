@@ -7,6 +7,7 @@ def setOptions(optionFile):
    setting = {'fileIn'   : ''               ,
               'fileOut'  : ''               ,
               'outBox'   : tuple()          ,
+              'inFormat' : 'mcnp'           ,
 
               'UStart'   : 0                ,
               'levelMax' : 'all'            ,
@@ -28,7 +29,7 @@ def setOptions(optionFile):
             exit()
 
        if section == 'Setting' :
-           fileIn,fileOut,outBox = getSetting(config)
+           fileIn,fileOut,outBox,inFormat = getSetting(config)
 
            i = 0
            if fileIn  is not None : 
@@ -42,6 +43,9 @@ def setOptions(optionFile):
            if outBox  is not None : 
               setting['outBox']  = outBox
               i += 1
+
+           if inFormat  is not None : 
+              setting['inFormat']  = inFormat
 
            if i==3 : fileData = True
 
@@ -73,19 +77,21 @@ def setOptions(optionFile):
 
 def getSetting(config):
 
-   fileIn, fileOut, outBox = None, None, None
+   fileIn, fileOut, outBox,inFormat = None, None, None, None
    for key in config['Setting'].keys() :
 
-      if  key == 'mcnpFile':
+      if  key in ['inputFile','mcnpFile']:
          fileIn  =  config.get('Setting',key)
       elif key == 'CADFile':
          fileOut =  config.get('Setting',key)
       elif key == 'outBox':
          outBox  = getBoxData(config.get('Setting',key))
+      elif key == 'inFormat':
+         inFormat  = config.get('Setting',key)
       else:
           print('{} bad keyword. Ignored'.format(key))       
 
-   return fileIn, fileOut, outBox 
+   return fileIn, fileOut, outBox, inFormat 
 
       
 def getLevel(config):

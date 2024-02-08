@@ -201,7 +201,11 @@ def ExtractSurfaces(solid,kind,UniverseBox,MakeObj=False):
          solidParts.append(GU.solid_GU(s))
     else:
         fuzzy = False
-        solidParts = [GU.solid_GU(solid)] 
+        if kind == 'Plane3Pts' :
+           P3P = True
+        else:
+           P3P = False
+        solidParts = [GU.solid_GU(solid,P3P)] 
 
     ex = FreeCAD.Vector(1,0,0)
     ey = FreeCAD.Vector(0,1,0)
@@ -282,6 +286,17 @@ def ExtractSurfaces(solid,kind,UniverseBox,MakeObj=False):
               for p in TorusBoundPlanes(face,UniverseBox) :
                  if MakeObj : p.buildSurface()
                  Surfaces.addPlane(p)
+
+         elif surf == '<Plane object>' and kind == 'Plane3Pts' :
+            pos=face.CenterOfMass
+            normal = face.Surface.Axis
+            dim1 = face.ParameterRange[1]-face.ParameterRange[0]
+            dim2 = face.ParameterRange[3]-face.ParameterRange[2]
+            points = tuple(v.Point for v in face.Vertexes)
+
+            plane = UF.GEOUNED_Surface(('Plane3Pts',(pos,normal,dim1,dim2,points)),UniverseBox)
+            if MakeObj : plane.buildSurface()
+            Surfaces.addPlane(plane,fuzzy)
          
     return Surfaces                  
  
@@ -907,7 +922,7 @@ def removeSolids(Solids):
     Solids_Clean=[]
     for solid in Solids:
         if solid.Volume <= Vol_tol:
-            if opt.verbose : print('Warning: degenerated solids are produced')
+            if opt.verbose : print('Warning: removeSolids degenerated solids are produced',solid.Volume)
             err=2
             continue
         Solids_Clean.append(solid)
@@ -933,7 +948,7 @@ def splitComponent(solidShape,UniverseBox):
     Pieces = []
     for part in split:
        if part.Volume <= 1e-10:
-          if opt.verbose : print('Warning: degenerated solids are produced')
+          if opt.verbose : print('Warning: splitComponent degenerated solids are produced',part.Volume)
           err += 2
           continue
        Pieces.append(part)                  

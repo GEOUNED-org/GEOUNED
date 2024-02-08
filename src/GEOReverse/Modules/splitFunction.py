@@ -50,7 +50,6 @@ def SplitSolid(base,surfacesCut,cellObj,solidTool=False,tolerance=0.01): #1e-2
           fullPart.extend(fullList)
           cutPart.extend(cutList)
        return fullPart,cutPart
-
      
     # part if base is shape object
     
@@ -230,37 +229,138 @@ def surface_side(p,surf):
 
      elif surf.type == 'cylinder':
          P,v,R = surf.params
+
          D = p-P
-         inout = D.cross(v).Length - R
+         if not surf.truncated:
+            inout = D.cross(v).Length - R
+         else:
+            inCyl = D.cross(v).Length/v.Length - R  # <0 in cylinder
+            inPln = btwPPlanes(p,P,v)               # <0  between planes
+
+            if (inCyl <0 ) and ( inPln < 0 )  :
+               inout = -1       # inside the can
+            else:
+               inout = 1        # outside the can
          
      elif surf.type == 'cone':
-         P,v,t,dblsht = surf.params
-         X = p-P
-         X.normalize()
-         dprod = X.dot(v)
-         dprod = max(-1,min(1,dprod))
-         a = math.acos(dprod)
-         if dblsht : a = math.acos(abs(dprod))  
-         inout = a - math.atan(t)
-         
+         if not surf.truncated:
+            P,v,t,dblsht = surf.params
+            X = p-P
+            X.normalize()
+            dprod = X.dot(v)
+            dprod = max(-1,min(1,dprod))
+            a = math.acos(dprod) if not dblsht else math.acos(abs(dprod))
+            inout = a - math.atan(t)
+         else:
+            P,v,R1,R2 = surf.params
+            apex = P + R1/(R1-R2)*v
+           
+            X = p-apex
+            X.normalize()
+            dprod = X.dot(-v)/v.Length   # -v because reverse axis. in MCNP TRC r1 > r2
+            dprod = max(-1,min(1,dprod))
+            a = math.acos(dprod)
+
+            t = (R1-R2)/v.Length
+            inCone = a - math.atan(t)
+            inPln = btwPPlanes(p,P,v)    # <0  between planes
+
+            if (inCone <0 ) and ( inPln < 0 ) :
+               inout = -1       # inside the can
+            else:
+               inout = 1        # outside the can
+
+     elif surf.type == 'cone_elliptic':
+         apex,axis,Ra,radii,rAxes,dblsht = surf.params
+
+         r = p-apex
+         X = r.dot(rAxes[1])
+         Y = r.dot(rAxes[0])
+         Z = r.dot(axis)
+         if dblsht : Z = abs(Z)
+         inout = (X/radii[1])**2 + (Y/radii[0])**2 - Z/Ra 
+
+     elif surf.type == 'hyperboloid':
+         center,axis,radii,rAxes,onesht = surf.params
+
+         r = p-center
+         rX = r.dot(rAxes[1])
+         v = r - (rX*rAxes[1] + center)
+         d = v.Length
+ 
+         one = 1 if onesht else -1            
+         radical = (rX/radii[1])**2 + one 
+
+         if radical  > 0 :
+            Y = radii[0] * math.sqrt( radical )
+            inout = d-Y
+         else:
+            inout = 1 
+
+     elif surf.type == 'ellipsoid':
+         center,axis,radii,rAxes = surf.params
+
+         r = p-center
+         rX = r.dot(axis)
+         rY = r - (rX*axis + center)
+          
+         if axis.add(-rAxes[0]).Length < 1e-5 :
+              radX,radY = raddii
+         else:
+              radY,radY = raddii
+
+         radical = 1-(rX/radX)**2  
+         if radical  > 0 :
+            Y = radY * math.sqrt( radical )
+            inout = rY-Y
+         else:
+            inout = 1 
+
+     elif surf.type == 'cylinder_elliptic':
+         center,axis,radii,rAxes = surf.params
+
+         r = p-center
+         X = r.dot(rAxes[1])
+         Y = r.dot(rAxes[0])
+         inout = (X/radii[1])**2 + (Y/radii[0])**2 -1 
+
+         if surf.truncated and inout < 0:
+            inout = btwPPlanes(p,center,axis)   # <0  between planes
+
+     elif surf.type == 'cylinder_hyperbolic':
+         center,axis,radii,rAxes = surf.params
+
+         r = p-center
+         X = r.dot(rAxes[1])
+         Y = r.dot(rAxes[0])
+         inout = (X/radii[1])**2 - (Y/radii[0])**2 -1 
+
+     elif surf.type == 'paraboloid':
+         center,axis,focal = surf.params
+
+         r = p-center
+         X = r.dot(axis)
+         if X < 0 :
+            inout = 1
+         else:
+            v = r - X*axis 
+            d = v.Length
+            Y = math.sqrt(4*focal*X) 
+            inout = d-Y
+
      elif surf.type == 'torus':
-         P,v,Ra,R = surf.params
+         P,v,Ra,Rb,Rc = surf.params
 
          d = p-P
-         if v[0] == 1.0 :
-            sx1 = d.x*d.x
-            sx2 = d.y*d.y
-            sx3 = d.z*d.z 
-         elif v[1] == 1.0 :
-            sx1 = d.y*d.y
-            sx2 = d.z*d.z
-            sx3 = d.x*d.x
-         else :
-            sx1 = d.z*d.z
-            sx2 = d.x*d.x
-            sx3 = d.y*d.y
+         z = d.dot(v)
+         rz = d-z*v
+         inout = (z/Rb)**2 + ((rz.Length-Ra)/Rc)**2 -1 
 
-         inout = sx1/(R*R) + (math.sqrt(sx2+sx3)-Ra)**2/(R*R) -1 
+     elif surf.type == 'box':
+         P,v1,v2,v3 = surf.params
+         for v in (v1,v2,v3):
+            inout = btwPPlanes(p,P,v)    # <0  between planes
+            if inout > 0 : break
         
      else:
        print ('surface type {} not considered'.format(surf[0]))
@@ -269,6 +369,17 @@ def surface_side(p,surf):
      return inout > 0 
 
 
+def btwPPlanes(p,p0,v):
+
+    p1 = p0 + v 
+    inP0 = v.dot(p-p0)             # >0 plane(base plane) side inside the cylinder
+    inP1 = v.dot(p-p1)             # >0 plane(base plane) side inside the cylinder
+
+    if (inP0 >0 ) and (inP1 < 0 ) :
+       return -1
+    else:     
+       return  1
+ 
 #************************************************    
 
 def FuseSolid(parts):

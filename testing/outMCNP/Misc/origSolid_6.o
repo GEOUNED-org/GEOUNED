@@ -1,95 +1,83 @@
- 
-  comment.  Physics models disabled.
-         1-       Input Test
-         2-       C   ______ _______  _____      _     _ __   _ _______ ______
-         3-       C  |  ____ |______ |     | ___ |     | | \  | |______ |     \
-         4-       C  |_____| |______ |_____|     |_____| |  \_| |______ |_____/
-         5-       C Version : 0.9.8.1     09/06/2023
-         6-       C FreeCAD Version : 0.20.2
-         7-       C
-         8-       C *************************************************************
-         9-       C Original Step file : inputSTEP/Misc/origSolid_6.stp
-        10-       C
-        11-       C Creation Date : 2023-06-11 18:24:11.158098
-        12-       C Solid Cells   : 1
-        13-       C Total Cells   : 4
-        14-       C Surfaces      : 15
-        15-       C Materials     : 0
-        16-       C
-        17-       C **************************************************************
-        18-       1     0      -1 -2 -3 -4 -5 -6 -7 8
-        19-                  imp:n=1.0   imp:p=1.0
-        20-       C
-        21-       C ##########################################################
-        22-       C              VOIDS
-        23-       C ##########################################################
-        24-       C
-        25-       2     0      9 11 13 -14 -12 -10 (1:3:5:7:-8:6:4:2)
-        26-                  imp:n=1.0   imp:p=1.0
-        27-                  $Automatic Generated Void Cell. Enclosure(628.5514507732424, 643.4712058759411, -827.8647139529044, -815.054141147126
-        28-                  $Enclosed cells : (1)
-        29-       3     0      -15 (-9:10:-11:12:-13:14)
-        30-                  imp:n=1.0   imp:p=1.0
-        31-                  $Graveyard_in
-        32-       4     0      15
-        33-                  imp:n=0     imp:p=0
-        34-                  $Graveyard
-        35-       
-        36-       C ##########################################################
-        37-       C                  SURFACE DEFINITION
-        38-       C ##########################################################
-        39-       1      P    3.3853268e-01  9.3676641e-01 -8.8681043e-02 -5.6015424e+02
-        40-       2      P    7.8442954e-02  6.5821454e-02  9.9474330e-01  8.6214244e+01
-        41-       3      P   -7.6201758e-01 -6.3940867e-01  1.0240005e-01  5.1562169e+01
-        42-       4      P    6.4278761e-01 -7.6604444e-01  0.0000000e+00  1.0430000e+03
-        43-       5      P    7.6201758e-01  6.3940867e-01 -1.0240000e-01 -4.5562165e+01
-        44-       6      P   -7.8442948e-02 -6.5821448e-02 -9.9474330e-01 -7.7314244e+01
-        45-       7      P   -9.9690517e-01  5.2041704e-18  7.8613466e-02 -6.2176728e+02
-        46-       8      GQ   0.675456970604655  0.334326385353052  0.990216644042293
-        47-                 -0.929601487705500  0.161400395584951  0.112696405979379
-        48-                 -1629.935936336692521 1124.718862727930627 -110.281821747246880
-        49-                 983443.376736418111250
-        50-       9      PX   6.2855145e+02
-        51-       10     PX   6.4347121e+02
-        52-       11     PY  -8.2786471e+02
-        53-       12     PY  -8.1505414e+02
-        54-       13     PZ   8.0573392e+01
-        55-       14     PZ   9.2041008e+01
-        56-       15     S   6.3601133e+02 -8.2145943e+02  8.6307200e+01  1.1609823e+01
-        57-       
-        58-       C
-        59-       MODE P
-        60-       VOID
-        61-       NPS 1e6
-        62-       PRDMP 2J -1
-        63-       C SDEF PAR=P X=D1 Y=D2 Z=D3
-        64-       C SI1 6.2855145e+02 6.4347121e+02
-        65-       C SI2 -8.2786471e+02 -8.1505414e+02
-        66-       C SI3 8.0573392e+01 9.2041008e+01
-        67-       C SP1 0  1
-        68-       C SP2 0  1
-        69-       C SP3 0  1
-        70-       SDEF PAR=P NRM=-1 SUR=15 WGT=4.2344899e+02 DIR=d1
-        71-       SI1 0 1
-        72-       SP1 -21 1
-        73-       F4:P  1
-        74-       SD4   1.8532939e+02
-
- ***************************************************
- * Random Number Generator  =                    1 *
- * Random Number Seed       =       19073486328125 *
- * Random Number Multiplier =       19073486328125 *
- * Random Number Adder      =                    0 *
- * Random Number Bits Used  =                   48 *
- * Random Number Stride     =               152917 *
- ***************************************************
-
+         1-       Input Test                                                                      
+         2-       C   ______ _______  _____      _     _ __   _ _______ ______                    
+         3-       C  |  ____ |______ |     | ___ |     | | \  | |______ |     \                   
+         4-       C  |_____| |______ |_____|     |_____| |  \_| |______ |_____/                   
+         5-       C Version : 1.0.1     22/10/2023                                                
+         6-       C FreeCAD Version : 0.20.2                                                      
+         7-       C                                                                               
+         8-       C *************************************************************                 
+         9-       C Original Step file : inputSTEP/Misc/origSolid_6.stp                           
+        10-       C                                                                               
+        11-       C Creation Date : 2023-10-31 13:35:16.681596                                    
+        12-       C Solid Cells   : 1                                                             
+        13-       C Total Cells   : 4                                                             
+        14-       C Surfaces      : 15                                                            
+        15-       C Materials     : 0                                                             
+        16-       C                                                                               
+        17-       C **************************************************************                
+        18-       1     0      8 -2 -7 -6 -5 -4 -3 -1                                             
+        19-                  imp:n=1.0   imp:p=1.0                                                
+        20-       C                                                                               
+        21-       C ##########################################################                    
+        22-       C              VOID CELLS                                                       
+        23-       C ##########################################################                    
+        24-       C                                                                               
+        25-       2     0      9 11 13 -14 -12 -10 (1:3:5:7:-8:6:4:2)                             
+        26-                  imp:n=1.0   imp:p=1.0                                                
+        27-                  $Automatic Generated Void Cell. Enclosure(628.5514507732424, 643.4712
+        28-                  $Enclosed cells : (1)                                                
+        29-       3     0      -15 (-9:10:-11:12:-13:14)                                          
+        30-                  imp:n=1.0   imp:p=1.0                                                
+        31-                  $Graveyard_in                                                        
+        32-       4     0      15                                                                 
+        33-                  imp:n=0     imp:p=0                                                  
+        34-                  $Graveyard                                                           
+        35-                                                                                       
+        36-       C ##########################################################                    
+        37-       C                  SURFACE DEFINITION                                           
+        38-       C ##########################################################                    
+        39-       1      P    3.3853268e-01  9.3676641e-01 -8.8681043e-02 -5.6015424e+02          
+        40-       2      P    7.8442954e-02  6.5821454e-02  9.9474330e-01  8.6214244e+01          
+        41-       3      P   -7.6201758e-01 -6.3940867e-01  1.0240005e-01  5.1562169e+01          
+        42-       4      P    6.4278761e-01 -7.6604444e-01  0.0000000e+00  1.0430000e+03          
+        43-       5      P    7.6201758e-01  6.3940867e-01 -1.0240000e-01 -4.5562165e+01          
+        44-       6      P   -7.8442948e-02 -6.5821448e-02 -9.9474330e-01 -7.7314244e+01          
+        45-       7      P   -9.9690517e-01  5.2041704e-18  7.8613466e-02 -6.2176728e+02          
+        46-       8      GQ   0.675456970604655  0.334326385353052  0.990216644042293             
+        47-                 -0.929601487705500  0.161400395584951  0.112696405979379              
+        48-                 -1629.935936336693430 1124.718862727931082 -110.281821747246809       
+        49-                 983443.376736418576911                                                
+        50-       9      PX   6.2855145e+02                                                       
+        51-       10     PX   6.4347121e+02                                                       
+        52-       11     PY  -8.2786471e+02                                                       
+        53-       12     PY  -8.1505414e+02                                                       
+        54-       13     PZ   8.0573392e+01                                                       
+        55-       14     PZ   9.2041008e+01                                                       
+        56-       15     S   6.3601133e+02 -8.2145943e+02  8.6307200e+01  1.1609823e+01           
+        57-                                                                                       
+        58-       C                                                                               
+        59-       MODE P                                                                          
+        60-       VOID                                                                            
+        61-       NPS 1e6                                                                         
+        62-       PRDMP 2J -1                                                                     
+        63-       C SDEF PAR=P X=D1 Y=D2 Z=D3                                                     
+        64-       C SI1 6.2855145e+02 6.4347121e+02                                               
+        65-       C SI2 -8.2786471e+02 -8.1505414e+02                                             
+        66-       C SI3 8.0573392e+01 9.2041008e+01                                               
+        67-       C SP1 0  1                                                                      
+        68-       C SP2 0  1                                                                      
+        69-       C SP3 0  1                                                                      
+        70-       SDEF PAR=P NRM=-1 SUR=15 WGT=4.2344899e+02 DIR=d1                               
+        71-       SI1 0 1                                                                         
+        72-       SP1 -21 1                                                                       
+        73-       F4:P  1                                                                         
+        74-       SD4   1.8532939e+02                                                             
  
   warning.  no cross-section tables are called for in this problem.
 1cells                                                                                                  print table 60
 
                                atom        gram                                            neutron    photon                           
-              cell      mat   density     density     volume       mass            pieces importance importance                        
+              cell     mat    density     density     volume       mass            pieces importance importance                        
 
         1        1        0  0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00           0  1.0000E+00 1.0000E+00                        
         2        2        0  0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00           0  1.0000E+00 1.0000E+00                        
@@ -100,19 +88,29 @@
 
     minimum source weight = 4.2345E+02    maximum source weight = 4.2345E+02
 
+ ***************************************************
+ * Random Number Generator  =                    1 *
+ * Random Number Seed       =       19073486328125 *
+ * Random Number Multiplier =       19073486328125 *
+ * Random Number Adder      =                    0 *
+ * Random Number Bits Used  =                   48 *
+ * Random Number Stride     =               152917 *
+ ***************************************************
+
+
           1 warning message so far.
 
           1 warning message so far.
 1problem summary                                                                                                           
 
       run terminated when     1000000  particle histories were done.
-
+0
  photon creation     tracks      weight        energy            photon loss         tracks      weight        energy
                                  (per source particle)                                           (per source particle)
 
  source             1000000    4.2345E+02    1.4000E+01          escape             1000000    4.2345E+02    1.4000E+01
- nucl. interaction        0    0.            0.                  energy cutoff            0    0.            0.        
- particle decay           0    0.            0.                  time cutoff              0    0.            0.        
+                                                                 energy cutoff            0    0.            0.        
+                                                                 time cutoff              0    0.            0.        
  weight window            0    0.            0.                  weight window            0    0.            0.        
  cell importance          0    0.            0.                  cell importance          0    0.            0.        
  weight cutoff            0    0.            0.                  weight cutoff            0    0.            0.        
@@ -124,15 +122,9 @@
  bremsstrahlung           0    0.            0.                  capture                  0    0.            0.        
  p-annihilation           0    0.            0.                  pair production          0    0.            0.        
  photonuclear             0    0.            0.                  photonuclear abs         0    0.            0.        
- electron x-rays          0    0.            0.                  loss to photofis         0    0.            0.        
- compton fluores          0    0.            0.                                                                        
- muon capt fluores        0    0.            0.                                                                        
+ electron x-rays          0    0.            0.                                                                        
  1st fluorescence         0    0.            0.                                                                        
  2nd fluorescence         0    0.            0.                                                                        
- cerenkov                 0    0.            0.                                                                        
- (gamma,xgamma)           0    0.            0.                                                                        
- tabular sampling         0    0.            0.                                                                        
- prompt photofis          0    0.            0.                                                                        
      total          1000000    4.2345E+02    1.4000E+01              total          1000000    4.2345E+02    1.4000E+01
 
    number of photons banked                        0        average time of (shakes)              cutoffs
@@ -160,8 +152,8 @@
            total       2576484      1775266            0    0.0000E+00
 
 1tally        4        nps =     1000000
-           tally type 4    track length estimate of particle flux.      units   1/cm**2        
-           particle(s): photons  
+           tally type 4    track length estimate of particle flux.      units   1/cm**2   
+           tally for  photons  
 
            volumes 
                    cell:       1                                                                                   
@@ -193,7 +185,7 @@
  estimated asymmetric confidence interval(1,2,3 sigma): 9.9744E-01 to 1.0033E+00; 9.9453E-01 to 1.0062E+00; 9.9162E-01 to 1.0091E+00
  estimated  symmetric confidence interval(1,2,3 sigma): 9.9743E-01 to 1.0033E+00; 9.9452E-01 to 1.0062E+00; 9.9161E-01 to 1.0091E+00
 
-1analysis of the results in the tally fluctuation chart bin (tfc) for tally 4 with nps = 1000000             print table 160
+1analysis of the results in the tally fluctuation chart bin (tfc) for tally        4 with nps=     1000000 print table 160
 
 
  normed average tally per history  = 1.00034E+00          unnormed average tally per history  = 1.85393E+02

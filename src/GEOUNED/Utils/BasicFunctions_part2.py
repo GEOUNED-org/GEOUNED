@@ -2,7 +2,7 @@
 # Set of useful functions used in different parts of the code
 #
 from GEOUNED.Utils.BasicFunctions_part1 \
-     import isParallel, isSameValue, isInTolerance
+     import isParallel, isOposite,isSameValue, isInTolerance
 from GEOUNED.Write.Functions import MCNPSurface
 import FreeCAD
 import math
@@ -30,11 +30,12 @@ def Fuzzy(index,dtype,surf1,surf2,val):
       line = 'Dist Axis: {} \n {}\n {}\n\n'.format(val,cyl1str,cyl2str)  
       sameSurfFic.write(line)
       
-    
 def isSamePlane(p1,p2,dtol=1e-6,atol=1e-6,relTol=True,fuzzy=(False,0)):     
     if isParallel(p1.Axis,p2.Axis,atol):
-      c12 = p1.Position - p2.Position
-      d = abs(p1.Axis.dot(c12))
+      d1 = p1.Axis.dot(p1.Position)
+      d2 = p2.Axis.dot(p2.Position)
+      if isOposite(p1.Axis,p2.Axis,atol) : d2 = -d2
+      d = abs(d1-d2)
       if relTol :
           tol = dtol * max(p2.dim1,p2.dim2)
       else :
@@ -45,6 +46,7 @@ def isSamePlane(p1,p2,dtol=1e-6,atol=1e-6,relTol=True,fuzzy=(False,0)):
 
       return isSame 
     return False     
+    
 
 def isSameCylinder(cyl1,cyl2,dtol=1e-6, atol=1e-6, relTol=True, fuzzy=(False,0)):
     if relTol :

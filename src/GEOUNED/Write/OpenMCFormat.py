@@ -56,8 +56,8 @@ class OpenMC_input:
 
     def __write_xml_cells__(self,cell):
        """ Write the cell in xml OpenMC format """
-       index = cell.__id__
-       if index is None : return
+       index = cell.label
+       if cell.__id__ is None : return
 
        if cell.Material == 0: 
           matName = 'void'
@@ -165,7 +165,7 @@ import openmc
           if  cell.MatInfo == 'Graveyard' : continue
           self.__write_py_cells__(cell)
           if cell.__id__ is None : continue
-          cellNames.append('C{}'.format(cell.__id__))
+          cellNames.append('C{}'.format(cell.label))
 
        geometry = "\ngeometry = openmc.Geometry([{}])\ngeometry.export_to_xml()\n".format(', '.join(cellNames)) 
 
@@ -175,8 +175,8 @@ import openmc
 
     def __write_py_cells__(self,cell):
        """ Write the cell in xml OpenMC format """
-       index = cell.__id__
-       if index is None : return
+       index = cell.label
+       if cell.__id__ is None : return
 
        if cell.Material == 0: 
           OMCcell = 'C{} = openmc.Cell(region={})\n'.format(index, writeOpenMCregion(cell.Definition,'PY') ) 

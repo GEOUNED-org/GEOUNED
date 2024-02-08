@@ -154,8 +154,7 @@ class VoidBox ():
         self.__removeExtraComp__(m,Cube,mode='dist')
      return   
 
-  def getVoidComplementary(self,Surfaces,simplify='No'):
-
+  def getVoidComplementary(self,Surfaces,simplify='no'):
     if self.PieceEnclosure is None:
         boxDef = BoolSequence(operator='AND')
         center = self.BoundBox.Center
@@ -192,13 +191,16 @@ class VoidBox ():
 
     voidSolidDef = BoolSequence(operator='OR')
 
+    cellIn = []
     for m in self.Objects:
         voidSolidDef.append(m.Definition)
+        if m.IsEnclosure : continue    
+        cellIn.append(m.__id__)
 
-    voidSolidDef.joinOperators()
+    #voidSolidDef.joinOperators()
 
     if not voidSolidDef.elements : 
-         return boxDef     #  Cell to get complementary are null => Void is only box definition
+         return boxDef,None    #  Cell to get complementary are null => Void is only box definition
        
     # join all basic solids into one big meta Object
     # CAD solid representation is not needed because
@@ -207,47 +209,86 @@ class VoidBox ():
 
     complementary = BoolSequence(operator='AND')
     complementary.append(boxDef)
-
     if (simplify != 'no' ) :
-       surfList = set(voidSolidDef.getSurfacesNumbers())
+       surfList = voidSolidDef.getSurfacesNumbers()
 
        if enclosure : 
-           surfList.update(set(boxDef.getSurfacesNumbers()))
+           surfList.update(boxDef.getSurfacesNumbers())
        else:
            for s in boxDef.elements:
-              val = True if s >0 else False
+              val = s > 0
               voidSolidDef.substitute(abs(s),val)
-           res = voidSolidDef.clean()
+           voidSolidDef.clean()
+       if type(voidSolidDef.elements) is bool :
+           res = voidSolidDef.elements
+       else:
+           res = None
 
-       if enclosure or res is None :
+       if enclosure or res is None:
           surfaceDict = {}
-          for surf in Surfaces.values():
-             for s in surf:
-                if s.Index in surfList:
-                   surfaceDict[s.Index] = s
-
+          for i in surfList:
+             surfaceDict[i] = Surfaces.getSurface(i)
           CTable = buildCTableFromSolids(Box,surfaceDict,option=simplify)
-          voidSolidDef = removeExtraSurfaces(voidSolidDef,CTable) 
+       else:
+          if res == True :
+             return None,None
+          else:
+             return boxDef,None
+
+       newTemp = BoolSequence(operator='OR')
+
+       if voidSolidDef.level == 0 :
+           if len(voidSolidDef.elements) == 1 :
+               voidSolidDef.operator = 'AND'
+           cellVoid = BoolSequence(operator = 'OR')
+           cellVoid.append(voidSolidDef)              
+           voidSolidDef = cellVoid
+
+       for solDef in voidSolidDef.elements :
+           newSolid = removeExtraSurfaces(solDef,CTable) 
+           if type(newSolid.elements) is not bool : 
+               newTemp.append(newSolid)
+           elif newSolid.elements == True:
+              return None,None 
+
+       voidSolidDef = newTemp
+
+    else:
+       if voidSolidDef.level == 0 :
+           if len(voidSolidDef.elements) == 1 :
+               voidSolidDef.operator = 'AND'
+           cellVoid = BoolSequence(operator = 'OR')
+           cellVoid.append(voidSolidDef)              
+           voidSolidDef = cellVoid
     
     if voidSolidDef.elements == True :
-        return None
+        return None,None
     elif voidSolidDef.elements == False or voidSolidDef.elements == []:
-        return boxDef
+        return boxDef,None
 
-    if voidSolidDef.level == 0:
+    if voidSolidDef.level == 0 :
        compSeq = voidSolidDef.getComplementary()
     else:
+
+       newCell = []
+
        if voidSolidDef.level == 1 and voidSolidDef.operator == 'AND':
            compSeq = BoolSequence(operator='OR')
        else:
            compSeq = BoolSequence(operator='AND')
+
        for comp in voidSolidDef.elements :
           if simplify == 'no':
-             chk =  comp.check()
+             comp.check()
+             if type(comp.elements) is bool :
+                chk = comp.elements
+             else:
+                chk = None
+             
              #solid in cover full Void cell volume  => Void cell doesn't exist
              if chk == True :
                  if opt.verbose: print('warning void Cell should not exist')
-                 return None
+                 return None,None
 
              #solid cell is not in void cell Void cell volume  => doesn't contribute to void definition
              elif chk == False :
@@ -269,13 +310,13 @@ class VoidBox ():
        complementary.append(compSeq)
  
 
-    res = complementary.clean()
+    complementary.clean()
     complementary.levelUpdate()
-    
-    if type(res) is bool :
-       return None
+
+    if type(complementary.elements) is bool :
+       return None,None
     else :
-       return complementary
+       return complementary,cellIn
 
   def getBoxNumber(self):
       return len(self.Objects)
@@ -286,7 +327,7 @@ class VoidBox ():
             
       for m in self.Objects:
         ns += len(m.Surfaces)
-        nb += len(m.Definition.elements)
+        nb += len(m.Definition.elements)  if m.Definition.level > 0 else 1
 
       return ns,nb
 

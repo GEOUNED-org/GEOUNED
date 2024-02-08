@@ -2,7 +2,7 @@ import sys
 import os
 import subprocess
 
-sys.path.append('/opt/geouned/v0.9.8.2/')
+sys.path.append('/work/patrick/GEOUNED/prualjaz/src')
 sys.path.append('/usr/lib64/freecad/lib64/')
 
 from GEOUNED import GEOUNED
@@ -22,12 +22,12 @@ def setInput(inName,inpDir,outDir):
     outDir = '.'
 
    inName  = '{}/{}'.format(inpDir,inName)
-   outName = '{}/{}.i'.format(outDir,filename)
+   outName = '{}/{}'.format(outDir,filename)
 
    template='''[Files]
 title    = Input Test
 stepFile = {}
-mcnpFile = {}
+geometryName = {}
 
 [Parameters]
 compSolids = False
@@ -39,7 +39,7 @@ minVoidSize =  100
 cellSummaryFile = False
 cellCommentFile = False
 debug       = False
-simplify   = No
+simplify   = no
 
 [Options]
 forceCylinder = False
@@ -80,7 +80,7 @@ def getInputList(folder,ext=None):
 
 
 def runMCNP(path,inpFile):
-   code = '/opt/mcnp6/last/bin/mcnp6'
+   code = '/opt/mcnp5/last/bin/mcnp5'
    xsdir = '/opt/mcnp.data/ascii/xsdir'
    inp = inpFile
    out = inpFile[0:-1]+'o'
@@ -90,7 +90,8 @@ def runMCNP(path,inpFile):
 
 def clean(folder):
    filename = '{}/runtpe'.format(folder) 
-   os.remove(filename)
+   if os.path.isfile(filename) :
+      os.remove(filename)
 
 def cleanDir(folder):
    for file in getInputList(folder,('.o','.m')):
@@ -148,8 +149,16 @@ def postProcess(folder):
       printResults(fmct[:-1]+'i',res,lost)
 
 # ****************************************************
-inpDir = 'inputSTEP/Misc'
-outDir = 'outMCNP/Misc'
+#inpDir = 'inputSTEP/Misc'
+#outDir = 'outMCNP/Misc'
+#inpDir = 'inputSTEP/DoubleCylinder'
+#outDir = 'outMCNP/DoubleCylinder'
+#inpDir = 'inputSTEP/Torus'
+#outDir = 'outMCNP/Torus'
+inpDir = 'inputSTEP/large'
+outDir = 'outMCNP/large'
+#inpDir = 'inputSTEP/'
+#outDir = 'outMCNP/'
 inifile = 'config.ini'
 
 
@@ -161,6 +170,9 @@ for f in getInputList(inpDir,('stp','step')):
    del GEO
    
 cleanDir(outDir)
+for f in getInputList(outDir,'.mcnp'):
+   os.rename(f'{outDir}/{f}',f'{outDir}/{f[:-4]}i')
+
 for f in getInputList(outDir,'.i'):
    runMCNP(outDir,f)
    clean(outDir)

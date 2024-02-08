@@ -2,10 +2,10 @@ import GEOUNED.Utils.Qform as Qform
 from GEOUNED.Utils.BasicFunctions_part1 import isParallel, isOposite
 from GEOUNED.Utils.Options.Classes import MCNP_numeric_format as nf
 from GEOUNED.Utils.Options.Classes import Tolerances as tol
+from GEOUNED.Utils.Options.Classes import Options as opt
 from GEOUNED.Write.StringFunctions import remove_redundant
 
 import FreeCAD
-import copy
 import math
 import re
 
@@ -102,6 +102,13 @@ def writeMCNPCellDef(Definition,tabspace=0,offset=0):
        sdef.wrapLine(offset)
        return  sdef.str
 
+def writeSerpentCellDef(Definition,tabspace=0,offset=0):
+       sdef = CellString(tabspace=tabspace)
+       strDef = remove_redundant(writeSequenceSerpent(Definition))
+       sdef.add(strDef)
+       sdef.wrapLine(offset)
+       return  sdef.str
+
 def writeOpenMCregion(Definition,Wtype='XML'):
        if Wtype == 'XML':
            return writeSequenceOMCXML(Definition)
@@ -109,6 +116,23 @@ def writeOpenMCregion(Definition,Wtype='XML'):
            return writeSequenceOMCPY(Definition)
 
 def writeSequenceMCNP(Seq):
+     if Seq.level == 0 :
+        if Seq.operator == 'AND' : line = '({})'.format(' '.join(map(str,Seq.elements)))
+        else  :                    line = '({})'.format(':'.join(map(str,Seq.elements)))
+     else :
+        terms = []
+        for e in Seq.elements:
+           if type(e) is int :
+              terms.append(str(e))
+           else :
+              terms.append(writeSequenceMCNP(e))
+
+        if Seq.operator == 'AND' : line = '({})'.format(' '.join(terms))
+        else  :                    line = '({})'.format(':'.join(terms))
+
+     return line
+
+def writeSequenceSerpent(Seq):
      if Seq.level == 0 :
         if Seq.operator == 'AND' : line = '({})'.format(' '.join(map(str,Seq.elements)))
         else  :                    line = '({})'.format(':'.join(map(str,Seq.elements)))
@@ -162,24 +186,33 @@ def writeSequenceOMCPY(Seq,prefix='S'):
 
 def MCNPSurface(id,Type,surf):
     MCNP_def = ''
+
     if (Type=='Plane'):
-        A=surf.Axis.x
-        B=surf.Axis.y
-        C=surf.Axis.z
-        D=surf.Axis.dot(surf.Position)
-        if   surf.Axis.isEqual(FreeCAD.Vector(1,0,0),tol.pln_angle) :
-           MCNP_def='{:<6d} PX  {:{x}}'.format(id,D/10.0,x=nf.P_xyz)
-        elif surf.Axis.isEqual(FreeCAD.Vector(0,1,0),tol.pln_angle) :
-           MCNP_def='{:<6d} PY  {:{y}}'.format(id,D/10.0,y=nf.P_xyz)
-        elif surf.Axis.isEqual(FreeCAD.Vector(0,0,1),tol.pln_angle) :
-           MCNP_def='{:<6d} PZ  {:{z}}'.format(id,D/10.0,z=nf.P_xyz) 
-        else:
-           MCNP_def='{:<6d} P   {:{abc}} {:{abc}} {:{abc}} {:{d}}'.format(id,A,B,C,D/10.0,abc=nf.P_abc,d=nf.P_d)  
+      if surf.pointDef and opt.prnt3PPlane:
+         P1 = surf.Points[0]
+         P2 = surf.Points[1]
+         P3 = surf.Points[2]
+         MCNP_def="""{:<6d} P   {P1[0]:{d}} {P1[1]:{d}} {P1[2]:{d}} 
+           {P2[0]:{d}} {P2[1]:{d}} {P2[2]:{d}}
+           {P3[0]:{d}} {P3[1]:{d}} {P3[2]:{d}}""".format(id,P1=P1/10,P2=P2/10,P3=P3/10,d=nf.P_d)  
+      else:
+         A=surf.Axis.x
+         B=surf.Axis.y
+         C=surf.Axis.z
+         D=surf.Axis.dot(surf.Position)
+         if   surf.Axis.isEqual(FreeCAD.Vector(1,0,0),tol.pln_angle) :
+            MCNP_def='{:<6d} PX  {:{x}}'.format(id,D/10.0,x=nf.P_xyz)
+         elif surf.Axis.isEqual(FreeCAD.Vector(0,1,0),tol.pln_angle) :
+            MCNP_def='{:<6d} PY  {:{y}}'.format(id,D/10.0,y=nf.P_xyz)
+         elif surf.Axis.isEqual(FreeCAD.Vector(0,0,1),tol.pln_angle) :
+            MCNP_def='{:<6d} PZ  {:{z}}'.format(id,D/10.0,z=nf.P_xyz) 
+         else:
+            MCNP_def='{:<6d} P   {:{abc}} {:{abc}} {:{abc}} {:{d}}'.format(id,A,B,C,D/10.0,abc=nf.P_abc,d=nf.P_d)  
     
     elif (Type == 'Cylinder'):
-        Pos = copy.deepcopy(surf.Center)
+        Pos = FreeCAD.Vector(surf.Center)
         Pos.multiply(0.1)
-        Dir = copy.deepcopy(surf.Axis)
+        Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
         rad = surf.Radius/10.0
         if (isParallel(Dir,FreeCAD.Vector(1,0,0),tol.angle)):
@@ -219,9 +252,9 @@ def MCNPSurface(id,Type,surf):
         #    MCNP_def='%i  RCC  %13.7E %13.7E %13.7E %13.7E\n       %13.7E %13.7E %13.7E' %(id,Vx,Vy,Vz,Hx,Hy,Hz,rad)
         
     elif (Type == 'Cone'):
-        Apex = copy.deepcopy(surf.Apex)
+        Apex = FreeCAD.Vector(surf.Apex)
         Apex.multiply(0.1)
-        Dir = copy.deepcopy(surf.Axis)
+        Dir = FreeCAD.Vector(surf.Axis)
         Dir.multiply(0.1)
         tan = math.tan(surf.SemiAngle)
         X_dir=FreeCAD.Vector(1,0,0)
@@ -266,9 +299,9 @@ def MCNPSurface(id,Type,surf):
            MCNP_def='{:<6d} S  {:{xyz}} {:{xyz}} {:{xyz}} {:{r}}'.format(id,pnt.x,pnt.y,pnt.z,rad,xyz=nf.S_xyz,r=nf.S_r)
 
     elif (Type == 'Torus'):
-        Pos = copy.deepcopy(surf.Center)
+        Pos = FreeCAD.Vector(surf.Center)
         Pos.multiply(0.1)
-        Dir = copy.deepcopy(surf.Axis)
+        Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
         radMaj = surf.MajorRadius/10.0
         radMin = surf.MinorRadius/10.0
@@ -335,7 +368,7 @@ def OpenMCSurface(Type,surf,outXML=True,quadricForm=False):
     
     elif (Type == 'Cylinder'):
         Pos = surf.Center
-        Dir = copy.deepcopy(surf.Axis)
+        Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
 
         if (isParallel(Dir,FreeCAD.Vector(1,0,0),tol.angle)):
@@ -379,7 +412,7 @@ def OpenMCSurface(Type,surf,outXML=True,quadricForm=False):
         
     elif (Type == 'Cone'):
         Apex = surf.Apex
-        Dir = copy.deepcopy(surf.Axis)
+        Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
         tan  = math.tan(surf.SemiAngle)
         tan2 = tan * tan
@@ -437,7 +470,7 @@ def OpenMCSurface(Type,surf,outXML=True,quadricForm=False):
 
 
     elif (Type == 'Torus'):
-        Dir = copy.deepcopy(surf.Axis)
+        Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
         if outXML :
            coeffs ='{:{xyz}} {:{xyz}} {:{xyz}} {:{r}} {:{r}} {:{r}}'.format(surf.Center.x, surf.Center.y, surf.Center.z,  \
@@ -447,16 +480,117 @@ def OpenMCSurface(Type,surf,outXML=True,quadricForm=False):
            coeffs ='x0={},y0={},z0={},r{},r1={},r2={}'.format(surf.Center.x, surf.Center.y, surf.Center.z, surf.MajorRadius, surf.MinorRadius, surf.MinorRadius)
 
         if (isParallel(Dir,FreeCAD.Vector(1,0,0),tol.angle)):
-             OMCsurf = 'x-torus' if outXML else XTorus
+             OMCsurf = 'x-torus' if outXML else 'XTorus'
         elif (isParallel(Dir,FreeCAD.Vector(0,1,0),tol.angle)):
-             OMCsurf = 'y-torus' if outXML else YTorus
+             OMCsurf = 'y-torus' if outXML else 'YTorus'
         elif (isParallel(Dir,FreeCAD.Vector(0,0,1),tol.angle)):
-             OMCsurf = 'z-torus' if outXML else ZTorus
+             OMCsurf = 'z-torus' if outXML else 'ZTorus'
         else:
              OMCsurf = None
 
     if outXML : coeffs = ' '.join(coeffs.split())
     return OMCsurf,coeffs
+
+def SerpentSurface(id, Type, surf):
+    Serpent_def = ''
+
+    if Type == 'Plane':
+        if surf.pointDef and opt.prnt3PPlane:
+            P1 = surf.Points[0]
+            P2 = surf.Points[1]
+            P3 = surf.Points[2]
+            Serpent_def = f"surf {id} plane {P1.x/10:{nf.P_d}} {P1.y/10:{nf.P_d}} {P1.z/10:{nf.P_d}}\n"
+            Serpent_def += f"      {P2.x/10:{nf.P_d}} {P2.y/10:{nf.P_d}} {P2.z/10:{nf.P_d}}\n"
+            Serpent_def += f"      {P3.x/10:{nf.P_d}} {P3.y/10:{nf.P_d}} {P3.z/10:{nf.P_d}}"
+
+        else:
+            A = surf.Axis.x
+            B = surf.Axis.y
+            C = surf.Axis.z
+            D = surf.Axis.dot(surf.Position)
+            if surf.Axis.isEqual(FreeCAD.Vector(1, 0, 0), tol.pln_angle):
+                Serpent_def = f"surf {id} px {D/10:{nf.P_xyz}}"
+            elif surf.Axis.isEqual(FreeCAD.Vector(0, 1, 0), tol.pln_angle):
+                Serpent_def = f"surf {id} py {D/10:{nf.P_xyz}}"
+            elif surf.Axis.isEqual(FreeCAD.Vector(0, 0, 1), tol.pln_angle):
+                Serpent_def = f"surf {id} pz {D/10:{nf.P_xyz}}"
+            else:
+                Serpent_def = f"surf {id} plane {A:{nf.P_d}} {B:{nf.P_d}} {C:{nf.P_d}} {D/10:{nf.P_d}}"
+
+    elif Type == 'Cylinder':
+        Pos = surf.Center.multiply(0.1)
+        Dir = surf.Axis.normalize()
+        rad = surf.Radius / 10.0
+        if isParallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle):
+            Serpent_def = f"surf {id} cylx {Pos.y:{nf.C_xyz}} {Pos.z:{nf.C_xyz}} {rad:{nf.C_r}}"
+        elif isParallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle):
+            Serpent_def = f"surf {id} cyly {Pos.x:{nf.C_xyz}} {Pos.z:{nf.C_xyz}} {rad:{nf.C_r}}"
+        elif isParallel(Dir, FreeCAD.Vector(0, 0, 1), tol.angle):
+            Serpent_def = f"surf {id} cylz {rad:{nf.C_r}}"
+        else:
+        # Is not still working fine
+          Q=Qform.QFormCyl(Dir,Pos,rad)
+          Serpent_def='''\
+surf quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
+          {v[3]:{aTof}} {v[4]:{aTof}} {v[5]:{aTof}}
+          {v[6]:{gToi}} {v[7]:{gToi}} {v[8]:{gToi}}
+          {v[9]:{j}} '''.format(id,v=Q,aTof=nf.GQ_1to6,gToi=nf.GQ_7to9,j=nf.GQ_10)
+
+    elif Type == 'Cone':
+        Apex = surf.Apex.multiply(0.1)
+        Dir = surf.Axis.multiply(0.1)
+        tan = math.tan(surf.SemiAngle)
+        X_dir = FreeCAD.Vector(1, 0, 0)
+        Y_dir = FreeCAD.Vector(0, 1, 0)
+        Z_dir = FreeCAD.Vector(0, 0, 1)
+
+        # Need to check this 
+        # Serpent has no specific card for cone at origin, explicit origin only
+
+        if (isParallel(Dir,X_dir,tol.angle)):
+          sheet=1
+          if (isOposite(Dir,X_dir,tol.angle)): sheet=-1
+          Serpent_def = 'surf ckx {:{xyz}} {:{xyz}} {:{xyz}} {:{t2}} {}'.format(id,Apex.x,Apex.y,Apex.z,tan**2,sheet,xyz=nf.K_xyz,t2=nf.K_tan2)
+        elif (isParallel(Dir,Y_dir,tol.angle)):
+          sheet=1
+          if (isOposite(Dir,Y_dir,tol.angle)): sheet=-1
+          Serpent_def = 'surf cky {:{xyz}} {:{xyz}} {:{xyz}} {:{t2}} {}'.format(id,Apex.x,Apex.y,Apex.z,tan**2,sheet,xyz=nf.K_xyz,t2=nf.K_tan2)
+        elif (isParallel(Dir,Z_dir,tol.angle)):
+          sheet=1
+          if (isOposite(Dir,Z_dir,tol.angle)): sheet=-1
+          Serpent_def = 'surf ckz {:{xyz}} {:{xyz}} {:{xyz}} {:{t2}} {}'.format(id,Apex.x,Apex.y,Apex.z,tan**2,sheet,xyz=nf.K_xyz,t2=nf.K_tan2)
+        else:
+          Q=Qform.QFormCone(Dir,Apex,tan)
+          MCNP_def='''\
+surf quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
+          {v[3]:{aTof}} {v[4]:{aTof}} {v[5]:{aTof}}
+          {v[6]:{gToi}} {v[7]:{gToi}} {v[8]:{gToi}}
+          {v[9]:{j}} '''.format(id,v=Q,aTof=nf.GQ_1to6,gToi=nf.GQ_7to9,j=nf.GQ_10)
+
+
+    elif Type == 'Sphere':
+        rad = surf.Radius / 10.0
+        pnt = surf.Center.multiply(0.1)
+        # Serpent has only explicit spheres at the origin
+        Serpent_def = f"surf {id} sph {pnt.x:{nf.S_xyz}} {pnt.y:{nf.S_xyz}} {pnt.z:{nf.S_xyz}} {rad:{nf.S_r}}"
+
+    elif Type == 'Torus':
+        Pos = surf.Center.multiply(0.1)
+        Dir = surf.Axis.normalize()
+        radMaj = surf.MajorRadius / 10.0
+        radMin = surf.MinorRadius / 10.0
+        if (isParallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle)):
+            Serpent_def = f"surf {id} torx {Pos.x:{nf.T_xyz}} {Pos.y:{nf.T_xyz}} {Pos.z:{nf.T_xyz}}\n"
+            Serpent_def += f"      {radMaj:{nf.T_r}} {radMin:{nf.T_r}} {radMin:{nf.T_r}}"
+        elif (isParallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle)):
+            Serpent_def = f"surf {id} tory {Pos.x:{nf.T_xyz}} {Pos.y:{nf.T_xyz}} {Pos.z:{nf.T_xyz}}\n"
+            Serpent_def += f"      {radMaj:{nf.T_r}} {radMin:{nf.T_r}} {radMin:{nf.T_r}}"
+        elif (isParallel(Dir, FreeCAD.Vector(0, 0, 1), tol.angle)):
+            Serpent_def = f"surf {id} torz {Pos.x:{nf.T_xyz}} {Pos.y:{nf.T_xyz}} {Pos.z:{nf.T_xyz}}\n"
+            Serpent_def += f"      {radMaj:{nf.T_r}} {radMin:{nf.T_r}} {radMin:{nf.T_r}}"
+
+    return Serpent_def
+
 
 def trim(surfDef,lineLength=80):
 

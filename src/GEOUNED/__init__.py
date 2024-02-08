@@ -19,6 +19,7 @@ from GEOUNED.Write.WriteFiles import writeGeometry
 from GEOUNED.CodeVersion import *
 from GEOUNED.Utils.Options.Classes import Tolerances, MCNP_numeric_format, Options 
 from GEOUNED.Utils.BooleanSolids import buildCTableFromSolids
+from GEOUNED.Cuboid.translate import translate
 
 import GEOUNED.Void.Void as Void
 
@@ -57,12 +58,12 @@ class GEOUNED() :
    def SetOptions(self):
       toleranceKwrd = ( 'relativeTolerance', 'relativePrecision', 'singleValue', 'generalDistance', 'generalAngle',
                         'planeDistance', 'planeAngle', 'cylinderDistance', 'cylinderAngle', 'sphereDistance', 'coneDistance',
-                        'coneAngle', 'torusDistance', 'torusAngle')
+                        'coneAngle', 'torusDistance', 'torusAngle','minArea')
       numericKwrd = ('P_abc', 'P_d', 'P_xyz', 'S_r', 'S_xyz', 'C_r', 'C_xyz', 'K_tan2', 'K_xyz', 'T_r', 'T_xyz', 'GQ_1to6', 'GQ_7to9', 'GQ_10' )
       tolKwrdEquiv = {'relativeTolerance':'relativeTol' , 'relativePrecision':'relativePrecision', 'singleValue':'value', 'generalDistance':'distance',
                       'generalAngle': 'angle', 'planeDistance':'pln_distance', 'planeAngle':'pln_angle', 'cylinderDistance':'cyl_distance', 
                       'cylinderAngle':'cyl_angle', 'sphereDistance':'sph_distance', 'coneDistance':'kne_distance', 'coneAngle': 'kne_angle',
-                      'torusDistance':'tor_distance', 'torusAngle':'tor_angle'}
+                      'torusDistance':'tor_distance', 'torusAngle':'tor_angle','minArea':'min_area'}
 
       config = configparser.ConfigParser()
       config.optionxform = str
@@ -89,6 +90,7 @@ class GEOUNED() :
                         if   v.lower() == 'mcnp'       : outFormat.append('mcnp')
                         elif v.lower() == 'openmc_xml' : outFormat.append('openMC_XML')
                         elif v.lower() == 'openmc_py'  : outFormat.append('openMC_PY')
+                        elif v.lower() == 'serpent'    : outFormat.append('serpent')
                      self.set(key, tuple(outFormat))   
                      
 
@@ -112,7 +114,8 @@ class GEOUNED() :
 
          elif section == 'Options':
             for key in config['Options'].keys() :
-               if key in ('forceCylinder','newSplitPlane','delLastNumber','verbose','quadricPY') :
+               if key in ('forceCylinder','newSplitPlane','delLastNumber','verbose','quadricPY',\
+                           'Facets','prnt3PPlane','forceNoOverlap') :
                    setattr(Options,key, config.getboolean('Options',key))
                elif key in ('enlargeBox','nPlaneReverse','splitTolerance'):
                    setattr(Options,key, config.getfloat('Options',key))
@@ -124,14 +127,21 @@ class GEOUNED() :
                  elif key in toleranceKwrd : setattr(Tolerances,tolKwrdEquiv[key], config.getfloat('Tolerances',key))   
 
          elif section == 'MCNP_Numeric_Format':
+            PdEntry = False
             for key in config['MCNP_Numeric_Format'].keys() :
                  if key in numericKwrd : setattr(MCNP_numeric_format,key, config.get('MCNP_Numeric_Format',key))   
+                 if key == 'P_d':  PdEntry = True
+                    
              
          else:
             print('bad section name : {}'.format(section))
 
       if self.__dict__['geometryName'] == '' :
          self.__dict__['geometryName'] = self.__dict__['stepFile'][:-4]
+
+      if Options.prnt3PPlane and not PdEntry :
+         MCNP_numeric_format.P_d = '22.15e'          
+
       print(self.__dict__)
 
    def set(self,kwrd,value):
@@ -202,6 +212,11 @@ class GEOUNED() :
           
        stepfile = code_setting['stepFile']
        matfile  = code_setting['matFile']
+
+       if not path.isfile(stepfile) :
+          print('Step file {} not found.\nStop.'.format(stepfile))
+          exit()
+
        startTime = datetime.now()
 
        if isinstance(stepfile,(list,tuple)):
@@ -248,47 +263,62 @@ class GEOUNED() :
 
        surfOffset = code_setting['startSurf'] - 1
        Surfaces    = UF.Surfaces_dict(offset=surfOffset)
+  
 
-
-       # decompose all solids in elementary solids (convex ones)
-       warningSolidList = DecomposeSolids(MetaList,Surfaces,UniverseBox,code_setting,True)
-
-       # decompose Enclosure solids
-       if code_setting['voidGen'] and EnclosureList :
-          warningEnclosureList = DecomposeSolids(EnclosureList,Surfaces,UniverseBox,code_setting,False)
-           
-       print('End of decomposition phase')
-       tempstr2 = str(datetime.now()-tempTime)
-       print(tempstr2)
-
-       # start Building CGS cells phase   
-       tempTime0 = datetime.now()
        warnSolids     = []
        warnEnclosures = []
+       coneInfo = dict()
+       tempTime0 = datetime.now()
+       if not Options.Facets:
+
+          # decompose all solids in elementary solids (convex ones)
+          warningSolidList = DecomposeSolids(MetaList,Surfaces,UniverseBox,code_setting,True)
+
+          # decompose Enclosure solids
+          if code_setting['voidGen'] and EnclosureList :
+             warningEnclosureList = DecomposeSolids(EnclosureList,Surfaces,UniverseBox,code_setting,False)
+           
+          print('End of decomposition phase')
+
+          # start Building CGS cells phase   
  
-       for j,m in enumerate(MetaList):
-           if m.IsEnclosure : continue
-           print('Building cell: ', j)
-           Conv.cellDef(m,Surfaces,UniverseBox)
-           if j in warningSolidList:
-               warnSolids.append(m)
-           if not m.Solids:
-              print('none',j,m.__id__)
-              print(m.Definition)
+          for j,m in enumerate(MetaList):
+              if m.IsEnclosure : continue
+              print('Building cell: ', j+1)
+              cones = Conv.cellDef(m,Surfaces,UniverseBox)
+              if cones : coneInfo[m.__id__] = cones
+              if j in warningSolidList:
+                  warnSolids.append(m)
+              if not m.Solids:
+                 print('none',j,m.__id__)
+                 print(m.Definition)
+
+          if Options.forceNoOverlap :
+             Conv.noOverlappingCell(MetaList,Surfaces) 
+
+       else:
+          translate(MetaList,Surfaces,UniverseBox,code_setting)
+          # decompose Enclosure solids
+          if code_setting['voidGen'] and EnclosureList :
+             warningEnclosureList = DecomposeSolids(EnclosureList,Surfaces,UniverseBox,code_setting,False)
+
+       tempstr2 = str(datetime.now()-tempTime)
+       print(tempstr2)
+         
 
        #  building enclosure solids       
 
        if code_setting['voidGen'] and EnclosureList :
            for j,m in enumerate(EnclosureList):
-             print('Building Enclosure Cell: ', j)
-             Conv.cellDef(m,Surfaces,UniverseBox)
+             print('Building Enclosure Cell: ', j+1)
+             cones = Conv.cellDef(m,Surfaces,UniverseBox)
+             if cones : coneInfo[m.__id__] =  cones
              if j in warningEnclosureList:
                 warnEnclosures.append(m)
         
 
        tempTime1 = datetime.now()
 
-       printWarningSolids(warnSolids,warnEnclosures)
 
        # void generation phase
        MetaVoid = []
@@ -306,6 +336,7 @@ class GEOUNED() :
             init = 0
          MetaVoid = Void.voidGeneration(MetaReduced,EnclosureList,Surfaces,UniverseBox,code_setting,init)
 
+       #if code_setting['simplify'] == 'full' and not Options.forceNoOverlap:
        if code_setting['simplify'] == 'full' :
            Surfs = {}
            for lst in Surfaces.values():
@@ -315,16 +346,12 @@ class GEOUNED() :
            for c in MetaList:
               if c.Definition.level == 0 or c.IsEnclosure: continue
               print('simplify cell',c.__id__)
-              Box =  getBox(c)
+              Box =  UF.getBox(c)
               CT = buildCTableFromSolids(Box,(c.Surfaces,Surfs),option='full')
- 
-                   
               c.Definition.simplify(CT)
-              res = c.Definition.clean()
-              if res is not None:
-                  print('unexpected constant cell {} :{}'.format(cell.__id__,res)) 
-
-
+              c.Definition.clean()
+              if type(c.Definition.elements) is bool:
+                  print('unexpected constant cell {} :{}'.format(c.__id__,res)) 
 
        tempTime2 = datetime.now()
        print('build Time:',tempTime2-tempTime1)
@@ -341,41 +368,51 @@ class GEOUNED() :
        else:
           # remove Null Cell and apply cell numbering offset
           deleted = []
-          icount = 0
+          idLabel = {0:0}
+          icount = cellOffSet
           for i,m in enumerate(MetaList):
               if m.NullCell or m.IsEnclosure :
                 deleted.append(i)
-                icount += 1
                 continue
-              m.__id__ += cellOffSet - icount
+
+              icount += 1
+              m.label =  icount  
+              idLabel[m.__id__] = m.label
+
           for i in reversed(deleted):
              del MetaList[i]       
 
           lineComment = """\
 ##########################################################
-             VOIDS 
+             VOID CELLS
 ##########################################################"""
           mc = UF.GEOUNED_Solid(None)
           mc.Comments = lineComment
           MetaList.append(mc)
 
           deleted = []
-          icount = 0
           for i,m in enumerate(MetaVoid):
               if m.NullCell :
                 deleted.append(i)
-                icount += 1
                 continue
-              m.__id__ += cellOffSet - icount
+              icount += 1
+              m.label = icount 
+              updateComment(m,idLabel)
           for i in reversed(deleted):
              del MetaVoid[i]       
 
           MetaList.extend(MetaVoid)
 
+
+       printWarningSolids(warnSolids,warnEnclosures)
+
+       # add plane definition to cone
+       processCones(MetaList,coneInfo,Surfaces,UniverseBox)
+
        # write outputformat input
        writeGeometry(UniverseBox,MetaList,Surfaces,code_setting)
    
-       print('End of MCNP translation phase')
+       print('End of MCNP, OpenMC and Serpent translation phase')
 
        print('Process finished')
        print(datetime.now()-startTime)
@@ -389,7 +426,7 @@ def DecomposeSolids(MetaList,Surfaces,UniverseBox,setting,meta):
     warningSolids = []
     for i,m in enumerate(MetaList):
         if meta and m.IsEnclosure: continue
-        print('Decomposing solid: {}/{} '.format(i,totsolid))
+        print('Decomposing solid: {}/{} '.format(i+1,totsolid))
         if setting['debug'] :
             print(m.Comments)
             if m.IsEnclosure :
@@ -423,48 +460,26 @@ def DecomposeSolids(MetaList,Surfaces,UniverseBox,setting,meta):
     return warningSolids   
 
 
-def getBox(comp):
-    bb=FreeCAD.BoundBox(comp.BoundBox)
-    apexList = findCone(comp.Faces)
-    if apexList :
-       xMin,xMax,yMin,yMax,zMin,zMax = bb.XMin, bb.XMax, bb.YMin, bb.YMax, bb.ZMin, bb.ZMax
-       for apex in apexList:
-          if apex.x < xMin   : xMin = apex.x
-          elif apex.x > xMax : xMax = apex.x
-          if apex.y < yMin   : yMin = apex.y
-          elif apex.y > yMax : yMax = apex.y
-          if apex.z < zMin   : zMin = apex.z
-          elif apex.z > zMax : zMax = apex.z
-       xLength = xMax-xMin + Options.enlargeBox
-       yLength = yMax-yMin + Options.enlargeBox
-       zLength = zMax-zMin + Options.enlargeBox
-       xMin -= 0.5*Options.enlargeBox
-       yMin -= 0.5*Options.enlargeBox
-       zMin -= 0.5*Options.enlargeBox
-    else:
-       bb.enlarge(Options.enlargeBox)
-       xMin,yMin,zMin = bb.XMin, bb.YMin, bb.ZMin
-       xLength,yLength,zLength = bb.XLength,  bb.YLength,  bb.ZLength 
-       
-    return Part.makeBox( xLength, yLength, zLength,
-                         FreeCAD.Vector( xMin, yMin, zMin),
-                         FreeCAD.Vector(0,0,1))
+def updateComment(meta,idLabel):
+    if meta.__commentInfo__ is None: return
+    if meta.__commentInfo__[1] is None: return
+    newLabel = ( idLabel[i] for i in meta.__commentInfo__[1] )
+    meta.setComments(Void.voidCommentLine((meta.__commentInfo__[0], newLabel)))
+    
+def processCones(MetaList,coneInfo,Surfaces,UniverseBox):
+   cellId = tuple(coneInfo.keys())
+   for m in MetaList: 
+      if m.__id__ not in cellId and not m.Void: continue
 
-def findCone(Faces):
-   coneObj = []
-   for list1 in Faces:
-     for f in list1:
-        if type(f) is list :
-           for ff in f :
-              if ff is not None :
-                 if "Cone" in str(ff.Surface) : coneObj.append(ff)
-        else:
-           if "Cone" in str(f.Surface) : coneObj.append(f)
-
-   apexList = []
-   for c in coneObj :
-      apexList.append(c.Surface.Apex)
-   return apexList
+      if m.Void and m.__commentInfo__ is not None :
+         if m.__commentInfo__[1] is None : continue
+         cones = set()
+         for Id in m.__commentInfo__[1] :
+            if Id in cellId :
+               cones.update(-x for x in coneInfo[Id])
+         Conv.addConePlane(m.Definition, cones, Surfaces,UniverseBox )
+      elif not m.Void:
+         Conv.addConePlane(m.Definition, coneInfo[m.__id__], Surfaces,UniverseBox)
 
 def getUniverse(MetaList):
       d = 10
@@ -499,7 +514,7 @@ def printWarningSolids(warnSolids,warnEnclosures):
        lines = 'Solids :\n'
        for sol in warnSolids:
           lines += '\n'
-          lines += '{}\n'.format(sol.__id__)
+          lines += '{}\n'.format(sol.label)
           lines += '{}\n'.format(sol.Comments)
           lines += '{}\n'.format(writeMCNPCellDef(sol.Definition))
        fic.write(lines)
@@ -508,7 +523,7 @@ def printWarningSolids(warnSolids,warnEnclosures):
        lines = 'Enclosures :\n'
        for sol in warnEnclosures:
           lines += '\n'
-          lines += '{}\n'.format(sol.__id__)
+          lines += '{}\n'.format(sol.label)
           lines += '{}\n'.format(sol.Comments)
           lines += '{}\n'.format(writeMCNPCellDef(sol.Definition))
 
@@ -555,6 +570,7 @@ def sortEnclosure(MetaList,MetaVoid,offSet=0):
           newList[m.EnclosureID] = [m]
     
     icount = offSet
+    idLabel = {0:0}
     newMeta = []
     for m in MetaList:
       if m.NullCell : continue
@@ -569,7 +585,8 @@ def sortEnclosure(MetaList,MetaVoid,offSet=0):
          for e in newList[m.EnclosureID] :
             if e.NullCell : continue
             icount += 1
-            e.__id__ = icount
+            e.label = icount
+            idLabel[e.__id__] = e.label
             newMeta.append(e)
          lineComment = """\
 ##########################################################
@@ -581,13 +598,14 @@ def sortEnclosure(MetaList,MetaVoid,offSet=0):
 
       else:
          icount += 1
-         m.__id__ = icount
+         m.label = icount
+         idLabel[m.__id__] = m.label
          newMeta.append(m)
 
 
     lineComment = """\
 ##########################################################
-             VOIDS 
+             VOID CELLS 
 ##########################################################"""
     mc = UF.GEOUNED_Solid(None)
     mc.Comments = lineComment
@@ -596,53 +614,14 @@ def sortEnclosure(MetaList,MetaVoid,offSet=0):
     for v in newList[0] :
         if v.NullCell : continue
         icount += 1
-        v.__id__ = icount
+        v.label = icount
+        idLabel[v.__id__] = v.label
         newMeta.append(v)
     
+    for m in newMeta:
+       if not m.Void: continue
+       if m.IsEnclosure: continue
+       updateComment(m,idLabel)
+
     return newMeta
-
-def sortEnclosure_old(MetaList):
-    newList = {}
-    enclID = []
-    for m in MetaList:
-      if m.ParentEnclosureID not in enclID:
-         enclID.append(m.ParentEnclosureID)
-         newList[m.ParentEnclosureID]=[m]
-      else:
-         newList[m.ParentEnclosureID].append(m)
-    
-    if -2 in enclID:
-       enclID.remove(-2)
-       graveYard = True
-    else:
-       graveYard = False
-
-    icount = 0
-    newMeta = []
-    for eID in enclID:
-      if eID != -1 :
-         lineComment = """\
-##########################################################
-             ENCLOSURE {}
-##########################################################""".format(eID)
-         mc = UF.GEOUNED_Solid(None)
-         mc.Comments = lineComment
-         newMeta.append(mc)
-
-      for m in newList[eID] :
-         icount += 1
-         m.__id__ = icount
-         newMeta.append(m)
-
-    if graveYard:
-      for m in newList[-2] :
-         icount += 1
-         m.__id__ = icount
-         newMeta.append(m)
-    
-    return newMeta
-
-
-
-
 

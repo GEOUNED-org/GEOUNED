@@ -44,11 +44,20 @@ Modification in 0.9.7 Release Date 06/12/2022
     Default value is only mcnp
   - new entry splitTolerance. Change the Tolerance value of the FreeCAD function split. Default Value  0.
   - new entry Verbose. Print on screen warning. Default False.
-  - bug fixed for solid having toroidal surfaces.
-  
-  
- '''
 
-GEOUNED_Version = '1.0'
-GEOUNED_ReleaseDate = '23/10/2023'
+ new in version 1.0.1
+  - implement new conversion module when all cells are made of triangular plane faces
+  - bug fixed void complementary of level1 'AND' sequence
+  - changes in simplify function of BoolSequence class
+  - implementation of the geometry conversion to Serpent code input file (by A. Valentine UKAEA)
+  - fixed bug with torodial surfaces.
+  - implementation of new, more robust, cell definition, where adjacent solid cell definition is rested to current solid cell definition (forcing no overlaping cell).
+  - fix bug additional plane with sphere
+  - improvement of cell simplification method
+  
+'''
+ 
+GEOUNED_Version = '1.0.1'
+GEOUNED_ReleaseDate = '24/12/2023'
+
 

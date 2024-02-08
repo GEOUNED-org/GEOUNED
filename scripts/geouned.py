@@ -10,7 +10,7 @@ import sys
 #sys.path.append('C:\\Program Files\\FreeCAD 0.19\\bin...')
 
 import GEOUNED 
-from  GEOReverse import reverse
+from  GEOReverse.reverse import reverse
 
 runReverse = False
 if len(sys.argv) < 2 :

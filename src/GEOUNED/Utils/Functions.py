@@ -1,16 +1,26 @@
 #
 # Set of useful functions used in different parts of the code
 #
-
 import GEOUNED.Utils.BasicFunctions_part2 as BF
-
 from GEOUNED.Utils.BasicFunctions_part1 import isParallel,\
-     PlaneParams, CylinderParams, ConeParams, SphereParams, TorusParams 
+     Plane3PtsParams, PlaneParams, CylinderParams, ConeParams, SphereParams, TorusParams 
 from GEOUNED.Utils.Options.Classes import Tolerances as tol
+from GEOUNED.Utils.Options.Classes import Options
 import copy
 import FreeCAD, Part
 import math
 import numpy as np
+
+
+def getBox(comp):
+    bb=FreeCAD.BoundBox(comp.BoundBox)
+    bb.enlarge(Options.enlargeBox)
+    xMin,yMin,zMin = bb.XMin, bb.YMin, bb.ZMin
+    xLength,yLength,zLength = bb.XLength,  bb.YLength,  bb.ZLength
+
+    return Part.makeBox( xLength, yLength, zLength,
+                         FreeCAD.Vector( xMin, yMin, zMin),
+                         FreeCAD.Vector(0,0,1))
 
 def makePlane(Plane,Boxin):
 
@@ -86,6 +96,7 @@ class GEOUNED_Solid:
          self.BoundBox = comsolid.BoundBox
 
        self.__id__ = id
+       self.label  = None
        self.Definition = []
        self.Faces = []
        self.Comments = ''
@@ -117,6 +128,8 @@ class GEOUNED_Solid:
 
     def setCADSolid(self):
         self.CADSolid = Part.makeCompound(self.Solids)
+        self.Volume = self.CADSolid.Volume
+        self.BoundBox = self.CADSolid.BoundBox
 
     def setUniverseBox(self,UniverseBox):
         self.UniverseBox = UniverseBox
@@ -138,7 +151,7 @@ class GEOUNED_Solid:
              self.NullCell = True
              return
 
-       self.Surfaces = self.Definition.getSurfacesNumbers()
+       self.Surfaces = tuple(self.Definition.getSurfacesNumbers())
 
         
     def setFaces(self,faces):
@@ -202,18 +215,25 @@ class GEOUNED_Surface:
     
     def __init__(self,params,boundBox,Face=None) :
        
-       self.Type    = params[0]
        self.Index   = 0
        self.__boundBox__ = boundBox
-       if self.Type == 'Plane':
+       if params[0] == 'Plane':
+          self.Type  = 'Plane'
           self.Surf  = PlaneParams(params[1])  #plane point defined as the shortest distance to origin
-       elif self.Type == 'Cylinder' :   
+       elif params[0] == 'Plane3Pts' :   
+          self.Type  = 'Plane'
+          self.Surf  = Plane3PtsParams(params[1])  #plane point defined with 3 points
+       elif params[0] == 'Cylinder' :   
+          self.Type  = params[0]
           self.Surf  = CylinderParams(params[1])
-       elif  self.Type == 'Cone' :
+       elif  params[0] == 'Cone' :
+          self.Type  = params[0]
           self.Surf  = ConeParams(params[1])
-       elif self.Type == 'Sphere' :
+       elif params[0] == 'Sphere' :
+          self.Type  = params[0]
           self.Surf  = SphereParams(params[1])
-       elif self.Type == 'Torus' :
+       elif params[0] == 'Torus' :
+          self.Type  = params[0]
           self.Surf  = TorusParams(params[1])
        
        self.shape = Face
@@ -342,14 +362,19 @@ class Surfaces_dict(dict):
         for name in surfname :
            self[name] = []
 
+        self.__surfIndex__ = dict()
+
         if surfaces is not None:
           for key in surfaces.keys():
             self[key]=surfaces[key][:]
+            self.__surfIndex__[key] = surfaces.__surfIndex__[key][:]
           self.surfaceNumber = surfaces.surfaceNumber
           self.__last_obj__ = (surfaces.__last_obj__[0],surfaces.__last_obj__[1])
         else:   
           self.surfaceNumber = 0
           self.__last_obj__ = ('',-1)
+          for key in surfname :
+             self.__surfIndex__[key] = []
         return
 
    def __str__(self):
@@ -366,16 +391,18 @@ class Surfaces_dict(dict):
           if self[lastKey][lastInd].Index == index :
             return self[lastKey][lastInd]
            
-      for key in self.keys() :
-         for i,s in enumerate(self[key]):
-           if s.Index == index :
-              self.__last_obj__ = (key,i)
-              return s
+      for key,values in self.__surfIndex__.items() :
+         if index not in values : continue
+         i = values.index(index)
+         self.__last_obj__ = (key,i)
+         return self[key][i]
+
       print ('Index {} not found in Surfaces'.format(index))
       return None
 
    def delSurface(self,index):         
       self.getSurface(index)
+      self.__surfIndex__[self.__last_obj__[0]].remove(index)
       del (self[self.__last_obj__[0]][self.__last_obj__[1]])
       return
        
@@ -396,6 +423,7 @@ class Surfaces_dict(dict):
         ex = FreeCAD.Vector(1,0,0)
         ey = FreeCAD.Vector(0,1,0)
         ez = FreeCAD.Vector(0,0,1)
+
         if isParallel(plane.Surf.Axis,ex,tol.pln_angle) :
            addPlane = True
            for i,p in enumerate(self['PX']):
@@ -409,6 +437,7 @@ class Surfaces_dict(dict):
               plane.Index = self.surfaceNumber + self.IndexOffset               
               self.__last_obj__ = ('PX',len(self['PX']))
               self['PX'].append(plane)
+              self.__surfIndex__['PX'].append(plane.Index)
 
                       
         elif isParallel(plane.Surf.Axis,ey,tol.pln_angle) :
@@ -424,6 +453,7 @@ class Surfaces_dict(dict):
               plane.Index = self.surfaceNumber + self.IndexOffset               
               self.__last_obj__ = ('PY',len(self['PY']))
               self['PY'].append(plane)
+              self.__surfIndex__['PY'].append(plane.Index)
                
         elif isParallel(plane.Surf.Axis,ez,tol.pln_angle) :
            addPlane = True
@@ -438,6 +468,7 @@ class Surfaces_dict(dict):
               plane.Index = self.surfaceNumber + self.IndexOffset              
               self.__last_obj__ = ('PZ',len(self['PZ']))
               self['PZ'].append(plane)
+              self.__surfIndex__['PZ'].append(plane.Index)
                
         else:
            addPlane = True
@@ -452,6 +483,7 @@ class Surfaces_dict(dict):
               plane.Index = self.surfaceNumber + self.IndexOffset             
               self.__last_obj__ = ('P',len(self['P']))
               self['P'].append(plane)
+              self.__surfIndex__['P'].append(plane.Index)
 
         if addPlane :
            return plane.Index, False
@@ -472,6 +504,7 @@ class Surfaces_dict(dict):
            cyl.Index = self.surfaceNumber + self.IndexOffset               
            self.__last_obj__ = ('Cyl',len(self['Cyl']))
            self['Cyl'].append(cyl)
+           self.__surfIndex__['Cyl'].append(cyl.Index)
            return cyl.Index, False
         else: 
            return index, True
@@ -489,6 +522,7 @@ class Surfaces_dict(dict):
            cone.Index = self.surfaceNumber + self.IndexOffset               
            self.__last_obj__ = ('Cone',len(self['Cone']))
            self['Cone'].append(cone)
+           self.__surfIndex__['Cone'].append(cone.Index)
            return cone.Index, False
         else:
            return index, True
@@ -506,6 +540,7 @@ class Surfaces_dict(dict):
            sph.Index = self.surfaceNumber + self.IndexOffset               
            self.__last_obj__ = ('Sph',len(self['Sph']))
            self['Sph'].append(sph)
+           self.__surfIndex__['Sph'].append(sph.Index)
            return sph.Index, False
         else:
            return index, True
@@ -524,6 +559,7 @@ class Surfaces_dict(dict):
            tor.Index = self.surfaceNumber + self.IndexOffset               
            self.__last_obj__ = ('Tor',len(self['Tor']))
            self['Tor'].append(tor)
+           self.__surfIndex__['Tor'].append(tor.Index)
            return tor.Index, False
         else:
            return index, True

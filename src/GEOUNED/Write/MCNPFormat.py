@@ -4,9 +4,11 @@
 from datetime import datetime
 
 from GEOUNED.Utils.Functions import Surfaces_dict
+from GEOUNED.Utils.BasicFunctions_part1 import pointsToCoeffs,isOposite
 from GEOUNED.Write.Functions import MCNPSurface, changeSurfSign, writeMCNPCellDef,CardLine
 from GEOUNED.Utils.Options.Classes import MCNP_numeric_format as nf
 from GEOUNED.Utils.Options.Classes import Tolerances as tol
+from GEOUNED.Utils.Options.Classes import Options as opt
 from GEOUNED.CodeVersion import *
 import FreeCAD
 import copy
@@ -134,11 +136,11 @@ C **************************************************************\n""".format(sel
 
     def __write_cells__(self,cell):
 
-       index = cell.__id__
+       index = cell.label
 
        # if index is None objet not contain cell definition
        # but a comment to insert between cells
-       if index is None :
+       if cell.__id__ is None :
            comment = self.__commentLine__(cell.Comments)
            self.inpfile.write(comment)
            return
@@ -306,6 +308,14 @@ C **************************************************************\n""".format(sel
           if p.Surf.Axis[2] < 0 :
             p.Surf.Axis = FreeCAD.Vector(0,0,1)
             self.__changeSurfSign__(p)          
+
+       if opt.prnt3PPlane :
+         for p in Surfaces['P']:
+            if p.Surf.pointDef:
+                axis,d = pointsToCoeffs(p.Surf.Points)
+                if isOposite(axis,p.Surf.Axis) :
+                  self.__changeSurfSign__(p)          
+
        return
     
     def __sortedSurfaces__(self,Surfaces):
@@ -337,7 +347,7 @@ C **************************************************************\n""".format(sel
         volumeList = []
         for m in self.Cells :
           if m.CellType == 'solid' and m.__id__ is not None:
-             solidList.append(m.__id__)
+             solidList.append(m.label)
              volumeList.append(m.Volume*1e-3)
                           
         return   solidList, volumeList                        

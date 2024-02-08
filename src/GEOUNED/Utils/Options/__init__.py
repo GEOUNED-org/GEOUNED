@@ -10,6 +10,9 @@ enlargeBox     = 2                              # Enlarge box Boundary when eval
 nPlaneReverse  = 0                              # numbers of plane thresold whether cut of parallel planes are made fisrt with lowest or highest number
 splitTolerance = 0                              # Fuzzy tolerance used in BOPTOOL Split function
 quadricPY      = False                          # use quadric form of cones and cylinder not align with X,Y,Z axis when write openMC script file
+Facets         = False                          # use alternative conversion module when geometry is defined by cells compound by only triangular plane faces
+prnt3PPlane    = False                          # print 3 point plane definition in MCNP output as 3 points coordinates
+forceNoOverlap = False                          # force no overlaping cell definition. Adjacent cell definition are rested from current cell definition
 
 tolValueDict = { 'relativeTol'        : False ,      
               'relativePrecision'  : 1.e-6 ,   # relative precision
@@ -24,7 +27,8 @@ tolValueDict = { 'relativeTol'        : False ,
               'kne_distance'       : 1.e-4 ,   # distance between apex
               'kne_angle'          : 1.e-4 ,   # angle between semiangles/axis
               'tor_distance'       : 1.e-4 ,   # distance between Major/Minor radii/center
-              'tor_angle'          : 1.e-4 }   # angle between axis
+              'tor_angle'          : 1.e-4 ,   # angle between axis
+              'min_area'           : 1.e-2 }   # minimun face area to consider in cell definition
 
 
 numValueDict = {  'P_abc'   : '14.7e'  ,     # Plane general a,b,c params
@@ -53,6 +57,9 @@ setattr(Options,'verbose'       ,verbose)
 setattr(Options,'nPlaneReverse' ,nPlaneReverse)  
 setattr(Options,'splitTolerance',splitTolerance)  
 setattr(Options,'quadricPY'     ,quadricPY)  
+setattr(Options,'Facets'        ,Facets)  
+setattr(Options,'prnt3PPlane'   ,prnt3PPlane)  
+setattr(Options,'forceNoOverlap',forceNoOverlap)  
 
 # Set default  attributes to Tolerances class
 for key in tolValueDict.keys():

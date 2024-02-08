@@ -8,6 +8,8 @@ import math
 import re
 from GEOUNED.Utils.Functions import GEOUNED_Surface
 from GEOUNED.Utils.booleanFunction import BoolSequence
+from GEOUNED.Utils.Options.Classes import Options as opt 
+
 
 BoolVals = (None,True,False)
 
@@ -153,31 +155,35 @@ class ConstraintTable(dict):
        return trueSet,falseSet 
      
    def solidInBox(self,Seq):             #  Sequence of the cell
-      surfs = Seq.getSurfacesNumbers()
+      surfs = tuple(Seq.getSurfacesNumbers())
       if self.diagonal :
          seqValues = dict()
          for s in surfs : 
-            seqValues[s] = BoolVals[self[s][s].val]
+            val = BoolVals[self[s][s].val]
+            if val is not None : seqValues[s] = val
          # if evaluate   None  : Box intersection Cell != 0      Part of the cell in the box
          #               True  : Box intersection Cell == Box    Cell cover the full region of the box. Void cell doesn't exist
          #               False : Box intersection Cell == 0      Cell out of the box 
-         return Seq.evaluate(seqValues)
+         res = Seq.evaluate(seqValues)
+         return  res if type(res) is bool else None
 
       else:
          trueSet,falseSet = self.getConstraintSet(surfs[0])
          if trueSet is not None:  
              trueVal  = Seq.evaluate(trueSet) 
+             trueVal  = trueVal if type(trueVal) is bool else None
              if trueVal is None : return None
              if falseSet is not None:  
                 falseVal = Seq.evaluate(falseSet) 
-                if falseVal is None    : return None     # Part of the cell in the box
-                if trueVal == falseVal : return trueVal  # True Cover full cell, False not in the box 
-                else                   : return None     # Part of the cell in the box                
+                falseVal = falseVal if type(falseVal) is bool else None
+                if falseVal is None     : return None     # Part of the cell in the box
+                if trueVal  == falseVal : return trueVal  # True Cover full cell, False not in the box 
+                else                    : return None     # Part of the cell in the box                
              else: 
                 return trueVal
          elif falseSet is not None:  
              falseVal = Seq.evaluate(falseSet) 
-             return falseVal
+             return falseVal if type(falseVal) is bool else None
          else:
             print('Bad trouble surfaces {} is on none side of the box!!')
             return False       
@@ -273,39 +279,47 @@ def removeExtraSurfaces(CellSeq,CTable):
     newDef = BoolSequence(operator='OR')
   
     #Loop over all compound solids of the metaSolid
-    if  CellSeq.level == 0 : 
+    if  CellSeq.operator == 'AND' : 
         newSeq = BoolSequence(operator='AND')
         newSeq.append(CellSeq.copy())
         CellSeq.assign(newSeq)
-
+    
     for subCell in CellSeq.elements:
         nullcell = False 
-        chk = subCell.check()
+        subCell.check()
+        if type(subCell.elements) is bool :
+           chk = not subCell.elements
+        else:
+           chk = None
 
         if chk == False :    # the cell doesn't exist
            nullcell = True
         elif chk == True :   # the cell describe the full universe
            newDef.elements = True
-           newDef.level = 0
+           newDef.level = -1
            return  newDef
        
         #if subcell has finite volume check it intersection with the box        
         if not nullcell :
            res = CTable.solidInBox(subCell)
-           if res == None :   
+           if res == None :    
                 # subcell intersect the box
                 # get the surfaces of the solids out of the box
                 # get reduced definition
-                removeSurf = outSurfaces & set(subCell.getSurfacesNumbers())
-                for s in removeSurf:
-                   val = True if CTable[s][s].val > 0 else False
-                   subCell.substitute(s,val)
+
+                # if subcell lev!= 0 remove surface operation is not valid
+                if subCell.level == 0 :
+                   removeSurf = outSurfaces & subCell.getSurfacesNumbers()
+                   for s in removeSurf:
+                      val = True if CTable[s][s].val > 0 else False
+                      subCell.substitute(s,val)
+
                 if type(subCell.elements) is bool : 
                    if subCell.elements == False :   #  cell does not intersect void box
                       continue
                    else:                            # cell cover fully void box
                       newDef.elements = True
-                      newDef.level = 0
+                      newDef.level = -1
                       return  newDef
                 else:
                    newDef.append(subCell)
@@ -313,7 +327,7 @@ def removeExtraSurfaces(CellSeq,CTable):
            elif res == True :
               # subcell cover the full box region Void cell doesn't exist
               newDef.elements = True
-              newDef.level = 0
+              newDef.level = -1
               return  newDef
 
     newDef.clean()
@@ -325,7 +339,7 @@ def splitSolid_fast(solid,surf,box):
 
     if box :
        if surf.shape :
-            comsolid = BOPTools.SplitAPI.slice(solid,[surf.shape],'Split', tolerance = 0)
+            comsolid = BOPTools.SplitAPI.slice(solid,[surf.shape],'Split', tolerance = opt.splitTolerance)
        else:
             return  checkSign(solid,surf),None
 
@@ -375,7 +389,7 @@ def point_inside(solid):
       if solid.isInside(point,0.0,False) : return point
 
       cut_line = 32
-      cut_box  = 4
+      cut_box  = 2
 
       v1=solid.Vertexes[0].Point
       for vi in range(len(solid.Vertexes)-1,0,-1):
@@ -415,8 +429,37 @@ def point_inside(solid):
          n = n + 1
 
          if (n == cut_box ) :
-           print('Solid not found in bounding Box (Volume : {})'.format(solid.Volume))
-           return None
+           break
+
+      return pointFromSurface(solid)
+
+
+def pointFromSurface(solid):
+ 
+    for face in solid.Faces:
+      parameters = face.ParameterRange
+      u = (parameters[0]+parameters[1])/2
+      v = (parameters[2]+parameters[3])/2
+      pface = face.valueAt(u,v)
+      normal= face.normalAt(u,v) 
+
+      d = 10
+      pp = pface + d*normal
+      while d > 1e-8:
+         if solid.isInside(pp,0.0,False) : return pp
+         d *= 0.5
+         pp = pface + d*normal
+
+      normal = -normal
+      d = 10
+      pp = pface + d*normal
+      while d > 1e-8:
+         if solid.isInside(pp,0.0,False) : return pp
+         d *= 0.5
+         pp = pface + d*normal
+
+    print('Solid not found in bounding Box (Volume : {})'.format(solid.Volume))
+    return None
 
 # divide a box into 8 smaller boxes
 def CutBox(Box):

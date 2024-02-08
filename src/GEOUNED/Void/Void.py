@@ -31,7 +31,7 @@ def voidGeneration(MetaList,EnclosureList,Surfaces,UniverseBox,setting,init):
         
 
     # get voids in 0 Level Enclosure (original Universe)
-    # if exist Level 1 enclosures are considered has material cells
+    # if exist Level 1 enclosures are considered as material cells
     print('Build Void highest enclosure')
        
     voids = GetVoidDef(newMetaList,Surfaces,EnclosureBox,setting,Lev0=True)
@@ -86,7 +86,7 @@ def GetVoidDef(MetaList,Surfaces,Enclosure,setting,Lev0=False):
       
       for iz,z in enumerate(Initial):
          nsurfaces,nbrackets = z.getNumbers()
-         if opt.verbose : print('{} {}/{} {} {}'.format(iloop,iz,nvoid,nsurfaces,nbrackets))      
+         if opt.verbose : print('{} {}/{} {} {}'.format(iloop,iz+1,nvoid,nsurfaces,nbrackets))      
 
          if nsurfaces > maxsurf and nbrackets > maxbracket:
             newspace = z.Split(minSize)
@@ -101,9 +101,9 @@ def GetVoidDef(MetaList,Surfaces,Enclosure,setting,Lev0=False):
                       z.BoundBox.YMin*0.1,z.BoundBox.YMax*0.1,
                       z.BoundBox.ZMin*0.1,z.BoundBox.ZMax*0.1)
 
-            CellIn = [O.__id__ for O in z.Objects]
             print('build complementary {} {}'.format(iloop,iz))
-            cell = z.getVoidComplementary(Surfaces,simplify=simplifyVoid) 
+
+            cell,CellIn = z.getVoidComplementary(Surfaces,simplify=simplifyVoid) 
             if cell is not None :					
                VoidCell = (cell,(boxDim,CellIn))
                VoidDef.append(VoidCell)  
@@ -117,9 +117,11 @@ def GetVoidDef(MetaList,Surfaces,Enclosure,setting,Lev0=False):
       mVoid.Void = True
       mVoid.CellType = 'void'
       mVoid.setDefinition(vcell[0],simplify=True) 
-      mVoid.setComments(voidCommentLine(vcell[1]))
       mVoid.setMaterial(Enclosure.Material,Enclosure.Rho,Enclosure.MatInfo)
       mVoid.setDilution(Enclosure.Dilution)
+
+      mVoid.__commentInfo__ = vcell[1]
+
       voidList.append(mVoid)
       
     return voidList
@@ -144,12 +146,14 @@ def setGraveyardCell(Surfaces,UniverseBox):
     mVoidSphIn.CellType  = 'void'
     mVoidSphIn.setDefinition(sphdef)
     mVoidSphIn.setMaterial(0,0,'Graveyard_in')
+    mVoidSphIn.__commentInfo__ = None
 
     mVoidSphOut      = GEOUNED_Solid(1)
     mVoidSphOut.Void = True
     mVoidSphOut.CellType  = 'void'
     mVoidSphOut.setDefinition(notsph)
     mVoidSphOut.setMaterial(0,0,'Graveyard')
+    mVoidSphOut.__commentInfo__ = None
 
     return (mVoidSphIn,mVoidSphOut)
 

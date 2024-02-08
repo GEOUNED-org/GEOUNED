@@ -11,7 +11,7 @@ sys.path.append(geo_path)
 sys.path.append('/usr/lib64/freecad/lib64/')
 
 import GEOUNED
-from GEOReverse import reverse
+from GEOReverse.reverse import reverse
 
 runReverse = False
 if len(sys.argv) < 2 :
