@@ -8,6 +8,7 @@ authors = [
 maintainers = [
   { name="Patrick Sauvan", email="psauvan@ind.uned.es" },
   { name="Juan-Pablo Catalan", email="jpcatalan@ind.uned.es" },
+  { name="Juan Garcia", email="jgarcia@ind.uned.es" },
   { name="Francisco Ogando", email="fogando@ind.uned.es" },
   { name="Javier Alguacil", email="jalguacil@ind.uned.es" },
 ]
