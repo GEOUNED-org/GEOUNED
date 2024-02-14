@@ -1,4 +1,4 @@
-import FreeCAD, Part
+
 import BOPTools.SplitAPI
 from GEOReverse.Modules.Utils.booleanFunction import outterTerms
 import math
@@ -305,9 +305,9 @@ def surface_side(p,surf):
          rY = r - (rX*axis + center)
           
          if axis.add(-rAxes[0]).Length < 1e-5 :
-              radX,radY = raddii
+              radX,radY = radii
          else:
-              radY,radY = raddii
+              radY,radY = radii
 
          radical = 1-(rX/radX)**2  
          if radical  > 0 :

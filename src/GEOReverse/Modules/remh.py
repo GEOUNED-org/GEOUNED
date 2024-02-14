@@ -490,7 +490,7 @@ class cell_card_string():
          self.likeCell = int(mc.group())
          ml = likemat.search(self.parm.str)
          if ml :
-            self.MAT = int(m1.group('mat'))
+            self.MAT = int(ml.group('mat'))
       elif m.group('scnd') == '0':
          cstart=m.end('scnd')
          self.MAT = 0

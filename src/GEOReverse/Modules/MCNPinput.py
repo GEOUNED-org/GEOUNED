@@ -1026,7 +1026,7 @@ def get_ellipsoid_parameters(eVal,eVect,T,k):
    if t > cylTan :
       return get_cylinder_parameters(eVal,eVect,T,k,iMaj)
    else :
-      return 'ellipsoid',(pos,axis,[RMin,RMaj],[minorAxis,majorAxis])
+      return 'ellipsoid',(pos,iaxis,[RMin,RMaj],[minorAxis,majorAxis])
 
 
 def getGQAxis(eVal,k):

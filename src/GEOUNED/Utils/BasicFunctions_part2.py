@@ -2,7 +2,7 @@
 # Set of useful functions used in different parts of the code
 #
 from GEOUNED.Utils.BasicFunctions_part1 \
-     import isParallel, isOposite,isSameValue, isInTolerance
+     import isParallel, isOposite,isSameValue, isInTolerance, isInLine, isInPlane
 from GEOUNED.Write.Functions import MCNPSurface
 import FreeCAD
 import math
