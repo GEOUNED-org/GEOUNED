@@ -28,7 +28,9 @@ tolValueDict = { 'relativeTol'        : False ,
               'kne_angle'          : 1.e-4 ,   # angle between semiangles/axis
               'tor_distance'       : 1.e-4 ,   # distance between Major/Minor radii/center
               'tor_angle'          : 1.e-4 ,   # angle between axis
-              'min_area'           : 1.e-2 }   # minimun face area to consider in cell definition
+              'min_area'           : 1.e-2 ,   # minimun face area to consider in cell definition
+              'min_area_gen'       : 1.e-2 ,   # minimun generated face area to consider in cell definition
+              'min_volume'         : 1.e-8 }   # minimun solid volume to consider as basic solid
 
 
 numValueDict = {  'P_abc'   : '14.7e'  ,     # Plane general a,b,c params

@@ -104,7 +104,7 @@ def setDefinition(metaObj,Surfaces):
 
      Faces = []
      for face in solid_GU.Faces :
-        if abs(face.Area) < 1e-2 : continue 
+        if abs(face.Area) < tol.min_area : continue 
         if face.Area < 0 :
             if opt.verbose : print('Warning : Negative surface Area')
         if str(face.Surface) != '<Plane object>' :

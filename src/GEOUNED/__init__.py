@@ -63,7 +63,7 @@ class GEOUNED() :
       tolKwrdEquiv = {'relativeTolerance':'relativeTol' , 'relativePrecision':'relativePrecision', 'singleValue':'value', 'generalDistance':'distance',
                       'generalAngle': 'angle', 'planeDistance':'pln_distance', 'planeAngle':'pln_angle', 'cylinderDistance':'cyl_distance', 
                       'cylinderAngle':'cyl_angle', 'sphereDistance':'sph_distance', 'coneDistance':'kne_distance', 'coneAngle': 'kne_angle',
-                      'torusDistance':'tor_distance', 'torusAngle':'tor_angle','minArea':'min_area'}
+                      'torusDistance':'tor_distance', 'torusAngle':'tor_angle','minArea':'min_area','minArea_gen':'min_area_gen','minVolume':'min_volume'}
 
       config = configparser.ConfigParser()
       config.optionxform = str
@@ -272,6 +272,7 @@ class GEOUNED() :
        if not Options.Facets:
 
           # decompose all solids in elementary solids (convex ones)
+          print(len(MetaList))
           warningSolidList = DecomposeSolids(MetaList,Surfaces,UniverseBox,code_setting,True)
 
           # decompose Enclosure solids
@@ -491,8 +492,6 @@ def getUniverse(MetaList):
       zmin = Box.ZMin
       zmax = Box.ZMax
       for m in  MetaList[1:]:
-       # MIO. This was removed since in HELIAS the enclosure cell is the biggest one
-       # if m.IsEnclosure: continue
         xmin = min(m.BoundBox.XMin,xmin)
         xmax = max(m.BoundBox.XMax,xmax)
         ymin = min(m.BoundBox.YMin,ymin)

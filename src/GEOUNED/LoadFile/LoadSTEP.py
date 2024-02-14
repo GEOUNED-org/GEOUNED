@@ -63,11 +63,11 @@ def LoadCAD(filename,matfilename,defaultMat=[],compSolids=True):
               tempremat = None
               tempredil = None
             
-              # MIO: lightly modification of label if required
+              # Lightly modification of label if required for HELIASGEOM models
               label = LF.GetLabel(elem.Label)
               comment=comment+'/'+label
               if elem.InList:
-                 # MIO: lightly modification of label if required
+                 # Lightly modification of label if required for HELIASGEOM models
                  label_inList = LF.GetLabel(elem.InList[0].Label)
                  enclLabel  = re.search('enclosure(?P<encl>[0-9]+)_(?P<parent>[0-9]+)_', label_inList)
                  if not enclLabel :
@@ -89,7 +89,7 @@ def LoadCAD(filename,matfilename,defaultMat=[],compSolids=True):
                  # Search for material definition in tree
                  xelem = [elem]
                  while xelem and not tempremat:
-                    # MIO: Modification of label if required
+                    # Lightly modification of label if required for HELIASGEOM models
                     temp_label = LF.GetLabel(xelem[0].Label)
                     tempremat = re.search("_m(?P<mat>\d+)_","_"+temp_label )
                     xelem = xelem[0].InList
@@ -97,7 +97,7 @@ def LoadCAD(filename,matfilename,defaultMat=[],compSolids=True):
                  # Search for dilution definition in tree
                  xelem = [elem]
                  while xelem and not tempredil:
-                    # MIO: Modification of label if required
+                    # Lightly modification of label if required for HELIASGEOM models
                     temp_label = LF.GetLabel(xelem[0].Label)
                     tempredil = re.search("_d(?P<dil>\d*\.\d*)_",temp_label)
                     xelem = xelem[0].InList

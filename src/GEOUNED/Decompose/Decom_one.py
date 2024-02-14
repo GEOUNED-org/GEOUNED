@@ -356,7 +356,7 @@ def SameFaces(Faces):
 def GenPlaneCylinder(face,solid):
     Surf=face.Surface
     rad=Surf.Radius
-    if face.Area < 1e-2:
+    if face.Area < tol.min_area_gen:
         return None
     
     UVNodes=[] 
@@ -393,7 +393,7 @@ def GenPlaneCylinder(face,solid):
     #    return None
     
     for ind in reversed(face_index[1:]):
-        if solid.Faces[ind].Area<=1e-3:
+        if solid.Faces[ind].Area <= tol.min_area_gen :
             face_index.remove(ind)
 
         else:
@@ -481,7 +481,7 @@ def GenPlaneCone(face,solid):
     Surf=face.Surface
     rad=Surf.Radius
     
-    if face.Area < 1e-2:
+    if face.Area < tol.min_area_gen :
         return None
            
     UVNodes=[] 
@@ -518,7 +518,7 @@ def GenPlaneCone(face,solid):
     #    return None
     
     for ind in reversed(face_index[1:]):
-        if solid.Faces[ind].Area<=1e-3:
+        if solid.Faces[ind].Area<=tol.min_area_gen:
             face_index.remove(ind)
         else:
             face2 = solid.Faces[ind]
@@ -855,7 +855,12 @@ def Split2ndOrder(Solids,UniverseBox):
 
                     solidsInCom = []
                     for s in comsolid.Solids :
-                        if s.Volume > 1e-9 : solidsInCom.append(s)
+                        if s.Volume > tol.min_volume : solidsInCom.append(s)
+                        else:
+                            if opt.verbose : 
+                                print('Warning: splitComponent degenerated solids are produced', \
+                                        part.Volume)
+
                         
                     if len(solidsInCom) > 1 :
                        simple =False
@@ -918,10 +923,9 @@ def split2ndOPlane(solid):
     
 def removeSolids(Solids):
     err = 0
-    Vol_tol=1e-2
     Solids_Clean=[]
     for solid in Solids:
-        if solid.Volume <= Vol_tol:
+        if solid.Volume <= tol.min_volume:
             if opt.verbose : print('Warning: removeSolids degenerated solids are produced',solid.Volume)
             err=2
             continue
@@ -947,7 +951,7 @@ def splitComponent(solidShape,UniverseBox):
     err += err2
     Pieces = []
     for part in split:
-       if part.Volume <= 1e-10:
+       if abs(part.Volume) <= tol.min_volume:
           if opt.verbose : print('Warning: splitComponent degenerated solids are produced',part.Volume)
           err += 2
           continue
