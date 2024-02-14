@@ -5,6 +5,7 @@ from   GEOUNED.Utils.BasicFunctions_part1  \
 import  GEOUNED.Utils.BasicFunctions_part2 as BF
 import GEOUNED.Decompose.Decom_one as Decom
 from GEOUNED.Utils.Options.Classes import Tolerances as tol
+from GEOUNED.Utils.Options.Classes import Options as opt
 import FreeCAD,Part
 
 

@@ -351,7 +351,7 @@ class GEOUNED() :
               c.Definition.simplify(CT)
               c.Definition.clean()
               if type(c.Definition.elements) is bool:
-                  print('unexpected constant cell {} :{}'.format(c.__id__,res)) 
+                  print('unexpected constant cell {} :{}'.format(c.__id__,c.Definition.elements)) 
 
        tempTime2 = datetime.now()
        print('build Time:',tempTime2-tempTime1)

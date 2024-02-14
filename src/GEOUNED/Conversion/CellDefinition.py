@@ -774,7 +774,7 @@ def getSurfValue(Definition,reverse = False):
           surf = set(Definition.elements)
     else:
        surf = set()
-       for e in self.elements:
+       for e in Definition.elements:
           if e.operator == 'AND':
              if reverse :
                 surf = { -i for i in e.elements}

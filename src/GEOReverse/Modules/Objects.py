@@ -80,45 +80,47 @@ class CADCell:
                   
         return subCell    
 
-    def split(self,nparts=2):
-
-        if nparts == 1:
-            return (self,None)
-        terms,operador = self.getOuterTerms()
-        nelemts = int(len(terms)/nparts)
-        subDefList = []
-
-        if operador == 'AND':
-          for i in range(parts-1):
-             newdef = ') ('.join(terms[i*nelemts:(i+1)*nelemts])
-             newdef = '({})'.format(newdef)
-             subDefList.append(newdef) 
-          newdef = ') ('.join(terms[(nparts-1)*nelemts:])
-          newdef = '({})'.format(newdef)
-          subDefList.append(newdef)
-
-        else:
-          for i in range(nparts-1):
-             newdef = '):('.join(terms[i*nelemts:(i+1)*nelemts])
-             newdef = '({})'.format(newdef)
-             subDefList.append(newdef)
-          newdef = '):('.join(terms[(nparts-1)*nelemts:])
-          newdef = '({})'.format(newdef)
-          subDefList.append(newdef)
-
-   
-        subCellList=[] 
-        for df in subDefList:
-           subCell = self.copy()
-           subCell.definition= cline(df)
-           subCell.shape = None
-           subCell.surfaceList  = subCell.definition.getSurfacesNumbers()
-           for s in tuple(subCell.surfaces.keys()) :
-               if s not in subCell.surfaceList: del(subCell.surfaces[s])
-                  
-           subCellList.append(subCell)    
-
-        return subCellList,operador
+# not used
+#
+#    def split(self,nparts=2):
+#
+#        if nparts == 1:
+#            return (self,None)
+#        terms,operador = self.getOuterTerms()
+#        nelemts = int(len(terms)/nparts)
+#        subDefList = []
+#
+#        if operador == 'AND':
+#          for i in range(nparts-1):
+#             newdef = ') ('.join(terms[i*nelemts:(i+1)*nelemts])
+#             newdef = '({})'.format(newdef)
+#             subDefList.append(newdef) 
+#          newdef = ') ('.join(terms[(nparts-1)*nelemts:])
+#          newdef = '({})'.format(newdef)
+#          subDefList.append(newdef)
+#
+#        else:
+#          for i in range(nparts-1):
+#             newdef = '):('.join(terms[i*nelemts:(i+1)*nelemts])
+#             newdef = '({})'.format(newdef)
+#             subDefList.append(newdef)
+#          newdef = '):('.join(terms[(nparts-1)*nelemts:])
+#          newdef = '({})'.format(newdef)
+#          subDefList.append(newdef)
+#
+#   
+#        subCellList=[] 
+#        for df in subDefList:
+#           subCell = self.copy()
+#           subCell.definition= cline(df)
+#           subCell.shape = None
+#           subCell.surfaceList  = subCell.definition.getSurfacesNumbers()
+#           for s in tuple(subCell.surfaces.keys()) :
+#               if s not in subCell.surfaceList: del(subCell.surfaces[s])
+#                  
+#           subCellList.append(subCell)    
+#
+#        return subCellList,operador
 
     def getOuterTerms(self):
         if not self.__defTerms__ :
@@ -453,7 +455,7 @@ class Ellipsoid:
            raxes[0] = matrix.submatrix(3).multVec(raxes[0])
            raxes[1] = matrix.submatrix(3).multVec(raxes[1])
            p = matrix.multVec(p)
-           self.params = (p,v,radii,raxes,onesht)
+           self.params = (p,v,radii,raxes)
     
     def buildShape(self,boundBox):
         center, axis, radii, rAxes = self.params
@@ -478,7 +480,7 @@ class EllipticCylinder:
            raxes[0] = matrix.submatrix(3).multVec(raxes[0])
            raxes[1] = matrix.submatrix(3).multVec(raxes[1])
            p = matrix.multVec(p)
-           self.params = (p,v,radii,raxes,onesht)
+           self.params = (p,v,radii,raxes)
     
     def buildShape(self,boundBox):
         center, axis, radii, rAxes = self.params
@@ -519,7 +521,7 @@ class HyperbolicCylinder:
            raxes[0] = matrix.submatrix(3).multVec(raxes[0])
            raxes[1] = matrix.submatrix(3).multVec(raxes[1])
            p = matrix.multVec(p)
-           self.params = (p,v,radii,raxes,onesht)
+           self.params = (p,v,radii,raxes)
     
     def buildShape(self,boundBox):
         center, axis, radii, rAxes = self.params
@@ -555,7 +557,7 @@ class Paraboloid:
            p,v,focal  = self.params
            v = matrix.submatrix(3).multVec(v)
            p = matrix.multVec(p)
-           self.params = (p,v,r)
+           self.params = (p,v,focal)
     
     def buildShape(self,boundBox):
         center, axis, focal  = self.params
@@ -774,7 +776,6 @@ def makeEllipsoid(center,radii,rAxes,axis):
 
     S1 = center + rAxes[1] * radii[1] # major axis
     S2 = center + rAxes[0] * radii[0] # minor axis
-    d = axis*length
 
     ellipse  = Part.Ellipse(S1,S2,center)
 
