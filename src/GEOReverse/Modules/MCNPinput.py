@@ -289,6 +289,9 @@ def selectCells(cellList,config):
     for cname,c in selected.items() :
        c.geom = remove_hash(cellList,cname)
 
+    if not selected:
+        raise ValueError("No cells selected. Check input or selection criteria in config file.")
+
     return selected    
         
 #Change implicit cell definition (like-but type or cell with #)
