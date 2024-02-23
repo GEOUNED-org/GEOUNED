@@ -58,7 +58,7 @@ From CSG to CAD (so far only for MCNP):
 ```python
 from GEOReverse import reverse
 inifile='Name of config file for reverse conversion'
-reverse(inifile)
+reverse.reverse(inifile)
 ``` 
 In the ~scripts/ folder you can find a script (geouned for linux or geouned.py for windows) to call both modules directly by command line as follows:
 
