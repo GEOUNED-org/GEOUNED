@@ -56,7 +56,7 @@ GEO.Start()
 From CSG to CAD (so far only for MCNP): 
 
 ```python
-from GEOReverse import reverse
+from GEOReverse.reverse import reverse
 inifile='Name of config file for reverse conversion'
 reverse(inifile)
 ``` 
