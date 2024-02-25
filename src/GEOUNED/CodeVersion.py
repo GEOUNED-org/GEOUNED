@@ -56,7 +56,8 @@ Modification in 0.9.7 Release Date 06/12/2022
   - improvement of cell simplification method
   - fix bug. bad parameter normalization multiple output formats
 '''
- 
+
+
 GEOUNED_Version = '1.0.1'
 GEOUNED_ReleaseDate = '25/02/2024'
 
