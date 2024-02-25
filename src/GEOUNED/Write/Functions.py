@@ -210,11 +210,10 @@ def MCNPSurface(id,Type,surf):
             MCNP_def='{:<6d} P   {:{abc}} {:{abc}} {:{abc}} {:{d}}'.format(id,A,B,C,D/10.0,abc=nf.P_abc,d=nf.P_d)  
     
     elif (Type == 'Cylinder'):
-        Pos = FreeCAD.Vector(surf.Center)
-        Pos.multiply(0.1)
         Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
-        rad = surf.Radius/10.0
+        Pos = surf.Center*0.1
+        rad = surf.Radius*0.1
         if (isParallel(Dir,FreeCAD.Vector(1,0,0),tol.angle)):
           if (Pos.y == 0.0 and Pos.z == 0.0):
              MCNP_def='{:<6d} CX  {:{r}}'.format(id,rad,r=nf.C_r)
@@ -252,10 +251,8 @@ def MCNPSurface(id,Type,surf):
         #    MCNP_def='%i  RCC  %13.7E %13.7E %13.7E %13.7E\n       %13.7E %13.7E %13.7E' %(id,Vx,Vy,Vz,Hx,Hy,Hz,rad)
         
     elif (Type == 'Cone'):
-        Apex = FreeCAD.Vector(surf.Apex)
-        Apex.multiply(0.1)
-        Dir = FreeCAD.Vector(surf.Axis)
-        Dir.multiply(0.1)
+        Apex = surf.Apex*0.1
+        Dir  = surf.Axis*0.1
         tan = math.tan(surf.SemiAngle)
         X_dir=FreeCAD.Vector(1,0,0)
         Y_dir=FreeCAD.Vector(0,1,0)
@@ -291,20 +288,19 @@ def MCNPSurface(id,Type,surf):
             
     elif (Type == 'Sphere'):
      # corresponding logic 
-        rad = surf.Radius/10.0
-        pnt = surf.Center.multiply(0.1)
+        rad = surf.Radius*0.1
+        pnt = surf.Center*0.1
         if pnt.isEqual(FreeCAD.Vector(0,0,0),tol.sph_distance):
            MCNP_def='{:<6d} SO  {:{r}}'.format(id,rad,r=nf.S_r)
         else:
            MCNP_def='{:<6d} S  {:{xyz}} {:{xyz}} {:{xyz}} {:{r}}'.format(id,pnt.x,pnt.y,pnt.z,rad,xyz=nf.S_xyz,r=nf.S_r)
 
     elif (Type == 'Torus'):
-        Pos = FreeCAD.Vector(surf.Center)
-        Pos.multiply(0.1)
         Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
-        radMaj = surf.MajorRadius/10.0
-        radMin = surf.MinorRadius/10.0
+        Pos = surf.Center*0.1
+        radMaj = surf.MajorRadius*0.1 
+        radMin = surf.MinorRadius*0.1 
         if (isParallel(Dir,FreeCAD.Vector(1,0,0),tol.angle)):
              MCNP_def='''\
 {:<6d} TX  {:{xyz}} {:{xyz}} {:{xyz}}
@@ -518,9 +514,10 @@ def SerpentSurface(id, Type, surf):
                 Serpent_def = f"surf {id} plane {A:{nf.P_d}} {B:{nf.P_d}} {C:{nf.P_d}} {D/10:{nf.P_d}}"
 
     elif Type == 'Cylinder':
-        Pos = surf.Center.multiply(0.1)
-        Dir = surf.Axis.normalize()
-        rad = surf.Radius / 10.0
+        Dir = surf.Axis
+        Dir.normalize()
+        Pos = surf.Center*0.1
+        rad = surf.Radius*0.1
         if isParallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle):
             Serpent_def = f"surf {id} cylx {Pos.y:{nf.C_xyz}} {Pos.z:{nf.C_xyz}} {rad:{nf.C_r}}"
         elif isParallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle):
@@ -537,8 +534,8 @@ surf quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
           {v[9]:{j}} '''.format(id,v=Q,aTof=nf.GQ_1to6,gToi=nf.GQ_7to9,j=nf.GQ_10)
 
     elif Type == 'Cone':
-        Apex = surf.Apex.multiply(0.1)
-        Dir = surf.Axis.multiply(0.1)
+        Apex = surf.Apex*0.1
+        Dir  = surf.Axis*0.1
         tan = math.tan(surf.SemiAngle)
         X_dir = FreeCAD.Vector(1, 0, 0)
         Y_dir = FreeCAD.Vector(0, 1, 0)
@@ -569,16 +566,17 @@ surf quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
 
 
     elif Type == 'Sphere':
-        rad = surf.Radius / 10.0
-        pnt = surf.Center.multiply(0.1)
+        rad = surf.Radius*0.1
+        pnt = surf.Center*0.1
         # Serpent has only explicit spheres at the origin
         Serpent_def = f"surf {id} sph {pnt.x:{nf.S_xyz}} {pnt.y:{nf.S_xyz}} {pnt.z:{nf.S_xyz}} {rad:{nf.S_r}}"
 
     elif Type == 'Torus':
-        Pos = surf.Center.multiply(0.1)
-        Dir = surf.Axis.normalize()
-        radMaj = surf.MajorRadius / 10.0
-        radMin = surf.MinorRadius / 10.0
+        Dir = surf.Axis
+        Dir.normalize()
+        Pos    = surf.Center*0.1
+        radMaj = surf.MajorRadius*0.1    
+        radMin = surf.MinorRadius*0.1    
         if (isParallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle)):
             Serpent_def = f"surf {id} torx {Pos.x:{nf.T_xyz}} {Pos.y:{nf.T_xyz}} {Pos.z:{nf.T_xyz}}\n"
             Serpent_def += f"      {radMaj:{nf.T_r}} {radMin:{nf.T_r}} {radMin:{nf.T_r}}"
