@@ -54,10 +54,10 @@ Modification in 0.9.7 Release Date 06/12/2022
   - implementation of new, more robust, cell definition, where adjacent solid cell definition is rested to current solid cell definition (forcing no overlaping cell).
   - fix bug additional plane with sphere
   - improvement of cell simplification method
-  
+  - fix bug. bad parameter normalization multiple output formats
 '''
  
 GEOUNED_Version = '1.0.1'
-GEOUNED_ReleaseDate = '24/12/2023'
+GEOUNED_ReleaseDate = '25/02/2024'
 
 
