@@ -1107,6 +1107,8 @@ def _split_data(input_):
             dtype = 'MTn'
         elif t[0][1].lower() == 'p':
             dtype = 'MPNn'
+        else:
+            dtype = None
     elif t[0][0].lower() == 'f' and t[0][1].isdigit():
         # FN card
         dtype = 'Fn'

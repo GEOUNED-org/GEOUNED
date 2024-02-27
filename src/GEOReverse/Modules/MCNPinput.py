@@ -266,7 +266,7 @@ def selectCells(cellList,config):
              else:       
                  selected[name] = c # Fill cell are not tested against material number
        elif config['cell'][0]=='exclude' :
-          for c in cellList:
+          for name,c in cellList.items():
              if c.FILL is None:
                  if c.MAT in config['mat'][1]:
                     if name not in config['cell'][1]: 

@@ -81,9 +81,16 @@ def cutFullCylinder(solid):
     for pp in Planes :
        # cut with more external parallel planes
        pp[0].buildSurface()
-       pp[-1].buildSurface()
-       tools = (pp[0].shape, pp[-1].shape) 
-       comsolid=BOPTools.SplitAPI.slice(solid,tools,'Split', tolerance = opt.splitTolerance)
+       if len(pp) != 1:
+         pp[-1].buildSurface()
+         tools = (pp[0].shape, pp[-1].shape) 
+       else:
+         tools = (pp[0].shape,) 
+
+       try :
+          comsolid=BOPTools.SplitAPI.slice(solid,tools,'Split', tolerance = opt.splitTolerance)
+       except :
+          comsolid = solid
        if len(comsolid.Solids) > 1 :
          outSolid = comsolid.Solids
          cut = True
@@ -92,7 +99,10 @@ def cutFullCylinder(solid):
     if cut : return outSolid
 
     tool = (Surfaces['Cyl'][0].shape,)
-    comsolid=BOPTools.SplitAPI.slice(solid,tool,'Split', tolerance = opt.splitTolerance)
+    try :
+       comsolid=BOPTools.SplitAPI.slice(solid,tool,'Split', tolerance = opt.splitTolerance)
+    except :
+       comsolid = solid
 
     if len(comsolid.Solids) > 1 :
        outSolid = comsolid.Solids
