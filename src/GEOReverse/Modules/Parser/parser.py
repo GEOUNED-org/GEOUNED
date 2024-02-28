@@ -1094,7 +1094,8 @@ def _split_data(input_):
         fmts.append(fmt_d(ns))
     elif (t[0][0].lower() == 'm' and
           'mode' not in t[0].lower() and
-          'mesh' not in t[0].lower()):
+          'mesh' not in t[0].lower() and
+          'mphys' not in t[0].lower()):
         # This is the Mn, MTn or MPNn card
         ms = _get_int(t[0])
         inpt = inpt.replace(ms, tp, 1)
@@ -1107,6 +1108,8 @@ def _split_data(input_):
             dtype = 'MTn'
         elif t[0][1].lower() == 'p':
             dtype = 'MPNn'
+        elif t[0][1].lower() == 'x':
+            dtype = 'MXn'
     elif t[0][0].lower() == 'f' and t[0][1].isdigit():
         # FN card
         dtype = 'Fn'
