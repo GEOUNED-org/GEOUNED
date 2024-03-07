@@ -429,10 +429,12 @@ def DecomposeSolids(MetaList,Surfaces,UniverseBox,setting,meta):
         print('Decomposing solid: {}/{} '.format(i+1,totsolid))
         if setting['debug'] :
             print(m.Comments)
+            if not path.exists('debug') :
+               mkdir("debug")
             if m.IsEnclosure :
-               m.Solids[0].exportStep('origEnclosure_{}.stp'.format(i))  
+               m.Solids[0].exportStep(u'debug/origEnclosure_{}.stp'.format(i))  
             else:    
-               m.Solids[0].exportStep('origSolid_{}.stp'.format(i))
+               m.Solids[0].exportStep(u'debug/origSolid_{}.stp'.format(i))
         
         comsolid,err=Decom.SplitSolid(Part.makeCompound(m.Solids),UniverseBox)
 
@@ -450,9 +452,9 @@ def DecomposeSolids(MetaList,Surfaces,UniverseBox,setting,meta):
            
         if setting['debug'] :
             if m.IsEnclosure :
-                comsolid.exportStep('compEnclosure_{}.stp'.format(i))
+                comsolid.exportStep(u'debug/compEnclosure_{}.stp'.format(i))
             else:
-                comsolid.exportStep('compSolid_{}.stp'.format(i))
+                comsolid.exportStep(u'debug/compSolid_{}.stp'.format(i))
         Surfaces.extend(Decom.ExtractSurfaces(comsolid,'All',UniverseBox,MakeObj=True))
         m.setCADSolid()
         m.updateSolids(comsolid.Solids)
