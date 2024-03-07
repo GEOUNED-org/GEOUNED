@@ -211,6 +211,9 @@ def selectCells(cellList,config):
     # remove complementary in cell of the universe
     # for cname,c in selected.items() :
     #   c.geom = remove_hash(cellList,cname)
+    
+    if not selected:
+        raise ValueError("No cells selected. Check input or selection criteria in config file.")
 
     return selected    
         
