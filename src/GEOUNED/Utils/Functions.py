@@ -1,6 +1,7 @@
 #
 # Set of useful functions used in different parts of the code
 #
+import BOPTools.SplitAPI
 import GEOUNED.Utils.BasicFunctions_part2 as BF
 from GEOUNED.Utils.BasicFunctions_part1 import isParallel,\
      Plane3PtsParams, PlaneParams, CylinderParams, ConeParams, SphereParams, TorusParams 
@@ -564,4 +565,22 @@ class Surfaces_dict(dict):
         else:
            return index, True
 
-    
+def splitBOP(solid,tools,tolerance,scale=0.1):
+  
+   if tolerance >= 0.1 :
+      compSolid = BOPTools.SplitAPI.slice(solid,tools,'Split',tolerance =tolerance)
+
+   elif tolerance < 1e-12 :
+      if Options.scaleUp :
+         tol = 1e-13 if Options.splitTolerance == 0  else Options.splitTolerance
+         compSolid = splitBOP(solid,tools,tol/scale,1./scale)
+      else:
+         compSolid = BOPTools.SplitAPI.slice(solid,tools,'Split',tolerance =tolerance)
+
+   else:
+      try :
+         compSolid = BOPTools.SplitAPI.slice(solid,tools,'Split',tolerance =tolerance)
+      except:
+         compSolid = splitBOP(solid,tools,tolerance*scale,scale)
+
+   return compSolid

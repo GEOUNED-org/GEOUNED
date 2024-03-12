@@ -997,11 +997,12 @@ def get_ellipsoid_parameters(eVal,eVect,T,k):
    cylTan  = 1e3
    iaxis = None 
    for i in range(3):
-     if abs(eVal[i]-eVal[(i+1)%3]) < 1e-5 : 
+     if abs(eVal[i]-eVal[(i+1)%3]) < 1e-3 : 
          iaxis = (i+2)%3
          break
 
    if iaxis is None :
+      print(eVal)
       print('cannot produce three radii Ellipsoid') 
       return 'ellipsoid_general',None
  
@@ -1135,6 +1136,7 @@ def gq2params(x) :
    #eigenValues and Vector
    eVal,vect = LA.eigh(mat3)
    XD = np.matmul(X,vect)                               # X in diagonalised base
+   
    Dinv = np.where(abs(eVal) < 1e-8 , eVal , 1/eVal )   # get inverse eigen value where eigen< 1e-8  
    zero =  (abs(eVal)<1e-8).nonzero()                   # index in eigen value vector where eigen < 1e-8 
    TD = -XD*Dinv                                        # Translation vector in diagonalized base

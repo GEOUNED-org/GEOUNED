@@ -65,6 +65,12 @@ class BoolSequence:
          self.level = max(self.level,level+1)
 
     def assign(self,Seq):
+        if type(Seq) is bool :
+           self.operator == 'AND'
+           self.elements = Seq
+           self.level    = -1
+           return
+
         self.operator = Seq.operator
         self.elements = Seq.elements
         self.level    = Seq.level 
@@ -177,6 +183,12 @@ class BoolSequence:
     def doFactorize(self,valname,trueSet,falseSet):
 
        if self.level > 0 : return True
+       if trueSet is None and falseSet is None : 
+           print(f'{valname} is not true nor false')
+           return False
+       if trueSet is None or falseSet is None : 
+           return True
+
        valSet = self.getSurfacesNumbers()
        TSet =  set(trueSet.keys()) & valSet
        FSet =  set(falseSet.keys()) & valSet
@@ -407,13 +419,13 @@ class BoolSequence:
     def factorize(self,valname,trueSet,falseSet):
 
         if trueSet is None:                    # valname cannot take True value 
-             pos,subSeq = self.getSubSequence(valname)
-             subSeq.substitute(valname,False)
+             falseFunc = self.evaluate(falseSet)
+             self.assign(falseFunc)
              return True
 
         if falseSet is None:                  # valname cannot take false value
-             pos,subSeq = self.getSubSequence(valname)
-             subSeq.substitute(valname,True)
+             trueFunc = self.evaluate(trueSet)
+             self.assign(trueFunc)
              return True
 
         valSet = set(trueSet.keys())
@@ -588,7 +600,8 @@ def insertInSequence(Seq,trgt,nsrf,operator):
         newSeq = BoolSequence(f'{trgt} {nsrf}')
 
     substituteIntegerElement(Seq,trgt,newSeq)        
-    Seq.joinOperators()
+    Seq.levelUpdate()
+    #Seq.joinOperators()
 
 
 def substituteIntegerElement(Seq,target,newElement):
@@ -596,7 +609,6 @@ def substituteIntegerElement(Seq,target,newElement):
        if type(e) is int:
           if e  == target :
                Seq.elements[i] = newElement
-               Seq.level = max(Seq.level,1)
        else:
           substituteIntegerElement(e,target,newElement)
           

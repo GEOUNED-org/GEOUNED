@@ -2,7 +2,7 @@ import sys
 import os
 import subprocess
 
-sys.path.append('/work/patrick/GEOUNED/prualjaz/src')
+sys.path.append('/home/patrick/recherche/GitRepo/GEOUNED/src')
 sys.path.append('/usr/lib64/freecad/lib64/')
 
 from GEOUNED import GEOUNED
@@ -39,7 +39,7 @@ minVoidSize =  100
 cellSummaryFile = False
 cellCommentFile = False
 debug       = False
-simplify   = no
+simplify   = full
 
 [Options]
 forceCylinder = False
@@ -139,6 +139,23 @@ def printResults(f,res,lost):
     print(line)
 
 
+def mkGEOInp(inpDir,outDir):
+   for f in getInputList(inpDir,('stp','step')):
+      setInput(f,inpDir,outDir)
+      GEO = GEOUNED(inifile)
+      GEO.SetOptions()
+      GEO.Start()
+      del GEO
+   
+def processMCNPfolder(outDir):
+   cleanDir(outDir)
+   for f in getInputList(outDir,'.mcnp'):
+      os.rename(f'{outDir}/{f}',f'{outDir}/{f[:-4]}i')
+
+   for f in getInputList(outDir,'.i'):
+      runMCNP(outDir,f)
+      clean(outDir)
+
 def postProcess(folder):
    for fmct in getInputList(folder,'.m'):
       fout = fmct[:-1]+'o'
@@ -149,32 +166,39 @@ def postProcess(folder):
       printResults(fmct[:-1]+'i',res,lost)
 
 # ****************************************************
-#inpDir = 'inputSTEP/Misc'
-#outDir = 'outMCNP/Misc'
-#inpDir = 'inputSTEP/DoubleCylinder'
-#outDir = 'outMCNP/DoubleCylinder'
-#inpDir = 'inputSTEP/Torus'
-#outDir = 'outMCNP/Torus'
-inpDir = 'inputSTEP/large'
-outDir = 'outMCNP/large'
-#inpDir = 'inputSTEP/'
-#outDir = 'outMCNP/'
+
+misInp = 'inputSTEP/Misc'
+misOut = 'outMCNP/Misc'
+cylInp = 'inputSTEP/DoubleCylinder'
+cylOut = 'outMCNP/DoubleCylinder'
+torInp = 'inputSTEP/Torus'
+torOut = 'outMCNP/Torus'
+lrgInp = 'inputSTEP/large'
+lrgOut = 'outMCNP/large'
+ms0Inp = 'inputSTEP/'
+ms0Out = 'outMCNP/'
+
 inifile = 'config.ini'
+folder = {'misc':(misInp,misOut),\
+          'cyl' :(cylInp,cylOut),\
+         'torus':(torInp,torOut),\
+         'large':(lrgInp,lrgOut),\
+         'misc0':(ms0Inp,ms0Out)}
 
+test = 'all'
 
-for f in getInputList(inpDir,('stp','step')):
-   setInput(f,inpDir,outDir)
-   GEO = GEOUNED(inifile)
-   GEO.SetOptions()
-   GEO.Start()
-   del GEO
-   
-cleanDir(outDir)
-for f in getInputList(outDir,'.mcnp'):
-   os.rename(f'{outDir}/{f}',f'{outDir}/{f[:-4]}i')
+if test == 'all':
+   for inpDir,outDir in folder.values():
+      mkGEOInp(inpDir,outDir)
 
-for f in getInputList(outDir,'.i'):
-   runMCNP(outDir,f)
-   clean(outDir)
+   for inpDir,outDir in folder.values():
+      processMCNPfolder(outDir)
 
-postProcess(outDir)
+   for inpDir,outDir in folder.values():
+      postProcess(outDir)
+
+else:
+   inpDir,outDir = folder[test]
+   mkGEOInp(inpDir,outDir)
+   processMCNPfolder(outDir)
+   postProcess(outDir)

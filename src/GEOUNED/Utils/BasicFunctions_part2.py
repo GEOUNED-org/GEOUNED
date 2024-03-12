@@ -43,7 +43,6 @@ def isSamePlane(p1,p2,dtol=1e-6,atol=1e-6,relTol=True,fuzzy=(False,0)):
 
       isSame,isFuzzy = isInTolerance(d,tol,0.5*tol,2*tol)   
       if isFuzzy and fuzzy[0]: Fuzzy(fuzzy[1],'plane',p2,p1,d)
-
       return isSame 
     return False     
     
@@ -102,6 +101,7 @@ def isSameSphere (sph1,sph2,tolerance=1e-6,relTol=True):
 
 def isSameTorus (tor1,tor2,dtol=1e-6,atol=1e-6,relTol=True):
     if isParallel(tor1.Axis,tor2.Axis,atol) :
+       if tor1.Axis.dot(tor2.Axis) < 0 : return False     # Assume same cone with oposite axis as different
        if relTol :
           Rtol = dtol * max(tor1.MajorRadius, tor2.MajorRadius)
           rtol = dtol * max(tor1.MinorRadius, tor2.MinorRadius)

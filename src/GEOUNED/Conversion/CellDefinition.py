@@ -476,6 +476,44 @@ def GenPlaneCone_old(face,solid):
 
 
 def GenTorusAnnexUPlanes(face,Uparams):
+
+    if   isParallel(face.Surface.Axis,FreeCAD.Vector(1,0,0),tol.tor_angle) :
+        axis = FreeCAD.Vector(1,0,0)
+    elif isParallel(face.Surface.Axis,FreeCAD.Vector(0,1,0),tol.tor_angle) :
+        axis = FreeCAD.Vector(0,1,0)
+    elif isParallel(face.Surface.Axis,FreeCAD.Vector(0,0,1),tol.tor_angle) :
+        axis = FreeCAD.Vector(0,0,1)
+
+    center = face.Surface.Center
+    p1 = face.valueAt(Uparams[0],0.)
+    p2 = face.valueAt(Uparams[1],0.)
+    pmid = face.valueAt(0.5*(Uparams[0]+Uparams[1]),0.)
+        
+    if isSameValue(abs(Uparams[1]-Uparams[0]),math.pi,tol.value):
+        d = axis.cross(p2-p1)
+        d.normalize()
+        if d.dot(pmid-center) < 0:  d = -d
+        return ((center,d,face.Surface.MajorRadius,face.Surface.MajorRadius),None),False
+
+    elif Uparams[1]-Uparams[0] < math.pi :
+        d = axis.cross(p2-p1)
+        d.normalize()
+        if d.dot(pmid-center) < 0:  d = -d
+        return ((center,d,face.Surface.MajorRadius,face.Surface.MajorRadius),None),False
+
+    else:
+        d1 = axis.cross(p1)
+        d1.normalize()
+        if d1.dot(pmid-center) < 0:  d1 = -d1
+
+        d2 = axis.cross(p2)
+        d2.normalize()
+        if d2.dot(pmid-center) < 0:  d2 = -d2
+
+        return ((center,d1,face.Surface.MajorRadius,face.Surface.MajorRadius),(center,d2,face.Surface.MajorRadius,face.Surface.MajorRadius)),True  # (d1 : d2)
+
+def GenTorusAnnexUPlanes_org(face,Uparams):
+
     if   isParallel(face.Surface.Axis,FreeCAD.Vector(1,0,0),tol.tor_angle) :
         axis = FreeCAD.Vector(1,0,0)
     elif isParallel(face.Surface.Axis,FreeCAD.Vector(0,1,0),tol.tor_angle) :
@@ -492,7 +530,7 @@ def GenTorusAnnexUPlanes(face,Uparams):
         d = axis.cross(p2-p1)
         d.normalize()
         if pmid.dot(d) < 0:  d = -d
-        return ((center,d,face.Surface.MajorRadius),tuple()),False
+        return ((center,d,face.Surface.MajorRadius),None),False
 
     else :
         d1 = axis.cross(p1)
@@ -648,22 +686,53 @@ def cellDef(metaObj,Surfaces,UniverseBox):
                     isParallel(face.Surface.Axis,FreeCAD.Vector(0,1,0),tol.angle) or \
                     isParallel(face.Surface.Axis,FreeCAD.Vector(0,0,1),tol.angle)):
                  
-                    id1=getId(face.Surface,Surfaces)
-                    
-                    if (orient == 'Forward'):
+                    idT=getId(face.Surface,Surfaces)
 
-                        index,Uparams = solid_GU.TorusUParams[iface]
-                        if index == lastTorus : continue
-                        lastTorus = index
-                        var = '-%i' %id1
+                    index,Uparams = solid_GU.TorusUParams[iface]
+                    if index == lastTorus : continue
+                    lastTorus = index
+
+                   
+                    # add if necesary additional planes following U variable
+                    UClosed,UminMax = Uparams
+                    #UClosed = True
+                    if not UClosed : 
+                         planes,ORop = GenTorusAnnexUPlanes(face,UminMax)
+                         plane1,plane2 = planes
+
+                         plane = GEOUNED_Surface(('Plane',plane1),UniverseBox,Face='Build')
+                         id1,exist = Surfaces.addPlane(plane)
+                         if exist :
+                            p = Surfaces.getSurface(id1)
+                            if isOposite(plane.Surf.Axis,p.Surf.Axis,tol.pln_angle):
+                                id1=-id1
+
+                         if plane2 is None :
+                            UVar = '%i' %id1
+                         else:
+                            plane = GEOUNED_Surface(('Plane',plane2),UniverseBox,Face='Build')
+                            id2,exist = Surfaces.addPlane(plane)
+                            if exist :
+                               p = Surfaces.getSurface(id2)
+                               if isOposite(plane.Surf.Axis,p.Surf.Axis,tol.pln_angle):
+                                   id2=-id2
+                             
+                            UVar = '(%i : %i)' %(id1,id2) if ORop else '%i %i' %(id1,id2)
+
+                    
+                    else:
+                         UVar = ''
+
+                    
+                    # add if necesary additional surface following V variable
+                    if (orient == 'Forward'):
+                        VVar = '-%i' %idT
 
                     else:
                         index,Vparams = solid_GU.TorusVParams[iface]
-                        if index == lastTorus : continue
-                        lastTorus = index
-                        closed,VminMax = Vparams
-                        if closed :
-                           var = '%i' %id1
+                        VClosed,VminMax = Vparams
+                        if VClosed :
+                           VVar = '%i' %idT
                         else:
                            surfParams,surfType,inSurf = GenTorusAnnexVSurface(face,VminMax,opt.forceCylinder)
 
@@ -683,8 +752,9 @@ def cellDef(metaObj,Surfaces,UniverseBox):
                                  if isOposite(plane.Surf.Axis,p.Surf.Axis,tol.pln_angle):
                                      id2=-id2
 
-                           var = '%i %i' %(id1,-id2 if inSurf else id2)
+                           VVar = '%i %i' %(idT,-id2 if inSurf else id2)
 
+                    var = VVar if UClosed  else ' '.join((VVar,UVar))
                     if (var not in SurfPiece):
                         SurfPiece.append(var)
                         SurfObj.append(face)
@@ -871,7 +941,6 @@ def noOverlappingCell(metaList,Surfaces):
                 comp = newDef.elements[i]
                 comp.simplify(CT)
                 comp.clean()
-                
 
           m.setDefinition(newDef)
           m.Definition.joinOperators()
