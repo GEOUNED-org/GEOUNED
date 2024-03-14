@@ -109,6 +109,13 @@ def writeSerpentCellDef(Definition,tabspace=0,offset=0):
        sdef.wrapLine(offset)
        return  sdef.str
 
+def writePHITSCellDef(Definition,tabspace=0,offset=0):
+       sdef = CellString(tabspace=tabspace)
+       strDef = remove_redundant(writeSequencePHITS(Definition))
+       sdef.add(strDef)
+       sdef.wrapLine(offset)
+       return  sdef.str
+
 def writeOpenMCregion(Definition,Wtype='XML'):
        if Wtype == 'XML':
            return writeSequenceOMCXML(Definition)
@@ -143,6 +150,23 @@ def writeSequenceSerpent(Seq):
               terms.append(str(e))
            else :
               terms.append(writeSequenceMCNP(e))
+
+        if Seq.operator == 'AND' : line = '({})'.format(' '.join(terms))
+        else  :                    line = '({})'.format(':'.join(terms))
+
+     return line
+
+def writeSequencePHITS(Seq):
+     if Seq.level == 0 :
+        if Seq.operator == 'AND' : line = '({})'.format(' '.join(map(str,Seq.elements)))
+        else  :                    line = '({})'.format(':'.join(map(str,Seq.elements)))
+     else :
+        terms = []
+        for e in Seq.elements:
+           if type(e) is int :
+              terms.append(str(e))
+           else :
+              terms.append(writeSequencePHITS(e))
 
         if Seq.operator == 'AND' : line = '({})'.format(' '.join(terms))
         else  :                    line = '({})'.format(':'.join(terms))
@@ -589,7 +613,144 @@ surf quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
 
     return Serpent_def
 
+def PHITSSurface(id,Type,surf):
+    PHITS_def = ''
 
+    if (Type=='Plane'):
+      if surf.pointDef and opt.prnt3PPlane:
+         P1 = surf.Points[0]
+         P2 = surf.Points[1]
+         P3 = surf.Points[2]
+         PHITS_def="""{:<6d} P   {P1[0]:{d}} {P1[1]:{d}} {P1[2]:{d}} 
+           {P2[0]:{d}} {P2[1]:{d}} {P2[2]:{d}}
+           {P3[0]:{d}} {P3[1]:{d}} {P3[2]:{d}}""".format(id,P1=P1/10,P2=P2/10,P3=P3/10,d=nf.P_d)  
+      else:
+         A=surf.Axis.x
+         B=surf.Axis.y
+         C=surf.Axis.z
+         D=surf.Axis.dot(surf.Position)
+         if   surf.Axis.isEqual(FreeCAD.Vector(1,0,0),tol.pln_angle) :
+            PHITS_def='{:<6d} PX  {:{x}}'.format(id,D/10.0,x=nf.P_xyz)
+         elif surf.Axis.isEqual(FreeCAD.Vector(0,1,0),tol.pln_angle) :
+            PHITS_def='{:<6d} PY  {:{y}}'.format(id,D/10.0,y=nf.P_xyz)
+         elif surf.Axis.isEqual(FreeCAD.Vector(0,0,1),tol.pln_angle) :
+            PHITS_def='{:<6d} PZ  {:{z}}'.format(id,D/10.0,z=nf.P_xyz) 
+         else:
+            PHITS_def='{:<6d} P   {:{abc}} {:{abc}} {:{abc}} {:{d}}'.format(id,A,B,C,D/10.0,abc=nf.P_abc,d=nf.P_d)  
+    
+    elif (Type == 'Cylinder'):
+        Dir = FreeCAD.Vector(surf.Axis)
+        Dir.normalize()
+        Pos = surf.Center*0.1
+        rad = surf.Radius*0.1
+        if (isParallel(Dir,FreeCAD.Vector(1,0,0),tol.angle)):
+          if (Pos.y == 0.0 and Pos.z == 0.0):
+             PHITS_def='{:<6d} CX  {:{r}}'.format(id,rad,r=nf.C_r)
+          else:
+             PHITS_def='{:<6d} C/X  {:{yz}} {:{yz}} {:{r}}'.format(id,Pos.y,Pos.z,rad,yz=nf.C_xyz,r=nf.C_r)
+        elif (isParallel(Dir,FreeCAD.Vector(0,1,0),tol.angle)):
+          if (Pos.x == 0.0 and Pos.z == 0.0):
+             PHITS_def='{:<6d} CY  {:{r}}'.format(id,rad,r=nf.C_r)
+          else:
+             PHITS_def='{:<6d} C/Y  {:{xz}} {:{xz}} {:{r}}'.format(id,Pos.x,Pos.z,rad,xz=nf.C_xyz,r=nf.C_r)
+        elif (isParallel(Dir,FreeCAD.Vector(0,0,1),tol.angle)):
+          if (Pos.y == 0.0 and Pos.x == 0.0):
+             PHITS_def='{:<6d} CZ  {:{r}}'.format(id,rad,r=nf.C_r)
+          else:
+             PHITS_def='{:<6d} C/Z  {:{xy}} {:{xy}} {:{r}}'.format(id,Pos.x,Pos.y,rad,xy=nf.C_xyz,r=nf.C_r)
+        else:
+        # Is not still working fine
+          Q=Qform.QFormCyl(Dir,Pos,rad)
+          PHITS_def='''\
+{:<6d} GQ  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
+          {v[3]:{aTof}} {v[4]:{aTof}} {v[5]:{aTof}}
+          {v[6]:{gToi}} {v[7]:{gToi}} {v[8]:{gToi}}
+          {v[9]:{j}} '''.format(id,v=Q,aTof=nf.GQ_1to6,gToi=nf.GQ_7to9,j=nf.GQ_10)
+        
+        # Si se quiere rcc en vez de Q form
+        #    pnt = surf.Center.sub(surf.Axis.multiply(1.0e7)) # mas alla de 100 m
+        #    dir = surf.Axis.multiply(1.0e8)
+        #    Vx= pnt.x/10.0
+        #    Vy= pnt.y/10.0
+        #    Vz= pnt.z/10.0
+        #    Hx= dir.x/10.0
+        #    Hy= dir.y/10.0
+        #    Hz= dir.z/10.0
+        #    rad=surf.Radius/10.0
+        #    MCNP_def='%i  RCC  %13.7E %13.7E %13.7E %13.7E\n       %13.7E %13.7E %13.7E' %(id,Vx,Vy,Vz,Hx,Hy,Hz,rad)
+        
+    elif (Type == 'Cone'):
+        Apex = surf.Apex*0.1
+        Dir  = surf.Axis*0.1
+        tan = math.tan(surf.SemiAngle)
+        X_dir=FreeCAD.Vector(1,0,0)
+        Y_dir=FreeCAD.Vector(0,1,0)
+        Z_dir=FreeCAD.Vector(0,0,1)
+        if (isParallel(Dir,X_dir,tol.angle)):
+          sheet=1
+          if (isOposite(Dir,X_dir,tol.angle)): sheet=-1
+          if (Apex.y == 0.0 and Apex.z == 0.0):
+             PHITS_def='{:<6d} KX  {:{x}} {:{t2}} {}'.format(id,Apex.x,tan**2,sheet,x=nf.K_xyz,t2=nf.K_tan2)
+          else:
+             PHITS_def='{:<6d} K/X  {:{xyz}} {:{xyz}} {:{xyz}} {:{t2}} {}'.format(id,Apex.x,Apex.y,Apex.z,tan**2,sheet,xyz=nf.K_xyz,t2=nf.K_tan2)
+        elif (isParallel(Dir,Y_dir,tol.angle)):
+          sheet=1
+          if (isOposite(Dir,Y_dir,tol.angle)): sheet=-1
+          if (Apex.x == 0.0 and Apex.z == 0.0):   
+             PHITS_def='{:<6d} KY  {:{y}} {:{t2}} {}'.format(id,Apex.y,tan**2,sheet,y=nf.K_xyz,t2=nf.K_tan2)
+          else:
+             PHITS_def='{:<6d} K/Y  {:{xyz}} {:{xyz}} {:{xyz}} {:{t2}} {}'.format(id,Apex.x,Apex.y,Apex.z,tan**2,sheet,xyz=nf.K_xyz,t2=nf.K_tan2)
+        elif (isParallel(Dir,Z_dir,tol.angle)):
+          sheet=1
+          if (isOposite(Dir,Z_dir,tol.angle)): sheet=-1
+          if (Apex.x == 0.0 and Apex.y == 0.0):
+             PHITS_def='{:<6d} KZ  {:{z}} {:{t2}} {}'.format(id,Apex.z,tan**2,sheet,z=nf.K_xyz,t2=nf.K_tan2)
+          else:
+             PHITS_def='{:<6d} K/Z  {:{xyz}} {:{xyz}} {:{xyz}} {:{t2}} {}'.format(id,Apex.x,Apex.y,Apex.z,tan**2,sheet,xyz=nf.K_xyz,t2=nf.K_tan2)
+        else:
+          Q=Qform.QFormCone(Dir,Apex,tan)
+          PHITS_def='''\
+{:<6d} GQ  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
+          {v[3]:{aTof}} {v[4]:{aTof}} {v[5]:{aTof}}
+          {v[6]:{gToi}} {v[7]:{gToi}} {v[8]:{gToi}}
+          {v[9]:{j}} '''.format(id,v=Q,aTof=nf.GQ_1to6,gToi=nf.GQ_7to9,j=nf.GQ_10)
+            
+    elif (Type == 'Sphere'):
+     # corresponding logic 
+        rad = surf.Radius*0.1
+        pnt = surf.Center*0.1
+        if pnt.isEqual(FreeCAD.Vector(0,0,0),tol.sph_distance):
+           PHITS_def='{:<6d} SO  {:{r}}'.format(id,rad,r=nf.S_r)
+        else:
+           PHITS_def='{:<6d} S  {:{xyz}} {:{xyz}} {:{xyz}} {:{r}}'.format(id,pnt.x,pnt.y,pnt.z,rad,xyz=nf.S_xyz,r=nf.S_r)
+
+    elif (Type == 'Torus'):
+        Dir = FreeCAD.Vector(surf.Axis)
+        Dir.normalize()
+        Pos = surf.Center*0.1
+        radMaj = surf.MajorRadius*0.1 
+        radMin = surf.MinorRadius*0.1 
+        if (isParallel(Dir,FreeCAD.Vector(1,0,0),tol.angle)):
+             PHITS_def='''\
+{:<6d} TX  {:{xyz}} {:{xyz}} {:{xyz}}
+           {:{r}} {:{r}} {:{r}}'''.format(id,Pos.x,Pos.y,Pos.z, \
+                                           radMaj,radMin,radMin,\
+                                           xyz=nf.T_xyz,r=nf.T_r)
+        elif (isParallel(Dir,FreeCAD.Vector(0,1,0),tol.angle)):
+             PHITS_def='''\
+{:<6d} TY  {:{xyz}} {:{xyz}} {:{xyz}}
+           {:{r}} {:{r}} {:{r}}'''.format(id,Pos.x,Pos.y,Pos.z, \
+                                           radMaj,radMin,radMin,\
+                                           xyz=nf.T_xyz,r=nf.T_r)
+        elif (isParallel(Dir,FreeCAD.Vector(0,0,1),tol.angle)):
+             PHITS_def='''\
+{:<6d} TZ  {:{xyz}} {:{xyz}} {:{xyz}}
+           {:{r}} {:{r}} {:{r}}'''.format(id,Pos.x,Pos.y,Pos.z, \
+                                           radMaj,radMin,radMin,\
+                                           xyz=nf.T_xyz,r=nf.T_r)
+
+    return trim(PHITS_def,80)
+    
 def trim(surfDef,lineLength=80):
 
     lines = surfDef.split('\n')
