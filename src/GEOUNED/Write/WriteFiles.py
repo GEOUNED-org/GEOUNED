@@ -2,6 +2,7 @@ import GEOUNED.Write.AdditionalFiles as OutFiles
 from GEOUNED.Write.MCNPFormat        import MCNP_input
 from GEOUNED.Write.OpenMCFormat      import OpenMC_input 
 from GEOUNED.Write.SerpentFormat      import Serpent_input 
+from GEOUNED.Write.PHITSFormat        import PHITS_input 
 
 def writeGeometry(UniverseBox,MetaList,Surfaces,code_setting):
 
@@ -50,3 +51,16 @@ def writeGeometry(UniverseBox,MetaList,Surfaces,code_setting):
        Serpentfile = Serpent_input(MetaList,Surfaces,code_setting)
        # Serpentfile.setSDEF((outSphere,outBox))
        Serpentfile.writeInput(serpentFilename)   
+
+   if 'phits' in code_setting['outFormat']:
+       phitsFilename = baseName + '.inp'
+       PHITS_outBox = (UniverseBox.XMin,UniverseBox.XMax,UniverseBox.YMin,UniverseBox.YMax,UniverseBox.ZMin,UniverseBox.ZMax)
+       if code_setting['voidGen'] :
+          PHITS_outSphere = (Surfaces['Sph'][-1].Index,Surfaces['Sph'][-1].Surf.Radius)
+       else:
+          PHITS_outSphere = None       
+
+       PHITSfile = PHITS_input(MetaList,Surfaces,code_setting)
+       # PHITSfile.setSDEF_PHITS((PHITS_outSphere,PHITS_outBox))
+       PHITSfile.writePHITS(phitsFilename)   
+       
