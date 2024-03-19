@@ -440,11 +440,11 @@ def DecomposeSolids(MetaList,Surfaces,UniverseBox,setting,meta):
            if not path.exists('Suspicious_solids') :
               mkdir("Suspicious_solids")
            if m.IsEnclosure:   
-              m.Solids[0].exportStep(u'Suspicious_solids/Enclosure_original_{}.stp'.format(i))
-              comsolid.exportStep(   u'Suspicious_solids/Enclosure_split_{}.stp'.format(i))
+              Part.CompSolid(m.Solids).exportStep('Suspicious_solids/Enclosure_original_{}.stp'.format(i))
+              comsolid.exportStep(                'Suspicious_solids/Enclosure_split_{}.stp'.format(i))
            else: 
-              m.Solids[0].exportStep(u'Suspicious_solids/Solid_original_{}.stp'.format(i))
-              comsolid.exportStep(   u'Suspicious_solids/Solid_split_{}.stp'.format(i))
+              Part.CompSolid(m.Solids).exportStep('Suspicious_solids/Solid_original_{}.stp'.format(i))
+              comsolid.exportStep(                'Suspicious_solids/Solid_split_{}.stp'.format(i))
 
            warningSolids.append(i)
            
