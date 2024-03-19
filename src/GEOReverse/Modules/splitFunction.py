@@ -1,4 +1,4 @@
-
+import FreeCAD,Part
 import BOPTools.SplitAPI
 from GEOReverse.Modules.Utils.booleanFunction import outterTerms
 import math

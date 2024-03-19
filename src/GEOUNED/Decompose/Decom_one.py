@@ -3,7 +3,6 @@
 #
 
 import FreeCAD, Part
-import BOPTools.SplitAPI
 import GEOUNED.Utils.Functions as UF
 import GEOUNED.Utils.Geometry_GU as GU
 import GEOUNED.Conversion.CellDefinition as CD
@@ -81,9 +80,16 @@ def cutFullCylinder(solid):
     for pp in Planes :
        # cut with more external parallel planes
        pp[0].buildSurface()
-       pp[-1].buildSurface()
-       tools = (pp[0].shape, pp[-1].shape) 
-       comsolid=BOPTools.SplitAPI.slice(solid,tools,'Split', tolerance = opt.splitTolerance)
+       if len(pp) != 1:
+         pp[-1].buildSurface()
+         tools = (pp[0].shape, pp[-1].shape) 
+       else:
+         tools = (pp[0].shape,) 
+
+       try :
+          comsolid = UF.splitBOP(solid,tools,opt.splitTolerance)
+       except :
+          comsolid = solid
        if len(comsolid.Solids) > 1 :
          outSolid = comsolid.Solids
          cut = True
@@ -92,7 +98,10 @@ def cutFullCylinder(solid):
     if cut : return outSolid
 
     tool = (Surfaces['Cyl'][0].shape,)
-    comsolid=BOPTools.SplitAPI.slice(solid,tool,'Split', tolerance = opt.splitTolerance)
+    try :
+       comsolid = UF.splitBOP(solid,tool,opt.splitTolerance)
+    except :
+       comsolid = solid
 
     if len(comsolid.Solids) > 1 :
        outSolid = comsolid.Solids
@@ -701,7 +710,7 @@ def SplitPlanes_org(Solids,UniverseBox):
             for p in Planes[imin] :
               p.buildSurface() 
               Tools.append(p.shape)
-            comsolid=BOPTools.SplitAPI.slice(base,Tools,'Split', tolerance = opt.splitTolerance)
+            comsolid = UF.splitBOP(base,Tools,opt.splitTolerance)
             if len(comsolid.Solids) == 1 :
                if abs(comsolid.Solids[0].Volume-base.Volume)/base.Volume > tol.relativePrecision :
                   if opt.verbose : print('Warning. Part of the split object is missing original base is used instead',\
@@ -815,7 +824,7 @@ def splitPPlanes_new(solid,UniverseBox):
     for pp in Planes :
        for p in pp : p.buildSurface()
        tools = tuple( p.shape for p in pp) 
-       comsolid=BOPTools.SplitAPI.slice(solid,tools,'Split',tolerance =opt.splitTolerance)         
+       comsolid = UF.splitBOP(solid,tools,opt.splitTolerance)
 
        if len(comsolid.Solids) > 1 :
          outSolid = comsolid.Solids
@@ -829,7 +838,7 @@ def splitPPlanes_org(solid,UniverseBox):
     outSolid = [solid]
     for p in SPlanes['P'] :
        p.buildSurface()
-       comsolid=BOPTools.SplitAPI.slice(solid,[p.shape],'Split', tolerance = opt.splitTolerance)
+       comsolid = UF.splitBOP(solid,[p.shape],opt.splitTolerance)
        if len(comsolid.Solids) > 1 :
          outSolid = comsolid.Solids
          break
@@ -851,8 +860,7 @@ def Split2ndOrder(Solids,UniverseBox):
               for s in Surfaces[kind]:
                  s.buildSurface()
                  try :
-                    comsolid=BOPTools.SplitAPI.slice(solid,[s.shape],'Split', tolerance = opt.splitTolerance)
-
+                    comsolid = UF.splitBOP(solid,[s.shape],opt.splitTolerance)
                     solidsInCom = []
                     for s in comsolid.Solids :
                         if s.Volume > 1e-9 : solidsInCom.append(s)
@@ -905,7 +913,7 @@ def split2ndOPlane(solid):
     if not planes  : return [solid],err
 
     for p in planes:
-      comsolid=BOPTools.SplitAPI.slice(solid,[p],'Split', tolerance = opt.splitTolerance)
+      comsolid = UF.splitBOP(solid,[p],opt.splitTolerance)
       if not comsolid.Solids:
          comsolid=solid
          continue

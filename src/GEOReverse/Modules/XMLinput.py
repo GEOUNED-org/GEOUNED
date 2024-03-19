@@ -349,16 +349,8 @@ def Get_primitive_surfaces(mcnp_surfaces,scale=10.) :
 
          elif MCNPtype in ['x-torus','y-torus','z-torus'] :
             Stype = 'torus'
-            x1 = MCNPparams[0]
-            x2 = MCNPparams[1]
-            x3 = MCNPparams[2]
-            p  = FreeCAD.Vector(x1,x2,x3)
-            Ra = MCNPparams[3]
-            r1 = MCNPparams[4]
-            r2 = MCNPparams[5]
-            if (r1 != r2 ) :
-               print('ellipsoid torus not implemented : {} {}'.format(r1,r2) )
-            R = (r1+r2)*0.5         
+            p        = FreeCAD.Vector(MCNPparams[0:3])
+            Ra,r1,r2 = MCNPparams[3:6]
 
             if   MCNPtype == 'x-torus':
               v  = X_vec
@@ -369,10 +361,11 @@ def Get_primitive_surfaces(mcnp_surfaces,scale=10.) :
                 
             if scale != 1.0 :
               Ra *= scale
-              R  *= scale
+              r1 *= scale
+              r2 *= scale
               p = p.multiply(scale)
 
-            params = ( p,v,Ra,R)  
+            params = ( p,v,Ra,r1,r2)  
 
          elif MCNPtype == 'quadric' :
             Qparams = tuple(MCNPparams[0:10])   

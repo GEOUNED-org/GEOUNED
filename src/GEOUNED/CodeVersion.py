@@ -55,8 +55,10 @@ Modification in 0.9.7 Release Date 06/12/2022
   - fix bug additional plane with sphere
   - improvement of cell simplification method
   - fix bug. bad parameter normalization multiple output formats
+  - Change tolerance values if BOPTsplit function crash
+  - fix some bugs with Torus (not all)
 '''
 
 
 GEOUNED_Version = '1.0.1'
-GEOUNED_ReleaseDate = '25/02/2024'
+GEOUNED_ReleaseDate = '12/03/2024'

@@ -266,7 +266,7 @@ def selectCells(cellList,config):
              else:       
                  selected[name] = c # Fill cell are not tested against material number
        elif config['cell'][0]=='exclude' :
-          for c in cellList:
+          for name,c in cellList.items():
              if c.FILL is None:
                  if c.MAT in config['mat'][1]:
                     if name not in config['cell'][1]: 
@@ -1000,11 +1000,12 @@ def get_ellipsoid_parameters(eVal,eVect,T,k):
    cylTan  = 1e3
    iaxis = None 
    for i in range(3):
-     if abs(eVal[i]-eVal[(i+1)%3]) < 1e-5 : 
+     if abs(eVal[i]-eVal[(i+1)%3]) < 1e-3 : 
          iaxis = (i+2)%3
          break
 
    if iaxis is None :
+      print(eVal)
       print('cannot produce three radii Ellipsoid') 
       return 'ellipsoid_general',None
  
@@ -1138,6 +1139,7 @@ def gq2params(x) :
    #eigenValues and Vector
    eVal,vect = LA.eigh(mat3)
    XD = np.matmul(X,vect)                               # X in diagonalised base
+   
    Dinv = np.where(abs(eVal) < 1e-8 , eVal , 1/eVal )   # get inverse eigen value where eigen< 1e-8  
    zero =  (abs(eVal)<1e-8).nonzero()                   # index in eigen value vector where eigen < 1e-8 
    TD = -XD*Dinv                                        # Translation vector in diagonalized base

@@ -3,10 +3,9 @@
 #   Only one solid and planar surfaces
 #
 import FreeCAD
-import BOPTools.SplitAPI
 import math
 import re
-from GEOUNED.Utils.Functions import GEOUNED_Surface
+from GEOUNED.Utils.Functions import GEOUNED_Surface, splitBOP
 from GEOUNED.Utils.booleanFunction import BoolSequence
 from GEOUNED.Utils.Options.Classes import Options as opt 
 
@@ -279,10 +278,15 @@ def removeExtraSurfaces(CellSeq,CTable):
     newDef = BoolSequence(operator='OR')
   
     #Loop over all compound solids of the metaSolid
+
+    if CellSeq.level == 0 and len(CellSeq.elements) == 1 :
+       return CellSeq
+
     if  CellSeq.operator == 'AND' : 
         newSeq = BoolSequence(operator='AND')
         newSeq.append(CellSeq.copy())
         CellSeq.assign(newSeq)
+        
     
     for subCell in CellSeq.elements:
         nullcell = False 
@@ -339,7 +343,7 @@ def splitSolid_fast(solid,surf,box):
 
     if box :
        if surf.shape :
-            comsolid = BOPTools.SplitAPI.slice(solid,[surf.shape],'Split', tolerance = opt.splitTolerance)
+            comsolid = splitBOP(solid,[surf.shape],opt.splitTolerance)
        else:
             return  checkSign(solid,surf),None
 
