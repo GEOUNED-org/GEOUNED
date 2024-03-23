@@ -76,9 +76,13 @@ class GEOUNED() :
 
                  elif key == 'stepFile':
                      value = config.get('Files',key).strip()
+                     lst = value.split()
                      if value[0] in ('(','[')  and value[-1] in (']',')') :
                         data=value[1:-1].split(',')
+                        data = [ x.strip() for x in data ]
                         self.set(key,data)
+                     elif len(lst) > 1:
+                        self.set(key,lst)
                      else :
                         self.set(key, value)   
 
@@ -214,9 +218,15 @@ class GEOUNED() :
        stepfile = code_setting['stepFile']
        matfile  = code_setting['matFile']
 
-       if not path.isfile(stepfile) :
-          print('Step file {} not found.\nStop.'.format(stepfile))
-          exit()
+       if isinstance(stepfile,(tuple,list)):
+         for stp in stepfile:
+           if not path.isfile(stp) :
+              print('Step file {} not found.\nStop.'.format(stp))
+              exit()
+       else:
+         if not path.isfile(stepfile) :
+            print('Step file {} not found.\nStop.'.format(stepfile))
+            exit()
 
        startTime = datetime.now()
 
