@@ -9,26 +9,25 @@ import math
 
 
 def Fuzzy(index,dtype,surf1,surf2,val):
-    sameSurfFic = open('fuzzySurfaces','w')
+    with open('fuzzySurfaces','w') as sameSurfFic:
+        if dtype == 'plane':
+           p1str = MCNPSurface(index,'Plane',surf1)
+           p2str = MCNPSurface(0,'Plane',surf2)
+           line = 'Plane distance : {} \n {}\n {}\n\n'.format(val,p1str,p2str)
+           sameSurfFic.write(line)
 
-    if dtype == 'plane':
-       p1str = MCNPSurface(index,'Plane',surf1)
-       p2str = MCNPSurface(0,'Plane',surf2)
-       line = 'Plane distance : {} \n {}\n {}\n\n'.format(val,p1str,p2str) 
-       sameSurfFic.write(line) 
+        elif dtype == 'cylRad':
+          cyl1str = MCNPSurface(index,'Cylinder',surf1)
+          cyl2str = MCNPSurface(0,'Cylinder',surf2)
+          line = 'Diff Radius: {} \n {}\n {}\n\n'.format(val,cyl1str,cyl2str)
+          sameSurfFic.write(line)
 
-    elif dtype == 'cylRad':
-      cyl1str = MCNPSurface(index,'Cylinder',surf1)
-      cyl2str = MCNPSurface(0,'Cylinder',surf2)
-      line = 'Diff Radius: {} \n {}\n {}\n\n'.format(val,cyl1str,cyl2str) 
-      sameSurfFic.write(line)
-      
-    elif dtype == 'cylAxs':
-      cyl1str = MCNPSurface(index,'Cylinder',surf1)
-      cyl2str = MCNPSurface(0,'Cylinder',surf2)
-      c12 = surf1.Center - surf2.Center
-      line = 'Dist Axis: {} \n {}\n {}\n\n'.format(val,cyl1str,cyl2str)  
-      sameSurfFic.write(line)
+        elif dtype == 'cylAxs':
+          cyl1str = MCNPSurface(index,'Cylinder',surf1)
+          cyl2str = MCNPSurface(0,'Cylinder',surf2)
+          c12 = surf1.Center - surf2.Center
+          line = 'Dist Axis: {} \n {}\n {}\n\n'.format(val,cyl1str,cyl2str)
+          sameSurfFic.write(line)
       
 def isSamePlane(p1,p2,dtol=1e-6,atol=1e-6,relTol=True,fuzzy=(False,0)):     
     if isParallel(p1.Axis,p2.Axis,atol):
