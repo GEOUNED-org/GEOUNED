@@ -8,8 +8,8 @@ import FreeCAD
 import math
 
 
-sameSurfFic = open('fuzzySurfaces','w')
 def Fuzzy(index,dtype,surf1,surf2,val):
+    sameSurfFic = open('fuzzySurfaces','w')
 
     if dtype == 'plane':
        p1str = MCNPSurface(index,'Plane',surf1)
