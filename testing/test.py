@@ -1,9 +1,7 @@
 import sys
 import os
 import subprocess
-
 from pathlib import Path
-aa=(Path(__file__).parents)
 
 sys.path.append(str(Path(__file__).parents[1]/'src'))
 sys.path.append('/usr/lib64/freecad/lib64/')
