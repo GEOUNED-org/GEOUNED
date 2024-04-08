@@ -30,14 +30,17 @@ def reverse(optFile='configRevese.ini') :
    UnivCell = CADCell()
    UnivCell.shape = UnivCell.makeBox(FreeCAD.BoundBox(*outBox))
 
-#get geometry definition from MCNP input
+   # get geometry definition from MCNP input
    if inFormat == 'mcnp':
       geom = MCNPinput(geomfile)
    elif inFormat == 'openMC_XML':
       geom = XMLinput(geomfile)
    else:
-      print('input format type {} not supported'.format(inFormat))
-      exit()
+      msg = (
+         f'input format type {inFormat} is not supported.'
+         'Supported options are "mcnp" or "openMC_XML"'
+      )
+      raise ValueError(msg)
 
    CADCells,fails = buildCAD(UnivCell,geom,CADselection)
 
