@@ -1,0 +1,10 @@
+.vscode
+**/__pycache__
+.coverage
+htmlcov/*
+docs/source/_build/**
+docs/build/**
+docs/source/_autosummary/*
+docs/jupyter_execute
+.pytest_cache/**
+build/
