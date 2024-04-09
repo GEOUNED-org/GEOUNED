@@ -481,7 +481,7 @@ def checkSign(solid,surf):
        apex,axis,t,dbl = surf.params
        r = point - apex
        r.normalize()
-       z  = axis.dot(r)
+       z  = round(axis.dot(r),15)
        alpha = math.acos(z)
 
        if alpha > math.atan(t) :
