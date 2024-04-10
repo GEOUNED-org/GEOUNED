@@ -32,7 +32,7 @@ If applicable, add screenshots to help explain your problem.
 
 # Please complete the following information):
  - OS: [e.g. Linux or Windows]
- - F4Enix version
+ - GEOUNED version
  - Python version
 
 # Additional context
