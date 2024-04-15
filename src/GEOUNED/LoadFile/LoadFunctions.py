@@ -70,10 +70,11 @@ def checkCADFileMaterial(Material, mdict):
     """Function to check that if a component in the CAD file has a material, it exist in the material file"""
     templist = [ elem for elem in set(Material) if elem not in mdict ]
     if templist:
-        print('At least one material in the CAD model is not present in the material file')
-        print('List of not present materials:', templist)
-        print('Code STOPS')
-        exit()
+        raise ValueError(
+         'At least one material in the CAD model is not present in the material file\n'
+         f'List of not present materials:{templist}\n' 
+         'Code STOPS\n'
+        )
     return
 
 # Paco mod
@@ -195,8 +196,8 @@ def checkEnclosure(FreeCAD_doc,EnclosureList):
             print(lab)
 
     # this stop should not be move to the end of routine
-    # if previous point not satisfied point 4) may lead to infite loop
-    if stop : exit() 
+    # if previous point not satisfied point 4) may lead to infinite loop
+    if stop : raise ValueError('Exiting to avoid infinite loop')
 
     # 4) look for explicit loops
     enclDict = dict()
@@ -223,7 +224,7 @@ def checkEnclosure(FreeCAD_doc,EnclosureList):
         for p in enclDict.keys():
             for s in enclDict[p] :
                 print ('{}_{}'.format(s,p))
-        exit()
+        raise ValueError('GEOUNED.LoadFunctions.checkEnclosure failed')
 
     # check enclosures solids are correctly nested and don't overlap each other
     nestedLevels = setEnclosureLevels(EnclosureList)
@@ -261,7 +262,7 @@ def checkEnclosure(FreeCAD_doc,EnclosureList):
        for elemt in overlap:
            print('{}_{}').format(elemt[0],elemt[1])
  
-    if stop : exit()
+    if stop : raise ValueError('GEOUNED.LoadFunctions.checkEnclosure failed')
                        
 def checkOverlap(enclosures):
      overlap = []

@@ -13,9 +13,7 @@ import xml.etree.ElementTree as ET
 class XMLinput:
     def __init__(self,name):
         if not os.path.isfile(name):
-            print("File %s does not exist" %name)
-            sys.exit()
-            return
+            raise FileNotFoundError(f"File {name} does not exist")
         
         tree = ET.parse(name)
         root = tree.getroot()

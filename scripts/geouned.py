@@ -31,12 +31,10 @@ elif len(sys.argv) == 3:
       runReverse = True
       inifile = sys.argv[1]
    else:
-      print('Bad option')
-      exit()
-else:
-   print('Too many input arguments')
-   exit()
+      raise ValueError('Bad option')
 
+else:
+   raise ValueError('Too many input arguments')
 
 if not runReverse :
   GEO = GEOUNED.GEOUNED(inifile)

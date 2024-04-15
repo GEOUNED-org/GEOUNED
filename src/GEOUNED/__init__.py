@@ -209,11 +209,9 @@ class GEOUNED() :
 
        code_setting = self.__dict__
        if code_setting is None:
-          print('Cannot run the code. Input are missing')
-          exit()
+          raise ValueError('Cannot run the code. Input are missing')
        if code_setting['stepFile'] == '':
-          print('Cannot run the code. Step file name is missing')
-          exit()
+          raise ValueError('Cannot run the code. Step file name is missing')
           
        stepfile = code_setting['stepFile']
        matfile  = code_setting['matFile']
@@ -221,12 +219,10 @@ class GEOUNED() :
        if isinstance(stepfile,(tuple,list)):
          for stp in stepfile:
            if not path.isfile(stp) :
-              print('Step file {} not found.\nStop.'.format(stp))
-              exit()
+              raise FileNotFoundError(f'Step file {stp} not found.\nStop.')
        else:
          if not path.isfile(stepfile) :
-            print('Step file {} not found.\nStop.'.format(stepfile))
-            exit()
+            raise FileNotFoundError(f'Step file {stepfile} not found.\nStop.')
 
        startTime = datetime.now()
 
@@ -261,9 +257,11 @@ class GEOUNED() :
               if m.IsEnclosure: continue 
               solids.extend(m.Solids)
           Part.makeCompound(solids).exportStep(code_setting['exportSolids'])
-          print ('Solids exported in file :{}'.format(code_setting['exportSolids']))
-          print ('GEOUNED Finish. No solid translation performed.')
-          sys.exit()
+          msg = (
+                  f'Solids exported in file {code_setting['exportSolids']}'
+                  'GEOUNED Finish. No solid translation performed.'
+          )
+          raise ValueError(msg)
 
        # set up Universe
        if EnclosureList :

@@ -25,8 +25,7 @@ def setOptions(optionFile):
    fileData = False
    for section in config.sections():
        if section not in sectionNames:
-            print('{} bad section name'.format(section))
-            exit()
+            raise ValueError(f'{section} bad section name')
 
        if section == 'Setting' :
            fileIn,fileOut,outBox,inFormat = getSetting(config)
@@ -68,9 +67,7 @@ def setOptions(optionFile):
            setSecOptions(config)
 
    if not fileData:
-       print('missing input data in [Setting] section')
-       exit()
-
+       raise ValueError('missing input data in [Setting] section')
 
    return setting
 
@@ -143,14 +140,12 @@ def getRange(section,config):
 def getBoxData(string):
    data = tuple(map(float,string.split()))
    if len(data) != 6 :
-      print('bad Outbox value number') 
-      exit()
+      raise ValueError('bad Outbox value number') 
 
    elif( (data[0] > data[1]) or
          (data[2] > data[3]) or
          (data[4] > data[5]) )   :
-      print('bad Outbox boundaries') 
-      exit()
+      raise ValueError('bad Outbox boundaries') 
 
    else:
       return (10*data[0],10*data[2],10*data[4],10*data[1],10*data[3],10*data[5])
