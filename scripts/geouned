@@ -32,11 +32,9 @@ elif len(sys.argv) == 3:
       runReverse = True
       inifile = sys.argv[1]
    else:
-      print('Bad option')
-      exit()
+      raise ValueError('Bad option')
 else:
-   print('Too many input arguments')
-   exit()
+   raise ValueError('Too many input arguments')
 
 
 if not runReverse :
