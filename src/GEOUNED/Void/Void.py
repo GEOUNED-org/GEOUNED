@@ -175,7 +175,7 @@ def getUniverseComplementary(Universe,Surfaces):
 def voidCommentLine(CellInfo):
     boxDef,cellIn = CellInfo
     cells = ', '.join(map(str,cellIn))
-    box   = ', '.join(map(str,boxDef))
-    line  = 'Automatic Generated Void Cell. Enclosure({})\n'.format(box)
-    line += 'Enclosed cells : ({})\n'.format(cells)
+    box = ', '.join(f'{num:.3f}' for num in boxDef)
+    line  = f'Automatic Generated Void Cell. Enclosure({box})\n'
+    line += f'Enclosed cells : ({cells})\n'
     return line
