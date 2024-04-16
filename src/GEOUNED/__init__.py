@@ -266,7 +266,7 @@ class GEOUNED() :
               solids.extend(m.Solids)
           Part.makeCompound(solids).exportStep(code_setting['exportSolids'])
           msg = (
-                  f'Solids exported in file {code_setting['exportSolids']}\n'
+                  f'Solids exported in file {code_setting["exportSolids"]}\n'
                   'GEOUNED Finish. No solid translation performed.'
           )
           raise ValueError(msg)
