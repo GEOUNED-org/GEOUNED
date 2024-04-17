@@ -25,3 +25,8 @@ classifiers = [
 Homepage = "https://github.com/GEOUNED-code"
 Repository = "https://github.com/GEOUNED-code/GEOUNED"
 Documentation = "https://github.com/GEOUNED-code/GEOUNED/docs"
+
+[project.optional-dependencies]
+tests = [
+    "pytest",
+]
