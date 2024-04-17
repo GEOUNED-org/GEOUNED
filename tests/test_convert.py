@@ -8,7 +8,7 @@ path_to_cad = Path("testing/inputSTEP")
 step_files = list(path_to_cad.rglob("*.stp")) + list(path_to_cad.rglob("*.step"))
 
 
-@pytest.mark.parametrize("input_step_file", step_files[1:4])
+@pytest.mark.parametrize("input_step_file", step_files)
 def test_conversion(input_step_file):
     """Test that step files can be converted to openmc and mcnp files"""
 
