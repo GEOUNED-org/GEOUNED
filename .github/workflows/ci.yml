@@ -50,4 +50,4 @@ jobs:
 
         - name: testing GEOUNED functionality
           if: ${{ matrix.os == 'ubuntu-latest'}}
-          run: python -m pytest -s -v --freecad-cmd=python tests/test_convert.py
+          run: python -m pytest -v tests/test_convert.py
