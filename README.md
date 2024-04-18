@@ -1,3 +1,5 @@
+[![CI testing](https://github.com/GEOUNED-org/GEOUNED/actions/workflows/ci.yml/badge.svg?branch=dev)](https://github.com/GEOUNED-org/GEOUNED/actions/workflows/ci.yml)
+
 # GEOUNED
 A tool to convert from CAD to CSG & CSG to CAD for Monte Carlo transport codes (MCNP & OpenMC).
 This repository contains the implementation of the algorithm presented in the paper [GEOUNED: A new conversion tool from CAD to Monte Carlo geometry](https://doi.org/10.1016/j.net.2024.01.052).
@@ -27,7 +29,7 @@ In that case you can install directly de module using:
 C:\Program Files\FreeCAD 0.XX\bin\python.exe -m pip install git+https://github.com/GEOUNED-code/GEOUNED.git
 ```
 using this option you have directly access to both FreeCAD and GEOUNED python modules. 
-Furthermore, using this python compabilities problems between different versions of python are avoided (some dynamic libraries of FreeCAD depends on the version of python used during the built process). 
+Furthermore, using this python compatibilities problems between different versions of python are avoided (some dynamic libraries of FreeCAD depends on the version of python used during the built process). 
 
 ## How to use
 
