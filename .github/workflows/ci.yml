@@ -49,5 +49,4 @@ jobs:
             python -m pip install .[tests]
 
         - name: testing GEOUNED functionality
-          if: ${{ matrix.os == 'ubuntu-latest'}}
           run: python -m pytest -v tests/test_convert.py
