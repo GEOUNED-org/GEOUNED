@@ -1,6 +1,6 @@
 [project]
 name = "GEOUNED"
-version = "1.0.0"
+version = "1.0.1"
 authors = [
   { name="Juan-Pablo Catalan", email="jpcatalan@ind.uned.es" },
   { name="Patrick Sauvan", email="psauvan@ind.uned.es" },
@@ -22,9 +22,9 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/GEOUNED-code"
-Repository = "https://github.com/GEOUNED-code/GEOUNED"
-Documentation = "https://github.com/GEOUNED-code/GEOUNED/docs"
+Homepage = "https://github.com/GEOUNED-org"
+Repository = "https://github.com/GEOUNED-org/GEOUNED"
+Documentation = "https://github.com/GEOUNED-org/GEOUNED/docs"
 
 [project.optional-dependencies]
 tests = [
