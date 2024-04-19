@@ -50,3 +50,11 @@ jobs:
 
         - name: testing GEOUNED functionality
           run: python -m pytest -v tests/test_convert.py
+
+        - name: install openmc
+          if: ${{ matrix.os == 'ubuntu-latest'}}
+          run: conda install -c conda-forge openmc -y
+
+        - name: testing with OpenMC
+          if: ${{ matrix.os == 'ubuntu-latest'}}
+          run: python -m pytest -v tests/test_volumes.py
