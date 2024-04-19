@@ -24,6 +24,9 @@ path_to_cad = Path("testing/inputSTEP")
 step_files = list(path_to_cad.rglob("*.stp")) + list(path_to_cad.rglob("*.step"))
 
 # these step files all produced failures, most of them lose particles
+# they are removed from the tests but an issue has be raised and a minimal
+# example has been made in the issue where the fixing of these files can be
+# tracked https://github.com/shimwell/GEOUNED/issues/11
 step_files.remove(Path("testing/inputSTEP/large/SCDR.stp"))
 step_files.remove(Path("testing/inputSTEP/placa.stp"))
 step_files.remove(Path("testing/inputSTEP/placa2.stp"))
