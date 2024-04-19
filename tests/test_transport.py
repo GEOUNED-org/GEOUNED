@@ -47,7 +47,6 @@ def test_transport(input_step_file):
     output_dir.mkdir(parents=True, exist_ok=True)
     output_filename_stem = output_dir / input_step_file.stem
     openmc_xml_file = output_filename_stem.with_suffix(".xml")
-    print("openmc_xml_file", openmc_xml_file)
 
     Import.insert(str(input_step_file), "converted-cad")
     result = Part.Shape()
