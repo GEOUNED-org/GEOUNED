@@ -1,0 +1,15 @@
+site_name: GEOUNED
+site_url: https://github.com/GEOUNED-org/GEOUNED/deployments/github-pages
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Examples: examples.md
+  - Python API: python_api.md
+  - Theory and Methodology: theory_and_methodology.md
+theme: readthedocs
+plugins:
+- search
+- mkdocstrings:
+    handlers:
+      python:
+        paths: [src]
