@@ -30,7 +30,3 @@ Documentation = "https://github.com/GEOUNED-org/GEOUNED/docs"
 tests = [
     "pytest",
 ]
-docs = [
-    "mkdocs",
-    "mkdocstrings[python]>=0.18",
-]
