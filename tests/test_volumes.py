@@ -31,20 +31,9 @@ openmc.config['cross_sections'] = Path("cross_sections.xml").resolve()
 
 path_to_cad = Path("testing/inputSTEP")
 step_files = list(path_to_cad.rglob("*.stp")) + list(path_to_cad.rglob("*.step"))
-
-# this checks if the tests are being run a github action runner or not
+step_files.remove(Path('testing/inputSTEP/Misc/rails.stp'))
+# # this checks if the tests are being run a github action runner or not
 if os.getenv("GITHUB_ACTIONS"):
-    # removing the larger models and models where the volumes don't match from
-    # some of these step file are removed as it fails the volume tests.
-    # Perhaps a bug with torus conversion or a bug with the stp file?
-    # Issue raised https://github.com/GEOUNED-org/GEOUNED/issues/55
-    step_files.remove(Path('testing/inputSTEP/Misc/rails.stp'))
-    step_files.remove(Path('testing/inputSTEP/placa.stp'))
-    step_files.remove(Path('testing/inputSTEP/Misc/tester.stp'))
-    step_files.remove(Path('testing/inputSTEP/large/SCDR.stp'))
-    step_files.remove(Path('testing/inputSTEP/large/Triangle.stp'))
-    step_files.remove(Path('testing/inputSTEP/Torus/face2.stp'))
-    step_files.remove(Path('testing/inputSTEP/Torus/rueda.stp'))
     # reduced samples as github action runners have 2 threads and more samples
     # is not needed for the smaller models tested. This allows the CI to
     # quickly test the smaller models
