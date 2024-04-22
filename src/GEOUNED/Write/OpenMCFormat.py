@@ -1,17 +1,12 @@
 ##############################
 # Module to write MCNP input #
 ##############################
-from datetime import datetime
 
-from GEOUNED.Utils.Functions import Surfaces_dict
-from GEOUNED.Write.Functions import OpenMCSurface, changeSurfSign,  writeOpenMCregion,CardLine
-from GEOUNED.Utils.Options.Classes import MCNP_numeric_format as nf
-from GEOUNED.Utils.Options.Classes import Options as opt
-from GEOUNED.CodeVersion import *
 import FreeCAD
-import copy
-import math
-import re
+from ..Utils.Functions import Surfaces_dict
+from .Functions import OpenMCSurface, changeSurfSign,  writeOpenMCregion
+from ..Utils.Options.Classes import Options as opt
+from ..CodeVersion import *
 
 class OpenMC_input:
     def __init__(self,Meta,Surfaces,setting) :

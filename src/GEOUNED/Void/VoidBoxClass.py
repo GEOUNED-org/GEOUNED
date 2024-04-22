@@ -1,14 +1,13 @@
 """File with the VoidBox class"""
 import FreeCAD
 import Part
-import GEOUNED.Decompose.Decom_one as Decom
-import GEOUNED.Conversion.CellDefinition as Conv
-
-from GEOUNED.Utils.Options.Classes import Options as opt
-from GEOUNED.Utils.BasicFunctions_part1 import isOposite
-from GEOUNED.Utils.Functions import GEOUNED_Solid, GEOUNED_Surface
-from GEOUNED.Utils.booleanFunction import BoolSequence
-from GEOUNED.Utils.BooleanSolids import buildCTableFromSolids, removeExtraSurfaces
+from ..Decompose import Decom_one as Decom
+from ..Conversion import CellDefinition as Conv
+from ..Utils.Options.Classes import Options as opt
+from ..Utils.BasicFunctions_part1 import isOposite
+from ..Utils.Functions import GEOUNED_Solid, GEOUNED_Surface
+from ..Utils.booleanFunction import BoolSequence
+from ..Utils.BooleanSolids import buildCTableFromSolids, removeExtraSurfaces
 
 
 class VoidBox (): 

@@ -1,16 +1,15 @@
 #
 # Set of useful functions used in different parts of the code
 #
-import BOPTools.SplitAPI
-import GEOUNED.Utils.BasicFunctions_part2 as BF
-from GEOUNED.Utils.BasicFunctions_part1 import isParallel,\
-     Plane3PtsParams, PlaneParams, CylinderParams, ConeParams, SphereParams, TorusParams 
-from GEOUNED.Utils.Options.Classes import Tolerances as tol
-from GEOUNED.Utils.Options.Classes import Options
-import copy
-import FreeCAD, Part
 import math
 import numpy as np
+import BOPTools.SplitAPI
+import FreeCAD, Part
+from . import BasicFunctions_part2 as BF
+from ..Utils.BasicFunctions_part1 import isParallel,\
+     Plane3PtsParams, PlaneParams, CylinderParams, ConeParams, SphereParams, TorusParams 
+from ..Utils.Options.Classes import Tolerances as tol
+from ..Utils.Options.Classes import Options
 
 
 def getBox(comp):

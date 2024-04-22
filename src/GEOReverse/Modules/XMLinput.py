@@ -1,10 +1,8 @@
 import os
-import sys
 import re
 import FreeCAD
-from GEOReverse.Modules.remh import cell_card_string, remove_hash
-from GEOReverse.Modules.Objects import *
-from GEOReverse.Modules.XMLParser import get_cards
+from .Objects import *
+from .XMLParser import get_cards
 import math
 import numpy as np
 from numpy import linalg as LA

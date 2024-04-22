@@ -1,8 +1,6 @@
+import math
 import FreeCAD,Part
 import BOPTools.SplitAPI
-from GEOReverse.Modules.Utils.booleanFunction import outterTerms
-import math
-
 
 class splitBase:
     def __init__(self,base,knownSurf={}):

@@ -1,19 +1,14 @@
 ##############################
 # Module to write MCNP input #
 ##############################
-from datetime import datetime
-
-from GEOUNED.Utils.Functions import Surfaces_dict
-from GEOUNED.Utils.BasicFunctions_part1 import pointsToCoeffs,isOposite
-from GEOUNED.Write.Functions import MCNPSurface, changeSurfSign, writeMCNPCellDef,CardLine
-from GEOUNED.Utils.Options.Classes import MCNP_numeric_format as nf
-from GEOUNED.Utils.Options.Classes import Tolerances as tol
-from GEOUNED.Utils.Options.Classes import Options as opt
-from GEOUNED.CodeVersion import *
-import FreeCAD
-import copy
 import math
-import re
+from datetime import datetime
+import FreeCAD
+from ..Utils.Functions import Surfaces_dict
+from ..Utils.BasicFunctions_part1 import pointsToCoeffs,isOposite
+from .Functions import MCNPSurface, changeSurfSign, writeMCNPCellDef,CardLine
+from ..Utils.Options.Classes import Options as opt
+from ..CodeVersion import *
 
 class MCNP_input:
     def __init__(self,Meta,Surfaces,setting) :

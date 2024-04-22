@@ -1,12 +1,10 @@
-import sys
-import FreeCAD, Part, Import
-
-from GEOReverse.Modules.MCNPinput import MCNPinput
-from GEOReverse.Modules.XMLinput import XMLinput
-from GEOReverse.Modules.buildCAD import buildCAD,makeTree
-from GEOReverse.Modules.Objects import CADCell
-from GEOReverse.Modules.processInp import setOptions 
-from GEOReverse.CodeVersion import *
+import FreeCAD, Import
+from .Modules.MCNPinput import MCNPinput
+from .Modules.XMLinput import XMLinput
+from .Modules.buildCAD import buildCAD,makeTree
+from .Modules.Objects import CADCell
+from .Modules.processInp import setOptions 
+from .CodeVersion import *
 
 
 def reverse(optFile='configRevese.ini') :

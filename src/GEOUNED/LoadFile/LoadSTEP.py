@@ -6,8 +6,7 @@ import re
 import FreeCAD, Part
 from FreeCAD import Import
 from ..Utils import Functions as UF
-from ..LoadFile import LoadFunctions as LF
-
+from . import LoadFunctions as LF
 
 # Paco mod
 def extractMaterials(filename):

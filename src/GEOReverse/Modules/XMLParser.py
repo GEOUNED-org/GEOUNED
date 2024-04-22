@@ -1,4 +1,4 @@
-from GEOReverse.Modules.remh import cline
+from .remh import cline
 
 class cellCARD:
   

@@ -1,11 +1,11 @@
 #
 #  definition of GEOUNED objects to release memory
 #
-import FreeCAD, Part
 import math
-from GEOUNED.Utils.BasicFunctions_part1 import isSameValue
-from GEOUNED.Utils.BasicFunctions_part2 import isSameTorus
-from GEOUNED.Utils.Options.Classes      import Tolerances as tol
+import Part
+from .BasicFunctions_part1 import isSameValue
+from .BasicFunctions_part2 import isSameTorus
+from ..Utils.Options.Classes import Tolerances as tol
 
 # SURFACES
 class Surfaces_GU(object):

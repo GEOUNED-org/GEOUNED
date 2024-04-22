@@ -7,7 +7,7 @@ Functions for parsing MCNP input files.
 import re
 import warnings
 import os
-from GEOReverse.Modules.Parser.PartialFormatter import PartialFormatter
+from .PartialFormatter import PartialFormatter
 
 version = '3.6'
 

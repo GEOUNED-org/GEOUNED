@@ -1,8 +1,8 @@
-import GEOUNED.Write.AdditionalFiles as OutFiles
-from GEOUNED.Write.MCNPFormat        import MCNP_input
-from GEOUNED.Write.OpenMCFormat      import OpenMC_input 
-from GEOUNED.Write.SerpentFormat      import Serpent_input 
-from GEOUNED.Write.PHITSFormat        import PHITS_input 
+from . import AdditionalFiles as OutFiles
+from .MCNPFormat import MCNP_input
+from .OpenMCFormat import OpenMC_input 
+from .SerpentFormat import Serpent_input 
+from .PHITSFormat import PHITS_input 
 
 def writeGeometry(UniverseBox,MetaList,Surfaces,code_setting):
 

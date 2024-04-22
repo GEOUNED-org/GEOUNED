@@ -1,13 +1,12 @@
+import math
 import os
-import sys
 import re
 import FreeCAD
-from GEOReverse.Modules.Parser import parser  as mp
-from GEOReverse.Modules.remh import cell_card_string, remove_hash
-from GEOReverse.Modules.Objects import *
-import math
 import numpy as np
 from numpy import linalg as LA
+from .Parser import parser  as mp
+from .remh import cell_card_string, remove_hash
+from .Objects import *
 
 class MCNPinput:
     def __init__(self,name):
