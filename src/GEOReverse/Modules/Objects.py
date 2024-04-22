@@ -1,9 +1,13 @@
 import math
+
+import FreeCAD
 import numpy as np
-import FreeCAD, Part
+import Part
+
 from .buildSolidCell import BuildSolid
 from .remh import cline
-from .Utils.booleanFunction import outterTerms,BoolSequence
+from .Utils.booleanFunction import BoolSequence, outterTerms
+
 
 class CADCell:
     def __init__(self,stringCell=None):

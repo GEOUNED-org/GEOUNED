@@ -2,14 +2,19 @@
 # Set of useful functions used in different parts of the code
 #
 import math
-import numpy as np
+
 import BOPTools.SplitAPI
-import FreeCAD, Part
-from . import BasicFunctions_part2 as BF
-from ..Utils.BasicFunctions_part1 import isParallel,\
-     Plane3PtsParams, PlaneParams, CylinderParams, ConeParams, SphereParams, TorusParams 
-from ..Utils.Options.Classes import Tolerances as tol
+import FreeCAD
+import numpy as np
+import Part
+
+from ..Utils.BasicFunctions_part1 import (ConeParams, CylinderParams,
+                                          Plane3PtsParams, PlaneParams,
+                                          SphereParams, TorusParams,
+                                          isParallel)
 from ..Utils.Options.Classes import Options
+from ..Utils.Options.Classes import Tolerances as tol
+from . import BasicFunctions_part2 as BF
 
 
 def getBox(comp):

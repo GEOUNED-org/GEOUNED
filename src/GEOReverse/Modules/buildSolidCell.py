@@ -1,7 +1,9 @@
 import Part
-from .Utils.booleanFunction import BoolSequence
-from .splitFunction import SplitSolid,splitBase,joinBase
+
 from .options import Options
+from .splitFunction import SplitSolid, joinBase, splitBase
+from .Utils.booleanFunction import BoolSequence
+
 
 def getPart(slist):
     sol = []

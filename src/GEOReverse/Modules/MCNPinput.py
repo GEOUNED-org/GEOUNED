@@ -1,12 +1,15 @@
 import math
 import os
 import re
+
 import FreeCAD
 import numpy as np
 from numpy import linalg as LA
-from .Parser import parser  as mp
-from .remh import cell_card_string, remove_hash
+
 from .Objects import *
+from .Parser import parser as mp
+from .remh import cell_card_string, remove_hash
+
 
 class MCNPinput:
     def __init__(self,name):

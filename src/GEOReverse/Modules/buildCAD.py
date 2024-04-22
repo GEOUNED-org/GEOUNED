@@ -1,7 +1,7 @@
 import BOPTools.SplitAPI
+
 from .buildSolidCell import FuseSolid
 from .Utils.booleanFunction import BoolSequence
-
 
 
 def buildCAD(UnivCell,data,config):

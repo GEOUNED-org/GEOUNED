@@ -1,11 +1,13 @@
 import math
 import re
+
 import FreeCAD
+
 from ..Utils import Qform as Qform
-from ..Utils.BasicFunctions_part1 import isParallel, isOposite
+from ..Utils.BasicFunctions_part1 import isOposite, isParallel
 from ..Utils.Options.Classes import MCNP_numeric_format as nf
-from ..Utils.Options.Classes import Tolerances as tol
 from ..Utils.Options.Classes import Options as opt
+from ..Utils.Options.Classes import Tolerances as tol
 from .StringFunctions import remove_redundant
 
 

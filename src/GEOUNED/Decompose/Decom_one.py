@@ -4,14 +4,18 @@
 
 import math
 from collections import OrderedDict
-import FreeCAD, Part
+
+import FreeCAD
+import Part
+
+from ..Conversion import CellDefinition as CD
 from ..Utils import Functions as UF
 from ..Utils import Geometry_GU as GU
-from ..Conversion import CellDefinition as CD
-from ..Utils.BasicFunctions_part1 import isParallel, isSameValue, isInLine, isInPlane
+from ..Utils.BasicFunctions_part1 import (isInLine, isInPlane, isParallel,
+                                          isSameValue)
 from ..Utils.BasicFunctions_part2 import isDuplicateInList
-from ..Utils.Options.Classes import Tolerances as tol
 from ..Utils.Options.Classes import Options as opt
+from ..Utils.Options.Classes import Tolerances as tol
 
 twoPi = math.pi*2
     

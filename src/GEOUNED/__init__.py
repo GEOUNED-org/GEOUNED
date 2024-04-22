@@ -12,20 +12,23 @@ try:
 except:
     pass
 import configparser
-from os import path, mkdir
 from datetime import datetime
-import FreeCAD, Part
-from  .LoadFile import LoadSTEP as Load
-from .Decompose import Decom_one as Decom
-from .Utils import Functions as UF
+from os import mkdir, path
+
+import FreeCAD
+import Part
+
+from .CodeVersion import *
 from .Conversion import CellDefinition as Conv
+from .Cuboid.translate import translate
+from .Decompose import Decom_one as Decom
+from .LoadFile import LoadSTEP as Load
+from .Utils import Functions as UF
+from .Utils.BooleanSolids import buildCTableFromSolids
+from .Utils.Options.Classes import MCNP_numeric_format, Options, Tolerances
+from .Void import Void as Void
 from .Write.Functions import writeMCNPCellDef
 from .Write.WriteFiles import writeGeometry
-from .CodeVersion import *
-from .Utils.Options.Classes import Tolerances, MCNP_numeric_format, Options 
-from .Utils.BooleanSolids import buildCTableFromSolids
-from .Cuboid.translate import translate
-from .Void import Void as Void
 
 
 class GEOUNED() :

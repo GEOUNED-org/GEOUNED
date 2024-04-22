@@ -1,11 +1,13 @@
-import FreeCAD,Part
-from ..Utils.booleanFunction import BoolSequence
-from ..Utils import Geometry_GU as GU
-from ..Utils.BasicFunctions_part1 import isParallel, isOposite
-from ..Utils import BasicFunctions_part2 as BF
+import FreeCAD
+import Part
+
 from ..Decompose import Decom_one as Decom
-from ..Utils.Options.Classes import Tolerances as tol
+from ..Utils import BasicFunctions_part2 as BF
+from ..Utils import Geometry_GU as GU
+from ..Utils.BasicFunctions_part1 import isOposite, isParallel
+from ..Utils.booleanFunction import BoolSequence
 from ..Utils.Options.Classes import Options as opt
+from ..Utils.Options.Classes import Tolerances as tol
 
 
 def commonEdge(face1,face2):

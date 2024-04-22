@@ -3,10 +3,12 @@
 ##############################
 
 import FreeCAD
-from ..Utils.Functions import Surfaces_dict
-from .Functions import OpenMCSurface, changeSurfSign,  writeOpenMCregion
-from ..Utils.Options.Classes import Options as opt
+
 from ..CodeVersion import *
+from ..Utils.Functions import Surfaces_dict
+from ..Utils.Options.Classes import Options as opt
+from .Functions import OpenMCSurface, changeSurfSign, writeOpenMCregion
+
 
 class OpenMC_input:
     def __init__(self,Meta,Surfaces,setting) :

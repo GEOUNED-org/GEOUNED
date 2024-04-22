@@ -13,12 +13,15 @@
 
 import re
 from datetime import datetime
+
 import FreeCAD
-from ..Utils.Functions import Surfaces_dict
-from ..Utils.BasicFunctions_part1 import pointsToCoeffs,isOposite
-from ..Write.Functions import PHITSSurface, changeSurfSign, writePHITSCellDef,CellString
-from ..Utils.Options.Classes import Options as opt
+
 from ..CodeVersion import *
+from ..Utils.BasicFunctions_part1 import isOposite, pointsToCoeffs
+from ..Utils.Functions import Surfaces_dict
+from ..Utils.Options.Classes import Options as opt
+from ..Write.Functions import (CellString, PHITSSurface, changeSurfSign,
+                               writePHITSCellDef)
 
 
 class PHITS_input:

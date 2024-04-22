@@ -1,4 +1,4 @@
-from .Classes import Options, Tolerances, MCNP_numeric_format
+from .Classes import MCNP_numeric_format, Options, Tolerances
 
 #default options values
 forceCylinder  = True                           # Force using cylinders instead cones for auxillary surfaces of torus surface definition

@@ -1,12 +1,15 @@
+import math
 import os
 import re
+import xml.etree.ElementTree as ET
+
 import FreeCAD
-from .Objects import *
-from .XMLParser import get_cards
-import math
 import numpy as np
 from numpy import linalg as LA
-import xml.etree.ElementTree as ET 
+
+from .Objects import *
+from .XMLParser import get_cards
+
 
 class XMLinput:
     def __init__(self,name):

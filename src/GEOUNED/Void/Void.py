@@ -1,11 +1,14 @@
-import FreeCAD, Part
-from .VoidBoxClass import VoidBox
-from ..Utils.BasicFunctions_part1 import isOposite
-from ..Utils.Functions import GEOUNED_Solid, GEOUNED_Surface
-from ..Utils.booleanFunction import BoolSequence
-from ..Utils.Options.Classes import Options as opt
+import FreeCAD
+import Part
+
 from ..LoadFile import LoadFunctions as LF
+from ..Utils.BasicFunctions_part1 import isOposite
+from ..Utils.booleanFunction import BoolSequence
+from ..Utils.Functions import GEOUNED_Solid, GEOUNED_Surface
+from ..Utils.Options.Classes import Options as opt
 from ..Void import voidFunctions as VF
+from .VoidBoxClass import VoidBox
+
 
 def voidGeneration(MetaList,EnclosureList,Surfaces,UniverseBox,setting,init):
     voidList = []

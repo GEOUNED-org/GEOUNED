@@ -4,9 +4,10 @@
 Functions for parsing MCNP input files.
 """
 
+import os
 import re
 import warnings
-import os
+
 from .PartialFormatter import PartialFormatter
 
 version = '3.6'

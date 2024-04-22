@@ -3,8 +3,10 @@
 #   Only one solid and planar surfaces
 #
 import math
-import FreeCAD
+
 import BOPTools.SplitAPI
+import FreeCAD
+
 from .booleanFunction import BoolSequence
 
 BoolVals = (None,True,False)

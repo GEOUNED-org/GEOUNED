@@ -2,16 +2,20 @@
 # Module for Cell definiton #
 #############################
 import math
-import FreeCAD, Part
-from ..Utils.Functions import GEOUNED_Surface
-from ..Utils.BasicFunctions_part1 import isParallel, isOposite, isInLine, signPlane, isSameValue
-from ..Utils.booleanFunction import BoolSequence, insertInSequence
-from ..Utils import BasicFunctions_part2 as BF 
+
+import FreeCAD
+import Part
+
+from ..Utils import BasicFunctions_part2 as BF
 from ..Utils import Functions as UF
 from ..Utils import Geometry_GU as GU
-from ..Utils.Options.Classes import Tolerances as tol
+from ..Utils.BasicFunctions_part1 import (isInLine, isOposite, isParallel,
+                                          isSameValue, signPlane)
+from ..Utils.booleanFunction import BoolSequence, insertInSequence
+from ..Utils.BooleanSolids import buildCTableFromSolids, removeExtraSurfaces
+from ..Utils.Functions import GEOUNED_Surface
 from ..Utils.Options.Classes import Options as opt
-from ..Utils.BooleanSolids import buildCTableFromSolids,removeExtraSurfaces
+from ..Utils.Options.Classes import Tolerances as tol
 
 
 def getId(facein, Surfaces):

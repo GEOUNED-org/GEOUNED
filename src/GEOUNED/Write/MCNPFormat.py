@@ -3,12 +3,15 @@
 ##############################
 import math
 from datetime import datetime
+
 import FreeCAD
-from ..Utils.Functions import Surfaces_dict
-from ..Utils.BasicFunctions_part1 import pointsToCoeffs,isOposite
-from .Functions import MCNPSurface, changeSurfSign, writeMCNPCellDef,CardLine
-from ..Utils.Options.Classes import Options as opt
+
 from ..CodeVersion import *
+from ..Utils.BasicFunctions_part1 import isOposite, pointsToCoeffs
+from ..Utils.Functions import Surfaces_dict
+from ..Utils.Options.Classes import Options as opt
+from .Functions import CardLine, MCNPSurface, changeSurfSign, writeMCNPCellDef
+
 
 class MCNP_input:
     def __init__(self,Meta,Surfaces,setting) :

@@ -1,5 +1,7 @@
 import re
+
 import FreeCAD
+
 from ..Utils.Functions import GEOUNED_Solid
 from ..Utils.Options.Classes import Options as opt
 

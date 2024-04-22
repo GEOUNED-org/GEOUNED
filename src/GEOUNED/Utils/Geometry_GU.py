@@ -2,10 +2,13 @@
 #  definition of GEOUNED objects to release memory
 #
 import math
+
 import Part
+
+from ..Utils.Options.Classes import Tolerances as tol
 from .BasicFunctions_part1 import isSameValue
 from .BasicFunctions_part2 import isSameTorus
-from ..Utils.Options.Classes import Tolerances as tol
+
 
 # SURFACES
 class Surfaces_GU(object):
