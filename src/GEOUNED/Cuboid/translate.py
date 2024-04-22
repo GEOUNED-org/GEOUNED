@@ -1,12 +1,11 @@
-from    GEOUNED.Utils.booleanFunction import BoolSequence
-import GEOUNED.Utils.Geometry_GU as GU
-from   GEOUNED.Utils.BasicFunctions_part1  \
-       import isParallel, isOposite
-import  GEOUNED.Utils.BasicFunctions_part2 as BF
-import GEOUNED.Decompose.Decom_one as Decom
-from GEOUNED.Utils.Options.Classes import Tolerances as tol
-from GEOUNED.Utils.Options.Classes import Options as opt
 import FreeCAD,Part
+from ..Utils.booleanFunction import BoolSequence
+from ..Utils import Geometry_GU as GU
+from ..Utils.BasicFunctions_part1 import isParallel, isOposite
+from ..Utils import BasicFunctions_part2 as BF
+from ..Decompose import Decom_one as Decom
+from ..Utils.Options.Classes import Tolerances as tol
+from ..Utils.Options.Classes import Options as opt
 
 
 def commonEdge(face1,face2):
