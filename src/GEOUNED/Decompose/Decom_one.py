@@ -2,18 +2,16 @@
 #   Only one solid and planar surfaces
 #
 
-import FreeCAD, Part
-import GEOUNED.Utils.Functions as UF
-import GEOUNED.Utils.Geometry_GU as GU
-import GEOUNED.Conversion.CellDefinition as CD
-from collections import OrderedDict
-from GEOUNED.Utils.BasicFunctions_part1 import isParallel, isSameValue,\
-     isInLine, isInPlane
-from GEOUNED.Utils.BasicFunctions_part2 import isDuplicateInList
-from GEOUNED.Utils.Options.Classes import Tolerances as tol
-from GEOUNED.Utils.Options.Classes import Options as opt
 import math
-import copy
+from collections import OrderedDict
+import FreeCAD, Part
+from ..Utils import Functions as UF
+from ..Utils import Geometry_GU as GU
+from ..Conversion import CellDefinition as CD
+from ..Utils.BasicFunctions_part1 import isParallel, isSameValue, isInLine, isInPlane
+from ..Utils.BasicFunctions_part2 import isDuplicateInList
+from ..Utils.Options.Classes import Tolerances as tol
+from ..Utils.Options.Classes import Options as opt
 
 twoPi = math.pi*2
     

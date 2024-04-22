@@ -1,7 +1,7 @@
 import re
 import FreeCAD
-from GEOUNED.Utils.Functions import GEOUNED_Solid
-from GEOUNED.Utils.Options.Classes import Options as opt
+from ..Utils.Functions import GEOUNED_Solid
+from ..Utils.Options.Classes import Options as opt
 
 
 def GetLabel(label):

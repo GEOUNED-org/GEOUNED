@@ -1,5 +1,4 @@
-import os.path
-from GEOUNED.Utils.Options.Classes import Options, Tolerances, MCNP_numeric_format
+from .Classes import Options, Tolerances, MCNP_numeric_format
 
 #default options values
 forceCylinder  = True                           # Force using cylinders instead cones for auxillary surfaces of torus surface definition
