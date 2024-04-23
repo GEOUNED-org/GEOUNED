@@ -30,13 +30,10 @@ step_files = list(path_to_cad.rglob("*.stp")) + list(path_to_cad.rglob("*.step")
 step_files.remove(Path("testing/inputSTEP/large/SCDR.stp"))
 step_files.remove(Path("testing/inputSTEP/placa.stp"))
 step_files.remove(Path("testing/inputSTEP/placa2.stp"))
-step_files.remove(Path("testing/inputSTEP/Misc/sphereBarCyl2.stp"))
-step_files.remove(Path("testing/inputSTEP/Misc/sphereBarCyl1.stp"))
 # required a few more particles needed but also losing particles
 step_files.remove(Path("testing/inputSTEP/DoubleCylinder/placa3.step"))
 step_files.remove(Path("testing/inputSTEP/DoubleCylinder/placa.stp"))
 # this face2.stp crashes when loading the geometry.xml
-step_files.remove(Path("testing/inputSTEP/Torus/face2.stp"))
 
 
 @pytest.mark.skipif(

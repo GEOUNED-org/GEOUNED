@@ -34,7 +34,7 @@ def test_conversion(input_step_file):
         "cellSummaryFile = False\n"
         "cellCommentFile = False\n"
         "debug = False\n"
-        "simplify = full\n"
+        "simplify = no\n"
         "[Options]\n"
         "forceCylinder = False\n"
         "splitTolerance = 0\n"
