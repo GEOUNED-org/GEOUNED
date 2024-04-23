@@ -49,9 +49,9 @@ The second step is to call or GEOUNED for CAD to CSG conversion or GEOReverse fo
 From CAD to CSG:
 
 ```python
-import geouned
+from geouned import GEOUNED
 inifile='Name of config file for forward conversion'
-GEO = GEOUNED.GEOUNED(inifile)
+GEO = GEOUNED(inifile)
 GEO.SetOptions()
 GEO.Start()
 ``` 
