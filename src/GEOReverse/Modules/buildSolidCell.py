@@ -1,12 +1,8 @@
-import FreeCAD, Part
-import BOPTools.SplitAPI
-from   BOPTools import GeneralFuseResult as GFR
-from GEOReverse.Modules.Utils.booleanFunction import BoolSequence
-from GEOReverse.Modules.splitFunction import SplitSolid,splitBase,joinBase
-from GEOReverse.Modules.Utils.BooleanSolids import buildCTableFromSolids
-from GEOReverse.Modules.options import Options
+import Part
 
-import math
+from .options import Options
+from .splitFunction import SplitSolid, joinBase, splitBase
+from .Utils.booleanFunction import BoolSequence
 
 
 def getPart(slist):

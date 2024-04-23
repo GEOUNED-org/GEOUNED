@@ -1,8 +1,10 @@
 #
 # Set of useful functions used in different parts of the code
 #
-import FreeCAD
 import math
+
+import FreeCAD
+
 
 def isSameValue(v1,v2,tolerance=1e-6):
     return abs(v1-v2) < tolerance 

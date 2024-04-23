@@ -1,12 +1,13 @@
-from    GEOUNED.Utils.booleanFunction import BoolSequence
-import GEOUNED.Utils.Geometry_GU as GU
-from   GEOUNED.Utils.BasicFunctions_part1  \
-       import isParallel, isOposite, isInLine, signPlane, isSameValue
-import  GEOUNED.Utils.BasicFunctions_part2 as BF
-import GEOUNED.Decompose.Decom_one as Decom
-from GEOUNED.Utils.Options.Classes import Tolerances as tol
-from GEOUNED.Utils.Options.Classes import Options as opt
-import FreeCAD,Part
+import FreeCAD
+import Part
+
+from ..Decompose import Decom_one as Decom
+from ..Utils import BasicFunctions_part2 as BF
+from ..Utils import Geometry_GU as GU
+from ..Utils.BasicFunctions_part1 import isOposite, isParallel
+from ..Utils.booleanFunction import BoolSequence
+from ..Utils.Options.Classes import Options as opt
+from ..Utils.Options.Classes import Tolerances as tol
 
 
 def commonEdge(face1,face2):
@@ -49,8 +50,6 @@ def isInverted(solid):
     u=(Range[1]+Range[0])/2.0
     v=(Range[3]+Range[2])/2.0
 
-    dist1=face.CenterOfMass.distanceToPoint(solid.BoundBox.Center)
-    dist2=face.CenterOfMass.add(face.normalAt(u,v).multiply(1.0e-6)).distanceToPoint(solid.BoundBox.Center)
     point2=face.CenterOfMass.add(face.normalAt(u,v).multiply(1.0e-6))
 
     if (solid.isInside(point2,1e-7,False)):
@@ -61,7 +60,6 @@ def isInverted(solid):
 
 def getId(facein, Surfaces):
     
-    surfin = str(facein)
     if   isParallel(facein.Axis,FreeCAD.Vector(1,0,0),tol.pln_angle) :
        P = 'PX'
     elif isParallel(facein.Axis,FreeCAD.Vector(0,1,0),tol.pln_angle) :

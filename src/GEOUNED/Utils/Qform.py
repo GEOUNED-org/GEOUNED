@@ -4,8 +4,11 @@
 #  
 #
 
-import FreeCAD, Part
 import math
+
+import FreeCAD
+import Part
+
 
 def RotationMatrix(u,v):
 

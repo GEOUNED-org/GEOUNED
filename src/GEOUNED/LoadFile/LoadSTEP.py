@@ -1,12 +1,15 @@
 #
 # Module to load a STEP file
 #
-import FreeCAD, Part
-from FreeCAD import Import
+import os
 import re
-import os.path
-import GEOUNED.Utils.Functions as UF
-import GEOUNED.LoadFile.LoadFunctions as LF
+
+import FreeCAD
+import Part
+from FreeCAD import Import
+
+from ..Utils import Functions as UF
+from . import LoadFunctions as LF
 
 
 # Paco mod

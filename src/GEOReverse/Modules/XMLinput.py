@@ -1,21 +1,20 @@
-import os
-import sys
-import re
-import FreeCAD
-from GEOReverse.Modules.remh import cell_card_string, remove_hash
-from GEOReverse.Modules.Objects import *
-from GEOReverse.Modules.XMLParser import get_cards
 import math
+import os
+import re
+import xml.etree.ElementTree as ET
+
+import FreeCAD
 import numpy as np
 from numpy import linalg as LA
-import xml.etree.ElementTree as ET 
+
+from .Objects import *
+from .XMLParser import get_cards
+
 
 class XMLinput:
     def __init__(self,name):
         if not os.path.isfile(name):
-            print("File %s does not exist" %name)
-            sys.exit()
-            return
+            raise FileNotFoundError(f"File {name} does not exist")
         
         tree = ET.parse(name)
         root = tree.getroot()

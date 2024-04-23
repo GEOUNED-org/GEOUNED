@@ -1,13 +1,15 @@
-import GEOUNED.Utils.Qform as Qform
-from GEOUNED.Utils.BasicFunctions_part1 import isParallel, isOposite
-from GEOUNED.Utils.Options.Classes import MCNP_numeric_format as nf
-from GEOUNED.Utils.Options.Classes import Tolerances as tol
-from GEOUNED.Utils.Options.Classes import Options as opt
-from GEOUNED.Write.StringFunctions import remove_redundant
-
-import FreeCAD
 import math
 import re
+
+import FreeCAD
+
+from ..Utils import Qform as Qform
+from ..Utils.BasicFunctions_part1 import isOposite, isParallel
+from ..Utils.Options.Classes import MCNP_numeric_format as nf
+from ..Utils.Options.Classes import Options as opt
+from ..Utils.Options.Classes import Tolerances as tol
+from .StringFunctions import remove_redundant
+
 
 class CardLine :
     def __init__(self,card,linesize=80,tabspace=6,fmt=''):
@@ -352,7 +354,7 @@ def OpenMCSurface(Type,surf,outXML=True,quadricForm=False):
         A=surf.Axis.x
         B=surf.Axis.y
         C=surf.Axis.z
-        D=surf.Axis.dot(surf.Position)
+        D=surf.Axis.dot(surf.Position)*0.1
         if   surf.Axis.isEqual(FreeCAD.Vector(1,0,0),tol.pln_angle) :
            if outXML :
               OMCsurf = 'x-plane'
@@ -387,51 +389,52 @@ def OpenMCSurface(Type,surf,outXML=True,quadricForm=False):
 
     
     elif (Type == 'Cylinder'):
-        Pos = surf.Center
+        Pos = surf.Center*0.1
+        Rad = surf.Radius*0.1
         Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
 
         if (isParallel(Dir,FreeCAD.Vector(1,0,0),tol.angle)):
            if outXML :
               OMCsurf = 'x-cylinder'
-              coeffs = '{:{xy}} {:{xy}} {:{r}}'.format(Pos.y, Pos.z, surf.Radius, xy=nf.C_xyz, r=nf.C_r) 
+              coeffs = '{:{xy}} {:{xy}} {:{r}}'.format(Pos.y, Pos.z, Rad, xy=nf.C_xyz, r=nf.C_r) 
            else:
               OMCsurf = 'XCylinder'
-              coeffs = 'y0={},z0={},r={}'.format(Pos.y, Pos.z, surf.Radius) 
+              coeffs = 'y0={},z0={},r={}'.format(Pos.y, Pos.z, Rad) 
 
         elif (isParallel(Dir,FreeCAD.Vector(0,1,0),tol.angle)):
            if outXML :
               OMCsurf = 'y-cylinder'
-              coeffs = '{:{xy}} {:{xy}} {:{r}}'.format(Pos.x, Pos.z, surf.Radius, xy=nf.C_xyz, r=nf.C_r)
+              coeffs = '{:{xy}} {:{xy}} {:{r}}'.format(Pos.x, Pos.z, Rad, xy=nf.C_xyz, r=nf.C_r)
            else:
               OMCsurf = 'YCylinder'
-              coeffs = 'x0={},z0={},r={}'.format(Pos.x, Pos.z, surf.Radius) 
+              coeffs = 'x0={},z0={},r={}'.format(Pos.x, Pos.z, Rad) 
 
         elif (isParallel(Dir,FreeCAD.Vector(0,0,1),tol.angle)):
            if outXML :
               OMCsurf = 'z-cylinder'
-              coeffs = '{:{xy}} {:{xy}} {:{r}}'.format(Pos.x, Pos.y, surf.Radius, xy=nf.C_xyz, r=nf.C_r) 
+              coeffs = '{:{xy}} {:{xy}} {:{r}}'.format(Pos.x, Pos.y, Rad, xy=nf.C_xyz, r=nf.C_r) 
            else:
               OMCsurf = 'ZCylinder'
-              coeffs = 'x0={},y0={},r={}'.format(Pos.x, Pos.y, surf.Radius) 
+              coeffs = 'x0={},y0={},r={}'.format(Pos.x, Pos.y, Rad) 
 
         else:
            if outXML :
               OMCsurf = 'quadric'
-              Q=Qform.QFormCyl(Dir,Pos,surf.Radius)
+              Q=Qform.QFormCyl(Dir,Pos,Rad)
               coeffs='{v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}} {v[3]:{aTof}} {v[4]:{aTof}} {v[5]:{aTof}} {v[6]:{gToi}} {v[7]:{gToi}} {v[8]:{gToi}} {v[9]:{j}}'\
                     .format(v=Q,aTof=nf.GQ_1to6,gToi=nf.GQ_7to9,j=nf.GQ_10) 
            else:
               if quadricForm :
                  OMCsurf = 'Quadric'
-                 Q=Qform.QFormCyl(Dir,Pos,surf.Radius)
+                 Q=Qform.QFormCyl(Dir,Pos,Rad)
                  coeffs='a={v[0]},b={v[1]},c={v[2]},d={v[3]},e={v[4]},f={v[5]},g={v[6]},h={v[7]},j={v[8]},k={v[9]}'.format(v=Q) 
               else :
                  OMCsurf = 'Cylinder'
-                 coeffs = 'x0={},y0={},z0={},r={},dx={},dy={},dz={}'.format(Pos.x, Pos.y, Pos.z, surf.Radius, Dir.x, Dir.y, Dir.z) 
+                 coeffs = 'x0={},y0={},z0={},r={},dx={},dy={},dz={}'.format(Pos.x, Pos.y, Pos.z, Rad, Dir.x, Dir.y, Dir.z) 
         
     elif (Type == 'Cone'):
-        Apex = surf.Apex
+        Apex = surf.Apex*0.1
         Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
         tan  = math.tan(surf.SemiAngle)
@@ -481,23 +484,28 @@ def OpenMCSurface(Type,surf,outXML=True,quadricForm=False):
                  coeffs='x0={},y0={},z0={},r2={},dx={},dy={},dz={}'.format(Apex.x, Apex.y, Apex.z, tan2, Dir.x, Dir.y, Dir.z) 
             
     elif (Type == 'Sphere'):
+        Center = surf.Center*0.1
+        Rad    = surf.Radius*0.1
         if outXML :
            OMCsurf = 'sphere'
-           coeffs = '{:{xyz}} {:{xyz}} {:{xyz}} {:{r}}'.format(surf.Center.x, surf.Center.y, surf.Center.z, surf.Radius, xyz=nf.S_xyz, r=nf.S_r) 
+           coeffs = '{:{xyz}} {:{xyz}} {:{xyz}} {:{r}}'.format(Center.x, Center.y, Center.z, Rad, xyz=nf.S_xyz, r=nf.S_r) 
         else:
            OMCsurf = 'Sphere'
-           coeffs = 'x0={},y0={},z0={},r={}'.format(surf.Center.x, surf.Center.y, surf.Center.z, surf.Radius) 
+           coeffs = 'x0={},y0={},z0={},r={}'.format(Center.x, Center.y, Center.z, Rad) 
 
 
     elif (Type == 'Torus'):
+        Center = surf.Center*0.1
+        minRad = surf.MinorRadius*0.1
+        majRad = surf.MajorRadius*0.1
         Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
         if outXML :
-           coeffs ='{:{xyz}} {:{xyz}} {:{xyz}} {:{r}} {:{r}} {:{r}}'.format(surf.Center.x, surf.Center.y, surf.Center.z,  \
-                                                                     surf.MajorRadius, surf.MinorRadius, surf.MinorRadius,\
+           coeffs ='{:{xyz}} {:{xyz}} {:{xyz}} {:{r}} {:{r}} {:{r}}'.format(Center.x, Center.y, Center.z,\
+                                                                     majRad, minRad, minRad,\
                                                                      xyz=nf.T_xyz,r=nf.T_r)     
         else:
-           coeffs ='x0={},y0={},z0={},r{},r1={},r2={}'.format(surf.Center.x, surf.Center.y, surf.Center.z, surf.MajorRadius, surf.MinorRadius, surf.MinorRadius)
+           coeffs ='x0={},y0={},z0={},r{},r1={},r2={}'.format(Center.x, Center.y, Center.z, majRad, minRad, minRad)
 
         if (isParallel(Dir,FreeCAD.Vector(1,0,0),tol.angle)):
              OMCsurf = 'x-torus' if outXML else 'XTorus'

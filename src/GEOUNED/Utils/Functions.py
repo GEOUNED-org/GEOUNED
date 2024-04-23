@@ -1,16 +1,20 @@
 #
 # Set of useful functions used in different parts of the code
 #
-import BOPTools.SplitAPI
-import GEOUNED.Utils.BasicFunctions_part2 as BF
-from GEOUNED.Utils.BasicFunctions_part1 import isParallel,\
-     Plane3PtsParams, PlaneParams, CylinderParams, ConeParams, SphereParams, TorusParams 
-from GEOUNED.Utils.Options.Classes import Tolerances as tol
-from GEOUNED.Utils.Options.Classes import Options
-import copy
-import FreeCAD, Part
 import math
+
+import BOPTools.SplitAPI
+import FreeCAD
 import numpy as np
+import Part
+
+from ..Utils.BasicFunctions_part1 import (ConeParams, CylinderParams,
+                                          Plane3PtsParams, PlaneParams,
+                                          SphereParams, TorusParams,
+                                          isParallel)
+from ..Utils.Options.Classes import Options
+from ..Utils.Options.Classes import Tolerances as tol
+from . import BasicFunctions_part2 as BF
 
 
 def getBox(comp):
@@ -243,8 +247,7 @@ class GEOUNED_Surface:
           if Face == 'Build' : self.buildSurface()
                   
        if self.shape == 'Build' :
-         print('stop',params,boundBox)
-         exit()
+         raise ValueError(f'stop {params} {boundBox}')
        return       
            
        

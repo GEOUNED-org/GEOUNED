@@ -11,19 +11,18 @@
 # 5. Eliminated the only MCNP related parts
 # 6. Added some comments to remind
 
-from datetime import datetime
-from GEOUNED.Utils.Functions import Surfaces_dict
-from GEOUNED.Utils.BasicFunctions_part1 import pointsToCoeffs,isOposite
-from GEOUNED.Write.Functions import PHITSSurface, changeSurfSign, writePHITSCellDef,CardLine,CellString
-from GEOUNED.Utils.Options.Classes import MCNP_numeric_format as nf
-from GEOUNED.Utils.Options.Classes import Tolerances as tol
-from GEOUNED.Utils.Options.Classes import Options as opt
-from GEOUNED.CodeVersion import *
-import FreeCAD
-import copy
-import math
 import re
-import os
+from datetime import datetime
+
+import FreeCAD
+
+from ..CodeVersion import *
+from ..Utils.BasicFunctions_part1 import isOposite, pointsToCoeffs
+from ..Utils.Functions import Surfaces_dict
+from ..Utils.Options.Classes import Options as opt
+from ..Write.Functions import (CellString, PHITSSurface, changeSurfSign,
+                               writePHITSCellDef)
+
 
 class PHITS_input:
     def __init__(self,Meta,Surfaces,setting) :

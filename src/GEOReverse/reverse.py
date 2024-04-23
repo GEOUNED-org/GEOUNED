@@ -1,12 +1,12 @@
-import sys
-import FreeCAD, Part, Import
+import FreeCAD
+import Import
 
-from GEOReverse.Modules.MCNPinput import MCNPinput
-from GEOReverse.Modules.XMLinput import XMLinput
-from GEOReverse.Modules.buildCAD import buildCAD,makeTree
-from GEOReverse.Modules.Objects import CADCell
-from GEOReverse.Modules.processInp import setOptions 
-from GEOReverse.CodeVersion import *
+from .CodeVersion import *
+from .Modules.buildCAD import buildCAD, makeTree
+from .Modules.MCNPinput import MCNPinput
+from .Modules.Objects import CADCell
+from .Modules.processInp import setOptions
+from .Modules.XMLinput import XMLinput
 
 
 def reverse(optFile='configRevese.ini') :
@@ -30,14 +30,17 @@ def reverse(optFile='configRevese.ini') :
    UnivCell = CADCell()
    UnivCell.shape = UnivCell.makeBox(FreeCAD.BoundBox(*outBox))
 
-#get geometry definition from MCNP input
+   # get geometry definition from MCNP input
    if inFormat == 'mcnp':
       geom = MCNPinput(geomfile)
    elif inFormat == 'openMC_XML':
       geom = XMLinput(geomfile)
    else:
-      print('input format type {} not supported'.format(inFormat))
-      exit()
+      msg = (
+         f'input format type {inFormat} is not supported.'
+         'Supported options are "mcnp" or "openMC_XML"'
+      )
+      raise ValueError(msg)
 
    CADCells,fails = buildCAD(UnivCell,geom,CADselection)
 

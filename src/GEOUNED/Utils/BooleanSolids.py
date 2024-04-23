@@ -2,13 +2,13 @@
 #   Conversion to MCNP v0.0 
 #   Only one solid and planar surfaces
 #
-import FreeCAD
 import math
-import re
-from GEOUNED.Utils.Functions import GEOUNED_Surface, splitBOP
-from GEOUNED.Utils.booleanFunction import BoolSequence
-from GEOUNED.Utils.Options.Classes import Options as opt 
 
+import FreeCAD
+
+from ..Utils.booleanFunction import BoolSequence
+from ..Utils.Functions import GEOUNED_Surface, splitBOP
+from ..Utils.Options.Classes import Options as opt
 
 BoolVals = (None,True,False)
 
@@ -531,7 +531,7 @@ def checkSign(solid,surf):
    elif surf.Type == 'Cone':
        r = point - surf.Surf.Apex
        r.normalize()
-       z  = surf.Surf.Axis.dot(r)
+       z  = round(surf.Surf.Axis.dot(r),15)
        alpha = math.acos(z)
 
        if alpha > surf.Surf.SemiAngle :

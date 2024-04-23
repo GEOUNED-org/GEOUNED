@@ -1,33 +1,36 @@
 #
 # Set of useful functions used in different parts of the code
 #
-from GEOUNED.Utils.BasicFunctions_part1 \
-     import isParallel, isOposite,isSameValue, isInTolerance, isInLine, isInPlane
-from GEOUNED.Write.Functions import MCNPSurface
-import FreeCAD
 import math
 
+import FreeCAD
+
+from ..Utils.BasicFunctions_part1 import (isInLine, isInPlane, isInTolerance,
+                                          isOposite, isParallel, isSameValue)
+from ..Write.Functions import MCNPSurface
 
 sameSurfFic = open('fuzzySurfaces','w')
-def Fuzzy(index,dtype,surf1,surf2,val):
+def Fuzzy(index,dtype,surf1,surf2,val,tol):
+
+    same =  val <= tol 
 
     if dtype == 'plane':
        p1str = MCNPSurface(index,'Plane',surf1)
        p2str = MCNPSurface(0,'Plane',surf2)
-       line = 'Plane distance : {} \n {}\n {}\n\n'.format(val,p1str,p2str) 
+       line = 'Same surface : {}\nPlane distance / Tolerance : {} {}\n {}\n {}\n\n'.format(same,val,tol,p1str,p2str) 
        sameSurfFic.write(line) 
 
     elif dtype == 'cylRad':
       cyl1str = MCNPSurface(index,'Cylinder',surf1)
       cyl2str = MCNPSurface(0,'Cylinder',surf2)
-      line = 'Diff Radius: {} \n {}\n {}\n\n'.format(val,cyl1str,cyl2str) 
+      line = 'Same surface : {}\nDiff Radius / Tolerance: {} {}\n {}\n {}\n\n'.format(same,val,tol,cyl1str,cyl2str) 
       sameSurfFic.write(line)
       
     elif dtype == 'cylAxs':
       cyl1str = MCNPSurface(index,'Cylinder',surf1)
       cyl2str = MCNPSurface(0,'Cylinder',surf2)
       c12 = surf1.Center - surf2.Center
-      line = 'Dist Axis: {} \n {}\n {}\n\n'.format(val,cyl1str,cyl2str)  
+      line = 'Same surface : {}\nDist Axis / Tolerance: {} {}\n {}\n {}\n\n'.format(same,val,tol,cyl1str,cyl2str)  
       sameSurfFic.write(line)
       
 def isSamePlane(p1,p2,dtol=1e-6,atol=1e-6,relTol=True,fuzzy=(False,0)):     
@@ -42,7 +45,7 @@ def isSamePlane(p1,p2,dtol=1e-6,atol=1e-6,relTol=True,fuzzy=(False,0)):
           tol = dtol
 
       isSame,isFuzzy = isInTolerance(d,tol,0.5*tol,2*tol)   
-      if isFuzzy and fuzzy[0]: Fuzzy(fuzzy[1],'plane',p2,p1,d)
+      if isFuzzy and fuzzy[0]: Fuzzy(fuzzy[1],'plane',p2,p1,d,tol)
       return isSame 
     return False     
     
@@ -54,7 +57,7 @@ def isSameCylinder(cyl1,cyl2,dtol=1e-6, atol=1e-6, relTol=True, fuzzy=(False,0))
        rtol = dtol
        
     isSameRad,isFuzzy = isInTolerance(cyl2.Radius-cyl1.Radius,rtol,0.5*rtol,2*rtol)   
-    if isFuzzy and fuzzy[0]: Fuzzy(fuzzy[1],'cylRad',cyl2,cyl1,abs(cyl2.Radius-cyl1.Radius)) 
+    if isFuzzy and fuzzy[0]: Fuzzy(fuzzy[1],'cylRad',cyl2,cyl1,abs(cyl2.Radius-cyl1.Radius),rtol) 
 
     if isSameRad :
        if isParallel(cyl1.Axis,cyl2.Axis,atol):
@@ -67,7 +70,7 @@ def isSameCylinder(cyl1,cyl2,dtol=1e-6, atol=1e-6, relTol=True, fuzzy=(False,0))
              tol = dtol
           
           isSameCenter,isFuzzy = isInTolerance(d,tol,0.5*tol,2*tol) 
-          if isFuzzy and fuzzy[0]: Fuzzy(fuzzy[1],'cylAxs',cyl1,cyl2,d) 
+          if isFuzzy and fuzzy[0]: Fuzzy(fuzzy[1],'cylAxs',cyl1,cyl2,d,tol) 
     
           return isSameCenter  
     return False
