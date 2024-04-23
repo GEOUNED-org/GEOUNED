@@ -1,5 +1,5 @@
 [project]
-name = "GEOUNED"
+name = "geouned"
 version = "1.0.1"
 authors = [
   { name="Juan-Pablo Catalan", email="jpcatalan@ind.uned.es" },
