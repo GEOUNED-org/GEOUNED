@@ -1,13 +1,15 @@
-import GEOUNED.Utils.Qform as Qform
-from GEOUNED.Utils.BasicFunctions_part1 import isParallel, isOposite
-from GEOUNED.Utils.Options.Classes import MCNP_numeric_format as nf
-from GEOUNED.Utils.Options.Classes import Tolerances as tol
-from GEOUNED.Utils.Options.Classes import Options as opt
-from GEOUNED.Write.StringFunctions import remove_redundant
-
-import FreeCAD
 import math
 import re
+
+import FreeCAD
+
+from ..Utils import Qform as Qform
+from ..Utils.BasicFunctions_part1 import isOposite, isParallel
+from ..Utils.Options.Classes import MCNP_numeric_format as nf
+from ..Utils.Options.Classes import Options as opt
+from ..Utils.Options.Classes import Tolerances as tol
+from .StringFunctions import remove_redundant
+
 
 class CardLine :
     def __init__(self,card,linesize=80,tabspace=6,fmt=''):

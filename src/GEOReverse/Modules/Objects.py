@@ -1,10 +1,13 @@
-from GEOReverse.Modules.buildSolidCell import BuildSolid
-import FreeCAD, Part
-import numpy as np
 import math
-from GEOReverse.Modules.remh import cline
-from GEOReverse.Modules.Utils.booleanFunction import outterTerms,BoolSequence
-from GEOReverse.Modules.Utils.BooleanSolids import buildCTableFromSolids
+
+import FreeCAD
+import numpy as np
+import Part
+
+from .buildSolidCell import BuildSolid
+from .remh import cline
+from .Utils.booleanFunction import BoolSequence, outterTerms
+
 
 class CADCell:
     def __init__(self,stringCell=None):

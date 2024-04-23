@@ -2,11 +2,12 @@
 #   Conversion to MCNP v0.0 
 #   Only one solid and planar surfaces
 #
-import FreeCAD
-import BOPTools.SplitAPI
 import math
-import re
-from GEOReverse.Modules.Utils.booleanFunction import BoolSequence
+
+import BOPTools.SplitAPI
+import FreeCAD
+
+from .booleanFunction import BoolSequence
 
 BoolVals = (None,True,False)
 

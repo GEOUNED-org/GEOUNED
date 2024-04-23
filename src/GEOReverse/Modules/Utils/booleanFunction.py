@@ -1,4 +1,5 @@
 import re
+
 mostinner=re.compile(r"\([^\(^\)]*\)")                                      # identify most inner parentheses
 number   =re.compile(r"(?P<value>[-+]?\d+)")
 mix      =re.compile(r"(?P<value>([-+]?\d+|\[0+\]))")

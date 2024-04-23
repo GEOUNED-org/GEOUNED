@@ -1,5 +1,6 @@
 import configparser
-from GEOReverse.Modules.options import Options
+
+from .options import Options
 
 
 def setOptions(optionFile):

@@ -2,7 +2,7 @@
 #
 
 # We load the STEP and the materials
-import sys
+
 # this try except attempts to import freecad (lowercase) which is the conda
 # package name for FreeCAD (mixed case) upon import the conda package appends
 # the sys path for Conda installed FreeCAD, consequently FreeCAD can then be
@@ -11,25 +11,24 @@ try:
     import freecad
 except:
     pass
-import FreeCAD,Part
 import configparser
-
-from os import path,mkdir
 from datetime import datetime
+from os import mkdir, path
 
+import FreeCAD
+import Part
 
-import GEOUNED.LoadFile.LoadSTEP as Load
-import GEOUNED.Decompose.Decom_one as Decom
-import GEOUNED.Utils.Functions as UF
-import GEOUNED.Conversion.CellDefinition as Conv
-from GEOUNED.Write.Functions import writeMCNPCellDef
-from GEOUNED.Write.WriteFiles import writeGeometry
-from GEOUNED.CodeVersion import *
-from GEOUNED.Utils.Options.Classes import Tolerances, MCNP_numeric_format, Options 
-from GEOUNED.Utils.BooleanSolids import buildCTableFromSolids
-from GEOUNED.Cuboid.translate import translate
-
-import GEOUNED.Void.Void as Void
+from .CodeVersion import *
+from .Conversion import CellDefinition as Conv
+from .Cuboid.translate import translate
+from .Decompose import Decom_one as Decom
+from .LoadFile import LoadSTEP as Load
+from .Utils import Functions as UF
+from .Utils.BooleanSolids import buildCTableFromSolids
+from .Utils.Options.Classes import MCNP_numeric_format, Options, Tolerances
+from .Void import Void as Void
+from .Write.Functions import writeMCNPCellDef
+from .Write.WriteFiles import writeGeometry
 
 
 class GEOUNED() :

@@ -1,12 +1,13 @@
 #
 # Set of useful functions used in different parts of the code
 #
-from GEOUNED.Utils.BasicFunctions_part1 \
-     import isParallel, isOposite,isSameValue, isInTolerance, isInLine, isInPlane
-from GEOUNED.Write.Functions import MCNPSurface
-import FreeCAD
 import math
 
+import FreeCAD
+
+from ..Utils.BasicFunctions_part1 import (isInLine, isInPlane, isInTolerance,
+                                          isOposite, isParallel, isSameValue)
+from ..Write.Functions import MCNPSurface
 
 sameSurfFic = open('fuzzySurfaces','w')
 def Fuzzy(index,dtype,surf1,surf2,val,tol):

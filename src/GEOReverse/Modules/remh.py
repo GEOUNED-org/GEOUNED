@@ -1,8 +1,5 @@
-import sys
-import re
 import math
-   
-
+import re
 
 #########################################
 # define patterns to be found in string #

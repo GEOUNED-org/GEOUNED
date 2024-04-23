@@ -1,4 +1,5 @@
 import string
+
 version = '3.6'
 
 def make_label(item):

@@ -1,9 +1,7 @@
-import FreeCAD, Part
 import BOPTools.SplitAPI
-from GEOReverse.Modules.buildSolidCell import FuseSolid
-from GEOReverse.Modules.Utils.BooleanSolids import buildCTableFromSolids
-from GEOReverse.Modules.Utils.booleanFunction import BoolSequence
 
+from .buildSolidCell import FuseSolid
+from .Utils.booleanFunction import BoolSequence
 
 
 def buildCAD(UnivCell,data,config):
