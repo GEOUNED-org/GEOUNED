@@ -243,8 +243,7 @@ class GEOUNED_Surface:
           if Face == 'Build' : self.buildSurface()
                   
        if self.shape == 'Build' :
-         print('stop',params,boundBox)
-         exit()
+         raise ValueError(f'stop {params} {boundBox}')
        return       
            
        

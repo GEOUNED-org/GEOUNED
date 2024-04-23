@@ -3,6 +3,14 @@
 
 # We load the STEP and the materials
 import sys
+# this try except attempts to import freecad (lowercase) which is the conda
+# package name for FreeCAD (mixed case) upon import the conda package appends
+# the sys path for Conda installed FreeCAD, consequently FreeCAD can then be
+# found by subsequent import statements through out the code base
+try:
+    import freecad
+except:
+    pass
 import FreeCAD,Part
 import configparser
 
@@ -76,9 +84,13 @@ class GEOUNED() :
 
                  elif key == 'stepFile':
                      value = config.get('Files',key).strip()
+                     lst = value.split()
                      if value[0] in ('(','[')  and value[-1] in (']',')') :
                         data=value[1:-1].split(',')
+                        data = [ x.strip() for x in data ]
                         self.set(key,data)
+                     elif len(lst) > 1:
+                        self.set(key,lst)
                      else :
                         self.set(key, value)   
 
@@ -205,18 +217,20 @@ class GEOUNED() :
 
        code_setting = self.__dict__
        if code_setting is None:
-          print('Cannot run the code. Input are missing')
-          exit()
+          raise ValueError('Cannot run the code. Input are missing')
        if code_setting['stepFile'] == '':
-          print('Cannot run the code. Step file name is missing')
-          exit()
+          raise ValueError('Cannot run the code. Step file name is missing')
           
        stepfile = code_setting['stepFile']
        matfile  = code_setting['matFile']
 
-       if not path.isfile(stepfile) :
-          print('Step file {} not found.\nStop.'.format(stepfile))
-          exit()
+       if isinstance(stepfile,(tuple,list)):
+         for stp in stepfile:
+           if not path.isfile(stp) :
+              raise FileNotFoundError(f'Step file {stp} not found.\nStop.')
+       else:
+         if not path.isfile(stepfile) :
+            raise FileNotFoundError(f'Step file {stepfile} not found.\nStop.')
 
        startTime = datetime.now()
 
@@ -251,9 +265,11 @@ class GEOUNED() :
               if m.IsEnclosure: continue 
               solids.extend(m.Solids)
           Part.makeCompound(solids).exportStep(code_setting['exportSolids'])
-          print ('Solids exported in file :{}'.format(code_setting['exportSolids']))
-          print ('GEOUNED Finish. No solid translation performed.')
-          sys.exit()
+          msg = (
+                  f'Solids exported in file {code_setting["exportSolids"]}\n'
+                  'GEOUNED Finish. No solid translation performed.'
+          )
+          raise ValueError(msg)
 
        # set up Universe
        if EnclosureList :

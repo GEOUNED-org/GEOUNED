@@ -1,8 +1,9 @@
 import sys
 import os
 import subprocess
+from pathlib import Path
 
-sys.path.append('/home/patrick/recherche/GitRepo/GEOUNED/src')
+sys.path.append(str(Path(__file__).parents[1]/'src'))
 sys.path.append('/usr/lib64/freecad/lib64/')
 
 from GEOUNED import GEOUNED

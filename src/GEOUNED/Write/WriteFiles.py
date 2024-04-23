@@ -63,4 +63,3 @@ def writeGeometry(UniverseBox,MetaList,Surfaces,code_setting):
        PHITSfile = PHITS_input(MetaList,Surfaces,code_setting)
        # PHITSfile.setSDEF_PHITS((PHITS_outSphere,PHITS_outBox))
        PHITSfile.writePHITS(phitsFilename)   
-       

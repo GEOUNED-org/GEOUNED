@@ -185,8 +185,8 @@ class solid_GU():
        params.sort()
        V0 = params[0][0]
        V1 = params[-1][1]
-       if isSameValue(arcLength, twoPi, tol.relativePrecision ):
-           mergedParams = (True,(V0,V1))
+       if arcLength >= twoPi*(1.-tol.relativePrecision):
+           mergedParams = (True,(V0,V0+twoPi))
        else:
            if isSameValue(V0, 0., tol.relativePrecision ) and isSameValue(V1, twoPi, tol.relativePrecision ) :
               for i in range(len(params)-1):

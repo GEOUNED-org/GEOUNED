@@ -12,9 +12,7 @@ from numpy import linalg as LA
 class MCNPinput:
     def __init__(self,name):
         if not os.path.isfile(name):
-            print("File %s does not exist" %name)
-            sys.exit()
-            return
+            raise FileNotFoundError (f"File {name} does not exist")
         self.__inputcards__  = list(mp.get_cards(name))
         self.Transformations = self.__getTransList__()
         return

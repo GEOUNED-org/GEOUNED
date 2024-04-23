@@ -8,3 +8,4 @@ docs/source/_autosummary/*
 docs/jupyter_execute
 .pytest_cache/**
 build/
+tests_outputs/

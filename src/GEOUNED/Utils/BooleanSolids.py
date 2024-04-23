@@ -531,7 +531,7 @@ def checkSign(solid,surf):
    elif surf.Type == 'Cone':
        r = point - surf.Surf.Apex
        r.normalize()
-       z  = surf.Surf.Axis.dot(r)
+       z  = round(surf.Surf.Axis.dot(r),15)
        alpha = math.acos(z)
 
        if alpha > surf.Surf.SemiAngle :

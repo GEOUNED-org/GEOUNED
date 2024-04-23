@@ -1,0 +1,62 @@
+name: CI testing
+
+on:
+    pull_request:
+      branches:
+        - dev
+        - main
+    push:
+      branches:
+        - main
+
+jobs:
+    testing:
+      name: CI (Python=${{ matrix.python-version }}, OS=${{ matrix.os }})
+      runs-on: ${{ matrix.os }}
+      defaults:
+        run:
+          shell: bash -el {0}
+      strategy:
+        matrix:
+          os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+          python-version: ["3.11"]
+
+          include:
+            - python-version: "3.8"
+              os: "ubuntu-latest"
+            - python-version: "3.9"
+              os: "ubuntu-latest"
+            - python-version: "3.10"
+              os: "ubuntu-latest"
+      steps:
+        - name: checkout actions
+          uses: actions/checkout@v4
+        - uses: conda-incubator/setup-miniconda@v3
+          with:
+            auto-update-conda: true
+            python-version: ${{ matrix.python-version }}
+            channels: conda-forge
+
+        - name: install dependencies
+          run: conda install -c conda-forge freecad -y
+
+        - name: install package
+          run: |
+            python -m pip install --upgrade pip
+            python -m pip install .
+            python -c 'import GEOUNED'
+            python -c 'from GEOReverse import reverse'
+            python -m pip install .[tests]
+
+        - name: testing GEOUNED functionality
+          run: python -m pytest -v tests/test_convert.py
+
+        - name: install openmc
+          if: ${{ matrix.os == 'ubuntu-latest'}}
+          run: conda install -c conda-forge openmc -y
+
+        - name: testing with OpenMC
+          if: ${{ matrix.os == 'ubuntu-latest'}}
+          run: |
+            python -m pytest -v tests/test_volumes.py
+            python -m pytest -v tests/test_transport.py
