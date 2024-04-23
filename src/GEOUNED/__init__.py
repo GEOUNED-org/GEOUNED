@@ -272,7 +272,6 @@ class GEOUNED() :
        if not Options.Facets:
 
           # decompose all solids in elementary solids (convex ones)
-          print(len(MetaList))
           warningSolidList = DecomposeSolids(MetaList,Surfaces,UniverseBox,code_setting,True)
 
           # decompose Enclosure solids
