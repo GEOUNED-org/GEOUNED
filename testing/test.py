@@ -6,7 +6,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parents[1]/'src'))
 sys.path.append('/usr/lib64/freecad/lib64/')
 
-from GEOUNED import GEOUNED
+from geouned import GEOUNED
 
 def setInput(inName,inpDir,outDir):
 
