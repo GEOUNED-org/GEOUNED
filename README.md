@@ -1,4 +1,4 @@
-[![CI testing](https://github.com/GEOUNED-org/GEOUNED/actions/workflows/ci.yml/badge.svg?branch=dev)](https://github.com/GEOUNED-org/GEOUNED/actions/workflows/ci.yml)
+[![CI testing](https://github.com/GEOUNED-org/GEOUNED/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/GEOUNED-org/GEOUNED/actions/workflows/ci.yml)
 
 # GEOUNED
 A tool to convert from CAD to CSG & CSG to CAD for Monte Carlo transport codes (MCNP & OpenMC).
