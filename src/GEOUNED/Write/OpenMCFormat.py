@@ -57,6 +57,7 @@ class OpenMC_input:
     def __write_xml_cells__(self,cell):
        """ Write the cell in xml OpenMC format """
        index = cell.label
+       cellName = ". ".join(cell.Comments.splitlines())
        if cell.__id__ is None : return
 
        if cell.Material == 0: 
@@ -64,9 +65,10 @@ class OpenMC_input:
        else:
           matName = '{}'.format(cell.Material) 
 
-       OMCcell = '  <cell id="{}" material="{}" region="{}" universe="1"/>\n'.format( \
+       OMCcell = '  <cell id="{}" material="{}" name="{}" region="{}" universe="1"/>\n'.format( \
                                        index,\
                                        matName,\
+                                       cellName,\
                                        writeOpenMCregion(cell.Definition,'XML') ) 
        self.inpfile.write(OMCcell)
        return
@@ -146,7 +148,7 @@ import openmc
 
 
     def __write_py_surfaces__(self,surface,boundary=False):
-       """ Write the surfaces in xml OpenMC format """
+       """ Write the surfaces in python OpenMC format """
 
        surfType,coeffs = OpenMCSurface(surface.Type, surface.Surf, outXML = False, quadricForm = opt.quadricPY)
 
@@ -174,15 +176,16 @@ import openmc
 
 
     def __write_py_cells__(self,cell):
-       """ Write the cell in xml OpenMC format """
+       """ Write the cell in python OpenMC format """
        index = cell.label
+       cellName = ". ".join(cell.Comments.splitlines())
        if cell.__id__ is None : return
 
        if cell.Material == 0: 
-          OMCcell = 'C{} = openmc.Cell(region={})\n'.format(index, writeOpenMCregion(cell.Definition,'PY') ) 
+          OMCcell = 'C{} = openmc.Cell(name="{}", region={})\n'.format(index, cellName, writeOpenMCregion(cell.Definition,'PY') )
        else:
           matName = 'M{}'.format(cell.Material) 
-          OMCcell = 'C{} = openmc.Cell(fill={}, region={})\n'.format(index, matName, writeOpenMCregion(cell.Definition,'PY') ) 
+          OMCcell = 'C{} = openmc.Cell(name="{}", fill={}, region={})\n'.format(index, cellName, matName, writeOpenMCregion(cell.Definition,'PY') )
        self.inpfile.write(OMCcell)
        return
 
