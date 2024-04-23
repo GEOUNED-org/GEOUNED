@@ -1,3 +1,2 @@
-class Options :
-   splitTolerance = 1.e-2
-
+class Options:
+    splitTolerance = 1.0e-2

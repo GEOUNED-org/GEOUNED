@@ -1,4 +1,4 @@
-''' Modification from 0.9.5 
+""" Modification from 0.9.5 
   - volInput card name substituted by volSDEF card name
   - new card volCARD (values : True/False) used to insert the CAD cell volume into the cell definition
     using the MCNP card VOL. Default value True  
@@ -58,8 +58,7 @@ Modification in 0.9.7 Release Date 06/12/2022
   - Change tolerance values if BOPTsplit function crash
   - fix some bugs with Torus (not all)
   - implementation of the geometry conversion to PHITS code input file (by T. Okano Nissin High Voltage Corporation (NHVC))
-'''
+"""
 
-
-GEOUNED_Version = '1.0.1'
-GEOUNED_ReleaseDate = '19/03/2024'
+GEOUNED_Version = "1.0.1"
+GEOUNED_ReleaseDate = "19/03/2024"
