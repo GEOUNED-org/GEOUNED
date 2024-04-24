@@ -598,7 +598,7 @@ def GenTorusAnnexVSurface(face,Vparams,forceCylinder=False):
        Apex   = face.Surface.Center + za * axis
        semiAngle = abs(math.atan(d1/(z1-za)))
 
-       ConeAxis = axis if (face.Surface.Center.dot(axis) + z1 - Apex.dot(axis)) > 0.0 else -axis
+       ConeAxis = axis if (z1 - za) > 0.0 else -axis
 
        Vmid = (Vparams[0]+Vparams[1])*0.5
        pMid = face.valueAt(0,Vmid) - face.Surface.Center
