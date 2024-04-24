@@ -161,27 +161,15 @@ class MCNPinput:
                 trl[c.name] = getTransMatrix(trValues, c.unit)
         return trl
 
-
+# fmt: off
 def getTransMatrix(trsf, unit="", scale=10.0):
 
     if len(trsf) == 3:
         trsfMat = FreeCAD.Matrix(
-            1,
-            0,
-            0,
-            trsf[0] * scale,
-            0,
-            1,
-            0,
-            trsf[1] * scale,
-            0,
-            0,
-            1,
-            trsf[2] * scale,
-            0,
-            0,
-            0,
-            1,
+            1, 0, 0, trsf[0] * scale,
+            0, 1, 0, trsf[1] * scale,
+            0, 0, 1, trsf[2] * scale,
+            0, 0, 0, 1,
         )
     else:
         if unit == "*":
@@ -191,23 +179,12 @@ def getTransMatrix(trsf, unit="", scale=10.0):
             coeff = trsf[3:12]
 
         trsfMat = FreeCAD.Matrix(
-            coeff[0],
-            coeff[3],
-            coeff[6],
-            trsf[0] * scale,
-            coeff[1],
-            coeff[4],
-            coeff[7],
-            trsf[1] * scale,
-            coeff[2],
-            coeff[5],
-            coeff[8],
-            trsf[2] * scale,
-            0,
-            0,
-            0,
-            1,
+            coeff[0], coeff[3], coeff[6], trsf[0] * scale,
+            coeff[1], coeff[4], coeff[7], trsf[1] * scale,
+            coeff[2], coeff[5], coeff[8], trsf[2] * scale,
+            0, 0, 0, 1,
         )
+# fmt: on
 
 
 def substituteLikeCell(universe, Surfaces):
