@@ -1,9 +1,9 @@
-
 """
 The tests check the resulting volume of the CSG cells using OpenMC.
 The tests assumes that the test_convert script has previously been run and
 that xml files exist in the tests_outputs folder.
 """
+
 import sys
 import math
 import os
@@ -20,39 +20,37 @@ import openmc
 
 with open("cross_sections.xml", "w") as file:
     file.write(
-    """
+        """
         <?xml version='1.0' encoding='UTF-8'?>
         <cross_sections>
         <library materials="H1" path="" type="neutron"/>
         </cross_sections>
     """
     )
-openmc.config['cross_sections'] = Path("cross_sections.xml").resolve()
+openmc.config["cross_sections"] = Path("cross_sections.xml").resolve()
 
 path_to_cad = Path("testing/inputSTEP")
 step_files = list(path_to_cad.rglob("*.stp")) + list(path_to_cad.rglob("*.step"))
-step_files.remove(Path('testing/inputSTEP/Misc/rails.stp'))
+step_files.remove(Path("testing/inputSTEP/Misc/rails.stp"))
 # # this checks if the tests are being run a github action runner or not
 if os.getenv("GITHUB_ACTIONS"):
     # reduced samples as github action runners have 2 threads and more samples
     # is not needed for the smaller models tested. This allows the CI to
     # quickly test the smaller models
-    samples=4_000_000
-    rel_tol=0.05
+    samples = 4_000_000
+    rel_tol = 0.05
 else:
     # samples for local run can be larger as threads is likely to be larger
-    samples=400_000_000
+    samples = 400_000_000
     # acceptable tolerance can also be smaller
-    rel_tol=0.01
+    rel_tol = 0.01
 
 
 @pytest.mark.skipif(
     sys.platform in ["win32", "darwin"],
-    reason="OpenMC doesn't install on Windows currently and is not well tested on Mac"
+    reason="OpenMC doesn't install on Windows currently and is not well tested on Mac",
 )
-@pytest.mark.parametrize(
-    "input_step_file", step_files
-)
+@pytest.mark.parametrize("input_step_file", step_files)
 def test_volumes(input_step_file):
 
     output_dir = Path("tests_outputs") / input_step_file.with_suffix("")
@@ -77,8 +75,22 @@ def test_volumes(input_step_file):
     for solid, (cell_id, cell) in zip(result.Solids, cells.items()):
 
         bb = solid.BoundBox
-        llx, lly, llz, urx, ury, urz = bb.XMin, bb.YMin, bb.ZMin, bb.XMax, bb.YMax, bb.ZMax
-        llx, lly, llz, urx, ury, urz = llx/10, lly/10, llz/10, urx/10, ury/10, urz/10
+        llx, lly, llz, urx, ury, urz = (
+            bb.XMin,
+            bb.YMin,
+            bb.ZMin,
+            bb.XMax,
+            bb.YMax,
+            bb.ZMax,
+        )
+        llx, lly, llz, urx, ury, urz = (
+            llx / 10,
+            lly / 10,
+            llz / 10,
+            urx / 10,
+            ury / 10,
+            urz / 10,
+        )
 
         cell_vol_calc = openmc.VolumeCalculation(
             domains=[cell],
@@ -96,7 +108,7 @@ def test_volumes(input_step_file):
     settings.run_mode = "volume"
     model = openmc.Model(geometry, materials, settings)
 
-    model.export_to_model_xml(path=openmc_xml_file.with_name('model.xml'))
+    model.export_to_model_xml(path=openmc_xml_file.with_name("model.xml"))
     openmc.run(cwd=output_dir)
 
     for solid, (cell_id, cell) in zip(result.Solids, cells.items()):
