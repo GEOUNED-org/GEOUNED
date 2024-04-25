@@ -41,7 +41,6 @@ def Fuzzy(index, dtype, surf1, surf2, val, tol):
     elif dtype == "cylAxs":
         cyl1str = MCNPSurface(index, "Cylinder", surf1)
         cyl2str = MCNPSurface(0, "Cylinder", surf2)
-        c12 = surf1.Center - surf2.Center
         line = "Same surface : {}\nDist Axis / Tolerance: {} {}\n {}\n {}\n\n".format(
             same, val, tol, cyl1str, cyl2str
         )

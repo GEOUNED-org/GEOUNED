@@ -1074,7 +1074,7 @@ def get_hyperboloid_parameters(eVal, eVect, T, k, iaxis):
     cylTan = 1e3
     coneRad = 0.1
 
-    elliposoid = False
+    ellipsoid = False
     if iaxis is None:
         iaxis = np.argmin(np.abs(eVal))
         ellipsoid = True
@@ -1101,7 +1101,7 @@ def get_hyperboloid_parameters(eVal, eVect, T, k, iaxis):
     elif minorRad < coneRad:
         return get_cone_parameters(eVal, eVect, T, iaxis)
     else:
-        if elliposoid:
+        if ellipsoid:
             print("ellipical hyperboloid not implemented")
             print("single radius from {} eigen Value will be used".format(minorRad))
         return "hyperboloid", (
@@ -1199,7 +1199,7 @@ def getGQAxis(eVal, k):
             ek = (0, -1)
         elif np.sign(e0) == np.sign(e1) and np.sign(e1) == np.sign(
             e2
-        ):  # e1*X^2 + e2*Y^2 + e0*Z^2 - |k| = 0  Elliposoid
+        ):  # e1*X^2 + e2*Y^2 + e0*Z^2 - |k| = 0  Ellipsoid
             ek = (1, -1)
         else:  # e1*X^2 + e2*Y^2 - e0*Z^2 - |k| = 0  Hyperbpoloid
             ek = (-1, 1)
@@ -1247,7 +1247,6 @@ def gq2params(x):
     #      f b g  *  beta   =   -v
     #      h g c     gamma      -w
 
-    zeroLim = 1e-12
     mat3 = np.array(
         [
             [x[0], x[3] / 2, x[5] / 2],

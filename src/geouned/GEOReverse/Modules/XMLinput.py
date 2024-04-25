@@ -68,7 +68,6 @@ class XMLinput:
     def GetLevelStructure(self):
         containers = []
         Universe_dict = {}
-        cellCards = {}
 
         for c in self.__inputcards__:
             if c.type != "cell":
@@ -291,10 +290,6 @@ def Get_primitive_surfaces(mcnp_surfaces, scale=10.0):
     X_vec = FreeCAD.Vector(1.0, 0.0, 0.0)
     Y_vec = FreeCAD.Vector(0.0, 1.0, 0.0)
     Z_vec = FreeCAD.Vector(0.0, 0.0, 1.0)
-    negX_vec = -X_vec
-    negY_vec = -Y_vec
-    negZ_vec = -Z_vec
-    origin = FreeCAD.Vector(0.0, 0.0, 0.0)
 
     surfaces = {}
     for Sid in mcnp_surfaces.keys():

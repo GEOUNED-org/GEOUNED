@@ -382,7 +382,6 @@ def GenPlaneCylinder_old(face, solid):
         try:
             UVNodes.append(face2.getUVNodes())
         except RuntimeError:
-            tess = face.tessellate(1.0, True)
             UVNodes.append(face2.getUVNodes())
 
     Uval_str_cl = []
@@ -404,12 +403,9 @@ def GenPlaneCylinder_old(face, solid):
     # searching for minimum and maximum angle points
     for j, Nodes in enumerate(UVNodes):
         for elem in Nodes:
-            val = "%11.4E" % elem[0]
             dif1 = abs(float(Uval_str_cl[0]) - elem[0])
             dif2 = abs(float(Uval_str_cl[1]) - elem[0])
 
-            if abs(elem[0]) < 1.0e-5:
-                val = "%11.4E" % 0.0
             if dif1 < dif1_0:
                 Node_min = elem
                 face_index_2[0] = face_index[j]
@@ -483,8 +479,6 @@ def GenPlaneCone(face, solid):
 def GenPlaneCone_old(face, solid):
 
     Surf = face.Surface
-    rad = Surf.Radius
-    Axis = face.Surface.Axis
     if str(Surf) != "<Cone object>":
         return None
 
@@ -544,11 +538,8 @@ def GenPlaneCone_old(face, solid):
     # searching for minimum and maximum angle points
     for j, Nodes in enumerate(UVNodes):
         for elem in Nodes:
-            val = "%11.4E" % elem[0]
             dif1 = abs(float(Uval_str_cl[0]) - elem[0])
             dif2 = abs(float(Uval_str_cl[1]) - elem[0])
-            if abs(elem[0]) < 1.0e-5:
-                val = "%11.4E" % 0.0
             if dif1 < dif1_0:
                 Node_min = elem
                 face_index_2[0] = face_index[j]
@@ -1165,7 +1156,6 @@ def ExtraPlaneCylFace(face, Box, Surfaces):
             plane = GEOUNED_Surface(
                 ("Plane", (center, dir, dim1, dim2)), Box, Face="Build"
             )
-            sign = signPlane(face.CenterOfMass, plane)
             id, exist = Surfaces.addPlane(plane)
             if exist:
                 pp = Surfaces.getSurface(id)

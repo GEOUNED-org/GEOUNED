@@ -156,8 +156,6 @@ class VoidBox:
             FreeCAD.Vector(self.BoundBox.XMin, self.BoundBox.YMin, self.BoundBox.ZMin),
             FreeCAD.Vector(0, 0, 1),
         )
-        refinedList = []
-        newcom = []
 
         for m in self.Objects:
             self.__removeExtraComp__(m, Cube, mode="dist")
@@ -289,8 +287,6 @@ class VoidBox:
         if voidSolidDef.level == 0:
             compSeq = voidSolidDef.getComplementary()
         else:
-
-            newCell = []
 
             if voidSolidDef.level == 1 and voidSolidDef.operator == "AND":
                 compSeq = BoolSequence(operator="OR")
