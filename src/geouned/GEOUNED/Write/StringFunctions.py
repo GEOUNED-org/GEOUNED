@@ -137,7 +137,6 @@ def redundant(m, geom):
 def remove_redundant(geom):
     """return cell without redundant parenthesis"""
 
-    porg = countP(geom)
     # Loop until no redundant parentheses are found
     cont = True
     while cont:

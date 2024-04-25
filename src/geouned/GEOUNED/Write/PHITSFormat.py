@@ -551,8 +551,6 @@ $ **************************************************************
         return
 
     def __simplifyPlanes__(self, Surfaces):
-        offset = len(self.Cells)
-        keys = self.surfaceTable.keys()
 
         for p in Surfaces["PX"]:
             if p.Surf.Axis[0] < 0:

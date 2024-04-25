@@ -229,13 +229,9 @@ def ExtractSurfaces(solid, kind, UniverseBox, MakeObj=False):
             P3P = False
         solidParts = [GU.solid_GU(solid, P3P)]
 
-    ex = FreeCAD.Vector(1, 0, 0)
-    ey = FreeCAD.Vector(0, 1, 0)
-    ez = FreeCAD.Vector(0, 0, 1)
     Surfaces = UF.Surfaces_dict()
 
     for solid_GU in solidParts:
-        flag_inv = CD.isInverted(solid_GU.solid)
 
         # Get the parameter of all faces of the solid
         # Add auxillary planes for Cylinders and Cones
@@ -501,12 +497,9 @@ def GenPlaneCylinder(face, solid):
 
     for j, Nodes in enumerate(UVNodes):
         for elem in Nodes:
-            val = "%11.4E" % elem[0]
             dif1 = abs(float(Uval_str_cl[0]) - elem[0])
             dif2 = abs(float(Uval_str_cl[1]) - elem[0])
 
-            if abs(elem[0]) < 1.0e-5:
-                val = "%11.4E" % 0.0
             if dif1 < dif1_0:
                 Node_min = elem
                 face_index_2[0] = face_index[j]
@@ -534,9 +527,6 @@ def GenPlaneCylinder(face, solid):
 # Tolerance in this function are not the general once
 # function should be reviewed
 def GenPlaneCone(face, solid):
-
-    Surf = face.Surface
-    rad = Surf.Radius
 
     if face.Area < 1e-2:
         return None
@@ -628,12 +618,9 @@ def GenPlaneCone(face, solid):
     # searching for minimum and maximum angle points
     for j, Nodes in enumerate(UVNodes):
         for elem in Nodes:
-            val = "%11.4E" % elem[0]
             dif1 = abs(float(Uval_str_cl[0]) - elem[0])
             dif2 = abs(float(Uval_str_cl[1]) - elem[0])
 
-            if abs(elem[0]) < 1.0e-5:
-                val = "%11.4E" % 0.0
             if dif1 < dif1_0:
                 Node_min = elem
                 face_index_2[0] = face_index[j]
@@ -735,7 +722,6 @@ def SplitPlanes_new(Solids, UniverseBox):
 
 def SplitPlanes_org(Solids, UniverseBox):
     Bases = []
-    icount = 0
     err = 0
     for sol in Solids:
         Bases.append((sol, []))
@@ -988,7 +974,6 @@ def Split2ndOrderPlanes(Solids):
 
 def split2ndOPlane(solid):
 
-    Planes = []
     err = 0
     flag_inv = CD.isInverted(solid)
     solid_GU = GU.solid_GU(solid)

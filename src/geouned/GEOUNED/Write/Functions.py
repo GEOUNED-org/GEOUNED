@@ -733,13 +733,6 @@ surf quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
             )
         else:
             Q = Qform.QFormCone(Dir, Apex, tan)
-            MCNP_def = """\
-surf quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
-          {v[3]:{aTof}} {v[4]:{aTof}} {v[5]:{aTof}}
-          {v[6]:{gToi}} {v[7]:{gToi}} {v[8]:{gToi}}
-          {v[9]:{j}} """.format(
-                id, v=Q, aTof=nf.GQ_1to6, gToi=nf.GQ_7to9, j=nf.GQ_10
-            )
 
     elif Type == "Sphere":
         rad = surf.Radius * 0.1

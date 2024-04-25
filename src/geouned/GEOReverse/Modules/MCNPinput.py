@@ -161,6 +161,7 @@ class MCNPinput:
                 trl[c.name] = getTransMatrix(trValues, c.unit)
         return trl
 
+
 # fmt: off
 def getTransMatrix(trsf, unit="", scale=10.0):
 
@@ -1077,7 +1078,6 @@ def get_hyperboloid_parameters(eVal, eVect, T, k, iaxis):
     elliposoid = False
     if iaxis is None:
         iaxis = np.argmin(np.abs(eVal))
-        ellipsoid = True
 
     other1 = (iaxis + 1) % 3
     other2 = (iaxis + 2) % 3
@@ -1247,7 +1247,6 @@ def gq2params(x):
     #      f b g  *  beta   =   -v
     #      h g c     gamma      -w
 
-    zeroLim = 1e-12
     mat3 = np.array(
         [
             [x[0], x[3] / 2, x[5] / 2],

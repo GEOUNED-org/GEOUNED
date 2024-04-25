@@ -250,7 +250,6 @@ def buildCTableFromSolids(Box, SurfInfo, option="diag"):
         surfaces = SurfInfo.Surfaces
         surfaceList = SurfInfo.surfaceList
 
-    outSurfaces = []
     if type(surfaces[surfaceList[0]]) is GEOUNED_Surface:
         for s in surfaceList:
             ss = surfaces[s]
@@ -318,7 +317,6 @@ def buildCTableFromSolids(Box, SurfInfo, option="diag"):
 def removeExtraSurfaces(CellSeq, CTable):
     # checking is make on solid cell definition to be removed from void cell
     outSurfaces = set(CTable.getOutSurfaces())
-    changed = False
     newDef = BoolSequence(operator="OR")
 
     # Loop over all compound solids of the metaSolid

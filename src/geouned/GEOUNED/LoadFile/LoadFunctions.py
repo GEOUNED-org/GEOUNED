@@ -13,7 +13,6 @@ def GetLabel(label):
         return label
     wrd = label.split()
     try:
-        val = float(wrd[-1])
         new_label = " ".join(wrd[:-1])
         return new_label
     except:

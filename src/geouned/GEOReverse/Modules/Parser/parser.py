@@ -1264,7 +1264,6 @@ else:
 
         If dump exists and it is newwer than the input file, read the dump file
         """
-        iname = inp
         for c in get_cards_from_input(inp, debug=debug, preservetabs=preservetabs):
             yield c
 

@@ -244,7 +244,6 @@ def buildCTableFromSolids(Box, SurfInfo, option="diag"):
         surfaces = SurfInfo.surfaces
         surfaceList = SurfInfo.surfaceList
 
-    outSurfaces = []
     for s in surfaceList:
         surfaces[s].buildShape(Box.BoundBox)
 
@@ -306,7 +305,6 @@ def buildCTableFromSolids(Box, SurfInfo, option="diag"):
 def removeExtraSurfaces(CellSeq, CTable):
     # checking is make on solid cell definition to be removed from void cell
     outSurfaces = set(CTable.getOutSurfaces())
-    changed = False
     newDef = BoolSequence(operator="OR")
 
     # Loop over all compound solids of the metaSolid

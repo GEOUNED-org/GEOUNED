@@ -374,7 +374,6 @@ class GEOUNED:
             UniverseBox = getUniverse(MetaList + EnclosureList)
         else:
             UniverseBox = getUniverse(MetaList)
-        Comsolids = []
 
         surfOffset = code_setting["startSurf"] - 1
         Surfaces = UF.Surfaces_dict(offset=surfOffset)

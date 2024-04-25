@@ -70,7 +70,6 @@ def SplitSolid(base, surfacesCut, cellObj, solidTool=False, tolerance=0.01):  # 
         Solids = [base.base]
     partPositions, partSolids = space_decomposition(Solids, surfacesCut)
 
-    ii = 0
     for pos, sol in zip(partPositions, partSolids):
         # fullPos = updateSurfacesValues(pos,cellObj.surfaces,base.knownSurf)
         # inSolid = cellObj.definition.evaluate(fullPos)
@@ -139,7 +138,6 @@ def point_inside(solid):
 
     # no poner boundbox, el punto puente caer en una superficie para geometria triangular
     point = solid.CenterOfMass
-    points = point
     if solid.isInside(point, 0.0, False):
         return point
 
