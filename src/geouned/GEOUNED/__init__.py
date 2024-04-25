@@ -12,6 +12,7 @@ try:
 except:
     pass
 import configparser
+import typing
 from datetime import datetime
 from os import mkdir, path
 
@@ -33,34 +34,60 @@ from .Write.WriteFiles import writeGeometry
 
 class GEOUNED:
 
-    def __init__(self, title="Geouned conversion"):
-        """ """
-        self.__dict__ = dict()
-        self.__dict__["stepFile"] = ""
-        self.__dict__["geometryName"] = ""
-        self.__dict__["matFile"] = ""
-        self.__dict__["outFormat"] = ("mcnp",)
-        self.__dict__["title"] = title
-        self.__dict__["voidGen"] = True
-        self.__dict__["debug"] = False
-        self.__dict__["compSolids"] = True
-        self.__dict__["volSDEF"] = False
-        self.__dict__["dummyMat"] = False
-        self.__dict__["volCARD"] = True
-        self.__dict__["UCARD"] = None
-        self.__dict__["simplify"] = "No"
-        self.__dict__["cellRange"] = []
-        self.__dict__["exportSolids"] = ""
-        self.__dict__["minVoidSize"] = 200  # units mm
-        self.__dict__["maxSurf"] = 50
-        self.__dict__["maxBracket"] = 30
-        self.__dict__["voidMat"] = []
-        self.__dict__["voidExclude"] = []
-        self.__dict__["startCell"] = 1
-        self.__dict__["startSurf"] = 1
-        self.__dict__["cellCommentFile"] = False
-        self.__dict__["cellSummaryFile"] = True
-        self.__dict__["sortEnclosure"] = False
+    def __init__(
+        self,
+        title: str = "Geouned conversion",
+        stepFile: str = "",
+        geometryName: str = "",
+        matFile: str = "",
+        outFormat: typing.Tuple[str] = ("mcnp",),
+        voidGen: bool = True,
+        debug: bool = False,
+        compSolids: bool = True,
+        volSDEF: bool = False,
+        dummyMat: bool = False,
+        volCARD: bool = True,
+        UCARD=None,
+        simplify: str = "No",
+        cellRange=[],
+        exportSolids: str = "",
+        minVoidSize: float = 200.0,  # units mm
+        maxSurf: int = 50,
+        maxBracket: int = 30,
+        voidMat=[],
+        voidExclude=[],
+        startCell: int = 1,
+        startSurf: int = 1,
+        cellCommentFile: bool = False,
+        cellSummaryFile: bool = True,
+        sortEnclosure: bool = False,
+    ):
+
+        self.title = title
+        self.stepFile = stepFile
+        self.geometryName = geometryName
+        self.matFile = matFile
+        self.outFormat = outFormat
+        self.voidGen = voidGen
+        self.debug = debug
+        self.compSolids = compSolids
+        self.volSDEF = volSDEF
+        self.dummyMat = dummyMat
+        self.volCARD = volCARD
+        self.UCARD = UCARD
+        self.simplify = simplify
+        self.cellRange = cellRange
+        self.exportSolids = exportSolids
+        self.minVoidSize = minVoidSize
+        self.maxSurf = maxSurf
+        self.maxBracket = maxBracket
+        self.voidMat = voidMat
+        self.voidExclude = voidExclude
+        self.startCell = startCell
+        self.startSurf = startSurf
+        self.cellCommentFile = cellCommentFile
+        self.cellSummaryFile = cellSummaryFile
+        self.sortEnclosure = sortEnclosure
 
     def SetOptions(self):
         toleranceKwrd = (
