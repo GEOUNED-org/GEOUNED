@@ -14,7 +14,7 @@ from . import LoadFunctions as LF
 
 # Paco mod
 def extractMaterials(filename):
-    rhoreal = []]
+    rhoreal = []
     mdict = {}  # _ Material dictionary
     with open(filename, "rt") as file:
         for line in file:
