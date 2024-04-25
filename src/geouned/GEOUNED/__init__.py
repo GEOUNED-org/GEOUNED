@@ -311,36 +311,33 @@ class GEOUNED:
         code_setting = self.__dict__
         if code_setting is None:
             raise ValueError("Cannot run the code. Input are missing")
-        if code_setting["stepFile"] == "":
+        if self.stepFile == "":
             raise ValueError("Cannot run the code. Step file name is missing")
 
-        stepfile = code_setting["stepFile"]
-        matfile = code_setting["matFile"]
-
-        if isinstance(stepfile, (tuple, list)):
-            for stp in stepfile:
+        if isinstance(self.stepFile, (tuple, list)):
+            for stp in self.stepFile:
                 if not path.isfile(stp):
                     raise FileNotFoundError(f"Step file {stp} not found.\nStop.")
         else:
-            if not path.isfile(stepfile):
-                raise FileNotFoundError(f"Step file {stepfile} not found.\nStop.")
+            if not path.isfile(self.stepFile):
+                raise FileNotFoundError(f"Step file {self.stepFile} not found.\nStop.")
 
         startTime = datetime.now()
 
-        if isinstance(stepfile, (list, tuple)):
+        if isinstance(self.stepFile, (list, tuple)):
             MetaChunk = []
             EnclosureChunk = []
-            for stp in stepfile:
+            for stp in self.stepFile:
                 print("read step file : {}".format(stp))
-                Meta, Enclosure = Load.LoadCAD(stp, matfile)
+                Meta, Enclosure = Load.LoadCAD(stp, self.matFile)
                 MetaChunk.append(Meta)
                 EnclosureChunk.append(Enclosure)
             MetaList = joinMetaLists(MetaChunk)
             EnclosureList = joinMetaLists(EnclosureChunk)
         else:
-            print("read step file : {}".format(stepfile))
+            print("read step file : {}".format(self.stepFile))
             MetaList, EnclosureList = Load.LoadCAD(
-                stepfile, matfile, code_setting["voidMat"], code_setting["compSolids"]
+                self.stepFile, self.matFile, self.voidMat, self.compSolids
             )
 
         print("End of loading phase")
@@ -349,22 +346,22 @@ class GEOUNED:
         tempTime = datetime.now()
 
         # Select a specific solid range from original STEP solids
-        if code_setting["cellRange"]:
+        if self.cellRange:
             MetaList = MetaList[
-                code_setting["cellRange"][0] : code_setting["cellRange"][1]
+                self.cellRange[0] : self.cellRange[1]
             ]
 
         # export in STEP format solids read from input file
         # terminate excution
-        if code_setting["exportSolids"] != "":
+        if self.exportSolids != "":
             solids = []
             for m in MetaList:
                 if m.IsEnclosure:
                     continue
                 solids.extend(m.Solids)
-            Part.makeCompound(solids).exportStep(code_setting["exportSolids"])
+            Part.makeCompound(solids).exportStep(self.exportSolids)
             msg = (
-                f'Solids exported in file {code_setting["exportSolids"]}\n'
+                f'Solids exported in file {self.exportSolids}\n'
                 "GEOUNED Finish. No solid translation performed."
             )
             raise ValueError(msg)
@@ -376,8 +373,7 @@ class GEOUNED:
             UniverseBox = getUniverse(MetaList)
         Comsolids = []
 
-        surfOffset = code_setting["startSurf"] - 1
-        Surfaces = UF.Surfaces_dict(offset=surfOffset)
+        Surfaces = UF.Surfaces_dict(offset=self.startSurf - 1)
 
         warnSolids = []
         warnEnclosures = []
@@ -391,7 +387,7 @@ class GEOUNED:
             )
 
             # decompose Enclosure solids
-            if code_setting["voidGen"] and EnclosureList:
+            if self.voidGen and EnclosureList:
                 warningEnclosureList = DecomposeSolids(
                     EnclosureList, Surfaces, UniverseBox, code_setting, False
                 )
@@ -419,7 +415,7 @@ class GEOUNED:
         else:
             translate(MetaList, Surfaces, UniverseBox, code_setting)
             # decompose Enclosure solids
-            if code_setting["voidGen"] and EnclosureList:
+            if self.voidGen and EnclosureList:
                 warningEnclosureList = DecomposeSolids(
                     EnclosureList, Surfaces, UniverseBox, code_setting, False
                 )
@@ -429,7 +425,7 @@ class GEOUNED:
 
         #  building enclosure solids
 
-        if code_setting["voidGen"] and EnclosureList:
+        if self.voidGen and EnclosureList:
             for j, m in enumerate(EnclosureList):
                 print("Building Enclosure Cell: ", j + 1)
                 cones = Conv.cellDef(m, Surfaces, UniverseBox)
@@ -442,13 +438,13 @@ class GEOUNED:
 
         # void generation phase
         MetaVoid = []
-        if code_setting["voidGen"]:
+        if self.voidGen:
             print("Build Void")
-            print(code_setting["voidExclude"])
-            if not code_setting["voidExclude"]:
+            print(self.voidExclude)
+            if not self.voidExclude:
                 MetaReduced = MetaList
             else:
-                MetaReduced = excludeCells(MetaList, code_setting["voidExclude"])
+                MetaReduced = excludeCells(MetaList, self.voidExclude)
 
             if MetaList:
                 init = MetaList[-1].__id__ - len(EnclosureList)
@@ -459,7 +455,7 @@ class GEOUNED:
             )
 
         # if code_setting['simplify'] == 'full' and not Options.forceNoOverlap:
-        if code_setting["simplify"] == "full":
+        if self.simplify == "full":
             Surfs = {}
             for lst in Surfaces.values():
                 for s in lst:
@@ -485,8 +481,8 @@ class GEOUNED:
 
         print(datetime.now() - startTime)
 
-        cellOffSet = code_setting["startCell"] - 1
-        if EnclosureList and code_setting["sortEnclosure"]:
+        cellOffSet = self.startCell - 1
+        if EnclosureList and self.sortEnclosure:
             # sort group solid cell / void cell sequence in each for each enclosure
             # if a solid belong to several enclosure, its definition will be written
             # for the highest enclosure level or if same enclosure level in the first
