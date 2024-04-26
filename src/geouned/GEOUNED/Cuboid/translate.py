@@ -115,7 +115,7 @@ def setDefinition(metaObj, Surfaces):
         solid_GU = GU.SolidGu(sol, plane3Pts=True)
 
         Faces = []
-        for face in solid_Gu.Faces:
+        for face in solid_GU.Faces:
             if abs(face.Area) < 1e-2:
                 continue
             if face.Area < 0:
