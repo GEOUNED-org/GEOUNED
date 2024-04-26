@@ -468,11 +468,11 @@ class BoolSequence:
 
         falseFunc = subSeq.evaluate(falseSet)
 
-        if trueFunc == False:
+        if trueFunc is False:
             newSeq = BoolSequence(operator="AND")
-            if falseFunc == True:
+            if falseFunc is True:
                 newSeq.append(-valname)
-            elif falseFunc == False:
+            elif falseFunc is False:
                 newSeq.elements = False
                 newSeq.level = -1
             else:
@@ -485,12 +485,12 @@ class BoolSequence:
                 self.assign(newSeq)
             return True
 
-        elif trueFunc == True:
+        elif trueFunc is True:
             newSeq = BoolSequence(operator="OR")
-            if falseFunc == True:
+            if falseFunc is True:
                 newSeq.elements = True
                 newSeq.level = -1
-            elif falseFunc == False:
+            elif falseFunc is False:
                 newSeq.append(valname)
             else:
                 newSeq.append(valname, falseFunc)
@@ -502,11 +502,11 @@ class BoolSequence:
                 self.assign(newSeq)
             return True
 
-        if falseFunc == False:
+        if falseFunc is False:
             newSeq = BoolSequence(operator="AND")
-            if trueFunc == True:
+            if trueFunc is True:
                 newSeq.append(valname)
-            elif trueFunc == False:
+            elif trueFunc is False:
                 newSeq.elements = False
                 newSeq.level = -1
             else:
@@ -518,12 +518,12 @@ class BoolSequence:
                 self.assign(newSeq)
             return True
 
-        elif falseFunc == True:
+        elif falseFunc is True:
             newSeq = BoolSequence(operator="OR")
-            if trueFunc == True:
+            if trueFunc is True:
                 newSeq.elements = True
                 newSeq.level = -1
-            elif trueFunc == False:
+            elif trueFunc is False:
                 newSeq.append(-valname)
             else:
                 newSeq.append(-valname, trueFunc)
