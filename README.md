@@ -1,5 +1,7 @@
 [![CI testing](https://github.com/GEOUNED-org/GEOUNED/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/GEOUNED-org/GEOUNED/actions/workflows/ci.yml)
 
+[![Upload Python Package](https://github.com/GEOUNED-org/GEOUNED/actions/workflows/python-publish.yml/badge.svg)](https://github.com/GEOUNED-org/GEOUNED/actions/workflows/python-publish.yml)
+
 # GEOUNED
 A tool to convert from CAD to CSG & CSG to CAD for Monte Carlo transport codes (MCNP & OpenMC).
 This repository contains the implementation of the algorithm presented in the paper [GEOUNED: A new conversion tool from CAD to Monte Carlo geometry](https://doi.org/10.1016/j.net.2024.01.052).

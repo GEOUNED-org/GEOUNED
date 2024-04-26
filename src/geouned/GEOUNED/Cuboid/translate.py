@@ -21,16 +21,16 @@ def commonEdge(face1, face2):
 def isConvex(face1, face2, edge):
     de = 0.1
     tol = 1.0e-5
-    e = edge.Vertexes[1].Point - edge.Vertexes[0].Point
-    e.normalize()
-    V = e.cross(face2.Surface.Axis)
+    delta_point = edge.Vertexes[1].Point - edge.Vertexes[0].Point
+    delta_point.normalize()
+    axis = delta_point.cross(face2.Surface.Axis)
 
-    P = edge.CenterOfMass + de * V
-    if not face2.__face__.isInside(P, tol, True):
-        V = -V
+    point = edge.CenterOfMass + de * axis
+    if not face2.__face__.isInside(point, tol, True):
+        axis = -axis
 
     convex = False
-    if face1.Surface.Axis.dot(V) < 0:
+    if face1.Surface.Axis.dot(axis) < 0:
         if face1.Orientation == "Forward":
             convex = True
     else:
@@ -48,9 +48,9 @@ def removeElement(Faces, idf):
 
 def isInverted(solid):
     face = solid.Faces[0]
-    Range = face.ParameterRange
-    u = (Range[1] + Range[0]) / 2.0
-    v = (Range[3] + Range[2]) / 2.0
+    parameter_range = face.ParameterRange
+    u = (parameter_range[1] + parameter_range[0]) / 2.0
+    v = (parameter_range[3] + parameter_range[2]) / 2.0
 
     point2 = face.CenterOfMass.add(face.normalAt(u, v).multiply(1.0e-6))
 
@@ -60,20 +60,20 @@ def isInverted(solid):
         return False
 
 
-def getId(facein, Surfaces):
+def getId(face_in, Surfaces):
 
-    if isParallel(facein.Axis, FreeCAD.Vector(1, 0, 0), tol.pln_angle):
-        P = "PX"
-    elif isParallel(facein.Axis, FreeCAD.Vector(0, 1, 0), tol.pln_angle):
-        P = "PY"
-    elif isParallel(facein.Axis, FreeCAD.Vector(0, 0, 1), tol.pln_angle):
-        P = "PZ"
+    if isParallel(face_in.Axis, FreeCAD.Vector(1, 0, 0), tol.pln_angle):
+        plane = "PX"
+    elif isParallel(face_in.Axis, FreeCAD.Vector(0, 1, 0), tol.pln_angle):
+        plane = "PY"
+    elif isParallel(face_in.Axis, FreeCAD.Vector(0, 0, 1), tol.pln_angle):
+        plane = "PZ"
     else:
-        P = "P"
+        plane = "P"
 
-    for s in Surfaces[P]:
+    for s in Surfaces[plane]:
         if BF.isSamePlane(
-            facein,
+            face_in,
             s.Surf,
             dtol=tol.pln_distance,
             atol=tol.pln_angle,
@@ -84,12 +84,12 @@ def getId(facein, Surfaces):
     return 0
 
 
-def translate(MetaList, Surfaces, UniverseBox, setting):
-    totsolid = len(MetaList)
-    for i, m in enumerate(MetaList):
+def translate(meta_list, surfaces, universe_box, setting):
+    tot_solid = len(meta_list)
+    for i, m in enumerate(meta_list):
         if m.IsEnclosure:
             continue
-        print("Decomposing solid: {}/{} ".format(i, totsolid))
+        print("Decomposing solid: {}/{} ".format(i, tot_solid))
         if setting["debug"]:
             print(m.Comments)
             if m.IsEnclosure:
@@ -97,25 +97,25 @@ def translate(MetaList, Surfaces, UniverseBox, setting):
             else:
                 m.Solids[0].exportStep("origSolid_{}.stp".format(i))
 
-        Surfaces.extend(
+        surfaces.extend(
             Decom.ExtractSurfaces(
-                Part.makeCompound(m.Solids), "Plane3Pts", UniverseBox, MakeObj=False
+                Part.makeCompound(m.Solids), "Plane3Pts", universe_box, MakeObj=False
             )
         )
-        setDefinition(m, Surfaces)
+        setDefinition(m, surfaces)
 
 
-def setDefinition(metaObj, Surfaces):
-    solids = metaObj.Solids
-    sDef = BoolSequence(operator="OR")
+def setDefinition(meta_obj, surfaces):
+    solids = meta_obj.Solids
+    s_def = BoolSequence(operator="OR")
 
     for sol in solids:
         subSol = BoolSequence(operator="AND")
         flag_inv = isInverted(sol)
-        solid_GU = GU.SolidGu(sol, plane3Pts=True)
+        solid_gu = GU.SolidGu(sol, plane3Pts=True)
 
-        Faces = []
-        for face in solid_GU.Faces:
+        faces = []
+        for face in solid_gu.Faces:
             if abs(face.Area) < 1e-2:
                 continue
             if face.Area < 0:
@@ -127,37 +127,37 @@ def setDefinition(metaObj, Surfaces):
             if face.Orientation not in ("Forward", "Reversed"):
                 continue
 
-            id = getId(face.Surface, Surfaces)
-            s = Surfaces.getSurface(id)
+            id = getId(face.Surface, surfaces)
+            s = surfaces.getSurface(id)
             if isOposite(face.Surface.Axis, s.Surf.Axis, tol.pln_angle):
                 id = -id
             if face.Orientation == "Forward":
                 id = -id
             if flag_inv:
                 id = -id
-            Faces.append((id, face))
+            faces.append((id, face))
 
-        while len(Faces) > 0:
-            id1, face1 = Faces[0]
-            noConvex = []
-            for id2, face2 in Faces[1:]:
+        while len(faces) > 0:
+            id1, face1 = faces[0]
+            no_convex = []
+            for id2, face2 in faces[1:]:
                 edge = commonEdge(face1, face2)
                 if edge is None:
                     continue
                 if not isConvex(face1, face2, edge):
-                    noConvex.append(id2)
+                    no_convex.append(id2)
 
-            if noConvex != []:
-                noConvex.insert(0, id1)
-                for i in noConvex:
-                    removeElement(Faces, i)
+            if no_convex != []:
+                no_convex.insert(0, id1)
+                for i in no_convex:
+                    removeElement(faces, i)
                 orPlanes = BoolSequence(operator="OR")
-                orPlanes.append(*noConvex)
+                orPlanes.append(*no_convex)
                 subSol.append(orPlanes)
             else:
-                removeElement(Faces, id1)
+                removeElement(faces, id1)
                 subSol.append(id1)
 
-        sDef.append(subSol)
+        s_def.append(subSol)
 
-    metaObj.setDefinition(sDef)
+    meta_obj.setDefinition(s_def)

@@ -20,62 +20,62 @@ def GetLabel(label):
 
 
 def getCommentTree(obj):
-    recursiveList = []
-    cObj = obj
-    while cObj.InList:
-        label = GetLabel(cObj.InList[0].Label)
-        recursiveList.append(label)
-        cObj = cObj.InList[0]
+    recursive_list = []
+    c_obj = obj
+    while c_obj.InList:
+        label = GetLabel(c_obj.InList[0].Label)
+        recursive_list.append(label)
+        c_obj = c_obj.InList[0]
 
     comment = ""
-    for label in reversed(recursiveList):
+    for label in reversed(recursive_list):
         comment += "/" + label
     return comment
 
 
-def joinEnvelopes(MetaList):
-    joinList = []
-    oldID = -1
-    newlist = []
-    for i, m in enumerate(MetaList):
+def joinEnvelopes(meta_list):
+    join_list = []
+    old_id = -1
+    new_list = []
+    for i, m in enumerate(meta_list):
         if m.CellType != "envelope":
             continue
-        if m.EnclosureID != oldID:
-            joinList.append(newlist)
-            newlist = [i]
-            oldID = m.EnclosureID
+        if m.EnclosureID != old_id:
+            join_list.append(new_list)
+            new_list = [i]
+            old_id = m.EnclosureID
         else:
-            newlist.append(i)
+            new_list.append(i)
 
-    joinList.append(newlist)
-    del joinList[0]
+    join_list.append(new_list)
+    del join_list[0]
 
-    for IDlist in joinList:
-        fuseMetaObj(MetaList, IDlist[0], IDlist[-1] + 1)
+    for id_list in join_list:
+        fuseMetaObj(meta_list, id_list[0], id_list[-1] + 1)
 
 
-def fuseMetaObj(MetaList, init, end):
+def fuseMetaObj(meta_list, init, end):
     if end - init == 1:
-        MetaList[init].__id__ = init + 1
+        meta_list[init].__id__ = init + 1
         return
     solids = []
-    for m in MetaList[init:end]:
+    for m in meta_list[init:end]:
         solids.extend(m.Solids)
 
-    newMeta = GeounedSolid(init + 1, solids)
-    newMeta.EnclosureID = MetaList[init].EnclosureID
-    newMeta.ParentEnclosureID = MetaList[init].ParentEnclosureID
-    newMeta.IsEnclosure = MetaList[init].IsEnclosure
-    newMeta.CellType = MetaList[init].CellType
+    new_meta = GeounedSolid(init + 1, solids)
+    new_meta.EnclosureID = meta_list[init].EnclosureID
+    new_meta.ParentEnclosureID = meta_list[init].ParentEnclosureID
+    new_meta.IsEnclosure = meta_list[init].IsEnclosure
+    new_meta.CellType = meta_list[init].CellType
 
-    del MetaList[init:end]
-    MetaList.insert(init, newMeta)
+    del meta_list[init:end]
+    meta_list.insert(init, new_meta)
 
 
 # Paco mod
-def checkCADFileMaterial(Material, mdict):
+def checkCADFileMaterial(material, mdict):
     """Function to check that if a component in the CAD file has a material, it exist in the material file"""
-    templist = [elem for elem in set(Material) if elem not in mdict]
+    templist = [elem for elem in set(material) if elem not in mdict]
     if templist:
         raise ValueError(
             "At least one material in the CAD model is not present in the material file\n"
@@ -86,52 +86,52 @@ def checkCADFileMaterial(Material, mdict):
 
 
 # Paco mod
-def setEnclosureSolidList(MetaList):
+def setEnclosureSolidList(meta_list):
     """Function to define DataList list."""
-    return [elem for elem in MetaList if elem.IsEnclosure]
+    return [elem for elem in meta_list if elem.IsEnclosure]
 
 
-def RemoveEnclosure(MetaList):
-    """This function removes Enclosure solid and actualises __id__ attributes to take into account the removal from MetaList list of nested enclosures originally loaded from CAD model."""
+def RemoveEnclosure(meta_list):
+    """This function removes Enclosure solid and actualises __id__ attributes to take into account the removal from meta_list list of nested enclosures originally loaded from CAD model."""
 
     # update id of solids
-    lenMetaList = len(MetaList)
-    icount = 0
-    for i, m in enumerate(MetaList):
+    len_meta_list = len(meta_list)
+    i_count = 0
+    for i, m in enumerate(meta_list):
         if m.IsEnclosure:
-            icount += 1
+            i_count += 1
         else:
-            MetaList[i].__id__ -= icount
+            meta_list[i].__id__ -= i_count
 
     # remove Enclosure solids from metaList
-    for i in range(lenMetaList - 1, -1, -1):
-        if MetaList[i].IsEnclosure:
-            MetaList.pop(i)
+    for i in range(len_meta_list - 1, -1, -1):
+        if meta_list[i].IsEnclosure:
+            meta_list.pop(i)
 
 
-def setEnclosureLevels(EnclosureList):
-    nestedList = [[0], []]
-    nestedEnclosure = [[]]
-    parentLevel = 0
-    tempList = EnclosureList[:]
+def setEnclosureLevels(enclosure_list):
+    nested_list = [[0], []]
+    nested_enclosure = [[]]
+    parent_level = 0
+    temp_list = enclosure_list[:]
 
-    while len(tempList) > 0:
+    while len(temp_list) > 0:
         remove = []
-        for i, encl in enumerate(tempList):
-            if encl.ParentEnclosureID in nestedList[parentLevel]:
-                nestedList[parentLevel + 1].append(encl.EnclosureID)
-                nestedEnclosure[parentLevel].append(encl)
+        for i, encl in enumerate(temp_list):
+            if encl.ParentEnclosureID in nested_list[parent_level]:
+                nested_list[parent_level + 1].append(encl.EnclosureID)
+                nested_enclosure[parent_level].append(encl)
                 remove.append(i)
 
-        nestedList.append([])
-        nestedEnclosure.append([])
-        parentLevel += 1
+        nested_list.append([])
+        nested_enclosure.append([])
+        parent_level += 1
         remove.reverse()
         for i in remove:
-            del tempList[i]
+            del temp_list[i]
 
-    nestedEnclosureList = []
-    for Level in nestedEnclosure:
+    nested_enclosure_list = []
+    for Level in nested_enclosure:
         temp = []
         for i, encl in enumerate(Level):
             temp.append((encl.ParentEnclosureID, i))
@@ -140,25 +140,25 @@ def setEnclosureLevels(EnclosureList):
         grouped = []
         for t in temp:
             grouped.append(Level[t[1]])
-        nestedEnclosureList.append(grouped)
+        nested_enclosure_list.append(grouped)
 
-    for i, Level in enumerate(nestedEnclosureList[0:-1]):
+    for i, Level in enumerate(nested_enclosure_list[0:-1]):
         for encl in Level:
-            childList = []
-            for child in nestedEnclosureList[i + 1]:
+            child_list = []
+            for child in nested_enclosure_list[i + 1]:
                 if child.ParentEnclosureID == encl.EnclosureID:
-                    childList.append(child)
-            encl.SonEnclosures = childList[:]
+                    child_list.append(child)
+            encl.SonEnclosures = child_list[:]
 
-    return nestedEnclosureList
+    return nested_enclosure_list
 
 
-def checkEnclosure(FreeCAD_doc, EnclosureList):
+def checkEnclosure(freecad_doc, enclosure_list):
 
     stop = False
     # check all enclosure labels have an associated solid
-    TempList = []
-    for elem in FreeCAD_doc.Objects:
+    temp_list = []
+    for elem in freecad_doc.Objects:
         if elem.TypeId == "Part::Feature":
             if elem.Shape.Solids:
                 if elem.InList:
@@ -171,16 +171,16 @@ def checkEnclosure(FreeCAD_doc, EnclosureList):
                             elem.TypeId == "Part::Feature"
                             and len(elem.Shape.Solids) == 0
                         ):
-                            TempList.append(elem)
+                            temp_list.append(elem)
 
-    if TempList:
+    if temp_list:
         stop = True
         print(
             "One or more nested enclosure labels in CAD solid tree view/structure tree do not have any CAD solid.\n",
             "Each nested enclosure must have only one solid.\nCode STOPS.",
             "\nList of problematic nested enclosure labels:",
         )
-        for elem in TempList:
+        for elem in temp_list:
             print(elem.EnclosureID)
 
     # check enclosure Labels don't make loops
@@ -189,27 +189,27 @@ def checkEnclosure(FreeCAD_doc, EnclosureList):
     # 2) check 0 is not in child enclosure label
     # 3) check child enclosure label is not repeated
 
-    SIDList = []
-    PIDSet = set()
-    repeatedID = set()
+    sid_list = []
+    pid_set = set()
+    repeated_id = set()
 
-    for encl in EnclosureList:
-        PIDSet.add(encl.ParentEnclosureID)
-        if encl.EnclosureID in SIDList:
-            repeatedID.add(encl.EnclosureID)
+    for encl in enclosure_list:
+        pid_set.add(encl.ParentEnclosureID)
+        if encl.EnclosureID in sid_list:
+            repeated_id.add(encl.EnclosureID)
         else:
-            SIDList.append(encl.EnclosureID)
+            sid_list.append(encl.EnclosureID)
 
-    if 0 in SIDList:
+    if 0 in sid_list:
         stop = True
         print('"0" cannot be label on child Enclosure')
-    if 0 not in PIDSet:
+    if 0 not in pid_set:
         stop = True
         print(' "0" should parent label of most external enclosure(s)')
-    if repeatedID:
+    if repeated_id:
         stop = True
         print("Child label cannot be repeated.\nRepeated labels :")
-        for lab in repeatedID:
+        for lab in repeated_id:
             print(lab)
 
     # this stop should not be move to the end of routine
@@ -218,60 +218,60 @@ def checkEnclosure(FreeCAD_doc, EnclosureList):
         raise ValueError("Exiting to avoid infinite loop")
 
     # 4) look for explicit loops
-    enclDict = dict()
-    for encl in EnclosureList:
-        if encl.ParentEnclosureID in enclDict.keys():
-            enclDict[encl.ParentEnclosureID].append(encl.EnclosureID)
+    encl_dict = dict()
+    for encl in enclosure_list:
+        if encl.ParentEnclosureID in encl_dict.keys():
+            encl_dict[encl.ParentEnclosureID].append(encl.EnclosureID)
         else:
-            enclDict[encl.ParentEnclosureID] = [encl.EnclosureID]
+            encl_dict[encl.ParentEnclosureID] = [encl.EnclosureID]
 
     parent = [0]
     cont = True
     while cont:
         cont = False
-        nextParent = []
+        next_parent = []
         for p in parent:
-            if p in enclDict.keys():
+            if p in encl_dict.keys():
                 cont = True
-                nextParent.extend(enclDict[p])
-                del enclDict[p]
-        parent = nextParent
+                next_parent.extend(encl_dict[p])
+                del encl_dict[p]
+        parent = next_parent
 
-    if enclDict.keys():
+    if encl_dict.keys():
         print("Following enclosure produce loop")
-        for p in enclDict.keys():
-            for s in enclDict[p]:
+        for p in encl_dict.keys():
+            for s in encl_dict[p]:
                 print("{}_{}".format(s, p))
         raise ValueError("GEOUNED.LoadFunctions.checkEnclosure failed")
 
     # check enclosures solids are correctly nested and don't overlap each other
-    nestedLevels = setEnclosureLevels(EnclosureList)
+    nested_levels = setEnclosureLevels(enclosure_list)
 
     overlap = []
-    enclTree = [[0]]
-    for level in nestedLevels:
-        enclTree = updateTree(enclTree, level)
+    encl_tree = [[0]]
+    for level in nested_levels:
+        encl_tree = updateTree(encl_tree, level)
         for encl in level:
-            sameParent = dict()
-            if encl.ParentEnclosureID in sameParent.keys():
-                sameParent[encl.ParentEnclosureID].append(encl.EnclosureID)
+            same_parent = dict()
+            if encl.ParentEnclosureID in same_parent.keys():
+                same_parent[encl.ParentEnclosureID].append(encl.EnclosureID)
             else:
-                sameParent[encl.ParentEnclosureID] = [encl.EnclosureID]
-        for encl in sameParent.values():
+                same_parent[encl.ParentEnclosureID] = [encl.EnclosureID]
+        for encl in same_parent.values():
             overlap.extend(checkOverlap(encl))
 
-    notEmbedded = []
-    for chain in enclTree:
+    not_embedded = []
+    for chain in encl_tree:
         up = chain[0]
         for low in chain[1:]:
             inter = up.checkIntersection(low.CADSolid)
             if inter != -2:
-                notEmbedded.append((low.EnclosureID, up.EnclosureID))
+                not_embedded.append((low.EnclosureID, up.EnclosureID))
 
-    if notEmbedded:
+    if not_embedded:
         stop = True
         print(" Following enclosures are not fully embedded in Parent enclosure")
-        for elemt in notEmbedded:
+        for elemt in not_embedded:
             print("{}_{}").format(elemt[0], elemt[1])
 
     if overlap:
@@ -295,13 +295,13 @@ def checkOverlap(enclosures):
 
 
 def updateTree(Tree, level):
-    newTree = []
+    new_tree = []
     for encl in level:
         for lst in Tree:
             if lst[-1] == encl.ParentEnclosureID:
-                newTree.append(lst + [encl.EnclosureID])
+                new_tree.append(lst + [encl.EnclosureID])
                 continue
-    return newTree
+    return new_tree
 
 
 def set_docOptions():

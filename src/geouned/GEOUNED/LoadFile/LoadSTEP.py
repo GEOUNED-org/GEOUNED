@@ -14,51 +14,51 @@ from . import LoadFunctions as LF
 
 # Paco mod
 def extractMaterials(filename):
-    rhoreal = []
-    mdict = {}  # _ Material dictionary
+    rho_real = []
+    m_dict = {}  # _ Material dictionary
     with open(filename, "rt") as file:
         for line in file:
             vals = line.split()
             if vals[0].startswith("#"):
                 continue
-            matlabel = int(vals[0])
-            rhoreal = -float(vals[1])
+            mat_label = int(vals[0])
+            rho_real = -float(vals[1])
             matname = " ".join(vals[2:])
-            mdict[matlabel] = (rhoreal, matname)
-    return mdict
+            m_dict[mat_label] = (rho_real, matname)
+    return m_dict
 
 
-def LoadCAD(filename, matfilename, defaultMat=[], compSolids=True):
+def LoadCAD(filename, mat_filename, default_mat=[], comp_solids=True):
 
     # Set document solid tree options when opening CAD differing from version 0.18
     if int(FreeCAD.Version()[1]) > 18:
         LF.set_docOptions()
 
-    CAD_simplificado_doc = FreeCAD.newDocument("CAD_simplificado")
+    cad_simplificado_doc = FreeCAD.newDocument("CAD_simplificado")
     Import.insert(filename, "CAD_simplificado")
 
-    if matfilename != "":
-        if os.path.exists(matfilename):
-            mdict = extractMaterials(matfilename)
+    if mat_filename != "":
+        if os.path.exists(mat_filename):
+            m_dict = extractMaterials(mat_filename)
         else:
-            print("Material definition file {} does not exist.".format(matfilename))
-            mdict = {}
+            print("Material definition file {} does not exist.".format(mat_filename))
+            m_dict = {}
     else:
-        mdict = {}
+        m_dict = {}
 
     s = Part.Shape()
     s.read(filename)
     Solids = s.Solids
-    MetaList = []
+    meta_list = []
     for i, s in enumerate(Solids):
-        MetaList.append(UF.GeounedSolid(i + 1, s))
+        meta_list.append(UF.GeounedSolid(i + 1, s))
 
-    isolid = 0
-    missingMat = set()
+    i_solid = 0
+    missing_mat = set()
 
-    docObjects = CAD_simplificado_doc.Objects
+    doc_objects = cad_simplificado_doc.Objects
 
-    for elem in docObjects:
+    for elem in doc_objects:
         if elem.TypeId == "Part::Feature":
             comment = LF.getCommentTree(elem)
             if not elem.Shape.Solids:
@@ -69,126 +69,126 @@ def LoadCAD(filename, matfilename, defaultMat=[], compSolids=True):
                 )
                 continue
             else:
-                tempremat = None
-                tempredil = None
+                tempre_mat = None
+                tempre_dil = None
 
                 # MIO: lightly modification of label if required
                 label = LF.GetLabel(elem.Label)
                 comment = comment + "/" + label
                 if elem.InList:
                     # MIO: lightly modification of label if required
-                    label_inList = LF.GetLabel(elem.InList[0].Label)
-                    enclLabel = re.search(
-                        "enclosure(?P<encl>[0-9]+)_(?P<parent>[0-9]+)_", label_inList
+                    label_in_list = LF.GetLabel(elem.InList[0].Label)
+                    encl_label = re.search(
+                        "enclosure(?P<encl>[0-9]+)_(?P<parent>[0-9]+)_", label_in_list
                     )
-                    if not enclLabel:
-                        enclLabel = re.search(
+                    if not encl_label:
+                        encl_label = re.search(
                             "enclosure(?P<encl>[0-9]+)_(?P<parent>[0-9]+)_", label
                         )
 
-                    envelLabel = re.search(
-                        "envelope(?P<env>[0-9]+)_(?P<parent>[0-9]+)_", label_inList
+                    envel_label = re.search(
+                        "envelope(?P<env>[0-9]+)_(?P<parent>[0-9]+)_", label_in_list
                     )
-                    if not envelLabel:
-                        envelLabel = re.search(
+                    if not envel_label:
+                        envel_label = re.search(
                             "envelope(?P<env>[0-9]+)_(?P<parent>[0-9]+)_", label
                         )
 
-                    # tempremat = re.search("(m(?P<mat>\d+)_)",elem.Label)
-                    # if not tempremat :
-                    #    tempremat = re.search("(m(?P<mat>\d+)_)",elem.InList[0].Label)
+                    # tempre_mat = re.search("(m(?P<mat>\d+)_)",elem.Label)
+                    # if not tempre_mat :
+                    #    tempre_mat = re.search("(m(?P<mat>\d+)_)",elem.InList[0].Label)
 
-                    # tempredil = re.search("(_d(?P<dil>\d*\.\d*)_)",elem.Label)
-                    # if not tempredil :
-                    #    tempredil = re.search("(_d(?P<dil>\d*\.\d*)_)",elem.InList[0].Label)
+                    # tempre_dil = re.search("(_d(?P<dil>\d*\.\d*)_)",elem.Label)
+                    # if not tempre_dil :
+                    #    tempre_dil = re.search("(_d(?P<dil>\d*\.\d*)_)",elem.InList[0].Label)
 
                     # Paco modifications
                     # Search for material definition in tree
                     xelem = [elem]
-                    while xelem and not tempremat:
+                    while xelem and not tempre_mat:
                         # MIO: Modification of label if required
                         temp_label = LF.GetLabel(xelem[0].Label)
-                        tempremat = re.search("_m(?P<mat>\d+)_", "_" + temp_label)
+                        tempre_mat = re.search("_m(?P<mat>\d+)_", "_" + temp_label)
                         xelem = xelem[0].InList
 
                     # Search for dilution definition in tree
                     xelem = [elem]
-                    while xelem and not tempredil:
+                    while xelem and not tempre_dil:
                         # MIO: Modification of label if required
                         temp_label = LF.GetLabel(xelem[0].Label)
-                        tempredil = re.search("_d(?P<dil>\d*\.\d*)_", temp_label)
+                        tempre_dil = re.search("_d(?P<dil>\d*\.\d*)_", temp_label)
                         xelem = xelem[0].InList
                     # Paco end
                 else:
-                    enclLabel = None
-                    envelLabel = None
+                    encl_label = None
+                    envel_label = None
 
                 # compSolid Diferent solid of the same cell are stored in the same metaObject (compSolid)
                 # enclosures and envelopes are always stored as compound
-                if compSolids or enclLabel or envelLabel:
+                if comp_solids or encl_label or envel_label:
 
-                    init = isolid
-                    end = isolid + len(elem.Shape.Solids)
-                    LF.fuseMetaObj(MetaList, init, end)
-                    nsolids = 1
+                    init = i_solid
+                    end = i_solid + len(elem.Shape.Solids)
+                    LF.fuseMetaObj(meta_list, init, end)
+                    n_solids = 1
                 else:
-                    nsolids = len(elem.Shape.Solids)
+                    n_solids = len(elem.Shape.Solids)
 
-                for i in range(nsolids):
-                    MetaList[isolid].setComments("{}{}".format(comment, (i + 1)))
-                    MetaList[isolid].setCADSolid()
+                for i in range(n_solids):
+                    meta_list[i_solid].setComments("{}{}".format(comment, (i + 1)))
+                    meta_list[i_solid].setCADSolid()
 
-                    if tempremat:
-                        matlabel = int(tempremat.group("mat"))
-                        if matlabel in mdict.keys():
-                            MetaList[isolid].setMaterial(
-                                matlabel, mdict[matlabel][0], mdict[matlabel][1]
+                    if tempre_mat:
+                        mat_label = int(tempre_mat.group("mat"))
+                        if mat_label in m_dict.keys():
+                            meta_list[i_solid].setMaterial(
+                                mat_label, m_dict[mat_label][0], m_dict[mat_label][1]
                             )
                         else:
-                            if matlabel == 0:
-                                MetaList[isolid].setMaterial(matlabel, 0, 0)
+                            if mat_label == 0:
+                                meta_list[i_solid].setMaterial(mat_label, 0, 0)
                             else:
-                                MetaList[isolid].setMaterial(
-                                    matlabel,
+                                meta_list[i_solid].setMaterial(
+                                    mat_label,
                                     -100,
                                     "Missing material density information",
                                 )
-                                missingMat.add(matlabel)
+                                missing_mat.add(mat_label)
                     else:
                         # print('Warning : No material label associated to solid {}.\nDefault material used instead.'.format(comment))
-                        if defaultMat:
-                            MetaList[isolid].setMaterial(*defaultMat)
-                    if tempredil:
-                        MetaList[isolid].setDilution(float(tempredil.group("dil")))
+                        if default_mat:
+                            meta_list[i_solid].setMaterial(*default_mat)
+                    if tempre_dil:
+                        meta_list[i_solid].setDilution(float(tempre_dil.group("dil")))
 
-                    if enclLabel is not None:
-                        MetaList[isolid].EnclosureID = int(enclLabel.group("encl"))
-                        MetaList[isolid].ParentEnclosureID = int(
-                            enclLabel.group("parent")
+                    if encl_label is not None:
+                        meta_list[i_solid].EnclosureID = int(encl_label.group("encl"))
+                        meta_list[i_solid].ParentEnclosureID = int(
+                            encl_label.group("parent")
                         )
-                        MetaList[isolid].IsEnclosure = True
-                        MetaList[isolid].CellType = "void"
+                        meta_list[i_solid].IsEnclosure = True
+                        meta_list[i_solid].CellType = "void"
 
-                    if envelLabel is not None:
-                        MetaList[isolid].EnclosureID = int(envelLabel.group("env"))
-                        MetaList[isolid].ParentEnclosureID = int(
-                            envelLabel.group("parent")
+                    if envel_label is not None:
+                        meta_list[i_solid].EnclosureID = int(envel_label.group("env"))
+                        meta_list[i_solid].ParentEnclosureID = int(
+                            envel_label.group("parent")
                         )
-                        MetaList[isolid].IsEnclosure = True
-                        MetaList[isolid].CellType = "envelope"
-                    isolid += 1
+                        meta_list[i_solid].IsEnclosure = True
+                        meta_list[i_solid].CellType = "envelope"
+                    i_solid += 1
 
-    LF.joinEnvelopes(MetaList)
-    if missingMat:
+    LF.joinEnvelopes(meta_list)
+    if missing_mat:
         print(
             "Warning!! At least one material in the CAD model is not present in the material file"
         )
-        print("List of not present materials:", missingMat)
+        print("List of not present materials:", missing_mat)
 
-    EnclosureList = LF.setEnclosureSolidList(MetaList)
-    if EnclosureList:
-        LF.checkEnclosure(CAD_simplificado_doc, EnclosureList)
-        # LF.RemoveEnclosure(MetaList)
-        return MetaList, EnclosureList
+    enclosure_list = LF.setEnclosureSolidList(meta_list)
+    if enclosure_list:
+        LF.checkEnclosure(cad_simplificado_doc, enclosure_list)
+        # LF.RemoveEnclosure(meta_list)
+        return meta_list, enclosure_list
     else:
-        return MetaList, []
+        return meta_list, []
