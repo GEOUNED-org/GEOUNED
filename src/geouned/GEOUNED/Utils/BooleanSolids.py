@@ -7,7 +7,7 @@ import math
 import FreeCAD
 
 from ..Utils.booleanFunction import BoolSequence
-from ..Utils.Functions import GEOUNED_Surface, splitBOP
+from ..Utils.Functions import GeounedSurface, splitBOP
 from ..Utils.Options.Classes import Options as opt
 
 BoolVals = (None, True, False)
@@ -250,7 +250,7 @@ def buildCTableFromSolids(Box, SurfInfo, option="diag"):
         surfaces = SurfInfo.Surfaces
         surfaceList = SurfInfo.surfaceList
 
-    if type(surfaces[surfaceList[0]]) is GEOUNED_Surface:
+    if type(surfaces[surfaceList[0]]) is GeounedSurface:
         for s in surfaceList:
             ss = surfaces[s]
             ss.__boundBox__ = Box.BoundBox

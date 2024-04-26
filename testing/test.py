@@ -6,7 +6,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parents[1] / "src"))
 sys.path.append("/usr/lib64/freecad/lib64/")
 
-from geouned import GEOUNED
+from geouned import CadToCsg
 
 
 def setInput(inName, inpDir, outDir):
@@ -157,7 +157,7 @@ def printResults(f, res, lost):
 def mkGEOInp(inpDir, outDir):
     for f in getInputList(inpDir, ("stp", "step")):
         setInput(f, inpDir, outDir)
-        GEO = GEOUNED(inifile)
+        GEO = CadToCsg(inifile)
         GEO.SetOptions()
         GEO.Start()
         del GEO

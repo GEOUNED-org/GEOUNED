@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from geouned import GEOUNED
+from geouned import CadToCsg
 
 path_to_cad = Path("testing/inputSTEP")
 step_files = list(path_to_cad.rglob("*.stp")) + list(path_to_cad.rglob("*.step"))
@@ -50,7 +50,7 @@ def test_conversion(input_step_file):
     output_filename_stem.with_suffix(".xml").unlink(missing_ok=True)
 
     inifile = f"{output_dir/'config.ini'}"
-    GEO = GEOUNED(inifile)
+    GEO = CadToCsg(inifile)
     GEO.SetOptions()
     GEO.outFormat = ("mcnp", "openMC_XML")
     GEO.Start()

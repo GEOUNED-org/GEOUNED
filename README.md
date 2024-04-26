@@ -1,5 +1,7 @@
 [![CI testing](https://github.com/GEOUNED-org/GEOUNED/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/GEOUNED-org/GEOUNED/actions/workflows/ci.yml)
 
+[![Upload Python Package](https://github.com/GEOUNED-org/GEOUNED/actions/workflows/python-publish.yml/badge.svg)](https://github.com/GEOUNED-org/GEOUNED/actions/workflows/python-publish.yml)
+
 # GEOUNED
 A tool to convert from CAD to CSG & CSG to CAD for Monte Carlo transport codes (MCNP & OpenMC).
 This repository contains the implementation of the algorithm presented in the paper [GEOUNED: A new conversion tool from CAD to Monte Carlo geometry](https://doi.org/10.1016/j.net.2024.01.052).
@@ -49,9 +51,9 @@ The second step is to call or GEOUNED for CAD to CSG conversion or GEOReverse fo
 From CAD to CSG:
 
 ```python
-from geouned import GEOUNED
+from geouned import CadToCsg
 inifile='Name of config file for forward conversion'
-GEO = GEOUNED(inifile)
+GEO = CadToCsg(inifile)
 GEO.SetOptions()
 GEO.Start()
 ``` 

@@ -39,8 +39,8 @@ def splitFullCylinder(solid):
 
 
 def cutFullCylinder(solid):
-    solid_gu = GU.solid_GU(solid)
-    surfaces = UF.Surfaces_dict()
+    solid_gu = GU.SolidGu(solid)
+    surfaces = UF.SurfacesDict()
     flag_inv = CD.isInverted(solid_gu.solid)
     universe_box = solid.BoundBox
 
@@ -61,7 +61,7 @@ def cutFullCylinder(solid):
                 orig = face.Surface.Center
                 rad = face.Surface.Radius
                 dim_l = face.ParameterRange[3] - face.ParameterRange[2]
-                cylinder = UF.GEOUNED_Surface(
+                cylinder = UF.GeounedSurface(
                     ("Cylinder", (orig, dir, rad, dim_l)), universe_box
                 )
                 cylinder.buildSurface()
@@ -141,7 +141,7 @@ def CylBoundPlanes(face, boundBox):
             center = e.Curve.Center
             dim1 = e.Curve.Radius
             dim2 = e.Curve.Radius
-            plane = UF.GEOUNED_Surface(("Plane", (center, dir, dim1, dim2)), boundBox)
+            plane = UF.GeounedSurface(("Plane", (center, dir, dim1, dim2)), boundBox)
             planes.append(plane)
 
         elif curve == "<Ellipse object>":
@@ -149,7 +149,7 @@ def CylBoundPlanes(face, boundBox):
             center = e.Curve.Center
             dim1 = e.Curve.MinorRadius
             dim2 = e.Curve.MajorRadius
-            plane = UF.GEOUNED_Surface(("Plane", (center, dir, dim1, dim2)), boundBox)
+            plane = UF.GeounedSurface(("Plane", (center, dir, dim1, dim2)), boundBox)
             planes.append(plane)
 
     return planes
@@ -175,7 +175,7 @@ def TorusBoundPlanes(face, boundBox):
                 center = e.Curve.Center
                 dim1 = e.Curve.Radius
                 dim2 = e.Curve.Radius
-                plane = UF.GEOUNED_Surface(
+                plane = UF.GeounedSurface(
                     ("Plane", (center, dir, dim1, dim2)), boundBox
                 )
                 planes.append(plane)
@@ -185,13 +185,13 @@ def TorusBoundPlanes(face, boundBox):
             center = e.Curve.Center
             dim1 = e.Curve.MinorRadius
             dim2 = e.Curve.MajorRadius
-            plane = UF.GEOUNED_Surface(("Plane", (center, dir, dim1, dim2)), boundBox)
+            plane = UF.GeounedSurface(("Plane", (center, dir, dim1, dim2)), boundBox)
             planes.append(plane)
 
         elif curve == "<BSplineCurve object>":
             planeParams = PlaneSplineCurve(e)
             if planeParams is not None:
-                plane = UF.GEOUNED_Surface(("Plane", planeParams), boundBox)
+                plane = UF.GeounedSurface(("Plane", planeParams), boundBox)
                 planes.append(plane)
 
     return planes
@@ -220,16 +220,16 @@ def ExtractSurfaces(solid, kind, universe_box, MakeObj=False):
         fuzzy = True
         solid_parts = []
         for s in solid.Solids:
-            solid_parts.append(GU.solid_GU(s))
+            solid_parts.append(GU.SolidGu(s))
     else:
         fuzzy = False
         if kind == "Plane3Pts":
             P3P = True
         else:
             P3P = False
-        solid_parts = [GU.solid_GU(solid, P3P)]
+        solid_parts = [GU.SolidGu(solid, P3P)]
 
-    surfaces = UF.Surfaces_dict()
+    surfaces = UF.SurfacesDict()
 
     for solid_GU in solid_parts:
 
@@ -242,7 +242,7 @@ def ExtractSurfaces(solid, kind, universe_box, MakeObj=False):
                 pos = face.CenterOfMass
                 dim1 = face.ParameterRange[1] - face.ParameterRange[0]
                 dim2 = face.ParameterRange[3] - face.ParameterRange[2]
-                plane = UF.GEOUNED_Surface(
+                plane = UF.GeounedSurface(
                     ("Plane", (pos, normal, dim1, dim2)), universe_box
                 )
                 if MakeObj:
@@ -255,7 +255,7 @@ def ExtractSurfaces(solid, kind, universe_box, MakeObj=False):
                 rad = face.Surface.Radius
                 dim_l = face.ParameterRange[3] - face.ParameterRange[2]
                 if kind in ["Cyl", "All"]:
-                    cylinder = UF.GEOUNED_Surface(
+                    cylinder = UF.GeounedSurface(
                         ("Cylinder", (orig, dir, rad, dim_l)), universe_box
                     )
                     if MakeObj:
@@ -272,12 +272,12 @@ def ExtractSurfaces(solid, kind, universe_box, MakeObj=False):
             elif surf == "<Cone object>":
                 dir = face.Surface.Axis
                 apex = face.Surface.Apex
-                halfAngle = face.Surface.SemiAngle
+                half_angle = face.Surface.SemiAngle
                 dim_l = face.ParameterRange[3] - face.ParameterRange[2]
                 dimR = face.Surface.Radius
                 if kind in ["Cone", "All"]:
-                    cone = UF.GEOUNED_Surface(
-                        ("Cone", (apex, dir, halfAngle, dim_l, dimR)), universe_box
+                    cone = UF.GeounedSurface(
+                        ("Cone", (apex, dir, half_angle, dim_l, dimR)), universe_box
                     )
                     if MakeObj:
                         cone.buildSurface()
@@ -292,7 +292,7 @@ def ExtractSurfaces(solid, kind, universe_box, MakeObj=False):
             elif surf[0:6] == "Sphere" and kind in ["Sph", "All"]:
                 rad = face.Surface.Radius
                 pnt = face.Surface.Center
-                sphere = UF.GEOUNED_Surface(("Sphere", (pnt, rad)), universe_box)
+                sphere = UF.GeounedSurface(("Sphere", (pnt, rad)), universe_box)
                 if MakeObj:
                     sphere.buildSurface()
                 surfaces.addSphere(sphere)
@@ -309,7 +309,7 @@ def ExtractSurfaces(solid, kind, universe_box, MakeObj=False):
                     radMin = face.Surface.MinorRadius
                     center = face.Surface.Center
                     dir = face.Surface.Axis
-                    torus = UF.GEOUNED_Surface(
+                    torus = UF.GeounedSurface(
                         ("Torus", (center, dir, radMaj, radMin)), universe_box
                     )
                     if MakeObj:
@@ -329,7 +329,7 @@ def ExtractSurfaces(solid, kind, universe_box, MakeObj=False):
                 dim2 = face.ParameterRange[3] - face.ParameterRange[2]
                 points = tuple(v.Point for v in face.Vertexes)
 
-                plane = UF.GEOUNED_Surface(
+                plane = UF.GeounedSurface(
                     ("Plane3Pts", (pos, normal, dim1, dim2, points)), universe_box
                 )
                 if MakeObj:
@@ -810,7 +810,7 @@ def SplitPlanes_org(Solids, universe_box):
     return simpleSolid, err
 
 
-class parallelPlanes:
+class ParallelPlanes:
     def __init__(self, plane):
         self.Axis = plane.Surf.Axis
         self.elements = [plane]
@@ -840,7 +840,7 @@ class parallelPlanes:
 def sortPlanes(PlaneList, sortElements=False):
     if not PlaneList:
         return []
-    newList = [parallelPlanes(PlaneList[0])]
+    newList = [ParallelPlanes(PlaneList[0])]
     for p in PlaneList[1:]:
         found = False
         for pp in newList:
@@ -848,7 +848,7 @@ def sortPlanes(PlaneList, sortElements=False):
                 found = True
                 break
         if not found:
-            newList.append(parallelPlanes(p))
+            newList.append(ParallelPlanes(p))
 
     lenList = []
     for i, pp in enumerate(newList):
@@ -976,7 +976,7 @@ def split2ndOPlane(solid):
 
     err = 0
     flag_inv = CD.isInverted(solid)
-    solid_GU = GU.solid_GU(solid)
+    solid_GU = GU.SolidGu(solid)
     planes = Plane2ndOrder(solid_GU, None, flag_inv, convex=True)
     if not planes:
         return [solid], err

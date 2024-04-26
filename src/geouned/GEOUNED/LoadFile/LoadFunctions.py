@@ -2,7 +2,7 @@ import re
 
 import FreeCAD
 
-from ..Utils.Functions import GEOUNED_Solid
+from ..Utils.Functions import GeounedSolid
 from ..Utils.Options.Classes import Options as opt
 
 
@@ -62,7 +62,7 @@ def fuseMetaObj(meta_list, init, end):
     for m in meta_list[init:end]:
         solids.extend(m.Solids)
 
-    new_meta = GEOUNED_Solid(init + 1, solids)
+    new_meta = GeounedSolid(init + 1, solids)
     new_meta.EnclosureID = meta_list[init].EnclosureID
     new_meta.ParentEnclosureID = meta_list[init].ParentEnclosureID
     new_meta.IsEnclosure = meta_list[init].IsEnclosure

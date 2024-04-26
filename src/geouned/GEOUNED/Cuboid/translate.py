@@ -112,7 +112,7 @@ def setDefinition(meta_obj, surfaces):
     for sol in solids:
         subSol = BoolSequence(operator="AND")
         flag_inv = isInverted(sol)
-        solid_gu = GU.solid_GU(sol, plane3Pts=True)
+        solid_gu = GU.SolidGu(sol, plane3Pts=True)
 
         faces = []
         for face in solid_gu.Faces:

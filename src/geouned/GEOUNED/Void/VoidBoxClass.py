@@ -8,7 +8,7 @@ from ..Decompose import Decom_one as Decom
 from ..Utils.BasicFunctions_part1 import isOposite
 from ..Utils.booleanFunction import BoolSequence
 from ..Utils.BooleanSolids import buildCTableFromSolids, removeExtraSurfaces
-from ..Utils.Functions import GEOUNED_Solid, GEOUNED_Surface
+from ..Utils.Functions import GeounedSolid, GeounedSurface
 from ..Utils.Options.Classes import Options as opt
 
 
@@ -181,7 +181,7 @@ class VoidBox:
 
         else:
             UniverseBox = self.PieceEnclosure.BoundBox
-            TempPieceEnclosure = GEOUNED_Solid(None, self.PieceEnclosure)
+            TempPieceEnclosure = GeounedSolid(None, self.PieceEnclosure)
             comsolid, err = Decom.SplitSolid(
                 Part.makeCompound(TempPieceEnclosure.Solids), UniverseBox
             )
@@ -354,7 +354,7 @@ class VoidBox:
         LX = self.BoundBox.ZMin + self.BoundBox.XLength
         LY = self.BoundBox.ZMin + self.BoundBox.YLength
         LZ = self.BoundBox.ZMin + self.BoundBox.ZLength
-        PXMin = GEOUNED_Surface(
+        PXMin = GeounedSurface(
             (
                 "Plane",
                 (
@@ -366,7 +366,7 @@ class VoidBox:
             ),
             self.BoundBox,
         )
-        PXMax = GEOUNED_Surface(
+        PXMax = GeounedSurface(
             (
                 "Plane",
                 (
@@ -378,7 +378,7 @@ class VoidBox:
             ),
             self.BoundBox,
         )
-        PYMin = GEOUNED_Surface(
+        PYMin = GeounedSurface(
             (
                 "Plane",
                 (
@@ -390,7 +390,7 @@ class VoidBox:
             ),
             self.BoundBox,
         )
-        PYMax = GEOUNED_Surface(
+        PYMax = GeounedSurface(
             (
                 "Plane",
                 (
@@ -402,7 +402,7 @@ class VoidBox:
             ),
             self.BoundBox,
         )
-        PZMin = GEOUNED_Surface(
+        PZMin = GeounedSurface(
             (
                 "Plane",
                 (
@@ -414,7 +414,7 @@ class VoidBox:
             ),
             self.BoundBox,
         )
-        PZMax = GEOUNED_Surface(
+        PZMax = GeounedSurface(
             (
                 "Plane",
                 (
@@ -458,7 +458,7 @@ class VoidBox:
     def __copyMeta__(self, m):
         solidsCopy = m.Solids[:]
         facesCopy = m.Faces[:]
-        Meta = GEOUNED_Solid(m.__id__, solidsCopy)
+        Meta = GeounedSolid(m.__id__, solidsCopy)
         Meta.setDefinition(m.Definition.copy())
         Meta.setFaces(facesCopy)
         if m.IsEnclosure:

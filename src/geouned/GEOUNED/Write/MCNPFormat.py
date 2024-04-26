@@ -8,12 +8,12 @@ import FreeCAD
 
 from ..CodeVersion import *
 from ..Utils.BasicFunctions_part1 import isOposite, pointsToCoeffs
-from ..Utils.Functions import Surfaces_dict
+from ..Utils.Functions import SurfacesDict
 from ..Utils.Options.Classes import Options as opt
 from .Functions import CardLine, MCNPSurface, changeSurfSign, writeMCNPCellDef
 
 
-class MCNP_input:
+class McnpInput:
     def __init__(self, Meta, Surfaces, setting):
         self.Title = setting["title"]
         self.VolSDEF = setting["volSDEF"]
@@ -326,7 +326,7 @@ C **************************************************************\n""".format(
         return
 
     def __sortedSurfaces__(self, Surfaces):
-        temp = Surfaces_dict(Surfaces)
+        temp = SurfacesDict(Surfaces)
         surfList = []
         for ind in range(
             Surfaces.IndexOffset, Surfaces.surfaceNumber + Surfaces.IndexOffset

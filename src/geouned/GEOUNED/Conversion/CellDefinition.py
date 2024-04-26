@@ -18,7 +18,7 @@ from ..Utils.BasicFunctions_part1 import (
 )
 from ..Utils.booleanFunction import BoolSequence, insertInSequence
 from ..Utils.BooleanSolids import buildCTableFromSolids, removeExtraSurfaces
-from ..Utils.Functions import GEOUNED_Surface
+from ..Utils.Functions import GeounedSurface
 from ..Utils.Options.Classes import Options as opt
 from ..Utils.Options.Classes import Tolerances as tol
 
@@ -697,11 +697,17 @@ def GenTorusAnnexVSurface(face, v_params, force_cylinder=False):
             p_mid = face.valueAt(0, v_mid) - center
             if p_mid.cross(axis).Length < face.Surface.MajorRadius:
                 in_surf = True
+            v_mid = (v_params[0] + v_params[1]) * 0.5
+            p_mid = face.valueAt(0, v_mid) - center
+            if p_mid.cross(axis).Length < face.Surface.MajorRadius:
+                in_surf = True
+                radius = max(d1, d2)
             else:
                 in_surf = False
         else:
             if d1 < face.Surface.MajorRadius:
                 in_surf = True
+                radius = max(d1, d2)
             else:
                 in_surf = False
         return (center, axis, radius, face.Surface.MinorRadius), surf_type, in_surf
@@ -749,7 +755,7 @@ def cellDef(meta_obj, surfaces, universe_box):
         extra_plane_reverse = dict()
 
         flag_inv = isInverted(solid)
-        solid_gu = GU.solid_GU(solid)
+        solid_gu = GU.SolidGu(solid)
         last_torus = -1
         for iface, face in enumerate(solid_gu.Faces):
             surface_type = str(face.Surface)
@@ -792,14 +798,14 @@ def cellDef(meta_obj, surfaces, universe_box):
                 try:
                     plane = GenPlane(face, solid_gu)
                     if plane is not None:
-                        plane = GU.Plane_GU(plane)
+                        plane = GU.PlaneGu(plane)
                 except:
                     plane = None
                     if opt.verbose:
                         print("Warning: generation of additional plane has failed")
 
                 if plane is not None:
-                    p = GEOUNED_Surface(
+                    p = GeounedSurface(
                         ("Plane", (plane.Position, plane.Axis, plane.dim1, plane.dim2)),
                         universe_box,
                         Face="Build",
@@ -842,8 +848,7 @@ def cellDef(meta_obj, surfaces, universe_box):
                     if not u_closed:
                         planes, ORop = GenTorusAnnexUPlanes(face, u_minMax)
                         plane1, plane2 = planes
-
-                        plane = GEOUNED_Surface(
+                        plane = GeounedSurface(
                             ("Plane", plane1), universe_box, Face="Build"
                         )
                         id1, exist = surfaces.addPlane(plane)
@@ -855,7 +860,7 @@ def cellDef(meta_obj, surfaces, universe_box):
                         if plane2 is None:
                             u_var = "%i" % id1
                         else:
-                            plane = GEOUNED_Surface(
+                            plane = GeounedSurface(
                                 ("Plane", plane2), universe_box, Face="Build"
                             )
                             id2, exist = surfaces.addPlane(plane)
@@ -890,19 +895,19 @@ def cellDef(meta_obj, surfaces, universe_box):
                             )
 
                             if surf_type == "Cone":
-                                cone = GEOUNED_Surface(
+                                cone = GeounedSurface(
                                     ("Cone", surf_params), universe_box, Face="Build"
                                 )
                                 id2, exist = surfaces.addCone(cone)
 
                             elif surf_type == "Cylinder":
-                                cyl = GEOUNED_Surface(
+                                cyl = GeounedSurface(
                                     ("Cylinder", surf_params), universe_box, Face="Build"
                                 )
                                 id2, exist = surfaces.addCylinder(cyl)
 
                             elif surf_type == "Plane":
-                                plane = GEOUNED_Surface(
+                                plane = GeounedSurface(
                                     ("Plane", surf_params), universe_box, Face="Build"
                                 )
                                 id2, exist = surfaces.addPlane(plane)
@@ -936,7 +941,7 @@ def cellDef(meta_obj, surfaces, universe_box):
                     if surface_type == "<Plane object>":
                         dim1 = face.ParameterRange[1] - face.ParameterRange[0]
                         dim2 = face.ParameterRange[3] - face.ParameterRange[2]
-                        plane = GEOUNED_Surface(
+                        plane = GeounedSurface(
                             (
                                 "Plane",
                                 (face.Surface.Position, face.Surface.Axis, dim1, dim2),
@@ -948,7 +953,7 @@ def cellDef(meta_obj, surfaces, universe_box):
                         surf = plane.shape
                     elif surface_type == "<Cylinder object>":
                         dim_l = face.ParameterRange[3] - face.ParameterRange[2]
-                        cylinder = GEOUNED_Surface(
+                        cylinder = GeounedSurface(
                             (
                                 "Cylinder",
                                 (
@@ -1153,7 +1158,7 @@ def ExtraPlaneCylFace(face, box, surfaces):
             else:
                 dim1 = e.Curve.Radius
                 dim2 = e.Curve.Radius
-            plane = GEOUNED_Surface(
+            plane = GeounedSurface(
                 ("Plane", (center, dir, dim1, dim2)), box, Face="Build"
             )
             id, exist = surfaces.addPlane(plane)
@@ -1179,7 +1184,7 @@ def addConePlane(definition, cones_list, surfaces, universe_box):
         ):
             continue
 
-        plane = GEOUNED_Surface(
+        plane = GeounedSurface(
             ("Plane", (cone.Surf.Apex, cone.Surf.Axis, 1, 1)), universe_box, Face="Build"
         )
         pid, exist = surfaces.addPlane(plane)

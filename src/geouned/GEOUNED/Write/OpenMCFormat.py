@@ -5,12 +5,12 @@
 import FreeCAD
 
 from ..CodeVersion import *
-from ..Utils.Functions import Surfaces_dict
+from ..Utils.Functions import SurfacesDict
 from ..Utils.Options.Classes import Options as opt
 from .Functions import OpenMCSurface, changeSurfSign, writeOpenMCregion
 
 
-class OpenMC_input:
+class OpenmcInput:
     def __init__(self, Meta, Surfaces, setting):
 
         self.Cells = Meta
@@ -243,7 +243,7 @@ import openmc
         return
 
     def __sortedSurfaces__(self, Surfaces):
-        temp = Surfaces_dict(Surfaces)
+        temp = SurfacesDict(Surfaces)
         surfList = []
         for ind in range(
             Surfaces.IndexOffset, Surfaces.surfaceNumber + Surfaces.IndexOffset
