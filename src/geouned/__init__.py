@@ -4,7 +4,7 @@
 # found by subsequent import statements through out the code base
 try:
     import freecad
-except:
+except ImportError:
     pass
 
 from .GEOUNED import *
