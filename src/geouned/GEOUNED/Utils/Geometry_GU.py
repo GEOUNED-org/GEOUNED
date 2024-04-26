@@ -1,20 +1,21 @@
 #
 #  definition of GEOUNED objects to release memory
 #
-import math
+#  GEOUNED SurfacesGU, SolidsGU, PlaneGU, etc.. objects are created because FreeCAD create a new object
+#  each time an attribute of FreeCAD object is called. This leads to code crash with memory failure
+#  when attribues are call large amount of times. Like it is in this code.
 
+import math
 import Part
 
 from ..Utils.Options.Classes import Tolerances as tol
 from .BasicFunctions_part1 import isSameValue
 from .BasicFunctions_part2 import isSameTorus
 
-
 # SURFACES
 class SurfacesGu(object):
-
+    """GEOUNED surface class"""
     def __init__(self, face):
-
         self.face = face
         self.Surface = self.face.Surface
         self.type = str(self.Surface)
@@ -26,9 +27,8 @@ class SurfacesGu(object):
 
 
 class PlaneGu(SurfacesGu):
-
+    """GEOUNED Plane Class"""
     def __init__(self, face, plane3Pts=False):
-
         SurfacesGu.__init__(self, face)
         self.Axis = face.Surface.Axis
         self.Position = face.Surface.Position
@@ -46,9 +46,8 @@ class PlaneGu(SurfacesGu):
 
 
 class CylinderGu(SurfacesGu):
-
+    """GEOUNED Cylinder Class"""
     def __init__(self, face):
-
         SurfacesGu.__init__(self, face)
         self.Axis = face.Surface.Axis
         self.Radius = face.Surface.Radius
@@ -57,9 +56,8 @@ class CylinderGu(SurfacesGu):
 
 
 class ConeGu(SurfacesGu):
-
+    """GEOUNED Cone Class"""
     def __init__(self, face):
-
         SurfacesGu.__init__(self, face)
         self.Axis = face.Surface.Axis
         self.Apex = face.Surface.Apex
@@ -70,9 +68,8 @@ class ConeGu(SurfacesGu):
 
 
 class SphereGu(SurfacesGu):
-
+    """GEOUNED Sphere Class"""
     def __init__(self, face):
-
         SurfacesGu.__init__(self, face)
         self.type = self.type[0:6]
         self.Center = face.Surface.Center
@@ -80,9 +77,8 @@ class SphereGu(SurfacesGu):
 
 
 class TorusGu(SurfacesGu):
-
+    """GEOUNED Torus Class"""
     def __init__(self, face):
-
         SurfacesGu.__init__(self, face)
         self.Center = face.Surface.Center
         self.Axis = face.Surface.Axis
@@ -91,7 +87,7 @@ class TorusGu(SurfacesGu):
 
 
 class SolidGu:
-
+    """GEOUNED Solid Class"""
     def __init__(self, solid, plane3Pts=False):
         self.solid = solid
         faces = DefineListFace_GU(solid.Faces, plane3Pts)
@@ -118,8 +114,7 @@ class SolidGu:
                     self.TorusUParams[t] = (i, URange)
 
     def __sameTorusSurf__(self, torusList):
-
-        # group identical faces
+        """group as a single face all the neighbour faces of the same torus"""
         sameTorusFace = []
         temp = torusList[:]
         while len(temp) > 0:
@@ -141,7 +136,7 @@ class SolidGu:
         return self.__separateSurfaces__(sameTorusFace)
 
     def __separateSurfaces__(self, faceList):
-        # group all faces forming a continuous surface
+        """group all faces in faceList forming a continuous surface"""
         sameSurfaces = []
         for tset in faceList:
             temp = tset[:]
@@ -167,7 +162,6 @@ class SolidGu:
         return sameSurfaces
 
     def __mergeNoPeriodicUV__(self, parameter, faceList):
-
         if parameter == "U":
             i1 = 0
             i2 = 2
@@ -226,6 +220,7 @@ class SolidGu:
 
 # FACES
 class FaceGu(object):
+    """GEOUNED Face Class"""
     def __init__(self, face, Plane3Pts=False):
         # GEOUNED based atributes
         self.__face__ = face
@@ -266,7 +261,6 @@ class FaceGu(object):
         if shape1 is shape2:
             return (0,)
         else:
-
             try:
                 dist2Shape = shape1.distToShape(shape2)
             except:

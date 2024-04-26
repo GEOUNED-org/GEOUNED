@@ -1,15 +1,20 @@
+#
+# Define the class storing Boolean expression of the cell definition
+#
+
 import re
 
-mostinner = re.compile(r"\([^\(^\)]*\)")  # identify most inner parentheses
-number = re.compile(r"(?P<value>[-+]?\d+)")
-mix = re.compile(r"(?P<value>([-+]?\d+|\[0+\]))")
-TFX = re.compile(r"(?P<value>[FTXo]+)")
-PValue = re.compile(r"P\d+")
-NValue = re.compile(r"N\d+")
-conversion = {"T": True, "F": False, "X": None}
+mostinner = re.compile(r"\([^\(^\)]*\)")           # identify most inner parentheses
+number = re.compile(r"(?P<value>[-+]?\d+)")        # identify signed integer and record its value in <value>
+mix = re.compile(r"(?P<value>([-+]?\d+|\[0+\]))")  # identify signed integer or [000...] pattern. Record the value. 
+TFX = re.compile(r"(?P<value>[FTXo]+)")            # identify pattern incluinding F,T,X, or o sequence ( in any order).
+PValue = re.compile(r"P\d+")                       # identify pattern "P" + integer pattern (e.g. P3915).
+NValue = re.compile(r"N\d+")                       # identify pattern "N" + integer pattern (e.g. N3358).
+conversion = {"T": True, "F": False, "X": None}    # associate "T", "F", "X" with associated Boolean value (or None for X)
 
 
 class BoolSequence:
+    """Class storing Boolean expression and operating on it"""
     def __init__(self, definition=None, operator=None):
         if definition:
             self.elements = []
@@ -33,6 +38,11 @@ class BoolSequence:
         return out
 
     def append(self, *seq):
+        """Append a BoolSequence Objects. seq may be :
+          - An iterable containing allowed BoolSequence Objects
+          - A BoolSequence object
+          - An integer value
+          - A Boolean value"""
         for s in seq:
             if type(s) is int:
                 level = -1
@@ -71,6 +81,7 @@ class BoolSequence:
             self.level = max(self.level, level + 1)
 
     def assign(self, Seq):
+        """Assign the BoolSequence Seq to the self instance BoolSequence""" 
         if type(Seq) is bool:
             self.operator == "AND"
             self.elements = Seq
@@ -125,7 +136,6 @@ class BoolSequence:
         return cp
 
     def getComplementary(self):
-
         c = BoolSequence(operator=self.compOperator())
         c.level = self.level
 
@@ -145,7 +155,8 @@ class BoolSequence:
         else:
             return "AND"
 
-    def simplify(self, CT, depth=0):
+    def simplify(self, CT=None, depth=0):
+        """Simplification by recursive calls to the inner BoolSequence objects."""
         if self.level > 0:
             for seq in self.elements:
                 seq.simplify(CT, depth + 1)
@@ -162,7 +173,8 @@ class BoolSequence:
             if self.level > levIn and depth < 10:
                 self.simplify(CT, depth + 1)
 
-    def simplifySequence(self, CT):
+    def simplifySequence(self, CT=None):
+        """Carry out the simplification process of the BoolSequence."""
         if self.level < 1 and CT is None:
             self.clean()
             return
@@ -189,7 +201,7 @@ class BoolSequence:
                 newNames = self.getSurfacesNumbers()
 
     def doFactorize(self, valname, trueSet, falseSet):
-
+        """For level 0 sequence check if the factorization would lead to a simplification."""
         if self.level > 0:
             return True
         if trueSet is None and falseSet is None:
@@ -239,6 +251,7 @@ class BoolSequence:
     # check if level 0 sequence have oposite value a & -a = 0  , a|-a = 1
     # return the value of the sequence None(unknown), True, False
     def check(self, level0=False):
+        """Check BoolSequence in level 0 have oposite values  a & -a = 0  , a|-a = 1."""
         if type(self.elements) is bool:
             return self.elements
         if self.level == 0:
@@ -289,6 +302,8 @@ class BoolSequence:
                 return False
 
     def substitute(self, var, val):
+        """Substitute in the BoolSequence the variable "var" by the value "val". 
+        "val" can be an Boolean value or an integer representing another surface variable."""
         if val is None:
             return
         if type(self.elements) is bool:
@@ -334,8 +349,8 @@ class BoolSequence:
         self.check(level0=True)
         self.joinOperators(selfLevel=True)
 
-    # remove sequence whom elements are boolean values instead of list
     def clean(self, selfLevel=False):
+        """Remove sequences whom elements are boolean values instead of list."""
         if type(self.elements) is bool:
             return self.elements
         for e in reversed(self.elements):
@@ -366,8 +381,8 @@ class BoolSequence:
         else:
             return self
 
-    # join redundant operators in sequence
     def joinOperators(self, selfLevel=False):
+        """Join redundant operators in found in the sequence."""
         if type(self.elements) is bool:
             return
         self.clean(selfLevel=True)
@@ -445,7 +460,7 @@ class BoolSequence:
         return subList, subSeq
 
     def factorize(self, valname, trueSet, falseSet):
-
+        """Make the factorization of the Sequence on variable valname using Shannon's theorem."""
         if trueSet is None:  # valname cannot take True value
             falseFunc = self.evaluate(falseSet)
             self.assign(falseFunc)
@@ -535,7 +550,8 @@ class BoolSequence:
             return True
 
     def evaluate(self, valueSet):
-
+        """Return the result of the evaluation of the BoolSequence given the known values of the variables in "valueSet".
+        Result can be a Boolean value or the reduced expresion of the BoolSequence."""
         if type(self.elements) is bool:
             return self.elements
         self.groupSingle()
@@ -548,6 +564,8 @@ class BoolSequence:
         return newSeq.elements if type(newSeq.elements) is bool else newSeq
 
     def setDef(self, expression):
+        """Set the expression of the Boolean function in the BoolSequence instance.
+        "expresion" is the string object. The definition should have MCNP syntax cell definition. """
         terms, operator = outterTerms(expression)
         self.operator = operator
         self.level = 0
@@ -577,6 +595,8 @@ class BoolSequence:
         self.groupSingle()
 
     def groupSingle(self):
+        """ group integers found in Sequence with level > 1.
+        (e.g. change AND[1 2 3 OR[2 4]] to AND[ AND[1 2 3] OR[2 3]] ). """
         if self.level == 0:
             return
         if type(self.elements) is bool:
@@ -599,6 +619,7 @@ class BoolSequence:
         self.elements.insert(0, seq)
 
     def getSurfacesNumbers(self):
+        """Return the list of all surfaces in the BoolSequence definition."""
         if type(self.elements) is bool:
             return tuple()
         surf = set()
@@ -610,6 +631,7 @@ class BoolSequence:
         return surf
 
     def levelUpdate(self):
+        """Update the level value of the BoolSequence."""
         if type(self.elements) is bool:
             self.level = 0
             return
@@ -623,7 +645,8 @@ class BoolSequence:
 
 
 def insertInSequence(Seq, trgt, nsrf, operator):
-
+    """Substitute the variable trgt by the sequence "(trgt:nsrg)" or "(trgt nsf)" in the
+    BoolSequence Seq"""
     if operator == "OR":
         newSeq = BoolSequence(f"{trgt}:{nsrf}")
     else:
@@ -635,6 +658,8 @@ def insertInSequence(Seq, trgt, nsrf, operator):
 
 
 def substituteIntegerElement(Seq, target, newElement):
+    """Substitute the variable target by the sequence newElement in the
+    BoolSequence Seq"""
     for i, e in enumerate(Seq.elements):
         if type(e) is int:
             if e == target:
@@ -644,6 +669,7 @@ def substituteIntegerElement(Seq, target, newElement):
 
 
 def outterTerms(expression, value="number"):
+    """Return the list and the boolean operator of the outter terms of the expression."""
     if value == "number":
         # reValue = number
         reValue = mix
@@ -706,7 +732,7 @@ def outterTerms(expression, value="number"):
 
 
 def redundant(m, geom):
-    """check if the inner parentheses are redundant"""
+    """Check if the inner parentheses are redundant."""
     term = m.group()
 
     # Find first valid character at the left of the  parenthese
