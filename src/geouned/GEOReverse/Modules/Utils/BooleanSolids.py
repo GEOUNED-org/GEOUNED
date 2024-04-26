@@ -317,9 +317,9 @@ def removeExtraSurfaces(CellSeq, CTable):
         nullcell = False
         chk = subCell.check()
 
-        if chk == False:  # the cell doesn't exist
+        if chk is False:  # the cell doesn't exist
             nullcell = True
-        elif chk == True:  # the cell describe the full universe
+        elif chk is True:  # the cell describe the full universe
             newDef.elements = True
             newDef.level = 0
             return newDef
@@ -336,7 +336,7 @@ def removeExtraSurfaces(CellSeq, CTable):
                     val = True if CTable[s][s].val > 0 else False
                     subCell.substitute(s, val)
                 if type(subCell.elements) is bool:
-                    if subCell.elements == False:  #  cell does not intersect void box
+                    if subCell.elements is False:  #  cell does not intersect void box
                         continue
                     else:  # cell cover fully void box
                         newDef.elements = True
@@ -345,7 +345,7 @@ def removeExtraSurfaces(CellSeq, CTable):
                 else:
                     newDef.append(subCell)
 
-            elif res == True:
+            elif res is True:
                 # subcell cover the full box region Void cell doesn't exist
                 newDef.elements = True
                 newDef.level = 0

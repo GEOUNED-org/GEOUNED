@@ -248,7 +248,7 @@ class VoidBox:
                     surfaceDict[i] = Surfaces.getSurface(i)
                 CTable = buildCTableFromSolids(Box, surfaceDict, option=simplify)
             else:
-                if res == True:
+                if res is True:
                     return None, None
                 else:
                     return boxDef, None
@@ -266,7 +266,7 @@ class VoidBox:
                 newSolid = removeExtraSurfaces(solDef, CTable)
                 if type(newSolid.elements) is not bool:
                     newTemp.append(newSolid)
-                elif newSolid.elements == True:
+                elif newSolid.elements is True:
                     return None, None
 
             voidSolidDef = newTemp
@@ -279,9 +279,9 @@ class VoidBox:
                 cellVoid.append(voidSolidDef)
                 voidSolidDef = cellVoid
 
-        if voidSolidDef.elements == True:
+        if voidSolidDef.elements is True:
             return None, None
-        elif voidSolidDef.elements == False or voidSolidDef.elements == []:
+        elif voidSolidDef.elements is False or voidSolidDef.elements == []:
             return boxDef, None
 
         if voidSolidDef.level == 0:
@@ -302,13 +302,13 @@ class VoidBox:
                         chk = None
 
                     # solid in cover full Void cell volume  => Void cell doesn't exist
-                    if chk == True:
+                    if chk is True:
                         if opt.verbose:
                             print("warning void Cell should not exist")
                         return None, None
 
                     # solid cell is not in void cell Void cell volume  => doesn't contribute to void definition
-                    elif chk == False:
+                    elif chk is False:
                         continue
 
                 pmoc = comp.getComplementary()

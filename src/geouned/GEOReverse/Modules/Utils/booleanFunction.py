@@ -41,9 +41,9 @@ class BoolSequence:
                 if type(s.elements) is bool:
                     if (
                         self.operator == "AND"
-                        and s.elements == False
+                        and s.elements is False
                         or self.operator == "OR"
-                        and s.elements == True
+                        and s.elements is True
                     ):
                         self.level = 0
                         self.elements = s.elements
@@ -144,9 +144,9 @@ class BoolSequence:
                 if type(e.elements) is bool:
                     if (
                         self.operator == "AND"
-                        and e.elements == False
+                        and e.elements is False
                         or self.operator == "OR"
-                        and e.elements == True
+                        and e.elements is True
                     ):
                         self.elements = e.elements
                         self.level = 0
@@ -186,9 +186,9 @@ class BoolSequence:
                 res = e.check()
                 if res is None:
                     noneVal = True
-                elif self.operator == "AND" and res == False:
+                elif self.operator == "AND" and res is False:
                     return False
-                elif self.operator == "OR" and res == True:
+                elif self.operator == "OR" and res is True:
                     return True
 
             if noneVal:
@@ -344,7 +344,7 @@ class BoolSequence:
             return True
 
         funcVal = self.evaluate(trueSet, CT)
-        if funcVal == False:
+        if funcVal is False:
             newSeq = BoolSequence(operator="AND")
             # self.substitute(valname,False)
             for name, value in falseSet.items():
@@ -352,7 +352,7 @@ class BoolSequence:
             newSeq.append(-valname, self.copy())
             self.assign(newSeq)
             return True
-        elif funcVal == True:
+        elif funcVal is True:
             newSeq = BoolSequence(operator="OR")
             # self.substitute(valname,False)
             for name, value in falseSet.items():
@@ -362,7 +362,7 @@ class BoolSequence:
             return True
 
         funcVal = self.evaluate(falseSet, CT)
-        if funcVal == False:
+        if funcVal is False:
             newSeq = BoolSequence(operator="AND")
             # self.substitute(valname,True)
             for name, value in trueSet.items():
@@ -370,7 +370,7 @@ class BoolSequence:
             newSeq.append(valname, self.copy())
             self.assign(newSeq)
             return True
-        elif funcVal == True:
+        elif funcVal is True:
             newSeq = BoolSequence(operator="OR")
             # self.substitute(valname,True)
             for name, value in trueSet.items():
@@ -444,9 +444,9 @@ class BoolSequence:
 
             if val is None:
                 noneVal = True
-            elif op == "AND" and val == False:
+            elif op == "AND" and val is False:
                 return False
-            elif op == "OR" and val == True:
+            elif op == "OR" and val is True:
                 return True
 
         if noneVal:
