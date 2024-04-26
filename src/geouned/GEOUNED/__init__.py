@@ -12,6 +12,7 @@ try:
 except:
     pass
 import configparser
+import typing
 from datetime import datetime
 from os import mkdir, path
 
@@ -33,34 +34,131 @@ from .Write.WriteFiles import writeGeometry
 
 class GEOUNED:
 
-    def __init__(self, title="Geouned conversion"):
-        """ """
-        self.__dict__ = dict()
-        self.__dict__["stepFile"] = ""
-        self.__dict__["geometryName"] = ""
-        self.__dict__["matFile"] = ""
-        self.__dict__["outFormat"] = ("mcnp",)
-        self.__dict__["title"] = title
-        self.__dict__["voidGen"] = True
-        self.__dict__["debug"] = False
-        self.__dict__["compSolids"] = True
-        self.__dict__["volSDEF"] = False
-        self.__dict__["dummyMat"] = False
-        self.__dict__["volCARD"] = True
-        self.__dict__["UCARD"] = None
-        self.__dict__["simplify"] = "No"
-        self.__dict__["cellRange"] = []
-        self.__dict__["exportSolids"] = ""
-        self.__dict__["minVoidSize"] = 200  # units mm
-        self.__dict__["maxSurf"] = 50
-        self.__dict__["maxBracket"] = 30
-        self.__dict__["voidMat"] = []
-        self.__dict__["voidExclude"] = []
-        self.__dict__["startCell"] = 1
-        self.__dict__["startSurf"] = 1
-        self.__dict__["cellCommentFile"] = False
-        self.__dict__["cellSummaryFile"] = True
-        self.__dict__["sortEnclosure"] = False
+    def __init__(
+        self,
+        title: str = "Geouned conversion",
+        stepFile: str = "",
+        geometryName: str = "",
+        matFile: str = "",
+        outFormat: typing.Tuple[str] = ("mcnp",),
+        voidGen: bool = True,
+        debug: bool = False,
+        compSolids: bool = True,
+        volSDEF: bool = False,
+        dummyMat: bool = False,
+        volCARD: bool = True,
+        UCARD=None,
+        simplify: str = "No",
+        cellRange=[],
+        exportSolids: str = "",
+        minVoidSize: float = 200.0,  # units mm
+        maxSurf: int = 50,
+        maxBracket: int = 30,
+        voidMat=[],
+        voidExclude=[],
+        startCell: int = 1,
+        startSurf: int = 1,
+        cellCommentFile: bool = False,
+        cellSummaryFile: bool = True,
+        sortEnclosure: bool = False,
+    ):
+        """Base class for the conversion of CAD to CSG models
+
+        Args:
+            title (str, optional): Title of the model. Defaults to "Geouned
+                conversion".
+            stepFile (str, optional): Name of the CAD file (in STEP format) to
+                be converted. Defaults to "".
+            geometryName (str, optional): Base name of the output file(s).
+                Defaults to "".
+            matFile (str, optional): _description_. Defaults to "".
+            outFormat (typing.Tuple[str], optional): Format for the output
+                geometry. Available format are: mcnp, openMC_XML, openMC_PY,
+                phits and serpent. Several output format can be written in the
+                same geouned run. Defaults to ("mcnp",).
+            voidGen (bool, optional): Generate voids of the geometry. Defaults
+                to True.
+            debug (bool, optional): Write step files of original and decomposed
+                solids, for each solid in the STEP file. Defaults to False.
+            compSolids (bool, optional): Join subsolids of STEP file as a single
+                compound solid. Step files generated with SpaceClaim have not
+                exactly the same level of solids as FreeCAD. It may a happened
+                that solids defined has separated solids are read by FreeCAD
+                as a single compound solid (and will produce only one MCNP
+                cell). In this case compSolids should be set to False. Defaults
+                to True.
+            volSDEF (bool, optional): Write SDEF definition and tally of solid
+                cell for stochastic volume checking. Defaults to False.
+            dummyMat (bool, optional): Write dummy material definition card in
+                the MCNP output file for all material labels present in the
+                model. Dummy material definition is "MX 1001 1". Defaults to
+                False.
+            volCARD (bool, optional): Write the CAD calculated volume in the
+                cell definition using the VOL card. Defaults to True.
+            UCARD (_type_, optional): Write universe card in the cell definition
+                with the specified universe number (if value = 0 Universe card
+                is not written). Defaults to None.
+            simplify (str, optional): Simplify the cell definition considering
+                relative surfaces position and using Boolean logics. Available
+                options are: "no" no optimization, "void" only void cells are
+                simplified. Algorithm is faster but the simplification is not
+                optimal. "voidfull" : only void cells are simplified with the
+                most optimal algorithm. The time of the conversion can be
+                multiplied by 5 or more. "full" : all the cells (solids and
+                voids) are simplified. Defaults to "No".
+            cellRange (list, optional): Range of cell to be converted (only one
+                range is allowed, e.g [100,220]). Default all solids are
+                converted. Defaults to [].
+            exportSolids (str, optional): Export CAD solid after reading.
+                The execution is stopped after export, the translation is not
+                carried out. Defaults to "".
+            minVoidSize (float, optional): Minimum size of the edges of the
+                void cell. Units are in mm. Defaults to 200.0.
+            maxBracket (int, optional): Maximum number of brackets (solid
+                complementary) allowed in void cell definition. Defaults to 30.
+            voidMat (list, optional): Assign a material defined by the user
+                instead of void for cells without material definition and the
+                cells generated in the automatic void generation. The format
+                is a 3 valued tuple (mat_label, mat_density, mat_description).
+                Example (100,1e-3,'Air assigned to Void'). Defaults to [].
+            voidExclude (list, optional): #TODO see issue 87. Defaults to [].
+            startCell (int, optional): Starting cell numbering label. Defaults to 1.
+            startSurf (int, optional): Starting surface numbering label. Defaults to 1.
+            cellCommentFile (bool, optional): Write an additional file with
+                comment associated to each CAD cell in the MCNP output file.
+                Defaults to False.
+            cellSummaryFile (bool, optional): Write an additional file with
+                information on the CAD cell translated. Defaults to True.
+            sortEnclosure (bool, optional): If enclosures are defined in the
+                CAD models, the voids cells of the enclosure will be located in
+                the output file in the same location where the enclosure solid
+                is located in the CAD solid tree.. Defaults to False.
+        """
+        self.title = title
+        self.stepFile = stepFile
+        self.geometryName = geometryName
+        self.matFile = matFile
+        self.outFormat = outFormat
+        self.voidGen = voidGen
+        self.debug = debug
+        self.compSolids = compSolids
+        self.volSDEF = volSDEF
+        self.dummyMat = dummyMat
+        self.volCARD = volCARD
+        self.UCARD = UCARD
+        self.simplify = simplify
+        self.cellRange = cellRange
+        self.exportSolids = exportSolids
+        self.minVoidSize = minVoidSize
+        self.maxSurf = maxSurf
+        self.maxBracket = maxBracket
+        self.voidMat = voidMat
+        self.voidExclude = voidExclude
+        self.startCell = startCell
+        self.startSurf = startSurf
+        self.cellCommentFile = cellCommentFile
+        self.cellSummaryFile = cellSummaryFile
+        self.sortEnclosure = sortEnclosure
 
     def SetOptions(self):
         toleranceKwrd = (
