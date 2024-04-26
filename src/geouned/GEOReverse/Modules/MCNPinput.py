@@ -6,7 +6,21 @@ import FreeCAD
 import numpy as np
 from numpy import linalg as LA
 
-from .Objects import *
+from .Objects import (
+    CadCell,
+    Plane,
+    Sphere,
+    Cylinder,
+    Cone,
+    EllipticCone,
+    Hyperboloid,
+    Ellipsoid,
+    EllipticCylinder,
+    HyperbolicCylinder,
+    Paraboloid,
+    Torus,
+    Box,
+)
 from .Parser import parser as mp
 from .remh import CellCardString, remove_hash
 
@@ -160,6 +174,7 @@ class McnpInput:
                     trValues.append(v[0])
                 trl[c.name] = getTransMatrix(trValues, c.unit)
         return trl
+
 
 # fmt: off
 def getTransMatrix(trsf, unit="", scale=10.0):
