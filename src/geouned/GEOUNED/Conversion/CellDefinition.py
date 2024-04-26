@@ -697,11 +697,13 @@ def GenTorusAnnexVSurface(face, Vparams, forceCylinder=False):
             pMid = face.valueAt(0, Vmid) - center
             if pMid.cross(axis).Length < face.Surface.MajorRadius:
                 inSurf = True
+                radius = max(d1,d2)
             else:
                 inSurf = False
         else:
             if d1 < face.Surface.MajorRadius:
                 inSurf = True
+                radius = max(d1,d2)
             else:
                 inSurf = False
         return (center, axis, radius, face.Surface.MinorRadius), surfType, inSurf
