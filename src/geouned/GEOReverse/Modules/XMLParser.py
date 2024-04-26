@@ -1,7 +1,7 @@
-from .remh import cline
+from .remh import Cline
 
 
-class cellCARD:
+class CellCard:
 
     def __init__(self, data):
         self.type = "cell"
@@ -27,10 +27,10 @@ class cellCARD:
         else:
             self.FILL = None
 
-        self.geom = cline(data["region"].replace("|", ":"))
+        self.geom = Cline(data["region"].replace("|", ":"))
 
 
-class surfCARD:
+class SurfCard:
     def __init__(self, data):
 
         self.type = "surface"
@@ -50,7 +50,7 @@ def get_cards(root):
 def process_card(card):
     ctype = card.tag
     if ctype == "cell":
-        return cellCARD(card.attrib)
+        return CellCard(card.attrib)
 
     elif ctype == "surface":
-        return surfCARD(card.attrib)
+        return SurfCard(card.attrib)

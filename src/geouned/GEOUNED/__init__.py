@@ -3,14 +3,6 @@
 
 # We load the STEP and the materials
 
-# this try except attempts to import freecad (lowercase) which is the conda
-# package name for FreeCAD (mixed case) upon import the conda package appends
-# the sys path for Conda installed FreeCAD, consequently FreeCAD can then be
-# found by subsequent import statements through out the code base
-try:
-    import freecad
-except:
-    pass
 import configparser
 import typing
 from datetime import datetime
@@ -26,13 +18,13 @@ from .Decompose import Decom_one as Decom
 from .LoadFile import LoadSTEP as Load
 from .Utils import Functions as UF
 from .Utils.BooleanSolids import buildCTableFromSolids
-from .Utils.Options.Classes import MCNP_numeric_format, Options, Tolerances
+from .Utils.Options.Classes import McnpNumericFormat, Options, Tolerances
 from .Void import Void as Void
 from .Write.Functions import writeMCNPCellDef
 from .Write.WriteFiles import writeGeometry
 
 
-class GEOUNED:
+class CadToCsg:
 
     def __init__(
         self,
@@ -316,7 +308,7 @@ class GEOUNED:
                 for key in config["MCNP_Numeric_Format"].keys():
                     if key in numericKwrd:
                         setattr(
-                            MCNP_numeric_format,
+                            McnpNumericFormat,
                             key,
                             config.get("MCNP_Numeric_Format", key),
                         )
@@ -330,7 +322,7 @@ class GEOUNED:
             self.__dict__["geometryName"] = self.__dict__["stepFile"][:-4]
 
         if Options.prnt3PPlane and not PdEntry:
-            MCNP_numeric_format.P_d = "22.15e"
+            McnpNumericFormat.P_d = "22.15e"
 
         print(self.__dict__)
 
@@ -470,7 +462,7 @@ class GEOUNED:
         else:
             UniverseBox = getUniverse(MetaList)
 
-        Surfaces = UF.Surfaces_dict(offset=self.startSurf - 1)
+        Surfaces = UF.SurfacesDict(offset=self.startSurf - 1)
 
         warnSolids = []
         warnEnclosures = []
@@ -606,7 +598,7 @@ class GEOUNED:
 ##########################################################
              VOID CELLS
 ##########################################################"""
-            mc = UF.GEOUNED_Solid(None)
+            mc = UF.GeounedSolid(None)
             mc.Comments = lineComment
             MetaList.append(mc)
 
@@ -822,7 +814,7 @@ def sortEnclosure(MetaList, MetaVoid, offSet=0):
 ##########################################################""".format(
                 m.EnclosureID
             )
-            mc = UF.GEOUNED_Solid(None)
+            mc = UF.GeounedSolid(None)
             mc.Comments = lineComment
             newMeta.append(mc)
             for e in newList[m.EnclosureID]:
@@ -838,7 +830,7 @@ def sortEnclosure(MetaList, MetaVoid, offSet=0):
 ##########################################################""".format(
                 m.EnclosureID
             )
-            mc = UF.GEOUNED_Solid(None)
+            mc = UF.GeounedSolid(None)
             mc.Comments = lineComment
             newMeta.append(mc)
 
@@ -852,7 +844,7 @@ def sortEnclosure(MetaList, MetaVoid, offSet=0):
 ##########################################################
              VOID CELLS 
 ##########################################################"""
-    mc = UF.GEOUNED_Solid(None)
+    mc = UF.GeounedSolid(None)
     mc.Comments = lineComment
     newMeta.append(mc)
 

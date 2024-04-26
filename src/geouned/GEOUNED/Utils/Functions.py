@@ -80,7 +80,7 @@ def makePlane(Plane, Boxin):
     return Part.Face(Part.makePolygon([pointEdge[p[1]] for p in orden], True))
 
 
-class GEOUNED_Solid:
+class GeounedSolid:
 
     def __init__(self, id, comsolid=None):
         refine = True
@@ -226,7 +226,7 @@ class GEOUNED_Solid:
             return 0
 
 
-class GEOUNED_Surface:
+class GeounedSurface:
 
     def __init__(self, params, boundBox, Face=None):
 
@@ -373,7 +373,7 @@ class GEOUNED_Surface:
             return
 
 
-class Surfaces_dict(dict):
+class SurfacesDict(dict):
     def __init__(self, surfaces=None, offset=0):
         self.IndexOffset = offset
         surfname = ["PX", "PY", "PZ", "P", "Cyl", "Cone", "Sph", "Tor"]

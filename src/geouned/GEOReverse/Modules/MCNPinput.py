@@ -8,10 +8,10 @@ from numpy import linalg as LA
 
 from .Objects import *
 from .Parser import parser as mp
-from .remh import cell_card_string, remove_hash
+from .remh import CellCardString, remove_hash
 
 
-class MCNPinput:
+class McnpInput:
     def __init__(self, name):
         if not os.path.isfile(name):
             raise FileNotFoundError(f"File {name} does not exist")
@@ -59,7 +59,7 @@ class MCNPinput:
             # set cell as CAD cell Object
             for cname, c in universe.items():
                 # print(cname,c.geom.str)
-                universe[cname] = CADCell(c)
+                universe[cname] = CadCell(c)
 
         return levels, FilteredCells, newSurfaces
 
@@ -72,7 +72,7 @@ class MCNPinput:
             if c.ctype != mp.CID.cell:
                 continue
             c.get_values()
-            cstr = cell_card_string("".join(c.lines))
+            cstr = CellCardString("".join(c.lines))
 
             if cstr.TRCL:
                 cstr.TRCL = TransformationMatrix(cstr.TRCL, self.Transformations)

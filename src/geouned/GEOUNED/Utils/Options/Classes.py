@@ -2,7 +2,7 @@ class Options:
     pass
 
 
-class MCNP_numeric_format:
+class McnpNumericFormat:
     pass
 
 

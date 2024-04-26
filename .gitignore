@@ -166,6 +166,11 @@ cython_debug/
 # testing folder
 tests_outputs/
 
+# debug output folders
+fuzzySurfaces
+Suspicious_solids/
+Warning_Solids_definition.txt
+
 .vscode
 **/__pycache__
 docs/source/_build/**

@@ -5,7 +5,7 @@ import FreeCAD
 import Part
 
 
-class splitBase:
+class SplitBase:
     def __init__(self, base, knownSurf={}):
         self.base = base
         self.knownSurf = knownSurf
@@ -31,7 +31,7 @@ def joinBase(baseList):
                     removedKeys.append(k)
 
     newbase = FuseSolid(shape)
-    return splitBase(newbase, surf)
+    return SplitBase(newbase, surf)
 
 
 def SplitSolid(base, surfacesCut, cellObj, solidTool=False, tolerance=0.01):  # 1e-2
@@ -88,9 +88,9 @@ def SplitSolid(base, surfacesCut, cellObj, solidTool=False, tolerance=0.01):  # 
         #  sol.exportStep('solid_{}{}.stp'.format(name,ii))
 
         if inSolid:
-            fullPart.append(splitBase(sol, pos))
+            fullPart.append(SplitBase(sol, pos))
         elif inSolid is None:
-            cutPart.append(splitBase(sol, pos))
+            cutPart.append(SplitBase(sol, pos))
     return fullPart, cutPart
 
 

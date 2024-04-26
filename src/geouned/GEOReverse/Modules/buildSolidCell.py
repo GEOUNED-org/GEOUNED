@@ -1,7 +1,7 @@
 import Part
 
 from .options import Options
-from .splitFunction import SplitSolid, joinBase, splitBase
+from .splitFunction import SplitSolid, joinBase, SplitBase
 from .Utils.booleanFunction import BoolSequence
 
 
@@ -21,7 +21,7 @@ def BuildSolid(cell, boundBox, mode="oneByOne", simplify=False):
     # cell.definition = BoolSequence(cell.definition.str)
     cell.cleanUndefined()
 
-    celParts = BuildDepth(cell, splitBase(cutCell), mode, True, simplify)
+    celParts = BuildDepth(cell, SplitBase(cutCell), mode, True, simplify)
 
     celParts = getPart(celParts)
     # print('celparts',len(celParts))

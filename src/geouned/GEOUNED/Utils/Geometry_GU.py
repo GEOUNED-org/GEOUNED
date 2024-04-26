@@ -11,7 +11,7 @@ from .BasicFunctions_part2 import isSameTorus
 
 
 # SURFACES
-class Surfaces_GU(object):
+class SurfacesGu(object):
 
     def __init__(self, face):
 
@@ -25,11 +25,11 @@ class Surfaces_GU(object):
         return self.type
 
 
-class Plane_GU(Surfaces_GU):
+class PlaneGu(SurfacesGu):
 
     def __init__(self, face, plane3Pts=False):
 
-        Surfaces_GU.__init__(self, face)
+        SurfacesGu.__init__(self, face)
         self.Axis = face.Surface.Axis
         self.Position = face.Surface.Position
         self.pointDef = plane3Pts
@@ -45,22 +45,22 @@ class Plane_GU(Surfaces_GU):
             self.dim2 = face.ParameterRange[3] - face.ParameterRange[2]
 
 
-class Cylinder_GU(Surfaces_GU):
+class CylinderGu(SurfacesGu):
 
     def __init__(self, face):
 
-        Surfaces_GU.__init__(self, face)
+        SurfacesGu.__init__(self, face)
         self.Axis = face.Surface.Axis
         self.Radius = face.Surface.Radius
         self.Center = face.Surface.Center
         self.dimL = face.ParameterRange[3] - face.ParameterRange[2]
 
 
-class Cone_GU(Surfaces_GU):
+class ConeGu(SurfacesGu):
 
     def __init__(self, face):
 
-        Surfaces_GU.__init__(self, face)
+        SurfacesGu.__init__(self, face)
         self.Axis = face.Surface.Axis
         self.Apex = face.Surface.Apex
         self.SemiAngle = face.Surface.SemiAngle
@@ -69,28 +69,28 @@ class Cone_GU(Surfaces_GU):
         self.Radius = face.Surface.Radius
 
 
-class Sphere_GU(Surfaces_GU):
+class SphereGu(SurfacesGu):
 
     def __init__(self, face):
 
-        Surfaces_GU.__init__(self, face)
+        SurfacesGu.__init__(self, face)
         self.type = self.type[0:6]
         self.Center = face.Surface.Center
         self.Radius = face.Surface.Radius
 
 
-class Torus_GU(Surfaces_GU):
+class TorusGu(SurfacesGu):
 
     def __init__(self, face):
 
-        Surfaces_GU.__init__(self, face)
+        SurfacesGu.__init__(self, face)
         self.Center = face.Surface.Center
         self.Axis = face.Surface.Axis
         self.MajorRadius = face.Surface.MajorRadius
         self.MinorRadius = face.Surface.MinorRadius
 
 
-class solid_GU:
+class SolidGu:
 
     def __init__(self, solid, plane3Pts=False):
         self.solid = solid
@@ -225,7 +225,7 @@ class solid_GU:
 
 
 # FACES
-class Faces_GU(object):
+class FaceGu(object):
     def __init__(self, face, Plane3Pts=False):
         # GEOUNED based atributes
         self.__face__ = face
@@ -277,21 +277,21 @@ class Faces_GU(object):
 # Aux functions
 def DefineListFace_GU(face_list, plane3Pts=False):
     """Return the list of the  corresponding Face_GU  object of a FaceList"""
-    return tuple(Faces_GU(face, plane3Pts) for face in face_list)
+    return tuple(FaceGu(face, plane3Pts) for face in face_list)
 
 
 def DefineSurface(face, plane3Pts):
     kind_surf = str(face.Surface)
     if kind_surf == "<Plane object>":
-        Surf_GU = Plane_GU(face, plane3Pts)
+        Surf_GU = PlaneGu(face, plane3Pts)
     elif kind_surf == "<Cylinder object>":
-        Surf_GU = Cylinder_GU(face)
+        Surf_GU = CylinderGu(face)
     elif kind_surf == "<Cone object>":
-        Surf_GU = Cone_GU(face)
+        Surf_GU = ConeGu(face)
     elif kind_surf[0:6] == "Sphere":
-        Surf_GU = Sphere_GU(face)
+        Surf_GU = SphereGu(face)
     elif kind_surf == "<Toroid object>":
-        Surf_GU = Torus_GU(face)
+        Surf_GU = TorusGu(face)
     else:
         print("bad Surface type", kind_surf)
         Surf_GU = None
