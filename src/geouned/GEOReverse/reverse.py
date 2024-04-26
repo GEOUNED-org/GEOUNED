@@ -3,10 +3,10 @@ import Import
 
 from .CodeVersion import *
 from .Modules.buildCAD import buildCAD, makeTree
-from .Modules.McnpInput import McnpInput
-from .Modules.Objects import CADCell
+from .Modules.MCNPinput import McnpInput
+from .Modules.Objects import CadCell
 from .Modules.processInp import setOptions
-from .Modules.XmlInput import XmlInput
+from .Modules.XMLinput import XmlInput
 
 
 def reverse(optFile="configRevese.ini"):
