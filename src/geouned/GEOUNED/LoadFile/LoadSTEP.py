@@ -51,7 +51,7 @@ def LoadCAD(filename, matfilename, defaultMat=[], compSolids=True):
     Solids = s.Solids
     MetaList = []
     for i, s in enumerate(Solids):
-        MetaList.append(UF.GEOUNED_Solid(i + 1, s))
+        MetaList.append(UF.GeounedSolid(i + 1, s))
 
     isolid = 0
     missingMat = set()

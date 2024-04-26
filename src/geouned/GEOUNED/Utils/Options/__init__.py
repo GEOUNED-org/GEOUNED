@@ -1,4 +1,4 @@
-from .Classes import MCNP_numeric_format, Options, Tolerances
+from .Classes import McnpNumericFormat, Options, Tolerances
 
 # default options values
 forceCylinder = True  # Force using cylinders instead cones for auxillary surfaces of torus surface definition
@@ -74,4 +74,4 @@ for key in tolValueDict.keys():
 
 # Set default  attributes to MCNP number format class
 for key in numValueDict.keys():
-    setattr(MCNP_numeric_format, key, numValueDict[key])
+    setattr(McnpNumericFormat, key, numValueDict[key])

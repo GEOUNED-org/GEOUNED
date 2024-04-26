@@ -11,7 +11,7 @@ from .Objects import *
 from .XMLParser import get_cards
 
 
-class XMLinput:
+class XmlInput:
     def __init__(self, name):
         if not os.path.isfile(name):
             raise FileNotFoundError(f"File {name} does not exist")
@@ -61,7 +61,7 @@ class XMLinput:
             # set cell as CAD cell Object
             for cname, c in universe.items():
                 # print(cname,c.geom.str)
-                universe[cname] = CADCell(c)
+                universe[cname] = CadCell(c)
 
         return levels, FilteredCells, newSurfaces
 

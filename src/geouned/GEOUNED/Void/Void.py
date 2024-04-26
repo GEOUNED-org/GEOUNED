@@ -4,7 +4,7 @@ import Part
 from ..LoadFile import LoadFunctions as LF
 from ..Utils.BasicFunctions_part1 import isOposite
 from ..Utils.booleanFunction import BoolSequence
-from ..Utils.Functions import GEOUNED_Solid, GEOUNED_Surface
+from ..Utils.Functions import GeounedSolid, GeounedSurface
 from ..Utils.Options.Classes import Options as opt
 from ..Void import voidFunctions as VF
 from .VoidBoxClass import VoidBox
@@ -31,7 +31,7 @@ def voidGeneration(MetaList, EnclosureList, Surfaces, UniverseBox, setting, init
         FreeCAD.Vector(0, 0, 1),
     )
 
-    EnclosureBox = GEOUNED_Solid(None, Box)
+    EnclosureBox = GeounedSolid(None, Box)
     if setting["voidMat"]:
         voidMat = setting["voidMat"]
         EnclosureBox.setMaterial(voidMat[0], voidMat[1], voidMat[2])
@@ -128,7 +128,7 @@ def GetVoidDef(MetaList, Surfaces, Enclosure, setting, Lev0=False):
 
     voidList = []
     for i, vcell in enumerate(VoidDef):
-        mVoid = GEOUNED_Solid(i)
+        mVoid = GeounedSolid(i)
         mVoid.Void = True
         mVoid.CellType = "void"
         mVoid.setDefinition(vcell[0], simplify=True)
@@ -148,7 +148,7 @@ def setGraveyardCell(Surfaces, UniverseBox):
     externalBox = getUniverseComplementary(Universe, Surfaces)
     center = UniverseBox.Center
     radius = 0.51 * UniverseBox.DiagonalLength
-    sphere = GEOUNED_Surface(("Sphere", (center, radius)), UniverseBox)
+    sphere = GeounedSurface(("Sphere", (center, radius)), UniverseBox)
     id, exist = Surfaces.addSphere(sphere)
 
     sphdef = BoolSequence(str(-id))
@@ -157,14 +157,14 @@ def setGraveyardCell(Surfaces, UniverseBox):
 
     notsph = BoolSequence(str(id))
 
-    mVoidSphIn = GEOUNED_Solid(0)
+    mVoidSphIn = GeounedSolid(0)
     mVoidSphIn.Void = True
     mVoidSphIn.CellType = "void"
     mVoidSphIn.setDefinition(sphdef)
     mVoidSphIn.setMaterial(0, 0, "Graveyard_in")
     mVoidSphIn.__commentInfo__ = None
 
-    mVoidSphOut = GEOUNED_Solid(1)
+    mVoidSphOut = GeounedSolid(1)
     mVoidSphOut.Void = True
     mVoidSphOut.CellType = "void"
     mVoidSphOut.setDefinition(notsph)

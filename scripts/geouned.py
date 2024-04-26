@@ -10,7 +10,7 @@ import sys
 # sys.path.append(geo_path)
 # sys.path.append('C:\\Program Files\\FreeCAD 0.19\\bin...')
 
-import geouned
+from geouned import CadToCsg
 from geouned.GEOReverse import reverse
 
 runReverse = False
@@ -38,7 +38,7 @@ else:
     raise ValueError("Too many input arguments")
 
 if not runReverse:
-    GEO = GEOUNED.GEOUNED(inifile)
+    GEO = CadToCsg(inifile)
     GEO.SetOptions()
     GEO.Start()
 

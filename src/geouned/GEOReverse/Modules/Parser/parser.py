@@ -53,7 +53,7 @@ fmt_s = fmt_gen
 partial_formmatter = PartialFormatter()
 
 
-class __CIDClass(object):
+class CidClass(object):
     """
     There are two levels of card types. 1-st level is purely defined by card
     position in the input file.  There can be:
@@ -95,7 +95,7 @@ class __CIDClass(object):
             raise ValueError()
 
 
-CID = __CIDClass()
+CID = CidClass()
 
 
 class Card(object):

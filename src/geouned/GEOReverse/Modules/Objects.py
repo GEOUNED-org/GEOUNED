@@ -5,11 +5,11 @@ import numpy as np
 import Part
 
 from .buildSolidCell import BuildSolid
-from .remh import cline
+from .remh import Cline
 from .Utils.booleanFunction import BoolSequence, outterTerms
 
 
-class CADCell:
+class CadCell:
     def __init__(self, stringCell=None):
 
         if not stringCell:
@@ -44,14 +44,14 @@ class CADCell:
             self.__setDefinition__(stringCell)
 
     def copy(self):
-        cpCell = CADCell()
+        cpCell = CadCell()
         cpCell.surfaceList = self.surfaceList[:]
         cpCell.surfaces = {}
         for name, s in self.surfaces.items():
             cpCell.surfaces[name] = s.copy()
 
-        if type(self.definition) is cline:
-            cpCell.definition = cline(self.definition.str)
+        if type(self.definition) is Cline:
+            cpCell.definition = Cline(self.definition.str)
 
         elif type(self.definition) is BoolSequence:
             cpCell.definition = self.definition.copy()
@@ -115,7 +115,7 @@ class CADCell:
     #        subCellList=[]
     #        for df in subDefList:
     #           subCell = self.copy()
-    #           subCell.definition= cline(df)
+    #           subCell.definition= Cline(df)
     #           subCell.shape = None
     #           subCell.surfaceList  = subCell.definition.getSurfacesNumbers()
     #           for s in tuple(subCell.surfaces.keys()) :

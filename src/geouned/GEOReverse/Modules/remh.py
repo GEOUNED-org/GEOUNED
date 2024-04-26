@@ -190,7 +190,7 @@ def reverse_repl(m):
 
 def complementary(ccell, outter=True):
     """return the complementary cell"""
-    wrkcell = cline(ccell.str)
+    wrkcell = Cline(ccell.str)
     if wrkcell.str[-1] == "\n":
         wrkcell.str = wrkcell.str[:-1]
 
@@ -237,12 +237,12 @@ def complementary(ccell, outter=True):
 
 
 ############################################################
-class cline:
+class Cline:
     def __init__(self, line):
         self.str = line
 
     def copy(self):
-        return cline(self.str)
+        return Cline(self.str)
 
     def getSurfacesNumbers(self):
         s = set(unsignedint.findall(self.str))
@@ -301,7 +301,7 @@ class cline:
         return
 
     def outterTerms(self):
-        cgeom = cline(self.str)
+        cgeom = Cline(self.str)
 
         cgeom.remove_comments(full=True)
         cgeom.remove_redundant()
@@ -434,7 +434,7 @@ class cline:
                 count -= 1
             if count == 0:
                 end = p.end()
-                cell = cline(self.str[start + 1 : end])
+                cell = Cline(self.str[start + 1 : end])
                 break
         return cell, end
 
@@ -532,7 +532,7 @@ class cline:
 
 
 ############################################################
-class cell_card_string:
+class CellCardString:
 
     def __init__(self, card):
         self.stat = {"word": None, "hashcell": None, "hashsurf": None, "hash": None}
@@ -549,8 +549,8 @@ class cell_card_string:
     def __card_split__(self, cardin):
         """Split the card string in three parts :
            - headstr : string containing the cell name, mat number and density (if mat != 0) of the cell
-           - geom    : cline class containing the part of the geometric definition of the cell
-           - param    : cline class containing the cell parameters part
+           - geom    : Cline class containing the part of the geometric definition of the cell
+           - param    : Cline class containing the cell parameters part
         hproc is true if the complementary operator of the cell can be substituted"""
 
         m = celmat.match(cardin)
@@ -560,8 +560,8 @@ class cell_card_string:
         if m.group("scnd").lower() == "like":
             self.headstr = cardin[: m.start("scnd")]
             s = likebut.search(cardin, m.end("scnd"))
-            self.geom = cline(cardin[m.start("scnd") : s.end()])
-            self.parm = cline(cardin[s.end() :])
+            self.geom = Cline(cardin[m.start("scnd") : s.end()])
+            self.parm = Cline(cardin[s.end() :])
             self.hproc = False
             mc = unsignedint.search(self.geom.str)
             self.likeCell = int(mc.group())
@@ -578,7 +578,7 @@ class cell_card_string:
 
         if self.hproc:
             self.headstr = cardin[:cstart]
-            cellcard = cline(cardin[cstart:])
+            cellcard = Cline(cardin[cstart:])
             cellcard.remove_comments()
             m = param.search(cellcard.str)
             if m:
@@ -599,8 +599,8 @@ class cell_card_string:
 
             if m:
                 start = m.end(1)
-                self.geom = cline(cellcard.str[:start])
-                self.parm = cline(cellcard.str[start:])
+                self.geom = Cline(cellcard.str[:start])
+                self.parm = Cline(cellcard.str[start:])
 
                 # look for transformation in cell parameters
                 self.parm.remove_comments()
@@ -609,8 +609,8 @@ class cell_card_string:
                     self.hproc = False
                 self.parm.restore_comments()
             else:
-                self.geom = cline(cellcard.str)
-                self.parm = cline("")
+                self.geom = Cline(cellcard.str)
+                self.parm = Cline("")
 
         return
 
@@ -717,7 +717,7 @@ def remove_hash(cards, cname, keepComments=True):
         """remove complementary operator and subtitute by complementary cell"""
         if "parser.Card" in str(type(card)):
             celline = "".join(card.lines)
-            cardstr = cell_card_string(celline)
+            cardstr = CellCardString(celline)
         else:
             cardstr = card
         cardstr.get_stat()
@@ -726,7 +726,7 @@ def remove_hash(cards, cname, keepComments=True):
             return (
                 cardstr.geom
             )  # no complementary operator or cannot be # cannot be removed
-        cell = cline(cardstr.geom.str)
+        cell = Cline(cardstr.geom.str)
         # find all operators in the cell and
         # substitute all complementary operators
         # locate object in list to reverse iteration
@@ -753,7 +753,7 @@ def remove_hash(cards, cname, keepComments=True):
             if m.group(1) == "(":  # complementary cell defined as surface intersections
                 hcell, end = cell.get_hashcell(start)
                 cellmod = cell.str[0:start] + complementary(hcell) + cell.str[end:]
-                cell = cline(cellmod)
+                cell = Cline(cellmod)
             else:
                 hcname = int(
                     m.group(1)
@@ -769,8 +769,8 @@ def remove_hash(cards, cname, keepComments=True):
                     + " "
                     + cell.str[end:]
                 )
-                cell = cline(cellmod)
+                cell = Cline(cellmod)
         return cell
 
     newcell = remove(cards[cname], cname, keepComments)
-    return cline(newcell.str)
+    return Cline(newcell.str)
