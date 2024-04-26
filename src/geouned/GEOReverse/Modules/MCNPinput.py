@@ -175,7 +175,6 @@ class McnpInput:
                 trl[c.name] = getTransMatrix(trValues, c.unit)
         return trl
 
-
 # fmt: off
 def getTransMatrix(trsf, unit="", scale=10.0):
 
