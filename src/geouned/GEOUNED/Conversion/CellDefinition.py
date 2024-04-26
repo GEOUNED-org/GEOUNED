@@ -749,9 +749,9 @@ def cellDef(metaObj, Surfaces, UniverseBox):
         extraPlaneReverse = dict()
 
         flag_inv = isInverted(solid)
-        SolidGu = GU.SolidGu(solid)
+        Solid_Gu = GU.SolidGu(solid)
         lastTorus = -1
-        for iface, face in enumerate(SolidGu.Faces):
+        for iface, face in enumerate(Solid_Gu.Faces):
             surfaceType = str(face.Surface)
             if abs(face.Area) < tol.min_area:
                 if opt.verbose:
@@ -831,7 +831,7 @@ def cellDef(metaObj, Surfaces, UniverseBox):
 
                     idT = getId(face.Surface, Surfaces)
 
-                    index, Uparams = SolidGu.TorusUParams[iface]
+                    index, Uparams = Solid_Gu.TorusUParams[iface]
                     if index == lastTorus:
                         continue
                     lastTorus = index
@@ -880,7 +880,7 @@ def cellDef(metaObj, Surfaces, UniverseBox):
                         VVar = "-%i" % idT
 
                     else:
-                        index, Vparams = SolidGu.TorusVParams[iface]
+                        index, Vparams = Solid_Gu.TorusVParams[iface]
                         VClosed, VminMax = Vparams
                         if VClosed:
                             VVar = "%i" % idT
