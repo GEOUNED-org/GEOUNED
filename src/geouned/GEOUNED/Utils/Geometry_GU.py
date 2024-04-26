@@ -220,7 +220,7 @@ class SolidGu:
 
 # FACES
 class FaceGu(object):
-     """GEOUNED Face Class"""
+    """GEOUNED Face Class"""
     def __init__(self, face, Plane3Pts=False):
         # GEOUNED based atributes
         self.__face__ = face
