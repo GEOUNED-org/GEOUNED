@@ -198,6 +198,7 @@ def getTransMatrix(trsf, unit="", scale=10.0):
             coeff[2], coeff[5], coeff[8], trsf[2] * scale,
             0, 0, 0, 1,
         )
+    return trsfMat    
 # fmt: on
 
 
