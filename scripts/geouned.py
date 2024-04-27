@@ -38,8 +38,8 @@ else:
     raise ValueError("Too many input arguments")
 
 if not runReverse:
-    GEO = CadToCsg(inifile)
-    GEO.SetOptions()
+    GEO = CadToCsg()
+    GEO.SetConfiguration(inifile)
     GEO.Start()
 
 else:

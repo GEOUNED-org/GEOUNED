@@ -1,10 +1,38 @@
 class Options:
-    pass
+    from optionsDefault import defaultValues, typeDict
+    @classmethod
+    def setDefaultAttribute(cls,key,value):
+         for key,value in cls.defaultValues.items():
+             setattr(cls, key, value)
+
+    @classmethod 
+    def setAttribute(cls,key,value):
+        if key in cls.defaultValues.keys():
+            setattr(cls, key, value)
+
+class Tolerances:
+    from tolerancesDefault import defaultValues, typeDict, KwrdEquiv
+
+    @classmethod
+    def setDefaultAttribute(cls,key,value):
+        for key,value in cls.defaultValues.items():
+            setattr(cls, key, value)
+
+    @classmethod
+    def setAttribute(cls,key,value):
+        if key in cls.defaultValues.keys():
+            setattr(cls, key, value)
 
 
 class McnpNumericFormat:
-    pass
+    from mcnpNumericDefault import defaultValues
 
-
-class Tolerances:
-    pass
+    @classmethod
+    def setDefaultAttribute(cls,key,value):
+         for key,value in cls.defaultValues.items():
+             setattr(cls, key, value)
+    
+    @classmethod
+    def setAttribute(cls,key,value):
+        if key in cls.defaultValues.keys():
+            setattr(cls, key, value)
