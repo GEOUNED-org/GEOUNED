@@ -1,7 +1,7 @@
 class Options:
-    from optionsDefault import defaultValues, typeDict
+    from .optionsDefault import defaultValues, typeDict
     @classmethod
-    def setDefaultAttribute(cls,key,value):
+    def setDefaultAttribute(cls):
          for key,value in cls.defaultValues.items():
              setattr(cls, key, value)
 
@@ -11,10 +11,10 @@ class Options:
             setattr(cls, key, value)
 
 class Tolerances:
-    from tolerancesDefault import defaultValues, typeDict, KwrdEquiv
+    from .tolerancesDefault import defaultValues, typeDict, KwrdEquiv
 
     @classmethod
-    def setDefaultAttribute(cls,key,value):
+    def setDefaultAttribute(cls):
         for key,value in cls.defaultValues.items():
             setattr(cls, key, value)
 
@@ -25,10 +25,10 @@ class Tolerances:
 
 
 class McnpNumericFormat:
-    from mcnpNumericDefault import defaultValues
+    from .mcnpNumericDefault import defaultValues
 
     @classmethod
-    def setDefaultAttribute(cls,key,value):
+    def setDefaultAttribute(cls):
          for key,value in cls.defaultValues.items():
              setattr(cls, key, value)
     

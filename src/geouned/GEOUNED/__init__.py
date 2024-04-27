@@ -18,7 +18,7 @@ from .Decompose import Decom_one as Decom
 from .LoadFile import LoadSTEP as Load
 from .Utils import Functions as UF
 from .Utils.BooleanSolids import buildCTableFromSolids
-#from .Utils.Options.Classes import McnpNumericFormat, Options, Tolerances
+from .Utils.Options.Classes import McnpNumericFormat, Options, Tolerances
 from .Void import Void as Void
 from .Write.Functions import writeMCNPCellDef
 from .Write.WriteFiles import writeGeometry
@@ -246,7 +246,7 @@ class CadToCsg:
                     if eqvKey in Tolerances.defaultValues.keys():
                          if Tolerances.typeDict[eqvKey] is bool :
                             Tolerances.setAttribute(eqvKey,config.getboolean("Tolerances", key))
-                         elif Tolerances.typeDict[key] is float:
+                         elif Tolerances.typeDict[eqvKey] is float:
                             Tolerances.setAttribute(eqvKey,config.getfloat("Tolerances", key))
 
             elif section == "MCNP_Numeric_Format":
