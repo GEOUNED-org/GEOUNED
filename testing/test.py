@@ -157,8 +157,8 @@ def printResults(f, res, lost):
 def mkGEOInp(inpDir, outDir):
     for f in getInputList(inpDir, ("stp", "step")):
         setInput(f, inpDir, outDir)
-        GEO = CadToCsg(inifile)
-        GEO.SetOptions()
+        GEO = CadToCsg()
+        GEO.SetConfiguration(inifile)
         GEO.Start()
         del GEO
 

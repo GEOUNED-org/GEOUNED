@@ -152,61 +152,18 @@ class CadToCsg:
         self.cellSummaryFile = cellSummaryFile
         self.sortEnclosure = sortEnclosure
 
-    def SetOptions(self):
-        toleranceKwrd = (
-            "relativeTolerance",
-            "relativePrecision",
-            "singleValue",
-            "generalDistance",
-            "generalAngle",
-            "planeDistance",
-            "planeAngle",
-            "cylinderDistance",
-            "cylinderAngle",
-            "sphereDistance",
-            "coneDistance",
-            "coneAngle",
-            "torusDistance",
-            "torusAngle",
-            "minArea",
-        )
-        numericKwrd = (
-            "P_abc",
-            "P_d",
-            "P_xyz",
-            "S_r",
-            "S_xyz",
-            "C_r",
-            "C_xyz",
-            "K_tan2",
-            "K_xyz",
-            "T_r",
-            "T_xyz",
-            "GQ_1to6",
-            "GQ_7to9",
-            "GQ_10",
-        )
-        tolKwrdEquiv = {
-            "relativeTolerance": "relativeTol",
-            "relativePrecision": "relativePrecision",
-            "singleValue": "value",
-            "generalDistance": "distance",
-            "generalAngle": "angle",
-            "planeDistance": "pln_distance",
-            "planeAngle": "pln_angle",
-            "cylinderDistance": "cyl_distance",
-            "cylinderAngle": "cyl_angle",
-            "sphereDistance": "sph_distance",
-            "coneDistance": "kne_distance",
-            "coneAngle": "kne_angle",
-            "torusDistance": "tor_distance",
-            "torusAngle": "tor_angle",
-            "minArea": "min_area",
-        }
+        Options.setDefaultAttribute()
+        McnpNumericFormat.setDefaultAttribute()  
+        Tolerances.setDefaultAttribute() 
 
+    def SetConfiguration(self,configFile=None):
+
+        if configFile is None :
+            return
+      
         config = configparser.ConfigParser()
         config.optionxform = str
-        config.read(self.__dict__["title"])
+        config.read(configFile)
         for section in config.sections():
             if section == "Files":
                 for key in config["Files"].keys():
@@ -277,43 +234,28 @@ class CadToCsg:
 
             elif section == "Options":
                 for key in config["Options"].keys():
-                    if key in (
-                        "forceCylinder",
-                        "newSplitPlane",
-                        "delLastNumber",
-                        "verbose",
-                        "scaleUP",
-                        "quadricPY",
-                        "Facets",
-                        "prnt3PPlane",
-                        "forceNoOverlap",
-                    ):
-                        setattr(Options, key, config.getboolean("Options", key))
-                    elif key in ("enlargeBox", "nPlaneReverse", "splitTolerance"):
-                        setattr(Options, key, config.getfloat("Options", key))
+                    if key in Options.defaultValues.keys():
+                        if Options.typeDict[key] is bool :  
+                            Options.setAttribute(key,config.getboolean("Options", key))
+                        elif Options.typeDict[key] is float or Options.typeDict[key] is int:
+                            Options.setAttribute(key,config.getfloat("Options", key))
 
             elif section == "Tolerances":
                 for key in config["Tolerances"].keys():
-                    if key == "relativeTolerance":
-                        setattr(Tolerances, key, config.getboolean("Tolerances", key))
-                    elif key in toleranceKwrd:
-                        setattr(
-                            Tolerances,
-                            tolKwrdEquiv[key],
-                            config.getfloat("Tolerances", key),
-                        )
+                    eqvKey = Tolerances.KwrdEquiv[key]
+                    if eqvKey in Tolerances.defaultValues.keys():
+                         if Tolerances.typeDict[eqvKey] is bool :
+                            Tolerances.setAttribute(eqvKey,config.getboolean("Tolerances", key))
+                         elif Tolerances.typeDict[eqvKey] is float:
+                            Tolerances.setAttribute(eqvKey,config.getfloat("Tolerances", key))
 
             elif section == "MCNP_Numeric_Format":
                 PdEntry = False
                 for key in config["MCNP_Numeric_Format"].keys():
-                    if key in numericKwrd:
-                        setattr(
-                            McnpNumericFormat,
-                            key,
-                            config.get("MCNP_Numeric_Format", key),
-                        )
-                    if key == "P_d":
-                        PdEntry = True
+                    if key in McnpNumericFormat.defaultValues.keys():
+                        McnpNumericFormat.setAttribute(key,config.get("MCNP_Numeric_Format", key))
+                        if key == "P_d":
+                            PdEntry = True
 
             else:
                 print("bad section name : {}".format(section))
@@ -328,7 +270,16 @@ class CadToCsg:
 
     def set(self, kwrd, value):
 
-        if kwrd not in self.__dict__.keys():
+        if kwrd in McnpNumericFormat.defaultValues.keys():
+            McnpNumericFormat.setAttribute(kwrd,value)
+            return
+        elif kwrd in Tolerances.defaultValues.keys():
+            Tolerances.setAttribute(kwrd,value)
+            return
+        elif kwrd in Options.defaultValues.keys():
+            Options.setAttribute(kwrd,value)
+            return
+        elif kwrd not in self.__dict__.keys():
             print("Bad entry : {}".format(kwrd))
             return
 

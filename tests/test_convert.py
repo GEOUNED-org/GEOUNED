@@ -18,41 +18,37 @@ def test_conversion(input_step_file):
     output_filename_stem = output_dir / input_step_file.stem
 
     # creates the config file contents
-    template = (
-        "[Files]\n"
-        "title = 'Input Test'\n"
-        f"stepFile = {input_step_file.resolve()}\n"
-        f"geometryName = {output_filename_stem.resolve()}\n"
-        "outFormat = ('mcnp', 'openMC_XML')\n"
-        "[Parameters]\n"
-        "compSolids = False\n"
-        "volCARD = False\n"
-        "volSDEF = True\n"
-        "voidGen = True\n"
-        "dummyMat = True\n"
-        "minVoidSize = 100\n"
-        "cellSummaryFile = False\n"
-        "cellCommentFile = False\n"
-        "debug = False\n"
-        "simplify = no\n"
-        "[Options]\n"
-        "forceCylinder = False\n"
-        "splitTolerance = 0\n"
-        "newSplitPlane = True\n"
-        "nPlaneReverse = 0\n"
-    )
-
-    with open(output_dir / "config.ini", mode="w") as file:
-        file.write(template)
+    template = {
+        "title" : 'Input Test' ,
+        "stepFile" : f"{input_step_file.resolve()}" ,
+        "geometryName" : f"{output_filename_stem.resolve()}" ,
+        "outFormat" : ('mcnp', 'openMC_XML') ,
+        "compSolids" : False ,
+        "volCARD" : False ,
+        "volSDEF" : True ,
+        "voidGen" : True ,
+        "dummyMat" : True ,
+        "minVoidSize" : 100 ,
+        "cellSummaryFile" : False ,
+        "cellCommentFile" : False ,
+        "debug" : False ,
+        "simplify" : 'no' ,
+        "forceCylinder" :  False ,
+        "splitTolerance" : 0 ,
+        "newSplitPlane" : True ,
+        "nPlaneReverse" : 0 ,
+    }
 
     # deletes the output openmc and mcnp output files if it already exists
     output_filename_stem.with_suffix(".mcnp").unlink(missing_ok=True)
     output_filename_stem.with_suffix(".xml").unlink(missing_ok=True)
 
-    inifile = f"{output_dir/'config.ini'}"
-    GEO = CadToCsg(inifile)
-    GEO.SetOptions()
-    GEO.outFormat = ("mcnp", "openMC_XML")
+    GEO = CadToCsg('Input Test')
+
+    # set parameters values stored in template dictionary
+    for key,value in template.items():
+      GEO.set(key, value)
+
     GEO.Start()
 
     assert output_filename_stem.with_suffix(".mcnp").exists()
