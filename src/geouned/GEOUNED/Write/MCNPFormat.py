@@ -71,7 +71,7 @@ class McnpInput:
     def writeInput(self, filename):
         print("write MCNP file {}".format(filename))
         self.inpfile = open(filename, "w", encoding="utf-8")
-        self.__write_header__(filename)
+        self.__write_header__()
         self.__write_cell_block__()
         self.inpfile.write(" \n")
 

@@ -24,7 +24,7 @@ class OpenmcInput:
     def writeXML(self, filename):
         print("write OpenMC xml file {}".format(filename))
         self.inpfile = open(filename, "w", encoding="utf-8")
-        self.__write_xml_header__(filename)
+        self.__write_xml_header__()
 
         self.inpfile.write("<geometry>\n")
         self.__write_xml_cell_block__()

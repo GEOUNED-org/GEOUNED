@@ -63,7 +63,7 @@ class SerpentInput:
     def writeInput(self, filename):
         print(f"write Serpent file {filename}")
         self.inpfile = open(filename, "w", encoding="utf-8")
-        self.__write_header__(filename)
+        self.__write_header__()
         cellblockHeader = """\
 % --- CELL DEFINITIONS 
 """
