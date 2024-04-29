@@ -258,7 +258,7 @@ class CadToCsg:
                             PdEntry = True
 
             else:
-                print("bad section name : {}".format(section))
+                print(f"bad section name : {section}")
 
         if self.__dict__["geometryName"] == "":
             self.__dict__["geometryName"] = self.__dict__["stepFile"][:-4]
@@ -280,17 +280,17 @@ class CadToCsg:
             Options.setAttribute(kwrd,value)
             return
         elif kwrd not in self.__dict__.keys():
-            print("Bad entry : {}".format(kwrd))
+            print(f"Bad entry : {kwrd}")
             return
 
         if kwrd == "stepFile":
             if isinstance(value, (list, tuple)):
                 for v in value:
                     if not isinstance(v, str):
-                        print("elemt in {} list should be string".format(kwrd))
+                        print(f"elemt in {kwrd} list should be string")
                         return
             elif not isinstance(value, str):
-                print("{} should be string or tuple of strings".format(kwrd))
+                print(f"{kwrd} should be string or tuple of strings")
                 return
 
         elif kwrd == "UCARD":
@@ -299,22 +299,22 @@ class CadToCsg:
             elif value.isdigit():
                 value = int(value)
             else:
-                print("{} value should be None or integer".format(kwrd))
+                print(f"{kwrd} value should be None or integer")
                 return
         elif kwrd == "outFormat":
             if len(value) == 0:
                 return
         elif kwrd in ("geometryName", "matFile", "exportSolids"):
             if not isinstance(value, str):
-                print("{} value should be str instance".format(kwrd))
+                print(f"{kwrd} value should be str instance")
                 return
         elif kwrd in ("cellRange", "voidMat", "voidExclude"):
             if not isinstance(value, (list, tuple)):
-                print("{} value should be list or tuple".format(kwrd))
+                print(f"{kwrd} value should be list or tuple")
                 return
         elif kwrd in ("minVoidSize", "maxSurf", "maxBracket", "startCell", "startSurf"):
             if not isinstance(value, int):
-                print("{} value should be integer".format(kwrd))
+                print(f"{kwrd} value should be integer")
                 return
         elif kwrd in (
             "voidGen",
@@ -329,7 +329,7 @@ class CadToCsg:
             "sortEnclosure",
         ):
             if not isinstance(value, bool):
-                print("{} value should be boolean".format(kwrd))
+                print(f"{kwrd} value should be boolean")
                 return
 
         self.__dict__[kwrd] = value
@@ -369,14 +369,14 @@ class CadToCsg:
             MetaChunk = []
             EnclosureChunk = []
             for stp in self.stepFile:
-                print("read step file : {}".format(stp))
+                print(f"read step file : {stp}")
                 Meta, Enclosure = Load.LoadCAD(stp, self.matFile)
                 MetaChunk.append(Meta)
                 EnclosureChunk.append(Enclosure)
             MetaList = joinMetaLists(MetaChunk)
             EnclosureList = joinMetaLists(EnclosureChunk)
         else:
-            print("read step file : {}".format(self.stepFile))
+            print(f"read step file : {self.stepFile}")
             MetaList, EnclosureList = Load.LoadCAD(
                 self.stepFile, self.matFile, self.voidMat, self.compSolids
             )
@@ -511,9 +511,7 @@ class CadToCsg:
                 c.Definition.clean()
                 if type(c.Definition.elements) is bool:
                     print(
-                        "unexpected constant cell {} :{}".format(
-                            c.__id__, c.Definition.elements
-                        )
+                        f"unexpected constant cell {c.__id__} :{c.Definition.elements}"
                     )
 
         tempTime2 = datetime.now()
@@ -589,15 +587,15 @@ def DecomposeSolids(MetaList, Surfaces, UniverseBox, setting, meta):
     for i, m in enumerate(MetaList):
         if meta and m.IsEnclosure:
             continue
-        print("Decomposing solid: {}/{} ".format(i + 1, totsolid))
+        print(f"Decomposing solid: {i + 1}/{totsolid} ")
         if setting["debug"]:
             print(m.Comments)
             if not path.exists("debug"):
                 mkdir("debug")
             if m.IsEnclosure:
-                m.Solids[0].exportStep("debug/origEnclosure_{}.stp".format(i))
+                m.Solids[0].exportStep(f"debug/origEnclosure_{i}.stp")
             else:
-                m.Solids[0].exportStep("debug/origSolid_{}.stp".format(i))
+                m.Solids[0].exportStep(f"debug/origSolid_{i}.stp")
 
         comsolid, err = Decom.SplitSolid(Part.makeCompound(m.Solids), UniverseBox)
 
@@ -606,24 +604,24 @@ def DecomposeSolids(MetaList, Surfaces, UniverseBox, setting, meta):
                 mkdir("Suspicious_solids")
             if m.IsEnclosure:
                 Part.CompSolid(m.Solids).exportStep(
-                    "Suspicious_solids/Enclosure_original_{}.stp".format(i)
+                    f"Suspicious_solids/Enclosure_original_{i}.stp"
                 )
                 comsolid.exportStep(
-                    "Suspicious_solids/Enclosure_split_{}.stp".format(i)
+                    f"Suspicious_solids/Enclosure_split_{i}.stp"
                 )
             else:
                 Part.CompSolid(m.Solids).exportStep(
-                    "Suspicious_solids/Solid_original_{}.stp".format(i)
+                    f"Suspicious_solids/Solid_original_{i}.stp"
                 )
-                comsolid.exportStep("Suspicious_solids/Solid_split_{}.stp".format(i))
+                comsolid.exportStep(f"Suspicious_solids/Solid_split_{i}.stp")
 
             warningSolids.append(i)
 
         if setting["debug"]:
             if m.IsEnclosure:
-                comsolid.exportStep("debug/compEnclosure_{}.stp".format(i))
+                comsolid.exportStep(f"debug/compEnclosure_{i}.stp")
             else:
-                comsolid.exportStep("debug/compSolid_{}.stp".format(i))
+                comsolid.exportStep(f"debug/compSolid_{i}.stp")
         Surfaces.extend(
             Decom.ExtractSurfaces(comsolid, "All", UniverseBox, MakeObj=True)
         )
@@ -696,18 +694,18 @@ def printWarningSolids(warnSolids, warnEnclosures):
         lines = "Solids :\n"
         for sol in warnSolids:
             lines += "\n"
-            lines += "{}\n".format(sol.label)
-            lines += "{}\n".format(sol.Comments)
-            lines += "{}\n".format(writeMCNPCellDef(sol.Definition))
+            lines += f"{sol.label}\n"
+            lines += f"{sol.Comments}\n"
+            lines += f"{writeMCNPCellDef(sol.Definition)}\n"
         fic.write(lines)
 
     if warnEnclosures:
         lines = "Enclosures :\n"
         for sol in warnEnclosures:
             lines += "\n"
-            lines += "{}\n".format(sol.label)
-            lines += "{}\n".format(sol.Comments)
-            lines += "{}\n".format(writeMCNPCellDef(sol.Definition))
+            lines += f"{sol.label}\n"
+            lines += f"{sol.Comments}\n"
+            lines += f"{writeMCNPCellDef(sol.Definition)}\n"
 
         fic.write(lines)
 
@@ -759,12 +757,9 @@ def sortEnclosure(MetaList, MetaVoid, offSet=0):
         if m.NullCell:
             continue
         if m.IsEnclosure:
-            lineComment = """\
-##########################################################
-             ENCLOSURE {}
-##########################################################""".format(
-                m.EnclosureID
-            )
+            lineComment = f"""##########################################################
+             ENCLOSURE {m.EnclosureID}
+##########################################################"""
             mc = UF.GeounedSolid(None)
             mc.Comments = lineComment
             newMeta.append(mc)
@@ -775,12 +770,9 @@ def sortEnclosure(MetaList, MetaVoid, offSet=0):
                 e.label = icount
                 idLabel[e.__id__] = e.label
                 newMeta.append(e)
-            lineComment = """\
-##########################################################
-            END  ENCLOSURE {}
-##########################################################""".format(
-                m.EnclosureID
-            )
+            lineComment = f"""##########################################################
+            END  ENCLOSURE {m.EnclosureID}
+##########################################################"""
             mc = UF.GeounedSolid(None)
             mc.Comments = lineComment
             newMeta.append(mc)

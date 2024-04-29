@@ -29,7 +29,7 @@ class CardLine:
                 self.__leftspace__ -= len(data_str)
             else:
                 self.str += line + "\n"
-                line = "{}{}".format(self.tabstr, data_str)
+                line = f"{self.tabstr}{data_str}"
                 self.__leftspace__ = self.lineSize - len(line)
 
         self.str += line
@@ -81,9 +81,9 @@ class CellString:
             if lenleft == 0:
                 break
             elif icount < len(self.str):
-                newline += "\n{}".format(self.tabstr)
+                newline += f"\n{self.tabstr}"
             else:
-                newline += "\n{}{}".format(self.tabstr, self.str[init:])
+                newline += f"\n{self.tabstr}{self.str[init:]}"
                 break
 
         self.str = newline
@@ -137,9 +137,9 @@ def writeOpenMCregion(Definition, Wtype="XML"):
 def writeSequenceMCNP(Seq):
     if Seq.level == 0:
         if Seq.operator == "AND":
-            line = "({})".format(" ".join(map(str, Seq.elements)))
+            line = f"({' '.join(map(str, Seq.elements))})"
         else:
-            line = "({})".format(":".join(map(str, Seq.elements)))
+            line = f"({':'.join(map(str, Seq.elements))})"
     else:
         terms = []
         for e in Seq.elements:
@@ -149,9 +149,9 @@ def writeSequenceMCNP(Seq):
                 terms.append(writeSequenceMCNP(e))
 
         if Seq.operator == "AND":
-            line = "({})".format(" ".join(terms))
+            line = f"({' '.join(terms)})"
         else:
-            line = "({})".format(":".join(terms))
+            line = f"({':'.join(terms)})"
 
     return line
 
@@ -159,9 +159,9 @@ def writeSequenceMCNP(Seq):
 def writeSequenceSerpent(Seq):
     if Seq.level == 0:
         if Seq.operator == "AND":
-            line = "({})".format(" ".join(map(str, Seq.elements)))
+            line = f"({' '.join(map(str, Seq.elements))})"
         else:
-            line = "({})".format(":".join(map(str, Seq.elements)))
+            line = f"({':'.join(map(str, Seq.elements))})"
     else:
         terms = []
         for e in Seq.elements:
@@ -171,9 +171,9 @@ def writeSequenceSerpent(Seq):
                 terms.append(writeSequenceMCNP(e))
 
         if Seq.operator == "AND":
-            line = "({})".format(" ".join(terms))
+            line = f"({' '.join(terms)})"
         else:
-            line = "({})".format(":".join(terms))
+            line = f"({':'.join(terms)})"
 
     return line
 
@@ -181,9 +181,9 @@ def writeSequenceSerpent(Seq):
 def writeSequencePHITS(Seq):
     if Seq.level == 0:
         if Seq.operator == "AND":
-            line = "({})".format(" ".join(map(str, Seq.elements)))
+            line = f"({' '.join(map(str, Seq.elements))})"
         else:
-            line = "({})".format(":".join(map(str, Seq.elements)))
+            line = f"({':'.join(map(str, Seq.elements))})"
     else:
         terms = []
         for e in Seq.elements:
@@ -193,9 +193,9 @@ def writeSequencePHITS(Seq):
                 terms.append(writeSequencePHITS(e))
 
         if Seq.operator == "AND":
-            line = "({})".format(" ".join(terms))
+            line = f"({' '.join(terms)})"
         else:
-            line = "({})".format(":".join(terms))
+            line = f"({':'.join(terms)})"
 
     return line
 
@@ -203,9 +203,9 @@ def writeSequencePHITS(Seq):
 def writeSequenceOMCXML(Seq):
     if Seq.level == 0:
         if Seq.operator == "AND":
-            line = "({})".format(" ".join(map(str, Seq.elements)))
+            line = f"({' '.join(map(str, Seq.elements))})"
         else:
-            line = "({})".format(" | ".join(map(str, Seq.elements)))
+            line = f"({' | '.join(map(str, Seq.elements))})"
     else:
         terms = []
         for e in Seq.elements:
@@ -215,23 +215,23 @@ def writeSequenceOMCXML(Seq):
                 terms.append(writeSequenceOMCXML(e))
 
         if Seq.operator == "AND":
-            line = "({})".format(" ".join(terms))
+            line = f"({' '.join(terms)})"
         else:
-            line = "({})".format(" | ".join(terms))
+            line = f"({' | '.join(terms)})"
     return line
 
 
 def writeSequenceOMCPY(Seq, prefix="S"):
 
     strSurf = lambda surf: (
-        "-{}{}".format(prefix, -surf) if surf < 0 else "+{}{}".format(prefix, surf)
+        f"-{prefix}{-surf}" if surf < 0 else f"+{prefix}{surf}"
     )
 
     if Seq.level == 0:
         if Seq.operator == "AND":
-            line = "({})".format(" & ".join(map(strSurf, Seq.elements)))
+            line = f"({' & '.join(map(strSurf, Seq.elements))})"
         else:
-            line = "({})".format(" | ".join(map(strSurf, Seq.elements)))
+            line = f"({' | '.join(map(strSurf, Seq.elements))})"
     else:
         terms = []
         for e in Seq.elements:
@@ -241,9 +241,9 @@ def writeSequenceOMCPY(Seq, prefix="S"):
                 terms.append(writeSequenceOMCPY(e))
 
         if Seq.operator == "AND":
-            line = "({})".format(" & ".join(terms))
+            line = f"({' & '.join(terms)})"
         else:
-            line = "({})".format(" | ".join(terms))
+            line = f"({' | '.join(terms)})"
     return line
 
 
@@ -450,7 +450,7 @@ def OpenMCSurface(Type, surf, outXML=True, quadricForm=False):
                 coeffs = "{:{x}}".format(D, x=nf.P_xyz)
             else:
                 OMCsurf = "XPlane"
-                coeffs = "x0={}".format(D)
+                coeffs = f"x0={D}"
 
         elif surf.Axis.isEqual(FreeCAD.Vector(0, 1, 0), tol.pln_angle):
             if outXML:
@@ -458,7 +458,7 @@ def OpenMCSurface(Type, surf, outXML=True, quadricForm=False):
                 coeffs = "{:{x}}".format(D, x=nf.P_xyz)
             else:
                 OMCsurf = "YPlane"
-                coeffs = "y0={}".format(D)
+                coeffs = f"y0={D}"
 
         elif surf.Axis.isEqual(FreeCAD.Vector(0, 0, 1), tol.pln_angle):
             if outXML:
@@ -466,7 +466,7 @@ def OpenMCSurface(Type, surf, outXML=True, quadricForm=False):
                 coeffs = "{:{x}}".format(D, x=nf.P_xyz)
             else:
                 OMCsurf = "ZPlane"
-                coeffs = "z0={}".format(D)
+                coeffs = f"z0={D}"
 
         else:
             if outXML:
@@ -476,7 +476,7 @@ def OpenMCSurface(Type, surf, outXML=True, quadricForm=False):
                 )
             else:
                 OMCsurf = "Plane"
-                coeffs = "a={},b={},c={},d={}".format(A, B, C, D)
+                coeffs = f"a={A},b={B},c={C},d={D}"
 
     elif Type == "Cylinder":
         Pos = surf.Center * 0.1
@@ -492,7 +492,7 @@ def OpenMCSurface(Type, surf, outXML=True, quadricForm=False):
                 )
             else:
                 OMCsurf = "XCylinder"
-                coeffs = "y0={},z0={},r={}".format(Pos.y, Pos.z, Rad)
+                coeffs = f"y0={Pos.y},z0={Pos.z},r={Rad}"
 
         elif isParallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle):
             if outXML:
@@ -502,7 +502,7 @@ def OpenMCSurface(Type, surf, outXML=True, quadricForm=False):
                 )
             else:
                 OMCsurf = "YCylinder"
-                coeffs = "x0={},z0={},r={}".format(Pos.x, Pos.z, Rad)
+                coeffs = f"x0={Pos.x},z0={Pos.z},r={Rad}"
 
         elif isParallel(Dir, FreeCAD.Vector(0, 0, 1), tol.angle):
             if outXML:
@@ -512,7 +512,7 @@ def OpenMCSurface(Type, surf, outXML=True, quadricForm=False):
                 )
             else:
                 OMCsurf = "ZCylinder"
-                coeffs = "x0={},y0={},r={}".format(Pos.x, Pos.y, Rad)
+                coeffs = f"x0={Pos.x},y0={Pos.y},r={Rad}"
 
         else:
             if outXML:
@@ -553,7 +553,7 @@ def OpenMCSurface(Type, surf, outXML=True, quadricForm=False):
                 )
             else:
                 OMCsurf = "XCone"
-                coeffs = "x0={},y0={},z0={},r2={}".format(Apex.x, Apex.y, Apex.z, tan2)
+                coeffs = f"x0={Apex.x},y0={Apex.y},z0={Apex.z},r2={tan2}"
 
         elif isParallel(Dir, Y_dir, tol.angle):
             if outXML:
@@ -563,7 +563,7 @@ def OpenMCSurface(Type, surf, outXML=True, quadricForm=False):
                 )
             else:
                 OMCsurf = "YCone"
-                coeffs = "x0={},y0={},z0={},r2={}".format(Apex.x, Apex.y, Apex.z, tan2)
+                coeffs = f"x0={Apex.x},y0={Apex.y},z0={Apex.z},r2={tan2}"
 
         elif isParallel(Dir, Z_dir, tol.angle):
             if outXML:
@@ -573,7 +573,7 @@ def OpenMCSurface(Type, surf, outXML=True, quadricForm=False):
                 )
             else:
                 OMCsurf = "ZCone"
-                coeffs = "x0={},y0={},z0={},r2={}".format(Apex.x, Apex.y, Apex.z, tan2)
+                coeffs = f"x0={Apex.x},y0={Apex.y},z0={Apex.z},r2={tan2}"
 
         else:
             if outXML:
@@ -605,7 +605,7 @@ def OpenMCSurface(Type, surf, outXML=True, quadricForm=False):
             )
         else:
             OMCsurf = "Sphere"
-            coeffs = "x0={},y0={},z0={},r={}".format(Center.x, Center.y, Center.z, Rad)
+            coeffs = f"x0={Center.x},y0={Center.y},z0={Center.z},r={Rad}"
 
     elif Type == "Torus":
         Center = surf.Center * 0.1

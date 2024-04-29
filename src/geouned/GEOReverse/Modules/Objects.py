@@ -206,7 +206,7 @@ class Plane:
             self.transform(tr)
 
     def __str__(self):
-        return "plane : {}\nParameters : {}".format(self.id, self.params)
+        return f"plane : {self.id}\nParameters : {self.params}"
 
     def copy(self):
         return Plane(self.id, self.params)

@@ -41,7 +41,7 @@ def LoadCAD(filename, mat_filename, default_mat=[], comp_solids=True):
         if os.path.exists(mat_filename):
             m_dict = extractMaterials(mat_filename)
         else:
-            print("Material definition file {} does not exist.".format(mat_filename))
+            print(f"Material definition file {mat_filename} does not exist.")
             m_dict = {}
     else:
         m_dict = {}
@@ -135,7 +135,7 @@ def LoadCAD(filename, mat_filename, default_mat=[], comp_solids=True):
                     n_solids = len(elem.Shape.Solids)
 
                 for i in range(n_solids):
-                    meta_list[i_solid].setComments("{}{}".format(comment, (i + 1)))
+                    meta_list[i_solid].setComments(f"{comment}{i + 1}")
                     meta_list[i_solid].setCADSolid()
 
                     if tempre_mat:

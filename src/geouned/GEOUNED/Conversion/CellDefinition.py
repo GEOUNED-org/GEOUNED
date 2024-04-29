@@ -991,7 +991,7 @@ def cellDef(meta_obj, surfaces, universe_box):
                     if extra[0] not in surf_piece:
                         surf_piece.append(extra[0])
                 else:
-                    surf_piece.append("({})".format(":".join(extra)))
+                    surf_piece.append(f"({":".join(extra)})")
 
         surf_piece_bool = BoolSequence(" ".join(surf_piece))
         # possible expresion for e

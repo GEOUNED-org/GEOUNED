@@ -53,7 +53,7 @@ def voidGeneration(MetaList, EnclosureList, Surfaces, UniverseBox, setting, init
             if encl.CellType == "envelope":
                 continue
             newMetaList = VF.selectSolids(MetaList, encl.SonEnclosures, encl)
-            print("Build Void enclosure {} in enclosure level {}".format(j, i + 1))
+            print(f"Build Void enclosure {j} in enclosure level {i + 1}")
             # select solids overlapping current enclosure "encl", and lower level enclosures
             voids = GetVoidDef(newMetaList, Surfaces, encl, setting)
             voidList.append(voids)
@@ -94,7 +94,7 @@ def GetVoidDef(MetaList, Surfaces, Enclosure, setting, Lev0=False):
             nsurfaces, nbrackets = z.getNumbers()
             if opt.verbose:
                 print(
-                    "{} {}/{} {} {}".format(iloop, iz + 1, nvoid, nsurfaces, nbrackets)
+                    f"{iloop} {iz + 1}/{nvoid} {nsurfaces} {nbrackets}"
                 )
 
             if nsurfaces > maxsurf and nbrackets > maxbracket:
@@ -115,7 +115,7 @@ def GetVoidDef(MetaList, Surfaces, Enclosure, setting, Lev0=False):
                     z.BoundBox.ZMax * 0.1,
                 )
 
-                print("build complementary {} {}".format(iloop, iz))
+                print(f"build complementary {iloop} {iz}")
 
                 cell, CellIn = z.getVoidComplementary(Surfaces, simplify=simplifyVoid)
                 if cell is not None:

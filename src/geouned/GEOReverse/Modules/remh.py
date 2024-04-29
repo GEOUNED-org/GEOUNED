@@ -452,7 +452,7 @@ class Cline:
             self.str = self.str[0 : m.start()] + s2 + self.str[m.end() :]
             return m.start() + len(s2)
         else:
-            print("number {} not found".format(surf))
+            print(f"number {surf} not found")
             return -1
 
     def countP(self):

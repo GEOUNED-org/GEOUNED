@@ -473,7 +473,7 @@ def GenPlaneCylinder(face, solid):
     Uval_str_cl = []
 
     for i, elem1 in enumerate(Uval):
-        num_str1 = "%11.4E" % elem1
+        num_str1 = f"{elem1:11.4E}"
         if abs(elem1) < 1.0e-5:
             num_str1 = "%11.4E" % 0.0
 
@@ -597,7 +597,7 @@ def GenPlaneCone(face, solid):
     Uval_str_cl = []
 
     for i, elem1 in enumerate(Uval):
-        num_str1 = "%11.4E" % elem1
+        num_str1 = f"{elem1:11.4E}"
         if abs(elem1) < 1.0e-5:
             num_str1 = "%11.4E" % 0.0
         if not (isDuplicateInList(num_str1, i, Uval)):
@@ -1048,7 +1048,7 @@ def splitComponent(solidShape, universe_box):
 
     if abs(Volch) > 1e-2:  # 1% of Volume change
         if opt.verbose:
-            print("Warning: Volume has changed after decomposition: %11.4E" % Volch)
+            print(f"Warning: Volume has changed after decomposition: {Volch:11.4E}")
         err += 4
 
     return comsolid, err

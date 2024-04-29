@@ -107,9 +107,7 @@ def BuildUniverse(
     Universe = AllUniverses[Ustart]
 
     print(
-        "Build Universe {} in container cell {}".format(
-            ContainerCell.FILL, ContainerCell.name
-        )
+        f"Build Universe {ContainerCell.FILL} in container cell {ContainerCell.name}"
     )
     fails = []
     for NTcell in Universe.values():
@@ -136,7 +134,7 @@ def BuildUniverse(
             NTcell = NTcell.copy()
 
         if buildShape:
-            print("Level :{}  build Cell {} ".format(CC.level + 1, NTcell.name))
+            print(f"Level :{CC.level + 1}  build Cell {NTcell.name} ")
             if type(NTcell.definition) is not BoolSequence:
                 NTcell.definition = BoolSequence(NTcell.definition.str)
 
@@ -187,15 +185,15 @@ def makeTree(CADdoc, CADCells):
     label, universeCADCells = CADCells
     groupObj = CADdoc.addObject("App::Part", "Materials")
 
-    groupObj.Label = "Universe_{}_Container_{}".format(label[1], label[0])
+    groupObj.Label = f"Universe_{label[1]}_Container_{label[0]}"
 
     CADObj = {}
     for i, c in enumerate(universeCADCells):
         if type(c) is tuple:
             groupObj.addObject(makeTree(CADdoc, c))
         else:
-            featObj = CADdoc.addObject("Part::FeaturePython", "solid{}".format(i))
-            featObj.Label = "Cell_{}_{}".format(c.name, c.MAT)
+            featObj = CADdoc.addObject("Part::FeaturePython", f"solid{i}")
+            featObj.Label = f"Cell_{c.name}_{c.MAT}"
             featObj.Shape = c.shape
             if c.MAT not in CADObj.keys():
                 CADObj[c.MAT] = [featObj]
@@ -204,7 +202,7 @@ def makeTree(CADdoc, CADCells):
 
     for mat, matGroup in CADObj.items():
         groupMatObj = CADdoc.addObject("App::Part", "Materials")
-        groupMatObj.Label = "Material_{}".format(mat)
+        groupMatObj.Label = f"Material_{mat}"
         groupMatObj.addObjects(matGroup)
         groupObj.addObject(groupMatObj)
 
