@@ -153,14 +153,14 @@ class CadToCsg:
         self.sortEnclosure = sortEnclosure
 
         Options.setDefaultAttribute()
-        McnpNumericFormat.setDefaultAttribute()  
-        Tolerances.setDefaultAttribute() 
+        McnpNumericFormat.setDefaultAttribute()
+        Tolerances.setDefaultAttribute()
 
-    def SetConfiguration(self,configFile=None):
+    def SetConfiguration(self, configFile=None):
 
-        if configFile is None :
+        if configFile is None:
             return
-      
+
         config = configparser.ConfigParser()
         config.optionxform = str
         config.read(configFile)
@@ -235,25 +235,34 @@ class CadToCsg:
             elif section == "Options":
                 for key in config["Options"].keys():
                     if key in Options.defaultValues.keys():
-                        if Options.typeDict[key] is bool :  
-                            Options.setAttribute(key,config.getboolean("Options", key))
-                        elif Options.typeDict[key] is float or Options.typeDict[key] is int:
-                            Options.setAttribute(key,config.getfloat("Options", key))
+                        if Options.typeDict[key] is bool:
+                            Options.setAttribute(key, config.getboolean("Options", key))
+                        elif (
+                            Options.typeDict[key] is float
+                            or Options.typeDict[key] is int
+                        ):
+                            Options.setAttribute(key, config.getfloat("Options", key))
 
             elif section == "Tolerances":
                 for key in config["Tolerances"].keys():
                     eqvKey = Tolerances.KwrdEquiv[key]
                     if eqvKey in Tolerances.defaultValues.keys():
-                         if Tolerances.typeDict[eqvKey] is bool :
-                            Tolerances.setAttribute(eqvKey,config.getboolean("Tolerances", key))
-                         elif Tolerances.typeDict[eqvKey] is float:
-                            Tolerances.setAttribute(eqvKey,config.getfloat("Tolerances", key))
+                        if Tolerances.typeDict[eqvKey] is bool:
+                            Tolerances.setAttribute(
+                                eqvKey, config.getboolean("Tolerances", key)
+                            )
+                        elif Tolerances.typeDict[eqvKey] is float:
+                            Tolerances.setAttribute(
+                                eqvKey, config.getfloat("Tolerances", key)
+                            )
 
             elif section == "MCNP_Numeric_Format":
                 PdEntry = False
                 for key in config["MCNP_Numeric_Format"].keys():
                     if key in McnpNumericFormat.defaultValues.keys():
-                        McnpNumericFormat.setAttribute(key,config.get("MCNP_Numeric_Format", key))
+                        McnpNumericFormat.setAttribute(
+                            key, config.get("MCNP_Numeric_Format", key)
+                        )
                         if key == "P_d":
                             PdEntry = True
 
@@ -271,13 +280,13 @@ class CadToCsg:
     def set(self, kwrd, value):
 
         if kwrd in McnpNumericFormat.defaultValues.keys():
-            McnpNumericFormat.setAttribute(kwrd,value)
+            McnpNumericFormat.setAttribute(kwrd, value)
             return
         elif kwrd in Tolerances.defaultValues.keys():
-            Tolerances.setAttribute(kwrd,value)
+            Tolerances.setAttribute(kwrd, value)
             return
         elif kwrd in Options.defaultValues.keys():
-            Options.setAttribute(kwrd,value)
+            Options.setAttribute(kwrd, value)
             return
         elif kwrd not in self.__dict__.keys():
             print("Bad entry : {}".format(kwrd))
@@ -388,9 +397,7 @@ class CadToCsg:
 
         # Select a specific solid range from original STEP solids
         if self.cellRange:
-            MetaList = MetaList[
-                self.cellRange[0] : self.cellRange[1]
-            ]
+            MetaList = MetaList[self.cellRange[0] : self.cellRange[1]]
 
         # export in STEP format solids read from input file
         # terminate excution
@@ -402,7 +409,7 @@ class CadToCsg:
                 solids.extend(m.Solids)
             Part.makeCompound(solids).exportStep(self.exportSolids)
             msg = (
-                f'Solids exported in file {self.exportSolids}\n'
+                f"Solids exported in file {self.exportSolids}\n"
                 "GEOUNED Finish. No solid translation performed."
             )
             raise ValueError(msg)

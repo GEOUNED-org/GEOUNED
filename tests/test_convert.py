@@ -19,35 +19,35 @@ def test_conversion(input_step_file):
 
     # creates the config file contents
     template = {
-        "title" : 'Input Test' ,
-        "stepFile" : f"{input_step_file.resolve()}" ,
-        "geometryName" : f"{output_filename_stem.resolve()}" ,
-        "outFormat" : ('mcnp', 'openMC_XML') ,
-        "compSolids" : False ,
-        "volCARD" : False ,
-        "volSDEF" : True ,
-        "voidGen" : True ,
-        "dummyMat" : True ,
-        "minVoidSize" : 100 ,
-        "cellSummaryFile" : False ,
-        "cellCommentFile" : False ,
-        "debug" : False ,
-        "simplify" : 'no' ,
-        "forceCylinder" :  False ,
-        "splitTolerance" : 0 ,
-        "newSplitPlane" : True ,
-        "nPlaneReverse" : 0 ,
+        "title": "Input Test",
+        "stepFile": f"{input_step_file.resolve()}",
+        "geometryName": f"{output_filename_stem.resolve()}",
+        "outFormat": ("mcnp", "openMC_XML"),
+        "compSolids": False,
+        "volCARD": False,
+        "volSDEF": True,
+        "voidGen": True,
+        "dummyMat": True,
+        "minVoidSize": 100,
+        "cellSummaryFile": False,
+        "cellCommentFile": False,
+        "debug": False,
+        "simplify": "no",
+        "forceCylinder": False,
+        "splitTolerance": 0,
+        "newSplitPlane": True,
+        "nPlaneReverse": 0,
     }
 
     # deletes the output openmc and mcnp output files if it already exists
     output_filename_stem.with_suffix(".mcnp").unlink(missing_ok=True)
     output_filename_stem.with_suffix(".xml").unlink(missing_ok=True)
 
-    GEO = CadToCsg('Input Test')
+    GEO = CadToCsg("Input Test")
 
     # set parameters values stored in template dictionary
-    for key,value in template.items():
-      GEO.set(key, value)
+    for key, value in template.items():
+        GEO.set(key, value)
 
     GEO.Start()
 

@@ -4,17 +4,28 @@
 
 import re
 
-mostinner = re.compile(r"\([^\(^\)]*\)")           # identify most inner parentheses
-number = re.compile(r"(?P<value>[-+]?\d+)")        # identify signed integer and record its value in <value>
-mix = re.compile(r"(?P<value>([-+]?\d+|\[0+\]))")  # identify signed integer or [000...] pattern. Record the value. 
-TFX = re.compile(r"(?P<value>[FTXo]+)")            # identify pattern incluinding F,T,X, or o sequence ( in any order).
-PValue = re.compile(r"P\d+")                       # identify pattern "P" + integer pattern (e.g. P3915).
-NValue = re.compile(r"N\d+")                       # identify pattern "N" + integer pattern (e.g. N3358).
-conversion = {"T": True, "F": False, "X": None}    # associate "T", "F", "X" with associated Boolean value (or None for X)
+mostinner = re.compile(r"\([^\(^\)]*\)")  # identify most inner parentheses
+number = re.compile(
+    r"(?P<value>[-+]?\d+)"
+)  # identify signed integer and record its value in <value>
+mix = re.compile(
+    r"(?P<value>([-+]?\d+|\[0+\]))"
+)  # identify signed integer or [000...] pattern. Record the value.
+TFX = re.compile(
+    r"(?P<value>[FTXo]+)"
+)  # identify pattern incluinding F,T,X, or o sequence ( in any order).
+PValue = re.compile(r"P\d+")  # identify pattern "P" + integer pattern (e.g. P3915).
+NValue = re.compile(r"N\d+")  # identify pattern "N" + integer pattern (e.g. N3358).
+conversion = {
+    "T": True,
+    "F": False,
+    "X": None,
+}  # associate "T", "F", "X" with associated Boolean value (or None for X)
 
 
 class BoolSequence:
     """Class storing Boolean expression and operating on it"""
+
     def __init__(self, definition=None, operator=None):
         if definition:
             self.elements = []
@@ -39,10 +50,10 @@ class BoolSequence:
 
     def append(self, *seq):
         """Append a BoolSequence Objects. seq may be :
-          - An iterable containing allowed BoolSequence Objects
-          - A BoolSequence object
-          - An integer value
-          - A Boolean value"""
+        - An iterable containing allowed BoolSequence Objects
+        - A BoolSequence object
+        - An integer value
+        - A Boolean value"""
         for s in seq:
             if type(s) is int:
                 level = -1
@@ -81,7 +92,7 @@ class BoolSequence:
             self.level = max(self.level, level + 1)
 
     def assign(self, Seq):
-        """Assign the BoolSequence Seq to the self instance BoolSequence""" 
+        """Assign the BoolSequence Seq to the self instance BoolSequence"""
         if type(Seq) is bool:
             self.operator == "AND"
             self.elements = Seq
@@ -302,8 +313,9 @@ class BoolSequence:
                 return False
 
     def substitute(self, var, val):
-        """Substitute in the BoolSequence the variable "var" by the value "val". 
-        "val" can be an Boolean value or an integer representing another surface variable."""
+        """Substitute in the BoolSequence the variable "var" by the value "val".
+        "val" can be an Boolean value or an integer representing another surface variable.
+        """
         if val is None:
             return
         if type(self.elements) is bool:
@@ -565,7 +577,8 @@ class BoolSequence:
 
     def setDef(self, expression):
         """Set the expression of the Boolean function in the BoolSequence instance.
-        "expresion" is the string object. The definition should have MCNP syntax cell definition. """
+        "expresion" is the string object. The definition should have MCNP syntax cell definition.
+        """
         terms, operator = outterTerms(expression)
         self.operator = operator
         self.level = 0
@@ -595,8 +608,8 @@ class BoolSequence:
         self.groupSingle()
 
     def groupSingle(self):
-        """ group integers found in Sequence with level > 1.
-        (e.g. change AND[1 2 3 OR[2 4]] to AND[ AND[1 2 3] OR[2 3]] ). """
+        """group integers found in Sequence with level > 1.
+        (e.g. change AND[1 2 3 OR[2 4]] to AND[ AND[1 2 3] OR[2 3]] )."""
         if self.level == 0:
             return
         if type(self.elements) is bool:

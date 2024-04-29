@@ -12,9 +12,11 @@ from ..Utils.Options.Classes import Tolerances as tol
 from .BasicFunctions_part1 import isSameValue
 from .BasicFunctions_part2 import isSameTorus
 
+
 # SURFACES
 class SurfacesGu(object):
     """GEOUNED surface class"""
+
     def __init__(self, face):
         self.face = face
         self.Surface = self.face.Surface
@@ -28,6 +30,7 @@ class SurfacesGu(object):
 
 class PlaneGu(SurfacesGu):
     """GEOUNED Plane Class"""
+
     def __init__(self, face, plane3Pts=False):
         SurfacesGu.__init__(self, face)
         self.Axis = face.Surface.Axis
@@ -47,6 +50,7 @@ class PlaneGu(SurfacesGu):
 
 class CylinderGu(SurfacesGu):
     """GEOUNED Cylinder Class"""
+
     def __init__(self, face):
         SurfacesGu.__init__(self, face)
         self.Axis = face.Surface.Axis
@@ -57,6 +61,7 @@ class CylinderGu(SurfacesGu):
 
 class ConeGu(SurfacesGu):
     """GEOUNED Cone Class"""
+
     def __init__(self, face):
         SurfacesGu.__init__(self, face)
         self.Axis = face.Surface.Axis
@@ -69,6 +74,7 @@ class ConeGu(SurfacesGu):
 
 class SphereGu(SurfacesGu):
     """GEOUNED Sphere Class"""
+
     def __init__(self, face):
         SurfacesGu.__init__(self, face)
         self.type = self.type[0:6]
@@ -78,6 +84,7 @@ class SphereGu(SurfacesGu):
 
 class TorusGu(SurfacesGu):
     """GEOUNED Torus Class"""
+
     def __init__(self, face):
         SurfacesGu.__init__(self, face)
         self.Center = face.Surface.Center
@@ -88,6 +95,7 @@ class TorusGu(SurfacesGu):
 
 class SolidGu:
     """GEOUNED Solid Class"""
+
     def __init__(self, solid, plane3Pts=False):
         self.solid = solid
         faces = DefineListFace_GU(solid.Faces, plane3Pts)
@@ -221,6 +229,7 @@ class SolidGu:
 # FACES
 class FaceGu(object):
     """GEOUNED Face Class"""
+
     def __init__(self, face, Plane3Pts=False):
         # GEOUNED based atributes
         self.__face__ = face
