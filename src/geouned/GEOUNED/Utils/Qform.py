@@ -7,7 +7,6 @@
 import math
 
 import FreeCAD
-import Part
 
 
 def RotationMatrix(u, v):
