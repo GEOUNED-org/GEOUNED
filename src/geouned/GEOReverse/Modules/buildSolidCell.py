@@ -110,14 +110,7 @@ def BuildSolidParts(cell, base, mode):
     # print(boundBox)
 
     if mode == "solids":
-        # boundBox.enlarge(10)
-        if cell.definition.operator == "OR" and False:
-            Def = cell.definition
-            cell.definition = cell.definition.getComplementary()
-            cell.buildShape(boundBox, force=False, simplify=False)
-            cell.definition = Def
-        else:
-            cell.buildShape(boundBox, force=True, simplify=False, fuse=True)
+        cell.buildShape(boundBox, force=True, simplify=False, fuse=True)
 
         # print('export')
         # base.base.exportStep('base.stp')
