@@ -77,7 +77,7 @@ def getId(face_in, Surfaces):
             s.Surf,
             dtol=tol.pln_distance,
             atol=tol.pln_angle,
-            relTol=tol.relativeTol,
+            rel_tol=tol.relativeTol,
         ):
             return s.Index
 
