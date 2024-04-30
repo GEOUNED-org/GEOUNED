@@ -657,7 +657,7 @@ class BoolSequence:
             self.level = max(e.level + 1, self.level)
 
 
-def insertInSequence(Seq, trgt, nsrf, operator):
+def insert_in_sequence(Seq, trgt, nsrf, operator):
     """Substitute the variable trgt by the sequence "(trgt:nsrg)" or "(trgt nsf)" in the
     BoolSequence Seq"""
     if operator == "OR":

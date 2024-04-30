@@ -13,7 +13,7 @@ from . import LoadFunctions as LF
 
 
 # Paco mod
-def extractMaterials(filename):
+def extract_materials(filename):
     rho_real = []
     m_dict = {}  # _ Material dictionary
     with open(filename, "rt") as file:
@@ -28,18 +28,18 @@ def extractMaterials(filename):
     return m_dict
 
 
-def LoadCAD(filename, mat_filename, default_mat=[], comp_solids=True):
+def load_cad(filename, mat_filename, default_mat=[], comp_solids=True):
 
     # Set document solid tree options when opening CAD differing from version 0.18
     if int(FreeCAD.Version()[1]) > 18:
-        LF.set_docOptions()
+        LF.set_doc_options()
 
     cad_simplificado_doc = FreeCAD.newDocument("CAD_simplificado")
     Import.insert(filename, "CAD_simplificado")
 
     if mat_filename != "":
         if os.path.exists(mat_filename):
-            m_dict = extractMaterials(mat_filename)
+            m_dict = extract_materials(mat_filename)
         else:
             print(f"Material definition file {mat_filename} does not exist.")
             m_dict = {}
@@ -129,7 +129,7 @@ def LoadCAD(filename, mat_filename, default_mat=[], comp_solids=True):
 
                     init = i_solid
                     end = i_solid + len(elem.Shape.Solids)
-                    LF.fuseMetaObj(meta_list, init, end)
+                    LF.fuse_meta_obj(meta_list, init, end)
                     n_solids = 1
                 else:
                     n_solids = len(elem.Shape.Solids)
@@ -185,10 +185,10 @@ def LoadCAD(filename, mat_filename, default_mat=[], comp_solids=True):
         )
         print("List of not present materials:", missing_mat)
 
-    enclosure_list = LF.setEnclosureSolidList(meta_list)
+    enclosure_list = LF.set_enclosure_solid_list(meta_list)
     if enclosure_list:
-        LF.checkEnclosure(cad_simplificado_doc, enclosure_list)
-        # LF.RemoveEnclosure(meta_list)
+        LF.check_enclosure(cad_simplificado_doc, enclosure_list)
+        # LF.remove_enclosure(meta_list)
         return meta_list, enclosure_list
     else:
         return meta_list, []

@@ -7,7 +7,7 @@
 
 Modification in 0.9.6 Release Date 24/11/2022
   - Small change in the reading of material file.
-  - In "CellDefinition.py" file. "isOposite" function is call with rhe correct tolerance value instead of default value of the isOposite function.  
+  - In "CellDefinition.py" file. "is_opposite" function is call with rhe correct tolerance value instead of default value of the is_opposite function.  
 
 Modification in 0.9.7 Release Date 06/12/2022
   - Compatibility with FreeCAD version higher than 0.18.

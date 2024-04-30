@@ -7,7 +7,7 @@ from datetime import datetime
 import FreeCAD
 
 from ..CodeVersion import *
-from ..Utils.BasicFunctions_part1 import isOposite, pointsToCoeffs
+from ..Utils.BasicFunctions_part1 import is_opposite, pointsToCoeffs
 from ..Utils.Functions import SurfacesDict
 from ..Utils.Options.Classes import Options as opt
 from .Functions import CardLine, MCNPSurface, changeSurfSign, writeMCNPCellDef
@@ -309,7 +309,7 @@ C **************************************************************
             for p in Surfaces["P"]:
                 if p.Surf.pointDef:
                     axis, d = pointsToCoeffs(p.Surf.Points)
-                    if isOposite(axis, p.Surf.Axis):
+                    if is_opposite(axis, p.Surf.Axis):
                         self.__changeSurfSign__(p)
 
         return

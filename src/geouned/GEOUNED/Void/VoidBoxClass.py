@@ -5,7 +5,7 @@ import Part
 
 from ..Conversion import CellDefinition as Conv
 from ..Decompose import Decom_one as Decom
-from ..Utils.BasicFunctions_part1 import isOposite
+from ..Utils.BasicFunctions_part1 import is_opposite
 from ..Utils.booleanFunction import BoolSequence
 from ..Utils.BooleanSolids import buildCTableFromSolids, removeExtraSurfaces
 from ..Utils.Functions import GeounedSolid, GeounedSurface
@@ -170,9 +170,9 @@ class VoidBox:
                 id, exist = Surfaces.addPlane(p)
                 if exist:
                     s = Surfaces.getSurface(id)
-                    if isOposite(p.Surf.Axis, s.Surf.Axis):
+                    if is_opposite(p.Surf.Axis, s.Surf.Axis):
                         id = -id
-                if isOposite(p.Surf.Axis, p.Surf.Position - center):
+                if is_opposite(p.Surf.Axis, p.Surf.Position - center):
                     boxDef.elements.append(id)
                 else:
                     boxDef.elements.append(-id)
@@ -186,7 +186,7 @@ class VoidBox:
                 Part.makeCompound(TempPieceEnclosure.Solids), UniverseBox
             )
             Surfaces.extend(
-                Decom.ExtractSurfaces(comsolid, "All", UniverseBox, MakeObj=True)
+                Decom.extract_surfaces(comsolid, "All", UniverseBox, MakeObj=True)
             )
             TempPieceEnclosure.updateSolids(comsolid.Solids)
             Conv.cellDef(TempPieceEnclosure, Surfaces, UniverseBox)

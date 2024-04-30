@@ -6,22 +6,22 @@ import math
 import FreeCAD
 
 
-def isSameValue(v1, v2, tolerance=1e-6):
+def is_same_value(v1, v2, tolerance=1e-6):
     return abs(v1 - v2) < tolerance
 
 
-def isOposite(vector_1, vector_2, tolerance=1e-6):
+def is_opposite(vector_1, vector_2, tolerance=1e-6):
     return abs(vector_1.getAngle(-vector_2)) < tolerance
 
 
-def isParallel(vector_1, vector_2, tolerance=1e-6):
+def is_parallel(vector_1, vector_2, tolerance=1e-6):
     angle = abs(vector_1.getAngle(vector_2))
-    return angle < tolerance or isSameValue(angle, math.pi, tolerance)
+    return angle < tolerance or is_same_value(angle, math.pi, tolerance)
 
 
 def isInLine(point, dir, pnt_line, tolerance=1e-6):
     r12 = point - pnt_line
-    return isParallel(dir, r12) or (r12.Length < tolerance)
+    return is_parallel(dir, r12) or (r12.Length < tolerance)
 
 
 def isInPoints(point, points, tolerance=1e-5):

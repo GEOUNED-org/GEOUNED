@@ -55,7 +55,7 @@ def writeGeometry(UniverseBox, MetaList, Surfaces, code_setting):
 
     if "openMC_PY" in code_setting["outFormat"]:
         omcFilename = baseName + ".py"
-        OMCFile.writePY(omcFilename)
+        OMCFile.write_py(omcFilename)
 
     if "serpent" in code_setting["outFormat"]:
         serpentFilename = baseName + ".serp"

@@ -4,7 +4,7 @@ import re
 import FreeCAD
 
 from ..Utils import Qform as Qform
-from ..Utils.BasicFunctions_part1 import isOposite, isParallel
+from ..Utils.BasicFunctions_part1 import is_opposite, is_parallel
 from ..Utils.Options.Classes import McnpNumericFormat as nf
 from ..Utils.Options.Classes import Options as opt
 from ..Utils.Options.Classes import Tolerances as tol
@@ -279,21 +279,21 @@ def MCNPSurface(id, Type, surf):
         Dir.normalize()
         Pos = surf.Center * 0.1
         rad = surf.Radius * 0.1
-        if isParallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle):
+        if is_parallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle):
             if Pos.y == 0.0 and Pos.z == 0.0:
                 MCNP_def = "{:<6d} CX  {:{r}}".format(id, rad, r=nf.C_r)
             else:
                 MCNP_def = "{:<6d} C/X  {:{yz}} {:{yz}} {:{r}}".format(
                     id, Pos.y, Pos.z, rad, yz=nf.C_xyz, r=nf.C_r
                 )
-        elif isParallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle):
+        elif is_parallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle):
             if Pos.x == 0.0 and Pos.z == 0.0:
                 MCNP_def = "{:<6d} CY  {:{r}}".format(id, rad, r=nf.C_r)
             else:
                 MCNP_def = "{:<6d} C/Y  {:{xz}} {:{xz}} {:{r}}".format(
                     id, Pos.x, Pos.z, rad, xz=nf.C_xyz, r=nf.C_r
                 )
-        elif isParallel(Dir, FreeCAD.Vector(0, 0, 1), tol.angle):
+        elif is_parallel(Dir, FreeCAD.Vector(0, 0, 1), tol.angle):
             if Pos.y == 0.0 and Pos.x == 0.0:
                 MCNP_def = "{:<6d} CZ  {:{r}}".format(id, rad, r=nf.C_r)
             else:
@@ -330,9 +330,9 @@ def MCNPSurface(id, Type, surf):
         X_dir = FreeCAD.Vector(1, 0, 0)
         Y_dir = FreeCAD.Vector(0, 1, 0)
         Z_dir = FreeCAD.Vector(0, 0, 1)
-        if isParallel(Dir, X_dir, tol.angle):
+        if is_parallel(Dir, X_dir, tol.angle):
             sheet = 1
-            if isOposite(Dir, X_dir, tol.angle):
+            if is_opposite(Dir, X_dir, tol.angle):
                 sheet = -1
             if Apex.y == 0.0 and Apex.z == 0.0:
                 MCNP_def = "{:<6d} KX  {:{x}} {:{t2}} {}".format(
@@ -349,9 +349,9 @@ def MCNPSurface(id, Type, surf):
                     xyz=nf.K_xyz,
                     t2=nf.K_tan2,
                 )
-        elif isParallel(Dir, Y_dir, tol.angle):
+        elif is_parallel(Dir, Y_dir, tol.angle):
             sheet = 1
-            if isOposite(Dir, Y_dir, tol.angle):
+            if is_opposite(Dir, Y_dir, tol.angle):
                 sheet = -1
             if Apex.x == 0.0 and Apex.z == 0.0:
                 MCNP_def = "{:<6d} KY  {:{y}} {:{t2}} {}".format(
@@ -368,9 +368,9 @@ def MCNPSurface(id, Type, surf):
                     xyz=nf.K_xyz,
                     t2=nf.K_tan2,
                 )
-        elif isParallel(Dir, Z_dir, tol.angle):
+        elif is_parallel(Dir, Z_dir, tol.angle):
             sheet = 1
-            if isOposite(Dir, Z_dir, tol.angle):
+            if is_opposite(Dir, Z_dir, tol.angle):
                 sheet = -1
             if Apex.x == 0.0 and Apex.y == 0.0:
                 MCNP_def = "{:<6d} KZ  {:{z}} {:{t2}} {}".format(
@@ -414,19 +414,19 @@ def MCNPSurface(id, Type, surf):
         Pos = surf.Center * 0.1
         radMaj = surf.MajorRadius * 0.1
         radMin = surf.MinorRadius * 0.1
-        if isParallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle):
+        if is_parallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle):
             MCNP_def = """\
 {:<6d} TX  {:{xyz}} {:{xyz}} {:{xyz}}
            {:{r}} {:{r}} {:{r}}""".format(
                 id, Pos.x, Pos.y, Pos.z, radMaj, radMin, radMin, xyz=nf.T_xyz, r=nf.T_r
             )
-        elif isParallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle):
+        elif is_parallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle):
             MCNP_def = """\
 {:<6d} TY  {:{xyz}} {:{xyz}} {:{xyz}}
            {:{r}} {:{r}} {:{r}}""".format(
                 id, Pos.x, Pos.y, Pos.z, radMaj, radMin, radMin, xyz=nf.T_xyz, r=nf.T_r
             )
-        elif isParallel(Dir, FreeCAD.Vector(0, 0, 1), tol.angle):
+        elif is_parallel(Dir, FreeCAD.Vector(0, 0, 1), tol.angle):
             MCNP_def = """\
 {:<6d} TZ  {:{xyz}} {:{xyz}} {:{xyz}}
            {:{r}} {:{r}} {:{r}}""".format(
@@ -482,7 +482,7 @@ def OpenMCSurface(Type, surf, outXML=True, quadricForm=False):
         Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
 
-        if isParallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle):
+        if is_parallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle):
             if outXML:
                 OMCsurf = "x-cylinder"
                 coeffs = "{:{xy}} {:{xy}} {:{r}}".format(
@@ -492,7 +492,7 @@ def OpenMCSurface(Type, surf, outXML=True, quadricForm=False):
                 OMCsurf = "XCylinder"
                 coeffs = f"y0={Pos.y},z0={Pos.z},r={Rad}"
 
-        elif isParallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle):
+        elif is_parallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle):
             if outXML:
                 OMCsurf = "y-cylinder"
                 coeffs = "{:{xy}} {:{xy}} {:{r}}".format(
@@ -502,7 +502,7 @@ def OpenMCSurface(Type, surf, outXML=True, quadricForm=False):
                 OMCsurf = "YCylinder"
                 coeffs = f"x0={Pos.x},z0={Pos.z},r={Rad}"
 
-        elif isParallel(Dir, FreeCAD.Vector(0, 0, 1), tol.angle):
+        elif is_parallel(Dir, FreeCAD.Vector(0, 0, 1), tol.angle):
             if outXML:
                 OMCsurf = "z-cylinder"
                 coeffs = "{:{xy}} {:{xy}} {:{r}}".format(
@@ -543,7 +543,7 @@ def OpenMCSurface(Type, surf, outXML=True, quadricForm=False):
         Y_dir = FreeCAD.Vector(0, 1, 0)
         Z_dir = FreeCAD.Vector(0, 0, 1)
 
-        if isParallel(Dir, X_dir, tol.angle):
+        if is_parallel(Dir, X_dir, tol.angle):
             if outXML:
                 OMCsurf = "x-cone"
                 coeffs = "{:{xyz}} {:{xyz}} {:{xyz}} {:{t2}}".format(
@@ -553,7 +553,7 @@ def OpenMCSurface(Type, surf, outXML=True, quadricForm=False):
                 OMCsurf = "XCone"
                 coeffs = f"x0={Apex.x},y0={Apex.y},z0={Apex.z},r2={tan2}"
 
-        elif isParallel(Dir, Y_dir, tol.angle):
+        elif is_parallel(Dir, Y_dir, tol.angle):
             if outXML:
                 OMCsurf = "y-cone"
                 coeffs = "{:{xyz}} {:{xyz}} {:{xyz}} {:{t2}}".format(
@@ -563,7 +563,7 @@ def OpenMCSurface(Type, surf, outXML=True, quadricForm=False):
                 OMCsurf = "YCone"
                 coeffs = f"x0={Apex.x},y0={Apex.y},z0={Apex.z},r2={tan2}"
 
-        elif isParallel(Dir, Z_dir, tol.angle):
+        elif is_parallel(Dir, Z_dir, tol.angle):
             if outXML:
                 OMCsurf = "z-cone"
                 coeffs = "{:{xyz}} {:{xyz}} {:{xyz}} {:{t2}}".format(
@@ -627,11 +627,11 @@ def OpenMCSurface(Type, surf, outXML=True, quadricForm=False):
                 Center.x, Center.y, Center.z, majRad, minRad, minRad
             )
 
-        if isParallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle):
+        if is_parallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle):
             OMCsurf = "x-torus" if outXML else "XTorus"
-        elif isParallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle):
+        elif is_parallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle):
             OMCsurf = "y-torus" if outXML else "YTorus"
-        elif isParallel(Dir, FreeCAD.Vector(0, 0, 1), tol.angle):
+        elif is_parallel(Dir, FreeCAD.Vector(0, 0, 1), tol.angle):
             OMCsurf = "z-torus" if outXML else "ZTorus"
         else:
             OMCsurf = None
@@ -676,15 +676,15 @@ def SerpentSurface(id, Type, surf):
         Dir.normalize()
         Pos = surf.Center * 0.1
         rad = surf.Radius * 0.1
-        if isParallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle):
+        if is_parallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle):
             Serpent_def = (
                 f"surf {id} cylx {Pos.y:{nf.C_xyz}} {Pos.z:{nf.C_xyz}} {rad:{nf.C_r}}"
             )
-        elif isParallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle):
+        elif is_parallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle):
             Serpent_def = (
                 f"surf {id} cyly {Pos.x:{nf.C_xyz}} {Pos.z:{nf.C_xyz}} {rad:{nf.C_r}}"
             )
-        elif isParallel(Dir, FreeCAD.Vector(0, 0, 1), tol.angle):
+        elif is_parallel(Dir, FreeCAD.Vector(0, 0, 1), tol.angle):
             Serpent_def = f"surf {id} cylz {rad:{nf.C_r}}"
         else:
             # Is not still working fine
@@ -708,23 +708,23 @@ surf quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
         # Need to check this
         # Serpent has no specific card for cone at origin, explicit origin only
 
-        if isParallel(Dir, X_dir, tol.angle):
+        if is_parallel(Dir, X_dir, tol.angle):
             sheet = 1
-            if isOposite(Dir, X_dir, tol.angle):
+            if is_opposite(Dir, X_dir, tol.angle):
                 sheet = -1
             Serpent_def = "surf ckx {:{xyz}} {:{xyz}} {:{xyz}} {:{t2}} {}".format(
                 id, Apex.x, Apex.y, Apex.z, tan**2, sheet, xyz=nf.K_xyz, t2=nf.K_tan2
             )
-        elif isParallel(Dir, Y_dir, tol.angle):
+        elif is_parallel(Dir, Y_dir, tol.angle):
             sheet = 1
-            if isOposite(Dir, Y_dir, tol.angle):
+            if is_opposite(Dir, Y_dir, tol.angle):
                 sheet = -1
             Serpent_def = "surf cky {:{xyz}} {:{xyz}} {:{xyz}} {:{t2}} {}".format(
                 id, Apex.x, Apex.y, Apex.z, tan**2, sheet, xyz=nf.K_xyz, t2=nf.K_tan2
             )
-        elif isParallel(Dir, Z_dir, tol.angle):
+        elif is_parallel(Dir, Z_dir, tol.angle):
             sheet = 1
-            if isOposite(Dir, Z_dir, tol.angle):
+            if is_opposite(Dir, Z_dir, tol.angle):
                 sheet = -1
             Serpent_def = "surf ckz {:{xyz}} {:{xyz}} {:{xyz}} {:{t2}} {}".format(
                 id, Apex.x, Apex.y, Apex.z, tan**2, sheet, xyz=nf.K_xyz, t2=nf.K_tan2
@@ -744,17 +744,17 @@ surf quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
         Pos = surf.Center * 0.1
         radMaj = surf.MajorRadius * 0.1
         radMin = surf.MinorRadius * 0.1
-        if isParallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle):
+        if is_parallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle):
             Serpent_def = f"surf {id} torx {Pos.x:{nf.T_xyz}} {Pos.y:{nf.T_xyz}} {Pos.z:{nf.T_xyz}}\n"
             Serpent_def += (
                 f"      {radMaj:{nf.T_r}} {radMin:{nf.T_r}} {radMin:{nf.T_r}}"
             )
-        elif isParallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle):
+        elif is_parallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle):
             Serpent_def = f"surf {id} tory {Pos.x:{nf.T_xyz}} {Pos.y:{nf.T_xyz}} {Pos.z:{nf.T_xyz}}\n"
             Serpent_def += (
                 f"      {radMaj:{nf.T_r}} {radMin:{nf.T_r}} {radMin:{nf.T_r}}"
             )
-        elif isParallel(Dir, FreeCAD.Vector(0, 0, 1), tol.angle):
+        elif is_parallel(Dir, FreeCAD.Vector(0, 0, 1), tol.angle):
             Serpent_def = f"surf {id} torz {Pos.x:{nf.T_xyz}} {Pos.y:{nf.T_xyz}} {Pos.z:{nf.T_xyz}}\n"
             Serpent_def += (
                 f"      {radMaj:{nf.T_r}} {radMin:{nf.T_r}} {radMin:{nf.T_r}}"
@@ -797,21 +797,21 @@ def PHITSSurface(id, Type, surf):
         Dir.normalize()
         Pos = surf.Center * 0.1
         rad = surf.Radius * 0.1
-        if isParallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle):
+        if is_parallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle):
             if Pos.y == 0.0 and Pos.z == 0.0:
                 PHITS_def = "{:<6d} CX  {:{r}}".format(id, rad, r=nf.C_r)
             else:
                 PHITS_def = "{:<6d} C/X  {:{yz}} {:{yz}} {:{r}}".format(
                     id, Pos.y, Pos.z, rad, yz=nf.C_xyz, r=nf.C_r
                 )
-        elif isParallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle):
+        elif is_parallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle):
             if Pos.x == 0.0 and Pos.z == 0.0:
                 PHITS_def = "{:<6d} CY  {:{r}}".format(id, rad, r=nf.C_r)
             else:
                 PHITS_def = "{:<6d} C/Y  {:{xz}} {:{xz}} {:{r}}".format(
                     id, Pos.x, Pos.z, rad, xz=nf.C_xyz, r=nf.C_r
                 )
-        elif isParallel(Dir, FreeCAD.Vector(0, 0, 1), tol.angle):
+        elif is_parallel(Dir, FreeCAD.Vector(0, 0, 1), tol.angle):
             if Pos.y == 0.0 and Pos.x == 0.0:
                 PHITS_def = "{:<6d} CZ  {:{r}}".format(id, rad, r=nf.C_r)
             else:
@@ -848,9 +848,9 @@ def PHITSSurface(id, Type, surf):
         X_dir = FreeCAD.Vector(1, 0, 0)
         Y_dir = FreeCAD.Vector(0, 1, 0)
         Z_dir = FreeCAD.Vector(0, 0, 1)
-        if isParallel(Dir, X_dir, tol.angle):
+        if is_parallel(Dir, X_dir, tol.angle):
             sheet = 1
-            if isOposite(Dir, X_dir, tol.angle):
+            if is_opposite(Dir, X_dir, tol.angle):
                 sheet = -1
             if Apex.y == 0.0 and Apex.z == 0.0:
                 PHITS_def = "{:<6d} KX  {:{x}} {:{t2}} {}".format(
@@ -867,9 +867,9 @@ def PHITSSurface(id, Type, surf):
                     xyz=nf.K_xyz,
                     t2=nf.K_tan2,
                 )
-        elif isParallel(Dir, Y_dir, tol.angle):
+        elif is_parallel(Dir, Y_dir, tol.angle):
             sheet = 1
-            if isOposite(Dir, Y_dir, tol.angle):
+            if is_opposite(Dir, Y_dir, tol.angle):
                 sheet = -1
             if Apex.x == 0.0 and Apex.z == 0.0:
                 PHITS_def = "{:<6d} KY  {:{y}} {:{t2}} {}".format(
@@ -886,9 +886,9 @@ def PHITSSurface(id, Type, surf):
                     xyz=nf.K_xyz,
                     t2=nf.K_tan2,
                 )
-        elif isParallel(Dir, Z_dir, tol.angle):
+        elif is_parallel(Dir, Z_dir, tol.angle):
             sheet = 1
-            if isOposite(Dir, Z_dir, tol.angle):
+            if is_opposite(Dir, Z_dir, tol.angle):
                 sheet = -1
             if Apex.x == 0.0 and Apex.y == 0.0:
                 PHITS_def = "{:<6d} KZ  {:{z}} {:{t2}} {}".format(
@@ -932,19 +932,19 @@ def PHITSSurface(id, Type, surf):
         Pos = surf.Center * 0.1
         radMaj = surf.MajorRadius * 0.1
         radMin = surf.MinorRadius * 0.1
-        if isParallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle):
+        if is_parallel(Dir, FreeCAD.Vector(1, 0, 0), tol.angle):
             PHITS_def = """\
 {:<6d} TX  {:{xyz}} {:{xyz}} {:{xyz}}
            {:{r}} {:{r}} {:{r}}""".format(
                 id, Pos.x, Pos.y, Pos.z, radMaj, radMin, radMin, xyz=nf.T_xyz, r=nf.T_r
             )
-        elif isParallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle):
+        elif is_parallel(Dir, FreeCAD.Vector(0, 1, 0), tol.angle):
             PHITS_def = """\
 {:<6d} TY  {:{xyz}} {:{xyz}} {:{xyz}}
            {:{r}} {:{r}} {:{r}}""".format(
                 id, Pos.x, Pos.y, Pos.z, radMaj, radMin, radMin, xyz=nf.T_xyz, r=nf.T_r
             )
-        elif isParallel(Dir, FreeCAD.Vector(0, 0, 1), tol.angle):
+        elif is_parallel(Dir, FreeCAD.Vector(0, 0, 1), tol.angle):
             PHITS_def = """\
 {:<6d} TZ  {:{xyz}} {:{xyz}} {:{xyz}}
            {:{r}} {:{r}} {:{r}}""".format(

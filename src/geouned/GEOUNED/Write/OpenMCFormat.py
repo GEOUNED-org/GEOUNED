@@ -87,7 +87,7 @@ class OpenmcInput:
         self.inpfile.write(OMCsurf)
         return
 
-    def writePY(self, filename):
+    def write_py(self, filename):
         print(f"write OpenMC python script {filename}")
 
         # get all the materials present in the model
@@ -96,7 +96,7 @@ class OpenmcInput:
                 self.Materials.add(cell.Material)
 
         self.inpfile = open(filename, "w", encoding="utf-8")
-        self.__write_py_header__(filename)
+        self.__write_py_header__()
 
         if len(self.Materials) > 0:
             self.inpfile.write("# Materials setup\n")

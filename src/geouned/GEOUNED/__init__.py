@@ -152,9 +152,9 @@ class CadToCsg:
         self.cellSummaryFile = cellSummaryFile
         self.sortEnclosure = sortEnclosure
 
-        Options.setDefaultAttribute()
-        McnpNumericFormat.setDefaultAttribute()
-        Tolerances.setDefaultAttribute()
+        Options.set_default_attribute()
+        McnpNumericFormat.set_default_attribute()
+        Tolerances.set_default_attribute()
 
     def SetConfiguration(self, configFile=None):
 
@@ -234,33 +234,33 @@ class CadToCsg:
 
             elif section == "Options":
                 for key in config["Options"].keys():
-                    if key in Options.defaultValues.keys():
-                        if Options.typeDict[key] is bool:
-                            Options.setAttribute(key, config.getboolean("Options", key))
+                    if key in Options.default_values.keys():
+                        if Options.type_dict[key] is bool:
+                            Options.set_attribute(key, config.getboolean("Options", key))
                         elif (
-                            Options.typeDict[key] is float
-                            or Options.typeDict[key] is int
+                            Options.type_dict[key] is float
+                            or Options.type_dict[key] is int
                         ):
-                            Options.setAttribute(key, config.getfloat("Options", key))
+                            Options.set_attribute(key, config.getfloat("Options", key))
 
             elif section == "Tolerances":
                 for key in config["Tolerances"].keys():
                     eqvKey = Tolerances.KwrdEquiv[key]
-                    if eqvKey in Tolerances.defaultValues.keys():
-                        if Tolerances.typeDict[eqvKey] is bool:
-                            Tolerances.setAttribute(
+                    if eqvKey in Tolerances.default_values.keys():
+                        if Tolerances.type_dict[eqvKey] is bool:
+                            Tolerances.set_attribute(
                                 eqvKey, config.getboolean("Tolerances", key)
                             )
-                        elif Tolerances.typeDict[eqvKey] is float:
-                            Tolerances.setAttribute(
+                        elif Tolerances.type_dict[eqvKey] is float:
+                            Tolerances.set_attribute(
                                 eqvKey, config.getfloat("Tolerances", key)
                             )
 
             elif section == "MCNP_Numeric_Format":
                 PdEntry = False
                 for key in config["MCNP_Numeric_Format"].keys():
-                    if key in McnpNumericFormat.defaultValues.keys():
-                        McnpNumericFormat.setAttribute(
+                    if key in McnpNumericFormat.default_values.keys():
+                        McnpNumericFormat.set_attribute(
                             key, config.get("MCNP_Numeric_Format", key)
                         )
                         if key == "P_d":
@@ -279,14 +279,14 @@ class CadToCsg:
 
     def set(self, kwrd, value):
 
-        if kwrd in McnpNumericFormat.defaultValues.keys():
-            McnpNumericFormat.setAttribute(kwrd, value)
+        if kwrd in McnpNumericFormat.default_values.keys():
+            McnpNumericFormat.set_attribute(kwrd, value)
             return
-        elif kwrd in Tolerances.defaultValues.keys():
-            Tolerances.setAttribute(kwrd, value)
+        elif kwrd in Tolerances.default_values.keys():
+            Tolerances.set_attribute(kwrd, value)
             return
-        elif kwrd in Options.defaultValues.keys():
-            Options.setAttribute(kwrd, value)
+        elif kwrd in Options.default_values.keys():
+            Options.set_attribute(kwrd, value)
             return
         elif kwrd not in self.__dict__.keys():
             print(f"Bad entry : {kwrd}")
@@ -379,14 +379,14 @@ class CadToCsg:
             EnclosureChunk = []
             for stp in self.stepFile:
                 print(f"read step file : {stp}")
-                Meta, Enclosure = Load.LoadCAD(stp, self.matFile)
+                Meta, Enclosure = Load.load_cad(stp, self.matFile)
                 MetaChunk.append(Meta)
                 EnclosureChunk.append(Enclosure)
             MetaList = joinMetaLists(MetaChunk)
             EnclosureList = joinMetaLists(EnclosureChunk)
         else:
             print(f"read step file : {self.stepFile}")
-            MetaList, EnclosureList = Load.LoadCAD(
+            MetaList, EnclosureList = Load.load_cad(
                 self.stepFile, self.matFile, self.voidMat, self.compSolids
             )
 
@@ -457,7 +457,7 @@ class CadToCsg:
                     print(m.Definition)
 
             if Options.forceNoOverlap:
-                Conv.noOverlappingCell(MetaList, Surfaces)
+                Conv.no_overlapping_cell(MetaList, Surfaces)
 
         else:
             translate(MetaList, Surfaces, UniverseBox, code_setting)
@@ -628,7 +628,7 @@ def DecomposeSolids(MetaList, Surfaces, UniverseBox, setting, meta):
             else:
                 comsolid.exportStep(f"debug/compSolid_{i}.stp")
         Surfaces.extend(
-            Decom.ExtractSurfaces(comsolid, "All", UniverseBox, MakeObj=True)
+            Decom.extract_surfaces(comsolid, "All", UniverseBox, MakeObj=True)
         )
         m.setCADSolid()
         m.updateSolids(comsolid.Solids)
@@ -658,9 +658,9 @@ def processCones(MetaList, coneInfo, Surfaces, UniverseBox):
             for Id in m.__commentInfo__[1]:
                 if Id in cellId:
                     cones.update(-x for x in coneInfo[Id])
-            Conv.addConePlane(m.Definition, cones, Surfaces, UniverseBox)
+            Conv.add_cone_plane(m.Definition, cones, Surfaces, UniverseBox)
         elif not m.Void:
-            Conv.addConePlane(m.Definition, coneInfo[m.__id__], Surfaces, UniverseBox)
+            Conv.add_cone_plane(m.Definition, coneInfo[m.__id__], Surfaces, UniverseBox)
 
 
 def getUniverse(MetaList):

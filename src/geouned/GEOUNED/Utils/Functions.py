@@ -15,7 +15,7 @@ from ..Utils.BasicFunctions_part1 import (
     PlaneParams,
     SphereParams,
     TorusParams,
-    isParallel,
+    is_parallel,
 )
 from ..Utils.Options.Classes import Options
 from ..Utils.Options.Classes import Tolerances as tol
@@ -442,7 +442,7 @@ class SurfacesDict(dict):
         ey = FreeCAD.Vector(0, 1, 0)
         ez = FreeCAD.Vector(0, 0, 1)
 
-        if isParallel(plane.Surf.Axis, ex, tol.pln_angle):
+        if is_parallel(plane.Surf.Axis, ex, tol.pln_angle):
             addPlane = True
             for i, p in enumerate(self["PX"]):
                 if BF.isSamePlane(
@@ -464,7 +464,7 @@ class SurfacesDict(dict):
                 self["PX"].append(plane)
                 self.__surfIndex__["PX"].append(plane.Index)
 
-        elif isParallel(plane.Surf.Axis, ey, tol.pln_angle):
+        elif is_parallel(plane.Surf.Axis, ey, tol.pln_angle):
             addPlane = True
             for i, p in enumerate(self["PY"]):
                 if BF.isSamePlane(
@@ -486,7 +486,7 @@ class SurfacesDict(dict):
                 self["PY"].append(plane)
                 self.__surfIndex__["PY"].append(plane.Index)
 
-        elif isParallel(plane.Surf.Axis, ez, tol.pln_angle):
+        elif is_parallel(plane.Surf.Axis, ez, tol.pln_angle):
             addPlane = True
             for i, p in enumerate(self["PZ"]):
                 if BF.isSamePlane(

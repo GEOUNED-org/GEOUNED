@@ -9,9 +9,9 @@ from ..Utils.BasicFunctions_part1 import (
     isInLine,
     isInPlane,
     isInTolerance,
-    isOposite,
-    isParallel,
-    isSameValue,
+    is_opposite,
+    is_parallel,
+    is_same_value,
 )
 from ..Write.Functions import MCNPSurface
 
@@ -48,10 +48,10 @@ def Fuzzy(index, dtype, surf1, surf2, val, tol):
 
 
 def isSamePlane(p1, p2, dtol=1e-6, atol=1e-6, rel_tol=True, fuzzy=(False, 0)):
-    if isParallel(p1.Axis, p2.Axis, atol):
+    if is_parallel(p1.Axis, p2.Axis, atol):
         d1 = p1.Axis.dot(p1.Position)
         d2 = p2.Axis.dot(p2.Position)
-        if isOposite(p1.Axis, p2.Axis, atol):
+        if is_opposite(p1.Axis, p2.Axis, atol):
             d2 = -d2
         d = abs(d1 - d2)
         if rel_tol:
@@ -79,7 +79,7 @@ def isSameCylinder(cyl1, cyl2, dtol=1e-6, atol=1e-6, rel_tol=True, fuzzy=(False,
         Fuzzy(fuzzy[1], "cylRad", cyl2, cyl1, abs(cyl2.Radius - cyl1.Radius), rtol)
 
     if is_same_rad:
-        if isParallel(cyl1.Axis, cyl2.Axis, atol):
+        if is_parallel(cyl1.Axis, cyl2.Axis, atol):
             c12 = cyl1.Center - cyl2.Center
             d = cyl1.Axis.cross(c12).Length
 
@@ -97,8 +97,8 @@ def isSameCylinder(cyl1, cyl2, dtol=1e-6, atol=1e-6, rel_tol=True, fuzzy=(False,
 
 
 def isSameCone(cone1, cone2, dtol=1e-6, atol=1e-6, rel_tol=True):
-    if isSameValue(cone1.SemiAngle, cone2.SemiAngle, atol):
-        if isParallel(cone1.Axis, cone2.Axis, atol):
+    if is_same_value(cone1.SemiAngle, cone2.SemiAngle, atol):
+        if is_parallel(cone1.Axis, cone2.Axis, atol):
             if rel_tol:
                 tol = dtol * max(cone1.Apex.Length, cone2.Apex.Length)
             else:
@@ -112,7 +112,7 @@ def isSameSphere(sph1, sph2, tolerance=1e-6, rel_tol=True):
         rtol = tolerance * max(sph2.Radius, sph1.Radius)
     else:
         rtol = tolerance
-    if isSameValue(sph1.Radius, sph2.Radius, rtol):
+    if is_same_value(sph1.Radius, sph2.Radius, rtol):
         if rel_tol:
             ctol = tolerance * max(sph2.Center.Length, sph1.Center.Length)
         else:
@@ -123,7 +123,7 @@ def isSameSphere(sph1, sph2, tolerance=1e-6, rel_tol=True):
 
 
 def isSameTorus(tor1, tor2, dtol=1e-6, atol=1e-6, rel_tol=True):
-    if isParallel(tor1.Axis, tor2.Axis, atol):
+    if is_parallel(tor1.Axis, tor2.Axis, atol):
         if tor1.Axis.dot(tor2.Axis) < 0:
             return False  # Assume same cone with oposite axis as different
         if rel_tol:
@@ -133,7 +133,7 @@ def isSameTorus(tor1, tor2, dtol=1e-6, atol=1e-6, rel_tol=True):
             Rtol = dtol
             rtol = dtol
 
-        if isSameValue(tor1.MajorRadius, tor2.MajorRadius, Rtol) and isSameValue(
+        if is_same_value(tor1.MajorRadius, tor2.MajorRadius, Rtol) and is_same_value(
             tor1.MinorRadius, tor2.MinorRadius, rtol
         ):
             if rel_tol:
@@ -286,7 +286,7 @@ def isInFaces2(face, faces):
         if elem.type == "<Plane object>" and kind_surf == "<Plane object>":
             vector_cross = axis.cross(elem.Axis)
             if vector_cross == vector_nulo and isInPlane(position, elem.Surface):
-                # if (isParallel(elem.Axis,elem.Surface.Axis) and isInPlane(Position,elem.Surface)):
+                # if (is_parallel(elem.Axis,elem.Surface.Axis) and isInPlane(Position,elem.Surface)):
                 return True
         elif elem.type == "<Cylinder object>" and kind_surf == "<Cylinder object>":
             dir = elem.Axis

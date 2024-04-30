@@ -2,7 +2,7 @@ import FreeCAD
 import Part
 
 from ..LoadFile import LoadFunctions as LF
-from ..Utils.BasicFunctions_part1 import isOposite
+from ..Utils.BasicFunctions_part1 import is_opposite
 from ..Utils.booleanFunction import BoolSequence
 from ..Utils.Functions import GeounedSolid, GeounedSurface
 from ..Utils.Options.Classes import Options as opt
@@ -14,7 +14,7 @@ def voidGeneration(MetaList, EnclosureList, Surfaces, UniverseBox, setting, init
     voidList = []
 
     if EnclosureList:
-        NestedEnclosure = LF.setEnclosureLevels(EnclosureList)
+        NestedEnclosure = LF.set_enclosure_levels(EnclosureList)
         VF.assignEnclosure(MetaList, NestedEnclosure)
 
         # add to Metalist Level 1 enclosures, remove from list material cells totally embedded in Level 1 enclosures
@@ -180,7 +180,7 @@ def getUniverseComplementary(Universe, Surfaces):
             Def.elements.append(-id)
         else:
             s = Surfaces.getSurface(id)
-            if isOposite(p.Surf.Axis, s.Surf.Axis):
+            if is_opposite(p.Surf.Axis, s.Surf.Axis):
                 Def.elements.append(id)
             else:
                 Def.elements.append(-id)

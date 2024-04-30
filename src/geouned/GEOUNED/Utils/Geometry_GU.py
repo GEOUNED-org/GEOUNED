@@ -9,7 +9,7 @@ import math
 import Part
 
 from ..Utils.Options.Classes import Tolerances as tol
-from .BasicFunctions_part1 import isSameValue
+from .BasicFunctions_part1 import is_same_value
 from .BasicFunctions_part2 import isSameTorus
 
 
@@ -208,11 +208,11 @@ class SolidGu:
         if arcLength >= two_pi * (1.0 - tol.relativePrecision):
             mergedParams = (True, (V0, V0 + two_pi))
         else:
-            if isSameValue(V0, 0.0, tol.relativePrecision) and isSameValue(
+            if is_same_value(V0, 0.0, tol.relativePrecision) and is_same_value(
                 V1, two_pi, tol.relativePrecision
             ):
                 for i in range(len(params) - 1):
-                    if not isSameValue(
+                    if not is_same_value(
                         params[i][1], params[i + 1][0], tol.relativePrecision
                     ):
                         break

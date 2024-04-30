@@ -4,7 +4,7 @@ import Part
 from ..Decompose import Decom_one as Decom
 from ..Utils import BasicFunctions_part2 as BF
 from ..Utils import Geometry_GU as GU
-from ..Utils.BasicFunctions_part1 import isOposite, isParallel
+from ..Utils.BasicFunctions_part1 import is_opposite, is_parallel
 from ..Utils.booleanFunction import BoolSequence
 from ..Utils.Options.Classes import Options as opt
 from ..Utils.Options.Classes import Tolerances as tol
@@ -62,11 +62,11 @@ def is_inverted(solid):
 
 def get_id(face_in, Surfaces):
 
-    if isParallel(face_in.Axis, FreeCAD.Vector(1, 0, 0), tol.pln_angle):
+    if is_parallel(face_in.Axis, FreeCAD.Vector(1, 0, 0), tol.pln_angle):
         plane = "PX"
-    elif isParallel(face_in.Axis, FreeCAD.Vector(0, 1, 0), tol.pln_angle):
+    elif is_parallel(face_in.Axis, FreeCAD.Vector(0, 1, 0), tol.pln_angle):
         plane = "PY"
-    elif isParallel(face_in.Axis, FreeCAD.Vector(0, 0, 1), tol.pln_angle):
+    elif is_parallel(face_in.Axis, FreeCAD.Vector(0, 0, 1), tol.pln_angle):
         plane = "PZ"
     else:
         plane = "P"
@@ -98,13 +98,13 @@ def translate(meta_list, surfaces, universe_box, setting):
                 m.Solids[0].exportStep(f"origSolid_{i}.stp")
 
         surfaces.extend(
-            Decom.ExtractSurfaces(
+            Decom.extract_surfaces(
                 Part.makeCompound(m.Solids), "Plane3Pts", universe_box, MakeObj=False
             )
         )
         setDefinition(m, surfaces)
 
-
+# TODO rename this, but be careful as there are other functions in the code with the same name
 def setDefinition(meta_obj, surfaces):
     solids = meta_obj.Solids
     s_def = BoolSequence(operator="OR")
@@ -129,7 +129,7 @@ def setDefinition(meta_obj, surfaces):
 
             id = get_id(face.Surface, surfaces)
             s = surfaces.getSurface(id)
-            if isOposite(face.Surface.Axis, s.Surf.Axis, tol.pln_angle):
+            if is_opposite(face.Surface.Axis, s.Surf.Axis, tol.pln_angle):
                 id = -id
             if face.Orientation == "Forward":
                 id = -id
