@@ -154,7 +154,6 @@ class CadCell:
         #     self.shape = Part.makeCompound(cutShape)
         self.shape = FuseSolid(cutShape)
 
-
     def buildSurfaceShape(self, boundBox):
         for s in self.surfaces.values():
             s.buildShape(boundBox)
