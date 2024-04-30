@@ -10,8 +10,9 @@ step_files = list(path_to_cad.rglob("*.stp")) + list(path_to_cad.rglob("*.step")
 # removing two geometries that are particularly slow to convert from CI testing
 # these two geometries remain in the test suite for locally testing
 if os.getenv("GITHUB_ACTIONS"):
-    step_files.remove(Path('testing/inputSTEP/large/SCDR.stp'))
-    step_files.remove(Path('testing/inputSTEP/large/Triangle.stp'))
+    step_files.remove(Path("testing/inputSTEP/large/SCDR.stp"))
+    step_files.remove(Path("testing/inputSTEP/large/Triangle.stp"))
+
 
 @pytest.mark.parametrize("input_step_file", step_files)
 def test_conversion(input_step_file):

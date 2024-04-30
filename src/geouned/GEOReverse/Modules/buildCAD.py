@@ -106,9 +106,7 @@ def BuildUniverse(
     Ustart, levelMax = startInfo
     Universe = AllUniverses[Ustart]
 
-    print(
-        f"Build Universe {ContainerCell.FILL} in container cell {ContainerCell.name}"
-    )
+    print(f"Build Universe {ContainerCell.FILL} in container cell {ContainerCell.name}")
     fails = []
     for NTcell in Universe.values():
         if duplicate:

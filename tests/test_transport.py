@@ -38,7 +38,8 @@ step_files.remove(Path("testing/inputSTEP/DoubleCylinder/placa.stp"))
 # removing geometries that are particularly slow to convert from CI testing
 # these geometries remain in the test suite for locally testing
 if os.getenv("GITHUB_ACTIONS"):
-    step_files.remove(Path('testing/inputSTEP/large/Triangle.stp'))
+    step_files.remove(Path("testing/inputSTEP/large/Triangle.stp"))
+
 
 @pytest.mark.skipif(
     sys.platform in ["win32", "darwin"],
