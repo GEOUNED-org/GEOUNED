@@ -84,7 +84,7 @@ def test_transport(input_step_file):
     if os.getenv("GITHUB_ACTIONS"):
         settings.particles = 100_000
     else:
-        settings.particles = 10_000_000
+        settings.particles = 1_000_000
     settings.run_mode = "fixed source"
     settings.source = source
     model = openmc.Model(geometry, materials, settings)

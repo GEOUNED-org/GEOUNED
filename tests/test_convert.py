@@ -22,7 +22,7 @@ def test_conversion(input_step_file):
         "title": "Input Test",
         "stepFile": f"{input_step_file.resolve()}",
         "geometryName": f"{output_filename_stem.resolve()}",
-        "outFormat": ("mcnp", "openMC_XML"),
+        "outFormat": ("mcnp", "openMC_XML", "openMC_PY", "serpent", "phits"),
         "compSolids": False,
         "volCARD": False,
         "volSDEF": True,

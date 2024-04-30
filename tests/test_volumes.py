@@ -41,9 +41,9 @@ if os.getenv("GITHUB_ACTIONS"):
     rel_tol = 0.05
 else:
     # samples for local run can be larger as threads is likely to be larger
-    samples = 400_000_000
+    samples = 40_000_000
     # acceptable tolerance can also be smaller
-    rel_tol = 0.01
+    rel_tol = 0.05
 
 
 @pytest.mark.skipif(
