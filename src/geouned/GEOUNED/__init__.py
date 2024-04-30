@@ -613,9 +613,7 @@ def DecomposeSolids(MetaList, Surfaces, UniverseBox, setting, meta):
                 Part.CompSolid(m.Solids).exportStep(
                     f"Suspicious_solids/Enclosure_original_{i}.stp"
                 )
-                comsolid.exportStep(
-                    f"Suspicious_solids/Enclosure_split_{i}.stp"
-                )
+                comsolid.exportStep(f"Suspicious_solids/Enclosure_split_{i}.stp")
             else:
                 Part.CompSolid(m.Solids).exportStep(
                     f"Suspicious_solids/Solid_original_{i}.stp"

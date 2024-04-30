@@ -223,9 +223,7 @@ def writeSequenceOMCXML(Seq):
 
 def writeSequenceOMCPY(Seq, prefix="S"):
 
-    strSurf = lambda surf: (
-        f"-{prefix}{-surf}" if surf < 0 else f"+{prefix}{surf}"
-    )
+    strSurf = lambda surf: (f"-{prefix}{-surf}" if surf < 0 else f"+{prefix}{surf}")
 
     if Seq.level == 0:
         if Seq.operator == "AND":
