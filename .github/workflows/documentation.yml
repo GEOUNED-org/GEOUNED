@@ -1,6 +1,13 @@
 name: documentation
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  pull_request:
+    branches:
+      - dev
+      - main
+  push:
+    branches:
+      - main
 
 permissions:
   contents: write
@@ -11,8 +18,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
+        with:
+          python-version: 'pypy3.11' 
       - name: Install dependencies
         run: |
+          pip install --upgrade pip
           pip install .[docs]
       - name: Sphinx build
         run: |
