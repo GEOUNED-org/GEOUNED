@@ -451,7 +451,7 @@ class SurfacesDict(dict):
                     p.Surf,
                     dtol=tol.pln_distance,
                     atol=tol.pln_angle,
-                    relTol=tol.relativeTol,
+                    rel_tol=tol.relativeTol,
                     fuzzy=(fuzzy, p.Index),
                 ):
                     addPlane = False
@@ -473,7 +473,7 @@ class SurfacesDict(dict):
                     p.Surf,
                     dtol=tol.pln_distance,
                     atol=tol.pln_angle,
-                    relTol=tol.relativeTol,
+                    rel_tol=tol.relativeTol,
                     fuzzy=(fuzzy, p.Index),
                 ):
                     addPlane = False
@@ -495,7 +495,7 @@ class SurfacesDict(dict):
                     p.Surf,
                     dtol=tol.pln_distance,
                     atol=tol.pln_angle,
-                    relTol=tol.relativeTol,
+                    rel_tol=tol.relativeTol,
                     fuzzy=(fuzzy, p.Index),
                 ):
                     addPlane = False
@@ -517,7 +517,7 @@ class SurfacesDict(dict):
                     p.Surf,
                     dtol=tol.pln_distance,
                     atol=tol.pln_angle,
-                    relTol=tol.relativeTol,
+                    rel_tol=tol.relativeTol,
                     fuzzy=(fuzzy, p.Index),
                 ):
                     addPlane = False
@@ -544,7 +544,7 @@ class SurfacesDict(dict):
                 c.Surf,
                 dtol=tol.cyl_distance,
                 atol=tol.cyl_angle,
-                relTol=tol.relativeTol,
+                rel_tol=tol.relativeTol,
                 fuzzy=(fuzzy, c.Index),
             ):
                 addCyl = False
@@ -570,7 +570,7 @@ class SurfacesDict(dict):
                 c.Surf,
                 dtol=tol.kne_distance,
                 atol=tol.kne_angle,
-                relTol=tol.relativeTol,
+                rel_tol=tol.relativeTol,
             ):
                 addCone = False
                 index = c.Index
@@ -590,7 +590,7 @@ class SurfacesDict(dict):
         addSphere = True
         for i, s in enumerate(self["Sph"]):
             if BF.isSameSphere(
-                sph.Surf, s.Surf, tol.sph_distance, relTol=tol.relativeTol
+                sph.Surf, s.Surf, tol.sph_distance, rel_tol=tol.relativeTol
             ):
                 addSphere = False
                 index = s.Index
@@ -614,7 +614,7 @@ class SurfacesDict(dict):
                 s.Surf,
                 dtol=tol.tor_distance,
                 atol=tol.tor_angle,
-                relTol=tol.relativeTol,
+                rel_tol=tol.relativeTol,
             ):
                 addTorus = False
                 index = s.Index
