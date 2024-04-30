@@ -34,7 +34,7 @@ def voidGeneration(MetaList, EnclosureList, Surfaces, UniverseBox, setting, init
     EnclosureBox = GeounedSolid(None, Box)
     if setting["voidMat"]:
         voidMat = setting["voidMat"]
-        EnclosureBox.setMaterial(voidMat[0], voidMat[1], voidMat[2])
+        EnclosureBox.set_material(voidMat[0], voidMat[1], voidMat[2])
 
     # get voids in 0 Level Enclosure (original Universe)
     # if exist Level 1 enclosures are considered as material cells
@@ -129,9 +129,9 @@ def GetVoidDef(MetaList, Surfaces, Enclosure, setting, Lev0=False):
         mVoid = GeounedSolid(i)
         mVoid.Void = True
         mVoid.CellType = "void"
-        mVoid.setDefinition(vcell[0], simplify=True)
-        mVoid.setMaterial(Enclosure.Material, Enclosure.Rho, Enclosure.MatInfo)
-        mVoid.setDilution(Enclosure.Dilution)
+        mVoid.set_definition(vcell[0], simplify=True)
+        mVoid.set_material(Enclosure.Material, Enclosure.Rho, Enclosure.MatInfo)
+        mVoid.set_dilution(Enclosure.Dilution)
 
         mVoid.__commentInfo__ = vcell[1]
 
@@ -147,7 +147,7 @@ def setGraveyardCell(Surfaces, UniverseBox):
     center = UniverseBox.Center
     radius = 0.51 * UniverseBox.DiagonalLength
     sphere = GeounedSurface(("Sphere", (center, radius)), UniverseBox)
-    id, exist = Surfaces.addSphere(sphere)
+    id, exist = Surfaces.add_sphere(sphere)
 
     sphdef = BoolSequence(str(-id))
     sphdef.operator = "AND"
@@ -158,15 +158,15 @@ def setGraveyardCell(Surfaces, UniverseBox):
     mVoidSphIn = GeounedSolid(0)
     mVoidSphIn.Void = True
     mVoidSphIn.CellType = "void"
-    mVoidSphIn.setDefinition(sphdef)
-    mVoidSphIn.setMaterial(0, 0, "Graveyard_in")
+    mVoidSphIn.set_definition(sphdef)
+    mVoidSphIn.set_material(0, 0, "Graveyard_in")
     mVoidSphIn.__commentInfo__ = None
 
     mVoidSphOut = GeounedSolid(1)
     mVoidSphOut.Void = True
     mVoidSphOut.CellType = "void"
-    mVoidSphOut.setDefinition(notsph)
-    mVoidSphOut.setMaterial(0, 0, "Graveyard")
+    mVoidSphOut.set_definition(notsph)
+    mVoidSphOut.set_material(0, 0, "Graveyard")
     mVoidSphOut.__commentInfo__ = None
 
     return (mVoidSphIn, mVoidSphOut)
@@ -175,11 +175,11 @@ def setGraveyardCell(Surfaces, UniverseBox):
 def getUniverseComplementary(Universe, Surfaces):
     Def = BoolSequence(operator="OR")
     for p in Universe.getBoundPlanes():
-        id, exist = Surfaces.addPlane(p)
+        id, exist = Surfaces.add_plane(p)
         if not exist:
             Def.elements.append(-id)
         else:
-            s = Surfaces.getSurface(id)
+            s = Surfaces.get_surface(id)
             if is_opposite(p.Surf.Axis, s.Surf.Axis):
                 Def.elements.append(id)
             else:

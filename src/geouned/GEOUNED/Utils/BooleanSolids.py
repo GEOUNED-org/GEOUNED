@@ -254,7 +254,7 @@ def build_c_table_from_solids(Box, SurfInfo, option="diag"):
         for s in surfaceList:
             ss = surfaces[s]
             ss.__boundBox__ = Box.BoundBox
-            ss.buildSurface()
+            ss.build_surface()
     else:
         for s in surfaceList:
             surfaces[s].buildShape(Box.BoundBox)
@@ -267,7 +267,7 @@ def build_c_table_from_solids(Box, SurfInfo, option="diag"):
 
     for i, s1 in enumerate(surfaceList):
         res, splitRegions = split_solid_fast(Box, surfaces[s1], True)
-        # res,splitRegions = split_solid_fast(Box,Surfaces.getSurface(s1),True)
+        # res,splitRegions = split_solid_fast(Box,Surfaces.get_surface(s1),True)
 
         CTable.add_element(s1, s1, CTelement(res, s1, s1))
         if option == "diag":
@@ -282,7 +282,7 @@ def build_c_table_from_solids(Box, SurfInfo, option="diag"):
 
                 pos = split_solid_fast(solid, surfaces[s2], False)
 
-                # pos = split_solid_fast(solid,Surfaces.getSurface(s2),False)
+                # pos = split_solid_fast(solid,Surfaces.get_surface(s2),False)
                 if pos == (1, 1):
                     break  # s2 intersect S1 Region
                 if pos0 is None:
@@ -294,7 +294,7 @@ def build_c_table_from_solids(Box, SurfInfo, option="diag"):
 
             neg0 = None
             for solid in negS1:
-                # neg = split_solid_fast(solid,Surfaces.getSurface(s2),False)
+                # neg = split_solid_fast(solid,Surfaces.get_surface(s2),False)
                 neg = split_solid_fast(solid, surfaces[s2], False)
                 if neg == (1, 1):
                     break  # s2 intersect S1 Region

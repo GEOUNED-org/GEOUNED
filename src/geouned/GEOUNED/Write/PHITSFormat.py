@@ -569,10 +569,10 @@ $ **************************************************************
         for ind in range(
             Surfaces.IndexOffset, Surfaces.surfaceNumber + Surfaces.IndexOffset
         ):
-            s = temp.getSurface(ind + 1)
+            s = temp.get_surface(ind + 1)
             if s is not None:
                 surfList.append(s)
-                temp.delSurface(ind + 1)
+                temp.del_surface(ind + 1)
         return surfList
 
     def __changeSurfSign__(self, p):

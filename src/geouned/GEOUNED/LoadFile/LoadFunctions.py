@@ -265,7 +265,7 @@ def check_enclosure(freecad_doc, enclosure_list):
     for chain in encl_tree:
         up = chain[0]
         for low in chain[1:]:
-            inter = up.checkIntersection(low.CADSolid)
+            inter = up.check_intersection(low.CADSolid)
             if inter != -2:
                 not_embedded.append((low.EnclosureID, up.EnclosureID))
 
@@ -289,7 +289,7 @@ def check_overlap(enclosures):
     overlap = []
     for i, enc1 in enumerate(enclosures):
         for enc2 in enclosures[i + 1 :]:
-            inter = enc1.checkIntersection(enc2.CADSolid)
+            inter = enc1.check_intersection(enc2.CADSolid)
             if inter != 1:
                 overlap.append((enc1.EnclosureID, enc2.EnclosureID))
     return overlap

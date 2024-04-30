@@ -811,10 +811,10 @@ def cellDef(meta_obj, surfaces, universe_box):
                         Face="Build",
                     )
 
-                    id, exist = surfaces.addPlane(p)
+                    id, exist = surfaces.add_plane(p)
                     sign = sign_plane(face.CenterOfMass, p)
                     if exist:
-                        pp = surfaces.getSurface(id)
+                        pp = surfaces.get_surface(id)
                         if is_opposite(p.Surf.Axis, pp.Surf.Axis, tol.angle):
                             id = -id
                     id *= sign
@@ -855,9 +855,9 @@ def cellDef(meta_obj, surfaces, universe_box):
                         plane = GeounedSurface(
                             ("Plane", plane1), universe_box, Face="Build"
                         )
-                        id1, exist = surfaces.addPlane(plane)
+                        id1, exist = surfaces.add_plane(plane)
                         if exist:
-                            p = surfaces.getSurface(id1)
+                            p = surfaces.get_surface(id1)
                             if is_opposite(plane.Surf.Axis, p.Surf.Axis, tol.pln_angle):
                                 id1 = -id1
 
@@ -867,9 +867,9 @@ def cellDef(meta_obj, surfaces, universe_box):
                             plane = GeounedSurface(
                                 ("Plane", plane2), universe_box, Face="Build"
                             )
-                            id2, exist = surfaces.addPlane(plane)
+                            id2, exist = surfaces.add_plane(plane)
                             if exist:
-                                p = surfaces.getSurface(id2)
+                                p = surfaces.get_surface(id2)
                                 if is_opposite(
                                     plane.Surf.Axis, p.Surf.Axis, tol.pln_angle
                                 ):
@@ -902,7 +902,7 @@ def cellDef(meta_obj, surfaces, universe_box):
                                 cone = GeounedSurface(
                                     ("Cone", surf_params), universe_box, Face="Build"
                                 )
-                                id2, exist = surfaces.addCone(cone)
+                                id2, exist = surfaces.add_cone(cone)
 
                             elif surf_type == "Cylinder":
                                 cyl = GeounedSurface(
@@ -910,15 +910,15 @@ def cellDef(meta_obj, surfaces, universe_box):
                                     universe_box,
                                     Face="Build",
                                 )
-                                id2, exist = surfaces.addCylinder(cyl)
+                                id2, exist = surfaces.add_cylinder(cyl)
 
                             elif surf_type == "Plane":
                                 plane = GeounedSurface(
                                     ("Plane", surf_params), universe_box, Face="Build"
                                 )
-                                id2, exist = surfaces.addPlane(plane)
+                                id2, exist = surfaces.add_plane(plane)
                                 if exist:
-                                    p = surfaces.getSurface(id2)
+                                    p = surfaces.get_surface(id2)
                                     if is_opposite(
                                         plane.Surf.Axis, p.Surf.Axis, tol.pln_angle
                                     ):
@@ -955,7 +955,7 @@ def cellDef(meta_obj, surfaces, universe_box):
                             universe_box,
                             Face="Build",
                         )
-                        id, exist = surfaces.addPlane(plane)
+                        id, exist = surfaces.add_plane(plane)
                         surf = plane.shape
                     elif surface_type == "<Cylinder object>":
                         dim_l = face.ParameterRange[3] - face.ParameterRange[2]
@@ -972,7 +972,7 @@ def cellDef(meta_obj, surfaces, universe_box):
                             universe_box,
                             Face="Build",
                         )
-                        id, exist = surfaces.addCylinder(cylinder)
+                        id, exist = surfaces.add_cylinder(cylinder)
                         surf = cylinder.shape
 
                 if orient == "Reversed":
@@ -981,7 +981,7 @@ def cellDef(meta_obj, surfaces, universe_box):
                     var = -id
 
                 if surface_type == "<Plane object>":
-                    s = surfaces.getSurface(id)
+                    s = surfaces.get_surface(id)
                     if is_opposite(face.Surface.Axis, s.Surf.Axis, tol.pln_angle):
                         var = -var
 
@@ -1026,8 +1026,8 @@ def cellDef(meta_obj, surfaces, universe_box):
 
     for isol in reversed(del_list):
         del meta_obj.Solids[isol]
-    meta_obj.setDefinition(piece_def)
-    meta_obj.setFaces(iece_obj)
+    meta_obj.set_definition(piece_def)
+    meta_obj.set_faces(iece_obj)
     return tuple(cones)
 
 
@@ -1145,7 +1145,7 @@ def no_overlapping_cell(metaList, surfaces):
                     comp.simplify(CT)
                     comp.clean()
 
-            m.setDefinition(new_def)
+            m.set_definition(new_def)
             m.Definition.joinOperators()
             m.Definition.level_update()
 
@@ -1168,9 +1168,9 @@ def extra_plane_cyl_face(face, box, surfaces):
             plane = GeounedSurface(
                 ("Plane", (center, dir, dim1, dim2)), box, Face="Build"
             )
-            id, exist = surfaces.addPlane(plane)
+            id, exist = surfaces.add_plane(plane)
             if exist:
-                pp = surfaces.getSurface(id)
+                pp = surfaces.get_surface(id)
                 if is_opposite(plane.Surf.Axis, pp.Surf.Axis, tol.pln_angle):
                     id = -id
             planes_id.append(id)
@@ -1183,7 +1183,7 @@ def add_cone_plane(definition, cones_list, surfaces, universe_box):
     z_axis = FreeCAD.Vector(0, 0, 1)
 
     for cid in cones_list:
-        cone = surfaces.getSurface(abs(cid))
+        cone = surfaces.get_surface(abs(cid))
         if (
             is_parallel(cone.Surf.Axis, x_axis, tol.angle)
             or is_parallel(cone.Surf.Axis, y_axis, tol.angle)
@@ -1196,10 +1196,10 @@ def add_cone_plane(definition, cones_list, surfaces, universe_box):
             universe_box,
             Face="Build",
         )
-        pid, exist = surfaces.addPlane(plane)
+        pid, exist = surfaces.add_plane(plane)
 
         if exist:
-            p = surfaces.getSurface(pid)
+            p = surfaces.get_surface(pid)
             if is_opposite(plane.Surf.Axis, p.Surf.Axis, tol.pln_angle):
                 pid = -pid
 

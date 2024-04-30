@@ -102,11 +102,11 @@ def translate(meta_list, surfaces, universe_box, setting):
                 Part.makeCompound(m.Solids), "Plane3Pts", universe_box, MakeObj=False
             )
         )
-        setDefinition(m, surfaces)
+        set_definition(m, surfaces)
 
 
 # TODO rename this, but be careful as there are other functions in the code with the same name
-def setDefinition(meta_obj, surfaces):
+def set_definition(meta_obj, surfaces):
     solids = meta_obj.Solids
     s_def = BoolSequence(operator="OR")
 
@@ -129,7 +129,7 @@ def setDefinition(meta_obj, surfaces):
                 continue
 
             id = get_id(face.Surface, surfaces)
-            s = surfaces.getSurface(id)
+            s = surfaces.get_surface(id)
             if is_opposite(face.Surface.Axis, s.Surf.Axis, tol.pln_angle):
                 id = -id
             if face.Orientation == "Forward":
@@ -161,4 +161,4 @@ def setDefinition(meta_obj, surfaces):
 
         s_def.append(subSol)
 
-    meta_obj.setDefinition(s_def)
+    meta_obj.set_definition(s_def)

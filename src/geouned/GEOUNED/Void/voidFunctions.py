@@ -8,7 +8,7 @@ def assignEnclosure(MetaList, NestedEnclosure):
         outside = True
         for lev, Level in enumerate(reversed(NestedEnclosure)):
             for encl in Level:
-                inter = m.checkIntersection(encl.CADSolid)
+                inter = m.check_intersection(encl.CADSolid)
                 # CAD solid intersect level i enclosure -> end of nested loops
                 # Current loop continue because solid can intersect various enclosure
                 if inter == 0:

@@ -69,13 +69,13 @@ def cut_full_cylinder(solid):
                 cylinder = UF.GeounedSurface(
                     ("Cylinder", (orig, dir, rad, dim_l)), universe_box
                 )
-                cylinder.buildSurface()
-                surfaces.addCylinder(cylinder, False)
+                cylinder.build_surface()
+                surfaces.add_cylinder(cylinder, False)
 
                 # add planes if cylinder axis is cut by a plane (plane quasi perpedicular to axis)
                 for p in cyl_bound_planes(face, universe_box):
-                    p.buildSurface()
-                    surfaces.addPlane(p, False)
+                    p.build_surface()
+                    surfaces.add_plane(p, False)
                 break
 
     planes = []
@@ -91,9 +91,9 @@ def cut_full_cylinder(solid):
     cut = False
     for pp in planes:
         # cut with more external parallel planes
-        pp[0].buildSurface()
+        pp[0].build_surface()
         if len(pp) != 1:
-            pp[-1].buildSurface()
+            pp[-1].build_surface()
             tools = (pp[0].shape, pp[-1].shape)
         else:
             tools = (pp[0].shape,)
@@ -251,8 +251,8 @@ def extract_surfaces(solid, kind, universe_box, MakeObj=False):
                     ("Plane", (pos, normal, dim1, dim2)), universe_box
                 )
                 if MakeObj:
-                    plane.buildSurface()
-                surfaces.addPlane(plane, fuzzy)
+                    plane.build_surface()
+                surfaces.add_plane(plane, fuzzy)
 
             elif surf == "<Cylinder object>":
                 dir = face.Surface.Axis
@@ -264,15 +264,15 @@ def extract_surfaces(solid, kind, universe_box, MakeObj=False):
                         ("Cylinder", (orig, dir, rad, dim_l)), universe_box
                     )
                     if MakeObj:
-                        cylinder.buildSurface()
-                    surfaces.addCylinder(cylinder, fuzzy)
+                        cylinder.build_surface()
+                    surfaces.add_cylinder(cylinder, fuzzy)
 
                 if kind in ["Planes", "All"]:
                     # add planes if cylinder axis is cut by a plane (plane quasi perpedicular to axis)
                     for p in cyl_bound_planes(face, universe_box):
                         if MakeObj:
-                            p.buildSurface()
-                        surfaces.addPlane(p)
+                            p.build_surface()
+                        surfaces.add_plane(p)
 
             elif surf == "<Cone object>":
                 dir = face.Surface.Axis
@@ -285,28 +285,28 @@ def extract_surfaces(solid, kind, universe_box, MakeObj=False):
                         ("Cone", (apex, dir, half_angle, dim_l, dimR)), universe_box
                     )
                     if MakeObj:
-                        cone.buildSurface()
-                    surfaces.addCone(cone)
+                        cone.build_surface()
+                    surfaces.add_cone(cone)
 
                 if kind in ["Planes", "All"]:
                     for p in cyl_bound_planes(face, universe_box):
                         if MakeObj:
-                            p.buildSurface()
-                        surfaces.addPlane(p)
+                            p.build_surface()
+                        surfaces.add_plane(p)
 
             elif surf[0:6] == "Sphere" and kind in ["Sph", "All"]:
                 rad = face.Surface.Radius
                 pnt = face.Surface.Center
                 sphere = UF.GeounedSurface(("Sphere", (pnt, rad)), universe_box)
                 if MakeObj:
-                    sphere.buildSurface()
-                surfaces.addSphere(sphere)
+                    sphere.build_surface()
+                surfaces.add_sphere(sphere)
 
                 if kind in ["Planes", "All"]:
                     for p in cyl_bound_planes(face, universe_box):
                         if MakeObj:
-                            p.buildSurface()
-                        surfaces.addPlane(p)
+                            p.build_surface()
+                        surfaces.add_plane(p)
 
             elif surf == "<Toroid object>":
                 if kind in ["Tor", "All"]:
@@ -318,14 +318,14 @@ def extract_surfaces(solid, kind, universe_box, MakeObj=False):
                         ("Torus", (center, dir, radMaj, radMin)), universe_box
                     )
                     if MakeObj:
-                        torus.buildSurface()
-                    surfaces.addTorus(torus)
+                        torus.build_surface()
+                    surfaces.add_torus(torus)
 
                 if kind in ["Planes", "All"]:
                     for p in torus_bound_planes(face, universe_box):
                         if MakeObj:
-                            p.buildSurface()
-                        surfaces.addPlane(p)
+                            p.build_surface()
+                        surfaces.add_plane(p)
 
             elif surf == "<Plane object>" and kind == "Plane3Pts":
                 pos = face.CenterOfMass
@@ -338,8 +338,8 @@ def extract_surfaces(solid, kind, universe_box, MakeObj=False):
                     ("Plane3Pts", (pos, normal, dim1, dim2, points)), universe_box
                 )
                 if MakeObj:
-                    plane.buildSurface()
-                surfaces.addPlane(plane, fuzzy)
+                    plane.build_surface()
+                surfaces.add_plane(plane, fuzzy)
 
     return surfaces
 
@@ -757,7 +757,7 @@ def split_planes_org(Solids, universe_box):
             if len(Planes[imin]) != 0:
                 Tools = []
                 for p in Planes[imin]:
-                    p.buildSurface()
+                    p.build_surface()
                     Tools.append(p.shape)
                 comsolid = UF.splitBOP(base, Tools, opt.splitTolerance)
                 if len(comsolid.Solids) == 1:
@@ -886,7 +886,7 @@ def split_p_planes_new(solid, universe_box):
     out_solid = [solid]
     for pp in Planes:
         for p in pp:
-            p.buildSurface()
+            p.build_surface()
         tools = tuple(p.shape for p in pp)
         comsolid = UF.splitBOP(solid, tools, opt.splitTolerance)
 
@@ -903,7 +903,7 @@ def split_p_planes_org(solid, universe_box):
         return [solid]
     out_solid = [solid]
     for p in SPlanes["P"]:
-        p.buildSurface()
+        p.build_surface()
         comsolid = UF.splitBOP(solid, [p.shape], opt.splitTolerance)
         if len(comsolid.Solids) > 1:
             out_solid = comsolid.Solids
@@ -925,7 +925,7 @@ def split_2nd_order(Solids, universe_box):
                 else:
                     simple = True
                     for s in Surfaces[kind]:
-                        s.buildSurface()
+                        s.build_surface()
                         try:
                             comsolid = UF.splitBOP(solid, [s.shape], opt.splitTolerance)
                             solidsInCom = []

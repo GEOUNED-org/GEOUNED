@@ -167,9 +167,9 @@ class VoidBox:
             center = self.BoundBox.Center
             bBox = self.BoundBox
             for p in self.getBoundPlanes():
-                id, exist = Surfaces.addPlane(p)
+                id, exist = Surfaces.add_plane(p)
                 if exist:
-                    s = Surfaces.getSurface(id)
+                    s = Surfaces.get_surface(id)
                     if is_opposite(p.Surf.Axis, s.Surf.Axis):
                         id = -id
                 if is_opposite(p.Surf.Axis, p.Surf.Position - center):
@@ -245,7 +245,7 @@ class VoidBox:
             if enclosure or res is None:
                 surfaceDict = {}
                 for i in surfList:
-                    surfaceDict[i] = Surfaces.getSurface(i)
+                    surfaceDict[i] = Surfaces.get_surface(i)
                 CTable = build_c_table_from_solids(Box, surfaceDict, option=simplify)
             else:
                 if res is True:
@@ -452,15 +452,15 @@ class VoidBox:
 
         if len(reducedSol) < len(Obj.Solids):
             Obj.update_solids(reducedSol)
-            Obj.setDefinition(reducedDef)
+            Obj.set_definition(reducedDef)
         return
 
     def __copyMeta__(self, m):
         solidsCopy = m.Solids[:]
         facesCopy = m.Faces[:]
         Meta = GeounedSolid(m.__id__, solidsCopy)
-        Meta.setDefinition(m.Definition.copy())
-        Meta.setFaces(facesCopy)
+        Meta.set_definition(m.Definition.copy())
+        Meta.set_faces(facesCopy)
         if m.IsEnclosure:
             Meta.IsEnclosure = True
             Meta.EnclosureID = m.EnclosureID

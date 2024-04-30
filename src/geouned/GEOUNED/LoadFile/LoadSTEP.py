@@ -135,20 +135,20 @@ def load_cad(filename, mat_filename, default_mat=[], comp_solids=True):
                     n_solids = len(elem.Shape.Solids)
 
                 for i in range(n_solids):
-                    meta_list[i_solid].setComments(f"{comment}{i + 1}")
+                    meta_list[i_solid].set_comments(f"{comment}{i + 1}")
                     meta_list[i_solid].set_cad_solid()
 
                     if tempre_mat:
                         mat_label = int(tempre_mat.group("mat"))
                         if mat_label in m_dict.keys():
-                            meta_list[i_solid].setMaterial(
+                            meta_list[i_solid].set_material(
                                 mat_label, m_dict[mat_label][0], m_dict[mat_label][1]
                             )
                         else:
                             if mat_label == 0:
-                                meta_list[i_solid].setMaterial(mat_label, 0, 0)
+                                meta_list[i_solid].set_material(mat_label, 0, 0)
                             else:
-                                meta_list[i_solid].setMaterial(
+                                meta_list[i_solid].set_material(
                                     mat_label,
                                     -100,
                                     "Missing material density information",
@@ -157,9 +157,9 @@ def load_cad(filename, mat_filename, default_mat=[], comp_solids=True):
                     else:
                         # print('Warning : No material label associated to solid {}.\nDefault material used instead.'.format(comment))
                         if default_mat:
-                            meta_list[i_solid].setMaterial(*default_mat)
+                            meta_list[i_solid].set_material(*default_mat)
                     if tempre_dil:
-                        meta_list[i_solid].setDilution(float(tempre_dil.group("dil")))
+                        meta_list[i_solid].set_dilution(float(tempre_dil.group("dil")))
 
                     if encl_label is not None:
                         meta_list[i_solid].EnclosureID = int(encl_label.group("encl"))

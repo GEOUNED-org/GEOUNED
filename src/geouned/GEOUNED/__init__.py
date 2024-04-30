@@ -644,7 +644,7 @@ def updateComment(meta, idLabel):
     if meta.__commentInfo__[1] is None:
         return
     newLabel = (idLabel[i] for i in meta.__commentInfo__[1])
-    meta.setComments(Void.voidCommentLine((meta.__commentInfo__[0], newLabel)))
+    meta.set_comments(Void.voidCommentLine((meta.__commentInfo__[0], newLabel)))
 
 
 def processCones(MetaList, coneInfo, Surfaces, UniverseBox):
