@@ -9,6 +9,15 @@ def writeGeometry(UniverseBox, MetaList, Surfaces, code_setting):
 
     baseName = code_setting["geometryName"]
 
+    # Currently there are two was of setting outFormat (via a .set method and
+    # a class attribute. Once we have a single method then move this validating
+    # input code to the attribute @setter
+    supported_mc_codes = ("mcnp", "openMC_XML", "openMC_PY", "serpent", "phits")
+    for out_format in code_setting["outFormat"]:
+        if out_format not in supported_mc_codes:
+            msg = f"outFormat {out_format} not in supported MC codes ({supported_mc_codes})"
+            raise ValueError(msg)
+
     # write cells comments in file
     if code_setting["cellCommentFile"]:
         OutFiles.commentsWrite(baseName, MetaList)

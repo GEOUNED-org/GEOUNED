@@ -28,7 +28,7 @@ def test_conversion(input_step_file):
         "title": "Input Test",
         "stepFile": f"{input_step_file.resolve()}",
         "geometryName": f"{output_filename_stem.resolve()}",
-        "outFormat": ("mcnp", "openMC_XML"),
+        "outFormat": ("mcnp", "openMC_XML", "openMC_PY", "serpent", "phits"),
         "compSolids": False,
         "volCARD": False,
         "volSDEF": True,
@@ -45,9 +45,10 @@ def test_conversion(input_step_file):
         "nPlaneReverse": 0,
     }
 
-    # deletes the output openmc and mcnp output files if it already exists
-    output_filename_stem.with_suffix(".mcnp").unlink(missing_ok=True)
-    output_filename_stem.with_suffix(".xml").unlink(missing_ok=True)
+    # deletes the output MC files if they already exists
+    suffixes = (".mcnp", ".xml", ".inp", ".py", ".serp")
+    for suffix in suffixes:
+        output_filename_stem.with_suffix(suffix).unlink(missing_ok=True)
 
     GEO = CadToCsg("Input Test")
 
@@ -57,5 +58,5 @@ def test_conversion(input_step_file):
 
     GEO.Start()
 
-    assert output_filename_stem.with_suffix(".mcnp").exists()
-    assert output_filename_stem.with_suffix(".xml").exists()
+    for suffix in suffixes:
+        assert output_filename_stem.with_suffix(suffix).exists()
