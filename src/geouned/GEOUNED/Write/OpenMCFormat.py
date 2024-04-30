@@ -22,7 +22,7 @@ class OpenmcInput:
         self.Materials = set()
 
     def writeXML(self, filename):
-        print("write OpenMC xml file {}".format(filename))
+        print(f"write OpenMC xml file {filename}")
         self.inpfile = open(filename, "w", encoding="utf-8")
         self.__write_xml_header__(filename)
 
@@ -62,7 +62,7 @@ class OpenmcInput:
         if cell.Material == 0:
             matName = "void"
         else:
-            matName = "{}".format(cell.Material)
+            matName = f"{cell.Material}"
 
         OMCcell = '  <cell id="{}" material="{}" name="{}" region="{}" universe="1"/>\n'.format(
             index, matName, cellName, writeOpenMCregion(cell.Definition, "XML")
@@ -88,7 +88,7 @@ class OpenmcInput:
         return
 
     def writePY(self, filename):
-        print("write OpenMC python script {}".format(filename))
+        print(f"write OpenMC python script {filename}")
 
         # get all the materials present in the model
         for cell in self.Cells:
@@ -131,11 +131,11 @@ import openmc
         matList = tuple(sorted(self.Materials))
         strMat = []
         for m in matList:
-            material = "M{} = openmc.Material(name='M{}')\n".format(m, m)
+            material = f"M{m} = openmc.Material(name='M{m}')\n"
             self.inpfile.write(material)
-            strMat.append("M{}".format(m))
+            strMat.append(f"M{m}")
 
-        collect = "materials = openmc.Materials([{}])\n".format(", ".join(strMat))
+        collect = f"materials = openmc.Materials([{', '.join(strMat)}])\n"
         self.inpfile.write(collect)
         self.inpfile.write("materials.export_to_xml()\n")
 
@@ -153,7 +153,7 @@ import openmc
         )
 
         if not boundary:
-            OMCsurf = "S{} = openmc.{}({})\n".format(surface.Index, surfType, coeffs)
+            OMCsurf = f"S{surface.Index} = openmc.{surfType}({coeffs})\n"
         else:
             OMCsurf = 'S{} = openmc.{}({}, boundary_type="vacuum")\n'.format(
                 surface.Index, surfType, coeffs
@@ -171,7 +171,7 @@ import openmc
             self.__write_py_cells__(cell)
             if cell.__id__ is None:
                 continue
-            cellNames.append("C{}".format(cell.label))
+            cellNames.append(f"C{cell.label}")
 
         geometry = (
             "\ngeometry = openmc.Geometry([{}])\ngeometry.export_to_xml()\n".format(
@@ -194,7 +194,7 @@ import openmc
                 index, cellName, writeOpenMCregion(cell.Definition, "PY")
             )
         else:
-            matName = "M{}".format(cell.Material)
+            matName = f"M{cell.Material}"
             OMCcell = 'C{} = openmc.Cell(name="{}", fill={}, region={})\n'.format(
                 index, cellName, matName, writeOpenMCregion(cell.Definition, "PY")
             )
@@ -258,7 +258,7 @@ import openmc
 
         if p.Index not in self.surfaceTable.keys():
             print(
-                "{} Surface {} not used in cell definition)".format(p.Type, p.Index),
+                f"{p.Type} Surface {p.Index} not used in cell definition)",
                 p.Surf.Axis,
                 p.Surf.Position,
             )

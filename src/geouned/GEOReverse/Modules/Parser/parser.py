@@ -43,7 +43,7 @@ re_fll = re.compile(
 
 # If type specifier not given, any data type can be formatted:
 def fmt_gen(s):
-    return "{" + ":<{}".format(len(s)) + "}"
+    return "{" + f":<{len(s)}" + "}"
 
 
 fmt_d = fmt_gen
@@ -204,9 +204,7 @@ class Card(object):
         d = self.debug
         if d:
             print(
-                "Line {}, {} card. {}".format(
-                    self.pos, CID.get_name(self.ctype), comment
-                ),
+                f"Line {self.pos}, {CID.get_name(self.ctype)} card. {comment}",
                 file=d,
             )
             if "t" in key:
@@ -670,7 +668,7 @@ class Card(object):
                                 # there is no proper place to wrap.
                                 self.print_debug("Cannot wrap line " + repr(i), "")
                                 warnings.warn(
-                                    "Cannot wrap card" " on line {}".format(self.pos)
+                                    f"Cannot wrap card on line {self.pos}"
                                 )
                                 break
                         else:
@@ -1226,7 +1224,7 @@ if version == "2.7":
         from os import stat
 
         iname = inp
-        dname = ".{}.~".format(os.path.basename(inp))
+        dname = f".{os.path.basename(inp)}.~"
         try:
             it = stat(iname).st_mtime
         except OSError as e:
@@ -1272,7 +1270,7 @@ def index_(line, chars="$&"):
     """
     Find the first index of one of the chars in line.
     """
-    r = re.compile("[{}]".format(chars))
+    r = re.compile(f"[{chars}]")
     m = r.search(line)
     if m:
         i = m.end() - 1
@@ -1303,7 +1301,7 @@ def get_cards_from_input(inp, debug=None, preservetabs=False):
             while "\t" in l:
                 i = l.index("\t")
                 ii = (i // ts + 1) * ts - i
-                print("c Line {}: tab replaced with {} spaces".format(cln + 1, ii))
+                print(f"c Line {cln + 1}: tab replaced with {ii} spaces")
                 l = l[:i] + " " * ii + l[i + 1 :]
             return l[:]
 
@@ -1505,7 +1503,7 @@ def are_close_lists(x, y, re=1e-6, pci=[]):
             for xx, yy in zip(xl, yl):
                 r = are_close_vals(xx, yy, re)
                 if not r:
-                    m = "diff at {}".format(n)
+                    m = f"diff at {n}"
                     break
             else:
                 m = "all elements are close or equal"

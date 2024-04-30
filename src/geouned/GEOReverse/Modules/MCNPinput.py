@@ -1119,7 +1119,7 @@ def get_hyperboloid_parameters(eVal, eVect, T, k, iaxis):
     else:
         if ellipsoid:
             print("ellipical hyperboloid not implemented")
-            print("single radius from {} eigen Value will be used".format(minorRad))
+            print(f"single radius from {minorRad} eigen Value will be used")
         return "hyperboloid", (
             pos,
             axis,

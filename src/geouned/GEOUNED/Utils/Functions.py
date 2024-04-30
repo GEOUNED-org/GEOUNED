@@ -369,7 +369,7 @@ class GeounedSurface:
             self.shape = torus.Faces[0]
             return
         else:
-            print("Error: Type {} is not defined".format(self.Type))
+            print(f"Error: Type {self.Type} is not defined")
             return
 
 
@@ -416,7 +416,7 @@ class SurfacesDict(dict):
             self.__last_obj__ = (key, i)
             return self[key][i]
 
-        print("Index {} not found in Surfaces".format(index))
+        print(f"Index {index} not found in Surfaces")
         return None
 
     def delSurface(self, index):
