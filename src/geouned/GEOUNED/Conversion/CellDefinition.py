@@ -1060,7 +1060,7 @@ def append_comp(new_cell, cell_def, cell_cad, meta_complementary):
         surfComp = get_surf_value(Seq, False)
         if len(surfComp & surf_cell) > 0:
             return False
-        new_cell.append(Seq.getComplementary())
+        new_cell.append(Seq.get_complementary())
         return True
 
     else:
@@ -1073,7 +1073,7 @@ def append_comp(new_cell, cell_def, cell_cad, meta_complementary):
             if len(surfComp & surf_cell) > 0:
                 continue
             append = True
-            new_cell.append(Seq.getComplementary())
+            new_cell.append(Seq.get_complementary())
         return append
 
 
@@ -1146,7 +1146,7 @@ def no_overlapping_cell(metaList, surfaces):
                     comp.clean()
 
             m.set_definition(new_def)
-            m.Definition.joinOperators()
+            m.Definition.join_operators()
             m.Definition.level_update()
 
 

@@ -6,7 +6,7 @@ from ..Utils.Functions import GeounedSolid
 from ..Utils.Options.Classes import Options as opt
 
 
-def GetLabel(label):
+def get_label(label):
     """Deleting the last word of the string if this is a number
     Only if the option delLastNumber is True"""
     if not opt.delLastNumber:
@@ -23,7 +23,7 @@ def getCommentTree(obj):
     recursive_list = []
     c_obj = obj
     while c_obj.InList:
-        label = GetLabel(c_obj.InList[0].Label)
+        label = get_label(c_obj.InList[0].Label)
         recursive_list.append(label)
         c_obj = c_obj.InList[0]
 

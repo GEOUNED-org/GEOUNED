@@ -61,7 +61,7 @@ def void_generation(MetaList, EnclosureList, Surfaces, UniverseBox, setting, ini
     voidList.append(set_graveyard_cell(Surfaces, UniverseBox))
 
     return VF.update_void_list(
-        init, voidList, NestedEnclosure, setting["sortEnclosure"]
+        init, voidList, NestedEnclosure, setting["sort_enclosure"]
     )
 
 

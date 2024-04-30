@@ -56,7 +56,7 @@ def test_conversion(input_step_file):
     for key, value in template.items():
         GEO.set(key, value)
 
-    GEO.Start()
+    GEO.start()
 
     for suffix in suffixes:
         assert output_filename_stem.with_suffix(suffix).exists()

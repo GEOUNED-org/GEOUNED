@@ -114,7 +114,7 @@ def BuildSolidParts(cell, base, mode):
         # TODO consider making this buildShape call conditional
         # if cell.definition.operator == "OR" and False:
         #     Def = cell.definition
-        #     cell.definition = cell.definition.getComplementary()
+        #     cell.definition = cell.definition.get_complementary()
         #     cell.buildShape(boundBox, force=False, simplify=False)
         #     cell.definition = Def
         # else:

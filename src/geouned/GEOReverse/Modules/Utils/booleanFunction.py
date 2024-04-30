@@ -73,9 +73,9 @@ class BoolSequence:
                     cp.elements.append(e.copy())
         return cp
 
-    def getComplementary(self):
+    def get_complementary(self):
 
-        c = BoolSequence(operator=self.compOperator())
+        c = BoolSequence(operator=self.comp_operator())
         c.level = self.level
 
         if self.level == 0:
@@ -85,10 +85,10 @@ class BoolSequence:
         else:
             self.group_single()
             for e in self.elements:
-                c.elements.append(e.getComplementary())
+                c.elements.append(e.get_complementary())
             return c
 
-    def compOperator(self):
+    def comp_operator(self):
         if self.operator == "AND":
             return "OR"
         else:
@@ -108,7 +108,7 @@ class BoolSequence:
                 chg = self.factorize(valname, CT)
                 simplified = simplified or chg
                 newNames = self.get_surfaces_numbers()
-        self.joinOperators()
+        self.join_operators()
 
         if self.level == 0 or (self.elements) is bool:
             return
@@ -136,7 +136,7 @@ class BoolSequence:
                 newSeq.append(ANDSeq)
             if ORSeq.elements:
                 newSeq.append(ORSeq)
-            newSeq.joinOperators()
+            newSeq.join_operators()
             self.assign(newSeq)
         else:
             for e in reversed(self.elements):
@@ -285,7 +285,7 @@ class BoolSequence:
             return None
 
     # join redundant operators in sequence
-    def joinOperators(self):
+    def join_operators(self):
         if self.level == 0:
             return
         if type(self.elements) is bool:
@@ -320,12 +320,12 @@ class BoolSequence:
             self.operator = self.elements[0].operator
             self.elements = self.elements[0].elements
             self.level -= 1
-            self.joinOperators()
+            self.join_operators()
 
         if self.level == 0:
             return
         for e in self.elements:
-            e.joinOperators()
+            e.join_operators()
 
     def factorize(self, valname, CT=None):
 

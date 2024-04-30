@@ -42,7 +42,7 @@ def buildCAD(UnivCell, data, config):
     # exit()
 
     # dictionnary of the cells filled with a given Universe U
-    # universeContainers = GetUniverseContainers(levels,UniverseCells)
+    # universeContainers = get_universe_containers(levels,UniverseCells)
 
     UnivCell.level = None
     levelMax = config["levelMax"]
@@ -86,7 +86,7 @@ def AssignSurfaceToCell(UniverseCells, modelSurfaces):
             c.setSurfaces(modelSurfaces)
 
 
-def GetUniverseContainers(levels, Universes):
+def get_universe_containers(levels, Universes):
     Ucontainer = {}
     for lev in range(1, len(levels)):
         for U, name in levels[lev]:

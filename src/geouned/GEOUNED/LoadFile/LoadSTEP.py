@@ -73,11 +73,11 @@ def load_cad(filename, mat_filename, default_mat=[], comp_solids=True):
                 tempre_dil = None
 
                 # MIO: lightly modification of label if required
-                label = LF.GetLabel(elem.Label)
+                label = LF.get_label(elem.Label)
                 comment = comment + "/" + label
                 if elem.InList:
                     # MIO: lightly modification of label if required
-                    label_in_list = LF.GetLabel(elem.InList[0].Label)
+                    label_in_list = LF.get_label(elem.InList[0].Label)
                     encl_label = re.search(
                         "enclosure(?P<encl>[0-9]+)_(?P<parent>[0-9]+)_", label_in_list
                     )
@@ -107,7 +107,7 @@ def load_cad(filename, mat_filename, default_mat=[], comp_solids=True):
                     xelem = [elem]
                     while xelem and not tempre_mat:
                         # MIO: Modification of label if required
-                        temp_label = LF.GetLabel(xelem[0].Label)
+                        temp_label = LF.get_label(xelem[0].Label)
                         tempre_mat = re.search("_m(?P<mat>\d+)_", "_" + temp_label)
                         xelem = xelem[0].InList
 
@@ -115,7 +115,7 @@ def load_cad(filename, mat_filename, default_mat=[], comp_solids=True):
                     xelem = [elem]
                     while xelem and not tempre_dil:
                         # MIO: Modification of label if required
-                        temp_label = LF.GetLabel(xelem[0].Label)
+                        temp_label = LF.get_label(xelem[0].Label)
                         tempre_dil = re.search("_d(?P<dil>\d*\.\d*)_", temp_label)
                         xelem = xelem[0].InList
                     # Paco end

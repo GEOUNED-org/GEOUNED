@@ -110,7 +110,7 @@ class BoolSequence:
         elif len(pos) == 1:
             base = self
         else:
-            base = self.getElement(pos[:-1])
+            base = self.get_element(pos[:-1])
 
         indexes = pos[-1]
         indexes.sort()
@@ -122,15 +122,15 @@ class BoolSequence:
             base.level = -1
         else:
             base.append(seq)
-            base.joinOperators()
+            base.join_operators()
         self.clean(self_level=True)
         return
 
-    def getElement(self, pos):
+    def get_element(self, pos):
         if len(pos) == 1:
             return self.elements[pos[0]]
         else:
-            return self.elements[pos[0]].getElement(pos[1:])
+            return self.elements[pos[0]].get_element(pos[1:])
 
     def copy(self):
         cp = BoolSequence()
@@ -147,8 +147,8 @@ class BoolSequence:
         return cp
 
     # TODO rename to snake case, care as multiple functions with same name
-    def getComplementary(self):
-        c = BoolSequence(operator=self.compOperator())
+    def get_complementary(self):
+        c = BoolSequence(operator=self.comp_operator())
         c.level = self.level
 
         if self.level == 0:
@@ -158,10 +158,10 @@ class BoolSequence:
         else:
             self.group_single()
             for e in self.elements:
-                c.elements.append(e.getComplementary())
+                c.elements.append(e.get_complementary())
             return c
 
-    def compOperator(self):
+    def comp_operator(self):
         if self.operator == "AND":
             return "OR"
         else:
@@ -173,19 +173,19 @@ class BoolSequence:
             for seq in self.elements:
                 seq.simplify(CT, depth + 1)
             self.clean()
-            self.joinOperators()
+            self.join_operators()
             self.level_update()
 
         if type(self.elements) is not bool and (
             self.level > 0 or len(self.elements) > 1
         ):
             levIn = self.level
-            self.simplifySequence(CT)
+            self.simplify_sequence(CT)
 
             if self.level > levIn and depth < 10:
                 self.simplify(CT, depth + 1)
 
-    def simplifySequence(self, CT=None):
+    def simplify_sequence(self, CT=None):
         """Carry out the simplification process of the BoolSequence."""
         if self.level < 1 and CT is None:
             self.clean()
@@ -360,7 +360,7 @@ class BoolSequence:
 
         self.clean(self_level=True)
         self.check(level0=True)
-        self.joinOperators(self_level=True)
+        self.join_operators(self_level=True)
 
     def clean(self, self_level=False):
         """Remove sequences whom elements are boolean values instead of list."""
@@ -395,7 +395,7 @@ class BoolSequence:
             return self
 
     # TODO rename to snake case, care as multiple functions with same name
-    def joinOperators(self, self_level=False):
+    def join_operators(self, self_level=False):
         """Join redundant operators in found in the sequence."""
         if type(self.elements) is bool:
             return
@@ -433,7 +433,7 @@ class BoolSequence:
             self.operator = self.elements[0].operator
             self.elements[:] = self.elements[0].elements[:]
             self.level -= 1
-            self.joinOperators()
+            self.join_operators()
 
         if self.level == 0:
             self.check()
@@ -443,7 +443,7 @@ class BoolSequence:
             if type(self.elements) is bool:
                 return
             for e in self.elements:
-                e.joinOperators()
+                e.join_operators()
 
     def get_sub_sequence(self, setIn):
         if type(setIn) is set:
@@ -506,7 +506,7 @@ class BoolSequence:
                 newSeq.level = -1
             else:
                 newSeq.append(-valname, falseFunc)
-                newSeq.joinOperators(self_level=True)
+                newSeq.join_operators(self_level=True)
 
             if updt:
                 self.update(newSeq, pos)
@@ -523,7 +523,7 @@ class BoolSequence:
                 newSeq.append(valname)
             else:
                 newSeq.append(valname, falseFunc)
-                newSeq.joinOperators(self_level=True)
+                newSeq.join_operators(self_level=True)
 
             if updt:
                 self.update(newSeq, pos)
@@ -540,7 +540,7 @@ class BoolSequence:
                 newSeq.level = -1
             else:
                 newSeq.append(valname, trueFunc)
-                newSeq.joinOperators(self_level=True)
+                newSeq.join_operators(self_level=True)
             if updt:
                 self.update(newSeq, pos)
             else:
@@ -556,7 +556,7 @@ class BoolSequence:
                 newSeq.append(-valname)
             else:
                 newSeq.append(-valname, trueFunc)
-                newSeq.joinOperators(self_level=True)
+                newSeq.join_operators(self_level=True)
             if updt:
                 self.update(newSeq, pos)
             else:
@@ -669,7 +669,7 @@ def insert_in_sequence(Seq, trgt, nsrf, operator):
 
     substitute_integer_element(Seq, trgt, newSeq)
     Seq.level_update()
-    # Seq.joinOperators()
+    # Seq.join_operators()
 
 
 def substitute_integer_element(Seq, target, newElement):

@@ -52,7 +52,7 @@ class CadToCsg:
         startSurf: int = 1,
         cellCommentFile: bool = False,
         cellSummaryFile: bool = True,
-        sortEnclosure: bool = False,
+        sort_enclosure: bool = False,
     ):
         """Base class for the conversion of CAD to CSG models
 
@@ -121,7 +121,7 @@ class CadToCsg:
                 Defaults to False.
             cellSummaryFile (bool, optional): Write an additional file with
                 information on the CAD cell translated. Defaults to True.
-            sortEnclosure (bool, optional): If enclosures are defined in the
+            sort_enclosure (bool, optional): If enclosures are defined in the
                 CAD models, the voids cells of the enclosure will be located in
                 the output file in the same location where the enclosure solid
                 is located in the CAD solid tree.. Defaults to False.
@@ -150,13 +150,13 @@ class CadToCsg:
         self.startSurf = startSurf
         self.cellCommentFile = cellCommentFile
         self.cellSummaryFile = cellSummaryFile
-        self.sortEnclosure = sortEnclosure
+        self.sort_enclosure = sort_enclosure
 
         Options.set_default_attribute()
         McnpNumericFormat.set_default_attribute()
         Tolerances.set_default_attribute()
 
-    def SetConfiguration(self, configFile=None):
+    def set_configuration(self, configFile=None):
 
         if configFile is None:
             return
@@ -210,7 +210,7 @@ class CadToCsg:
                         "dummyMat",
                         "cellSummaryFile",
                         "cellCommentFile",
-                        "sortEnclosure",
+                        "sort_enclosure",
                     ):
                         self.set(key, config.getboolean("Parameters", key))
                     elif key in (
@@ -337,7 +337,7 @@ class CadToCsg:
             "dummyMat",
             "cellSummaryFile",
             "cellCommentFile",
-            "sortEnclosure",
+            "sort_enclosure",
         ):
             if not isinstance(value, bool):
                 print(f"{kwrd} value should be boolean")
@@ -350,7 +350,7 @@ class CadToCsg:
             else:
                 self.__dict__["geometryName"] == value[:-4]
 
-    def Start(self):
+    def start(self):
 
         print("start")
         FreeCAD_Version = "{V[0]:}.{V[1]:}.{V[2]:}".format(V=FreeCAD.Version())
@@ -384,8 +384,8 @@ class CadToCsg:
                 Meta, Enclosure = Load.load_cad(stp, self.matFile)
                 MetaChunk.append(Meta)
                 EnclosureChunk.append(Enclosure)
-            MetaList = joinMetaLists(MetaChunk)
-            EnclosureList = joinMetaLists(EnclosureChunk)
+            MetaList = join_meta_lists(MetaChunk)
+            EnclosureList = join_meta_lists(EnclosureChunk)
         else:
             print(f"read step file : {self.stepFile}")
             MetaList, EnclosureList = Load.load_cad(
@@ -418,9 +418,9 @@ class CadToCsg:
 
         # set up Universe
         if EnclosureList:
-            UniverseBox = getUniverse(MetaList + EnclosureList)
+            UniverseBox = get_universe(MetaList + EnclosureList)
         else:
-            UniverseBox = getUniverse(MetaList)
+            UniverseBox = get_universe(MetaList)
 
         Surfaces = UF.SurfacesDict(offset=self.startSurf - 1)
 
@@ -431,13 +431,13 @@ class CadToCsg:
         if not Options.Facets:
 
             # decompose all solids in elementary solids (convex ones)
-            warningSolidList = DecomposeSolids(
+            warningSolidList = decompose_solids(
                 MetaList, Surfaces, UniverseBox, code_setting, True
             )
 
             # decompose Enclosure solids
             if self.voidGen and EnclosureList:
-                warningEnclosureList = DecomposeSolids(
+                warningEnclosureList = decompose_solids(
                     EnclosureList, Surfaces, UniverseBox, code_setting, False
                 )
 
@@ -465,7 +465,7 @@ class CadToCsg:
             translate(MetaList, Surfaces, UniverseBox, code_setting)
             # decompose Enclosure solids
             if self.voidGen and EnclosureList:
-                warningEnclosureList = DecomposeSolids(
+                warningEnclosureList = decompose_solids(
                     EnclosureList, Surfaces, UniverseBox, code_setting, False
                 )
 
@@ -493,7 +493,7 @@ class CadToCsg:
             if not self.voidExclude:
                 MetaReduced = MetaList
             else:
-                MetaReduced = excludeCells(MetaList, self.voidExclude)
+                MetaReduced = exclude_cells(MetaList, self.voidExclude)
 
             if MetaList:
                 init = MetaList[-1].__id__ - len(EnclosureList)
@@ -529,12 +529,12 @@ class CadToCsg:
         print(datetime.now() - startTime)
 
         cellOffSet = self.startCell - 1
-        if EnclosureList and self.sortEnclosure:
+        if EnclosureList and self.sort_enclosure:
             # sort group solid cell / void cell sequence in each for each enclosure
             # if a solid belong to several enclosure, its definition will be written
             # for the highest enclosure level or if same enclosure level in the first
             # enclosure found
-            MetaList = sortEnclosure(MetaList, MetaVoid, cellOffSet)
+            MetaList = sort_enclosure(MetaList, MetaVoid, cellOffSet)
         else:
             # remove Null Cell and apply cell numbering offset
             deleted = []
@@ -567,16 +567,16 @@ class CadToCsg:
                     continue
                 icount += 1
                 m.label = icount
-                updateComment(m, idLabel)
+                update_comment(m, idLabel)
             for i in reversed(deleted):
                 del MetaVoid[i]
 
             MetaList.extend(MetaVoid)
 
-        printWarningSolids(warnSolids, warnEnclosures)
+        print_warning_solids(warnSolids, warnEnclosures)
 
         # add plane definition to cone
-        processCones(MetaList, coneInfo, Surfaces, UniverseBox)
+        process_cones(MetaList, coneInfo, Surfaces, UniverseBox)
 
         # write outputformat input
         write_geometry(UniverseBox, MetaList, Surfaces, code_setting)
@@ -590,7 +590,7 @@ class CadToCsg:
         print("Translation time of void cells", tempTime2 - tempTime1)
 
 
-def DecomposeSolids(MetaList, Surfaces, UniverseBox, setting, meta):
+def decompose_solids(MetaList, Surfaces, UniverseBox, setting, meta):
     totsolid = len(MetaList)
     warningSolids = []
     for i, m in enumerate(MetaList):
@@ -638,7 +638,7 @@ def DecomposeSolids(MetaList, Surfaces, UniverseBox, setting, meta):
     return warningSolids
 
 
-def updateComment(meta, idLabel):
+def update_comment(meta, idLabel):
     if meta.__commentInfo__ is None:
         return
     if meta.__commentInfo__[1] is None:
@@ -647,7 +647,7 @@ def updateComment(meta, idLabel):
     meta.set_comments(Void.void_comment_line((meta.__commentInfo__[0], newLabel)))
 
 
-def processCones(MetaList, coneInfo, Surfaces, UniverseBox):
+def process_cones(MetaList, coneInfo, Surfaces, UniverseBox):
     cellId = tuple(coneInfo.keys())
     for m in MetaList:
         if m.__id__ not in cellId and not m.Void:
@@ -665,7 +665,7 @@ def processCones(MetaList, coneInfo, Surfaces, UniverseBox):
             Conv.add_cone_plane(m.Definition, coneInfo[m.__id__], Surfaces, UniverseBox)
 
 
-def getUniverse(MetaList):
+def get_universe(MetaList):
     d = 10
     Box = MetaList[0].BoundBox
     xmin = Box.XMin
@@ -690,7 +690,7 @@ def getUniverse(MetaList):
     )
 
 
-def printWarningSolids(warnSolids, warnEnclosures):
+def print_warning_solids(warnSolids, warnEnclosures):
 
     if warnSolids or warnEnclosures:
         fic = open("Warning_Solids_definition.txt", "w")
@@ -719,7 +719,7 @@ def printWarningSolids(warnSolids, warnEnclosures):
     fic.close()
 
 
-def joinMetaLists(MList):
+def join_meta_lists(MList):
 
     newMetaList = MList[0]
     if MList[0]:
@@ -732,7 +732,7 @@ def joinMetaLists(MList):
     return newMetaList
 
 
-def excludeCells(MetaList, labelList):
+def exclude_cells(MetaList, labelList):
     voidMeta = []
     for m in MetaList:
         if m.IsEnclosure:
@@ -748,7 +748,7 @@ def excludeCells(MetaList, labelList):
     return voidMeta
 
 
-def sortEnclosure(MetaList, MetaVoid, offSet=0):
+def sort_enclosure(MetaList, MetaVoid, offSet=0):
 
     newList = {}
     for m in MetaVoid:
@@ -811,6 +811,6 @@ def sortEnclosure(MetaList, MetaVoid, offSet=0):
             continue
         if m.IsEnclosure:
             continue
-        updateComment(m, idLabel)
+        update_comment(m, idLabel)
 
     return newMeta

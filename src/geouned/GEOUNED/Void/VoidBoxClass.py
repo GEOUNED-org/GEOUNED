@@ -213,7 +213,7 @@ class VoidBox:
                 continue
             cellIn.append(m.__id__)
 
-        # voidSolidDef.joinOperators()
+        # voidSolidDef.join_operators()
 
         if not voidSolidDef.elements:
             return (
@@ -285,7 +285,7 @@ class VoidBox:
             return boxDef, None
 
         if voidSolidDef.level == 0:
-            compSeq = voidSolidDef.getComplementary()
+            compSeq = voidSolidDef.get_complementary()
         else:
 
             if voidSolidDef.level == 1 and voidSolidDef.operator == "AND":
@@ -311,7 +311,7 @@ class VoidBox:
                     elif chk is False:
                         continue
 
-                pmoc = comp.getComplementary()
+                pmoc = comp.get_complementary()
                 compSeq.append(pmoc)
 
         if simplify == "full":

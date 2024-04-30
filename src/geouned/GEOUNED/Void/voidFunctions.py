@@ -60,19 +60,19 @@ def select_solids(MetaList, LowLevelEnclosure, Enclosure):
     return newMetaList
 
 
-def update_void_list(offset, voidList, NestedEnclosure, sortEnclosure):
+def update_void_list(offset, voidList, NestedEnclosure, sort_enclosure):
 
     newVoidList = []
     if NestedEnclosure:
-        updateComment = True
+        update_comment = True
     else:
-        updateComment = False
+        update_comment = False
 
     icount = offset + 1
     voids = voidList[0]
     for m in voids:
         m.__id__ = icount
-        if updateComment and not sortEnclosure:
+        if update_comment and not sort_enclosure:
             m.Comments = m.Comments + "\nLevel 0 void enclosure"
         icount += 1
         m.ParentEnclosureID = -1
@@ -88,7 +88,7 @@ def update_void_list(offset, voidList, NestedEnclosure, sortEnclosure):
                 m.__id__ = icount
                 m.ParentEnclosureID = encl.ParentEnclosureID
                 m.EnclosureID = encl.EnclosureID
-                if sortEnclosure:
+                if sort_enclosure:
                     m.Comments = m.Comments + f"\n{encl.Comments}"
                 else:
                     m.Comments = m.Comments + f"\nVoid Enclosure #{encl.EnclosureID}"

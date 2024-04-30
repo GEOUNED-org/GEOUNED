@@ -389,7 +389,7 @@ def mcnp_surface(id, Type, surf):
                     t2=nf.K_tan2,
                 )
         else:
-            Q = Qform.QFormCone(Dir, Apex, tan)
+            Q = Qform.q_form_cone(Dir, Apex, tan)
             mcnp_def = """\
 {:<6d} GQ  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
           {v[3]:{aTof}} {v[4]:{aTof}} {v[5]:{aTof}}
@@ -577,14 +577,14 @@ def open_mc_surface(Type, surf, out_xml=True, quadricForm=False):
         else:
             if out_xml:
                 omc_surf = "quadric"
-                Q = Qform.QFormCone(Dir, Apex, tan)
+                Q = Qform.q_form_cone(Dir, Apex, tan)
                 coeffs = "{v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}} {v[3]:{aTof}} {v[4]:{aTof}} {v[5]:{aTof}} {v[6]:{gToi}} {v[7]:{gToi}} {v[8]:{gToi}} {v[9]:{j}}".format(
                     v=Q, aTof=nf.GQ_1to6, gToi=nf.GQ_7to9, j=nf.GQ_10
                 )
             else:
                 if quadricForm:
                     omc_surf = "Quadric"
-                    Q = Qform.QFormCone(Dir, Apex, tan)
+                    Q = Qform.q_form_cone(Dir, Apex, tan)
                     coeffs = "a={v[0]},b={v[1]},c={v[2]},d={v[3]},e={v[4]},f={v[5]},g={v[6]},h={v[7]},j={v[8]},k={v[9]}".format(
                         v=Q
                     )
@@ -731,7 +731,7 @@ surf quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
                 id, Apex.x, Apex.y, Apex.z, tan**2, sheet, xyz=nf.K_xyz, t2=nf.K_tan2
             )
         else:
-            Q = Qform.QFormCone(Dir, Apex, tan)
+            Q = Qform.q_form_cone(Dir, Apex, tan)
 
     elif Type == "Sphere":
         rad = surf.Radius * 0.1
@@ -907,7 +907,7 @@ def phits_surface(id, Type, surf):
                     t2=nf.K_tan2,
                 )
         else:
-            Q = Qform.QFormCone(Dir, Apex, tan)
+            Q = Qform.q_form_cone(Dir, Apex, tan)
             phits_def = """\
 {:<6d} GQ  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
           {v[3]:{aTof}} {v[4]:{aTof}} {v[5]:{aTof}}

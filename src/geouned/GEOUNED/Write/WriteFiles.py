@@ -47,7 +47,7 @@ def write_geometry(UniverseBox, MetaList, Surfaces, code_setting):
         "openMC_XML" in code_setting["outFormat"]
         or "openMC_PY" in code_setting["outFormat"]
     ):
-        OMCFile = OpenmcInput(MetaList, Surfaces, code_setting)
+        OMCFile = OpenmcInput(MetaList, Surfaces)
 
     if "openMC_XML" in code_setting["outFormat"]:
         omcFilename = baseName + ".xml"

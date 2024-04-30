@@ -103,7 +103,7 @@ def q_form_cyl(Axis, Pos, rad):
     return (A, B, C, D, E, F, G, H, J, K)
 
 
-def QFormCone(Axis, Pos, tan):
+def q_form_cone(Axis, Pos, tan):
 
     R = rotation_matrix(FreeCAD.Vector(1, 0, 0), Axis)
     R.transpose()

@@ -149,7 +149,7 @@ import openmc
         """Write the surfaces in python OpenMC format"""
 
         surfType, coeffs = open_mc_surface(
-            surface.Type, surface.Surf, outXML=False, quadricForm=opt.quadricPY
+            surface.Type, surface.Surf, out_xml=False, quadricForm=opt.quadricPY
         )
 
         if not boundary:
