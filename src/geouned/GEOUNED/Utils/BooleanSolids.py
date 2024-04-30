@@ -178,7 +178,7 @@ class ConstraintTable(dict):
         return trueSet, falseSet
 
     def solidInBox(self, Seq):  #  Sequence of the cell
-        surfs = tuple(Seq.getSurfacesNumbers())
+        surfs = tuple(Seq.get_surfaces_numbers())
         if self.diagonal:
             seqValues = dict()
             for s in surfs:
@@ -354,7 +354,7 @@ def removeExtraSurfaces(CellSeq, CTable):
 
                 # if subcell lev!= 0 remove surface operation is not valid
                 if subCell.level == 0:
-                    removeSurf = outSurfaces & subCell.getSurfacesNumbers()
+                    removeSurf = outSurfaces & subCell.get_surfaces_numbers()
                     for s in removeSurf:
                         val = True if CTable[s][s].val > 0 else False
                         subCell.substitute(s, val)

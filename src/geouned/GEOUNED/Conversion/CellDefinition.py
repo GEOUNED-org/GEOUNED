@@ -1120,14 +1120,14 @@ def no_overlapping_cell(metaList, surfaces):
             # evaluate only diagonal elements of the Constraint Table (fastest) and remove surface not
             # crossing in the solid boundBox
             CT = buildCTableFromSolids(
-                box, (tuple(t_def.getSurfacesNumbers()), Surfs), option="diag"
+                box, (tuple(t_def.get_surfaces_numbers()), Surfs), option="diag"
             )
 
             new_def = removeExtraSurfaces(t_def, CT)
 
             # evaluate full constraint Table with less surfaces involved
             CT = buildCTableFromSolids(
-                box, (tuple(new_def.getSurfacesNumbers()), Surfs), option="full"
+                box, (tuple(new_def.get_surfaces_numbers()), Surfs), option="full"
             )
 
             if new_def.operator == "AND":
@@ -1143,7 +1143,7 @@ def no_overlapping_cell(metaList, surfaces):
 
             m.setDefinition(new_def)
             m.Definition.joinOperators()
-            m.Definition.levelUpdate()
+            m.Definition.level_update()
 
 # TODO this function looks like it is not used in the code.
 def extra_plane_cyl_face(face, box, surfaces):

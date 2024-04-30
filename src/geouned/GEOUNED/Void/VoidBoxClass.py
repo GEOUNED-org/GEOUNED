@@ -228,10 +228,10 @@ class VoidBox:
         complementary = BoolSequence(operator="AND")
         complementary.append(boxDef)
         if simplify != "no":
-            surfList = voidSolidDef.getSurfacesNumbers()
+            surfList = voidSolidDef.get_surfaces_numbers()
 
             if enclosure:
-                surfList.update(boxDef.getSurfacesNumbers())
+                surfList.update(boxDef.get_surfaces_numbers())
             else:
                 for s in boxDef.elements:
                     val = s > 0
@@ -327,7 +327,7 @@ class VoidBox:
             complementary.append(compSeq)
 
         complementary.clean()
-        complementary.levelUpdate()
+        complementary.level_update()
 
         if type(complementary.elements) is bool:
             return None, None

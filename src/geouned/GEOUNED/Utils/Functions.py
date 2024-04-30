@@ -167,7 +167,7 @@ class GeounedSolid:
                 self.NullCell = True
                 return
 
-        self.Surfaces = tuple(self.Definition.getSurfacesNumbers())
+        self.Surfaces = tuple(self.Definition.get_surfaces_numbers())
 
     def setFaces(self, faces):
         self.Faces = faces

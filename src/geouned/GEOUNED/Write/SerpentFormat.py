@@ -289,7 +289,7 @@ class SerpentInput:
             if CellObj.Material != 0:
                 self.__materials__.add(CellObj.Material)
 
-            surf = CellObj.Definition.getSurfacesNumbers()
+            surf = CellObj.Definition.get_surfaces_numbers()
             if not CellObj.Void:
                 self.__solidCells__ += 1
             for index in surf:
@@ -348,7 +348,7 @@ class SerpentInput:
             return
 
         for ic in self.surfaceTable[p.Index]:
-            surf = self.Cells[ic].Definition.getSurfacesNumbers()
+            surf = self.Cells[ic].Definition.get_surfaces_numbers()
             for s in surf:
                 if s == p.Index:
                     changeSurfSign(s, self.Cells[ic].Definition)

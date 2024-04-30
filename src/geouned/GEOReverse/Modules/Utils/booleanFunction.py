@@ -95,7 +95,7 @@ class BoolSequence:
             return "AND"
 
     def simplify(self, CT, loop=0):
-        surfNames = self.getSurfacesNumbers()
+        surfNames = self.get_surfaces_numbers()
         if not surfNames:
             return
         #   print(CT)
@@ -107,7 +107,7 @@ class BoolSequence:
             if valname in newNames:
                 chg = self.factorize(valname, CT)
                 simplified = simplified or chg
-                newNames = self.getSurfacesNumbers()
+                newNames = self.get_surfaces_numbers()
         self.joinOperators()
 
         if self.level == 0 or (self.elements) is bool:
@@ -169,7 +169,7 @@ class BoolSequence:
                 return self.elements
 
             signedSurf = set(self.elements)
-            surfname = self.getSurfacesNumbers()
+            surfname = self.get_surfaces_numbers()
             if len(signedSurf) == len(surfname):
                 return None  # means same surface has not positive and negative value
             elif self.operator == "AND":
@@ -233,7 +233,7 @@ class BoolSequence:
                 e.substitute(var, val)
 
         self.clean()
-        self.levelUpdate()
+        self.level_update()
 
     def removeSurf(self, name):
         if type(self.elements) is bool:
@@ -253,7 +253,7 @@ class BoolSequence:
                 e.removeSurf(name)
 
         self.clean()
-        self.levelUpdate()
+        self.level_update()
 
     # remove sequence whom elements are boolean values instead of list
     def clean(self):
@@ -305,7 +305,7 @@ class BoolSequence:
             for s in ANDop:
                 newSeq.elements.extend(s.elements)
                 self.elements.remove(s)
-            newSeq.levelUpdate()
+            newSeq.level_update()
             self.append(newSeq)
 
         elif len(ORop) > 1 and self.operator == "OR":
@@ -313,7 +313,7 @@ class BoolSequence:
             for s in ORop:
                 newSeq.elements.extend(s.elements)
                 self.elements.remove(s)
-            newSeq.levelUpdate()
+            newSeq.level_update()
             self.append(newSeq)
 
         if self.level > 0 and len(self.elements) == 1:
@@ -393,7 +393,7 @@ class BoolSequence:
         if type(newSeq.elements) is bool:
             return newSeq.elements
         else:
-            surfNames = newSeq.getSurfacesNumbers()
+            surfNames = newSeq.get_surfaces_numbers()
             valname = surfNames[0]
             if CT is None:
                 trueSet = {abs(valname): True}
@@ -457,11 +457,11 @@ class BoolSequence:
             return False
 
     def set_def(self, expression):
-        terms, operator = outterTerms(expression)
+        terms, operator = outer_terms(expression)
         self.operator = operator
         self.level = 0
         for t in terms:
-            if isInteger(t):
+            if is_integer(t):
                 self.elements.append(int(t.strip("(").strip(")")))
             else:
                 x = BoolSequence(t)
@@ -511,11 +511,11 @@ class BoolSequence:
         for i in reversed(changed):
             del self.elements[i]
         self.append(*new)
-        self.levelUpdate()
+        self.level_update()
 
         return
 
-    def getSurfacesNumbers(self):
+    def get_surfaces_numbers(self):
         if type(self.elements) is bool:
             return tuple()
         surf = set()
@@ -523,10 +523,10 @@ class BoolSequence:
             if type(e) is int:
                 surf.add(abs(e))
             else:
-                surf.update(e.getSurfacesNumbers())
+                surf.update(e.get_surfaces_numbers())
         return tuple(surf)
 
-    def levelUpdate(self):
+    def level_update(self):
         if type(self.elements) is bool:
             self.level = 0
             return
@@ -541,7 +541,7 @@ class BoolSequence:
         self.level = newlev
 
 
-def outterTerms(expression, value="number"):
+def outer_terms(expression, value="number"):
     if value == "number":
         # reValue = number
         reValue = mix
@@ -644,7 +644,7 @@ def redundant(m, geom):
         return False
 
 
-def isInteger(x):
+def is_integer(x):
     try:
         int(x.strip("(").strip(")"))
         return True

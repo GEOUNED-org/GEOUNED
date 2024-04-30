@@ -218,7 +218,7 @@ def substituteLikeCell(universe, Surfaces):
     for c in universe.values():
         if not c.TRCL:
             continue
-        cellSurf = c.geom.getSurfacesNumbers()
+        cellSurf = c.geom.get_surfaces_numbers()
         surfDict = {}
         for surf in cellSurf:
             newId += 1
