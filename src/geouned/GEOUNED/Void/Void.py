@@ -93,9 +93,7 @@ def GetVoidDef(MetaList, Surfaces, Enclosure, setting, Lev0=False):
         for iz, z in enumerate(Initial):
             nsurfaces, nbrackets = z.getNumbers()
             if opt.verbose:
-                print(
-                    f"{iloop} {iz + 1}/{nvoid} {nsurfaces} {nbrackets}"
-                )
+                print(f"{iloop} {iz + 1}/{nvoid} {nsurfaces} {nbrackets}")
 
             if nsurfaces > maxsurf and nbrackets > maxbracket:
                 newspace = z.Split(minSize)

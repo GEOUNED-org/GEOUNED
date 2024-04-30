@@ -667,9 +667,7 @@ class Card(object):
                             else:
                                 # there is no proper place to wrap.
                                 self.print_debug("Cannot wrap line " + repr(i), "")
-                                warnings.warn(
-                                    f"Cannot wrap card on line {self.pos}"
-                                )
+                                warnings.warn(f"Cannot wrap card on line {self.pos}")
                                 break
                         else:
                             # input i fits to one line. Do nothing.
