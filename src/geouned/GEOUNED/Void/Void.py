@@ -10,7 +10,7 @@ from ..Void import voidFunctions as VF
 from .VoidBoxClass import VoidBox
 
 
-def voidGeneration(MetaList, EnclosureList, Surfaces, UniverseBox, setting, init):
+def void_generation(MetaList, EnclosureList, Surfaces, UniverseBox, setting, init):
     voidList = []
 
     if EnclosureList:
@@ -18,7 +18,7 @@ def voidGeneration(MetaList, EnclosureList, Surfaces, UniverseBox, setting, init
         VF.assignEnclosure(MetaList, NestedEnclosure)
 
         # add to Metalist Level 1 enclosures, remove from list material cells totally embedded in Level 1 enclosures
-        newMetaList = VF.selectSolids(MetaList, NestedEnclosure[0], UniverseBox)
+        newMetaList = VF.select_solids(MetaList, NestedEnclosure[0], UniverseBox)
     else:
         newMetaList = MetaList[:]
         NestedEnclosure = []
@@ -40,7 +40,7 @@ def voidGeneration(MetaList, EnclosureList, Surfaces, UniverseBox, setting, init
     # if exist Level 1 enclosures are considered as material cells
     print("Build Void highest enclosure")
 
-    voids = GetVoidDef(newMetaList, Surfaces, EnclosureBox, setting, Lev0=True)
+    voids = get_void_def(newMetaList, Surfaces, EnclosureBox, setting, Lev0=True)
     voidList.append(voids)
 
     # Perform enclosure void
@@ -52,18 +52,18 @@ def voidGeneration(MetaList, EnclosureList, Surfaces, UniverseBox, setting, init
         for j, encl in enumerate(Level):
             if encl.CellType == "envelope":
                 continue
-            newMetaList = VF.selectSolids(MetaList, encl.SonEnclosures, encl)
+            newMetaList = VF.select_solids(MetaList, encl.SonEnclosures, encl)
             print(f"Build Void enclosure {j} in enclosure level {i + 1}")
             # select solids overlapping current enclosure "encl", and lower level enclosures
-            voids = GetVoidDef(newMetaList, Surfaces, encl, setting)
+            voids = get_void_def(newMetaList, Surfaces, encl, setting)
             voidList.append(voids)
 
-    voidList.append(setGraveyardCell(Surfaces, UniverseBox))
+    voidList.append(set_graveyard_cell(Surfaces, UniverseBox))
 
-    return VF.updateVoidList(init, voidList, NestedEnclosure, setting["sortEnclosure"])
+    return VF.update_void_list(init, voidList, NestedEnclosure, setting["sortEnclosure"])
 
 
-def GetVoidDef(MetaList, Surfaces, Enclosure, setting, Lev0=False):
+def get_void_def(MetaList, Surfaces, Enclosure, setting, Lev0=False):
 
     maxsurf = setting["maxSurf"]
     maxbracket = setting["maxBracket"]
@@ -91,12 +91,12 @@ def GetVoidDef(MetaList, Surfaces, Enclosure, setting, Lev0=False):
         print("Loop, Box to Split :", iloop, nvoid)
 
         for iz, z in enumerate(Initial):
-            nsurfaces, nbrackets = z.getNumbers()
+            nsurfaces, nbrackets = z.get_numbers()
             if opt.verbose:
                 print(f"{iloop} {iz + 1}/{nvoid} {nsurfaces} {nbrackets}")
 
             if nsurfaces > maxsurf and nbrackets > maxbracket:
-                newspace = z.Split(minSize)
+                newspace = z.split(minSize)
             else:
                 newspace = None
 
@@ -115,7 +115,7 @@ def GetVoidDef(MetaList, Surfaces, Enclosure, setting, Lev0=False):
 
                 print(f"build complementary {iloop} {iz}")
 
-                cell, CellIn = z.getVoidComplementary(Surfaces, simplify=simplifyVoid)
+                cell, CellIn = z.get_void_complementary(Surfaces, simplify=simplifyVoid)
                 if cell is not None:
                     VoidCell = (cell, (boxDim, CellIn))
                     VoidDef.append(VoidCell)
@@ -140,10 +140,10 @@ def GetVoidDef(MetaList, Surfaces, Enclosure, setting, Lev0=False):
     return voidList
 
 
-def setGraveyardCell(Surfaces, UniverseBox):
+def set_graveyard_cell(Surfaces, UniverseBox):
     Universe = VoidBox([], UniverseBox)
 
-    externalBox = getUniverseComplementary(Universe, Surfaces)
+    externalBox = get_universe_complementary(Universe, Surfaces)
     center = UniverseBox.Center
     radius = 0.51 * UniverseBox.DiagonalLength
     sphere = GeounedSurface(("Sphere", (center, radius)), UniverseBox)
@@ -171,10 +171,10 @@ def setGraveyardCell(Surfaces, UniverseBox):
 
     return (mVoidSphIn, mVoidSphOut)
 
-
-def getUniverseComplementary(Universe, Surfaces):
+# TODO check this is being used
+def get_universe_complementary(Universe, Surfaces):
     Def = BoolSequence(operator="OR")
-    for p in Universe.getBoundPlanes():
+    for p in Universe.get_bound_planes():
         id, exist = Surfaces.add_plane(p)
         if not exist:
             Def.elements.append(-id)
@@ -187,7 +187,7 @@ def getUniverseComplementary(Universe, Surfaces):
     return Def
 
 
-def voidCommentLine(CellInfo):
+def void_comment_line(CellInfo):
     boxDef, cellIn = CellInfo
     cells = ", ".join(map(str, cellIn))
     box = ", ".join(f"{num:.3f}" for num in boxDef)

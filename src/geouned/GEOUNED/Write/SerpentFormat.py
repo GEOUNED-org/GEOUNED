@@ -9,7 +9,7 @@ from ..CodeVersion import *
 from ..Utils.BasicFunctions_part1 import is_opposite, points_to_coeffs
 from ..Utils.Functions import SurfacesDict
 from ..Utils.Options.Classes import Options as opt
-from .Functions import SerpentSurface, changeSurfSign, writeSerpentCellDef
+from .Functions import serpent_surface, change_surf_sign, write_serpent_cell_def
 
 
 class SerpentInput:
@@ -34,10 +34,10 @@ class SerpentInput:
         if self.Title == "":
             self.Title = self.StepFile
 
-        self.__getSurfaceTable__()
-        self.__simplifyPlanes__(Surfaces)
+        self.__get_surface_table__()
+        self.__simplify_planes__(Surfaces)
 
-        self.Surfaces = self.__sortedSurfaces__(Surfaces)
+        self.Surfaces = self.__sorted_surfaces__(Surfaces)
         self.Materials = set()
 
         return
@@ -60,7 +60,7 @@ class SerpentInput:
     #     SP3  = 'SP3 0  1 \n'
     #     self.SDEF_box    = (sdef,SI1,SI2,SI3,SP1,SP2,SP3)
 
-    def writeInput(self, filename):
+    def write_input(self, filename):
         print(f"write Serpent file {filename}")
         self.inpfile = open(filename, "w", encoding="utf-8")
         self.__write_header__()
@@ -147,7 +147,7 @@ class SerpentInput:
                 )
 
             serpent_cell = (
-                f"{cellHeader}{self.__cellFormat__(cell.Definition, offset=len(cellHeader))}"
+                f"{cellHeader}{self.__cell_format__(cell.Definition, offset=len(cellHeader))}"
                 f"{self.comment_format(cell.Comments, cell.MatInfo)}"
             )
             self.inpfile.write(serpent_cell)
@@ -161,7 +161,7 @@ class SerpentInput:
                 cellHeader = f"cell {index:<5d}  0  {cell.Material:<5d} "
 
         serpent_cell = (
-            f"{cellHeader}{self.__cellFormat__(cell.Definition, offset=len(cellHeader))}"
+            f"{cellHeader}{self.__cell_format__(cell.Definition, offset=len(cellHeader))}"
             f"{self.comment_format(cell.Comments, cell.MatInfo)}"
         )
         self.inpfile.write(serpent_cell)
@@ -171,7 +171,7 @@ class SerpentInput:
     def __write_surfaces__(self, surface):
         """Write the surfaces in Serpent format"""
 
-        Serpent_def = SerpentSurface(surface.Index, surface.Type, surface.Surf)
+        Serpent_def = serpent_surface(surface.Index, surface.Type, surface.Surf)
         if Serpent_def:
             Serpent_def += "\n"
             self.inpfile.write(Serpent_def)
@@ -203,7 +203,7 @@ class SerpentInput:
         #       for line in self.SDEF_sphere:
         #          Block += line
 
-        #       celList,volList = self.__get_solidCellVolume__()
+        #       celList,volList = self.__get_solid_cell_volume__()
 
         #       F4Tally = CardLine('F4:{} '.format(self.part))
         #       F4Tally.extend(celList)
@@ -223,12 +223,12 @@ class SerpentInput:
 
         self.inpfile.write(Block)
 
-    def __cellFormat__(self, Definition, offset=11):
-        return writeSerpentCellDef(Definition, tabspace=11, offset=offset)
+    def __cell_format__(self, Definition, offset=11):
+        return write_serpent_cell_def(Definition, tabspace=11, offset=offset)
 
     # Function not relevant for Serpent : No importance setting, universes assigned elsewhere.
     # Volumes only defined on tally cards.
-    # def __optionFormat__(self,cell):
+    # def __option_format__(self,cell):
 
     #    option = ''
     #    if self.Options['Volume']:
@@ -276,7 +276,7 @@ class SerpentInput:
             comment += "% \n"
         return comment
 
-    def __getSurfaceTable__(self):
+    def __get_surface_table__(self):
         self.surfaceTable = {}
         self.__solidCells__ = 0
         self.__cells__ = 0
@@ -299,33 +299,33 @@ class SerpentInput:
                     self.surfaceTable[index] = {i}
         return
 
-    def __simplifyPlanes__(self, Surfaces):
+    def __simplify_planes__(self, Surfaces):
 
         for p in Surfaces["PX"]:
             if p.Surf.Axis[0] < 0:
                 p.Surf.Axis = FreeCAD.Vector(1, 0, 0)
-                self.__changeSurfSign__(p)
+                self.__change_surf_sign__(p)
 
         for p in Surfaces["PY"]:
             if p.Surf.Axis[1] < 0:
                 p.Surf.Axis = FreeCAD.Vector(0, 1, 0)
-                self.__changeSurfSign__(p)
+                self.__change_surf_sign__(p)
 
         for p in Surfaces["PZ"]:
             if p.Surf.Axis[2] < 0:
                 p.Surf.Axis = FreeCAD.Vector(0, 0, 1)
-                self.__changeSurfSign__(p)
+                self.__change_surf_sign__(p)
 
         if opt.prnt3PPlane:
             for p in Surfaces["P"]:
                 if p.Surf.pointDef:
                     axis, d = points_to_coeffs(p.Surf.Points)
                     if is_opposite(axis, p.Surf.Axis):
-                        self.__changeSurfSign__(p)
+                        self.__change_surf_sign__(p)
 
         return
 
-    def __sortedSurfaces__(self, Surfaces):
+    def __sorted_surfaces__(self, Surfaces):
         temp = SurfacesDict(Surfaces)
         surfList = []
         for ind in range(
@@ -337,7 +337,7 @@ class SerpentInput:
                 temp.del_surface(ind + 1)
         return surfList
 
-    def __changeSurfSign__(self, p):
+    def __change_surf_sign__(self, p):
 
         if p.Index not in self.surfaceTable.keys():
             print(
@@ -351,9 +351,9 @@ class SerpentInput:
             surf = self.Cells[ic].Definition.get_surfaces_numbers()
             for s in surf:
                 if s == p.Index:
-                    changeSurfSign(s, self.Cells[ic].Definition)
+                    change_surf_sign(s, self.Cells[ic].Definition)
 
-    def __get_solidCellVolume__(self):
+    def __get_solid_cell_volume__(self):
 
         solidList = []
         volumeList = []

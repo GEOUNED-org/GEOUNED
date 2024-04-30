@@ -38,7 +38,7 @@ def assignEnclosure(MetaList, NestedEnclosure):
     return
 
 
-def selectSolids(MetaList, LowLevelEnclosure, Enclosure):
+def select_solids(MetaList, LowLevelEnclosure, Enclosure):
     """This function selects the CAD solids and nested enclosures
     that can intersect with the current nested enclosure.
     For intermediate Levels selected solids are those intersecting i and i+1 level enclosure,
@@ -60,7 +60,7 @@ def selectSolids(MetaList, LowLevelEnclosure, Enclosure):
     return newMetaList
 
 
-def updateVoidList(offset, voidList, NestedEnclosure, sortEnclosure):
+def update_void_list(offset, voidList, NestedEnclosure, sortEnclosure):
 
     newVoidList = []
     if NestedEnclosure:

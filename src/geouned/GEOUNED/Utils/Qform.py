@@ -9,7 +9,7 @@ import math
 import FreeCAD
 
 
-def RotationMatrix(u, v):
+def rotation_matrix(u, v):
     """Definition of the rotation matrix for two vectors"""
 
     # defintion of the axis of rotation
@@ -46,8 +46,8 @@ def RotationMatrix(u, v):
 
     return R
 
-
-def RotationMatrixAngleAxis(u, angle):
+# TODO check if this is being used
+def rotation_matrix_angle_axis(u, angle):
     """Definition of the rotation matrix for an angle and the rotation axis"""
 
     # defintion of the exis of rotation
@@ -79,9 +79,9 @@ def RotationMatrixAngleAxis(u, angle):
     return R
 
 
-def QFormCyl(Axis, Pos, rad):
+def q_form_cyl(Axis, Pos, rad):
 
-    R = RotationMatrix(FreeCAD.Vector(1, 0, 0), Axis)
+    R = rotation_matrix(FreeCAD.Vector(1, 0, 0), Axis)
     R.transpose()
     Pos2 = R.multiply(Pos).negative()
 
@@ -104,7 +104,7 @@ def QFormCyl(Axis, Pos, rad):
 
 def QFormCone(Axis, Pos, tan):
 
-    R = RotationMatrix(FreeCAD.Vector(1, 0, 0), Axis)
+    R = rotation_matrix(FreeCAD.Vector(1, 0, 0), Axis)
     R.transpose()
     Pos2 = R.multiply(Pos).negative()
 

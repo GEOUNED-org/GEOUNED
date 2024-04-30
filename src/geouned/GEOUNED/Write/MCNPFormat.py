@@ -10,7 +10,7 @@ from ..CodeVersion import *
 from ..Utils.BasicFunctions_part1 import is_opposite, points_to_coeffs
 from ..Utils.Functions import SurfacesDict
 from ..Utils.Options.Classes import Options as opt
-from .Functions import CardLine, mcnp_surface, changeSurfSign, writeMCNPCellDef
+from .Functions import CardLine, mcnp_surface, change_surf_sign, write_mcnp_cell_def
 
 
 class McnpInput:
@@ -35,15 +35,15 @@ class McnpInput:
         if self.Title == "":
             self.Title = self.StepFile
 
-        self.__getSurfaceTable__()
-        self.__simplifyPlanes__(Surfaces)
+        self.__get_surface_table__()
+        self.__simplify_planes__(Surfaces)
 
-        self.Surfaces = self.__sortedSurfaces__(Surfaces)
+        self.Surfaces = self.__sorted_surfaces__(Surfaces)
         self.Materials = set()
 
         return
 
-    def setSDEF(self, data):
+    def set_sdef(self, data):
 
         if data[0] is not None:
             sphereId = data[0][0]
@@ -68,7 +68,7 @@ class McnpInput:
         SP3 = "SP3 0  1 \n"
         self.SDEF_box = (sdef, SI1, SI2, SI3, SP1, SP2, SP3)
 
-    def writeInput(self, filename):
+    def write_input(self, filename):
         print(f"write MCNP file {filename}")
         self.inpfile = open(filename, "w", encoding="utf-8")
         self.__write_header__()
@@ -137,7 +137,7 @@ C **************************************************************
         # if index is None objet not contain cell definition
         # but a comment to insert between cells
         if cell.__id__ is None:
-            comment = self.__commentLine__(cell.Comments)
+            comment = self.__comment_line__(cell.Comments)
             self.inpfile.write(comment)
             return
 
@@ -152,9 +152,9 @@ C **************************************************************
 
         mcnpcell = "{}{}\n{}{}".format(
             cellHeader,
-            self.__cellFormat__(cell.Definition, offset=len(cellHeader)),
-            self.__optionFormat__(cell),
-            self.__commentFormat__(cell.Comments, cell.MatInfo),
+            self.__cell_format__(cell.Definition, offset=len(cellHeader)),
+            self.__option_format__(cell),
+            self.__comment_format__(cell.Comments, cell.MatInfo),
         )
         self.inpfile.write(mcnpcell)
         return
@@ -193,7 +193,7 @@ C **************************************************************
             for line in self.SDEF_sphere:
                 Block += line
 
-            celList, volList = self.__get_solidCellVolume__()
+            celList, volList = self.__get_solid_cell_volume__()
 
             F4Tally = CardLine(f"F4:{self.part} ")
             F4Tally.extend(celList)
@@ -213,10 +213,10 @@ C **************************************************************
 
         self.inpfile.write(Block)
 
-    def __cellFormat__(self, Definition, offset=11):
-        return writeMCNPCellDef(Definition, tabspace=11, offset=offset)
+    def __cell_format__(self, Definition, offset=11):
+        return write_mcnp_cell_def(Definition, tabspace=11, offset=offset)
 
-    def __optionFormat__(self, cell):
+    def __option_format__(self, cell):
 
         option = ""
         if self.Options["Volume"]:
@@ -238,7 +238,7 @@ C **************************************************************
 
         return option
 
-    def __commentFormat__(self, cComment, mComment=None):
+    def __comment_format__(self, cComment, mComment=None):
 
         comment = ""
         if mComment:
@@ -254,7 +254,7 @@ C **************************************************************
                     comment += f"{'':11s}${c}\n"
         return comment
 
-    def __commentLine__(self, lineComment):
+    def __comment_line__(self, lineComment):
         lineComment = lineComment.strip().split("\n")
         comment = ""
         if lineComment:
@@ -265,7 +265,7 @@ C **************************************************************
             comment += "C \n"
         return comment
 
-    def __getSurfaceTable__(self):
+    def __get_surface_table__(self):
         self.surfaceTable = {}
         self.__solidCells__ = 0
         self.__cells__ = 0
@@ -288,33 +288,33 @@ C **************************************************************
                     self.surfaceTable[index] = {i}
         return
 
-    def __simplifyPlanes__(self, Surfaces):
+    def __simplify_planes__(self, Surfaces):
 
         for p in Surfaces["PX"]:
             if p.Surf.Axis[0] < 0:
                 p.Surf.Axis = FreeCAD.Vector(1, 0, 0)
-                self.__changeSurfSign__(p)
+                self.__change_surf_sign__(p)
 
         for p in Surfaces["PY"]:
             if p.Surf.Axis[1] < 0:
                 p.Surf.Axis = FreeCAD.Vector(0, 1, 0)
-                self.__changeSurfSign__(p)
+                self.__change_surf_sign__(p)
 
         for p in Surfaces["PZ"]:
             if p.Surf.Axis[2] < 0:
                 p.Surf.Axis = FreeCAD.Vector(0, 0, 1)
-                self.__changeSurfSign__(p)
+                self.__change_surf_sign__(p)
 
         if opt.prnt3PPlane:
             for p in Surfaces["P"]:
                 if p.Surf.pointDef:
                     axis, d = points_to_coeffs(p.Surf.Points)
                     if is_opposite(axis, p.Surf.Axis):
-                        self.__changeSurfSign__(p)
+                        self.__change_surf_sign__(p)
 
         return
 
-    def __sortedSurfaces__(self, Surfaces):
+    def __sorted_surfaces__(self, Surfaces):
         temp = SurfacesDict(Surfaces)
         surfList = []
         for ind in range(
@@ -326,7 +326,7 @@ C **************************************************************
                 temp.del_surface(ind + 1)
         return surfList
 
-    def __changeSurfSign__(self, p):
+    def __change_surf_sign__(self, p):
 
         if p.Index not in self.surfaceTable.keys():
             print(
@@ -340,9 +340,9 @@ C **************************************************************
             surf = self.Cells[ic].Definition.get_surfaces_numbers()
             for s in surf:
                 if s == p.Index:
-                    changeSurfSign(s, self.Cells[ic].Definition)
+                    change_surf_sign(s, self.Cells[ic].Definition)
 
-    def __get_solidCellVolume__(self):
+    def __get_solid_cell_volume__(self):
 
         solidList = []
         volumeList = []

@@ -99,7 +99,7 @@ def cut_full_cylinder(solid):
             tools = (pp[0].shape,)
 
         try:
-            comsolid = UF.splitBOP(solid, tools, opt.splitTolerance)
+            comsolid = UF.split_bop(solid, tools, opt.splitTolerance)
         except:
             comsolid = solid
         if len(comsolid.Solids) > 1:
@@ -112,7 +112,7 @@ def cut_full_cylinder(solid):
 
     tool = (surfaces["Cyl"][0].shape,)
     try:
-        comsolid = UF.splitBOP(solid, tool, opt.splitTolerance)
+        comsolid = UF.split_bop(solid, tool, opt.splitTolerance)
     except:
         comsolid = solid
 
@@ -759,7 +759,7 @@ def split_planes_org(Solids, universe_box):
                 for p in Planes[imin]:
                     p.build_surface()
                     Tools.append(p.shape)
-                comsolid = UF.splitBOP(base, Tools, opt.splitTolerance)
+                comsolid = UF.split_bop(base, Tools, opt.splitTolerance)
                 if len(comsolid.Solids) == 1:
                     if (
                         abs(comsolid.Solids[0].Volume - base.Volume) / base.Volume
@@ -888,7 +888,7 @@ def split_p_planes_new(solid, universe_box):
         for p in pp:
             p.build_surface()
         tools = tuple(p.shape for p in pp)
-        comsolid = UF.splitBOP(solid, tools, opt.splitTolerance)
+        comsolid = UF.split_bop(solid, tools, opt.splitTolerance)
 
         if len(comsolid.Solids) > 1:
             out_solid = comsolid.Solids
@@ -904,7 +904,7 @@ def split_p_planes_org(solid, universe_box):
     out_solid = [solid]
     for p in SPlanes["P"]:
         p.build_surface()
-        comsolid = UF.splitBOP(solid, [p.shape], opt.splitTolerance)
+        comsolid = UF.split_bop(solid, [p.shape], opt.splitTolerance)
         if len(comsolid.Solids) > 1:
             out_solid = comsolid.Solids
             break
@@ -927,7 +927,7 @@ def split_2nd_order(Solids, universe_box):
                     for s in Surfaces[kind]:
                         s.build_surface()
                         try:
-                            comsolid = UF.splitBOP(solid, [s.shape], opt.splitTolerance)
+                            comsolid = UF.split_bop(solid, [s.shape], opt.splitTolerance)
                             solidsInCom = []
                             for s in comsolid.Solids:
                                 if s.Volume > 1e-9:
@@ -988,7 +988,7 @@ def split_2nd_o_plane(solid):
         return [solid], err
 
     for p in planes:
-        comsolid = UF.splitBOP(solid, [p], opt.splitTolerance)
+        comsolid = UF.split_bop(solid, [p], opt.splitTolerance)
         if not comsolid.Solids:
             comsolid = solid
             continue

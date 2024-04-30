@@ -1,4 +1,4 @@
-def commentsWrite(name, MetaList):
+def comments_write(name, MetaList):
     """Function to write in an independent file the comment strings"""
 
     outfile = open(name + "_comments.txt", "w", encoding="utf-8")
@@ -8,7 +8,7 @@ def commentsWrite(name, MetaList):
     outfile.close()
 
 
-def summaryWrite(name, MetaList):
+def summary_write(name, MetaList):
 
     outfile = open(name + "_Summary.txt", "w", encoding="utf-8")
     header = f"  Cell Id{'':5s}Mat Id{'':6s}Density{'':7s}Volume{'':5s}Comments\n"

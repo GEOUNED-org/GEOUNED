@@ -20,9 +20,9 @@ def writeGeometry(UniverseBox, MetaList, Surfaces, code_setting):
 
     # write cells comments in file
     if code_setting["cellCommentFile"]:
-        OutFiles.commentsWrite(baseName, MetaList)
+        OutFiles.comments_write(baseName, MetaList)
     if code_setting["cellSummaryFile"]:
-        OutFiles.summaryWrite(baseName, MetaList)
+        OutFiles.summary_write(baseName, MetaList)
 
     if "mcnp" in code_setting["outFormat"]:
         mcnpFilename = baseName + ".mcnp"
@@ -40,8 +40,8 @@ def writeGeometry(UniverseBox, MetaList, Surfaces, code_setting):
             outSphere = None
 
         MCNPfile = McnpInput(MetaList, Surfaces, code_setting)
-        MCNPfile.setSDEF((outSphere, outBox))
-        MCNPfile.writeInput(mcnpFilename)
+        MCNPfile.set_sdef((outSphere, outBox))
+        MCNPfile.write_input(mcnpFilename)
 
     if (
         "openMC_XML" in code_setting["outFormat"]
@@ -51,7 +51,7 @@ def writeGeometry(UniverseBox, MetaList, Surfaces, code_setting):
 
     if "openMC_XML" in code_setting["outFormat"]:
         omcFilename = baseName + ".xml"
-        OMCFile.writeXML(omcFilename)
+        OMCFile.write_xml(omcFilename)
 
     if "openMC_PY" in code_setting["outFormat"]:
         omcFilename = baseName + ".py"
@@ -73,8 +73,8 @@ def writeGeometry(UniverseBox, MetaList, Surfaces, code_setting):
             outSphere = None
 
         Serpentfile = SerpentInput(MetaList, Surfaces, code_setting)
-        # Serpentfile.setSDEF((outSphere,outBox))
-        Serpentfile.writeInput(serpentFilename)
+        # Serpentfile.set_sdef((outSphere,outBox))
+        Serpentfile.write_input(serpentFilename)
 
     if "phits" in code_setting["outFormat"]:
         phitsFilename = baseName + ".inp"
@@ -96,4 +96,4 @@ def writeGeometry(UniverseBox, MetaList, Surfaces, code_setting):
 
         PHITSfile = PhitsInput(MetaList, Surfaces, code_setting)
         # PHITSfile.setSDEF_PHITS((PHITS_outSphere,PHITS_outBox))
-        PHITSfile.writePHITS(phitsFilename)
+        PHITSfile.write_phits(phitsFilename)

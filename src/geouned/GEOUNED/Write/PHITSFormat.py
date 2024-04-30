@@ -22,9 +22,9 @@ from ..Utils.Functions import SurfacesDict
 from ..Utils.Options.Classes import Options as opt
 from ..Write.Functions import (
     CellString,
-    PHITSSurface,
-    changeSurfSign,
-    writePHITSCellDef,
+    phits_surface,
+    change_surf_sign,
+    write_phits_cell_def,
 )
 
 
@@ -48,18 +48,18 @@ class PhitsInput:
         if self.Title == "":
             self.Title = self.StepFile
 
-        self.__getSurfaceTable__()
-        self.__simplifyPlanes__(Surfaces)
+        self.__get_surface_table__()
+        self.__simplify_planes__(Surfaces)
 
-        self.Surfaces = self.__sortedSurfaces__(Surfaces)
+        self.Surfaces = self.__sorted_surfaces__(Surfaces)
         self.Materials = set()
 
         return
 
-    def writePHITS(self, filename):
+    def write_phits(self, filename):
         print(f"write PHITS file {filename}")
         self.inpfile = open(filename, "w", encoding="utf-8")
-        self.__write_PHITS_header__()
+        self.__write_phits_header__()
 
         cHeader = """\
 $
@@ -70,7 +70,7 @@ $
 [CELL]\n"""
 
         self.inpfile.write(cHeader)
-        self.__write_PHITS_cell_block__()
+        self.__write_phits_cell_block__()
         self.inpfile.write(" \n")
 
         surfaceHeader = """\
@@ -82,7 +82,7 @@ $
 [SURFACE]\n"""
 
         self.inpfile.write(surfaceHeader)
-        self.__write_PHITS_surface_block__()
+        self.__write_phits_surface_block__()
         self.inpfile.write(" \n")
 
         materialHeader = """\
@@ -113,13 +113,13 @@ $
 
         if self.Options["Volume"]:
             self.inpfile.write(volHeader)
-            self.__write_PHITS__Volume_block__()
+            self.__write_phits__volume_block__()
             self.inpfile.write(" \n")
 
         self.inpfile.close()
         return
 
-    def __write_PHITS_header__(self):
+    def __write_phits_header__(self):
 
         version = GEOUNED_Version
         releaseDate = GEOUNED_ReleaseDate
@@ -157,7 +157,7 @@ $ **************************************************************
         self.inpfile.write(Information)
         return
 
-    def __write_PHITS_cell_block__(self):
+    def __write_phits_cell_block__(self):
 
         enclenvChk = []
         enclenvChk = self.__stepfile_label_chk__(self.StepFile)
@@ -169,7 +169,7 @@ $ **************************************************************
             return
         else:
             for i, cell in enumerate(self.Cells):
-                self.__write_PHITS_cells__(cell)
+                self.__write_phits_cells__(cell)
             return
 
     def __stepfile_label_chk__(self, filename):
@@ -187,19 +187,19 @@ $ **************************************************************
         cond2 = envelLabel == None
         return cond1 and cond2
 
-    def __write_PHITS_surface_block__(self):
+    def __write_phits_surface_block__(self):
 
         for surf in self.Surfaces:
             self.__write_PHITS_surfaces__(surf)
 
-    def __write_PHITS_cells__(self, cell):
+    def __write_phits_cells__(self, cell):
 
         index = cell.label
 
         # if index is None objet not contain cell definition
         # but a comment to insert between cells
         if cell.__id__ is None:
-            comment = self.__commentLine__(cell.Comments)
+            comment = self.__comment_line__(cell.Comments)
             self.inpfile.write(comment)
             return
 
@@ -242,9 +242,9 @@ $ **************************************************************
 
         phitscell = "{}{}\n{}{}".format(
             cellHeader,
-            self.__cellFormat__(cell.Definition, offset=len(cellHeader)),
-            self.__optionFormat__(cell),
-            self.__commentFormat__(cell.Comments, cell.MatInfo),
+            self.__cell_format__(cell.Definition, offset=len(cellHeader)),
+            self.__option_format__(cell),
+            self.__comment_format__(cell.Comments, cell.MatInfo),
         )
         self.inpfile.write(phitscell)
         return
@@ -256,7 +256,7 @@ $ **************************************************************
         # if index is None objet not contain cell definition
         # but a comment to insert between cells
         if cell.__id__ is None:
-            comment = self.__commentLine__(cell.Comments)
+            comment = self.__comment_line__(cell.Comments)
             self.inpfile.write(comment)
             return
         """
@@ -267,7 +267,7 @@ $ **************************************************************
         # To exclude solid cell(s) from the inner void's defenition,
         # a string of '#(Solid Cell No.)', or inclsolidCells, 
         # is appended to the new inner void cell definition
-        # after self.__cellFormat__(cell.Definition) process.       
+        # after self.__cell_format__(cell.Definition) process.       
         """
 
         if cell.Void:
@@ -314,8 +314,8 @@ $ **************************************************************
                     self.__new_InnerVoid_Def__(
                         inclSolidCells, cell.Definition, offset=len(cellHeader)
                     ),
-                    self.__optionFormat__(cell),
-                    self.__commentFormat__(cell.Comments, cell.MatInfo),
+                    self.__option_format__(cell),
+                    self.__comment_format__(cell.Comments, cell.MatInfo),
                 )
                 self.inpfile.write(phitscell)
                 return
@@ -331,7 +331,7 @@ $ **************************************************************
         # To check auto-generated voids, apply this commented out section instead
         # and comment out above from "if cell.Void:..." to "... else: return"
         # In addition, if you set volCARD = True and want for all void regions to come apperes in [VOLUME],
-        # comment out some part in the def __write_PHITS__Volume_block__() section also.       
+        # comment out some part in the def __write_phits__volume_block__() section also.       
         if cell.Material == 0:
             print(cell.IsEnclosure)
             if cell.MatInfo == 'Graveyard':
@@ -356,9 +356,9 @@ $ **************************************************************
 
         phitscell = "{}{}\n{}{}".format(
             cellHeader,
-            self.__cellFormat__(cell.Definition, offset=len(cellHeader)),
-            self.__optionFormat__(cell),
-            self.__commentFormat__(cell.Comments, cell.MatInfo),
+            self.__cell_format__(cell.Definition, offset=len(cellHeader)),
+            self.__option_format__(cell),
+            self.__comment_format__(cell.Comments, cell.MatInfo),
         )
         self.inpfile.write(phitscell)
         return
@@ -366,7 +366,7 @@ $ **************************************************************
     def __write_PHITS_surfaces__(self, surface):
         """Write the surfaces in PHITS format"""
 
-        PHITS_def = PHITSSurface(surface.Index, surface.Type, surface.Surf)
+        PHITS_def = phits_surface(surface.Index, surface.Type, surface.Surf)
         if PHITS_def:
             PHITS_def += "\n"
             self.inpfile.write(PHITS_def)
@@ -401,7 +401,7 @@ $ **************************************************************
 
         self.inpfile.write(Block)
 
-    def __write_PHITS__Volume_block__(self):
+    def __write_phits__volume_block__(self):
 
         vol = f"{'':5s}reg{'':5s}vol\n"
 
@@ -464,17 +464,17 @@ $ **************************************************************
         self.inpfile.write(vol)
         """
 
-    def __cellFormat__(self, Definition, offset=11):
-        return writePHITSCellDef(Definition, tabspace=11, offset=offset)
+    def __cell_format__(self, Definition, offset=11):
+        return write_phits_cell_def(Definition, tabspace=11, offset=offset)
 
     def __new_InnerVoid_Def__(self, innerSolidCells, Definition, offset=11):
-        newInnerVoidDef = self.__cellFormat__(Definition, offset)
+        newInnerVoidDef = self.__cell_format__(Definition, offset)
         strdef = CellString(tabspace=11)
         strdef.add(newInnerVoidDef + innerSolidCells)
-        strdef.wrapLine(offset)
+        strdef.wrap_line(offset)
         return strdef.str
 
-    def __optionFormat__(self, cell):
+    def __option_format__(self, cell):
 
         option = ""
         if self.Options["Volume"]:
@@ -488,7 +488,7 @@ $ **************************************************************
 
         return option
 
-    def __commentFormat__(self, cComment, mComment=None):
+    def __comment_format__(self, cComment, mComment=None):
 
         comment = ""
         if mComment:
@@ -504,7 +504,7 @@ $ **************************************************************
                     comment += f"{'':11s}${c}\n"
         return comment
 
-    def __commentLine__(self, lineComment):
+    def __comment_line__(self, lineComment):
         lineComment = lineComment.strip().split("\n")
         comment = ""
         if lineComment:
@@ -515,7 +515,7 @@ $ **************************************************************
             comment += "$ \n"
         return comment
 
-    def __getSurfaceTable__(self):
+    def __get_surface_table__(self):
         self.surfaceTable = {}
         self.__solidCells__ = 0
         self.__cells__ = 0
@@ -538,32 +538,32 @@ $ **************************************************************
                     self.surfaceTable[index] = {i}
         return
 
-    def __simplifyPlanes__(self, Surfaces):
+    def __simplify_planes__(self, Surfaces):
 
         for p in Surfaces["PX"]:
             if p.Surf.Axis[0] < 0:
                 p.Surf.Axis = FreeCAD.Vector(1, 0, 0)
-                self.__changeSurfSign__(p)
+                self.__change_surf_sign__(p)
 
         for p in Surfaces["PY"]:
             if p.Surf.Axis[1] < 0:
                 p.Surf.Axis = FreeCAD.Vector(0, 1, 0)
-                self.__changeSurfSign__(p)
+                self.__change_surf_sign__(p)
 
         for p in Surfaces["PZ"]:
             if p.Surf.Axis[2] < 0:
                 p.Surf.Axis = FreeCAD.Vector(0, 0, 1)
-                self.__changeSurfSign__(p)
+                self.__change_surf_sign__(p)
 
         if opt.prnt3PPlane:
             for p in Surfaces["P"]:
                 if p.Surf.pointDef:
                     axis, d = points_to_coeffs(p.Surf.Points)
                     if is_opposite(axis, p.Surf.Axis):
-                        self.__changeSurfSign__(p)
+                        self.__change_surf_sign__(p)
         return
 
-    def __sortedSurfaces__(self, Surfaces):
+    def __sorted_surfaces__(self, Surfaces):
         temp = SurfacesDict(Surfaces)
         surfList = []
         for ind in range(
@@ -575,7 +575,7 @@ $ **************************************************************
                 temp.del_surface(ind + 1)
         return surfList
 
-    def __changeSurfSign__(self, p):
+    def __change_surf_sign__(self, p):
 
         if p.Index not in self.surfaceTable.keys():
             print(
@@ -589,9 +589,9 @@ $ **************************************************************
             surf = self.Cells[ic].Definition.get_surfaces_numbers()
             for s in surf:
                 if s == p.Index:
-                    changeSurfSign(s, self.Cells[ic].Definition)
+                    change_surf_sign(s, self.Cells[ic].Definition)
 
-    def __get_solidCellVolume__(self):
+    def __get_solid_cell_volume__(self):
 
         solidList = []
         volumeList = []

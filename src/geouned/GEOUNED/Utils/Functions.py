@@ -631,7 +631,7 @@ class SurfacesDict(dict):
             return index, True
 
 
-def splitBOP(solid, tools, tolerance, scale=0.1):
+def split_bop(solid, tools, tolerance, scale=0.1):
 
     if tolerance >= 0.1:
         compSolid = BOPTools.SplitAPI.slice(solid, tools, "Split", tolerance=tolerance)
@@ -639,7 +639,7 @@ def splitBOP(solid, tools, tolerance, scale=0.1):
     elif tolerance < 1e-12:
         if Options.scaleUp:
             tol = 1e-13 if Options.splitTolerance == 0 else Options.splitTolerance
-            compSolid = splitBOP(solid, tools, tol / scale, 1.0 / scale)
+            compSolid = split_bop(solid, tools, tol / scale, 1.0 / scale)
         else:
             compSolid = BOPTools.SplitAPI.slice(
                 solid, tools, "Split", tolerance=tolerance
@@ -651,6 +651,6 @@ def splitBOP(solid, tools, tolerance, scale=0.1):
                 solid, tools, "Split", tolerance=tolerance
             )
         except:
-            compSolid = splitBOP(solid, tools, tolerance * scale, scale)
+            compSolid = split_bop(solid, tools, tolerance * scale, scale)
 
     return compSolid

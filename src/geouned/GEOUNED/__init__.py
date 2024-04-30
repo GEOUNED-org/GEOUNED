@@ -20,7 +20,7 @@ from .Utils import Functions as UF
 from .Utils.BooleanSolids import build_c_table_from_solids
 from .Utils.Options.Classes import McnpNumericFormat, Options, Tolerances
 from .Void import Void as Void
-from .Write.Functions import writeMCNPCellDef
+from .Write.Functions import write_mcnp_cell_def
 from .Write.WriteFiles import writeGeometry
 
 
@@ -499,7 +499,7 @@ class CadToCsg:
                 init = MetaList[-1].__id__ - len(EnclosureList)
             else:
                 init = 0
-            MetaVoid = Void.voidGeneration(
+            MetaVoid = Void.void_generation(
                 MetaReduced, EnclosureList, Surfaces, UniverseBox, code_setting, init
             )
 
@@ -644,7 +644,7 @@ def updateComment(meta, idLabel):
     if meta.__commentInfo__[1] is None:
         return
     newLabel = (idLabel[i] for i in meta.__commentInfo__[1])
-    meta.set_comments(Void.voidCommentLine((meta.__commentInfo__[0], newLabel)))
+    meta.set_comments(Void.void_comment_line((meta.__commentInfo__[0], newLabel)))
 
 
 def processCones(MetaList, coneInfo, Surfaces, UniverseBox):
@@ -703,7 +703,7 @@ def printWarningSolids(warnSolids, warnEnclosures):
             lines += "\n"
             lines += f"{sol.label}\n"
             lines += f"{sol.Comments}\n"
-            lines += f"{writeMCNPCellDef(sol.Definition)}\n"
+            lines += f"{write_mcnp_cell_def(sol.Definition)}\n"
         fic.write(lines)
 
     if warnEnclosures:
@@ -712,7 +712,7 @@ def printWarningSolids(warnSolids, warnEnclosures):
             lines += "\n"
             lines += f"{sol.label}\n"
             lines += f"{sol.Comments}\n"
-            lines += f"{writeMCNPCellDef(sol.Definition)}\n"
+            lines += f"{write_mcnp_cell_def(sol.Definition)}\n"
 
         fic.write(lines)
 

@@ -7,7 +7,7 @@ import math
 import FreeCAD
 
 from ..Utils.booleanFunction import BoolSequence
-from ..Utils.Functions import GeounedSurface, splitBOP
+from ..Utils.Functions import GeounedSurface, split_bop
 from ..Utils.Options.Classes import Options as opt
 
 BoolVals = (None, True, False)
@@ -384,7 +384,7 @@ def split_solid_fast(solid, surf, box):
 
     if box:
         if surf.shape:
-            comsolid = splitBOP(solid, [surf.shape], opt.splitTolerance)
+            comsolid = split_bop(solid, [surf.shape], opt.splitTolerance)
         else:
             return check_sign(solid, surf), None
 

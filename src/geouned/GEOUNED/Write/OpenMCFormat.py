@@ -7,21 +7,21 @@ import FreeCAD
 from ..CodeVersion import *
 from ..Utils.Functions import SurfacesDict
 from ..Utils.Options.Classes import Options as opt
-from .Functions import OpenMCSurface, changeSurfSign, writeOpenMCregion
+from .Functions import open_mc_surface, change_surf_sign, write_openmc_region
 
 
 class OpenmcInput:
-    def __init__(self, Meta, Surfaces, setting):
+    def __init__(self, Meta, Surfaces):
 
         self.Cells = Meta
 
-        self.__getSurfaceTable__()
-        self.__simplifyPlanes__(Surfaces)
+        self.__get_surface_table__()
+        self.__simplify_planes__(Surfaces)
 
-        self.Surfaces = self.__sortedSurfaces__(Surfaces)
+        self.Surfaces = self.__sorted_surfaces__(Surfaces)
         self.Materials = set()
 
-    def writeXML(self, filename):
+    def write_xml(self, filename):
         print(f"write OpenMC xml file {filename}")
         self.inpfile = open(filename, "w", encoding="utf-8")
         self.__write_xml_header__()
@@ -41,7 +41,7 @@ class OpenmcInput:
         return
 
     def __write_xml_cell_block__(self):
-        for i, cell in enumerate(self.Cells):
+        for _, cell in enumerate(self.Cells):
             if cell.MatInfo == "Graveyard":
                 continue
             self.__write_xml_cells__(cell)
@@ -65,7 +65,7 @@ class OpenmcInput:
             matName = f"{cell.Material}"
 
         OMCcell = '  <cell id="{}" material="{}" name="{}" region="{}" universe="1"/>\n'.format(
-            index, matName, cellName, writeOpenMCregion(cell.Definition, "XML")
+            index, matName, cellName, write_openmc_region(cell.Definition, "XML")
         )
         self.inpfile.write(OMCcell)
         return
@@ -73,7 +73,7 @@ class OpenmcInput:
     def __write_xml_surfaces__(self, surface, boundary=False):
         """Write the surfaces in xml OpenMC format"""
 
-        surfType, coeffs = OpenMCSurface(surface.Type, surface.Surf)
+        surfType, coeffs = open_mc_surface(surface.Type, surface.Surf)
 
         if not boundary:
             OMCsurf = '  <surface id="{}" type="{}" coeffs="{}" />\n'.format(
@@ -148,7 +148,7 @@ import openmc
     def __write_py_surfaces__(self, surface, boundary=False):
         """Write the surfaces in python OpenMC format"""
 
-        surfType, coeffs = OpenMCSurface(
+        surfType, coeffs = open_mc_surface(
             surface.Type, surface.Surf, outXML=False, quadricForm=opt.quadricPY
         )
 
@@ -191,17 +191,17 @@ import openmc
 
         if cell.Material == 0:
             OMCcell = 'C{} = openmc.Cell(name="{}", region={})\n'.format(
-                index, cellName, writeOpenMCregion(cell.Definition, "PY")
+                index, cellName, write_openmc_region(cell.Definition, "PY")
             )
         else:
             matName = f"M{cell.Material}"
             OMCcell = 'C{} = openmc.Cell(name="{}", fill={}, region={})\n'.format(
-                index, cellName, matName, writeOpenMCregion(cell.Definition, "PY")
+                index, cellName, matName, write_openmc_region(cell.Definition, "PY")
             )
         self.inpfile.write(OMCcell)
         return
 
-    def __getSurfaceTable__(self):
+    def __get_surface_table__(self):
         self.surfaceTable = {}
         self.__solidCells__ = 0
         self.__cells__ = 0
@@ -224,25 +224,25 @@ import openmc
                     self.surfaceTable[index] = {i}
         return
 
-    def __simplifyPlanes__(self, Surfaces):
+    def __simplify_planes__(self, Surfaces):
 
         for p in Surfaces["PX"]:
             if p.Surf.Axis[0] < 0:
                 p.Surf.Axis = FreeCAD.Vector(1, 0, 0)
-                self.__changeSurfSign__(p)
+                self.__change_surf_sign__(p)
 
         for p in Surfaces["PY"]:
             if p.Surf.Axis[1] < 0:
                 p.Surf.Axis = FreeCAD.Vector(0, 1, 0)
-                self.__changeSurfSign__(p)
+                self.__change_surf_sign__(p)
 
         for p in Surfaces["PZ"]:
             if p.Surf.Axis[2] < 0:
                 p.Surf.Axis = FreeCAD.Vector(0, 0, 1)
-                self.__changeSurfSign__(p)
+                self.__change_surf_sign__(p)
         return
 
-    def __sortedSurfaces__(self, Surfaces):
+    def __sorted_surfaces__(self, Surfaces):
         temp = SurfacesDict(Surfaces)
         surfList = []
         for ind in range(
@@ -254,7 +254,7 @@ import openmc
                 temp.del_surface(ind + 1)
         return surfList
 
-    def __changeSurfSign__(self, p):
+    def __change_surf_sign__(self, p):
 
         if p.Index not in self.surfaceTable.keys():
             print(
@@ -268,4 +268,4 @@ import openmc
             surf = self.Cells[ic].Definition.get_surfaces_numbers()
             for s in surf:
                 if s == p.Index:
-                    changeSurfSign(s, self.Cells[ic].Definition)
+                    change_surf_sign(s, self.Cells[ic].Definition)

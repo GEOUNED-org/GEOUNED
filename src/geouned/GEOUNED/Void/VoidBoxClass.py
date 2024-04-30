@@ -28,12 +28,12 @@ class VoidBox:
                 continue
             if m.BoundBox.isValid():
                 if self.BoundBox.intersect(m.BoundBox):
-                    Obj = self.__copyMeta__(m)
-                    self.__removeExtraComp__(Obj, self.BoundBox)
+                    Obj = self.__copy_meta__(m)
+                    self.__remove_extra_comp__(Obj, self.BoundBox)
                     self.Objects.append(Obj)
         return
 
-    def Split(self, minSize=200):
+    def split(self, minSize=200):
 
         dims = [self.BoundBox.XLength, self.BoundBox.YLength, self.BoundBox.ZLength]
         coord = ["X", "Y", "Z"]
@@ -104,8 +104,8 @@ class VoidBox:
             Space2 = VoidBox(self.Objects, box2)
             VoidBoxTuple = (Space1, Space2)
         else:
-            Space1 = self.PieceEnclosureSplit(box1)
-            Space2 = self.PieceEnclosureSplit(box2)
+            Space1 = self.piece_enclosure_split(box1)
+            Space2 = self.piece_enclosure_split(box2)
             VoidBoxTuple = (Space1, Space2)
             if Space1 == None:
                 VoidBoxTuple = (Space2,)
@@ -116,7 +116,7 @@ class VoidBox:
 
         return VoidBoxTuple
 
-    def PieceEnclosureSplit(self, Box, Tolerance=1.0e-13):
+    def piece_enclosure_split(self, Box, Tolerance=1.0e-13):
         """This function creates a box-shaped solid with the new limits of given bounding box and
         it is intersected with the piece of nested enclosure to create the new void cell.
         If the limited region does not intersect with the piece, no void cell is created.
@@ -158,15 +158,15 @@ class VoidBox:
         )
 
         for m in self.Objects:
-            self.__removeExtraComp__(m, Cube, mode="dist")
+            self.__remove_extra_comp__(m, Cube, mode="dist")
         return
 
-    def getVoidComplementary(self, Surfaces, simplify="no"):
+    def get_void_complementary(self, Surfaces, simplify="no"):
         if self.PieceEnclosure is None:
             boxDef = BoolSequence(operator="AND")
             center = self.BoundBox.Center
             bBox = self.BoundBox
-            for p in self.getBoundPlanes():
+            for p in self.get_bound_planes():
                 id, exist = Surfaces.add_plane(p)
                 if exist:
                     s = Surfaces.get_surface(id)
@@ -334,10 +334,11 @@ class VoidBox:
         else:
             return complementary, cellIn
 
-    def getBoxNumber(self):
+    # TODO check this is used in the code
+    def get_box_number(self):
         return len(self.Objects)
 
-    def getNumbers(self):
+    def get_numbers(self):
         ns = 0
         nb = 0
 
@@ -347,7 +348,7 @@ class VoidBox:
 
         return ns, nb
 
-    def getBoundPlanes(self):
+    def get_bound_planes(self):
         Xmid = 0.5 * (self.BoundBox.XMin + self.BoundBox.XMax)
         Ymid = 0.5 * (self.BoundBox.YMin + self.BoundBox.YMax)
         Zmid = 0.5 * (self.BoundBox.ZMin + self.BoundBox.ZMax)
@@ -429,7 +430,7 @@ class VoidBox:
 
         return (PXMin, PXMax, PYMin, PYMax, PZMin, PZMax)
 
-    def __removeExtraComp__(self, Obj, Box, mode="box"):
+    def __remove_extra_comp__(self, Obj, Box, mode="box"):
         reducedSol = []
         reducedDef = BoolSequence(operator="OR")
         if not Obj.Solids:
@@ -455,7 +456,7 @@ class VoidBox:
             Obj.set_definition(reducedDef)
         return
 
-    def __copyMeta__(self, m):
+    def __copy_meta__(self, m):
         solidsCopy = m.Solids[:]
         facesCopy = m.Faces[:]
         Meta = GeounedSolid(m.__id__, solidsCopy)
