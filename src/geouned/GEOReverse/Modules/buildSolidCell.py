@@ -55,7 +55,7 @@ def BuildDepth(cell, cutShape, mode, baseBox, simplify=False, loop=0):
     for i, CS in enumerate(cutShape):
         cbaseBox = baseBox
         # CS.base.exportStep('CS_{}_{}.stp'.format(i,str(cell.definition)))
-        # CTable =buildCTableFromSolids(cell.makeBox(CS.base.BoundBox),cell.surfaces,option='full')
+        # CTable =build_c_table_from_solids(cell.makeBox(CS.base.BoundBox),cell.surfaces,option='full')
         # cell.definition.simplify(CTable)
         cell.definition.group_single()
 

@@ -203,7 +203,7 @@ class BoolSequence:
                     true_set = {abs(val_name): True}
                     false_set = {abs(val_name): False}
                 else:
-                    true_set, false_set = CT.getConstraintSet(val_name)
+                    true_set, false_set = CT.get_constraint_set(val_name)
 
                 if not self.do_factorize(val_name, true_set, false_set):
                     continue

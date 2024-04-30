@@ -17,7 +17,7 @@ from ..Utils.BasicFunctions_part1 import (
     sign_plane,
 )
 from ..Utils.booleanFunction import BoolSequence, insert_in_sequence
-from ..Utils.BooleanSolids import buildCTableFromSolids, removeExtraSurfaces
+from ..Utils.BooleanSolids import build_c_table_from_solids, remove_extra_surfaces
 from ..Utils.Functions import GeounedSurface
 from ..Utils.Options.Classes import Options as opt
 from ..Utils.Options.Classes import Tolerances as tol
@@ -1119,14 +1119,14 @@ def no_overlapping_cell(metaList, surfaces):
 
             # evaluate only diagonal elements of the Constraint Table (fastest) and remove surface not
             # crossing in the solid boundBox
-            CT = buildCTableFromSolids(
+            CT = build_c_table_from_solids(
                 box, (tuple(t_def.get_surfaces_numbers()), Surfs), option="diag"
             )
 
-            new_def = removeExtraSurfaces(t_def, CT)
+            new_def = remove_extra_surfaces(t_def, CT)
 
             # evaluate full constraint Table with less surfaces involved
-            CT = buildCTableFromSolids(
+            CT = build_c_table_from_solids(
                 box, (tuple(new_def.get_surfaces_numbers()), Surfs), option="full"
             )
 

@@ -7,7 +7,7 @@ from ..Conversion import CellDefinition as Conv
 from ..Decompose import Decom_one as Decom
 from ..Utils.BasicFunctions_part1 import is_opposite
 from ..Utils.booleanFunction import BoolSequence
-from ..Utils.BooleanSolids import buildCTableFromSolids, removeExtraSurfaces
+from ..Utils.BooleanSolids import build_c_table_from_solids, remove_extra_surfaces
 from ..Utils.Functions import GeounedSolid, GeounedSurface
 from ..Utils.Options.Classes import Options as opt
 
@@ -246,7 +246,7 @@ class VoidBox:
                 surfaceDict = {}
                 for i in surfList:
                     surfaceDict[i] = Surfaces.getSurface(i)
-                CTable = buildCTableFromSolids(Box, surfaceDict, option=simplify)
+                CTable = build_c_table_from_solids(Box, surfaceDict, option=simplify)
             else:
                 if res is True:
                     return None, None
@@ -263,7 +263,7 @@ class VoidBox:
                 voidSolidDef = cellVoid
 
             for solDef in voidSolidDef.elements:
-                newSolid = removeExtraSurfaces(solDef, CTable)
+                newSolid = remove_extra_surfaces(solDef, CTable)
                 if type(newSolid.elements) is not bool:
                     newTemp.append(newSolid)
                 elif newSolid.elements is True:

@@ -333,7 +333,7 @@ class BoolSequence:
             trueSet = {abs(valname): True}
             falseSet = {abs(valname): False}
         else:
-            trueSet, falseSet = CT.getConstraintSet(valname)
+            trueSet, falseSet = CT.get_constraint_set(valname)
 
         if trueSet is None:
             self.substitute(valname, False)
@@ -399,7 +399,7 @@ class BoolSequence:
                 trueSet = {abs(valname): True}
                 falseSet = {abs(valname): False}
             else:
-                trueSet, falseSet = CT.getConstraintSet(valname)
+                trueSet, falseSet = CT.get_constraint_set(valname)
 
             if trueSet is None:
                 trueVal = True

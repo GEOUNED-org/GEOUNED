@@ -17,7 +17,7 @@ from .Cuboid.translate import translate
 from .Decompose import Decom_one as Decom
 from .LoadFile import LoadSTEP as Load
 from .Utils import Functions as UF
-from .Utils.BooleanSolids import buildCTableFromSolids
+from .Utils.BooleanSolids import build_c_table_from_solids
 from .Utils.Options.Classes import McnpNumericFormat, Options, Tolerances
 from .Void import Void as Void
 from .Write.Functions import writeMCNPCellDef
@@ -513,7 +513,7 @@ class CadToCsg:
                     continue
                 print("simplify cell", c.__id__)
                 Box = UF.getBox(c)
-                CT = buildCTableFromSolids(Box, (c.Surfaces, Surfs), option="full")
+                CT = build_c_table_from_solids(Box, (c.Surfaces, Surfs), option="full")
                 c.Definition.simplify(CT)
                 c.Definition.clean()
                 if type(c.Definition.elements) is bool:

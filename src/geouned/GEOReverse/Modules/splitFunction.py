@@ -164,7 +164,7 @@ def point_inside(solid):
     BBox = solid.optimalBoundingBox(False)
     box = [BBox.XMin, BBox.XMax, BBox.YMin, BBox.YMax, BBox.ZMin, BBox.ZMax]
 
-    boxes, centers = CutBox(box)
+    boxes, centers = cut_box(box)
     n = 0
 
     while True:
@@ -176,7 +176,7 @@ def point_inside(solid):
         subbox = []
         centers = []
         for b in boxes:
-            btab, ctab = CutBox(b)
+            btab, ctab = cut_box(b)
             subbox.extend(btab)
             centers.extend(ctab)
         boxes = subbox
@@ -189,7 +189,7 @@ def point_inside(solid):
 
 
 # divide a box into 8 smaller boxes
-def CutBox(Box):
+def cut_box(Box):
     xmid = (Box[1] + Box[0]) * 0.5
     ymid = (Box[3] + Box[2]) * 0.5
     zmid = (Box[5] + Box[4]) * 0.5

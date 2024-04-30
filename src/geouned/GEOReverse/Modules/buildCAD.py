@@ -33,7 +33,7 @@ def buildCAD(UnivCell, data, config):
 
     #    print(UniverseCells[0][120].definition.str)
     #    print(UniverseCells[0][120].surfaces)
-    #    CT=buildCTableFromSolids(UnivCell.shape,UniverseCells[0][70],option='full')
+    #    CT=build_c_table_from_solids(UnivCell.shape,UniverseCells[0][70],option='full')
     #    print(CT)
     #    simply = BoolSequence(UniverseCells[0][70].definition.str)
     #    print('antesSimply',simply)
