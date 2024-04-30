@@ -902,7 +902,9 @@ def cellDef(meta_obj, surfaces, universe_box):
 
                             elif surf_type == "Cylinder":
                                 cyl = GeounedSurface(
-                                    ("Cylinder", surf_params), universe_box, Face="Build"
+                                    ("Cylinder", surf_params),
+                                    universe_box,
+                                    Face="Build",
                                 )
                                 id2, exist = surfaces.addCylinder(cyl)
 
@@ -1185,7 +1187,9 @@ def addConePlane(definition, cones_list, surfaces, universe_box):
             continue
 
         plane = GeounedSurface(
-            ("Plane", (cone.Surf.Apex, cone.Surf.Axis, 1, 1)), universe_box, Face="Build"
+            ("Plane", (cone.Surf.Apex, cone.Surf.Axis, 1, 1)),
+            universe_box,
+            Face="Build",
         )
         pid, exist = surfaces.addPlane(plane)
 
