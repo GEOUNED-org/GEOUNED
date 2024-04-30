@@ -11,9 +11,7 @@ def commentsWrite(name, MetaList):
 def summaryWrite(name, MetaList):
 
     outfile = open(name + "_Summary.txt", "w", encoding="utf-8")
-    header = "  Cell Id{:5s}Mat Id{:6s}Density{:7s}Volume{:5s}Comments\n".format(
-        "", "", "", ""
-    )
+    header = f"  Cell Id{'':5s}Mat Id{'':6s}Density{'':7s}Volume{'':5s}Comments\n"
     outfile.write(header)
 
     for m in MetaList:

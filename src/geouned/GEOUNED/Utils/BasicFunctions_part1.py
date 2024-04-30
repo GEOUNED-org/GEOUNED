@@ -118,11 +118,9 @@ class Plane3PtsParams:
         #    Point 2  : {P2[0]}  {P2[1]}  {P2[2]}
         #    Point 3  : {P3[0]}  {P3[1]}  {P3[2]} '''.format(P1=self.Points[0], P2=self.Points[1], P3=self.Points[2])
         pos = self.Axis.dot(self.Position)
-        outstr = """Plane :
-    Axis     : {}  {}  {} 
-    Position : {}  """.format(
-            self.Axis.x, self.Axis.y, self.Axis.z, pos
-        )
+        outstr = f"""Plane :
+    Axis     : {self.Axis.x}  {self.Axis.y}  {self.Axis.z} 
+    Position : {pos}  """
         return outstr
 
 
@@ -137,11 +135,9 @@ class PlaneParams:
 
     def __str__(self):
         pos = self.Axis.dot(self.Position)
-        outstr = """Plane :
-    Axis     : {}  {}  {} 
-    Position : {}  """.format(
-            self.Axis.x, self.Axis.y, self.Axis.z, pos
-        )
+        outstr = f"""Plane :
+    Axis     : {self.Axis.x}  {self.Axis.y}  {self.Axis.z} 
+    Position : {pos}  """
         return outstr
 
 
@@ -154,18 +150,10 @@ class CylinderParams:
         self.real = real
 
     def __str__(self):
-        outstr = """Cylinder :
-    Axis     : {}  {}  {} 
-    Center   : {}  {}  {}
-    Radius   : {}  """.format(
-            self.Axis.x,
-            self.Axis.y,
-            self.Axis.z,
-            self.Center.x,
-            self.Center.y,
-            self.Center.z,
-            self.Radius,
-        )
+        outstr = f"""Cylinder :
+    Axis     : {self.Axis.x}  {self.Axis.y}  {self.Axis.z} 
+    Center   : {self.Center.x}  {self.Center.y}  {self.Center.z}
+    Radius   : {self.Radius}  """
         return outstr
 
 
@@ -179,18 +167,10 @@ class ConeParams:
         self.real = real
 
     def __str__(self):
-        outstr = """Cone :
-    Axis     : {}  {}  {} 
-    Center   : {}  {}  {}
-    SemiAngle: {}  """.format(
-            self.Axis.x,
-            self.Axis.y,
-            self.Axis.z,
-            self.Apex.x,
-            self.Apex.y,
-            self.Apex.z,
-            self.SemiAngle,
-        )
+        outstr = f"""Cone :
+    Axis     : {self.Axis.x}  {self.Axis.y}  {self.Axis.z} 
+    Center   : {self.Apex.x}  {self.Apex.y}  {self.Apex.z}
+    SemiAngle: {self.SemiAngle}  """
         return outstr
 
 
@@ -200,11 +180,9 @@ class SphereParams:
         self.Radius = params[1]
 
     def __str__(self):
-        outstr = """Sphere :
-    Center   : {}  {}  {}
-    Radius   : {}  """.format(
-            self.Center.x, self.Center.y, self.Center.z, self.Radius
-        )
+        outstr = f"""Sphere :
+    Center   : {self.Center.x}  {self.Center.y}  {self.Center.z}
+    Radius   : {self.Radius}  """
         return outstr
 
 
@@ -216,18 +194,9 @@ class TorusParams:
         self.MinorRadius = params[3]
 
     def __str__(self):
-        outstr = """Torus :
-    Axis     : {}  {}  {} 
-    Center   : {}  {}  {}
-    MajorRadius: {}
-    MinorRadius: {} """.format(
-            self.Axis.x,
-            self.Axis.y,
-            self.Axis.z,
-            self.Center.x,
-            self.Center.y,
-            self.Center.z,
-            self.MajorRadius,
-            self.MinorRadius,
-        )
+        outstr = f"""Torus :
+    Axis     : {self.Axis.x}  {self.Axis.y}  {self.Axis.z} 
+    Center   : {self.Center.x}  {self.Center.y}  {self.Center.z}
+    MajorRadius: {self.MajorRadius}
+    MinorRadius: {self.MinorRadius} """
         return outstr

@@ -89,33 +89,26 @@ class SerpentInput:
         releaseDate = GEOUNED_ReleaseDate
         freeCAD_Version = "{V[0]:}.{V[1]:}.{V[2]:}".format(V=FreeCAD.Version())
 
-        Header = """{}
+        Header = f"""{self.Title}
 %   ______ _______  _____      _     _ __   _ _______ ______  
-%  |  ____ |______ |     | ___ |     | | \  | |______ |     \ 
-%  |_____| |______ |_____|     |_____| |  \_| |______ |_____/
-% Version : {}     {}
-% FreeCAD Version : {} \n""".format(
-            self.Title, version, releaseDate, freeCAD_Version
-        )
+%  |  ____ |______ |     | ___ |     | | \\  | |______ |     \\ 
+%  |_____| |______ |_____|     |_____| |  \\_| |______ |_____/
+% Version : {version}     {releaseDate}
+% FreeCAD Version : {freeCAD_Version} 
+"""
 
-        Information = """%
+        Information = f"""%
 % *************************************************************
-% Original Step file : {}
+% Original Step file : {self.StepFile}
 %
-% Creation Date : {}
-% Solid Cells   : {}
-% Total Cells   : {}
-% Surfaces      : {}
-% Materials     : {}
+% Creation Date : {datetime.now()}
+% Solid Cells   : {self.__solidCells__}
+% Total Cells   : {self.__cells__}
+% Surfaces      : {len(self.Surfaces)}
+% Materials     : {len(self.__materials__)}
 %
-% **************************************************************\n""".format(
-            self.StepFile,
-            datetime.now(),
-            self.__solidCells__,
-            self.__cells__,
-            len(self.Surfaces),
-            len(self.__materials__),
-        )
+% **************************************************************
+"""
         self.inpfile.write(Header)
         self.inpfile.write(Information)
         return
@@ -183,7 +176,7 @@ class SerpentInput:
             Serpent_def += "\n"
             self.inpfile.write(Serpent_def)
         else:
-            print("Surface {} cannot be written in Serpent input".format(surface.Type))
+            print(f"Surface {surface.Type} cannot be written in Serpent input")
         return
 
     # No void all option in Serpent. For now remove addition of source.
@@ -197,9 +190,7 @@ class SerpentInput:
             mat.sort()
             MATCARD = ""
             for m in mat:
-                MATCARD += "mat {:<6d} {:11.4e} \n1001 1 \n".format(
-                    m, self.cell.Density
-                )
+                MATCARD += f"mat {m:<6d} {self.cell.Density:11.4e} \n1001 1 \n"
             Block = MATCARD + "% \n" + MODE
         else:
             Block = MODE
@@ -265,13 +256,13 @@ class SerpentInput:
             mComment = mComment.split("\n")
             for c in mComment:
                 if c:
-                    comment += "{:11s}%{}\n".format("", c)
+                    comment += f"{'':11s}%{c}\n"
 
         if cComment.strip() != "":
             cComment = cComment.strip().split("\n")
             for c in cComment:
                 if c:
-                    comment += "{:11s}%{}\n".format("", c)
+                    comment += f"{'':11s}%{c}\n"
         return comment
 
     def comment_line(self, lineComment):
@@ -281,7 +272,7 @@ class SerpentInput:
             comment = "% \n"
             for c in lineComment:
                 if c:
-                    comment += "% {}\n".format(c)
+                    comment += f"% {c}\n"
             comment += "% \n"
         return comment
 
@@ -350,7 +341,7 @@ class SerpentInput:
 
         if p.Index not in self.surfaceTable.keys():
             print(
-                "{} Surface {} not used in cell definition)".format(p.Type, p.Index),
+                f"{p.Type} Surface {p.Index} not used in cell definition)",
                 p.Surf.Axis,
                 p.Surf.Position,
             )

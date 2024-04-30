@@ -183,7 +183,7 @@ def point_inside(solid):
         n = n + 1
 
         if n == cut_box:
-            print("Solid not found in bounding Box (Volume : {})".format(solid.Volume))
+            print(f"Solid not found in bounding Box (Volume : {solid.Volume})")
             print("Valid Solid : ", solid.isValid())
             return None
 
@@ -371,7 +371,7 @@ def surface_side(p, surf):
                 break
 
     else:
-        print("surface type {} not considered".format(surf[0]))
+        print(f"surface type {surf[0]} not considered")
         return
 
     return inout > 0

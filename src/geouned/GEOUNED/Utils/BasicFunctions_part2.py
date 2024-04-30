@@ -148,9 +148,9 @@ def isDuplicateInList(num_str1, i, lista):
     for j, elem2 in enumerate(lista):
         if i == j:
             continue
-        num_str2 = "%11.4E" % (elem2)
-        num_str3 = "%11.4E" % (elem2 + 2.0 * math.pi)
-        num_str4 = "%11.4E" % (elem2 - 2.0 * math.pi)
+        num_str2 = f"{elem2:11.4E}"
+        num_str3 = f"{elem2 + 2.0 * math.pi:11.4E}"
+        num_str4 = f"{elem2 - 2.0 * math.pi:11.4E}"
 
         if abs(float(num_str2)) < 1.0e-5:
             num_str2 = "%11.4E" % 0.0
