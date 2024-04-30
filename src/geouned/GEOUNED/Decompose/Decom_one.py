@@ -41,7 +41,7 @@ def splitFullCylinder(solid):
 def cutFullCylinder(solid):
     solid_gu = GU.SolidGu(solid)
     surfaces = UF.SurfacesDict()
-    flag_inv = CD.isInverted(solid_gu.solid)
+    flag_inv = CD.is_inverted(solid_gu.solid)
     universe_box = solid.BoundBox
 
     for face in solid_gu.Faces:
@@ -119,7 +119,7 @@ def cutFullCylinder(solid):
     return out_solid
 
 
-def GenPlane(pos, normal, diag):
+def gen_plane(pos, normal, diag):
     plane = Part.makePlane(diag, diag, pos, normal)
     vec_on_plane = plane.Vertexes[3].Point.sub(plane.Vertexes[0].Point)
     new_pos = plane.Vertexes[0].Point.sub(vec_on_plane)
@@ -975,7 +975,7 @@ def Split2ndOrderPlanes(Solids):
 def split2ndOPlane(solid):
 
     err = 0
-    flag_inv = CD.isInverted(solid)
+    flag_inv = CD.is_inverted(solid)
     solid_GU = GU.SolidGu(solid)
     planes = Plane2ndOrder(solid_GU, None, flag_inv, convex=True)
     if not planes:

@@ -46,7 +46,7 @@ def removeElement(Faces, idf):
             break
 
 
-def isInverted(solid):
+def is_inverted(solid):
     face = solid.Faces[0]
     parameter_range = face.ParameterRange
     u = (parameter_range[1] + parameter_range[0]) / 2.0
@@ -60,7 +60,7 @@ def isInverted(solid):
         return False
 
 
-def getId(face_in, Surfaces):
+def get_id(face_in, Surfaces):
 
     if isParallel(face_in.Axis, FreeCAD.Vector(1, 0, 0), tol.pln_angle):
         plane = "PX"
@@ -111,7 +111,7 @@ def setDefinition(meta_obj, surfaces):
 
     for sol in solids:
         subSol = BoolSequence(operator="AND")
-        flag_inv = isInverted(sol)
+        flag_inv = is_inverted(sol)
         solid_gu = GU.SolidGu(sol, plane3Pts=True)
 
         faces = []
@@ -127,7 +127,7 @@ def setDefinition(meta_obj, surfaces):
             if face.Orientation not in ("Forward", "Reversed"):
                 continue
 
-            id = getId(face.Surface, surfaces)
+            id = get_id(face.Surface, surfaces)
             s = surfaces.getSurface(id)
             if isOposite(face.Surface.Axis, s.Surf.Axis, tol.pln_angle):
                 id = -id

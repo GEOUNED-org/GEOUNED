@@ -23,7 +23,7 @@ from ..Utils.Options.Classes import Options as opt
 from ..Utils.Options.Classes import Tolerances as tol
 
 
-def getId(facein, surfaces):
+def get_id(facein, surfaces):
 
     surfin = str(facein)
     if surfin == "<Plane object>":
@@ -89,7 +89,7 @@ def getId(facein, surfaces):
     return 0
 
 
-def isInverted(solid):
+def is_inverted(solid):
 
     face = solid.Faces[0]
 
@@ -149,7 +149,7 @@ def isInverted(solid):
     return False
 
 
-def GenPlane(face, solid):
+def gen_plane(face, solid):
     """Generate an additional plane when convex surfaces of second order are presented as a face of the solid"""
 
     surf = face.Surface
@@ -161,7 +161,7 @@ def GenPlane(face, solid):
         return GenPlaneSphere(face, solid)
 
 
-def getClosedRanges(solid, face_index):
+def get_closed_ranges(solid, face_index):
 
     u_nodes = []
     for index in face_index:
@@ -170,7 +170,7 @@ def getClosedRanges(solid, face_index):
         u_nodes.append((URange[1], index))
     u_nodes.sort()
 
-    closed_range = getIntervals(u_nodes)
+    closed_range = get_intervals(u_nodes)
 
     a_min = closed_range[0][0][0]
     a_max = closed_range[-1][1][0]
@@ -199,7 +199,7 @@ def getClosedRanges(solid, face_index):
     return closed_range, closed_face
 
 
-def getIntervals(u_nodes):
+def get_intervals(u_nodes):
     closed_ranges = []
     pos_min = dict()
     pos_max = dict()
@@ -249,7 +249,7 @@ def getIntervals(u_nodes):
 
 def getUValueBoundary(solid, face_index, my_index):
 
-    face_u_ranges, closed_face = getClosedRanges(solid, face_index)
+    face_u_ranges, closed_face = get_closed_ranges(solid, face_index)
     if closed_face:
         return None, None
 
@@ -754,7 +754,7 @@ def cellDef(meta_obj, surfaces, universe_box):
         surf_obj = []
         extra_plane_reverse = dict()
 
-        flag_inv = isInverted(solid)
+        flag_inv = is_inverted(solid)
         solid_gu = GU.SolidGu(solid)
         last_torus = -1
         for iface, face in enumerate(solid_gu.Faces):
@@ -788,7 +788,7 @@ def cellDef(meta_obj, surfaces, universe_box):
                 and orient == "Reversed"
             ):
                 # cone additional plane is added afterward
-                id_face = getId(face.Surface, surfaces)
+                id_face = get_id(face.Surface, surfaces)
                 if surface_type == "<Cone object>":
                     cones.add(id_face)
                 if str(id_face) not in surf_piece:
@@ -796,7 +796,7 @@ def cellDef(meta_obj, surfaces, universe_box):
                     surf_obj.append(face)
 
                 try:
-                    plane = GenPlane(face, solid_gu)
+                    plane = gen_plane(face, solid_gu)
                     if plane is not None:
                         plane = GU.PlaneGu(plane)
                 except:
@@ -835,7 +835,7 @@ def cellDef(meta_obj, surfaces, universe_box):
                     or isParallel(face.Surface.Axis, FreeCAD.Vector(0, 0, 1), tol.angle)
                 ):
 
-                    idT = getId(face.Surface, surfaces)
+                    idT = get_id(face.Surface, surfaces)
 
                     index, u_params = solid_gu.TorusUParams[iface]
                     if index == last_torus:
@@ -932,7 +932,7 @@ def cellDef(meta_obj, surfaces, universe_box):
                             "Only Torus with axis along X, Y , Z axis can be reproduced"
                         )
             else:
-                id = getId(face.Surface, surfaces)
+                id = get_id(face.Surface, surfaces)
                 if surface_type == "<Cone object>":
                     cones.add(-id)
 
