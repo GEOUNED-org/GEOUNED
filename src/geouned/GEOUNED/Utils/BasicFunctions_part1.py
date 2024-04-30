@@ -45,7 +45,9 @@ def isInEdge(edge1, edge2, tolerance=1e-8):
 
 
 def isInPlane(point, plane, d_tolerance=1e-7):
-    return abs(point.distanceToPlane(plane.Surf.Position, plane.Surf.Axis)) < d_tolerance
+    return (
+        abs(point.distanceToPlane(plane.Surf.Position, plane.Surf.Axis)) < d_tolerance
+    )
 
 
 def isInTolerance(val, tol, fuzzy_low, fuzzy_high):

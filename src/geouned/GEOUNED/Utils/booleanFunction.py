@@ -92,7 +92,7 @@ class BoolSequence:
             self.level = max(self.level, level + 1)
 
     def assign(self, seq):
-        """Assign the BoolSequence Seq to the self instance BoolSequence""" 
+        """Assign the BoolSequence Seq to the self instance BoolSequence"""
         if type(seq) is bool:
             self.operator == "AND"
             self.elements = seq
