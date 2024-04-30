@@ -147,6 +147,11 @@ class CadCell:
 
         cutShape = BuildSolid(self, boundBox, simplify=simplify)
 
+        # TODO consider making this step conditional on fuse
+        # if fuse or True:
+        #     self.shape = FuseSolid(cutShape)
+        # else:
+        #     self.shape = Part.makeCompound(cutShape)
         self.shape = FuseSolid(cutShape)
 
 
