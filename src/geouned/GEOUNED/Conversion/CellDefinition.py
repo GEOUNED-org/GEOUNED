@@ -831,8 +831,12 @@ def cellDef(meta_obj, surfaces, universe_box):
 
                 if (
                     is_parallel(face.Surface.Axis, FreeCAD.Vector(1, 0, 0), tol.angle)
-                    or is_parallel(face.Surface.Axis, FreeCAD.Vector(0, 1, 0), tol.angle)
-                    or is_parallel(face.Surface.Axis, FreeCAD.Vector(0, 0, 1), tol.angle)
+                    or is_parallel(
+                        face.Surface.Axis, FreeCAD.Vector(0, 1, 0), tol.angle
+                    )
+                    or is_parallel(
+                        face.Surface.Axis, FreeCAD.Vector(0, 0, 1), tol.angle
+                    )
                 ):
 
                     idT = get_id(face.Surface, surfaces)
@@ -1144,6 +1148,7 @@ def no_overlapping_cell(metaList, surfaces):
             m.setDefinition(new_def)
             m.Definition.joinOperators()
             m.Definition.level_update()
+
 
 # TODO this function looks like it is not used in the code.
 def extra_plane_cyl_face(face, box, surfaces):

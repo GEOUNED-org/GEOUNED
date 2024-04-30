@@ -104,6 +104,7 @@ def translate(meta_list, surfaces, universe_box, setting):
         )
         setDefinition(m, surfaces)
 
+
 # TODO rename this, but be careful as there are other functions in the code with the same name
 def setDefinition(meta_obj, surfaces):
     solids = meta_obj.Solids

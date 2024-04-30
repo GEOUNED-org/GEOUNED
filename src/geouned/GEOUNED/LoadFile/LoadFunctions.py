@@ -365,6 +365,7 @@ def next_index(docList, lastIndex=None):
             if len(tmp) == 0:
                 return None
 
+
 # TODO check this function is used in the code
 def solid_generator(doclist):
     last = None

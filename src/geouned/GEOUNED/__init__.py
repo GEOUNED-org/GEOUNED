@@ -236,7 +236,9 @@ class CadToCsg:
                 for key in config["Options"].keys():
                     if key in Options.default_values.keys():
                         if Options.type_dict[key] is bool:
-                            Options.set_attribute(key, config.getboolean("Options", key))
+                            Options.set_attribute(
+                                key, config.getboolean("Options", key)
+                            )
                         elif (
                             Options.type_dict[key] is float
                             or Options.type_dict[key] is int

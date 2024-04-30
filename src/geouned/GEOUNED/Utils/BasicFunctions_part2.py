@@ -166,6 +166,7 @@ def is_duplicate_in_list(num_str1, i, lista):
 
     return False
 
+
 # TODO check if this function is used
 def is_in_faces(face, faces):
 
@@ -248,6 +249,7 @@ def is_in_faces(face, faces):
                 return True
 
     return False
+
 
 # TODO check if this function is used
 def is_in_faces_2(face, faces):

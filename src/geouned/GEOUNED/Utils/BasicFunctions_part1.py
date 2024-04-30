@@ -23,6 +23,7 @@ def is_in_line(point, dir, pnt_line, tolerance=1e-6):
     r12 = point - pnt_line
     return is_parallel(dir, r12) or (r12.Length < tolerance)
 
+
 # TODO check this function is used in the code
 def is_in_points(point, points, tolerance=1e-5):
     if len(points) > 0:

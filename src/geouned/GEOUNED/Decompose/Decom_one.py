@@ -11,7 +11,12 @@ import Part
 from ..Conversion import CellDefinition as CD
 from ..Utils import Functions as UF
 from ..Utils import Geometry_GU as GU
-from ..Utils.BasicFunctions_part1 import is_in_line, is_in_plane, is_parallel, is_same_value
+from ..Utils.BasicFunctions_part1 import (
+    is_in_line,
+    is_in_plane,
+    is_parallel,
+    is_same_value,
+)
 from ..Utils.BasicFunctions_part2 import is_duplicate_in_list
 from ..Utils.Options.Classes import Options as opt
 from ..Utils.Options.Classes import Tolerances as tol
@@ -337,6 +342,7 @@ def extract_surfaces(solid, kind, universe_box, MakeObj=False):
                 surfaces.addPlane(plane, fuzzy)
 
     return surfaces
+
 
 # TODO check if this function is used as it appears to be not used elsewhere in the src folder
 def is_already_in_planes(plane, Array):
@@ -1052,6 +1058,7 @@ def split_component(solidShape, universe_box):
         err += 4
 
     return comsolid, err
+
 
 # TODO rename function but be careful as there are functions with the same name elsewhere in the code
 def SplitSolid(solidShape, universe_box):
