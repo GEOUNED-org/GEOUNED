@@ -42,7 +42,7 @@ def getId(facein, surfaces):
                 s.Surf,
                 dtol=tol.pln_distance,
                 atol=tol.pln_angle,
-                relTol=tol.relativeTol,
+                rel_tol=tol.relativeTol,
             ):
                 return s.Index
 
@@ -53,7 +53,7 @@ def getId(facein, surfaces):
                 s.Surf,
                 dtol=tol.cyl_distance,
                 atol=tol.cyl_angle,
-                relTol=tol.relativeTol,
+                rel_tol=tol.relativeTol,
             ):
                 return s.Index
 
@@ -64,14 +64,14 @@ def getId(facein, surfaces):
                 s.Surf,
                 dtol=tol.kne_distance,
                 atol=tol.kne_angle,
-                relTol=tol.relativeTol,
+                rel_tol=tol.relativeTol,
             ):
                 return s.Index
 
     elif surfin[0:6] == "Sphere":
         for s in surfaces["Sph"]:
             if BF.isSameSphere(
-                facein, s.Surf, tol.sph_distance, relTol=tol.relativeTol
+                facein, s.Surf, tol.sph_distance, rel_tol=tol.relativeTol
             ):
                 return s.Index
 
@@ -82,7 +82,7 @@ def getId(facein, surfaces):
                 s.Surf,
                 dtol=tol.tor_distance,
                 atol=tol.tor_angle,
-                relTol=tol.relativeTol,
+                rel_tol=tol.relativeTol,
             ):
                 return s.Index
 

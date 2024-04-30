@@ -134,7 +134,7 @@ class SolidGu:
                     self.Faces[j].Surface,
                     dtol=tol.tor_distance,
                     atol=tol.tor_angle,
-                    relTol=tol.relativeTol,
+                    rel_tol=tol.relativeTol,
                 ):
                     current.append(j)
             for c in current:
@@ -177,17 +177,17 @@ class SolidGu:
             i1 = 2
             i2 = 4
 
-        Vmin, Vmax = self.Faces[faceList[0]].ParameterRange[i1:i2]
+        v_min, v_max = self.Faces[faceList[0]].ParameterRange[i1:i2]
         for face in faceList[1:]:
             V0, V1 = self.Faces[face].ParameterRange[i1:i2]
-            Vmin = min(Vmin, V0)
-            Vmax = max(Vmax, V1)
-        mergedParams = (False, (Vmin, Vmax))
+            v_min = min(v_min, V0)
+            v_max = max(v_max, V1)
+        mergedParams = (False, (v_min, v_max))
 
         return mergedParams
 
     def __mergePeriodicUV__(self, parameter, faceList):
-        twoPi = 2.0 * math.pi
+        two_pi = 2.0 * math.pi
         if parameter == "U":
             i1 = 0
             i2 = 2
@@ -205,23 +205,23 @@ class SolidGu:
         params.sort()
         V0 = params[0][0]
         V1 = params[-1][1]
-        if arcLength >= twoPi * (1.0 - tol.relativePrecision):
-            mergedParams = (True, (V0, V0 + twoPi))
+        if arcLength >= two_pi * (1.0 - tol.relativePrecision):
+            mergedParams = (True, (V0, V0 + two_pi))
         else:
             if isSameValue(V0, 0.0, tol.relativePrecision) and isSameValue(
-                V1, twoPi, tol.relativePrecision
+                V1, two_pi, tol.relativePrecision
             ):
                 for i in range(len(params) - 1):
                     if not isSameValue(
                         params[i][1], params[i + 1][0], tol.relativePrecision
                     ):
                         break
-                Vmin = params[i + 1][0] - twoPi
-                Vmax = params[i][1]
+                v_min = params[i + 1][0] - two_pi
+                v_max = params[i][1]
             else:
-                Vmin = params[0][0]
-                Vmax = params[-1][1]
-            mergedParams = (False, (Vmin, Vmax))
+                v_min = params[0][0]
+                v_max = params[-1][1]
+            mergedParams = (False, (v_min, v_max))
 
         return mergedParams
 

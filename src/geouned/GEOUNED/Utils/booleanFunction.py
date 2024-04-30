@@ -91,21 +91,21 @@ class BoolSequence:
             self.elements.append(s)
             self.level = max(self.level, level + 1)
 
-    def assign(self, Seq):
+    def assign(self, seq):
         """Assign the BoolSequence Seq to the self instance BoolSequence"""
-        if type(Seq) is bool:
+        if type(seq) is bool:
             self.operator == "AND"
-            self.elements = Seq
+            self.elements = seq
             self.level = -1
             return
 
-        self.operator = Seq.operator
-        self.elements = Seq.elements
-        self.level = Seq.level
+        self.operator = seq.operator
+        self.elements = seq.elements
+        self.level = seq.level
 
-    def update(self, Seq, pos):
+    def update(self, seq, pos):
         if len(pos) == 0:
-            self.assign(Seq)
+            self.assign(seq)
             return
         elif len(pos) == 1:
             base = self
@@ -117,13 +117,13 @@ class BoolSequence:
         for i in reversed(indexes):
             del base.elements[i]
 
-        if type(Seq.elements) is bool:
-            base.elements = Seq.elements
+        if type(seq.elements) is bool:
+            base.elements = seq.elements
             base.level = -1
         else:
-            base.append(Seq)
+            base.append(seq)
             base.joinOperators()
-        self.clean(selfLevel=True)
+        self.clean(self_level=True)
         return
 
     def getElement(self, pos):
@@ -190,85 +190,85 @@ class BoolSequence:
             self.clean()
             return
 
-        surfNames = self.getSurfacesNumbers()
-        if not surfNames:
+        surf_names = self.getSurfacesNumbers()
+        if not surf_names:
             return
 
-        newNames = surfNames
-        for valname in surfNames:
-            if valname in newNames:
+        newNames = surf_names
+        for val_name in surf_names:
+            if val_name in newNames:
 
                 if CT is None:
-                    trueSet = {abs(valname): True}
-                    falseSet = {abs(valname): False}
+                    true_set = {abs(val_name): True}
+                    false_set = {abs(val_name): False}
                 else:
-                    trueSet, falseSet = CT.getConstraintSet(valname)
+                    true_set, false_set = CT.getConstraintSet(val_name)
 
-                if not self.doFactorize(valname, trueSet, falseSet):
+                if not self.doFactorize(val_name, true_set, false_set):
                     continue
-                self.factorize(valname, trueSet, falseSet)
+                self.factorize(val_name, true_set, false_set)
                 if type(self.elements) is bool:
                     return
                 newNames = self.getSurfacesNumbers()
 
-    def doFactorize(self, valname, trueSet, falseSet):
+    def doFactorize(self, val_name, true_set, false_set):
         """For level 0 sequence check if the factorization would lead to a simplification."""
         if self.level > 0:
             return True
-        if trueSet is None and falseSet is None:
-            print(f"{valname} is not true nor false")
+        if true_set is None and false_set is None:
+            print(f"{val_name} is not true nor false")
             return False
-        if trueSet is None or falseSet is None:
+        if true_set is None or false_set is None:
             return True
 
-        valSet = self.getSurfacesNumbers()
-        TSet = set(trueSet.keys()) & valSet
-        FSet = set(falseSet.keys()) & valSet
+        val_set = self.getSurfacesNumbers()
+        t_set = set(true_set.keys()) & val_set
+        f_set = set(false_set.keys()) & val_set
 
-        if len(TSet) == 1 and len(FSet) == 1:
+        if len(t_set) == 1 and len(f_set) == 1:
             return False
 
         value = None
         for val in self.elements:
-            if abs(val) == valname:
+            if abs(val) == val_name:
                 value = val
                 break
 
         if value is None:
             return False
 
-        if len(TSet) == 1:
+        if len(t_set) == 1:
             if self.operator == "AND":
-                # if value > 0 and TSet[valname] or value < 0 and not TSet[valname] : return False
+                # if value > 0 and t_set[val_name] or value < 0 and not t_set[val_name] : return False
                 if value > 0:
                     return False  # TrueSet[Valname] always True
             else:
-                # if value < 0 and TSet[valname] or value > 0 and not TSet[valname] : return False
+                # if value < 0 and t_set[val_name] or value > 0 and not t_set[val_name] : return False
                 if value < 0:
                     return False
 
-        elif len(FSet) == 1:
+        elif len(f_set) == 1:
             if self.operator == "AND":
-                # if value > 0 and FSet[valname] or value < 0 and not FSet[valname] : return False
+                # if value > 0 and f_set[val_name] or value < 0 and not f_set[val_name] : return False
                 if value < 0:
                     return False
             else:
-                # if value < 0 and FSet[valname] or value > 0 and not FSet[valname] : return False
+                # if value < 0 and f_set[val_name] or value > 0 and not f_set[val_name] : return False
                 if value > 0:
                     return False
 
         return True
 
-    # check if level 0 sequence have oposite value a & -a = 0  , a|-a = 1
+    # check if level 0 sequence have opposite value a & -a = 0  , a|-a = 1
     # return the value of the sequence None(unknown), True, False
     def check(self, level0=False):
         """Check BoolSequence in level 0 have oposite values  a & -a = 0  , a|-a = 1."""
         if type(self.elements) is bool:
             return self.elements
         if self.level == 0:
-            signedSurf = set(self.elements)
-            surfname = self.getSurfacesNumbers()
-            if len(signedSurf) == len(surfname):
+            signed_surf = set(self.elements)
+            surf_name = self.getSurfacesNumbers()
+            if len(signed_surf) == len(surf_name):
                 return None  # means same surface has not positive and negative value
             elif self.operator == "AND":
                 self.elements = False
@@ -280,7 +280,7 @@ class BoolSequence:
                 return True
         elif not level0:
             self.groupSingle()
-            noneVal = False
+            none_val = False
             for e in reversed(self.elements):
                 e.check()
                 if type(e.elements) is bool:
@@ -289,7 +289,7 @@ class BoolSequence:
                     res = None
 
                 if res is None:
-                    noneVal = True
+                    none_val = True
                 elif self.operator == "AND" and res is False:
                     self.level = -1
                     self.elements = False
@@ -301,7 +301,7 @@ class BoolSequence:
                 else:
                     self.elements.remove(e)
 
-            if noneVal:
+            if none_val:
                 return None
             elif self.operator == "AND":
                 self.level = -1
@@ -334,15 +334,15 @@ class BoolSequence:
 
                     else:
                         if name == e:
-                            boolValue = val
+                            bool_value = val
                         else:
-                            boolValue = not val
+                            bool_value = not val
 
-                        if self.operator == "AND" and not boolValue:
+                        if self.operator == "AND" and not bool_value:
                             self.elements = False
                             self.level = -1
                             return
-                        elif self.operator == "OR" and boolValue:
+                        elif self.operator == "OR" and bool_value:
                             self.elements = True
                             self.level = -1
                             return
@@ -357,18 +357,18 @@ class BoolSequence:
             self.level = -1
             return
 
-        self.clean(selfLevel=True)
+        self.clean(self_level=True)
         self.check(level0=True)
-        self.joinOperators(selfLevel=True)
+        self.joinOperators(self_level=True)
 
-    def clean(self, selfLevel=False):
+    def clean(self, self_level=False):
         """Remove sequences whom elements are boolean values instead of list."""
         if type(self.elements) is bool:
             return self.elements
         for e in reversed(self.elements):
             if type(e) is int:
                 continue
-            eVal = e if selfLevel else e.clean()
+            eVal = e if self_level else e.clean()
             if type(eVal) is not bool:
                 eVal = eVal.elements
 
@@ -393,11 +393,11 @@ class BoolSequence:
         else:
             return self
 
-    def joinOperators(self, selfLevel=False):
+    def joinOperators(self, self_level=False):
         """Join redundant operators in found in the sequence."""
         if type(self.elements) is bool:
             return
-        self.clean(selfLevel=True)
+        self.clean(self_level=True)
         self.levelUpdate()
         if self.level == 0:
             return
@@ -437,7 +437,7 @@ class BoolSequence:
             self.check()
             return
 
-        if not selfLevel:
+        if not self_level:
             if type(self.elements) is bool:
                 return
             for e in self.elements:
@@ -445,11 +445,11 @@ class BoolSequence:
 
     def getSubSequence(self, setIn):
         if type(setIn) is set:
-            valSet = setIn
+            val_set = setIn
         elif type(setIn) is int:
-            valSet = {setIn}
+            val_set = {setIn}
         else:
-            valSet = set(setIn.keys())
+            val_set = set(setIn.keys())
 
         if self.level == 0:
             return ([], self)
@@ -459,41 +459,41 @@ class BoolSequence:
 
         for pos, e in enumerate(self.elements):
             surf = e.getSurfacesNumbers()
-            if len(surf & valSet) != 0:
+            if len(surf & val_set) != 0:
                 subSeq.append(e)
                 position.append(pos)
 
         if len(position) == 1 and subSeq.elements[0].level > 0:
-            subList, subSeq = subSeq.elements[0].getSubSequence(valSet)
+            subList, subSeq = subSeq.elements[0].getSubSequence(val_set)
             subList.insert(0, position[0])
         else:
             subList = [position]
 
         return subList, subSeq
 
-    def factorize(self, valname, trueSet, falseSet):
+    def factorize(self, valname, true_set, false_set):
         """Make the factorization of the Sequence on variable valname using Shannon's theorem."""
-        if trueSet is None:  # valname cannot take True value
-            falseFunc = self.evaluate(falseSet)
+        if true_set is None:  # valname cannot take True value
+            falseFunc = self.evaluate(false_set)
             self.assign(falseFunc)
             return True
 
-        if falseSet is None:  # valname cannot take false value
-            trueFunc = self.evaluate(trueSet)
+        if false_set is None:  # valname cannot take false value
+            trueFunc = self.evaluate(true_set)
             self.assign(trueFunc)
             return True
 
-        valSet = set(trueSet.keys())
-        valSet.update(falseSet.keys())
-        pos, subSeq = self.getSubSequence(valSet)
+        val_set = set(true_set.keys())
+        val_set.update(false_set.keys())
+        pos, subSeq = self.getSubSequence(val_set)
         updt = True
         if len(pos) == 0:
             subSeq = self
             updt = False
 
-        trueFunc = subSeq.evaluate(trueSet)
+        trueFunc = subSeq.evaluate(true_set)
 
-        falseFunc = subSeq.evaluate(falseSet)
+        falseFunc = subSeq.evaluate(false_set)
 
         if trueFunc is False:
             newSeq = BoolSequence(operator="AND")
@@ -504,7 +504,7 @@ class BoolSequence:
                 newSeq.level = -1
             else:
                 newSeq.append(-valname, falseFunc)
-                newSeq.joinOperators(selfLevel=True)
+                newSeq.joinOperators(self_level=True)
 
             if updt:
                 self.update(newSeq, pos)
@@ -521,7 +521,7 @@ class BoolSequence:
                 newSeq.append(valname)
             else:
                 newSeq.append(valname, falseFunc)
-                newSeq.joinOperators(selfLevel=True)
+                newSeq.joinOperators(self_level=True)
 
             if updt:
                 self.update(newSeq, pos)
@@ -538,7 +538,7 @@ class BoolSequence:
                 newSeq.level = -1
             else:
                 newSeq.append(valname, trueFunc)
-                newSeq.joinOperators(selfLevel=True)
+                newSeq.joinOperators(self_level=True)
             if updt:
                 self.update(newSeq, pos)
             else:
@@ -554,7 +554,7 @@ class BoolSequence:
                 newSeq.append(-valname)
             else:
                 newSeq.append(-valname, trueFunc)
-                newSeq.joinOperators(selfLevel=True)
+                newSeq.joinOperators(self_level=True)
             if updt:
                 self.update(newSeq, pos)
             else:
@@ -725,12 +725,12 @@ def outterTerms(expression, value="number"):
         terms = []
         pos = 0
         while True:
-            newpos = expr.find(":", pos)
-            if newpos == -1:
+            new_pos = expr.find(":", pos)
+            if new_pos == -1:
                 terms.append(expression[pos:].strip())
                 break
-            terms.append(expression[pos:newpos].strip())
-            pos = newpos + 1
+            terms.append(expression[pos:new_pos].strip())
+            pos = new_pos + 1
         return (terms, "OR")
     else:
         terms = []
@@ -749,14 +749,14 @@ def redundant(m, geom):
     term = m.group()
 
     # Find first valid character at the left of the  parenthese
-    leftOK = True
+    left_ok = True
     left = m.start() - 1
     while left > -1:
         if geom[left] in ("\n", "C", "$", " "):
             left -= 1
         else:
             if geom[left] not in ("(", ":"):
-                leftOK = False
+                left_ok = False
             break
 
     # check if no ':' (or) are inside the parenthese
@@ -765,21 +765,21 @@ def redundant(m, geom):
         return True
 
     # Find first valid character at the right of the  parenthese
-    rightOK = True
+    right_ok = True
     right = m.end()
     while right < len(geom):
         if geom[right] in ("\n", "C", "$", " "):
             right += 1
         else:
             if geom[right] not in (")", ":"):
-                rightOK = False
+                right_ok = False
             break
 
     # if parentheses are like:
     # {( or : } ( ....... ) {) or :}
     # parentheses are redundants
 
-    if leftOK and rightOK:
+    if left_ok and right_ok:
         return True
     else:
         return False
