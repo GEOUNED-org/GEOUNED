@@ -63,7 +63,7 @@ class SerpentInput:
     def writeInput(self, filename):
         print(f"write Serpent file {filename}")
         self.inpfile = open(filename, "w", encoding="utf-8")
-        self.__write_header__(filename)
+        self.__write_header__()
         cellblockHeader = """\
 % --- CELL DEFINITIONS 
 """
@@ -83,7 +83,7 @@ class SerpentInput:
         self.inpfile.close()
         return
 
-    def __write_header__(self, fileout):
+    def __write_header__(self):
 
         version = GEOUNED_Version
         releaseDate = GEOUNED_ReleaseDate

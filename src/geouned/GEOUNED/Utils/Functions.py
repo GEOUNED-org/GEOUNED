@@ -351,7 +351,6 @@ class GeounedSurface:
             else:
                 self.shape = None
             return
-            self.shape = cone
 
         elif self.Type == "Sphere":
             rad = self.Surf.Radius
