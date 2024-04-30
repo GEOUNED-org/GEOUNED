@@ -30,3 +30,8 @@ Documentation = "https://github.com/GEOUNED-org/GEOUNED/docs"
 tests = [
     "pytest",
 ]
+docs = [
+  "sphinx",
+  "sphinx_rtd_theme",
+  "myst_parser"
+]
