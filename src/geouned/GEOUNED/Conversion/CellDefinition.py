@@ -386,7 +386,7 @@ def GenPlaneCylinder_old(face, solid):
 
     U_val_str_cl = []
     for i, elem1 in enumerate(U_val):
-        num_str1 = "%11.4E" % elem1
+        num_str1 = f"{elem1:11.4E}"
         if abs(elem1) < 1.0e-5:
             num_str1 = "%11.4E" % 0.0
         if not (BF.isDuplicateInList(num_str1, i, U_val)):
@@ -522,7 +522,7 @@ def GenPlaneCone_old(face, solid):
     u_val_str_cl = []
 
     for i, elem1 in enumerate(u_val):
-        num_str1 = "%11.4E" % elem1
+        num_str1 = f"{elem1:11.4E}"
         if abs(elem1) < 1.0e-5:
             num_str1 = "%11.4E" % 0.0
         if not (BF.isDuplicateInList(num_str1, i, u_val)):
@@ -993,7 +993,7 @@ def cellDef(meta_obj, surfaces, universe_box):
                     if extra[0] not in surf_piece:
                         surf_piece.append(extra[0])
                 else:
-                    surf_piece.append("({})".format(":".join(extra)))
+                    surf_piece.append(f"({':'.join(extra)})")
 
         surf_piece_bool = BoolSequence(" ".join(surf_piece))
         # possible expresion for e

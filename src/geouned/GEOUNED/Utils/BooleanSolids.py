@@ -96,25 +96,25 @@ class ConstraintTable(dict):
             line = ""
             for name in varName:
                 element = self[name][name]
-                line += " {:4d} : {}\n".format(name, element.val)
+                line += f" {name:4d} : {element.val}\n"
             return line
 
         outstr = "  "
         for name in varName:
-            outstr = outstr + " {:3d}".format(name)
+            outstr = outstr + f" {name:3d}"
         outstr = outstr + "\n"
 
         for name1 in varName:
-            line = " {:3d} ".format(name1)
-            linenot = "~{:3d} ".format(name1)
+            line = f" {name1:3d} "
+            linenot = f"~{name1:3d} "
             for name2 in varName:
                 elmt = self[name1][name2]
                 if elmt.diagonal:
-                    line += " {:>2d} ".format(elmt.val)
+                    line += f" {elmt.val:>2d} "
                     linenot += "    "
                 else:
-                    line += " {}{} ".format(elmt.val[0], elmt.val[1])
-                    linenot += " {}{} ".format(elmt.val[3], elmt.val[2])
+                    line += f" {elmt.val[0]}{elmt.val[1]} "
+                    linenot += f" {elmt.val[3]}{elmt.val[2]} "
             outstr += line + "\n"
             outstr += linenot + "\n"
         return outstr
@@ -510,7 +510,7 @@ def pointFromSurface(solid):
             d *= 0.5
             pp = pface + d * normal
 
-    print("Solid not found in bounding Box (Volume : {})".format(solid.Volume))
+    print(f"Solid not found in bounding Box (Volume : {solid.Volume})")
     return None
 
 

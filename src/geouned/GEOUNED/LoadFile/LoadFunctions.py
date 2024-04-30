@@ -241,7 +241,7 @@ def checkEnclosure(freecad_doc, enclosure_list):
         print("Following enclosure produce loop")
         for p in encl_dict.keys():
             for s in encl_dict[p]:
-                print("{}_{}".format(s, p))
+                print(f"{s}_{p}")
         raise ValueError("GEOUNED.LoadFunctions.checkEnclosure failed")
 
     # check enclosures solids are correctly nested and don't overlap each other

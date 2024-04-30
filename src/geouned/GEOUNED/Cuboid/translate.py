@@ -89,13 +89,13 @@ def translate(meta_list, surfaces, universe_box, setting):
     for i, m in enumerate(meta_list):
         if m.IsEnclosure:
             continue
-        print("Decomposing solid: {}/{} ".format(i, tot_solid))
+        print(f"Decomposing solid: {i}/{tot_solid} ")
         if setting["debug"]:
             print(m.Comments)
             if m.IsEnclosure:
-                m.Solids[0].exportStep("origEnclosure_{}.stp".format(i))
+                m.Solids[0].exportStep(f"origEnclosure_{i}.stp")
             else:
-                m.Solids[0].exportStep("origSolid_{}.stp".format(i))
+                m.Solids[0].exportStep(f"origSolid_{i}.stp")
 
         surfaces.extend(
             Decom.ExtractSurfaces(

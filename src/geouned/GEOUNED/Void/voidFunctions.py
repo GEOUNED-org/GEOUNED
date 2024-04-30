@@ -89,11 +89,9 @@ def updateVoidList(offset, voidList, NestedEnclosure, sortEnclosure):
                 m.ParentEnclosureID = encl.ParentEnclosureID
                 m.EnclosureID = encl.EnclosureID
                 if sortEnclosure:
-                    m.Comments = m.Comments + "\n{}".format(encl.Comments)
+                    m.Comments = m.Comments + f"\n{encl.Comments}"
                 else:
-                    m.Comments = m.Comments + "\nVoid Enclosure #{}".format(
-                        encl.EnclosureID
-                    )
+                    m.Comments = m.Comments + f"\nVoid Enclosure #{encl.EnclosureID}"
                 icount += 1
                 newVoidList.append(m)
             ivoid += 1

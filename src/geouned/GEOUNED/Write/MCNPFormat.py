@@ -59,17 +59,17 @@ class McnpInput:
             self.SDEF_sphere = None
         xmin, xmax, ymin, ymax, zmin, zmax = data[1]
 
-        sdef = "SDEF PAR={} X=D1 Y=D2 Z=D3 \n".format(self.part)
-        SI1 = "SI1 {:13.7e} {:13.7e} \n".format(xmin * 0.1, xmax * 0.1)
-        SI2 = "SI2 {:13.7e} {:13.7e} \n".format(ymin * 0.1, ymax * 0.1)
-        SI3 = "SI3 {:13.7e} {:13.7e} \n".format(zmin * 0.1, zmax * 0.1)
+        sdef = f"SDEF PAR={self.part} X=D1 Y=D2 Z=D3 \n"
+        SI1 = f"SI1 {xmin * 0.1:13.7e} {xmax * 0.1:13.7e} \n"
+        SI2 = f"SI2 {ymin * 0.1:13.7e} {ymax * 0.1:13.7e} \n"
+        SI3 = f"SI3 {zmin * 0.1:13.7e} {zmax * 0.1:13.7e} \n"
         SP1 = "SP1 0  1 \n"
         SP2 = "SP2 0  1 \n"
         SP3 = "SP3 0  1 \n"
         self.SDEF_box = (sdef, SI1, SI2, SI3, SP1, SP2, SP3)
 
     def writeInput(self, filename):
-        print("write MCNP file {}".format(filename))
+        print(f"write MCNP file {filename}")
         self.inpfile = open(filename, "w", encoding="utf-8")
         self.__write_header__(filename)
         self.__write_cell_block__()
@@ -95,33 +95,26 @@ C ##########################################################
         releaseDate = GEOUNED_ReleaseDate
         freeCAD_Version = "{V[0]:}.{V[1]:}.{V[2]:}".format(V=FreeCAD.Version())
 
-        Header = """{}
+        Header = f"""{self.Title}
 C   ______ _______  _____      _     _ __   _ _______ ______  
-C  |  ____ |______ |     | ___ |     | | \  | |______ |     \ 
-C  |_____| |______ |_____|     |_____| |  \_| |______ |_____/
-C Version : {}     {}
-C FreeCAD Version : {} \n""".format(
-            self.Title, version, releaseDate, freeCAD_Version
-        )
+C  |  ____ |______ |     | ___ |     | | \\  | |______ |     \\ 
+C  |_____| |______ |_____|     |_____| |  \\_| |______ |_____/
+C Version : {version}     {releaseDate}
+C FreeCAD Version : {freeCAD_Version} 
+"""
 
-        Information = """C
+        Information = f"""C
 C *************************************************************
-C Original Step file : {}
+C Original Step file : {self.StepFile}
 C
-C Creation Date : {}
-C Solid Cells   : {}
-C Total Cells   : {}
-C Surfaces      : {}
-C Materials     : {}
+C Creation Date : {datetime.now()}
+C Solid Cells   : {self.__solidCells__}
+C Total Cells   : {self.__cells__}
+C Surfaces      : {len(self.Surfaces)}
+C Materials     : {len(self.__materials__)}
 C
-C **************************************************************\n""".format(
-            self.StepFile,
-            datetime.now(),
-            self.__solidCells__,
-            self.__cells__,
-            len(self.Surfaces),
-            len(self.__materials__),
-        )
+C **************************************************************
+"""
         self.inpfile.write(Header)
         self.inpfile.write(Information)
         return
@@ -149,17 +142,13 @@ C **************************************************************\n""".format(
             return
 
         if cell.Material == 0:
-            cellHeader = "{:<5d} {:<5d}  ".format(index, 0)
+            cellHeader = f"{index:<5d} {0:<5d}  "
         else:
             self.Materials.add(cell.Material)
             if abs(cell.Density) < 1e-2:
-                cellHeader = "{:<5d} {:<5d} {:11.4e} ".format(
-                    index, cell.Material, cell.Density
-                )
+                cellHeader = f"{index:<5d} {cell.Material:<5d} {cell.Density:11.4e} "
             else:
-                cellHeader = "{:<5d} {:<5d} {:11.7f} ".format(
-                    index, cell.Material, cell.Density
-                )
+                cellHeader = f"{index:<5d} {cell.Material:<5d} {cell.Density:11.7f} "
 
         mcnpcell = "{}{}\n{}{}".format(
             cellHeader,
@@ -178,7 +167,7 @@ C **************************************************************\n""".format(
             MCNP_def += "\n"
             self.inpfile.write(MCNP_def)
         else:
-            print("Surface {} cannot be written in MCNP input".format(surface.Type))
+            print(f"Surface {surface.Type} cannot be written in MCNP input")
         return
 
     def __write_source_block__(self):
@@ -186,13 +175,13 @@ C **************************************************************\n""".format(
         if self.SDEF_sphere is None:
             return
 
-        MODE = "MODE {}\nVOID \nNPS 1e6\n".format(self.part)
+        MODE = f"MODE {self.part}\nVOID \nNPS 1e6\n"
         if self.dummyMat:
             mat = list(self.Materials)
             mat.sort()
             MATCARD = ""
             for m in mat:
-                MATCARD += "M{:<6d} 1001 1\n".format(m)
+                MATCARD += f"M{m:<6d} 1001 1\n"
             Block = MATCARD + "C \n" + MODE
         else:
             Block = MODE
@@ -206,7 +195,7 @@ C **************************************************************\n""".format(
 
             celList, volList = self.__get_solidCellVolume__()
 
-            F4Tally = CardLine("F4:{} ".format(self.part))
+            F4Tally = CardLine(f"F4:{self.part} ")
             F4Tally.extend(celList)
             SD4 = CardLine("SD4  ", fmt="13.7e")
             SD4.extend(volList)
@@ -232,19 +221,19 @@ C **************************************************************\n""".format(
         option = ""
         if self.Options["Volume"]:
             if not cell.Void:
-                option = "{:11s}Vol={:e}\n".format("", cell.Volume * 1e-3)
+                option = f"{'':11s}Vol={cell.Volume * 0.001:e}\n"
             else:
-                option = "{:11s}Vol=1.0\n".format("")
+                option = f"{'':11s}Vol=1.0\n"
 
-        option += "{:11s}".format("")
+        option += f"{'':11s}"
         for p in self.Options["Particle"]:
             if cell.MatInfo == "Graveyard":
-                option += "imp:{}=0     ".format(p)
+                option += f"imp:{p}=0     "
             else:
-                option += "imp:{}=1.0   ".format(p)
+                option += f"imp:{p}=1.0   "
 
         if self.Options["Universe"] is not None:
-            option += "U={}  ".format(self.Options["Universe"])
+            option += f"U={self.Options['Universe']}  "
         option += "\n"
 
         return option
@@ -256,13 +245,13 @@ C **************************************************************\n""".format(
             mComment = mComment.split("\n")
             for c in mComment:
                 if c:
-                    comment += "{:11s}${}\n".format("", c)
+                    comment += f"{'':11s}${c}\n"
 
         if cComment.strip() != "":
             cComment = cComment.strip().split("\n")
             for c in cComment:
                 if c:
-                    comment += "{:11s}${}\n".format("", c)
+                    comment += f"{'':11s}${c}\n"
         return comment
 
     def __commentLine__(self, lineComment):
@@ -272,7 +261,7 @@ C **************************************************************\n""".format(
             comment = "C \n"
             for c in lineComment:
                 if c:
-                    comment += "C {}\n".format(c)
+                    comment += f"C {c}\n"
             comment += "C \n"
         return comment
 
@@ -341,7 +330,7 @@ C **************************************************************\n""".format(
 
         if p.Index not in self.surfaceTable.keys():
             print(
-                "{} Surface {} not used in cell definition)".format(p.Type, p.Index),
+                f"{p.Type} Surface {p.Index} not used in cell definition)",
                 p.Surf.Axis,
                 p.Surf.Position,
             )

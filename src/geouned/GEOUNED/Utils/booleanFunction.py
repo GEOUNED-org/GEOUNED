@@ -36,12 +36,12 @@ class BoolSequence:
             self.level = 0
 
     def __str__(self):
-        out = "{}[".format(self.operator)
+        out = f"{self.operator}["
         if type(self.elements) is bool:
             return " True " if self.elements else " False "
         for e in self.elements:
             if type(e) is int or type(e) is bool or type(e) is str:
-                out += " {} ".format(e)
+                out += f" {e} "
             else:
                 out += e.__str__()
 
