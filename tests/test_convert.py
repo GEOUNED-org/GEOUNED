@@ -40,9 +40,9 @@ def test_conversion(input_step_file):
     }
 
     # deletes the output MC files if they already exists
-    suffixes = ('.mcnp', '.xml', '.inp', '.py', '.serp')
+    suffixes = (".mcnp", ".xml", ".inp", ".py", ".serp")
     for suffix in suffixes:
-      output_filename_stem.with_suffix(suffix).unlink(missing_ok=True)
+        output_filename_stem.with_suffix(suffix).unlink(missing_ok=True)
 
     GEO = CadToCsg("Input Test")
 
@@ -53,4 +53,4 @@ def test_conversion(input_step_file):
     GEO.Start()
 
     for suffix in suffixes:
-      assert output_filename_stem.with_suffix(suffix).exists()
+        assert output_filename_stem.with_suffix(suffix).exists()
