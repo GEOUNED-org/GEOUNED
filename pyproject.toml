@@ -29,4 +29,5 @@ Documentation = "https://github.com/GEOUNED-org/GEOUNED/docs"
 [project.optional-dependencies]
 tests = [
     "pytest",
+    "black==24.4.2",
 ]
