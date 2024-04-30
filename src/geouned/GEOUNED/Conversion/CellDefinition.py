@@ -1081,10 +1081,10 @@ def no_overlapping_cell(metaList, surfaces):
             Surfs[s.Index] = s
 
     new_definition_list = []
-    metaList[0].setCADSolid()
+    metaList[0].set_cad_solid()
 
     for i, m in enumerate(metaList[1:]):
-        m.setCADSolid()
+        m.set_cad_solid()
 
         if m.Definition.operator == "AND":
             new_def = BoolSequence(operator="AND")
@@ -1115,7 +1115,7 @@ def no_overlapping_cell(metaList, surfaces):
         t_def, simplify = t_def_and_simplify
         if True in simplify:
             print(f"reduce cell {m.__id__}")
-            box = UF.getBox(m)
+            box = UF.get_box(m)
 
             # evaluate only diagonal elements of the Constraint Table (fastest) and remove surface not
             # crossing in the solid boundBox

@@ -136,7 +136,7 @@ def load_cad(filename, mat_filename, default_mat=[], comp_solids=True):
 
                 for i in range(n_solids):
                     meta_list[i_solid].setComments(f"{comment}{i + 1}")
-                    meta_list[i_solid].setCADSolid()
+                    meta_list[i_solid].set_cad_solid()
 
                     if tempre_mat:
                         mat_label = int(tempre_mat.group("mat"))

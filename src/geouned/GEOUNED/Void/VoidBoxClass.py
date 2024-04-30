@@ -188,7 +188,7 @@ class VoidBox:
             Surfaces.extend(
                 Decom.extract_surfaces(comsolid, "All", UniverseBox, MakeObj=True)
             )
-            TempPieceEnclosure.updateSolids(comsolid.Solids)
+            TempPieceEnclosure.update_solids(comsolid.Solids)
             Conv.cellDef(TempPieceEnclosure, Surfaces, UniverseBox)
 
             boxDef = TempPieceEnclosure.Definition
@@ -451,7 +451,7 @@ class VoidBox:
                     reducedDef.append(Obj.Definition.elements[i])
 
         if len(reducedSol) < len(Obj.Solids):
-            Obj.updateSolids(reducedSol)
+            Obj.update_solids(reducedSol)
             Obj.setDefinition(reducedDef)
         return
 

@@ -22,7 +22,7 @@ from ..Utils.Options.Classes import Tolerances as tol
 from . import BasicFunctions_part2 as BF
 
 
-def getBox(comp):
+def get_box(comp):
     bb = FreeCAD.BoundBox(comp.BoundBox)
     bb.enlarge(Options.enlargeBox)
     xMin, yMin, zMin = bb.XMin, bb.YMin, bb.ZMin
@@ -37,7 +37,7 @@ def getBox(comp):
     )
 
 
-def makePlane(Plane, Boxin):
+def make_plane(Plane, Boxin):
 
     normal = Plane.Surf.Axis
     p0 = Plane.Surf.Position.dot(normal)
@@ -134,7 +134,7 @@ class GeounedSolid:
         self.UniverseBox = None
         self.NullCell = True
 
-    def updateSolids(self, solidList):
+    def update_solids(self, solidList):
         self.Solids = solidList
         vol = 0
         self.BoundBox = FreeCAD.BoundBox()
@@ -142,15 +142,16 @@ class GeounedSolid:
             vol += s.Volume
             self.BoundBox.add(s.BoundBox)
 
-    def setCADSolid(self):
+    def set_cad_solid(self):
         self.CADSolid = Part.makeCompound(self.Solids)
         self.Volume = self.CADSolid.Volume
         self.BoundBox = self.CADSolid.BoundBox
 
-    def setUniverseBox(self, UniverseBox):
+    def set_universe_box(self, UniverseBox):
         self.UniverseBox = UniverseBox
 
-    def setSonEnclosures(self, sonEnclosures):
+    # TODO check this function is used in the code
+    def set_son_enclosures(self, sonEnclosures):
         self.SonEnclosures = sonEnclosures
 
     def setDefinition(self, definition, simplify=False):

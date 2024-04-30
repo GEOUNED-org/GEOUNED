@@ -512,7 +512,7 @@ class CadToCsg:
                 if c.Definition.level == 0 or c.IsEnclosure:
                     continue
                 print("simplify cell", c.__id__)
-                Box = UF.getBox(c)
+                Box = UF.get_box(c)
                 CT = build_c_table_from_solids(Box, (c.Surfaces, Surfs), option="full")
                 c.Definition.simplify(CT)
                 c.Definition.clean()
@@ -630,8 +630,8 @@ def DecomposeSolids(MetaList, Surfaces, UniverseBox, setting, meta):
         Surfaces.extend(
             Decom.extract_surfaces(comsolid, "All", UniverseBox, MakeObj=True)
         )
-        m.setCADSolid()
-        m.updateSolids(comsolid.Solids)
+        m.set_cad_solid()
+        m.update_solids(comsolid.Solids)
 
     return warningSolids
 
