@@ -245,7 +245,7 @@ def writeSequenceOMCPY(Seq, prefix="S"):
     return line
 
 
-def MCNPSurface(id, Type, surf):
+def mcnp_surface(id, Type, surf):
     MCNP_def = ""
 
     if Type == "Plane":

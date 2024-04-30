@@ -13,7 +13,7 @@ class BoolSequence:
     def __init__(self, definition=None, operator=None):
         if definition:
             self.elements = []
-            self.setDef(definition)
+            self.set_def(definition)
         else:
             self.elements = []
             self.operator = operator
@@ -83,7 +83,7 @@ class BoolSequence:
                 c.elements.append(-e)
             return c
         else:
-            self.groupSingle()
+            self.group_single()
             for e in self.elements:
                 c.elements.append(e.getComplementary())
             return c
@@ -180,7 +180,7 @@ class BoolSequence:
             if type(self.elements) is bool:
                 return self.elements
 
-            self.groupSingle()
+            self.group_single()
             noneVal = False
             for e in self.elements:
                 res = e.check()
@@ -290,7 +290,7 @@ class BoolSequence:
             return
         if type(self.elements) is bool:
             return
-        self.groupSingle()
+        self.group_single()
         ANDop = []
         ORop = []
 
@@ -385,7 +385,7 @@ class BoolSequence:
 
         if type(self.elements) is bool:
             return self.elements
-        self.groupSingle()
+        self.group_single()
         newSeq = self.copy()
         for name, value in valueSet.items():
             newSeq.substitute(name, value)
@@ -423,7 +423,7 @@ class BoolSequence:
     def evaluate(self, valueSet, CT=None):
         if type(self.elements) is bool:
             return self.elements
-        self.groupSingle()
+        self.group_single()
         op = self.operator
         noneVal = False
         for e in self.elements:
@@ -456,7 +456,7 @@ class BoolSequence:
         else:
             return False
 
-    def setDef(self, expression):
+    def set_def(self, expression):
         terms, operator = outterTerms(expression)
         self.operator = operator
         self.level = 0
@@ -467,9 +467,9 @@ class BoolSequence:
                 x = BoolSequence(t)
                 self.level = max(x.level + 1, self.level)
                 self.elements.append(x)
-        self.groupSingle()
+        self.group_single()
 
-    def groupSingle(self):
+    def group_single(self):
         if self.level == 0:
             return
         if type(self.elements) is bool:

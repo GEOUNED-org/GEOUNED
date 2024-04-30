@@ -19,12 +19,12 @@ def is_parallel(vector_1, vector_2, tolerance=1e-6):
     return angle < tolerance or is_same_value(angle, math.pi, tolerance)
 
 
-def isInLine(point, dir, pnt_line, tolerance=1e-6):
+def is_in_line(point, dir, pnt_line, tolerance=1e-6):
     r12 = point - pnt_line
     return is_parallel(dir, r12) or (r12.Length < tolerance)
 
-
-def isInPoints(point, points, tolerance=1e-5):
+# TODO check this function is used in the code
+def is_in_points(point, points, tolerance=1e-5):
     if len(points) > 0:
         for p in points:
             if point.isEqual(p, tolerance):
@@ -32,7 +32,8 @@ def isInPoints(point, points, tolerance=1e-5):
     return False
 
 
-def isInEdge(edge1, edge2, tolerance=1e-8):
+# TODO check this function is used in the code
+def is_in_edge(edge1, edge2, tolerance=1e-8):
     ver1 = edge1.Vertexes
     ver2 = edge2.Vertexes
     con1 = ver1[0].Point.isEqual(ver2[0].Point, tolerance) or ver1[0].Point.isEqual(
@@ -44,13 +45,13 @@ def isInEdge(edge1, edge2, tolerance=1e-8):
     return con1 and con2
 
 
-def isInPlane(point, plane, d_tolerance=1e-7):
+def is_in_plane(point, plane, d_tolerance=1e-7):
     return (
         abs(point.distanceToPlane(plane.Surf.Position, plane.Surf.Axis)) < d_tolerance
     )
 
 
-def isInTolerance(val, tol, fuzzy_low, fuzzy_high):
+def is_in_tolerance(val, tol, fuzzy_low, fuzzy_high):
     if abs(val) < fuzzy_low:
         return True, False  # 1) isintolerance 2) fuzzy
     elif abs(val) < tol:
@@ -61,7 +62,7 @@ def isInTolerance(val, tol, fuzzy_low, fuzzy_high):
         return False, True
 
 
-def signPlane(point, plane):
+def sign_plane(point, plane):
     value = plane.Surf.Axis.dot(point - plane.Surf.Position)
     if value >= 0.0:
         sign = 1
@@ -70,7 +71,7 @@ def signPlane(point, plane):
     return sign
 
 
-def pointsToCoeffs(points):
+def points_to_coeffs(points):
     p1, p2, p3 = points[0:3]
     scf = (p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, p3.x, p3.y, p3.z)
 

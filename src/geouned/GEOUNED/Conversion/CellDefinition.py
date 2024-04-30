@@ -10,11 +10,11 @@ from ..Utils import BasicFunctions_part2 as BF
 from ..Utils import Functions as UF
 from ..Utils import Geometry_GU as GU
 from ..Utils.BasicFunctions_part1 import (
-    isInLine,
+    is_in_line,
     is_opposite,
     is_parallel,
     is_same_value,
-    signPlane,
+    sign_plane,
 )
 from ..Utils.booleanFunction import BoolSequence, insert_in_sequence
 from ..Utils.BooleanSolids import buildCTableFromSolids, removeExtraSurfaces
@@ -37,7 +37,7 @@ def get_id(facein, surfaces):
             p = "P"
 
         for s in surfaces[p]:
-            if BF.isSamePlane(
+            if BF.is_same_plane(
                 facein,
                 s.Surf,
                 dtol=tol.pln_distance,
@@ -48,7 +48,7 @@ def get_id(facein, surfaces):
 
     elif surfin == "<Cylinder object>":
         for s in surfaces["Cyl"]:
-            if BF.isSameCylinder(
+            if BF.is_same_cylinder(
                 facein,
                 s.Surf,
                 dtol=tol.cyl_distance,
@@ -59,7 +59,7 @@ def get_id(facein, surfaces):
 
     elif surfin == "<Cone object>":
         for s in surfaces["Cone"]:
-            if BF.isSameCone(
+            if BF.is_same_cone(
                 facein,
                 s.Surf,
                 dtol=tol.kne_distance,
@@ -70,14 +70,14 @@ def get_id(facein, surfaces):
 
     elif surfin[0:6] == "Sphere":
         for s in surfaces["Sph"]:
-            if BF.isSameSphere(
+            if BF.is_same_sphere(
                 facein, s.Surf, tol.sph_distance, rel_tol=tol.relativeTol
             ):
                 return s.Index
 
     elif surfin == "<Toroid object>":
         for s in surfaces["Tor"]:
-            if BF.isSameTorus(
+            if BF.is_same_torus(
                 facein,
                 s.Surf,
                 dtol=tol.tor_distance,
@@ -306,7 +306,7 @@ def gen_plane_cylinder(face, solid):
             if (
                 face2.Surface.Axis.isEqual(face.Surface.Axis, 1e-5)
                 and face2.Surface.Radius == rad
-                and isInLine(
+                and is_in_line(
                     face2.Surface.Center, face.Surface.Axis, face.Surface.Center
                 )
             ):
@@ -358,7 +358,7 @@ def gen_plane_cylinder_old(face, solid):
             if (
                 face2.Surface.Axis.isEqual(face.Surface.Axis, 1e-5)
                 and face2.Surface.Radius == rad
-                and isInLine(
+                and is_in_line(
                     face2.Surface.Center, face.Surface.Axis, face.Surface.Center
                 )
             ):
@@ -389,7 +389,7 @@ def gen_plane_cylinder_old(face, solid):
         num_str1 = f"{elem1:11.4E}"
         if abs(elem1) < 1.0e-5:
             num_str1 = "%11.4E" % 0.0
-        if not (BF.isDuplicateInList(num_str1, i, U_val)):
+        if not (BF.is_duplicate_in_list(num_str1, i, U_val)):
             U_val_str_cl.append(num_str1)
 
     face_index_2 = [face_index[0], face_index[0]]
@@ -525,7 +525,7 @@ def gen_plane_cone_old(face, solid):
         num_str1 = f"{elem1:11.4E}"
         if abs(elem1) < 1.0e-5:
             num_str1 = "%11.4E" % 0.0
-        if not (BF.isDuplicateInList(num_str1, i, u_val)):
+        if not (BF.is_duplicate_in_list(num_str1, i, u_val)):
             u_val_str_cl.append(num_str1)
 
     face_index_2 = [face_index[0], face_index[0]]
@@ -812,7 +812,7 @@ def cellDef(meta_obj, surfaces, universe_box):
                     )
 
                     id, exist = surfaces.addPlane(p)
-                    sign = signPlane(face.CenterOfMass, p)
+                    sign = sign_plane(face.CenterOfMass, p)
                     if exist:
                         pp = surfaces.getSurface(id)
                         if is_opposite(p.Surf.Axis, pp.Surf.Axis, tol.angle):

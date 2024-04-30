@@ -72,7 +72,7 @@ def get_id(face_in, Surfaces):
         plane = "P"
 
     for s in Surfaces[plane]:
-        if BF.isSamePlane(
+        if BF.is_same_plane(
             face_in,
             s.Surf,
             dtol=tol.pln_distance,

@@ -445,7 +445,7 @@ class SurfacesDict(dict):
         if is_parallel(plane.Surf.Axis, ex, tol.pln_angle):
             addPlane = True
             for i, p in enumerate(self["PX"]):
-                if BF.isSamePlane(
+                if BF.is_same_plane(
                     plane.Surf,
                     p.Surf,
                     dtol=tol.pln_distance,
@@ -467,7 +467,7 @@ class SurfacesDict(dict):
         elif is_parallel(plane.Surf.Axis, ey, tol.pln_angle):
             addPlane = True
             for i, p in enumerate(self["PY"]):
-                if BF.isSamePlane(
+                if BF.is_same_plane(
                     plane.Surf,
                     p.Surf,
                     dtol=tol.pln_distance,
@@ -489,7 +489,7 @@ class SurfacesDict(dict):
         elif is_parallel(plane.Surf.Axis, ez, tol.pln_angle):
             addPlane = True
             for i, p in enumerate(self["PZ"]):
-                if BF.isSamePlane(
+                if BF.is_same_plane(
                     plane.Surf,
                     p.Surf,
                     dtol=tol.pln_distance,
@@ -511,7 +511,7 @@ class SurfacesDict(dict):
         else:
             addPlane = True
             for i, p in enumerate(self["P"]):
-                if BF.isSamePlane(
+                if BF.is_same_plane(
                     plane.Surf,
                     p.Surf,
                     dtol=tol.pln_distance,
@@ -538,7 +538,7 @@ class SurfacesDict(dict):
     def addCylinder(self, cyl, fuzzy=False):
         addCyl = True
         for i, c in enumerate(self["Cyl"]):
-            if BF.isSameCylinder(
+            if BF.is_same_cylinder(
                 cyl.Surf,
                 c.Surf,
                 dtol=tol.cyl_distance,
@@ -564,7 +564,7 @@ class SurfacesDict(dict):
     def addCone(self, cone):
         addCone = True
         for i, c in enumerate(self["Cone"]):
-            if BF.isSameCone(
+            if BF.is_same_cone(
                 cone.Surf,
                 c.Surf,
                 dtol=tol.kne_distance,
@@ -588,7 +588,7 @@ class SurfacesDict(dict):
     def addSphere(self, sph):
         addSphere = True
         for i, s in enumerate(self["Sph"]):
-            if BF.isSameSphere(
+            if BF.is_same_sphere(
                 sph.Surf, s.Surf, tol.sph_distance, rel_tol=tol.relativeTol
             ):
                 addSphere = False
@@ -608,7 +608,7 @@ class SurfacesDict(dict):
     def addTorus(self, tor):
         addTorus = True
         for i, s in enumerate(self["Tor"]):
-            if BF.isSameTorus(
+            if BF.is_same_torus(
                 tor.Surf,
                 s.Surf,
                 dtol=tol.tor_distance,

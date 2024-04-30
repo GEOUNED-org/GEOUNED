@@ -7,10 +7,10 @@ from datetime import datetime
 import FreeCAD
 
 from ..CodeVersion import *
-from ..Utils.BasicFunctions_part1 import is_opposite, pointsToCoeffs
+from ..Utils.BasicFunctions_part1 import is_opposite, points_to_coeffs
 from ..Utils.Functions import SurfacesDict
 from ..Utils.Options.Classes import Options as opt
-from .Functions import CardLine, MCNPSurface, changeSurfSign, writeMCNPCellDef
+from .Functions import CardLine, mcnp_surface, changeSurfSign, writeMCNPCellDef
 
 
 class McnpInput:
@@ -162,7 +162,7 @@ C **************************************************************
     def __write_surfaces__(self, surface):
         """Write the surfaces in MCNP format"""
 
-        MCNP_def = MCNPSurface(surface.Index, surface.Type, surface.Surf)
+        MCNP_def = mcnp_surface(surface.Index, surface.Type, surface.Surf)
         if MCNP_def:
             MCNP_def += "\n"
             self.inpfile.write(MCNP_def)
@@ -308,7 +308,7 @@ C **************************************************************
         if opt.prnt3PPlane:
             for p in Surfaces["P"]:
                 if p.Surf.pointDef:
-                    axis, d = pointsToCoeffs(p.Surf.Points)
+                    axis, d = points_to_coeffs(p.Surf.Points)
                     if is_opposite(axis, p.Surf.Axis):
                         self.__changeSurfSign__(p)
 

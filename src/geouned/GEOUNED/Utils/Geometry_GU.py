@@ -10,7 +10,7 @@ import Part
 
 from ..Utils.Options.Classes import Tolerances as tol
 from .BasicFunctions_part1 import is_same_value
-from .BasicFunctions_part2 import isSameTorus
+from .BasicFunctions_part2 import is_same_torus
 
 
 # SURFACES
@@ -129,7 +129,7 @@ class SolidGu:
             i = temp[0]
             current = [i]
             for j in temp[1:]:
-                if isSameTorus(
+                if is_same_torus(
                     self.Faces[i].Surface,
                     self.Faces[j].Surface,
                     dtol=tol.tor_distance,

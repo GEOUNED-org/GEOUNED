@@ -57,7 +57,7 @@ def BuildDepth(cell, cutShape, mode, baseBox, simplify=False, loop=0):
         # CS.base.exportStep('CS_{}_{}.stp'.format(i,str(cell.definition)))
         # CTable =buildCTableFromSolids(cell.makeBox(CS.base.BoundBox),cell.surfaces,option='full')
         # cell.definition.simplify(CTable)
-        cell.definition.groupSingle()
+        cell.definition.group_single()
 
         if type(cell.definition.elements) is not bool:
             if cell.definition.level == 0:

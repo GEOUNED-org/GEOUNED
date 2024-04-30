@@ -6,14 +6,14 @@ import math
 import FreeCAD
 
 from ..Utils.BasicFunctions_part1 import (
-    isInLine,
-    isInPlane,
-    isInTolerance,
+    is_in_line,
+    is_in_plane,
+    is_in_tolerance,
     is_opposite,
     is_parallel,
     is_same_value,
 )
-from ..Write.Functions import MCNPSurface
+from ..Write.Functions import mcnp_surface
 
 same_surf_fic = open("fuzzySurfaces", "w")
 
@@ -23,31 +23,31 @@ def Fuzzy(index, dtype, surf1, surf2, val, tol):
     same = val <= tol
 
     if dtype == "plane":
-        p1str = MCNPSurface(index, "Plane", surf1)
-        p2str = MCNPSurface(0, "Plane", surf2)
+        p1str = mcnp_surface(index, "Plane", surf1)
+        p2str = mcnp_surface(0, "Plane", surf2)
         line = "Same surface : {}\nPlane distance / Tolerance : {} {}\n {}\n {}\n\n".format(
             same, val, tol, p1str, p2str
         )
         same_surf_fic.write(line)
 
     elif dtype == "cylRad":
-        cyl1str = MCNPSurface(index, "Cylinder", surf1)
-        cyl2str = MCNPSurface(0, "Cylinder", surf2)
+        cyl1str = mcnp_surface(index, "Cylinder", surf1)
+        cyl2str = mcnp_surface(0, "Cylinder", surf2)
         line = "Same surface : {}\nDiff Radius / Tolerance: {} {}\n {}\n {}\n\n".format(
             same, val, tol, cyl1str, cyl2str
         )
         same_surf_fic.write(line)
 
     elif dtype == "cylAxs":
-        cyl1str = MCNPSurface(index, "Cylinder", surf1)
-        cyl2str = MCNPSurface(0, "Cylinder", surf2)
+        cyl1str = mcnp_surface(index, "Cylinder", surf1)
+        cyl2str = mcnp_surface(0, "Cylinder", surf2)
         line = "Same surface : {}\nDist Axis / Tolerance: {} {}\n {}\n {}\n\n".format(
             same, val, tol, cyl1str, cyl2str
         )
         same_surf_fic.write(line)
 
 
-def isSamePlane(p1, p2, dtol=1e-6, atol=1e-6, rel_tol=True, fuzzy=(False, 0)):
+def is_same_plane(p1, p2, dtol=1e-6, atol=1e-6, rel_tol=True, fuzzy=(False, 0)):
     if is_parallel(p1.Axis, p2.Axis, atol):
         d1 = p1.Axis.dot(p1.Position)
         d2 = p2.Axis.dot(p2.Position)
@@ -59,20 +59,20 @@ def isSamePlane(p1, p2, dtol=1e-6, atol=1e-6, rel_tol=True, fuzzy=(False, 0)):
         else:
             tol = dtol
 
-        isSame, is_fuzzy = isInTolerance(d, tol, 0.5 * tol, 2 * tol)
+        isSame, is_fuzzy = is_in_tolerance(d, tol, 0.5 * tol, 2 * tol)
         if is_fuzzy and fuzzy[0]:
             Fuzzy(fuzzy[1], "plane", p2, p1, d, tol)
         return isSame
     return False
 
 
-def isSameCylinder(cyl1, cyl2, dtol=1e-6, atol=1e-6, rel_tol=True, fuzzy=(False, 0)):
+def is_same_cylinder(cyl1, cyl2, dtol=1e-6, atol=1e-6, rel_tol=True, fuzzy=(False, 0)):
     if rel_tol:
         rtol = dtol * max(cyl2.Radius, cyl1.Radius)
     else:
         rtol = dtol
 
-    is_same_rad, is_fuzzy = isInTolerance(
+    is_same_rad, is_fuzzy = is_in_tolerance(
         cyl2.Radius - cyl1.Radius, rtol, 0.5 * rtol, 2 * rtol
     )
     if is_fuzzy and fuzzy[0]:
@@ -88,7 +88,7 @@ def isSameCylinder(cyl1, cyl2, dtol=1e-6, atol=1e-6, rel_tol=True, fuzzy=(False,
             else:
                 tol = dtol
 
-            is_same_center, is_fuzzy = isInTolerance(d, tol, 0.5 * tol, 2 * tol)
+            is_same_center, is_fuzzy = is_in_tolerance(d, tol, 0.5 * tol, 2 * tol)
             if is_fuzzy and fuzzy[0]:
                 Fuzzy(fuzzy[1], "cylAxs", cyl1, cyl2, d, tol)
 
@@ -96,7 +96,7 @@ def isSameCylinder(cyl1, cyl2, dtol=1e-6, atol=1e-6, rel_tol=True, fuzzy=(False,
     return False
 
 
-def isSameCone(cone1, cone2, dtol=1e-6, atol=1e-6, rel_tol=True):
+def is_same_cone(cone1, cone2, dtol=1e-6, atol=1e-6, rel_tol=True):
     if is_same_value(cone1.SemiAngle, cone2.SemiAngle, atol):
         if is_parallel(cone1.Axis, cone2.Axis, atol):
             if rel_tol:
@@ -107,7 +107,7 @@ def isSameCone(cone1, cone2, dtol=1e-6, atol=1e-6, rel_tol=True):
     return False
 
 
-def isSameSphere(sph1, sph2, tolerance=1e-6, rel_tol=True):
+def is_same_sphere(sph1, sph2, tolerance=1e-6, rel_tol=True):
     if rel_tol:
         rtol = tolerance * max(sph2.Radius, sph1.Radius)
     else:
@@ -122,7 +122,7 @@ def isSameSphere(sph1, sph2, tolerance=1e-6, rel_tol=True):
     return False
 
 
-def isSameTorus(tor1, tor2, dtol=1e-6, atol=1e-6, rel_tol=True):
+def is_same_torus(tor1, tor2, dtol=1e-6, atol=1e-6, rel_tol=True):
     if is_parallel(tor1.Axis, tor2.Axis, atol):
         if tor1.Axis.dot(tor2.Axis) < 0:
             return False  # Assume same cone with oposite axis as different
@@ -144,7 +144,7 @@ def isSameTorus(tor1, tor2, dtol=1e-6, atol=1e-6, rel_tol=True):
     return False
 
 
-def isDuplicateInList(num_str1, i, lista):
+def is_duplicate_in_list(num_str1, i, lista):
     for j, elem2 in enumerate(lista):
         if i == j:
             continue
@@ -166,8 +166,8 @@ def isDuplicateInList(num_str1, i, lista):
 
     return False
 
-
-def isInFaces(face, faces):
+# TODO check if this function is used
+def is_in_faces(face, faces):
 
     if faces == []:
         return False
@@ -203,7 +203,7 @@ def isInFaces(face, faces):
         ##print surf
         if str(surf) == "<Plane object>" and kind_surf == "<Plane object>":
             vector_cross = axis.cross(surf.Axis)
-            if vector_cross == vector_nulo and isInPlane(position, surf):
+            if vector_cross == vector_nulo and is_in_plane(position, surf):
                 return True
         elif str(surf) == "<Cylinder object>" and kind_surf == "<Cylinder object>":
             dir = surf.Axis
@@ -213,7 +213,7 @@ def isInFaces(face, faces):
             if (
                 vector_cross == vector_nulo
                 and radius == rad
-                and isInLine(center, dir, pnt)
+                and is_in_line(center, dir, pnt)
             ):
                 return True
         elif str(surf) == "<Cone object>" and kind_surf == "<Cone object>":
@@ -249,8 +249,8 @@ def isInFaces(face, faces):
 
     return False
 
-
-def isInFaces2(face, faces):
+# TODO check if this function is used
+def is_in_faces_2(face, faces):
 
     if faces == []:
         return False
@@ -285,8 +285,8 @@ def isInFaces2(face, faces):
         ##print surf
         if elem.type == "<Plane object>" and kind_surf == "<Plane object>":
             vector_cross = axis.cross(elem.Axis)
-            if vector_cross == vector_nulo and isInPlane(position, elem.Surface):
-                # if (is_parallel(elem.Axis,elem.Surface.Axis) and isInPlane(Position,elem.Surface)):
+            if vector_cross == vector_nulo and is_in_plane(position, elem.Surface):
+                # if (is_parallel(elem.Axis,elem.Surface.Axis) and is_in_plane(Position,elem.Surface)):
                 return True
         elif elem.type == "<Cylinder object>" and kind_surf == "<Cylinder object>":
             dir = elem.Axis
@@ -296,7 +296,7 @@ def isInFaces2(face, faces):
             if (
                 vector_cross == vector_nulo
                 and radius == rad
-                and isInLine(center, dir, pnt)
+                and is_in_line(center, dir, pnt)
             ):
                 return True
         elif elem.type == "<Cone object>" and kind_surf == "<Cone object>":

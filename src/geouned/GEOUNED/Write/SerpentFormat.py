@@ -6,7 +6,7 @@ from datetime import datetime
 import FreeCAD
 
 from ..CodeVersion import *
-from ..Utils.BasicFunctions_part1 import is_opposite, pointsToCoeffs
+from ..Utils.BasicFunctions_part1 import is_opposite, points_to_coeffs
 from ..Utils.Functions import SurfacesDict
 from ..Utils.Options.Classes import Options as opt
 from .Functions import SerpentSurface, changeSurfSign, writeSerpentCellDef
@@ -319,7 +319,7 @@ class SerpentInput:
         if opt.prnt3PPlane:
             for p in Surfaces["P"]:
                 if p.Surf.pointDef:
-                    axis, d = pointsToCoeffs(p.Surf.Points)
+                    axis, d = points_to_coeffs(p.Surf.Points)
                     if is_opposite(axis, p.Surf.Axis):
                         self.__changeSurfSign__(p)
 

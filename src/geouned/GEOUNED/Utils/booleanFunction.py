@@ -29,7 +29,7 @@ class BoolSequence:
     def __init__(self, definition=None, operator=None):
         if definition:
             self.elements = []
-            self.setDef(definition)
+            self.set_def(definition)
         else:
             self.elements = []
             self.operator = operator
@@ -146,6 +146,7 @@ class BoolSequence:
                     cp.elements.append(e.copy())
         return cp
 
+    # TODO rename to snake case, care as multiple functions with same name
     def getComplementary(self):
         c = BoolSequence(operator=self.compOperator())
         c.level = self.level
@@ -155,7 +156,7 @@ class BoolSequence:
                 c.elements.append(-e)
             return c
         else:
-            self.groupSingle()
+            self.group_single()
             for e in self.elements:
                 c.elements.append(e.getComplementary())
             return c
@@ -204,14 +205,14 @@ class BoolSequence:
                 else:
                     true_set, false_set = CT.getConstraintSet(val_name)
 
-                if not self.doFactorize(val_name, true_set, false_set):
+                if not self.do_factorize(val_name, true_set, false_set):
                     continue
                 self.factorize(val_name, true_set, false_set)
                 if type(self.elements) is bool:
                     return
                 newNames = self.getSurfacesNumbers()
 
-    def doFactorize(self, val_name, true_set, false_set):
+    def do_factorize(self, val_name, true_set, false_set):
         """For level 0 sequence check if the factorization would lead to a simplification."""
         if self.level > 0:
             return True
@@ -279,7 +280,7 @@ class BoolSequence:
                 self.level = -1
                 return True
         elif not level0:
-            self.groupSingle()
+            self.group_single()
             none_val = False
             for e in reversed(self.elements):
                 e.check()
@@ -393,6 +394,7 @@ class BoolSequence:
         else:
             return self
 
+    # TODO rename to snake case, care as multiple functions with same name
     def joinOperators(self, self_level=False):
         """Join redundant operators in found in the sequence."""
         if type(self.elements) is bool:
@@ -401,7 +403,7 @@ class BoolSequence:
         self.levelUpdate()
         if self.level == 0:
             return
-        self.groupSingle()
+        self.group_single()
         ANDop = []
         ORop = []
 
@@ -443,7 +445,7 @@ class BoolSequence:
             for e in self.elements:
                 e.joinOperators()
 
-    def getSubSequence(self, setIn):
+    def get_sub_sequence(self, setIn):
         if type(setIn) is set:
             val_set = setIn
         elif type(setIn) is int:
@@ -464,7 +466,7 @@ class BoolSequence:
                 position.append(pos)
 
         if len(position) == 1 and subSeq.elements[0].level > 0:
-            subList, subSeq = subSeq.elements[0].getSubSequence(val_set)
+            subList, subSeq = subSeq.elements[0].get_sub_sequence(val_set)
             subList.insert(0, position[0])
         else:
             subList = [position]
@@ -485,7 +487,7 @@ class BoolSequence:
 
         val_set = set(true_set.keys())
         val_set.update(false_set.keys())
-        pos, subSeq = self.getSubSequence(val_set)
+        pos, subSeq = self.get_sub_sequence(val_set)
         updt = True
         if len(pos) == 0:
             subSeq = self
@@ -566,7 +568,7 @@ class BoolSequence:
         Result can be a Boolean value or the reduced expresion of the BoolSequence."""
         if type(self.elements) is bool:
             return self.elements
-        self.groupSingle()
+        self.group_single()
         newSeq = self.copy()
         for name, value in valueSet.items():
             newSeq.substitute(name, value)
@@ -575,7 +577,7 @@ class BoolSequence:
 
         return newSeq.elements if type(newSeq.elements) is bool else newSeq
 
-    def setDef(self, expression):
+    def set_def(self, expression):
         """Set the expression of the Boolean function in the BoolSequence instance.
         "expresion" is the string object. The definition should have MCNP syntax cell definition.
         """
@@ -605,9 +607,9 @@ class BoolSequence:
         else:
             self.append(*lev0Seq)
 
-        self.groupSingle()
+        self.group_single()
 
-    def groupSingle(self):
+    def group_single(self):
         """group integers found in Sequence with level > 1.
         (e.g. change AND[1 2 3 OR[2 4]] to AND[ AND[1 2 3] OR[2 3]] )."""
         if self.level == 0:

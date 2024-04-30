@@ -11,8 +11,8 @@ import Part
 from ..Conversion import CellDefinition as CD
 from ..Utils import Functions as UF
 from ..Utils import Geometry_GU as GU
-from ..Utils.BasicFunctions_part1 import isInLine, isInPlane, is_parallel, is_same_value
-from ..Utils.BasicFunctions_part2 import isDuplicateInList
+from ..Utils.BasicFunctions_part1 import is_in_line, is_in_plane, is_parallel, is_same_value
+from ..Utils.BasicFunctions_part2 import is_duplicate_in_list
 from ..Utils.Options.Classes import Options as opt
 from ..Utils.Options.Classes import Tolerances as tol
 
@@ -344,7 +344,7 @@ def is_already_in_planes(plane, Array):
     for elem in Array:
         if plane.Surface.Axis.cross(elem.Surface.Axis) == FreeCAD.Vector(
             0, 0, 0
-        ) and isInPlane(plane.Surface.Position, elem.Surface):
+        ) and is_in_plane(plane.Surface.Position, elem.Surface):
             return True
 
     return False
@@ -422,7 +422,7 @@ def gen_plane_cylinder(face, solid):
             if (
                 face2.Surface.Axis.isEqual(face.Surface.Axis, 1e-5)
                 and face2.Surface.Radius == rad
-                and isInLine(
+                and is_in_line(
                     face2.Surface.Center, face.Surface.Axis, face.Surface.Center
                 )
             ):
@@ -477,7 +477,7 @@ def gen_plane_cylinder(face, solid):
         if abs(elem1) < 1.0e-5:
             num_str1 = "%11.4E" % 0.0
 
-        if not (isDuplicateInList(num_str1, i, Uval)):
+        if not (is_duplicate_in_list(num_str1, i, Uval)):
             Uval_str_cl.append(num_str1)
 
     if len(Uval_str_cl) < 2:
@@ -600,7 +600,7 @@ def gen_plane_cone(face, solid):
         num_str1 = f"{elem1:11.4E}"
         if abs(elem1) < 1.0e-5:
             num_str1 = "%11.4E" % 0.0
-        if not (isDuplicateInList(num_str1, i, Uval)):
+        if not (is_duplicate_in_list(num_str1, i, Uval)):
             Uval_str_cl.append(num_str1)
 
     if len(Uval_str_cl) < 2:
