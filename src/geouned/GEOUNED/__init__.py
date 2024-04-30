@@ -21,7 +21,7 @@ from .Utils.BooleanSolids import build_c_table_from_solids
 from .Utils.Options.Classes import McnpNumericFormat, Options, Tolerances
 from .Void import Void as Void
 from .Write.Functions import write_mcnp_cell_def
-from .Write.WriteFiles import writeGeometry
+from .Write.WriteFiles import write_geometry
 
 
 class CadToCsg:
@@ -579,7 +579,7 @@ class CadToCsg:
         processCones(MetaList, coneInfo, Surfaces, UniverseBox)
 
         # write outputformat input
-        writeGeometry(UniverseBox, MetaList, Surfaces, code_setting)
+        write_geometry(UniverseBox, MetaList, Surfaces, code_setting)
 
         print("End of MCNP, OpenMC, Serpent and PHITS translation phase")
 

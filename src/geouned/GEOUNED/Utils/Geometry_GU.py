@@ -301,6 +301,7 @@ def define_surface(face, plane3Pts):
         Surf_GU = None
     return Surf_GU
 
+
 # TODO check if this function is being used as it doesn't appear to be used in the code
 def list_surfaces(Surfaces):
     Faces = []

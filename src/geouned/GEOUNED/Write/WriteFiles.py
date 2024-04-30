@@ -5,7 +5,7 @@ from .PHITSFormat import PhitsInput
 from .SerpentFormat import SerpentInput
 
 
-def writeGeometry(UniverseBox, MetaList, Surfaces, code_setting):
+def write_geometry(UniverseBox, MetaList, Surfaces, code_setting):
 
     baseName = code_setting["geometryName"]
 

@@ -97,7 +97,7 @@ $
 
         if self.DummyMat:
             self.inpfile.write(materialHeader)
-            self.__write_PHITS_source_block__()
+            self.__write_phits_source_block__()
             self.inpfile.write(" \n")
 
         volHeader = """\
@@ -113,7 +113,7 @@ $
 
         if self.Options["Volume"]:
             self.inpfile.write(volHeader)
-            self.__write_phits__volume_block__()
+            self.__write_phits_volume_block__()
             self.inpfile.write(" \n")
 
         self.inpfile.close()
@@ -165,7 +165,7 @@ $ **************************************************************
         if enclenvChk:
             print("Unified the inner void cell(s) definition")
             for i, cell in enumerate(self.Cells):
-                self.__write_PHITS_cells_uniVoidDef__(cell)
+                self.__write_phits_cells_uni_void_def__(cell)
             return
         else:
             for i, cell in enumerate(self.Cells):
@@ -190,7 +190,7 @@ $ **************************************************************
     def __write_phits_surface_block__(self):
 
         for surf in self.Surfaces:
-            self.__write_PHITS_surfaces__(surf)
+            self.__write_phits_surfaces__(surf)
 
     def __write_phits_cells__(self, cell):
 
@@ -249,7 +249,7 @@ $ **************************************************************
         self.inpfile.write(phitscell)
         return
 
-    def __write_PHITS_cells_uniVoidDef__(self, cell):
+    def __write_phits_cells_uni_void_def__(self, cell):
 
         index = cell.label
 
@@ -311,7 +311,7 @@ $ **************************************************************
 
                 phitscell = "{}{}\n{}{}\n".format(
                     cellHeader,
-                    self.__new_InnerVoid_Def__(
+                    self.__new_inner_void_def__(
                         inclSolidCells, cell.Definition, offset=len(cellHeader)
                     ),
                     self.__option_format__(cell),
@@ -331,7 +331,7 @@ $ **************************************************************
         # To check auto-generated voids, apply this commented out section instead
         # and comment out above from "if cell.Void:..." to "... else: return"
         # In addition, if you set volCARD = True and want for all void regions to come apperes in [VOLUME],
-        # comment out some part in the def __write_phits__volume_block__() section also.       
+        # comment out some part in the def __write_phits_volume_block__() section also.       
         if cell.Material == 0:
             print(cell.IsEnclosure)
             if cell.MatInfo == 'Graveyard':
@@ -363,7 +363,7 @@ $ **************************************************************
         self.inpfile.write(phitscell)
         return
 
-    def __write_PHITS_surfaces__(self, surface):
+    def __write_phits_surfaces__(self, surface):
         """Write the surfaces in PHITS format"""
 
         PHITS_def = phits_surface(surface.Index, surface.Type, surface.Surf)
@@ -374,7 +374,7 @@ $ **************************************************************
             print(f"Surface {surface.Type} cannot be written in PHITS input")
         return
 
-    def __write_PHITS_source_block__(self):
+    def __write_phits_source_block__(self):
 
         if self.DummyMat:
             mat = list(self.Materials)
@@ -401,7 +401,7 @@ $ **************************************************************
 
         self.inpfile.write(Block)
 
-    def __write_phits__volume_block__(self):
+    def __write_phits_volume_block__(self):
 
         vol = f"{'':5s}reg{'':5s}vol\n"
 
@@ -467,7 +467,7 @@ $ **************************************************************
     def __cell_format__(self, Definition, offset=11):
         return write_phits_cell_def(Definition, tabspace=11, offset=offset)
 
-    def __new_InnerVoid_Def__(self, innerSolidCells, Definition, offset=11):
+    def __new_inner_void_def__(self, innerSolidCells, Definition, offset=11):
         newInnerVoidDef = self.__cell_format__(Definition, offset)
         strdef = CellString(tabspace=11)
         strdef.add(newInnerVoidDef + innerSolidCells)

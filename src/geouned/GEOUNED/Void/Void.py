@@ -60,7 +60,9 @@ def void_generation(MetaList, EnclosureList, Surfaces, UniverseBox, setting, ini
 
     voidList.append(set_graveyard_cell(Surfaces, UniverseBox))
 
-    return VF.update_void_list(init, voidList, NestedEnclosure, setting["sortEnclosure"])
+    return VF.update_void_list(
+        init, voidList, NestedEnclosure, setting["sortEnclosure"]
+    )
 
 
 def get_void_def(MetaList, Surfaces, Enclosure, setting, Lev0=False):
@@ -170,6 +172,7 @@ def set_graveyard_cell(Surfaces, UniverseBox):
     mVoidSphOut.__commentInfo__ = None
 
     return (mVoidSphIn, mVoidSphOut)
+
 
 # TODO check this is being used
 def get_universe_complementary(Universe, Surfaces):

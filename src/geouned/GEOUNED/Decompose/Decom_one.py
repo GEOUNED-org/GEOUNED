@@ -927,7 +927,9 @@ def split_2nd_order(Solids, universe_box):
                     for s in Surfaces[kind]:
                         s.build_surface()
                         try:
-                            comsolid = UF.split_bop(solid, [s.shape], opt.splitTolerance)
+                            comsolid = UF.split_bop(
+                                solid, [s.shape], opt.splitTolerance
+                            )
                             solidsInCom = []
                             for s in comsolid.Solids:
                                 if s.Volume > 1e-9:
