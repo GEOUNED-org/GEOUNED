@@ -13,19 +13,26 @@ permissions:
   contents: write
 
 jobs:
-  docs:
-    runs-on: ubuntu-latest
+  testing:
+    name: Documentation
+    runs-on: "ubuntu-latest"
+    defaults:
+      run:
+        shell: bash -el {0}
+    strategy:
+      matrix:
+        python-version: ["3.11"]
     steps:
-      - uses: actions/checkout@v4
+      - name: checkout actions
+        uses: actions/checkout@v4
       - uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
           channels: conda-forge
 
-      - name: Install dependencies
-        run: |
-          conda install -c conda-forge freecad -y
+      - name: install dependencies
+        run: conda install -c conda-forge freecad -y
 
       - name: install package
         run: |
