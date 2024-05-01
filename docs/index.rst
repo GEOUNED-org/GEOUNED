@@ -10,13 +10,11 @@ GEOUNED
    :maxdepth: 2
 
    install
+   usage
+   python-API
+   methodology
+   developer-guide
 
-
-   .. Getting started
-   .. Python API reference
-   .. Methodology
-   .. Contribute
-   .. :caption: Contents:
 
 GEOUNED converts CAD to Constructive Solid Geometry (CSG) formats for use in
 Monte Carlo transport codes.
