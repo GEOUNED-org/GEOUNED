@@ -15,10 +15,10 @@ from .Functions import serpent_surface, change_surf_sign, write_serpent_cell_def
 class SerpentInput:
     def __init__(self, Meta, Surfaces, setting):
         self.Title = setting["title"]
-        self.VolSDEF = setting["volSDEF"]
-        self.VolCARD = setting["volCARD"]
-        self.U0CARD = setting["UCARD"]
-        self.dummyMat = setting["dummyMat"]
+        self.VolSDEF = setting["vol_sdef"]
+        self.VolCARD = setting["vol_card"]
+        self.U0CARD = setting["u_card"]
+        self.dummy_mat = setting["dummy_mat"]
         self.Cells = Meta
         self.Options = {
             "Volume": self.VolCARD,
@@ -27,7 +27,7 @@ class SerpentInput:
         }
         self.part = "p"
 
-        self.StepFile = setting["stepFile"]
+        self.StepFile = setting["step_file"]
         if isinstance(self.StepFile, (tuple, list)):
             self.StepFile = "; ".join(self.StepFile)
 
@@ -185,7 +185,7 @@ class SerpentInput:
 
         #       if self.SDEF_sphere is None:  return
         MODE = f"\nset nps 1e6\nset bc 1"
-        if self.dummyMat:
+        if self.dummy_mat:
             mat = list(self.Materials)
             mat.sort()
             MATCARD = ""

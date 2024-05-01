@@ -29,29 +29,29 @@ class CadToCsg:
     def __init__(
         self,
         title: str = "Geouned conversion",
-        stepFile: str = "",
-        geometryName: str = "",
-        matFile: str = "",
-        outFormat: typing.Tuple[str] = ("mcnp",),
-        voidGen: bool = True,
+        step_file: str = "",
+        geometry_name: str = "",
+        mat_file: str = "",
+        out_format: typing.Tuple[str] = ("mcnp",),
+        void_gen: bool = True,
         debug: bool = False,
-        compSolids: bool = True,
-        volSDEF: bool = False,
-        dummyMat: bool = False,
-        volCARD: bool = True,
-        UCARD=None,
+        comp_solids: bool = True,
+        vol_sdef: bool = False,
+        dummy_mat: bool = False,
+        vol_card: bool = True,
+        u_card=None,
         simplify: str = "No",
-        cellRange=[],
-        exportSolids: str = "",
-        minVoidSize: float = 200.0,  # units mm
-        maxSurf: int = 50,
-        maxBracket: int = 30,
-        voidMat=[],
-        voidExclude=[],
-        startCell: int = 1,
-        startSurf: int = 1,
-        cellCommentFile: bool = False,
-        cellSummaryFile: bool = True,
+        cell_range=[],
+        export_solids: str = "",
+        min_void_size: float = 200.0,  # units mm
+        max_surf: int = 50,
+        max_bracket: int = 30,
+        void_mat=[],
+        void_exclude=[],
+        start_cell: int = 1,
+        start_surf: int = 1,
+        cell_comment_file: bool = False,
+        cell_summary_file: bool = True,
         sort_enclosure: bool = False,
     ):
         """Base class for the conversion of CAD to CSG models
@@ -59,35 +59,35 @@ class CadToCsg:
         Args:
             title (str, optional): Title of the model. Defaults to "Geouned
                 conversion".
-            stepFile (str, optional): Name of the CAD file (in STEP format) to
+            step_file (str, optional): Name of the CAD file (in STEP format) to
                 be converted. Defaults to "".
-            geometryName (str, optional): Base name of the output file(s).
+            geometry_name (str, optional): Base name of the output file(s).
                 Defaults to "".
-            matFile (str, optional): _description_. Defaults to "".
-            outFormat (typing.Tuple[str], optional): Format for the output
+            mat_file (str, optional): _description_. Defaults to "".
+            out_format (typing.Tuple[str], optional): Format for the output
                 geometry. Available format are: mcnp, openMC_XML, openMC_PY,
                 phits and serpent. Several output format can be written in the
                 same geouned run. Defaults to ("mcnp",).
-            voidGen (bool, optional): Generate voids of the geometry. Defaults
+            void_gen (bool, optional): Generate voids of the geometry. Defaults
                 to True.
             debug (bool, optional): Write step files of original and decomposed
                 solids, for each solid in the STEP file. Defaults to False.
-            compSolids (bool, optional): Join subsolids of STEP file as a single
+            comp_solids (bool, optional): Join subsolids of STEP file as a single
                 compound solid. Step files generated with SpaceClaim have not
                 exactly the same level of solids as FreeCAD. It may a happened
                 that solids defined has separated solids are read by FreeCAD
                 as a single compound solid (and will produce only one MCNP
-                cell). In this case compSolids should be set to False. Defaults
+                cell). In this case comp_solids should be set to False. Defaults
                 to True.
-            volSDEF (bool, optional): Write SDEF definition and tally of solid
+            vol_sdef (bool, optional): Write SDEF definition and tally of solid
                 cell for stochastic volume checking. Defaults to False.
-            dummyMat (bool, optional): Write dummy material definition card in
+            dummy_mat (bool, optional): Write dummy material definition card in
                 the MCNP output file for all material labels present in the
                 model. Dummy material definition is "MX 1001 1". Defaults to
                 False.
-            volCARD (bool, optional): Write the CAD calculated volume in the
+            vol_card (bool, optional): Write the CAD calculated volume in the
                 cell definition using the VOL card. Defaults to True.
-            UCARD (_type_, optional): Write universe card in the cell definition
+            u_card (_type_, optional): Write universe card in the cell definition
                 with the specified universe number (if value = 0 Universe card
                 is not written). Defaults to None.
             simplify (str, optional): Simplify the cell definition considering
@@ -98,28 +98,28 @@ class CadToCsg:
                 most optimal algorithm. The time of the conversion can be
                 multiplied by 5 or more. "full" : all the cells (solids and
                 voids) are simplified. Defaults to "No".
-            cellRange (list, optional): Range of cell to be converted (only one
+            cell_range (list, optional): Range of cell to be converted (only one
                 range is allowed, e.g [100,220]). Default all solids are
                 converted. Defaults to [].
-            exportSolids (str, optional): Export CAD solid after reading.
+            export_solids (str, optional): Export CAD solid after reading.
                 The execution is stopped after export, the translation is not
                 carried out. Defaults to "".
-            minVoidSize (float, optional): Minimum size of the edges of the
+            min_void_size (float, optional): Minimum size of the edges of the
                 void cell. Units are in mm. Defaults to 200.0.
-            maxBracket (int, optional): Maximum number of brackets (solid
+            max_bracket (int, optional): Maximum number of brackets (solid
                 complementary) allowed in void cell definition. Defaults to 30.
-            voidMat (list, optional): Assign a material defined by the user
+            void_mat (list, optional): Assign a material defined by the user
                 instead of void for cells without material definition and the
                 cells generated in the automatic void generation. The format
                 is a 3 valued tuple (mat_label, mat_density, mat_description).
                 Example (100,1e-3,'Air assigned to Void'). Defaults to [].
-            voidExclude (list, optional): #TODO see issue 87. Defaults to [].
-            startCell (int, optional): Starting cell numbering label. Defaults to 1.
-            startSurf (int, optional): Starting surface numbering label. Defaults to 1.
-            cellCommentFile (bool, optional): Write an additional file with
+            void_exclude (list, optional): #TODO see issue 87. Defaults to [].
+            start_cell (int, optional): Starting cell numbering label. Defaults to 1.
+            start_surf (int, optional): Starting surface numbering label. Defaults to 1.
+            cell_comment_file (bool, optional): Write an additional file with
                 comment associated to each CAD cell in the MCNP output file.
                 Defaults to False.
-            cellSummaryFile (bool, optional): Write an additional file with
+            cell_summary_file (bool, optional): Write an additional file with
                 information on the CAD cell translated. Defaults to True.
             sort_enclosure (bool, optional): If enclosures are defined in the
                 CAD models, the voids cells of the enclosure will be located in
@@ -127,29 +127,29 @@ class CadToCsg:
                 is located in the CAD solid tree.. Defaults to False.
         """
         self.title = title
-        self.stepFile = stepFile
-        self.geometryName = geometryName
-        self.matFile = matFile
-        self.outFormat = outFormat
-        self.voidGen = voidGen
+        self.step_file = step_file
+        self.geometry_name = geometry_name
+        self.mat_file = mat_file
+        self.out_format = out_format
+        self.void_gen = void_gen
         self.debug = debug
-        self.compSolids = compSolids
-        self.volSDEF = volSDEF
-        self.dummyMat = dummyMat
-        self.volCARD = volCARD
-        self.UCARD = UCARD
+        self.comp_solids = comp_solids
+        self.vol_sdef = vol_sdef
+        self.dummy_mat = dummy_mat
+        self.vol_card = vol_card
+        self.u_card = u_card
         self.simplify = simplify
-        self.cellRange = cellRange
-        self.exportSolids = exportSolids
-        self.minVoidSize = minVoidSize
-        self.maxSurf = maxSurf
-        self.maxBracket = maxBracket
-        self.voidMat = voidMat
-        self.voidExclude = voidExclude
-        self.startCell = startCell
-        self.startSurf = startSurf
-        self.cellCommentFile = cellCommentFile
-        self.cellSummaryFile = cellSummaryFile
+        self.cell_range = cell_range
+        self.export_solids = export_solids
+        self.min_void_size = min_void_size
+        self.max_surf = max_surf
+        self.max_bracket = max_bracket
+        self.void_mat = void_mat
+        self.void_exclude = void_exclude
+        self.start_cell = start_cell
+        self.start_surf = start_surf
+        self.cell_comment_file = cell_comment_file
+        self.cell_summary_file = cell_summary_file
         self.sort_enclosure = sort_enclosure
 
         Options.set_default_attribute()
@@ -167,10 +167,10 @@ class CadToCsg:
         for section in config.sections():
             if section == "Files":
                 for key in config["Files"].keys():
-                    if key in ("geometryName", "matFile", "title"):
+                    if key in ("geometry_name", "mat_file", "title"):
                         self.set(key, config.get("Files", key))
 
-                    elif key == "stepFile":
+                    elif key == "step_file":
                         value = config.get("Files", key).strip()
                         lst = value.split()
                         if value[0] in ("(", "[") and value[-1] in ("]", ")"):
@@ -182,48 +182,48 @@ class CadToCsg:
                         else:
                             self.set(key, value)
 
-                    elif key == "outFormat":
+                    elif key == "out_format":
                         raw = config.get("Files", key).strip()
                         values = tuple(x.strip() for x in raw.split(","))
-                        outFormat = []
+                        out_format = []
                         for v in values:
                             if v.lower() == "mcnp":
-                                outFormat.append("mcnp")
+                                out_format.append("mcnp")
                             elif v.lower() == "openmc_xml":
-                                outFormat.append("openMC_XML")
+                                out_format.append("openMC_XML")
                             elif v.lower() == "openmc_py":
-                                outFormat.append("openMC_PY")
+                                out_format.append("openMC_PY")
                             elif v.lower() == "serpent":
-                                outFormat.append("serpent")
+                                out_format.append("serpent")
                             elif v.lower() == "phits":
-                                outFormat.append("phits")
-                        self.set(key, tuple(outFormat))
+                                out_format.append("phits")
+                        self.set(key, tuple(out_format))
 
             elif section == "Parameters":
                 for key in config["Parameters"].keys():
                     if key in (
-                        "voidGen",
+                        "void_gen",
                         "debug",
-                        "compSolids",
-                        "volSDEF",
-                        "volCARD",
-                        "dummyMat",
-                        "cellSummaryFile",
-                        "cellCommentFile",
+                        "comp_solids",
+                        "vol_sdef",
+                        "vol_card",
+                        "dummy_mat",
+                        "cell_summary_file",
+                        "cell_comment_file",
                         "sort_enclosure",
                     ):
                         self.set(key, config.getboolean("Parameters", key))
                     elif key in (
-                        "minVoidSize",
-                        "maxSurf",
-                        "maxBracket",
-                        "startCell",
-                        "startSurf",
+                        "min_void_size",
+                        "max_surf",
+                        "max_bracket",
+                        "start_cell",
+                        "start_surf",
                     ):
                         self.set(key, config.getint("Parameters", key))
-                    elif key in ("exportSolids", "UCARD", "simplify"):
+                    elif key in ("export_solids", "u_card", "simplify"):
                         self.set(key, config.get("Parameters", key))
-                    elif key == "voidMat":
+                    elif key == "void_mat":
                         value = config.get("Parameters", key).strip()
                         data = value[1:-1].split(",")
                         self.set(key, (int(data[0]), float(data[1]), data[2]))
@@ -271,8 +271,8 @@ class CadToCsg:
             else:
                 print(f"bad section name : {section}")
 
-        if self.__dict__["geometryName"] == "":
-            self.__dict__["geometryName"] = self.__dict__["stepFile"][:-4]
+        if self.__dict__["geometry_name"] == "":
+            self.__dict__["geometry_name"] = self.__dict__["step_file"][:-4]
 
         if Options.prnt3PPlane and not PdEntry:
             McnpNumericFormat.P_d = "22.15e"
@@ -294,7 +294,7 @@ class CadToCsg:
             print(f"Bad entry : {kwrd}")
             return
 
-        if kwrd == "stepFile":
+        if kwrd == "step_file":
             if isinstance(value, (list, tuple)):
                 for v in value:
                     if not isinstance(v, str):
@@ -304,7 +304,7 @@ class CadToCsg:
                 print(f"{kwrd} should be string or tuple of strings")
                 return
 
-        elif kwrd == "UCARD":
+        elif kwrd == "u_card":
             if value == "None":
                 value = None
             elif value.isdigit():
@@ -312,31 +312,31 @@ class CadToCsg:
             else:
                 print(f"{kwrd} value should be None or integer")
                 return
-        elif kwrd == "outFormat":
+        elif kwrd == "out_format":
             if len(value) == 0:
                 return
-        elif kwrd in ("geometryName", "matFile", "exportSolids"):
+        elif kwrd in ("geometry_name", "mat_file", "export_solids"):
             if not isinstance(value, str):
                 print(f"{kwrd} value should be str instance")
                 return
-        elif kwrd in ("cellRange", "voidMat", "voidExclude"):
+        elif kwrd in ("cell_range", "void_mat", "void_exclude"):
             if not isinstance(value, (list, tuple)):
                 print(f"{kwrd} value should be list or tuple")
                 return
-        elif kwrd in ("minVoidSize", "maxSurf", "maxBracket", "startCell", "startSurf"):
+        elif kwrd in ("min_void_size", "max_surf", "max_bracket", "start_cell", "start_surf"):
             if not isinstance(value, int):
                 print(f"{kwrd} value should be integer")
                 return
         elif kwrd in (
-            "voidGen",
+            "void_gen",
             "debug",
-            "compSolids",
+            "comp_solids",
             "simplifyCTable",
-            "volSDEF",
-            "volCARD",
-            "dummyMat",
-            "cellSummaryFile",
-            "cellCommentFile",
+            "vol_sdef",
+            "vol_card",
+            "dummy_mat",
+            "cell_summary_file",
+            "cell_comment_file",
             "sort_enclosure",
         ):
             if not isinstance(value, bool):
@@ -344,11 +344,11 @@ class CadToCsg:
                 return
 
         self.__dict__[kwrd] = value
-        if kwrd == "stepFile" and self.__dict__["geometryName"] == "":
+        if kwrd == "step_file" and self.__dict__["geometry_name"] == "":
             if isinstance(value, (tuple, list)):
-                self.__dict__["geometryName"] == "joined_step_files"
+                self.__dict__["geometry_name"] == "joined_step_files"
             else:
-                self.__dict__["geometryName"] == value[:-4]
+                self.__dict__["geometry_name"] == value[:-4]
 
     def start(self):
 
@@ -363,33 +363,33 @@ class CadToCsg:
         code_setting = self.__dict__
         if code_setting is None:
             raise ValueError("Cannot run the code. Input are missing")
-        if self.stepFile == "":
+        if self.step_file == "":
             raise ValueError("Cannot run the code. Step file name is missing")
 
-        if isinstance(self.stepFile, (tuple, list)):
-            for stp in self.stepFile:
+        if isinstance(self.step_file, (tuple, list)):
+            for stp in self.step_file:
                 if not path.isfile(stp):
                     raise FileNotFoundError(f"Step file {stp} not found.\nStop.")
         else:
-            if not path.isfile(self.stepFile):
-                raise FileNotFoundError(f"Step file {self.stepFile} not found.\nStop.")
+            if not path.isfile(self.step_file):
+                raise FileNotFoundError(f"Step file {self.step_file} not found.\nStop.")
 
         startTime = datetime.now()
 
-        if isinstance(self.stepFile, (list, tuple)):
+        if isinstance(self.step_file, (list, tuple)):
             MetaChunk = []
             EnclosureChunk = []
-            for stp in self.stepFile:
+            for stp in self.step_file:
                 print(f"read step file : {stp}")
-                Meta, Enclosure = Load.load_cad(stp, self.matFile)
+                Meta, Enclosure = Load.load_cad(stp, self.mat_file)
                 MetaChunk.append(Meta)
                 EnclosureChunk.append(Enclosure)
             MetaList = join_meta_lists(MetaChunk)
             EnclosureList = join_meta_lists(EnclosureChunk)
         else:
-            print(f"read step file : {self.stepFile}")
+            print(f"read step file : {self.step_file}")
             MetaList, EnclosureList = Load.load_cad(
-                self.stepFile, self.matFile, self.voidMat, self.compSolids
+                self.step_file, self.mat_file, self.void_mat, self.comp_solids
             )
 
         print("End of loading phase")
@@ -398,20 +398,20 @@ class CadToCsg:
         tempTime = datetime.now()
 
         # Select a specific solid range from original STEP solids
-        if self.cellRange:
-            MetaList = MetaList[self.cellRange[0] : self.cellRange[1]]
+        if self.cell_range:
+            MetaList = MetaList[self.cell_range[0] : self.cell_range[1]]
 
         # export in STEP format solids read from input file
         # terminate excution
-        if self.exportSolids != "":
+        if self.export_solids != "":
             solids = []
             for m in MetaList:
                 if m.IsEnclosure:
                     continue
                 solids.extend(m.Solids)
-            Part.makeCompound(solids).exportStep(self.exportSolids)
+            Part.makeCompound(solids).exportStep(self.export_solids)
             msg = (
-                f"Solids exported in file {self.exportSolids}\n"
+                f"Solids exported in file {self.export_solids}\n"
                 "GEOUNED Finish. No solid translation performed."
             )
             raise ValueError(msg)
@@ -422,7 +422,7 @@ class CadToCsg:
         else:
             UniverseBox = get_universe(MetaList)
 
-        Surfaces = UF.SurfacesDict(offset=self.startSurf - 1)
+        Surfaces = UF.SurfacesDict(offset=self.start_surf - 1)
 
         warnSolids = []
         warnEnclosures = []
@@ -436,7 +436,7 @@ class CadToCsg:
             )
 
             # decompose Enclosure solids
-            if self.voidGen and EnclosureList:
+            if self.void_gen and EnclosureList:
                 warningEnclosureList = decompose_solids(
                     EnclosureList, Surfaces, UniverseBox, code_setting, False
                 )
@@ -464,7 +464,7 @@ class CadToCsg:
         else:
             translate(MetaList, Surfaces, UniverseBox, code_setting)
             # decompose Enclosure solids
-            if self.voidGen and EnclosureList:
+            if self.void_gen and EnclosureList:
                 warningEnclosureList = decompose_solids(
                     EnclosureList, Surfaces, UniverseBox, code_setting, False
                 )
@@ -474,7 +474,7 @@ class CadToCsg:
 
         #  building enclosure solids
 
-        if self.voidGen and EnclosureList:
+        if self.void_gen and EnclosureList:
             for j, m in enumerate(EnclosureList):
                 print("Building Enclosure Cell: ", j + 1)
                 cones = Conv.cellDef(m, Surfaces, UniverseBox)
@@ -487,13 +487,13 @@ class CadToCsg:
 
         # void generation phase
         MetaVoid = []
-        if self.voidGen:
+        if self.void_gen:
             print("Build Void")
-            print(self.voidExclude)
-            if not self.voidExclude:
+            print(self.void_exclude)
+            if not self.void_exclude:
                 MetaReduced = MetaList
             else:
-                MetaReduced = exclude_cells(MetaList, self.voidExclude)
+                MetaReduced = exclude_cells(MetaList, self.void_exclude)
 
             if MetaList:
                 init = MetaList[-1].__id__ - len(EnclosureList)
@@ -528,7 +528,7 @@ class CadToCsg:
 
         print(datetime.now() - startTime)
 
-        cellOffSet = self.startCell - 1
+        cellOffSet = self.start_cell - 1
         if EnclosureList and self.sort_enclosure:
             # sort group solid cell / void cell sequence in each for each enclosure
             # if a solid belong to several enclosure, its definition will be written

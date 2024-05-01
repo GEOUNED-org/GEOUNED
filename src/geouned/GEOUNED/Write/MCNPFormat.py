@@ -16,10 +16,10 @@ from .Functions import CardLine, mcnp_surface, change_surf_sign, write_mcnp_cell
 class McnpInput:
     def __init__(self, Meta, Surfaces, setting):
         self.Title = setting["title"]
-        self.VolSDEF = setting["volSDEF"]
-        self.VolCARD = setting["volCARD"]
-        self.U0CARD = setting["UCARD"]
-        self.dummyMat = setting["dummyMat"]
+        self.VolSDEF = setting["vol_sdef"]
+        self.VolCARD = setting["vol_card"]
+        self.U0CARD = setting["u_card"]
+        self.dummy_mat = setting["dummy_mat"]
         self.Cells = Meta
         self.Options = {
             "Volume": self.VolCARD,
@@ -28,7 +28,7 @@ class McnpInput:
         }
         self.part = "P"
 
-        self.StepFile = setting["stepFile"]
+        self.StepFile = setting["step_file"]
         if isinstance(self.StepFile, (tuple, list)):
             self.StepFile = "; ".join(self.StepFile)
 
@@ -176,7 +176,7 @@ C **************************************************************
             return
 
         MODE = f"MODE {self.part}\nVOID \nNPS 1e6\n"
-        if self.dummyMat:
+        if self.dummy_mat:
             mat = list(self.Materials)
             mat.sort()
             MATCARD = ""

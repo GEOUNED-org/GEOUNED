@@ -6,8 +6,8 @@
 # Some are modified for PHITS
 # 1. Chosen the graveyard surface as the boundary of the outer void region (-1)
 # 2. Unified the auto genarated void regions when envelope*_*_ and/or enclosure*_*_ are not setted
-# 3. Applied MATERIAL DEFINITION block when dummyMat = True
-# 4. Applied VOLUME DEFINITION block when volCARD = True
+# 3. Applied MATERIAL DEFINITION block when dummy_mat = True
+# 4. Applied VOLUME DEFINITION block when vol_card = True
 # 5. Eliminated the only MCNP related parts
 # 6. Added some comments to remind
 
@@ -31,17 +31,17 @@ from ..Write.Functions import (
 class PhitsInput:
     def __init__(self, Meta, Surfaces, setting):
         self.Title = setting["title"]
-        self.VolSDEF = setting["volSDEF"]
-        self.VolCARD = setting["volCARD"]
-        self.U0CARD = setting["UCARD"]
-        self.DummyMat = setting["dummyMat"]
-        self.Matfile = setting["matFile"]
-        self.voidMat = setting["voidMat"]
-        self.startCell = setting["startCell"]
+        self.VolSDEF = setting["vol_sdef"]
+        self.VolCARD = setting["vol_card"]
+        self.U0CARD = setting["u_card"]
+        self.DummyMat = setting["dummy_mat"]
+        self.Matfile = setting["mat_file"]
+        self.void_mat = setting["void_mat"]
+        self.start_cell = setting["start_cell"]
         self.Cells = Meta
         self.Options = {"Volume": self.VolCARD, "Universe": self.U0CARD}
 
-        self.StepFile = setting["stepFile"]
+        self.StepFile = setting["step_file"]
         if isinstance(self.StepFile, (tuple, list)):
             self.StepFile = "; ".join(self.StepFile)
 
@@ -210,15 +210,15 @@ $ **************************************************************
 
             elif cell.MatInfo == "Graveyard_in":
                 cell.MatInfo = "Inner void"
-                if self.voidMat != []:
-                    self.Materials.add(self.voidMat[0])
-                    if abs(self.voidMat[1]) < 1e-2:
+                if self.void_mat != []:
+                    self.Materials.add(self.void_mat[0])
+                    if abs(self.void_mat[1]) < 1e-2:
                         cellHeader = "{:<5d} {:<5d} {:11.4e} ".format(
-                            index, self.voidMat[0], self.voidMat[1]
+                            index, self.void_mat[0], self.void_mat[1]
                         )
                     else:
                         cellHeader = "{:<5d} {:<5d} {:11.7f} ".format(
-                            index, self.voidMat[0], self.voidMat[1]
+                            index, self.void_mat[0], self.void_mat[1]
                         )
                 else:
                     cellHeader = f"{index:<5d} {0:<5d}  "
@@ -279,13 +279,13 @@ $ **************************************************************
                 cell.Definition.elements = newInnerVoidCell
 
                 inclSolidCells = ""
-                startVoidIndex = self.__solidCells__ + self.startCell
-                eliminated_endVoidIndex = self.__cells__ + self.startCell - 3
+                startVoidIndex = self.__solidCells__ + self.start_cell
+                eliminated_endVoidIndex = self.__cells__ + self.start_cell - 3
 
-                if self.startCell == startVoidIndex - 1:
-                    inclSolidCells = f"{'':1s}#{self.startCell}"
+                if self.start_cell == startVoidIndex - 1:
+                    inclSolidCells = f"{'':1s}#{self.start_cell}"
                 else:
-                    for i in range(self.startCell, startVoidIndex):
+                    for i in range(self.start_cell, startVoidIndex):
                         inclSolidCells += f"{'':1s}#{i}"
 
                 if startVoidIndex == eliminated_endVoidIndex:
@@ -296,15 +296,15 @@ $ **************************************************************
                     cell.Comments = some_mervoid_str.format(
                         startVoidIndex, eliminated_endVoidIndex
                     )
-                if self.voidMat != []:
-                    self.Materials.add(self.voidMat[0])
-                    if abs(self.voidMat[1]) < 1e-2:
+                if self.void_mat != []:
+                    self.Materials.add(self.void_mat[0])
+                    if abs(self.void_mat[1]) < 1e-2:
                         cellHeader = "{:<5d} {:<5d} {:11.4e} ".format(
-                            index, self.voidMat[0], self.voidMat[1]
+                            index, self.void_mat[0], self.void_mat[1]
                         )
                     else:
                         cellHeader = "{:<5d} {:<5d} {:11.7f} ".format(
-                            index, self.voidMat[0], self.voidMat[1]
+                            index, self.void_mat[0], self.void_mat[1]
                         )
                 else:
                     cellHeader = f"{index:<5d} {0:<5d}  "
@@ -330,7 +330,7 @@ $ **************************************************************
             """
         # To check auto-generated voids, apply this commented out section instead
         # and comment out above from "if cell.Void:..." to "... else: return"
-        # In addition, if you set volCARD = True and want for all void regions to come apperes in [VOLUME],
+        # In addition, if you set vol_card = True and want for all void regions to come apperes in [VOLUME],
         # comment out some part in the def __write_phits_volume_block__() section also.       
         if cell.Material == 0:
             print(cell.IsEnclosure)
@@ -385,12 +385,12 @@ $ **************************************************************
                 if (cell.Material in mat) and (cell.Material not in MATID):
                     MATID.append(cell.Material)
                     if self.Matfile == "" and cell.EnclosureID != 0:
-                        mismat_comment = "$ Change dummyMat M{}, {} c{} g/cm3 is assigned\n M{:<6d} H 2 O 1\n"
+                        mismat_comment = "$ Change dummy_mat M{}, {} c{} g/cm3 is assigned\n M{:<6d} H 2 O 1\n"
                         MATCARD += mismat_comment.format(
                             cell.Material, cell.MatInfo, cell.Material, cell.Material
                         )
                     else:
-                        mat_comment = "$ Change dummyMat M{} to {}, Density = {}g/cm3\n M{:<6d} H 2 O 1\n"
+                        mat_comment = "$ Change dummy_mat M{} to {}, Density = {}g/cm3\n M{:<6d} H 2 O 1\n"
                         MATCARD += mat_comment.format(
                             cell.Material,
                             cell.MatInfo,
@@ -405,8 +405,8 @@ $ **************************************************************
 
         vol = f"{'':5s}reg{'':5s}vol\n"
 
-        startVoidIndex = self.__solidCells__ + self.startCell
-        eliminated_endVoidIndex = self.__cells__ + self.startCell - 3
+        startVoidIndex = self.__solidCells__ + self.start_cell
+        eliminated_endVoidIndex = self.__cells__ + self.start_cell - 3
 
         enclenvChk = []
         enclenvChk = self.__stepfile_label_chk__(self.StepFile)

@@ -32,9 +32,9 @@ def void_generation(MetaList, EnclosureList, Surfaces, UniverseBox, setting, ini
     )
 
     EnclosureBox = GeounedSolid(None, Box)
-    if setting["voidMat"]:
-        voidMat = setting["voidMat"]
-        EnclosureBox.set_material(voidMat[0], voidMat[1], voidMat[2])
+    if setting["void_mat"]:
+        void_mat = setting["void_mat"]
+        EnclosureBox.set_material(void_mat[0], void_mat[1], void_mat[2])
 
     # get voids in 0 Level Enclosure (original Universe)
     # if exist Level 1 enclosures are considered as material cells
@@ -67,9 +67,9 @@ def void_generation(MetaList, EnclosureList, Surfaces, UniverseBox, setting, ini
 
 def get_void_def(MetaList, Surfaces, Enclosure, setting, Lev0=False):
 
-    maxsurf = setting["maxSurf"]
-    maxbracket = setting["maxBracket"]
-    minSize = setting["minVoidSize"]
+    maxsurf = setting["max_surf"]
+    maxbracket = setting["max_bracket"]
+    minSize = setting["min_void_size"]
 
     if "full" in setting["simplify"].lower():
         simplifyVoid = "full"

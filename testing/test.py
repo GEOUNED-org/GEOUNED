@@ -28,18 +28,18 @@ def setInput(inName, inpDir, outDir):
 
     template = """[Files]
 title    = Input Test
-stepFile = {}
-geometryName = {}
+step_file = {}
+geometry_name = {}
 
 [Parameters]
-compSolids = False
-volCARD    = False
-volSDEF    = True
-voidGen    = True
-dummyMat    = True
-minVoidSize =  100
-cellSummaryFile = False
-cellCommentFile = False
+comp_solids = False
+vol_card    = False
+vol_sdef    = True
+void_gen    = True
+dummy_mat    = True
+min_void_size =  100
+cell_summary_file = False
+cell_comment_file = False
 debug       = False
 simplify   = full
 

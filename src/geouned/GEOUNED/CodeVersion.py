@@ -1,6 +1,6 @@
 """ Modification from 0.9.5 
-  - volInput card name substituted by volSDEF card name
-  - new card volCARD (values : True/False) used to insert the CAD cell volume into the cell definition
+  - volInput card name substituted by vol_sdef card name
+  - new card vol_card (values : True/False) used to insert the CAD cell volume into the cell definition
     using the MCNP card VOL. Default value True  
   - Fixed bug. Code crashing when automatic void calculation was not enabled.
   - Fixed bug. Comment line might not be in the correct order following de CAD tree labels
@@ -29,7 +29,7 @@ Modification in 0.9.7 Release Date 06/12/2022
   - fix bug with two cylinders/cones intersection
   - Introduce splitting planes to cut rounded edges(edge made with cylinder)
   - fixed bug with torus (I hope so!)
-  - new card "dummyMat" to write dummy material card (associated to material labels present in cell definition) in input file.
+  - new card "dummy_mat" to write dummy material card (associated to material labels present in cell definition) in input file.
 
  new in version 0.9.8.2
   - Javi modification for memory bug for geomtry with large plane numbers
@@ -38,9 +38,9 @@ Modification in 0.9.7 Release Date 06/12/2022
 
  new in version 1.0
   - allow to convert geometry to openMC XML format and script input file
-  - change the entry "mcnpfile" by "geometryName" in FILES section. Now geometryName is the generic name of output geometry file.
+  - change the entry "mcnpfile" by "geometry_name" in FILES section. Now geometry_name is the generic name of output geometry file.
     mncp input file will have ".mcnp" extension and openMC XML the ".xml" extension.
-  - new entry "outFormat" is added in FILES section. "outFormat" is used to select the output geometry format (mcnp and/or openMC_xml). 
+  - new entry "out_format" is added in FILES section. "out_format" is used to select the output geometry format (mcnp and/or openMC_xml). 
     Default value is only mcnp
   - new entry splitTolerance. Change the Tolerance value of the FreeCAD function split. Default Value  0.
   - new entry Verbose. Print on screen warning. Default False.
