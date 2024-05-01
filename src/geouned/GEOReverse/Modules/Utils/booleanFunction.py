@@ -13,7 +13,7 @@ class BoolSequence:
     def __init__(self, definition=None, operator=None):
         if definition:
             self.elements = []
-            self.setDef(definition)
+            self.set_def(definition)
         else:
             self.elements = []
             self.operator = operator
@@ -73,9 +73,9 @@ class BoolSequence:
                     cp.elements.append(e.copy())
         return cp
 
-    def getComplementary(self):
+    def get_complementary(self):
 
-        c = BoolSequence(operator=self.compOperator())
+        c = BoolSequence(operator=self.comp_operator())
         c.level = self.level
 
         if self.level == 0:
@@ -83,19 +83,19 @@ class BoolSequence:
                 c.elements.append(-e)
             return c
         else:
-            self.groupSingle()
+            self.group_single()
             for e in self.elements:
-                c.elements.append(e.getComplementary())
+                c.elements.append(e.get_complementary())
             return c
 
-    def compOperator(self):
+    def comp_operator(self):
         if self.operator == "AND":
             return "OR"
         else:
             return "AND"
 
     def simplify(self, CT, loop=0):
-        surfNames = self.getSurfacesNumbers()
+        surfNames = self.get_surfaces_numbers()
         if not surfNames:
             return
         #   print(CT)
@@ -107,8 +107,8 @@ class BoolSequence:
             if valname in newNames:
                 chg = self.factorize(valname, CT)
                 simplified = simplified or chg
-                newNames = self.getSurfacesNumbers()
-        self.joinOperators()
+                newNames = self.get_surfaces_numbers()
+        self.join_operators()
 
         if self.level == 0 or (self.elements) is bool:
             return
@@ -136,7 +136,7 @@ class BoolSequence:
                 newSeq.append(ANDSeq)
             if ORSeq.elements:
                 newSeq.append(ORSeq)
-            newSeq.joinOperators()
+            newSeq.join_operators()
             self.assign(newSeq)
         else:
             for e in reversed(self.elements):
@@ -169,7 +169,7 @@ class BoolSequence:
                 return self.elements
 
             signedSurf = set(self.elements)
-            surfname = self.getSurfacesNumbers()
+            surfname = self.get_surfaces_numbers()
             if len(signedSurf) == len(surfname):
                 return None  # means same surface has not positive and negative value
             elif self.operator == "AND":
@@ -180,7 +180,7 @@ class BoolSequence:
             if type(self.elements) is bool:
                 return self.elements
 
-            self.groupSingle()
+            self.group_single()
             noneVal = False
             for e in self.elements:
                 res = e.check()
@@ -233,7 +233,7 @@ class BoolSequence:
                 e.substitute(var, val)
 
         self.clean()
-        self.levelUpdate()
+        self.level_update()
 
     def removeSurf(self, name):
         if type(self.elements) is bool:
@@ -253,7 +253,7 @@ class BoolSequence:
                 e.removeSurf(name)
 
         self.clean()
-        self.levelUpdate()
+        self.level_update()
 
     # remove sequence whom elements are boolean values instead of list
     def clean(self):
@@ -285,12 +285,12 @@ class BoolSequence:
             return None
 
     # join redundant operators in sequence
-    def joinOperators(self):
+    def join_operators(self):
         if self.level == 0:
             return
         if type(self.elements) is bool:
             return
-        self.groupSingle()
+        self.group_single()
         ANDop = []
         ORop = []
 
@@ -305,7 +305,7 @@ class BoolSequence:
             for s in ANDop:
                 newSeq.elements.extend(s.elements)
                 self.elements.remove(s)
-            newSeq.levelUpdate()
+            newSeq.level_update()
             self.append(newSeq)
 
         elif len(ORop) > 1 and self.operator == "OR":
@@ -313,19 +313,19 @@ class BoolSequence:
             for s in ORop:
                 newSeq.elements.extend(s.elements)
                 self.elements.remove(s)
-            newSeq.levelUpdate()
+            newSeq.level_update()
             self.append(newSeq)
 
         if self.level > 0 and len(self.elements) == 1:
             self.operator = self.elements[0].operator
             self.elements = self.elements[0].elements
             self.level -= 1
-            self.joinOperators()
+            self.join_operators()
 
         if self.level == 0:
             return
         for e in self.elements:
-            e.joinOperators()
+            e.join_operators()
 
     def factorize(self, valname, CT=None):
 
@@ -333,7 +333,7 @@ class BoolSequence:
             trueSet = {abs(valname): True}
             falseSet = {abs(valname): False}
         else:
-            trueSet, falseSet = CT.getConstraintSet(valname)
+            trueSet, falseSet = CT.get_constraint_set(valname)
 
         if trueSet is None:
             self.substitute(valname, False)
@@ -385,7 +385,7 @@ class BoolSequence:
 
         if type(self.elements) is bool:
             return self.elements
-        self.groupSingle()
+        self.group_single()
         newSeq = self.copy()
         for name, value in valueSet.items():
             newSeq.substitute(name, value)
@@ -393,13 +393,13 @@ class BoolSequence:
         if type(newSeq.elements) is bool:
             return newSeq.elements
         else:
-            surfNames = newSeq.getSurfacesNumbers()
+            surfNames = newSeq.get_surfaces_numbers()
             valname = surfNames[0]
             if CT is None:
                 trueSet = {abs(valname): True}
                 falseSet = {abs(valname): False}
             else:
-                trueSet, falseSet = CT.getConstraintSet(valname)
+                trueSet, falseSet = CT.get_constraint_set(valname)
 
             if trueSet is None:
                 trueVal = True
@@ -423,7 +423,7 @@ class BoolSequence:
     def evaluate(self, valueSet, CT=None):
         if type(self.elements) is bool:
             return self.elements
-        self.groupSingle()
+        self.group_single()
         op = self.operator
         noneVal = False
         for e in self.elements:
@@ -456,20 +456,20 @@ class BoolSequence:
         else:
             return False
 
-    def setDef(self, expression):
-        terms, operator = outterTerms(expression)
+    def set_def(self, expression):
+        terms, operator = outer_terms(expression)
         self.operator = operator
         self.level = 0
         for t in terms:
-            if isInteger(t):
+            if is_integer(t):
                 self.elements.append(int(t.strip("(").strip(")")))
             else:
                 x = BoolSequence(t)
                 self.level = max(x.level + 1, self.level)
                 self.elements.append(x)
-        self.groupSingle()
+        self.group_single()
 
-    def groupSingle(self):
+    def group_single(self):
         if self.level == 0:
             return
         if type(self.elements) is bool:
@@ -511,11 +511,11 @@ class BoolSequence:
         for i in reversed(changed):
             del self.elements[i]
         self.append(*new)
-        self.levelUpdate()
+        self.level_update()
 
         return
 
-    def getSurfacesNumbers(self):
+    def get_surfaces_numbers(self):
         if type(self.elements) is bool:
             return tuple()
         surf = set()
@@ -523,10 +523,10 @@ class BoolSequence:
             if type(e) is int:
                 surf.add(abs(e))
             else:
-                surf.update(e.getSurfacesNumbers())
+                surf.update(e.get_surfaces_numbers())
         return tuple(surf)
 
-    def levelUpdate(self):
+    def level_update(self):
         if type(self.elements) is bool:
             self.level = 0
             return
@@ -541,7 +541,7 @@ class BoolSequence:
         self.level = newlev
 
 
-def outterTerms(expression, value="number"):
+def outer_terms(expression, value="number"):
     if value == "number":
         # reValue = number
         reValue = mix
@@ -644,7 +644,7 @@ def redundant(m, geom):
         return False
 
 
-def isInteger(x):
+def is_integer(x):
     try:
         int(x.strip("(").strip(")"))
         return True

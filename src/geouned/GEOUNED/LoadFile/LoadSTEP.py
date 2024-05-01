@@ -13,7 +13,7 @@ from . import LoadFunctions as LF
 
 
 # Paco mod
-def extractMaterials(filename):
+def extract_materials(filename):
     rho_real = []
     m_dict = {}  # _ Material dictionary
     with open(filename, "rt") as file:
@@ -28,18 +28,18 @@ def extractMaterials(filename):
     return m_dict
 
 
-def LoadCAD(filename, mat_filename, default_mat=[], comp_solids=True):
+def load_cad(filename, mat_filename, default_mat=[], comp_solids=True):
 
     # Set document solid tree options when opening CAD differing from version 0.18
     if int(FreeCAD.Version()[1]) > 18:
-        LF.set_docOptions()
+        LF.set_doc_options()
 
     cad_simplificado_doc = FreeCAD.newDocument("CAD_simplificado")
     Import.insert(filename, "CAD_simplificado")
 
     if mat_filename != "":
         if os.path.exists(mat_filename):
-            m_dict = extractMaterials(mat_filename)
+            m_dict = extract_materials(mat_filename)
         else:
             print(f"Material definition file {mat_filename} does not exist.")
             m_dict = {}
@@ -73,11 +73,11 @@ def LoadCAD(filename, mat_filename, default_mat=[], comp_solids=True):
                 tempre_dil = None
 
                 # MIO: lightly modification of label if required
-                label = LF.GetLabel(elem.Label)
+                label = LF.get_label(elem.Label)
                 comment = comment + "/" + label
                 if elem.InList:
                     # MIO: lightly modification of label if required
-                    label_in_list = LF.GetLabel(elem.InList[0].Label)
+                    label_in_list = LF.get_label(elem.InList[0].Label)
                     encl_label = re.search(
                         "enclosure(?P<encl>[0-9]+)_(?P<parent>[0-9]+)_", label_in_list
                     )
@@ -107,7 +107,7 @@ def LoadCAD(filename, mat_filename, default_mat=[], comp_solids=True):
                     xelem = [elem]
                     while xelem and not tempre_mat:
                         # MIO: Modification of label if required
-                        temp_label = LF.GetLabel(xelem[0].Label)
+                        temp_label = LF.get_label(xelem[0].Label)
                         tempre_mat = re.search("_m(?P<mat>\d+)_", "_" + temp_label)
                         xelem = xelem[0].InList
 
@@ -115,7 +115,7 @@ def LoadCAD(filename, mat_filename, default_mat=[], comp_solids=True):
                     xelem = [elem]
                     while xelem and not tempre_dil:
                         # MIO: Modification of label if required
-                        temp_label = LF.GetLabel(xelem[0].Label)
+                        temp_label = LF.get_label(xelem[0].Label)
                         tempre_dil = re.search("_d(?P<dil>\d*\.\d*)_", temp_label)
                         xelem = xelem[0].InList
                     # Paco end
@@ -129,26 +129,26 @@ def LoadCAD(filename, mat_filename, default_mat=[], comp_solids=True):
 
                     init = i_solid
                     end = i_solid + len(elem.Shape.Solids)
-                    LF.fuseMetaObj(meta_list, init, end)
+                    LF.fuse_meta_obj(meta_list, init, end)
                     n_solids = 1
                 else:
                     n_solids = len(elem.Shape.Solids)
 
                 for i in range(n_solids):
-                    meta_list[i_solid].setComments(f"{comment}{i + 1}")
-                    meta_list[i_solid].setCADSolid()
+                    meta_list[i_solid].set_comments(f"{comment}{i + 1}")
+                    meta_list[i_solid].set_cad_solid()
 
                     if tempre_mat:
                         mat_label = int(tempre_mat.group("mat"))
                         if mat_label in m_dict.keys():
-                            meta_list[i_solid].setMaterial(
+                            meta_list[i_solid].set_material(
                                 mat_label, m_dict[mat_label][0], m_dict[mat_label][1]
                             )
                         else:
                             if mat_label == 0:
-                                meta_list[i_solid].setMaterial(mat_label, 0, 0)
+                                meta_list[i_solid].set_material(mat_label, 0, 0)
                             else:
-                                meta_list[i_solid].setMaterial(
+                                meta_list[i_solid].set_material(
                                     mat_label,
                                     -100,
                                     "Missing material density information",
@@ -157,9 +157,9 @@ def LoadCAD(filename, mat_filename, default_mat=[], comp_solids=True):
                     else:
                         # print('Warning : No material label associated to solid {}.\nDefault material used instead.'.format(comment))
                         if default_mat:
-                            meta_list[i_solid].setMaterial(*default_mat)
+                            meta_list[i_solid].set_material(*default_mat)
                     if tempre_dil:
-                        meta_list[i_solid].setDilution(float(tempre_dil.group("dil")))
+                        meta_list[i_solid].set_dilution(float(tempre_dil.group("dil")))
 
                     if encl_label is not None:
                         meta_list[i_solid].EnclosureID = int(encl_label.group("encl"))
@@ -185,10 +185,10 @@ def LoadCAD(filename, mat_filename, default_mat=[], comp_solids=True):
         )
         print("List of not present materials:", missing_mat)
 
-    enclosure_list = LF.setEnclosureSolidList(meta_list)
+    enclosure_list = LF.set_enclosure_solid_list(meta_list)
     if enclosure_list:
-        LF.checkEnclosure(cad_simplificado_doc, enclosure_list)
-        # LF.RemoveEnclosure(meta_list)
+        LF.check_enclosure(cad_simplificado_doc, enclosure_list)
+        # LF.remove_enclosure(meta_list)
         return meta_list, enclosure_list
     else:
         return meta_list, []

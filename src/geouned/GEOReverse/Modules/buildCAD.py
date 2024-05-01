@@ -33,7 +33,7 @@ def buildCAD(UnivCell, data, config):
 
     #    print(UniverseCells[0][120].definition.str)
     #    print(UniverseCells[0][120].surfaces)
-    #    CT=buildCTableFromSolids(UnivCell.shape,UniverseCells[0][70],option='full')
+    #    CT=build_c_table_from_solids(UnivCell.shape,UniverseCells[0][70],option='full')
     #    print(CT)
     #    simply = BoolSequence(UniverseCells[0][70].definition.str)
     #    print('antesSimply',simply)
@@ -42,7 +42,7 @@ def buildCAD(UnivCell, data, config):
     # exit()
 
     # dictionnary of the cells filled with a given Universe U
-    # universeContainers = GetUniverseContainers(levels,UniverseCells)
+    # universeContainers = get_universe_containers(levels,UniverseCells)
 
     UnivCell.level = None
     levelMax = config["levelMax"]
@@ -86,7 +86,7 @@ def AssignSurfaceToCell(UniverseCells, modelSurfaces):
             c.setSurfaces(modelSurfaces)
 
 
-def GetUniverseContainers(levels, Universes):
+def get_universe_containers(levels, Universes):
     Ucontainer = {}
     for lev in range(1, len(levels)):
         for U, name in levels[lev]:

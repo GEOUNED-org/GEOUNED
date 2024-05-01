@@ -7,7 +7,7 @@ import math
 import FreeCAD
 
 from ..Utils.booleanFunction import BoolSequence
-from ..Utils.Functions import GeounedSurface, splitBOP
+from ..Utils.Functions import GeounedSurface, split_bop
 from ..Utils.Options.Classes import Options as opt
 
 BoolVals = (None, True, False)
@@ -28,14 +28,14 @@ class CTelement:
                 self.type = val.count(0)
             self.val = val
 
-    def getTranspose(self):
+    def get_transpose(self):
         if self.diagonal:
             return self.val
         return CTelement(
             (self.val[0], self.val[3], self.val[2], self.val[1]), self.S2, self.S1
         )
 
-    def getDependence(self):
+    def get_dependence(self):
         if self.diagonal:
             if self.val == 0:
                 return True, False
@@ -119,47 +119,47 @@ class ConstraintTable(dict):
             outstr += linenot + "\n"
         return outstr
 
-    def addElement(self, k1, k2, val):
+    def add_element(self, k1, k2, val):
 
         if k1 in self.keys():
             self[k1][k2] = val
         else:
             self[k1] = {k2: val}
 
-    def fillMissingElements(self):
+    def fill_missing_elements(self):
         keys = list(self.keys())
         missing = []
         for i, k1 in enumerate(keys):
             for k2 in keys[i + 1 :]:
                 if k2 in self[k1].keys():
                     elmt = self[k1][k2]
-                    self[k2][k1] = elmt.getTranspose()
+                    self[k2][k1] = elmt.get_transpose()
                 else:
                     missing.append((k1, k2))
 
         for k1, k2 in missing:
             diag1 = self[k1][k1]
             diag2 = self[k2][k2]
-            new = combineDiagElements(diag1, diag2)
+            new = combine_diag_elements(diag1, diag2)
             new.S1 = k1
             new.S2 = k2
             self[k1][k2] = new
-            self[k2][k1] = new.getTranspose()
+            self[k2][k1] = new.get_transpose()
 
-    def getOutSurfaces(self):
+    def get_out_surfaces(self):
         out = []
         for k in self.keys():
             if self[k][k].val != 0:
                 out.append(k)
         return out
 
-    def getConstraintSet(self, valname):
+    def get_constraint_set(self, valname):
         trueSet = {}
         falseSet = {}
         TNull = False
         FNull = False
         for k in self.keys():
-            TValue, FValue = self[valname][k].getDependence()
+            TValue, FValue = self[valname][k].get_dependence()
             if TValue == "Null":
                 TNull = True
                 TValue = None
@@ -177,8 +177,8 @@ class ConstraintTable(dict):
             falseSet = None
         return trueSet, falseSet
 
-    def solidInBox(self, Seq):  #  Sequence of the cell
-        surfs = tuple(Seq.getSurfacesNumbers())
+    def solid_in_box(self, Seq):  #  Sequence of the cell
+        surfs = tuple(Seq.get_surfaces_numbers())
         if self.diagonal:
             seqValues = dict()
             for s in surfs:
@@ -192,7 +192,7 @@ class ConstraintTable(dict):
             return res if type(res) is bool else None
 
         else:
-            trueSet, falseSet = self.getConstraintSet(surfs[0])
+            trueSet, falseSet = self.get_constraint_set(surfs[0])
             if trueSet is not None:
                 trueVal = Seq.evaluate(trueSet)
                 trueVal = trueVal if type(trueVal) is bool else None
@@ -217,7 +217,7 @@ class ConstraintTable(dict):
                 return False
 
 
-def combineDiagElements(d1, d2):
+def combine_diag_elements(d1, d2):
 
     if d1.val == 0 and d2.val == 0:
         return CTelement((1, 1, 1, 1))
@@ -239,7 +239,7 @@ def combineDiagElements(d1, d2):
         return CTelement((0, 0, 1, 0))
 
 
-def buildCTableFromSolids(Box, SurfInfo, option="diag"):
+def build_c_table_from_solids(Box, SurfInfo, option="diag"):
 
     if type(SurfInfo) is dict:
         surfaces = SurfInfo
@@ -254,7 +254,7 @@ def buildCTableFromSolids(Box, SurfInfo, option="diag"):
         for s in surfaceList:
             ss = surfaces[s]
             ss.__boundBox__ = Box.BoundBox
-            ss.buildSurface()
+            ss.build_surface()
     else:
         for s in surfaceList:
             surfaces[s].buildShape(Box.BoundBox)
@@ -266,10 +266,10 @@ def buildCTableFromSolids(Box, SurfInfo, option="diag"):
         CTable.diagonal = False
 
     for i, s1 in enumerate(surfaceList):
-        res, splitRegions = splitSolid_fast(Box, surfaces[s1], True)
-        # res,splitRegions = splitSolid_fast(Box,Surfaces.getSurface(s1),True)
+        res, splitRegions = split_solid_fast(Box, surfaces[s1], True)
+        # res,splitRegions = split_solid_fast(Box,Surfaces.get_surface(s1),True)
 
-        CTable.addElement(s1, s1, CTelement(res, s1, s1))
+        CTable.add_element(s1, s1, CTelement(res, s1, s1))
         if option == "diag":
             continue
         if splitRegions is None:
@@ -280,9 +280,9 @@ def buildCTableFromSolids(Box, SurfInfo, option="diag"):
             pos0 = None
             for solid in posS1:
 
-                pos = splitSolid_fast(solid, surfaces[s2], False)
+                pos = split_solid_fast(solid, surfaces[s2], False)
 
-                # pos = splitSolid_fast(solid,Surfaces.getSurface(s2),False)
+                # pos = split_solid_fast(solid,Surfaces.get_surface(s2),False)
                 if pos == (1, 1):
                     break  # s2 intersect S1 Region
                 if pos0 is None:
@@ -294,8 +294,8 @@ def buildCTableFromSolids(Box, SurfInfo, option="diag"):
 
             neg0 = None
             for solid in negS1:
-                # neg = splitSolid_fast(solid,Surfaces.getSurface(s2),False)
-                neg = splitSolid_fast(solid, surfaces[s2], False)
+                # neg = split_solid_fast(solid,Surfaces.get_surface(s2),False)
+                neg = split_solid_fast(solid, surfaces[s2], False)
                 if neg == (1, 1):
                     break  # s2 intersect S1 Region
                 if neg0 is None:
@@ -306,17 +306,17 @@ def buildCTableFromSolids(Box, SurfInfo, option="diag"):
                         break
 
             val = (pos[0], pos[1], neg[1], neg[0])
-            CTable.addElement(s1, s2, CTelement(val, s1, s2))
+            CTable.add_element(s1, s2, CTelement(val, s1, s2))
 
     # if some surfaces don't cross the box some elements in Constraint table are not filled
     if option != "diag":
-        CTable.fillMissingElements()
+        CTable.fill_missing_elements()
     return CTable
 
 
-def removeExtraSurfaces(CellSeq, CTable):
+def remove_extra_surfaces(CellSeq, CTable):
     # checking is make on solid cell definition to be removed from void cell
-    outSurfaces = set(CTable.getOutSurfaces())
+    outSurfaces = set(CTable.get_out_surfaces())
     newDef = BoolSequence(operator="OR")
 
     # Loop over all compound solids of the metaSolid
@@ -346,7 +346,7 @@ def removeExtraSurfaces(CellSeq, CTable):
 
         # if subcell has finite volume check it intersection with the box
         if not nullcell:
-            res = CTable.solidInBox(subCell)
+            res = CTable.solid_in_box(subCell)
             if res == None:
                 # subcell intersect the box
                 # get the surfaces of the solids out of the box
@@ -354,7 +354,7 @@ def removeExtraSurfaces(CellSeq, CTable):
 
                 # if subcell lev!= 0 remove surface operation is not valid
                 if subCell.level == 0:
-                    removeSurf = outSurfaces & subCell.getSurfacesNumbers()
+                    removeSurf = outSurfaces & subCell.get_surfaces_numbers()
                     for s in removeSurf:
                         val = True if CTable[s][s].val > 0 else False
                         subCell.substitute(s, val)
@@ -380,17 +380,17 @@ def removeExtraSurfaces(CellSeq, CTable):
     return newDef
 
 
-def splitSolid_fast(solid, surf, box):
+def split_solid_fast(solid, surf, box):
 
     if box:
         if surf.shape:
-            comsolid = splitBOP(solid, [surf.shape], opt.splitTolerance)
+            comsolid = split_bop(solid, [surf.shape], opt.splitTolerance)
         else:
-            return checkSign(solid, surf), None
+            return check_sign(solid, surf), None
 
         if len(comsolid.Solids) <= 1:
-            return checkSign(solid, surf), None
-        # sgn = checkSign(solid,surf)   # if "box" and single object => the box is not split, surface s1 out of the box.
+            return check_sign(solid, surf), None
+        # sgn = check_sign(solid,surf)   # if "box" and single object => the box is not split, surface s1 out of the box.
         # if sgn == 1 :                 # The sign is the side of surface s1 where the box is located
         #    # return ((1,0),(0,0)),None  # return the diagonal element of the Constraint Table for s1
         #    return ((1,0),(0,0)),None  # return the diagonal element of the Constraint Table for s1
@@ -401,7 +401,7 @@ def splitSolid_fast(solid, surf, box):
             posSol = []
             negSol = []
             for s in comsolid.Solids:
-                sgn = checkSign(s, surf)
+                sgn = check_sign(s, surf)
                 if sgn == 1:
                     posSol.append(s)
                 else:
@@ -419,7 +419,7 @@ def splitSolid_fast(solid, surf, box):
         else:
             dist = 1.0
         if dist > 1e-6:  # face doesn't intersect solid
-            sgn = checkSign(solid, surf)
+            sgn = check_sign(solid, surf)
             if sgn == 1:
                 return (
                     1,
@@ -460,7 +460,7 @@ def point_inside(solid):
     BBox = solid.optimalBoundingBox(False)
     box = [BBox.XMin, BBox.XMax, BBox.YMin, BBox.YMax, BBox.ZMin, BBox.ZMax]
 
-    boxes, centers = CutBox(box)
+    boxes, centers = cut_box(box)
     n = 0
 
     while True:
@@ -472,7 +472,7 @@ def point_inside(solid):
         subbox = []
         centers = []
         for b in boxes:
-            btab, ctab = CutBox(b)
+            btab, ctab = cut_box(b)
             subbox.extend(btab)
             centers.extend(ctab)
         boxes = subbox
@@ -481,10 +481,10 @@ def point_inside(solid):
         if n == cut_box:
             break
 
-    return pointFromSurface(solid)
+    return point_from_surface(solid)
 
 
-def pointFromSurface(solid):
+def point_from_surface(solid):
 
     for face in solid.Faces:
         parameters = face.ParameterRange
@@ -515,7 +515,7 @@ def pointFromSurface(solid):
 
 
 # divide a box into 8 smaller boxes
-def CutBox(Box):
+def cut_box(Box):
     xmid = (Box[1] + Box[0]) * 0.5
     ymid = (Box[3] + Box[2]) * 0.5
     zmid = (Box[5] + Box[4]) * 0.5
@@ -547,7 +547,7 @@ def CutBox(Box):
     return (b1, b2, b3, b4, b5, b6, b7, b8), (p1, p2, p3, p4, p5, p6, p7, p8)
 
 
-def checkSign(solid, surf):
+def check_sign(solid, surf):
 
     point = point_inside(solid)
 

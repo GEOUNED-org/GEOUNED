@@ -1,4 +1,4 @@
-defaultValues = {
+default_values = {
     "P_abc": "14.7e",  # Plane general a,b,c params
     "P_d": "14.7e",  # Plane general d     params
     "P_xyz": "14.7e",  # PX/PY/PZ            params

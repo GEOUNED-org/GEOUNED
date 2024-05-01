@@ -1,5 +1,5 @@
 # default options values
-defaultValues = {
+default_values = {
     "forceCylinder": False,  # Force using cylinders instead cones for auxillary surfaces of torus surface definition
     "newSplitPlane": True,  # Use new module for planes splitting in decomposition module
     "delLastNumber": False,  # Deleting the last word in the comment if it is a number
@@ -14,7 +14,7 @@ defaultValues = {
     "forceNoOverlap": False,  # force no overlaping cell definition. Adjacent cell definition are rested from current cell definition
 }
 
-typeDict = {
+type_dict = {
     "forceCylinder": bool,  # Force using cylinders instead cones for auxillary surfaces of torus surface definition
     "newSplitPlane": bool,  # Use new module for planes splitting in decomposition module
     "delLastNumber": bool,  # Deleting the last word in the comment if it is a number
