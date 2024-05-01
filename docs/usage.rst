@@ -1,4 +1,4 @@
-usage
+Usage
 =====
 
 GEOUNED can be used as a Python package or via the command line.

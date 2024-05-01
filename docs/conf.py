@@ -13,13 +13,14 @@
 import os
 import sys
 from pathlib import Path
-print(os.path.abspath('../src'))
-print(os.path.abspath('../src'))
-print(os.path.abspath('../src'))
-print(os.path.abspath('../src'))
-print(os.path.abspath('../src'))
-print(os.path.abspath('../src'))
-sys.path.insert(0, os.path.abspath('../../src'))
+
+print(os.path.abspath("../src"))
+print(os.path.abspath("../src"))
+print(os.path.abspath("../src"))
+print(os.path.abspath("../src"))
+print(os.path.abspath("../src"))
+print(os.path.abspath("../src"))
+sys.path.insert(0, os.path.abspath("../../src"))
 
 # -- Project information -----------------------------------------------------
 

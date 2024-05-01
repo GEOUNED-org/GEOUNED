@@ -157,7 +157,6 @@ class CadToCsg:
         McnpNumericFormat.set_default_attribute()
         Tolerances.set_default_attribute()
 
-
     def set_configuration(self, configFile=None):
 
         if configFile is None:
