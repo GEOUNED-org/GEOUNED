@@ -34,7 +34,6 @@ tests = [
 docs = [
   "sphinx",
   "sphinx_rtd_theme",
-  "myst_parser",
   "sphinx_autodoc_typehints",
   "sphinx_rtd_theme",
 ]
