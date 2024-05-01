@@ -22,17 +22,13 @@ class OpenmcInput:
         self.Materials = set()
 
     def write_xml(self, filename):
-        print(f"write OpenMC xml file {filename}")
-        self.inpfile = open(filename, "w", encoding="utf-8")
-        self.__write_xml_header__()
-
-        self.inpfile.write("<geometry>\n")
-        self.__write_xml_cell_block__()
-        self.inpfile.write(" \n")
-        self.__write_xml_surface_block__()
-        self.inpfile.write("</geometry>\n")
-
-        self.inpfile.close()
+        with open(file=filename, mode="w", encoding="utf-8") as self.inpfile:
+            self.__write_xml_header__()
+            self.inpfile.write("<geometry>\n")
+            self.__write_xml_cell_block__()
+            self.inpfile.write(" \n")
+            self.__write_xml_surface_block__()
+            self.inpfile.write("</geometry>\n")
         return
 
     def __write_xml_header__(self):
@@ -95,22 +91,20 @@ class OpenmcInput:
             if cell.Material != 0:
                 self.Materials.add(cell.Material)
 
-        self.inpfile = open(filename, "w", encoding="utf-8")
-        self.__write_py_header__()
+        with open(file=filename, mode="w", encoding="utf-8") as self.inpfile:
+            self.__write_py_header__()
 
-        if len(self.Materials) > 0:
-            self.inpfile.write("# Materials setup\n")
-            self.__write_py_materials__()
-        self.inpfile.write("\n")
+            if len(self.Materials) > 0:
+                self.inpfile.write("# Materials setup\n")
+                self.__write_py_materials__()
+            self.inpfile.write("\n")
 
-        self.inpfile.write("# Surface setup\n")
-        self.__write_py_surface_block__()
-        self.inpfile.write("\n")
+            self.inpfile.write("# Surface setup\n")
+            self.__write_py_surface_block__()
+            self.inpfile.write("\n")
 
-        self.inpfile.write("# Cell definition \n")
-        self.__write_py_cell_block__()
-
-        self.inpfile.close()
+            self.inpfile.write("# Cell definition \n")
+            self.__write_py_cell_block__()
         return
 
     def __write_py_header__(self):

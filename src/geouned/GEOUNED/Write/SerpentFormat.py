@@ -62,25 +62,24 @@ class SerpentInput:
 
     def write_input(self, filename):
         print(f"write Serpent file {filename}")
-        self.inpfile = open(filename, "w", encoding="utf-8")
-        self.__write_header__()
-        cellblockHeader = """\
+        with open(file=filename, mode="w", encoding="utf-8") as self.inpfile:
+            self.__write_header__()
+            cellblockHeader = """\
 % --- CELL DEFINITIONS 
 """
-        self.inpfile.write(cellblockHeader)
-        self.__write_cell_block__()
-        self.inpfile.write(" \n")
+            self.inpfile.write(cellblockHeader)
+            self.__write_cell_block__()
+            self.inpfile.write(" \n")
 
-        surfaceHeader = """\
+            surfaceHeader = """\
 % --- SURFACE DEFINITIONS 
 """
-        self.inpfile.write(surfaceHeader)
-        self.__write_surface_block__()
-        self.inpfile.write(" \n")
+            self.inpfile.write(surfaceHeader)
+            self.__write_surface_block__()
+            self.inpfile.write(" \n")
 
-        self.__write_source_block__()
+            self.__write_source_block__()
 
-        self.inpfile.close()
         return
 
     def __write_header__(self):
