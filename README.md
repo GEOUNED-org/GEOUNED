@@ -54,8 +54,8 @@ From CAD to CSG:
 from geouned import CadToCsg
 inifile='Name of config file for forward conversion'
 GEO = CadToCsg(inifile)
-GEO.SetOptions()
-GEO.Start()
+GEO.set_options()
+GEO.start()
 ``` 
 From CSG to CAD (so far only for MCNP): 
 

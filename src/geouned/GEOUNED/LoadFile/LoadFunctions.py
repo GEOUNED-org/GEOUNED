@@ -6,7 +6,7 @@ from ..Utils.Functions import GeounedSolid
 from ..Utils.Options.Classes import Options as opt
 
 
-def GetLabel(label):
+def get_label(label):
     """Deleting the last word of the string if this is a number
     Only if the option delLastNumber is True"""
     if not opt.delLastNumber:
@@ -23,7 +23,7 @@ def getCommentTree(obj):
     recursive_list = []
     c_obj = obj
     while c_obj.InList:
-        label = GetLabel(c_obj.InList[0].Label)
+        label = get_label(c_obj.InList[0].Label)
         recursive_list.append(label)
         c_obj = c_obj.InList[0]
 
@@ -51,10 +51,10 @@ def joinEnvelopes(meta_list):
     del join_list[0]
 
     for id_list in join_list:
-        fuseMetaObj(meta_list, id_list[0], id_list[-1] + 1)
+        fuse_meta_obj(meta_list, id_list[0], id_list[-1] + 1)
 
 
-def fuseMetaObj(meta_list, init, end):
+def fuse_meta_obj(meta_list, init, end):
     if end - init == 1:
         meta_list[init].__id__ = init + 1
         return
@@ -73,7 +73,8 @@ def fuseMetaObj(meta_list, init, end):
 
 
 # Paco mod
-def checkCADFileMaterial(material, mdict):
+# TODO check if this function is actually used in to code
+def check_cad_file_material(material, mdict):
     """Function to check that if a component in the CAD file has a material, it exist in the material file"""
     templist = [elem for elem in set(material) if elem not in mdict]
     if templist:
@@ -86,12 +87,12 @@ def checkCADFileMaterial(material, mdict):
 
 
 # Paco mod
-def setEnclosureSolidList(meta_list):
+def set_enclosure_solid_list(meta_list):
     """Function to define DataList list."""
     return [elem for elem in meta_list if elem.IsEnclosure]
 
 
-def RemoveEnclosure(meta_list):
+def remove_enclosure(meta_list):
     """This function removes Enclosure solid and actualises __id__ attributes to take into account the removal from meta_list list of nested enclosures originally loaded from CAD model."""
 
     # update id of solids
@@ -109,7 +110,7 @@ def RemoveEnclosure(meta_list):
             meta_list.pop(i)
 
 
-def setEnclosureLevels(enclosure_list):
+def set_enclosure_levels(enclosure_list):
     nested_list = [[0], []]
     nested_enclosure = [[]]
     parent_level = 0
@@ -153,7 +154,7 @@ def setEnclosureLevels(enclosure_list):
     return nested_enclosure_list
 
 
-def checkEnclosure(freecad_doc, enclosure_list):
+def check_enclosure(freecad_doc, enclosure_list):
 
     stop = False
     # check all enclosure labels have an associated solid
@@ -241,16 +242,16 @@ def checkEnclosure(freecad_doc, enclosure_list):
         print("Following enclosure produce loop")
         for p in encl_dict.keys():
             for s in encl_dict[p]:
-                print("{}_{}".format(s, p))
-        raise ValueError("GEOUNED.LoadFunctions.checkEnclosure failed")
+                print(f"{s}_{p}")
+        raise ValueError("GEOUNED.LoadFunctions.check_enclosure failed")
 
     # check enclosures solids are correctly nested and don't overlap each other
-    nested_levels = setEnclosureLevels(enclosure_list)
+    nested_levels = set_enclosure_levels(enclosure_list)
 
     overlap = []
     encl_tree = [[0]]
     for level in nested_levels:
-        encl_tree = updateTree(encl_tree, level)
+        encl_tree = update_tree(encl_tree, level)
         for encl in level:
             same_parent = dict()
             if encl.ParentEnclosureID in same_parent.keys():
@@ -258,13 +259,13 @@ def checkEnclosure(freecad_doc, enclosure_list):
             else:
                 same_parent[encl.ParentEnclosureID] = [encl.EnclosureID]
         for encl in same_parent.values():
-            overlap.extend(checkOverlap(encl))
+            overlap.extend(check_overlap(encl))
 
     not_embedded = []
     for chain in encl_tree:
         up = chain[0]
         for low in chain[1:]:
-            inter = up.checkIntersection(low.CADSolid)
+            inter = up.check_intersection(low.CADSolid)
             if inter != -2:
                 not_embedded.append((low.EnclosureID, up.EnclosureID))
 
@@ -281,20 +282,20 @@ def checkEnclosure(freecad_doc, enclosure_list):
             print("{}_{}").format(elemt[0], elemt[1])
 
     if stop:
-        raise ValueError("GEOUNED.LoadFunctions.checkEnclosure failed")
+        raise ValueError("GEOUNED.LoadFunctions.check_enclosure failed")
 
 
-def checkOverlap(enclosures):
+def check_overlap(enclosures):
     overlap = []
     for i, enc1 in enumerate(enclosures):
         for enc2 in enclosures[i + 1 :]:
-            inter = enc1.checkIntersection(enc2.CADSolid)
+            inter = enc1.check_intersection(enc2.CADSolid)
             if inter != 1:
                 overlap.append((enc1.EnclosureID, enc2.EnclosureID))
     return overlap
 
 
-def updateTree(Tree, level):
+def update_tree(Tree, level):
     new_tree = []
     for encl in level:
         for lst in Tree:
@@ -304,7 +305,7 @@ def updateTree(Tree, level):
     return new_tree
 
 
-def set_docOptions():
+def set_doc_options():
     # set import step document options for FreeCAD version >0.18 compatible with FreeCAD0.18 opening options
     p0 = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Import")
     p0.SetBool("UseLinkGroup", False)
@@ -316,8 +317,7 @@ def set_docOptions():
     p1.SetBool("ReadShapeCompoundMode", True)
 
 
-# functions not used in the code
-def checkIndex(docList, index, returnObject=False):
+def check_index(docList, index, returnObject=False):
     subList = docList.ElementList
     for i in index[:-1]:
         if len(subList) > i:
@@ -340,10 +340,10 @@ def checkIndex(docList, index, returnObject=False):
         return None
 
 
-def nextIndex(docList, lastIndex=None):
+def next_index(docList, lastIndex=None):
     if lastIndex is None:
         lastIndex = [0]
-        while checkIndex(docList, lastIndex) != "Feature":
+        while check_index(docList, lastIndex) != "Feature":
             lastIndex.append(0)
         else:
             return lastIndex
@@ -353,7 +353,7 @@ def nextIndex(docList, lastIndex=None):
     while True:
         if move:
             tmp[-1] = tmp[-1] + 1
-        obj = checkIndex(docList, tmp)
+        obj = check_index(docList, tmp)
         if obj == "Feature":
             return tmp
         elif obj == "Link":
@@ -366,10 +366,11 @@ def nextIndex(docList, lastIndex=None):
                 return None
 
 
-def solidGenerator(doclist):
+# TODO check this function is used in the code
+def solid_generator(doclist):
     last = None
     while True:
-        last = nextIndex(doclist, last)
+        last = next_index(doclist, last)
         if last is None:
             break
-        yield checkIndex(doclist, last, True)
+        yield check_index(doclist, last, True)

@@ -5,9 +5,9 @@ import Part
 
 from ..Conversion import CellDefinition as Conv
 from ..Decompose import Decom_one as Decom
-from ..Utils.BasicFunctions_part1 import isOposite
+from ..Utils.BasicFunctions_part1 import is_opposite
 from ..Utils.booleanFunction import BoolSequence
-from ..Utils.BooleanSolids import buildCTableFromSolids, removeExtraSurfaces
+from ..Utils.BooleanSolids import build_c_table_from_solids, remove_extra_surfaces
 from ..Utils.Functions import GeounedSolid, GeounedSurface
 from ..Utils.Options.Classes import Options as opt
 
@@ -28,12 +28,12 @@ class VoidBox:
                 continue
             if m.BoundBox.isValid():
                 if self.BoundBox.intersect(m.BoundBox):
-                    Obj = self.__copyMeta__(m)
-                    self.__removeExtraComp__(Obj, self.BoundBox)
+                    Obj = self.__copy_meta__(m)
+                    self.__remove_extra_comp__(Obj, self.BoundBox)
                     self.Objects.append(Obj)
         return
 
-    def Split(self, minSize=200):
+    def split(self, minSize=200):
 
         dims = [self.BoundBox.XLength, self.BoundBox.YLength, self.BoundBox.ZLength]
         coord = ["X", "Y", "Z"]
@@ -104,8 +104,8 @@ class VoidBox:
             Space2 = VoidBox(self.Objects, box2)
             VoidBoxTuple = (Space1, Space2)
         else:
-            Space1 = self.PieceEnclosureSplit(box1)
-            Space2 = self.PieceEnclosureSplit(box2)
+            Space1 = self.piece_enclosure_split(box1)
+            Space2 = self.piece_enclosure_split(box2)
             VoidBoxTuple = (Space1, Space2)
             if Space1 == None:
                 VoidBoxTuple = (Space2,)
@@ -116,7 +116,7 @@ class VoidBox:
 
         return VoidBoxTuple
 
-    def PieceEnclosureSplit(self, Box, Tolerance=1.0e-13):
+    def piece_enclosure_split(self, Box, Tolerance=1.0e-13):
         """This function creates a box-shaped solid with the new limits of given bounding box and
         it is intersected with the piece of nested enclosure to create the new void cell.
         If the limited region does not intersect with the piece, no void cell is created.
@@ -158,21 +158,21 @@ class VoidBox:
         )
 
         for m in self.Objects:
-            self.__removeExtraComp__(m, Cube, mode="dist")
+            self.__remove_extra_comp__(m, Cube, mode="dist")
         return
 
-    def getVoidComplementary(self, Surfaces, simplify="no"):
+    def get_void_complementary(self, Surfaces, simplify="no"):
         if self.PieceEnclosure is None:
             boxDef = BoolSequence(operator="AND")
             center = self.BoundBox.Center
             bBox = self.BoundBox
-            for p in self.getBoundPlanes():
-                id, exist = Surfaces.addPlane(p)
+            for p in self.get_bound_planes():
+                id, exist = Surfaces.add_plane(p)
                 if exist:
-                    s = Surfaces.getSurface(id)
-                    if isOposite(p.Surf.Axis, s.Surf.Axis):
+                    s = Surfaces.get_surface(id)
+                    if is_opposite(p.Surf.Axis, s.Surf.Axis):
                         id = -id
-                if isOposite(p.Surf.Axis, p.Surf.Position - center):
+                if is_opposite(p.Surf.Axis, p.Surf.Position - center):
                     boxDef.elements.append(id)
                 else:
                     boxDef.elements.append(-id)
@@ -186,9 +186,9 @@ class VoidBox:
                 Part.makeCompound(TempPieceEnclosure.Solids), UniverseBox
             )
             Surfaces.extend(
-                Decom.ExtractSurfaces(comsolid, "All", UniverseBox, MakeObj=True)
+                Decom.extract_surfaces(comsolid, "All", UniverseBox, MakeObj=True)
             )
-            TempPieceEnclosure.updateSolids(comsolid.Solids)
+            TempPieceEnclosure.update_solids(comsolid.Solids)
             Conv.cellDef(TempPieceEnclosure, Surfaces, UniverseBox)
 
             boxDef = TempPieceEnclosure.Definition
@@ -213,7 +213,7 @@ class VoidBox:
                 continue
             cellIn.append(m.__id__)
 
-        # voidSolidDef.joinOperators()
+        # voidSolidDef.join_operators()
 
         if not voidSolidDef.elements:
             return (
@@ -228,10 +228,10 @@ class VoidBox:
         complementary = BoolSequence(operator="AND")
         complementary.append(boxDef)
         if simplify != "no":
-            surfList = voidSolidDef.getSurfacesNumbers()
+            surfList = voidSolidDef.get_surfaces_numbers()
 
             if enclosure:
-                surfList.update(boxDef.getSurfacesNumbers())
+                surfList.update(boxDef.get_surfaces_numbers())
             else:
                 for s in boxDef.elements:
                     val = s > 0
@@ -245,8 +245,8 @@ class VoidBox:
             if enclosure or res is None:
                 surfaceDict = {}
                 for i in surfList:
-                    surfaceDict[i] = Surfaces.getSurface(i)
-                CTable = buildCTableFromSolids(Box, surfaceDict, option=simplify)
+                    surfaceDict[i] = Surfaces.get_surface(i)
+                CTable = build_c_table_from_solids(Box, surfaceDict, option=simplify)
             else:
                 if res is True:
                     return None, None
@@ -263,7 +263,7 @@ class VoidBox:
                 voidSolidDef = cellVoid
 
             for solDef in voidSolidDef.elements:
-                newSolid = removeExtraSurfaces(solDef, CTable)
+                newSolid = remove_extra_surfaces(solDef, CTable)
                 if type(newSolid.elements) is not bool:
                     newTemp.append(newSolid)
                 elif newSolid.elements is True:
@@ -285,7 +285,7 @@ class VoidBox:
             return boxDef, None
 
         if voidSolidDef.level == 0:
-            compSeq = voidSolidDef.getComplementary()
+            compSeq = voidSolidDef.get_complementary()
         else:
 
             if voidSolidDef.level == 1 and voidSolidDef.operator == "AND":
@@ -311,7 +311,7 @@ class VoidBox:
                     elif chk is False:
                         continue
 
-                pmoc = comp.getComplementary()
+                pmoc = comp.get_complementary()
                 compSeq.append(pmoc)
 
         if simplify == "full":
@@ -327,17 +327,18 @@ class VoidBox:
             complementary.append(compSeq)
 
         complementary.clean()
-        complementary.levelUpdate()
+        complementary.level_update()
 
         if type(complementary.elements) is bool:
             return None, None
         else:
             return complementary, cellIn
 
-    def getBoxNumber(self):
+    # TODO check this is used in the code
+    def get_box_number(self):
         return len(self.Objects)
 
-    def getNumbers(self):
+    def get_numbers(self):
         ns = 0
         nb = 0
 
@@ -347,7 +348,7 @@ class VoidBox:
 
         return ns, nb
 
-    def getBoundPlanes(self):
+    def get_bound_planes(self):
         Xmid = 0.5 * (self.BoundBox.XMin + self.BoundBox.XMax)
         Ymid = 0.5 * (self.BoundBox.YMin + self.BoundBox.YMax)
         Zmid = 0.5 * (self.BoundBox.ZMin + self.BoundBox.ZMax)
@@ -429,7 +430,7 @@ class VoidBox:
 
         return (PXMin, PXMax, PYMin, PYMax, PZMin, PZMax)
 
-    def __removeExtraComp__(self, Obj, Box, mode="box"):
+    def __remove_extra_comp__(self, Obj, Box, mode="box"):
         reducedSol = []
         reducedDef = BoolSequence(operator="OR")
         if not Obj.Solids:
@@ -451,16 +452,16 @@ class VoidBox:
                     reducedDef.append(Obj.Definition.elements[i])
 
         if len(reducedSol) < len(Obj.Solids):
-            Obj.updateSolids(reducedSol)
-            Obj.setDefinition(reducedDef)
+            Obj.update_solids(reducedSol)
+            Obj.set_definition(reducedDef)
         return
 
-    def __copyMeta__(self, m):
+    def __copy_meta__(self, m):
         solidsCopy = m.Solids[:]
         facesCopy = m.Faces[:]
         Meta = GeounedSolid(m.__id__, solidsCopy)
-        Meta.setDefinition(m.Definition.copy())
-        Meta.setFaces(facesCopy)
+        Meta.set_definition(m.Definition.copy())
+        Meta.set_faces(facesCopy)
         if m.IsEnclosure:
             Meta.IsEnclosure = True
             Meta.EnclosureID = m.EnclosureID

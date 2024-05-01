@@ -1,4 +1,4 @@
-defaultValues = {
+default_values = {
     "relativeTol": False,
     "relativePrecision": 1.0e-6,  # relative precision
     "value": 1.0e-6,  # Tolerance in single value comparison
@@ -16,7 +16,7 @@ defaultValues = {
     "min_area": 1.0e-2,  # minimun face area to consider in cell definition
 }
 
-typeDict = {
+type_dict = {
     "relativeTol": bool,
     "relativePrecision": float,  # relative precision
     "value": float,  # Tolerance in single value comparison

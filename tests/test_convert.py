@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import pytest
@@ -6,6 +7,11 @@ from geouned import CadToCsg
 
 path_to_cad = Path("testing/inputSTEP")
 step_files = list(path_to_cad.rglob("*.stp")) + list(path_to_cad.rglob("*.step"))
+# removing two geometries that are particularly slow to convert from CI testing
+# these two geometries remain in the test suite for locally testing
+if os.getenv("GITHUB_ACTIONS"):
+    step_files.remove(Path("testing/inputSTEP/large/SCDR.stp"))
+    step_files.remove(Path("testing/inputSTEP/large/Triangle.stp"))
 
 
 @pytest.mark.parametrize("input_step_file", step_files)
@@ -22,7 +28,7 @@ def test_conversion(input_step_file):
         "title": "Input Test",
         "stepFile": f"{input_step_file.resolve()}",
         "geometryName": f"{output_filename_stem.resolve()}",
-        "outFormat": ("mcnp", "openMC_XML"),
+        "outFormat": ("mcnp", "openMC_XML", "openMC_PY", "serpent", "phits"),
         "compSolids": False,
         "volCARD": False,
         "volSDEF": True,
@@ -39,9 +45,10 @@ def test_conversion(input_step_file):
         "nPlaneReverse": 0,
     }
 
-    # deletes the output openmc and mcnp output files if it already exists
-    output_filename_stem.with_suffix(".mcnp").unlink(missing_ok=True)
-    output_filename_stem.with_suffix(".xml").unlink(missing_ok=True)
+    # deletes the output MC files if they already exists
+    suffixes = (".mcnp", ".xml", ".inp", ".py", ".serp")
+    for suffix in suffixes:
+        output_filename_stem.with_suffix(suffix).unlink(missing_ok=True)
 
     GEO = CadToCsg("Input Test")
 
@@ -49,7 +56,7 @@ def test_conversion(input_step_file):
     for key, value in template.items():
         GEO.set(key, value)
 
-    GEO.Start()
+    GEO.start()
 
-    assert output_filename_stem.with_suffix(".mcnp").exists()
-    assert output_filename_stem.with_suffix(".xml").exists()
+    for suffix in suffixes:
+        assert output_filename_stem.with_suffix(suffix).exists()

@@ -6,7 +6,7 @@ import Part
 
 from .buildSolidCell import BuildSolid
 from .remh import Cline
-from .Utils.booleanFunction import BoolSequence, outterTerms
+from .Utils.booleanFunction import BoolSequence, outer_terms
 
 
 class CadCell:
@@ -76,7 +76,7 @@ class CadCell:
         subCell = self.copy()
         subCell.definition = seq.copy()
         subCell.shape = None
-        subCell.surfaceList = subCell.definition.getSurfacesNumbers()
+        subCell.surfaceList = subCell.definition.get_surfaces_numbers()
         for s in tuple(subCell.surfaces.keys()):
             if s not in subCell.surfaceList:
                 del subCell.surfaces[s]
@@ -117,7 +117,7 @@ class CadCell:
     #           subCell = self.copy()
     #           subCell.definition= Cline(df)
     #           subCell.shape = None
-    #           subCell.surfaceList  = subCell.definition.getSurfacesNumbers()
+    #           subCell.surfaceList  = subCell.definition.get_surfaces_numbers()
     #           for s in tuple(subCell.surfaces.keys()) :
     #               if s not in subCell.surfaceList: del(subCell.surfaces[s])
     #
@@ -127,7 +127,7 @@ class CadCell:
 
     def getOuterTerms(self):
         if not self.__defTerms__:
-            self.__defTerms__, self.__operator__ = outterTerms(self.definition.str)
+            self.__defTerms__, self.__operator__ = outer_terms(self.definition.str)
         return self.__defTerms__, self.__operator__
 
     def makeBox(self, boundBox):
@@ -147,10 +147,12 @@ class CadCell:
 
         cutShape = BuildSolid(self, boundBox, simplify=simplify)
 
-        if fuse or True:
-            self.shape = FuseSolid(cutShape)
-        else:
-            self.shape = Part.makeCompound(cutShape)
+        # TODO consider making this step conditional on fuse
+        # if fuse or True:
+        #     self.shape = FuseSolid(cutShape)
+        # else:
+        #     self.shape = Part.makeCompound(cutShape)
+        self.shape = FuseSolid(cutShape)
 
     def buildSurfaceShape(self, boundBox):
         for s in self.surfaces.values():
@@ -177,7 +179,7 @@ class CadCell:
 
     def cleanUndefined(self):
         undefined = []
-        for s in self.definition.getSurfacesNumbers():
+        for s in self.definition.get_surfaces_numbers():
             if self.surfaces[s].params is None:
                 undefined.append(s)
         if undefined:
@@ -193,7 +195,7 @@ class CadCell:
         self.definition.remove_cr()
         self.definition.remove_multispace()
         self.definition.remove_redundant()
-        self.surfaceList = self.definition.getSurfacesNumbers()
+        self.surfaceList = self.definition.get_surfaces_numbers()
 
 
 class Plane:
@@ -206,7 +208,7 @@ class Plane:
             self.transform(tr)
 
     def __str__(self):
-        return "plane : {}\nParameters : {}".format(self.id, self.params)
+        return f"plane : {self.id}\nParameters : {self.params}"
 
     def copy(self):
         return Plane(self.id, self.params)

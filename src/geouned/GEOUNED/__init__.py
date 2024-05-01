@@ -17,11 +17,11 @@ from .Cuboid.translate import translate
 from .Decompose import Decom_one as Decom
 from .LoadFile import LoadSTEP as Load
 from .Utils import Functions as UF
-from .Utils.BooleanSolids import buildCTableFromSolids
+from .Utils.BooleanSolids import build_c_table_from_solids
 from .Utils.Options.Classes import McnpNumericFormat, Options, Tolerances
 from .Void import Void as Void
-from .Write.Functions import writeMCNPCellDef
-from .Write.WriteFiles import writeGeometry
+from .Write.Functions import write_mcnp_cell_def
+from .Write.WriteFiles import write_geometry
 
 
 class CadToCsg:
@@ -52,7 +52,7 @@ class CadToCsg:
         startSurf: int = 1,
         cellCommentFile: bool = False,
         cellSummaryFile: bool = True,
-        sortEnclosure: bool = False,
+        sort_enclosure: bool = False,
     ):
         """Base class for the conversion of CAD to CSG models
 
@@ -121,7 +121,7 @@ class CadToCsg:
                 Defaults to False.
             cellSummaryFile (bool, optional): Write an additional file with
                 information on the CAD cell translated. Defaults to True.
-            sortEnclosure (bool, optional): If enclosures are defined in the
+            sort_enclosure (bool, optional): If enclosures are defined in the
                 CAD models, the voids cells of the enclosure will be located in
                 the output file in the same location where the enclosure solid
                 is located in the CAD solid tree.. Defaults to False.
@@ -150,13 +150,13 @@ class CadToCsg:
         self.startSurf = startSurf
         self.cellCommentFile = cellCommentFile
         self.cellSummaryFile = cellSummaryFile
-        self.sortEnclosure = sortEnclosure
+        self.sort_enclosure = sort_enclosure
 
-        Options.setDefaultAttribute()
-        McnpNumericFormat.setDefaultAttribute()
-        Tolerances.setDefaultAttribute()
+        Options.set_default_attribute()
+        McnpNumericFormat.set_default_attribute()
+        Tolerances.set_default_attribute()
 
-    def SetConfiguration(self, configFile=None):
+    def set_configuration(self, configFile=None):
 
         if configFile is None:
             return
@@ -210,7 +210,7 @@ class CadToCsg:
                         "dummyMat",
                         "cellSummaryFile",
                         "cellCommentFile",
-                        "sortEnclosure",
+                        "sort_enclosure",
                     ):
                         self.set(key, config.getboolean("Parameters", key))
                     elif key in (
@@ -234,40 +234,42 @@ class CadToCsg:
 
             elif section == "Options":
                 for key in config["Options"].keys():
-                    if key in Options.defaultValues.keys():
-                        if Options.typeDict[key] is bool:
-                            Options.setAttribute(key, config.getboolean("Options", key))
+                    if key in Options.default_values.keys():
+                        if Options.type_dict[key] is bool:
+                            Options.set_attribute(
+                                key, config.getboolean("Options", key)
+                            )
                         elif (
-                            Options.typeDict[key] is float
-                            or Options.typeDict[key] is int
+                            Options.type_dict[key] is float
+                            or Options.type_dict[key] is int
                         ):
-                            Options.setAttribute(key, config.getfloat("Options", key))
+                            Options.set_attribute(key, config.getfloat("Options", key))
 
             elif section == "Tolerances":
                 for key in config["Tolerances"].keys():
                     eqvKey = Tolerances.KwrdEquiv[key]
-                    if eqvKey in Tolerances.defaultValues.keys():
-                        if Tolerances.typeDict[eqvKey] is bool:
-                            Tolerances.setAttribute(
+                    if eqvKey in Tolerances.default_values.keys():
+                        if Tolerances.type_dict[eqvKey] is bool:
+                            Tolerances.set_attribute(
                                 eqvKey, config.getboolean("Tolerances", key)
                             )
-                        elif Tolerances.typeDict[eqvKey] is float:
-                            Tolerances.setAttribute(
+                        elif Tolerances.type_dict[eqvKey] is float:
+                            Tolerances.set_attribute(
                                 eqvKey, config.getfloat("Tolerances", key)
                             )
 
             elif section == "MCNP_Numeric_Format":
                 PdEntry = False
                 for key in config["MCNP_Numeric_Format"].keys():
-                    if key in McnpNumericFormat.defaultValues.keys():
-                        McnpNumericFormat.setAttribute(
+                    if key in McnpNumericFormat.default_values.keys():
+                        McnpNumericFormat.set_attribute(
                             key, config.get("MCNP_Numeric_Format", key)
                         )
                         if key == "P_d":
                             PdEntry = True
 
             else:
-                print("bad section name : {}".format(section))
+                print(f"bad section name : {section}")
 
         if self.__dict__["geometryName"] == "":
             self.__dict__["geometryName"] = self.__dict__["stepFile"][:-4]
@@ -279,27 +281,27 @@ class CadToCsg:
 
     def set(self, kwrd, value):
 
-        if kwrd in McnpNumericFormat.defaultValues.keys():
-            McnpNumericFormat.setAttribute(kwrd, value)
+        if kwrd in McnpNumericFormat.default_values.keys():
+            McnpNumericFormat.set_attribute(kwrd, value)
             return
-        elif kwrd in Tolerances.defaultValues.keys():
-            Tolerances.setAttribute(kwrd, value)
+        elif kwrd in Tolerances.default_values.keys():
+            Tolerances.set_attribute(kwrd, value)
             return
-        elif kwrd in Options.defaultValues.keys():
-            Options.setAttribute(kwrd, value)
+        elif kwrd in Options.default_values.keys():
+            Options.set_attribute(kwrd, value)
             return
         elif kwrd not in self.__dict__.keys():
-            print("Bad entry : {}".format(kwrd))
+            print(f"Bad entry : {kwrd}")
             return
 
         if kwrd == "stepFile":
             if isinstance(value, (list, tuple)):
                 for v in value:
                     if not isinstance(v, str):
-                        print("elemt in {} list should be string".format(kwrd))
+                        print(f"elemt in {kwrd} list should be string")
                         return
             elif not isinstance(value, str):
-                print("{} should be string or tuple of strings".format(kwrd))
+                print(f"{kwrd} should be string or tuple of strings")
                 return
 
         elif kwrd == "UCARD":
@@ -308,22 +310,22 @@ class CadToCsg:
             elif value.isdigit():
                 value = int(value)
             else:
-                print("{} value should be None or integer".format(kwrd))
+                print(f"{kwrd} value should be None or integer")
                 return
         elif kwrd == "outFormat":
             if len(value) == 0:
                 return
         elif kwrd in ("geometryName", "matFile", "exportSolids"):
             if not isinstance(value, str):
-                print("{} value should be str instance".format(kwrd))
+                print(f"{kwrd} value should be str instance")
                 return
         elif kwrd in ("cellRange", "voidMat", "voidExclude"):
             if not isinstance(value, (list, tuple)):
-                print("{} value should be list or tuple".format(kwrd))
+                print(f"{kwrd} value should be list or tuple")
                 return
         elif kwrd in ("minVoidSize", "maxSurf", "maxBracket", "startCell", "startSurf"):
             if not isinstance(value, int):
-                print("{} value should be integer".format(kwrd))
+                print(f"{kwrd} value should be integer")
                 return
         elif kwrd in (
             "voidGen",
@@ -335,10 +337,10 @@ class CadToCsg:
             "dummyMat",
             "cellSummaryFile",
             "cellCommentFile",
-            "sortEnclosure",
+            "sort_enclosure",
         ):
             if not isinstance(value, bool):
-                print("{} value should be boolean".format(kwrd))
+                print(f"{kwrd} value should be boolean")
                 return
 
         self.__dict__[kwrd] = value
@@ -348,7 +350,7 @@ class CadToCsg:
             else:
                 self.__dict__["geometryName"] == value[:-4]
 
-    def Start(self):
+    def start(self):
 
         print("start")
         FreeCAD_Version = "{V[0]:}.{V[1]:}.{V[2]:}".format(V=FreeCAD.Version())
@@ -378,15 +380,15 @@ class CadToCsg:
             MetaChunk = []
             EnclosureChunk = []
             for stp in self.stepFile:
-                print("read step file : {}".format(stp))
-                Meta, Enclosure = Load.LoadCAD(stp, self.matFile)
+                print(f"read step file : {stp}")
+                Meta, Enclosure = Load.load_cad(stp, self.matFile)
                 MetaChunk.append(Meta)
                 EnclosureChunk.append(Enclosure)
-            MetaList = joinMetaLists(MetaChunk)
-            EnclosureList = joinMetaLists(EnclosureChunk)
+            MetaList = join_meta_lists(MetaChunk)
+            EnclosureList = join_meta_lists(EnclosureChunk)
         else:
-            print("read step file : {}".format(self.stepFile))
-            MetaList, EnclosureList = Load.LoadCAD(
+            print(f"read step file : {self.stepFile}")
+            MetaList, EnclosureList = Load.load_cad(
                 self.stepFile, self.matFile, self.voidMat, self.compSolids
             )
 
@@ -416,9 +418,9 @@ class CadToCsg:
 
         # set up Universe
         if EnclosureList:
-            UniverseBox = getUniverse(MetaList + EnclosureList)
+            UniverseBox = get_universe(MetaList + EnclosureList)
         else:
-            UniverseBox = getUniverse(MetaList)
+            UniverseBox = get_universe(MetaList)
 
         Surfaces = UF.SurfacesDict(offset=self.startSurf - 1)
 
@@ -429,13 +431,13 @@ class CadToCsg:
         if not Options.Facets:
 
             # decompose all solids in elementary solids (convex ones)
-            warningSolidList = DecomposeSolids(
+            warningSolidList = decompose_solids(
                 MetaList, Surfaces, UniverseBox, code_setting, True
             )
 
             # decompose Enclosure solids
             if self.voidGen and EnclosureList:
-                warningEnclosureList = DecomposeSolids(
+                warningEnclosureList = decompose_solids(
                     EnclosureList, Surfaces, UniverseBox, code_setting, False
                 )
 
@@ -457,13 +459,13 @@ class CadToCsg:
                     print(m.Definition)
 
             if Options.forceNoOverlap:
-                Conv.noOverlappingCell(MetaList, Surfaces)
+                Conv.no_overlapping_cell(MetaList, Surfaces)
 
         else:
             translate(MetaList, Surfaces, UniverseBox, code_setting)
             # decompose Enclosure solids
             if self.voidGen and EnclosureList:
-                warningEnclosureList = DecomposeSolids(
+                warningEnclosureList = decompose_solids(
                     EnclosureList, Surfaces, UniverseBox, code_setting, False
                 )
 
@@ -491,13 +493,13 @@ class CadToCsg:
             if not self.voidExclude:
                 MetaReduced = MetaList
             else:
-                MetaReduced = excludeCells(MetaList, self.voidExclude)
+                MetaReduced = exclude_cells(MetaList, self.voidExclude)
 
             if MetaList:
                 init = MetaList[-1].__id__ - len(EnclosureList)
             else:
                 init = 0
-            MetaVoid = Void.voidGeneration(
+            MetaVoid = Void.void_generation(
                 MetaReduced, EnclosureList, Surfaces, UniverseBox, code_setting, init
             )
 
@@ -512,15 +514,13 @@ class CadToCsg:
                 if c.Definition.level == 0 or c.IsEnclosure:
                     continue
                 print("simplify cell", c.__id__)
-                Box = UF.getBox(c)
-                CT = buildCTableFromSolids(Box, (c.Surfaces, Surfs), option="full")
+                Box = UF.get_box(c)
+                CT = build_c_table_from_solids(Box, (c.Surfaces, Surfs), option="full")
                 c.Definition.simplify(CT)
                 c.Definition.clean()
                 if type(c.Definition.elements) is bool:
                     print(
-                        "unexpected constant cell {} :{}".format(
-                            c.__id__, c.Definition.elements
-                        )
+                        f"unexpected constant cell {c.__id__} :{c.Definition.elements}"
                     )
 
         tempTime2 = datetime.now()
@@ -529,12 +529,12 @@ class CadToCsg:
         print(datetime.now() - startTime)
 
         cellOffSet = self.startCell - 1
-        if EnclosureList and self.sortEnclosure:
+        if EnclosureList and self.sort_enclosure:
             # sort group solid cell / void cell sequence in each for each enclosure
             # if a solid belong to several enclosure, its definition will be written
             # for the highest enclosure level or if same enclosure level in the first
             # enclosure found
-            MetaList = sortEnclosure(MetaList, MetaVoid, cellOffSet)
+            MetaList = sort_enclosure(MetaList, MetaVoid, cellOffSet)
         else:
             # remove Null Cell and apply cell numbering offset
             deleted = []
@@ -567,19 +567,19 @@ class CadToCsg:
                     continue
                 icount += 1
                 m.label = icount
-                updateComment(m, idLabel)
+                update_comment(m, idLabel)
             for i in reversed(deleted):
                 del MetaVoid[i]
 
             MetaList.extend(MetaVoid)
 
-        printWarningSolids(warnSolids, warnEnclosures)
+        print_warning_solids(warnSolids, warnEnclosures)
 
         # add plane definition to cone
-        processCones(MetaList, coneInfo, Surfaces, UniverseBox)
+        process_cones(MetaList, coneInfo, Surfaces, UniverseBox)
 
         # write outputformat input
-        writeGeometry(UniverseBox, MetaList, Surfaces, code_setting)
+        write_geometry(UniverseBox, MetaList, Surfaces, code_setting)
 
         print("End of MCNP, OpenMC, Serpent and PHITS translation phase")
 
@@ -590,21 +590,21 @@ class CadToCsg:
         print("Translation time of void cells", tempTime2 - tempTime1)
 
 
-def DecomposeSolids(MetaList, Surfaces, UniverseBox, setting, meta):
+def decompose_solids(MetaList, Surfaces, UniverseBox, setting, meta):
     totsolid = len(MetaList)
     warningSolids = []
     for i, m in enumerate(MetaList):
         if meta and m.IsEnclosure:
             continue
-        print("Decomposing solid: {}/{} ".format(i + 1, totsolid))
+        print(f"Decomposing solid: {i + 1}/{totsolid} ")
         if setting["debug"]:
             print(m.Comments)
             if not path.exists("debug"):
                 mkdir("debug")
             if m.IsEnclosure:
-                m.Solids[0].exportStep("debug/origEnclosure_{}.stp".format(i))
+                m.Solids[0].exportStep(f"debug/origEnclosure_{i}.stp")
             else:
-                m.Solids[0].exportStep("debug/origSolid_{}.stp".format(i))
+                m.Solids[0].exportStep(f"debug/origSolid_{i}.stp")
 
         comsolid, err = Decom.SplitSolid(Part.makeCompound(m.Solids), UniverseBox)
 
@@ -613,43 +613,41 @@ def DecomposeSolids(MetaList, Surfaces, UniverseBox, setting, meta):
                 mkdir("Suspicious_solids")
             if m.IsEnclosure:
                 Part.CompSolid(m.Solids).exportStep(
-                    "Suspicious_solids/Enclosure_original_{}.stp".format(i)
+                    f"Suspicious_solids/Enclosure_original_{i}.stp"
                 )
-                comsolid.exportStep(
-                    "Suspicious_solids/Enclosure_split_{}.stp".format(i)
-                )
+                comsolid.exportStep(f"Suspicious_solids/Enclosure_split_{i}.stp")
             else:
                 Part.CompSolid(m.Solids).exportStep(
-                    "Suspicious_solids/Solid_original_{}.stp".format(i)
+                    f"Suspicious_solids/Solid_original_{i}.stp"
                 )
-                comsolid.exportStep("Suspicious_solids/Solid_split_{}.stp".format(i))
+                comsolid.exportStep(f"Suspicious_solids/Solid_split_{i}.stp")
 
             warningSolids.append(i)
 
         if setting["debug"]:
             if m.IsEnclosure:
-                comsolid.exportStep("debug/compEnclosure_{}.stp".format(i))
+                comsolid.exportStep(f"debug/compEnclosure_{i}.stp")
             else:
-                comsolid.exportStep("debug/compSolid_{}.stp".format(i))
+                comsolid.exportStep(f"debug/compSolid_{i}.stp")
         Surfaces.extend(
-            Decom.ExtractSurfaces(comsolid, "All", UniverseBox, MakeObj=True)
+            Decom.extract_surfaces(comsolid, "All", UniverseBox, MakeObj=True)
         )
-        m.setCADSolid()
-        m.updateSolids(comsolid.Solids)
+        m.set_cad_solid()
+        m.update_solids(comsolid.Solids)
 
     return warningSolids
 
 
-def updateComment(meta, idLabel):
+def update_comment(meta, idLabel):
     if meta.__commentInfo__ is None:
         return
     if meta.__commentInfo__[1] is None:
         return
     newLabel = (idLabel[i] for i in meta.__commentInfo__[1])
-    meta.setComments(Void.voidCommentLine((meta.__commentInfo__[0], newLabel)))
+    meta.set_comments(Void.void_comment_line((meta.__commentInfo__[0], newLabel)))
 
 
-def processCones(MetaList, coneInfo, Surfaces, UniverseBox):
+def process_cones(MetaList, coneInfo, Surfaces, UniverseBox):
     cellId = tuple(coneInfo.keys())
     for m in MetaList:
         if m.__id__ not in cellId and not m.Void:
@@ -662,12 +660,12 @@ def processCones(MetaList, coneInfo, Surfaces, UniverseBox):
             for Id in m.__commentInfo__[1]:
                 if Id in cellId:
                     cones.update(-x for x in coneInfo[Id])
-            Conv.addConePlane(m.Definition, cones, Surfaces, UniverseBox)
+            Conv.add_cone_plane(m.Definition, cones, Surfaces, UniverseBox)
         elif not m.Void:
-            Conv.addConePlane(m.Definition, coneInfo[m.__id__], Surfaces, UniverseBox)
+            Conv.add_cone_plane(m.Definition, coneInfo[m.__id__], Surfaces, UniverseBox)
 
 
-def getUniverse(MetaList):
+def get_universe(MetaList):
     d = 10
     Box = MetaList[0].BoundBox
     xmin = Box.XMin
@@ -692,7 +690,7 @@ def getUniverse(MetaList):
     )
 
 
-def printWarningSolids(warnSolids, warnEnclosures):
+def print_warning_solids(warnSolids, warnEnclosures):
 
     if warnSolids or warnEnclosures:
         fic = open("Warning_Solids_definition.txt", "w")
@@ -703,25 +701,25 @@ def printWarningSolids(warnSolids, warnEnclosures):
         lines = "Solids :\n"
         for sol in warnSolids:
             lines += "\n"
-            lines += "{}\n".format(sol.label)
-            lines += "{}\n".format(sol.Comments)
-            lines += "{}\n".format(writeMCNPCellDef(sol.Definition))
+            lines += f"{sol.label}\n"
+            lines += f"{sol.Comments}\n"
+            lines += f"{write_mcnp_cell_def(sol.Definition)}\n"
         fic.write(lines)
 
     if warnEnclosures:
         lines = "Enclosures :\n"
         for sol in warnEnclosures:
             lines += "\n"
-            lines += "{}\n".format(sol.label)
-            lines += "{}\n".format(sol.Comments)
-            lines += "{}\n".format(writeMCNPCellDef(sol.Definition))
+            lines += f"{sol.label}\n"
+            lines += f"{sol.Comments}\n"
+            lines += f"{write_mcnp_cell_def(sol.Definition)}\n"
 
         fic.write(lines)
 
     fic.close()
 
 
-def joinMetaLists(MList):
+def join_meta_lists(MList):
 
     newMetaList = MList[0]
     if MList[0]:
@@ -734,7 +732,7 @@ def joinMetaLists(MList):
     return newMetaList
 
 
-def excludeCells(MetaList, labelList):
+def exclude_cells(MetaList, labelList):
     voidMeta = []
     for m in MetaList:
         if m.IsEnclosure:
@@ -750,7 +748,7 @@ def excludeCells(MetaList, labelList):
     return voidMeta
 
 
-def sortEnclosure(MetaList, MetaVoid, offSet=0):
+def sort_enclosure(MetaList, MetaVoid, offSet=0):
 
     newList = {}
     for m in MetaVoid:
@@ -766,12 +764,9 @@ def sortEnclosure(MetaList, MetaVoid, offSet=0):
         if m.NullCell:
             continue
         if m.IsEnclosure:
-            lineComment = """\
-##########################################################
-             ENCLOSURE {}
-##########################################################""".format(
-                m.EnclosureID
-            )
+            lineComment = f"""##########################################################
+             ENCLOSURE {m.EnclosureID}
+##########################################################"""
             mc = UF.GeounedSolid(None)
             mc.Comments = lineComment
             newMeta.append(mc)
@@ -782,12 +777,9 @@ def sortEnclosure(MetaList, MetaVoid, offSet=0):
                 e.label = icount
                 idLabel[e.__id__] = e.label
                 newMeta.append(e)
-            lineComment = """\
-##########################################################
-            END  ENCLOSURE {}
-##########################################################""".format(
-                m.EnclosureID
-            )
+            lineComment = f"""##########################################################
+            END  ENCLOSURE {m.EnclosureID}
+##########################################################"""
             mc = UF.GeounedSolid(None)
             mc.Comments = lineComment
             newMeta.append(mc)
@@ -819,6 +811,6 @@ def sortEnclosure(MetaList, MetaVoid, offSet=0):
             continue
         if m.IsEnclosure:
             continue
-        updateComment(m, idLabel)
+        update_comment(m, idLabel)
 
     return newMeta
