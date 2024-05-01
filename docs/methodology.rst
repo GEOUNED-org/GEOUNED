@@ -1,4 +1,4 @@
-methodology
+Methodology
 ===========
 
 TODO

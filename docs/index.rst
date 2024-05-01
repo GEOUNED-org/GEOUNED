@@ -11,9 +11,9 @@ GEOUNED
 
    install
    usage
-   python-API
+   python_api
    methodology
-   developer-guide
+   developer_guide
 
 
 GEOUNED converts CAD to Constructive Solid Geometry (CSG) formats for use in

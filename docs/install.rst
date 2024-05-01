@@ -64,7 +64,7 @@ Install GEOUNED with pip
 
 .. code-block:: sh
 
-    pip install geouned
+    pip install git+https://github.com/GEOUNED-code/GEOUNED.git
 
 Then you will be able to run import GEOUNED from within Python
 
@@ -124,7 +124,7 @@ Install GEOUNED with pip
 
 .. code-block:: sh
 
-    pip install geouned
+    pip install git+https://github.com/GEOUNED-code/GEOUNED.git
 
 Then you will be able to run import GEOUNED from within Python
 
