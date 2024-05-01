@@ -323,7 +323,13 @@ class CadToCsg:
             if not isinstance(value, (list, tuple)):
                 print(f"{kwrd} value should be list or tuple")
                 return
-        elif kwrd in ("min_void_size", "max_surf", "max_bracket", "start_cell", "start_surf"):
+        elif kwrd in (
+            "min_void_size",
+            "max_surf",
+            "max_bracket",
+            "start_cell",
+            "start_surf",
+        ):
             if not isinstance(value, int):
                 print(f"{kwrd} value should be integer")
                 return
