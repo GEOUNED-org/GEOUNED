@@ -244,7 +244,7 @@ class Cline:
     def copy(self):
         return Cline(self.str)
 
-    def getSurfacesNumbers(self):
+    def get_surfaces_numbers(self):
         s = set(unsignedint.findall(self.str))
         return tuple(map(int, s))
 
@@ -300,7 +300,7 @@ class Cline:
         self.str = "".join(celltab)
         return
 
-    def outterTerms(self):
+    def outer_terms(self):
         cgeom = Cline(self.str)
 
         cgeom.remove_comments(full=True)
@@ -452,7 +452,7 @@ class Cline:
             self.str = self.str[0 : m.start()] + s2 + self.str[m.end() :]
             return m.start() + len(s2)
         else:
-            print("number {} not found".format(surf))
+            print(f"number {surf} not found")
             return -1
 
     def countP(self):

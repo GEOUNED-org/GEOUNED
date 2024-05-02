@@ -9,12 +9,14 @@ import math
 import Part
 
 from ..Utils.Options.Classes import Tolerances as tol
-from .BasicFunctions_part1 import isSameValue
-from .BasicFunctions_part2 import isSameTorus
+from .BasicFunctions_part1 import is_same_value
+from .BasicFunctions_part2 import is_same_torus
+
 
 # SURFACES
 class SurfacesGu(object):
     """GEOUNED surface class"""
+
     def __init__(self, face):
         self.face = face
         self.Surface = self.face.Surface
@@ -28,6 +30,7 @@ class SurfacesGu(object):
 
 class PlaneGu(SurfacesGu):
     """GEOUNED Plane Class"""
+
     def __init__(self, face, plane3Pts=False):
         SurfacesGu.__init__(self, face)
         self.Axis = face.Surface.Axis
@@ -47,6 +50,7 @@ class PlaneGu(SurfacesGu):
 
 class CylinderGu(SurfacesGu):
     """GEOUNED Cylinder Class"""
+
     def __init__(self, face):
         SurfacesGu.__init__(self, face)
         self.Axis = face.Surface.Axis
@@ -57,6 +61,7 @@ class CylinderGu(SurfacesGu):
 
 class ConeGu(SurfacesGu):
     """GEOUNED Cone Class"""
+
     def __init__(self, face):
         SurfacesGu.__init__(self, face)
         self.Axis = face.Surface.Axis
@@ -69,6 +74,7 @@ class ConeGu(SurfacesGu):
 
 class SphereGu(SurfacesGu):
     """GEOUNED Sphere Class"""
+
     def __init__(self, face):
         SurfacesGu.__init__(self, face)
         self.type = self.type[0:6]
@@ -78,6 +84,7 @@ class SphereGu(SurfacesGu):
 
 class TorusGu(SurfacesGu):
     """GEOUNED Torus Class"""
+
     def __init__(self, face):
         SurfacesGu.__init__(self, face)
         self.Center = face.Surface.Center
@@ -88,9 +95,10 @@ class TorusGu(SurfacesGu):
 
 class SolidGu:
     """GEOUNED Solid Class"""
+
     def __init__(self, solid, plane3Pts=False):
         self.solid = solid
-        faces = DefineListFace_GU(solid.Faces, plane3Pts)
+        faces = define_list_face_gu(solid.Faces, plane3Pts)
         self.Faces = faces
         self.Solids = solid.Solids
         self.BoundBox = solid.BoundBox
@@ -105,15 +113,15 @@ class SolidGu:
             toroidIndex.append(i)
 
         if len(toroidIndex) != 0:
-            tFaces = self.__sameTorusSurf__(toroidIndex)
+            tFaces = self.__same_torus_surf__(toroidIndex)
             for i, tSet in enumerate(tFaces):
-                URange = self.__mergePeriodicUV__("U", tSet)
-                VRange = self.__mergePeriodicUV__("V", tSet)
+                URange = self.__merge_periodic_uv__("U", tSet)
+                VRange = self.__merge_periodic_uv__("V", tSet)
                 for t in tSet:
                     self.TorusVParams[t] = (i, VRange)
                     self.TorusUParams[t] = (i, URange)
 
-    def __sameTorusSurf__(self, torusList):
+    def __same_torus_surf__(self, torusList):
         """group as a single face all the neighbour faces of the same torus"""
         sameTorusFace = []
         temp = torusList[:]
@@ -121,21 +129,21 @@ class SolidGu:
             i = temp[0]
             current = [i]
             for j in temp[1:]:
-                if isSameTorus(
+                if is_same_torus(
                     self.Faces[i].Surface,
                     self.Faces[j].Surface,
                     dtol=tol.tor_distance,
                     atol=tol.tor_angle,
-                    relTol=tol.relativeTol,
+                    rel_tol=tol.relativeTol,
                 ):
                     current.append(j)
             for c in current:
                 temp.remove(c)
             sameTorusFace.append(current)
 
-        return self.__separateSurfaces__(sameTorusFace)
+        return self.__separate_surfaces__(sameTorusFace)
 
-    def __separateSurfaces__(self, faceList):
+    def __separate_surfaces__(self, faceList):
         """group all faces in faceList forming a continuous surface"""
         sameSurfaces = []
         for tset in faceList:
@@ -161,7 +169,8 @@ class SolidGu:
                 sameSurfaces.append(current)
         return sameSurfaces
 
-    def __mergeNoPeriodicUV__(self, parameter, faceList):
+    # TODO check if this function is used as it appears to be nut used in the code
+    def __merge_no_periodic_uv__(self, parameter, faceList):
         if parameter == "U":
             i1 = 0
             i2 = 2
@@ -169,17 +178,17 @@ class SolidGu:
             i1 = 2
             i2 = 4
 
-        Vmin, Vmax = self.Faces[faceList[0]].ParameterRange[i1:i2]
+        v_min, v_max = self.Faces[faceList[0]].ParameterRange[i1:i2]
         for face in faceList[1:]:
             V0, V1 = self.Faces[face].ParameterRange[i1:i2]
-            Vmin = min(Vmin, V0)
-            Vmax = max(Vmax, V1)
-        mergedParams = (False, (Vmin, Vmax))
+            v_min = min(v_min, V0)
+            v_max = max(v_max, V1)
+        mergedParams = (False, (v_min, v_max))
 
         return mergedParams
 
-    def __mergePeriodicUV__(self, parameter, faceList):
-        twoPi = 2.0 * math.pi
+    def __merge_periodic_uv__(self, parameter, faceList):
+        two_pi = 2.0 * math.pi
         if parameter == "U":
             i1 = 0
             i2 = 2
@@ -197,23 +206,23 @@ class SolidGu:
         params.sort()
         V0 = params[0][0]
         V1 = params[-1][1]
-        if arcLength >= twoPi * (1.0 - tol.relativePrecision):
-            mergedParams = (True, (V0, V0 + twoPi))
+        if arcLength >= two_pi * (1.0 - tol.relativePrecision):
+            mergedParams = (True, (V0, V0 + two_pi))
         else:
-            if isSameValue(V0, 0.0, tol.relativePrecision) and isSameValue(
-                V1, twoPi, tol.relativePrecision
+            if is_same_value(V0, 0.0, tol.relativePrecision) and is_same_value(
+                V1, two_pi, tol.relativePrecision
             ):
                 for i in range(len(params) - 1):
-                    if not isSameValue(
+                    if not is_same_value(
                         params[i][1], params[i + 1][0], tol.relativePrecision
                     ):
                         break
-                Vmin = params[i + 1][0] - twoPi
-                Vmax = params[i][1]
+                v_min = params[i + 1][0] - two_pi
+                v_max = params[i][1]
             else:
-                Vmin = params[0][0]
-                Vmax = params[-1][1]
-            mergedParams = (False, (Vmin, Vmax))
+                v_min = params[0][0]
+                v_max = params[-1][1]
+            mergedParams = (False, (v_min, v_max))
 
         return mergedParams
 
@@ -221,10 +230,11 @@ class SolidGu:
 # FACES
 class FaceGu(object):
     """GEOUNED Face Class"""
+
     def __init__(self, face, Plane3Pts=False):
         # GEOUNED based atributes
         self.__face__ = face
-        self.Surface = DefineSurface(
+        self.Surface = define_surface(
             face, Plane3Pts
         )  # Define the appropiate GU Surface of the face
 
@@ -269,12 +279,12 @@ class FaceGu(object):
 
 
 # Aux functions
-def DefineListFace_GU(face_list, plane3Pts=False):
+def define_list_face_gu(face_list, plane3Pts=False):
     """Return the list of the  corresponding Face_GU  object of a FaceList"""
     return tuple(FaceGu(face, plane3Pts) for face in face_list)
 
 
-def DefineSurface(face, plane3Pts):
+def define_surface(face, plane3Pts):
     kind_surf = str(face.Surface)
     if kind_surf == "<Plane object>":
         Surf_GU = PlaneGu(face, plane3Pts)
@@ -292,8 +302,9 @@ def DefineSurface(face, plane3Pts):
     return Surf_GU
 
 
-def ListSurfaces(Surfaces):
+# TODO check if this function is being used as it doesn't appear to be used in the code
+def list_surfaces(Surfaces):
     Faces = []
     for elem in Surfaces:
-        Faces.extend(DefineSurface(face) for face in elem)
+        Faces.extend(define_surface(face) for face in elem)
     return Faces

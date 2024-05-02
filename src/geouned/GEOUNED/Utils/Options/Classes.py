@@ -1,38 +1,40 @@
 class Options:
-    from .optionsDefault import defaultValues, typeDict
-    @classmethod
-    def setDefaultAttribute(cls):
-         for key,value in cls.defaultValues.items():
-             setattr(cls, key, value)
+    from .optionsDefault import default_values, type_dict
 
-    @classmethod 
-    def setAttribute(cls,key,value):
-        if key in cls.defaultValues.keys():
+    @classmethod
+    def set_default_attribute(cls):
+        for key, value in cls.default_values.items():
             setattr(cls, key, value)
+
+    @classmethod
+    def set_attribute(cls, key, value):
+        if key in cls.default_values.keys():
+            setattr(cls, key, value)
+
 
 class Tolerances:
-    from .tolerancesDefault import defaultValues, typeDict, KwrdEquiv
+    from .tolerancesDefault import default_values, type_dict, KwrdEquiv
 
     @classmethod
-    def setDefaultAttribute(cls):
-        for key,value in cls.defaultValues.items():
+    def set_default_attribute(cls):
+        for key, value in cls.default_values.items():
             setattr(cls, key, value)
 
     @classmethod
-    def setAttribute(cls,key,value):
-        if key in cls.defaultValues.keys():
+    def set_attribute(cls, key, value):
+        if key in cls.default_values.keys():
             setattr(cls, key, value)
 
 
 class McnpNumericFormat:
-    from .mcnpNumericDefault import defaultValues
+    from .mcnpNumericDefault import default_values
 
     @classmethod
-    def setDefaultAttribute(cls):
-         for key,value in cls.defaultValues.items():
-             setattr(cls, key, value)
-    
+    def set_default_attribute(cls):
+        for key, value in cls.default_values.items():
+            setattr(cls, key, value)
+
     @classmethod
-    def setAttribute(cls,key,value):
-        if key in cls.defaultValues.keys():
+    def set_attribute(cls, key, value):
+        if key in cls.default_values.keys():
             setattr(cls, key, value)

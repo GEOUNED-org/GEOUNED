@@ -173,6 +173,9 @@ Warning_Solids_definition.txt
 
 .vscode
 **/__pycache__
+
+# documentation
+_build
 docs/source/_build/**
 docs/build/**
 docs/source/_autosummary/*

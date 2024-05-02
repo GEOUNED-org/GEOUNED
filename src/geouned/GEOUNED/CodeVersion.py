@@ -7,7 +7,7 @@
 
 Modification in 0.9.6 Release Date 24/11/2022
   - Small change in the reading of material file.
-  - In "CellDefinition.py" file. "isOposite" function is call with rhe correct tolerance value instead of default value of the isOposite function.  
+  - In "CellDefinition.py" file. "is_opposite" function is call with rhe correct tolerance value instead of default value of the is_opposite function.  
 
 Modification in 0.9.7 Release Date 06/12/2022
   - Compatibility with FreeCAD version higher than 0.18.
@@ -21,7 +21,7 @@ Modification in 0.9.7 Release Date 06/12/2022
   - new module for plane splitting in decomposition modules. All planes are considerer equivalent (PX,PY,PZ,P), parallel planes are grouped together. 
     Decomposition is performed by splitting first with group of parallel planes with lowest number of elements. 
     Old version module is still available by switching the option keyword "newSplitPlane" to False. 
-  - New option added when enclosure are used. The option "sortEnclosure" True (Default False) will produce output file where solids and void of an enclosure
+  - New option added when enclosure are used. The option "sort_enclosure" True (Default False) will produce output file where solids and void of an enclosure
     are grouped together (first solid cell of the enclosure, then voids)
   - Options has been added to enlarge Box dimension when Constraint table is evaluated
  

@@ -55,9 +55,9 @@ def BuildDepth(cell, cutShape, mode, baseBox, simplify=False, loop=0):
     for i, CS in enumerate(cutShape):
         cbaseBox = baseBox
         # CS.base.exportStep('CS_{}_{}.stp'.format(i,str(cell.definition)))
-        # CTable =buildCTableFromSolids(cell.makeBox(CS.base.BoundBox),cell.surfaces,option='full')
+        # CTable =build_c_table_from_solids(cell.makeBox(CS.base.BoundBox),cell.surfaces,option='full')
         # cell.definition.simplify(CTable)
-        cell.definition.groupSingle()
+        cell.definition.group_single()
 
         if type(cell.definition.elements) is not bool:
             if cell.definition.level == 0:
@@ -110,14 +110,16 @@ def BuildSolidParts(cell, base, mode):
     # print(boundBox)
 
     if mode == "solids":
-        # boundBox.enlarge(10)
-        if cell.definition.operator == "OR" and False:
-            Def = cell.definition
-            cell.definition = cell.definition.getComplementary()
-            cell.buildShape(boundBox, force=False, simplify=False)
-            cell.definition = Def
-        else:
-            cell.buildShape(boundBox, force=True, simplify=False, fuse=True)
+
+        # TODO consider making this buildShape call conditional
+        # if cell.definition.operator == "OR" and False:
+        #     Def = cell.definition
+        #     cell.definition = cell.definition.get_complementary()
+        #     cell.buildShape(boundBox, force=False, simplify=False)
+        #     cell.definition = Def
+        # else:
+        #     cell.buildShape(boundBox, force=True, simplify=False, fuse=True)
+        cell.buildShape(boundBox, force=True, simplify=False, fuse=True)
 
         # print('export')
         # base.base.exportStep('base.stp')

@@ -175,6 +175,7 @@ class McnpInput:
                 trl[c.name] = getTransMatrix(trValues, c.unit)
         return trl
 
+
 # fmt: off
 def getTransMatrix(trsf, unit="", scale=10.0):
 
@@ -217,7 +218,7 @@ def substituteLikeCell(universe, Surfaces):
     for c in universe.values():
         if not c.TRCL:
             continue
-        cellSurf = c.geom.getSurfacesNumbers()
+        cellSurf = c.geom.get_surfaces_numbers()
         surfDict = {}
         for surf in cellSurf:
             newId += 1
@@ -503,7 +504,7 @@ def Get_primitive_surfaces(mcnp_surfaces, scale=10.0):
                     normal = FreeCAD.Vector(MCNPparams[0:3])
                     params = (normal, MCNPparams[3] * scale)
                 else:
-                    coeffs = pointsToCoeffs(MCNPparams[0:9])
+                    coeffs = points_to_coeffs(MCNPparams[0:9])
                     normal = FreeCAD.Vector(coeffs[0:3])
                     point = coeffs[3] / normal.Length
                     normal.normalize()
@@ -964,7 +965,7 @@ def Get_primitive_surfaces(mcnp_surfaces, scale=10.0):
     return surfaces
 
 
-def pointsToCoeffs(scf):
+def points_to_coeffs(scf):
     # mcnp implementation to convert 3 point plane to
     # plane parameters
 
@@ -1118,7 +1119,7 @@ def get_hyperboloid_parameters(eVal, eVect, T, k, iaxis):
     else:
         if ellipsoid:
             print("ellipical hyperboloid not implemented")
-            print("single radius from {} eigen Value will be used".format(minorRad))
+            print(f"single radius from {minorRad} eigen Value will be used")
         return "hyperboloid", (
             pos,
             axis,

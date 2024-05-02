@@ -8,7 +8,7 @@ def assignEnclosure(MetaList, NestedEnclosure):
         outside = True
         for lev, Level in enumerate(reversed(NestedEnclosure)):
             for encl in Level:
-                inter = m.checkIntersection(encl.CADSolid)
+                inter = m.check_intersection(encl.CADSolid)
                 # CAD solid intersect level i enclosure -> end of nested loops
                 # Current loop continue because solid can intersect various enclosure
                 if inter == 0:
@@ -38,7 +38,7 @@ def assignEnclosure(MetaList, NestedEnclosure):
     return
 
 
-def selectSolids(MetaList, LowLevelEnclosure, Enclosure):
+def select_solids(MetaList, LowLevelEnclosure, Enclosure):
     """This function selects the CAD solids and nested enclosures
     that can intersect with the current nested enclosure.
     For intermediate Levels selected solids are those intersecting i and i+1 level enclosure,
@@ -60,19 +60,19 @@ def selectSolids(MetaList, LowLevelEnclosure, Enclosure):
     return newMetaList
 
 
-def updateVoidList(offset, voidList, NestedEnclosure, sortEnclosure):
+def update_void_list(offset, voidList, NestedEnclosure, sort_enclosure):
 
     newVoidList = []
     if NestedEnclosure:
-        updateComment = True
+        update_comment = True
     else:
-        updateComment = False
+        update_comment = False
 
     icount = offset + 1
     voids = voidList[0]
     for m in voids:
         m.__id__ = icount
-        if updateComment and not sortEnclosure:
+        if update_comment and not sort_enclosure:
             m.Comments = m.Comments + "\nLevel 0 void enclosure"
         icount += 1
         m.ParentEnclosureID = -1
@@ -88,12 +88,10 @@ def updateVoidList(offset, voidList, NestedEnclosure, sortEnclosure):
                 m.__id__ = icount
                 m.ParentEnclosureID = encl.ParentEnclosureID
                 m.EnclosureID = encl.EnclosureID
-                if sortEnclosure:
-                    m.Comments = m.Comments + "\n{}".format(encl.Comments)
+                if sort_enclosure:
+                    m.Comments = m.Comments + f"\n{encl.Comments}"
                 else:
-                    m.Comments = m.Comments + "\nVoid Enclosure #{}".format(
-                        encl.EnclosureID
-                    )
+                    m.Comments = m.Comments + f"\nVoid Enclosure #{encl.EnclosureID}"
                 icount += 1
                 newVoidList.append(m)
             ivoid += 1

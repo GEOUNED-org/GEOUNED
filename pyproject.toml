@@ -29,4 +29,11 @@ Documentation = "https://github.com/GEOUNED-org/GEOUNED/docs"
 [project.optional-dependencies]
 tests = [
     "pytest",
+    "black==24.4.2",
+]
+docs = [
+  "sphinx",
+  "sphinx_rtd_theme",
+  "sphinx_autodoc_typehints",
+  "sphinx_rtd_theme",
 ]

@@ -39,7 +39,7 @@ else:
 
 if not runReverse :
   GEO = CadToCsg()
-  GEO.SetConfiguration(inifile)
+  GEO.set_configuration(inifile)
   GEO.Start()
 
 else:

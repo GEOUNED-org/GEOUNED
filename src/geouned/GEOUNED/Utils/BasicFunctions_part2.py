@@ -6,16 +6,16 @@ import math
 import FreeCAD
 
 from ..Utils.BasicFunctions_part1 import (
-    isInLine,
-    isInPlane,
-    isInTolerance,
-    isOposite,
-    isParallel,
-    isSameValue,
+    is_in_line,
+    is_in_plane,
+    is_in_tolerance,
+    is_opposite,
+    is_parallel,
+    is_same_value,
 )
-from ..Write.Functions import MCNPSurface
+from ..Write.Functions import mcnp_surface
 
-sameSurfFic = open("fuzzySurfaces", "w")
+same_surf_fic = open("fuzzySurfaces", "w")
 
 
 def Fuzzy(index, dtype, surf1, surf2, val, tol):
@@ -23,83 +23,83 @@ def Fuzzy(index, dtype, surf1, surf2, val, tol):
     same = val <= tol
 
     if dtype == "plane":
-        p1str = MCNPSurface(index, "Plane", surf1)
-        p2str = MCNPSurface(0, "Plane", surf2)
+        p1str = mcnp_surface(index, "Plane", surf1)
+        p2str = mcnp_surface(0, "Plane", surf2)
         line = "Same surface : {}\nPlane distance / Tolerance : {} {}\n {}\n {}\n\n".format(
             same, val, tol, p1str, p2str
         )
-        sameSurfFic.write(line)
+        same_surf_fic.write(line)
 
     elif dtype == "cylRad":
-        cyl1str = MCNPSurface(index, "Cylinder", surf1)
-        cyl2str = MCNPSurface(0, "Cylinder", surf2)
+        cyl1str = mcnp_surface(index, "Cylinder", surf1)
+        cyl2str = mcnp_surface(0, "Cylinder", surf2)
         line = "Same surface : {}\nDiff Radius / Tolerance: {} {}\n {}\n {}\n\n".format(
             same, val, tol, cyl1str, cyl2str
         )
-        sameSurfFic.write(line)
+        same_surf_fic.write(line)
 
     elif dtype == "cylAxs":
-        cyl1str = MCNPSurface(index, "Cylinder", surf1)
-        cyl2str = MCNPSurface(0, "Cylinder", surf2)
+        cyl1str = mcnp_surface(index, "Cylinder", surf1)
+        cyl2str = mcnp_surface(0, "Cylinder", surf2)
         line = "Same surface : {}\nDist Axis / Tolerance: {} {}\n {}\n {}\n\n".format(
             same, val, tol, cyl1str, cyl2str
         )
-        sameSurfFic.write(line)
+        same_surf_fic.write(line)
 
 
-def isSamePlane(p1, p2, dtol=1e-6, atol=1e-6, relTol=True, fuzzy=(False, 0)):
-    if isParallel(p1.Axis, p2.Axis, atol):
+def is_same_plane(p1, p2, dtol=1e-6, atol=1e-6, rel_tol=True, fuzzy=(False, 0)):
+    if is_parallel(p1.Axis, p2.Axis, atol):
         d1 = p1.Axis.dot(p1.Position)
         d2 = p2.Axis.dot(p2.Position)
-        if isOposite(p1.Axis, p2.Axis, atol):
+        if is_opposite(p1.Axis, p2.Axis, atol):
             d2 = -d2
         d = abs(d1 - d2)
-        if relTol:
+        if rel_tol:
             tol = dtol * max(p2.dim1, p2.dim2)
         else:
             tol = dtol
 
-        isSame, isFuzzy = isInTolerance(d, tol, 0.5 * tol, 2 * tol)
-        if isFuzzy and fuzzy[0]:
+        isSame, is_fuzzy = is_in_tolerance(d, tol, 0.5 * tol, 2 * tol)
+        if is_fuzzy and fuzzy[0]:
             Fuzzy(fuzzy[1], "plane", p2, p1, d, tol)
         return isSame
     return False
 
 
-def isSameCylinder(cyl1, cyl2, dtol=1e-6, atol=1e-6, relTol=True, fuzzy=(False, 0)):
-    if relTol:
+def is_same_cylinder(cyl1, cyl2, dtol=1e-6, atol=1e-6, rel_tol=True, fuzzy=(False, 0)):
+    if rel_tol:
         rtol = dtol * max(cyl2.Radius, cyl1.Radius)
     else:
         rtol = dtol
 
-    isSameRad, isFuzzy = isInTolerance(
+    is_same_rad, is_fuzzy = is_in_tolerance(
         cyl2.Radius - cyl1.Radius, rtol, 0.5 * rtol, 2 * rtol
     )
-    if isFuzzy and fuzzy[0]:
+    if is_fuzzy and fuzzy[0]:
         Fuzzy(fuzzy[1], "cylRad", cyl2, cyl1, abs(cyl2.Radius - cyl1.Radius), rtol)
 
-    if isSameRad:
-        if isParallel(cyl1.Axis, cyl2.Axis, atol):
+    if is_same_rad:
+        if is_parallel(cyl1.Axis, cyl2.Axis, atol):
             c12 = cyl1.Center - cyl2.Center
             d = cyl1.Axis.cross(c12).Length
 
-            if relTol:
+            if rel_tol:
                 tol = dtol * max(cyl1.Center.Length, cyl2.Center.Length)
             else:
                 tol = dtol
 
-            isSameCenter, isFuzzy = isInTolerance(d, tol, 0.5 * tol, 2 * tol)
-            if isFuzzy and fuzzy[0]:
+            is_same_center, is_fuzzy = is_in_tolerance(d, tol, 0.5 * tol, 2 * tol)
+            if is_fuzzy and fuzzy[0]:
                 Fuzzy(fuzzy[1], "cylAxs", cyl1, cyl2, d, tol)
 
-            return isSameCenter
+            return is_same_center
     return False
 
 
-def isSameCone(cone1, cone2, dtol=1e-6, atol=1e-6, relTol=True):
-    if isSameValue(cone1.SemiAngle, cone2.SemiAngle, atol):
-        if isParallel(cone1.Axis, cone2.Axis, atol):
-            if relTol:
+def is_same_cone(cone1, cone2, dtol=1e-6, atol=1e-6, rel_tol=True):
+    if is_same_value(cone1.SemiAngle, cone2.SemiAngle, atol):
+        if is_parallel(cone1.Axis, cone2.Axis, atol):
+            if rel_tol:
                 tol = dtol * max(cone1.Apex.Length, cone2.Apex.Length)
             else:
                 tol = dtol
@@ -107,13 +107,13 @@ def isSameCone(cone1, cone2, dtol=1e-6, atol=1e-6, relTol=True):
     return False
 
 
-def isSameSphere(sph1, sph2, tolerance=1e-6, relTol=True):
-    if relTol:
+def is_same_sphere(sph1, sph2, tolerance=1e-6, rel_tol=True):
+    if rel_tol:
         rtol = tolerance * max(sph2.Radius, sph1.Radius)
     else:
         rtol = tolerance
-    if isSameValue(sph1.Radius, sph2.Radius, rtol):
-        if relTol:
+    if is_same_value(sph1.Radius, sph2.Radius, rtol):
+        if rel_tol:
             ctol = tolerance * max(sph2.Center.Length, sph1.Center.Length)
         else:
             ctol = tolerance
@@ -122,21 +122,21 @@ def isSameSphere(sph1, sph2, tolerance=1e-6, relTol=True):
     return False
 
 
-def isSameTorus(tor1, tor2, dtol=1e-6, atol=1e-6, relTol=True):
-    if isParallel(tor1.Axis, tor2.Axis, atol):
+def is_same_torus(tor1, tor2, dtol=1e-6, atol=1e-6, rel_tol=True):
+    if is_parallel(tor1.Axis, tor2.Axis, atol):
         if tor1.Axis.dot(tor2.Axis) < 0:
             return False  # Assume same cone with oposite axis as different
-        if relTol:
+        if rel_tol:
             Rtol = dtol * max(tor1.MajorRadius, tor2.MajorRadius)
             rtol = dtol * max(tor1.MinorRadius, tor2.MinorRadius)
         else:
             Rtol = dtol
             rtol = dtol
 
-        if isSameValue(tor1.MajorRadius, tor2.MajorRadius, Rtol) and isSameValue(
+        if is_same_value(tor1.MajorRadius, tor2.MajorRadius, Rtol) and is_same_value(
             tor1.MinorRadius, tor2.MinorRadius, rtol
         ):
-            if relTol:
+            if rel_tol:
                 ctol = dtol * max(tor1.Center.Length, tor2.Center.Length)
             else:
                 ctol = dtol
@@ -144,13 +144,13 @@ def isSameTorus(tor1, tor2, dtol=1e-6, atol=1e-6, relTol=True):
     return False
 
 
-def isDuplicateInList(num_str1, i, lista):
+def is_duplicate_in_list(num_str1, i, lista):
     for j, elem2 in enumerate(lista):
         if i == j:
             continue
-        num_str2 = "%11.4E" % (elem2)
-        num_str3 = "%11.4E" % (elem2 + 2.0 * math.pi)
-        num_str4 = "%11.4E" % (elem2 - 2.0 * math.pi)
+        num_str2 = f"{elem2:11.4E}"
+        num_str3 = f"{elem2 + 2.0 * math.pi:11.4E}"
+        num_str4 = f"{elem2 - 2.0 * math.pi:11.4E}"
 
         if abs(float(num_str2)) < 1.0e-5:
             num_str2 = "%11.4E" % 0.0
@@ -167,53 +167,54 @@ def isDuplicateInList(num_str1, i, lista):
     return False
 
 
-def isInFaces(face, Faces):
+# TODO check if this function is used
+def is_in_faces(face, faces):
 
-    if Faces == []:
+    if faces == []:
         return False
     vector_nulo = FreeCAD.Vector(0, 0, 0)
     surface = face.Surface
     kind_surf = str(face.Surface)
     if kind_surf == "<Plane object>":
-        Axis = surface.Axis
-        Position = surface.Position
+        axis = surface.Axis
+        position = surface.Position
 
     elif kind_surf == "<Cylinder object>":
-        Axis = surface.Axis
-        Radius = surface.Radius
-        Center = surface.Center
+        axis = surface.Axis
+        radius = surface.Radius
+        center = surface.Center
 
     elif kind_surf == "<Cone object>":
-        Axis = surface.Axis
-        Apex = surface.Apex
-        SemiAngle = surface.SemiAngle
+        axis = surface.Axis
+        apex = surface.Apex
+        semi_angle = surface.SemiAngle
 
     elif kind_surf[0:6] == "Sphere":
-        Center = surface.Center
-        Radius = surface.Radius
+        center = surface.Center
+        radius = surface.Radius
 
     elif kind_surf == "<Toroid object>":
-        Axis = surface.Axis
-        Center = surface.Center
-        MajorRadius = surface.MajorRadius
-        MinorRadius = surface.MinorRadius
+        axis = surface.Axis
+        center = surface.Center
+        major_radius = surface.MajorRadius
+        minor_radius = surface.MinorRadius
 
-    for elem in Faces:
+    for elem in faces:
         surf = elem.Surface
         ##print surf
         if str(surf) == "<Plane object>" and kind_surf == "<Plane object>":
-            vector_cross = Axis.cross(surf.Axis)
-            if vector_cross == vector_nulo and isInPlane(Position, surf):
+            vector_cross = axis.cross(surf.Axis)
+            if vector_cross == vector_nulo and is_in_plane(position, surf):
                 return True
         elif str(surf) == "<Cylinder object>" and kind_surf == "<Cylinder object>":
             dir = surf.Axis
             rad = surf.Radius
             pnt = surf.Center
-            vector_cross = Axis.cross(surf.Axis)
+            vector_cross = axis.cross(surf.Axis)
             if (
                 vector_cross == vector_nulo
-                and Radius == rad
-                and isInLine(Center, dir, pnt)
+                and radius == rad
+                and is_in_line(center, dir, pnt)
             ):
                 return True
         elif str(surf) == "<Cone object>" and kind_surf == "<Cone object>":
@@ -222,81 +223,82 @@ def isInFaces(face, Faces):
             punta = surf.Apex
             semiangle = surf.SemiAngle
             if (
-                Axis.isEqual(dir, 1e-5)
-                and Apex.isEqual(punta, 1e-5)
-                and (SemiAngle - semiangle) < 1e-6
+                axis.isEqual(dir, 1e-5)
+                and apex.isEqual(punta, 1e-5)
+                and (semi_angle - semiangle) < 1e-6
             ):
                 return True
         elif str(surf)[0:6] == "Sphere" and kind_surf[0:6] == "Sphere":
             # corresponding logic for sphere
             rad = surf.Radius
             pnt = surf.Center
-            if Center == pnt and Radius == rad:
+            if center == pnt and radius == rad:
                 return True
 
         elif str(surf) == "<Toroid object>" and kind_surf == "<Toroid object>":
             # corresponding logic for Torus
-            radMaj = surf.MajorRadius
-            radMin = surf.MinorRadius
+            rad_maj = surf.MajorRadius
+            rad_min = surf.MinorRadius
             pnt = surf.Center
             dir = surf.Axis
             if (
-                Axis.isEqual(dir, 1e-5)
-                and Center.isEqual(pnt, 1e-5)
-                and (MajorRadius - radMaj) < 1e-6
-            ) and (MinorRadius - radMin) < 1e-6:
+                axis.isEqual(dir, 1e-5)
+                and center.isEqual(pnt, 1e-5)
+                and (major_radius - rad_maj) < 1e-6
+            ) and (minor_radius - rad_min) < 1e-6:
                 return True
 
     return False
 
 
-def isInFaces2(face, Faces):
+# TODO check if this function is used
+def is_in_faces_2(face, faces):
 
-    if Faces == []:
+    if faces == []:
         return False
     vector_nulo = FreeCAD.Vector(0, 0, 0)
     surface = face
     kind_surf = face.type
     if kind_surf == "<Plane object>":
-        Axis = surface.Axis
-        Position = surface.Position
+        axis = surface.Axis
+        position = surface.Position
 
     elif kind_surf == "<Cylinder object>":
-        Axis = surface.Axis
-        Radius = surface.Radius
-        Center = surface.Center
+        axis = surface.Axis
+        radius = surface.Radius
+        center = surface.Center
 
     elif kind_surf == "<Cone object>":
-        Axis = surface.Axis
-        Apex = surface.Apex
-        SemiAngle = surface.SemiAngle
+        axis = surface.Axis
+        apex = surface.Apex
+        semi_angle = surface.SemiAngle
 
     elif kind_surf[0:6] == "Sphere":
-        Center = surface.Center
-        Radius = surface.Radius
+        center = surface.Center
+        radius = surface.Radius
 
     elif kind_surf == "<Toroid object>":
-        Axis = surface.Axis
-        Center = surface.Center
-        MajorRadius = surface.MajorRadius
-        MinorRadius = surface.MinorRadius
+        axis = surface.Axis
+        center = surface.Center
+        major_radius = surface.MajorRadius
+        minor_radius = surface.MinorRadius
 
-    for elem in Faces:
+    for elem in faces:
         ##print surf
         if elem.type == "<Plane object>" and kind_surf == "<Plane object>":
-            vector_cross = Axis.cross(elem.Axis)
-            if vector_cross == vector_nulo and isInPlane(Position, elem.Surface):
-                # if (isParallel(elem.Axis,elem.Surface.Axis) and isInPlane(Position,elem.Surface)):
+            vector_cross = axis.cross(elem.Axis)
+            if vector_cross == vector_nulo and is_in_plane(position, elem.Surface):
+                # if (is_parallel(elem.Axis,elem.Surface.Axis) and is_in_plane(Position,elem.Surface)):
                 return True
         elif elem.type == "<Cylinder object>" and kind_surf == "<Cylinder object>":
             dir = elem.Axis
             rad = elem.Radius
             pnt = elem.Center
-            vector_cross = Axis.cross(elem.Axis)
+            vector_cross = axis.cross(elem.Axis)
             if (
                 vector_cross == vector_nulo
-                and Radius == rad
-                and isInLine(Center, dir, pnt)
+                and radius == rad
+                and is_in_line(center, dir, pnt)
             ):
                 return True
         elif elem.type == "<Cone object>" and kind_surf == "<Cone object>":
@@ -305,27 +307,27 @@ def isInFaces2(face, Faces):
             punta = elem.Apex
             semiangle = elem.SemiAngle
             if (
-                Axis.isEqual(dir, 1e-5)
-                and Apex.isEqual(punta, 1e-5)
-                and (SemiAngle - semiangle) < 1e-6
+                axis.isEqual(dir, 1e-5)
+                and apex.isEqual(punta, 1e-5)
+                and (semi_angle - semiangle) < 1e-6
             ):
                 return True
         elif elem.type == "Sphere" and kind_surf == "Sphere":
             # corresponding logic for sphere
             rad = elem.Radius
             pnt = elem.Center
-            if Center == pnt and Radius == rad:
+            if center == pnt and radius == rad:
                 return True
         elif elem.type == "<Toroid object>" and kind_surf == "<Toroid object>":
             # corresponding logic for Torus
-            radMaj = elem.MajorRadius
-            radMin = elem.MinorRadius
+            rad_maj = elem.MajorRadius
+            rad_min = elem.MinorRadius
             pnt = elem.Center
             dir = elem.Axis
             if (
-                Axis.isEqual(dir, 1e-5)
-                and Center.isEqual(pnt, 1e-5)
-                and (MajorRadius - radMaj) < 1e-6
-            ) and (MinorRadius - radMin) < 1e-6:
+                axis.isEqual(dir, 1e-5)
+                and center.isEqual(pnt, 1e-5)
+                and (major_radius - rad_maj) < 1e-6
+            ) and (minor_radius - rad_min) < 1e-6:
                 return True
     return False

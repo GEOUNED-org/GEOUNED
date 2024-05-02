@@ -6,61 +6,65 @@ import math
 import FreeCAD
 
 
-def isSameValue(v1, v2, tolerance=1e-6):
+def is_same_value(v1, v2, tolerance=1e-6):
     return abs(v1 - v2) < tolerance
 
 
-def isOposite(Vector1, Vector2, tolerance=1e-6):
-    return abs(Vector1.getAngle(-Vector2)) < tolerance
+def is_opposite(vector_1, vector_2, tolerance=1e-6):
+    return abs(vector_1.getAngle(-vector_2)) < tolerance
 
 
-def isParallel(Vector1, Vector2, tolerance=1e-6):
-    angle = abs(Vector1.getAngle(Vector2))
-    return angle < tolerance or isSameValue(angle, math.pi, tolerance)
+def is_parallel(vector_1, vector_2, tolerance=1e-6):
+    angle = abs(vector_1.getAngle(vector_2))
+    return angle < tolerance or is_same_value(angle, math.pi, tolerance)
 
 
-def isInLine(Point, Dir, Pnt_line, tolerance=1e-6):
-    r12 = Point - Pnt_line
-    return isParallel(Dir, r12) or (r12.Length < tolerance)
+def is_in_line(point, dir, pnt_line, tolerance=1e-6):
+    r12 = point - pnt_line
+    return is_parallel(dir, r12) or (r12.Length < tolerance)
 
 
-def isInPoints(point, Points, tolerance=1e-5):
-    if len(Points) > 0:
-        for P in Points:
-            if point.isEqual(P, tolerance):
+# TODO check this function is used in the code
+def is_in_points(point, points, tolerance=1e-5):
+    if len(points) > 0:
+        for p in points:
+            if point.isEqual(p, tolerance):
                 return True
     return False
 
 
-def isInEdge(Edge1, Edge2, tolerance=1e-8):
-    Ver1 = Edge1.Vertexes
-    Ver2 = Edge2.Vertexes
-    con1 = Ver1[0].Point.isEqual(Ver2[0].Point, tolerance) or Ver1[0].Point.isEqual(
-        Ver2[1].Point, tolerance
+# TODO check this function is used in the code
+def is_in_edge(edge1, edge2, tolerance=1e-8):
+    ver1 = edge1.Vertexes
+    ver2 = edge2.Vertexes
+    con1 = ver1[0].Point.isEqual(ver2[0].Point, tolerance) or ver1[0].Point.isEqual(
+        ver2[1].Point, tolerance
     )
-    con2 = Ver1[1].Point.isEqual(Ver2[0].Point, tolerance) or Ver1[1].Point.isEqual(
-        Ver2[1].Point, tolerance
+    con2 = ver1[1].Point.isEqual(ver2[0].Point, tolerance) or ver1[1].Point.isEqual(
+        ver2[1].Point, tolerance
     )
     return con1 and con2
 
 
-def isInPlane(Point, plane, dtolerance=1e-7):
-    return abs(Point.distanceToPlane(plane.Surf.Position, plane.Surf.Axis)) < dtolerance
+def is_in_plane(point, plane, d_tolerance=1e-7):
+    return (
+        abs(point.distanceToPlane(plane.Surf.Position, plane.Surf.Axis)) < d_tolerance
+    )
 
 
-def isInTolerance(val, tol, fuzzyLow, fuzzyHigh):
-    if abs(val) < fuzzyLow:
+def is_in_tolerance(val, tol, fuzzy_low, fuzzy_high):
+    if abs(val) < fuzzy_low:
         return True, False  # 1) isintolerance 2) fuzzy
     elif abs(val) < tol:
         return True, True
-    elif abs(val) > fuzzyHigh:
+    elif abs(val) > fuzzy_high:
         return False, False
     else:
         return False, True
 
 
-def signPlane(Point, plane):
-    value = plane.Surf.Axis.dot(Point - plane.Surf.Position)
+def sign_plane(point, plane):
+    value = plane.Surf.Axis.dot(point - plane.Surf.Position)
     if value >= 0.0:
         sign = 1
     else:
@@ -68,8 +72,8 @@ def signPlane(Point, plane):
     return sign
 
 
-def pointsToCoeffs(Points):
-    p1, p2, p3 = Points[0:3]
+def points_to_coeffs(points):
+    p1, p2, p3 = points[0:3]
     scf = (p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, p3.x, p3.y, p3.z)
 
     # mcnp implementation to convert 3 point plane to
@@ -95,11 +99,11 @@ def pointsToCoeffs(Points):
             xm = 1 / tpp[4 - i]
         coeff[4 - i] = tpp[4 - i] * xm
 
-    Axis = FreeCAD.Vector(coeff[0:3])
-    Distance = coeff[3] / Axis.Length
-    Axis.normalize()
+    axis = FreeCAD.Vector(coeff[0:3])
+    distance = coeff[3] / axis.Length
+    axis.normalize()
 
-    return Axis, Distance
+    return axis, distance
 
 
 class Plane3PtsParams:
@@ -118,11 +122,9 @@ class Plane3PtsParams:
         #    Point 2  : {P2[0]}  {P2[1]}  {P2[2]}
         #    Point 3  : {P3[0]}  {P3[1]}  {P3[2]} '''.format(P1=self.Points[0], P2=self.Points[1], P3=self.Points[2])
         pos = self.Axis.dot(self.Position)
-        outstr = """Plane :
-    Axis     : {}  {}  {} 
-    Position : {}  """.format(
-            self.Axis.x, self.Axis.y, self.Axis.z, pos
-        )
+        outstr = f"""Plane :
+    Axis     : {self.Axis.x}  {self.Axis.y}  {self.Axis.z} 
+    Position : {pos}  """
         return outstr
 
 
@@ -137,11 +139,9 @@ class PlaneParams:
 
     def __str__(self):
         pos = self.Axis.dot(self.Position)
-        outstr = """Plane :
-    Axis     : {}  {}  {} 
-    Position : {}  """.format(
-            self.Axis.x, self.Axis.y, self.Axis.z, pos
-        )
+        outstr = f"""Plane :
+    Axis     : {self.Axis.x}  {self.Axis.y}  {self.Axis.z} 
+    Position : {pos}  """
         return outstr
 
 
@@ -154,18 +154,10 @@ class CylinderParams:
         self.real = real
 
     def __str__(self):
-        outstr = """Cylinder :
-    Axis     : {}  {}  {} 
-    Center   : {}  {}  {}
-    Radius   : {}  """.format(
-            self.Axis.x,
-            self.Axis.y,
-            self.Axis.z,
-            self.Center.x,
-            self.Center.y,
-            self.Center.z,
-            self.Radius,
-        )
+        outstr = f"""Cylinder :
+    Axis     : {self.Axis.x}  {self.Axis.y}  {self.Axis.z} 
+    Center   : {self.Center.x}  {self.Center.y}  {self.Center.z}
+    Radius   : {self.Radius}  """
         return outstr
 
 
@@ -179,18 +171,10 @@ class ConeParams:
         self.real = real
 
     def __str__(self):
-        outstr = """Cone :
-    Axis     : {}  {}  {} 
-    Center   : {}  {}  {}
-    SemiAngle: {}  """.format(
-            self.Axis.x,
-            self.Axis.y,
-            self.Axis.z,
-            self.Apex.x,
-            self.Apex.y,
-            self.Apex.z,
-            self.SemiAngle,
-        )
+        outstr = f"""Cone :
+    Axis     : {self.Axis.x}  {self.Axis.y}  {self.Axis.z} 
+    Center   : {self.Apex.x}  {self.Apex.y}  {self.Apex.z}
+    SemiAngle: {self.SemiAngle}  """
         return outstr
 
 
@@ -200,11 +184,9 @@ class SphereParams:
         self.Radius = params[1]
 
     def __str__(self):
-        outstr = """Sphere :
-    Center   : {}  {}  {}
-    Radius   : {}  """.format(
-            self.Center.x, self.Center.y, self.Center.z, self.Radius
-        )
+        outstr = f"""Sphere :
+    Center   : {self.Center.x}  {self.Center.y}  {self.Center.z}
+    Radius   : {self.Radius}  """
         return outstr
 
 
@@ -216,18 +198,9 @@ class TorusParams:
         self.MinorRadius = params[3]
 
     def __str__(self):
-        outstr = """Torus :
-    Axis     : {}  {}  {} 
-    Center   : {}  {}  {}
-    MajorRadius: {}
-    MinorRadius: {} """.format(
-            self.Axis.x,
-            self.Axis.y,
-            self.Axis.z,
-            self.Center.x,
-            self.Center.y,
-            self.Center.z,
-            self.MajorRadius,
-            self.MinorRadius,
-        )
+        outstr = f"""Torus :
+    Axis     : {self.Axis.x}  {self.Axis.y}  {self.Axis.z} 
+    Center   : {self.Center.x}  {self.Center.y}  {self.Center.z}
+    MajorRadius: {self.MajorRadius}
+    MinorRadius: {self.MinorRadius} """
         return outstr
