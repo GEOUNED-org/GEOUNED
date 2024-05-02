@@ -328,6 +328,7 @@ def is_in_faces_2(face, faces):
                 axis.isEqual(dir, 1e-5)
                 and center.isEqual(pnt, 1e-5)
                 and (major_radius - rad_maj) < 1e-6
-            ) and (minor_radius - rad_min) < 1e-6:
+                and (minor_radius - rad_min) < 1e-6
+            ):
                 return True
     return False

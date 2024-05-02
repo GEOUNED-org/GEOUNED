@@ -4,18 +4,14 @@
 
 import re
 
-mostinner = re.compile(r"\([^\(^\)]*\)")  # identify most inner parentheses
-number = re.compile(
-    r"(?P<value>[-+]?\d+)"
-)  # identify signed integer and record its value in <value>
-mix = re.compile(
-    r"(?P<value>([-+]?\d+|\[0+\]))"
-)  # identify signed integer or [000...] pattern. Record the value.
-TFX = re.compile(
-    r"(?P<value>[FTXo]+)"
-)  # identify pattern incluinding F,T,X, or o sequence ( in any order).
-PValue = re.compile(r"P\d+")  # identify pattern "P" + integer pattern (e.g. P3915).
-NValue = re.compile(r"N\d+")  # identify pattern "N" + integer pattern (e.g. N3358).
+# fmt: off
+mostinner = re.compile(r"\([^\(^\)]*\)")                 # identify most inner parentheses
+number    = re.compile(r"(?P<value>[-+]?\d+)")           # identify signed integer and record its value in <value>
+mix       = re.compile(r"(?P<value>([-+]?\d+|\[0+\]))")  # identify signed integer or [000...] pattern. Record the value.
+TFX       = re.compile(r"(?P<value>[FTXo]+)")            # identify pattern incluinding F,T,X, or o sequence ( in any order).
+PValue    = re.compile(r"P\d+")                          # identify pattern "P" + integer pattern (e.g. P3915).
+NValue    = re.compile(r"N\d+")                          # identify pattern "N" + integer pattern (e.g. N3358).
+# fmt: on
 conversion = {
     "T": True,
     "F": False,

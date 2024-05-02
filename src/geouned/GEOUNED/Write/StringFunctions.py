@@ -4,76 +4,51 @@ import re
 # define patterns to be found in string #
 #########################################
 
-
+# fmt: off
 # used in card_split
-celmat = re.compile(
-    r"(?P<cel>^ *\d+) +(?P<scnd>(\d+|like))", re.I
-)  # identify first two entries on cell card (cell name, material)
-grlnumber = re.compile(
-    r"[-+]?(\d+\.\d+|\.\d+|\d+\.?)(e[+-]\d+)?", re.I
-)  # identify a general number form signed integer, float or exponential
-param = re.compile(
-    r"((^|\n {5})[\(\):\-\+\d+\.\# ]*)([\*a-z])", re.I
-)  # identity begining of the paramter part of the cell card
-likebut = re.compile(r"but", re.I)  # identify likebut  card
-trans = re.compile(r"trcl|fill= *\d+[ c\$\n]*\(,", re.I)  # identify tranformed card
+celmat    = re.compile(r"(?P<cel>^ *\d+) +(?P<scnd>(\d+|like))", re.I)      # identify first two entries on cell card (cell name, material)
+grlnumber = re.compile(r"[-+]?(\d+\.\d+|\.\d+|\d+\.?)(e[+-]\d+)?", re.I)    # identify a general number form signed integer, float or exponential
+param     = re.compile(r"((^|\n {5})[\(\):\-\+\d+\.\# ]*)([\*a-z])", re.I)  # identity begining of the paramter part of the cell card
+likebut   = re.compile(r"but", re.I)                                        # identify likebut  card
+trans     = re.compile(r"trcl|fill= *\d+[ c\$\n]*\(,", re.I)                # identify tranformed card
 
 # user in get_stat function
-reword = re.compile(r"(\d+|\(|\)|:|\#)")  # word identification in cell line
-compcell = re.compile(r"\#\d")  # identify hashcell complement operator
+reword   = re.compile(r"(\d+|\(|\)|:|\#)")         # word identification in cell line
+compcell = re.compile(r"\#\d")                     # identify hashcell complement operator
 
 # used in Complementary operator function
-number = re.compile(r"(?P<number>[-+]?\d+)")  # signed (+-) (or not) numbers
-# leftp=re.compile(r"^ *(?P<left>[-\d\(\#])",re.M)                               # identify first valid character
-leftp = re.compile(r"(?P<left>[-+\d\(\#])", re.I)  # identify first valid character
-rightp = re.compile(r"(?P<right>[ c\$\n]*$)", re.I)  # identify last valid character
-# interblk=re.compile(r"(?P<previous>\d)(?P<next>(( +| *(\$)?\n(C\n)* *)[-+]?\d))") # two numbers separated by blank (or newline or comments)
-# intercls=re.compile(r"(?P<previous>\))(?P<next>(( *| *(\$)?\n(C\n)* *)[-+]?\d))") # closed parenthesis followed by number
-# interopn=re.compile(r"(?P<previous>\d)(?P<next>(( *| *(\$)?\n(C\n)* *)\())")   # number followed by opened parenthesis
-# intercop=re.compile(r"(?P<previous>\))(?P<next>(( *| *(\$)?\n(C\n)* *)\())")   # closed parenthesis followed by opened parenthesis
-interblk = re.compile(
-    r"(?P<previous>\d)(?P<next>(( +| *((\n *)?\$|\nC)*\n *)[-+]?\d))"
-)  # two numbers separated by blank (or newline or comments)
-intercls = re.compile(
-    r"(?P<previous>\))(?P<next>(( *| *((\n *)?\$|\nC)*\n *)[-+]?\d))"
-)  # closed parenthesis followed by number
-interopn = re.compile(
-    r"(?P<previous>\d)(?P<next>(( *| *((\n *)?\$|\nC)*\n *)\())"
-)  # number followed by opened parenthesis
-intercop = re.compile(
-    r"(?P<previous>\))(?P<next>(( *| *((\n *)?\$|\nC)*\n *)\())"
-)  # closed parenthesis followed by opened parenthesis
-colonamp = re.compile(r"[:&]")  # colon or ampersand
+number = re.compile(r"(?P<number>[-+]?\d+)")                                          # signed (+-) (or not) numbers
+# leftp=re.compile(r"^ *(?P<left>[-\d\(\#])",re.M)                                    # identify first valid character
+leftp  = re.compile(r"(?P<left>[-+\d\(\#])", re.I)                                    # identify first valid character
+rightp = re.compile(r"(?P<right>[ c\$\n]*$)", re.I)                                   # identify last valid character
+# interblk=re.compile(r"(?P<previous>\d)(?P<next>(( +| *(\$)?\n(C\n)* *)[-+]?\d))")   # two numbers separated by blank (or newline or comments)
+# intercls=re.compile(r"(?P<previous>\))(?P<next>(( *| *(\$)?\n(C\n)* *)[-+]?\d))")   # closed parenthesis followed by number
+# interopn=re.compile(r"(?P<previous>\d)(?P<next>(( *| *(\$)?\n(C\n)* *)\())")        # number followed by opened parenthesis
+# intercop=re.compile(r"(?P<previous>\))(?P<next>(( *| *(\$)?\n(C\n)* *)\())")        # closed parenthesis followed by opened parenthesis
+interblk = re.compile(r"(?P<previous>\d)(?P<next>(( +| *((\n *)?\$|\nC)*\n *)[-+]?\d))")  # two numbers separated by blank (or newline or comments)
+intercls = re.compile(r"(?P<previous>\))(?P<next>(( *| *((\n *)?\$|\nC)*\n *)[-+]?\d))")  # closed parenthesis followed by number
+interopn = re.compile(r"(?P<previous>\d)(?P<next>(( *| *((\n *)?\$|\nC)*\n *)\())")       # number followed by opened parenthesis
+intercop = re.compile(r"(?P<previous>\))(?P<next>(( *| *((\n *)?\$|\nC)*\n *)\())")       # closed parenthesis followed by opened parenthesis
+colonamp = re.compile(r"[:&]")                                                            # colon or ampersand
 
 # used for remove redundant parenthesis function
-mostinner = re.compile(r"\([^\(^\)]*\)")  # identify most inner parentheses
-bracketsemi = re.compile(r"[\]\[;]")  # square bracket or semicolon
-blnkline = re.compile(r"^ *\n", re.M)  # identify blank line
-contline = re.compile(
-    r"\n {0,4}(?P<start>[^c^ ])", re.I
-)  # identify character other than 'C' in fisrt 5 columns
-comdollar = re.compile(r"\n(?P<blnk> *)\$")  # identify dollar on 'blank line'
-startgeom = re.compile(
-    r"(?P<previous>^ *)(?P<start>[\-\+\d])"
-)  # identify beginning of the geomtric part
-endgeom = re.compile(
-    r"(?P<last>\d)(?P<next> *((\n *)?\$|\nc)?(\n *)?$)", re.I
-)  # identify end of the geomtric part
-# endgeom=re.compile(r"(?P<last>\d)(?P<next> *(\$|\nc)?(\n *)?$)",re.I)                      # identify end of the geomtric part
+mostinner   = re.compile(r"\([^\(^\)]*\)")                                           # identify most inner parentheses
+bracketsemi = re.compile(r"[\]\[;]")                                                 # square bracket or semicolon
+blnkline    = re.compile(r"^ *\n", re.M)                                             # identify blank line
+contline    = re.compile(r"\n {0,4}(?P<start>[^c^ ])", re.I)                         # identify character other than 'C' in fisrt 5 columns
+comdollar   = re.compile(r"\n(?P<blnk> *)\$")                                        # identify dollar on 'blank line'
+startgeom   = re.compile(r"(?P<previous>^ *)(?P<start>[\-\+\d])")                    # identify beginning of the geomtric part
+endgeom     = re.compile(r"(?P<last>\d)(?P<next> *((\n *)?\$|\nc)?(\n *)?$)", re.I)  # identify end of the geomtric part
+# endgeom=re.compile(r"(?P<last>\d)(?P<next> *(\$|\nc)?(\n *)?$)",re.I)              # identify end of the geomtric part
 
 # other
-rehash = re.compile(
-    r"# *(\d+|\()"
-)  # find beginning of complementary operator (both cell and surf)
-parent = re.compile(r"[\(|\)]")  # position of open and close parenthesis (get_hashcell)
-gline = re.compile(
-    r"(^ ?[\(\):\-\+\d+\.\# ]+|\n {5}[\(\):\-\+\d+\.\# ]+)", re.I
-)  # valid geometric part of the line       (remove/restore_comments)
-comments = re.compile(
-    r"((\n *)?\$|\n *c)", re.I
-)  # begining of comment part               (remove/restore_comments)
-# comments=re.compile(r"\$|\n *c",re.I)                               # begining of comment part               (remove/restore_comments)
-lastCR = re.compile(r"\n *$")  # last newline "\n" on line string
+rehash   = re.compile(r"# *(\d+|\()")                                                 # find beginning of complementary operator (both cell and surf)
+parent   = re.compile(r"[\(|\)]")                                                     # position of open and close parenthesis (get_hashcell)
+gline    = re.compile(r"(^ ?[\(\):\-\+\d+\.\# ]+|\n {5}[\(\):\-\+\d+\.\# ]+)", re.I)  # valid geometric part of the line       (remove/restore_comments)
+comments = re.compile(r"((\n *)?\$|\n *c)", re.I)                                     # begining of comment part               (remove/restore_comments)
+# comments=re.compile(r"\$|\n *c",re.I)                                               # begining of comment part               (remove/restore_comments)
+lastCR   = re.compile(r"\n *$")                                                       # last newline "\n" on line string
+# fmt: on
 
 
 # restore curve parentheses and colon characters

@@ -418,17 +418,18 @@ def split_solid_fast(solid, surf, box):
             dist = solid.distToShape(surf.shape)[0]
         else:
             dist = 1.0
+        # fmt: off
         if dist > 1e-6:  # face doesn't intersect solid
             sgn = check_sign(solid, surf)
             if sgn == 1:
-                return (
-                    1,
-                    0,
-                )  # values of s2 and -s2   "0" means this region doesn't exist
+                return (1, 0)  # values of s2 and -s2   "0" means this region doesn't exist
             else:
                 return (0, 1)
         else:
             return (1, 1)  # values of s2 and -s2
+
+
+# fmt: on
 
 
 # find one point inside a solid (region)

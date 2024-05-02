@@ -357,8 +357,7 @@ def is_already_in_planes(plane, Array):
 
 
 #
-#
-#   Check if to faces are joint
+#   Check if two faces are joint
 #
 def contiguous_face(face1, face2):
     return face1.distToShape(face2)[0] < tol.distance
@@ -530,7 +529,7 @@ def gen_plane_cylinder(face, solid):
     return plane
 
 
-# Tolerance in this function are not the general once
+# Tolerance in this function are not the general one
 # function should be reviewed
 def gen_plane_cone(face, solid):
 
