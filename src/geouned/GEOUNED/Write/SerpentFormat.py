@@ -13,9 +13,7 @@ from .Functions import serpent_surface, change_surf_sign, write_serpent_cell_def
 
 
 class SerpentInput:
-    def __init__(
-        self, Meta, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat
-    ):
+    def __init__(self, Meta, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat):
         self.Title = title
         self.VolSDEF = volSDEF
         self.VolCARD = volCARD

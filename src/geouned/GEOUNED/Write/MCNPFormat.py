@@ -14,9 +14,7 @@ from .Functions import CardLine, mcnp_surface, change_surf_sign, write_mcnp_cell
 
 
 class McnpInput:
-    def __init__(
-        self, Meta, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat
-    ):
+    def __init__(self, Meta, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat):
         self.Title = title
         self.VolSDEF = volSDEF
         self.VolCARD = volCARD
