@@ -29,19 +29,32 @@ from ..Write.Functions import (
 
 
 class PhitsInput:
-    def __init__(self, Meta, Surfaces, setting):
-        self.Title = setting["title"]
-        self.VolSDEF = setting["volSDEF"]
-        self.VolCARD = setting["volCARD"]
-        self.U0CARD = setting["UCARD"]
-        self.DummyMat = setting["dummyMat"]
-        self.Matfile = setting["matFile"]
-        self.voidMat = setting["voidMat"]
-        self.startCell = setting["startCell"]
+    def __init__(
+        self,
+        Meta,
+        Surfaces,
+        title,
+        volSDEF,
+        volCARD,
+        UCARD,
+        dummyMat,
+        matFile,
+        voidMat,
+        startCell,
+        stepFile,
+    ):
+        self.Title = title
+        self.VolSDEF = volSDEF
+        self.VolCARD = volCARD
+        self.U0CARD = UCARD
+        self.DummyMat = dummyMat
+        self.Matfile = matFile
+        self.voidMat = voidMat
+        self.startCell = startCell
         self.Cells = Meta
         self.Options = {"Volume": self.VolCARD, "Universe": self.U0CARD}
 
-        self.StepFile = setting["stepFile"]
+        self.StepFile = stepFile
         if isinstance(self.StepFile, (tuple, list)):
             self.StepFile = "; ".join(self.StepFile)
 

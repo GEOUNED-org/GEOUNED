@@ -361,8 +361,7 @@ class CadToCsg:
             )
         )
 
-        code_setting = self.__dict__
-        if code_setting is None:
+        if self.__dict__ is None:
             raise ValueError("Cannot run the code. Input are missing")
         if self.stepFile == "":
             raise ValueError("Cannot run the code. Step file name is missing")
@@ -433,13 +432,13 @@ class CadToCsg:
 
             # decompose all solids in elementary solids (convex ones)
             warningSolidList = decompose_solids(
-                MetaList, Surfaces, UniverseBox, code_setting, True
+                MetaList, Surfaces, UniverseBox, self.debug, True
             )
 
             # decompose Enclosure solids
             if self.voidGen and EnclosureList:
                 warningEnclosureList = decompose_solids(
-                    EnclosureList, Surfaces, UniverseBox, code_setting, False
+                    EnclosureList, Surfaces, UniverseBox, self.debug, False
                 )
 
             print("End of decomposition phase")
@@ -463,11 +462,11 @@ class CadToCsg:
                 Conv.no_overlapping_cell(MetaList, Surfaces)
 
         else:
-            translate(MetaList, Surfaces, UniverseBox, code_setting)
+            translate(MetaList, Surfaces, UniverseBox, self.debug)
             # decompose Enclosure solids
             if self.voidGen and EnclosureList:
                 warningEnclosureList = decompose_solids(
-                    EnclosureList, Surfaces, UniverseBox, code_setting, False
+                    EnclosureList, Surfaces, UniverseBox, self.debug, False
                 )
 
         tempstr2 = str(datetime.now() - tempTime)
@@ -500,11 +499,22 @@ class CadToCsg:
                 init = MetaList[-1].__id__ - len(EnclosureList)
             else:
                 init = 0
+            # TODO perhaps this method should be moved into the CsgToCsg class to avoid passing in so many args
             MetaVoid = Void.void_generation(
-                MetaReduced, EnclosureList, Surfaces, UniverseBox, code_setting, init
+                MetaReduced,
+                EnclosureList,
+                Surfaces,
+                UniverseBox,
+                self.voidMat,
+                self.maxSurf,
+                self.maxBracket,
+                self.minVoidSize,
+                self.simplify,
+                self.sort_enclosure,
+                init,
             )
 
-        # if code_setting['simplify'] == 'full' and not Options.forceNoOverlap:
+        # if self.simplify == 'full' and not Options.forceNoOverlap:
         if self.simplify == "full":
             Surfs = {}
             for lst in Surfaces.values():
@@ -580,7 +590,25 @@ class CadToCsg:
         process_cones(MetaList, coneInfo, Surfaces, UniverseBox)
 
         # write outputformat input
-        write_geometry(UniverseBox, MetaList, Surfaces, code_setting)
+        write_geometry(
+            UniverseBox,
+            MetaList,
+            Surfaces,
+            self.stepFile,
+            self.title,
+            self.volSDEF,
+            self.volCARD,
+            self.UCARD,
+            self.dummyMat,
+            self.geometryName,
+            self.outFormat,
+            self.cellCommentFile,
+            self.cellSummaryFile,
+            self.voidGen,
+            self.matFile,
+            self.voidMat,
+            self.startCell,
+        )
 
         print("End of MCNP, OpenMC, Serpent and PHITS translation phase")
 
@@ -591,14 +619,14 @@ class CadToCsg:
         print("Translation time of void cells", tempTime2 - tempTime1)
 
 
-def decompose_solids(MetaList, Surfaces, UniverseBox, setting, meta):
+def decompose_solids(MetaList, Surfaces, UniverseBox, debug, meta):
     totsolid = len(MetaList)
     warningSolids = []
     for i, m in enumerate(MetaList):
         if meta and m.IsEnclosure:
             continue
         print(f"Decomposing solid: {i + 1}/{totsolid} ")
-        if setting["debug"]:
+        if debug:
             print(m.Comments)
             if not path.exists("debug"):
                 mkdir("debug")
@@ -625,7 +653,7 @@ def decompose_solids(MetaList, Surfaces, UniverseBox, setting, meta):
 
             warningSolids.append(i)
 
-        if setting["debug"]:
+        if debug:
             if m.IsEnclosure:
                 comsolid.exportStep(f"debug/compEnclosure_{i}.stp")
             else:

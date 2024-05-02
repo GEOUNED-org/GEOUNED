@@ -10,7 +10,19 @@ from ..Void import voidFunctions as VF
 from .VoidBoxClass import VoidBox
 
 
-def void_generation(MetaList, EnclosureList, Surfaces, UniverseBox, setting, init):
+def void_generation(
+    MetaList,
+    EnclosureList,
+    Surfaces,
+    UniverseBox,
+    voidMat,
+    maxsurf,
+    maxbracket,
+    minVoidSize,
+    simplify,
+    sort_enclosure,
+    init,
+):
     voidList = []
 
     if EnclosureList:
@@ -32,15 +44,23 @@ def void_generation(MetaList, EnclosureList, Surfaces, UniverseBox, setting, ini
     )
 
     EnclosureBox = GeounedSolid(None, Box)
-    if setting["voidMat"]:
-        voidMat = setting["voidMat"]
+    if voidMat:
         EnclosureBox.set_material(voidMat[0], voidMat[1], voidMat[2])
 
     # get voids in 0 Level Enclosure (original Universe)
     # if exist Level 1 enclosures are considered as material cells
     print("Build Void highest enclosure")
 
-    voids = get_void_def(newMetaList, Surfaces, EnclosureBox, setting, Lev0=True)
+    voids = get_void_def(
+        newMetaList,
+        Surfaces,
+        EnclosureBox,
+        maxsurf,
+        maxbracket,
+        minVoidSize,
+        simplify,
+        Lev0=True,
+    )
     voidList.append(voids)
 
     # Perform enclosure void
@@ -55,25 +75,38 @@ def void_generation(MetaList, EnclosureList, Surfaces, UniverseBox, setting, ini
             newMetaList = VF.select_solids(MetaList, encl.SonEnclosures, encl)
             print(f"Build Void enclosure {j} in enclosure level {i + 1}")
             # select solids overlapping current enclosure "encl", and lower level enclosures
-            voids = get_void_def(newMetaList, Surfaces, encl, setting)
+            voids = get_void_def(
+                newMetaList,
+                Surfaces,
+                encl,
+                maxsurf,
+                maxbracket,
+                minVoidSize,
+                simplify,
+                False,
+            )
             voidList.append(voids)
 
     voidList.append(set_graveyard_cell(Surfaces, UniverseBox))
 
-    return VF.update_void_list(
-        init, voidList, NestedEnclosure, setting["sort_enclosure"]
-    )
+    return VF.update_void_list(init, voidList, NestedEnclosure, sort_enclosure)
 
 
-def get_void_def(MetaList, Surfaces, Enclosure, setting, Lev0=False):
+def get_void_def(
+    MetaList,
+    Surfaces,
+    Enclosure,
+    maxsurf,
+    maxbracket,
+    minVoidSize,
+    simplify,
+    Lev0=False,
+):
 
-    maxsurf = setting["maxSurf"]
-    maxbracket = setting["maxBracket"]
-    minSize = setting["minVoidSize"]
-
-    if "full" in setting["simplify"].lower():
+    # TODO on another PR this can be removed with an attribute setter on the CadToCsg class
+    if "full" in simplify.lower():
         simplifyVoid = "full"
-    elif "void" in setting["simplify"].lower():
+    elif "void" in simplify.lower():
         simplifyVoid = "diag"
     else:
         simplifyVoid = "no"
@@ -98,7 +131,7 @@ def get_void_def(MetaList, Surfaces, Enclosure, setting, Lev0=False):
                 print(f"{iloop} {iz + 1}/{nvoid} {nsurfaces} {nbrackets}")
 
             if nsurfaces > maxsurf and nbrackets > maxbracket:
-                newspace = z.split(minSize)
+                newspace = z.split(minVoidSize)
             else:
                 newspace = None
 

@@ -13,12 +13,14 @@ from .Functions import serpent_surface, change_surf_sign, write_serpent_cell_def
 
 
 class SerpentInput:
-    def __init__(self, Meta, Surfaces, setting):
-        self.Title = setting["title"]
-        self.VolSDEF = setting["volSDEF"]
-        self.VolCARD = setting["volCARD"]
-        self.U0CARD = setting["UCARD"]
-        self.dummyMat = setting["dummyMat"]
+    def __init__(
+        self, Meta, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat, stepFile
+    ):
+        self.Title = title
+        self.VolSDEF = volSDEF
+        self.VolCARD = volCARD
+        self.U0CARD = UCARD
+        self.dummyMat = dummyMat
         self.Cells = Meta
         self.Options = {
             "Volume": self.VolCARD,
@@ -27,7 +29,7 @@ class SerpentInput:
         }
         self.part = "p"
 
-        self.StepFile = setting["stepFile"]
+        self.StepFile = stepFile
         if isinstance(self.StepFile, (tuple, list)):
             self.StepFile = "; ".join(self.StepFile)
 

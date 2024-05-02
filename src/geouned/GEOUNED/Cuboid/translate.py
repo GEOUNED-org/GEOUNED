@@ -84,13 +84,13 @@ def get_id(face_in, Surfaces):
     return 0
 
 
-def translate(meta_list, surfaces, universe_box, setting):
+def translate(meta_list, surfaces, universe_box, debug):
     tot_solid = len(meta_list)
     for i, m in enumerate(meta_list):
         if m.IsEnclosure:
             continue
         print(f"Decomposing solid: {i}/{tot_solid} ")
-        if setting["debug"]:
+        if debug:
             print(m.Comments)
             if m.IsEnclosure:
                 m.Solids[0].exportStep(f"origEnclosure_{i}.stp")
