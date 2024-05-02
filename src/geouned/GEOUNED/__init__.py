@@ -25,6 +25,78 @@ from .Write.WriteFiles import write_geometry
 
 
 class CadToCsg:
+    """Base class for the conversion of CAD to CSG models
+
+    Args:
+        title (str, optional): Title of the model. Defaults to "Geouned
+            conversion".
+        stepFile (str, optional): Name of the CAD file (in STEP format) to
+            be converted. Defaults to "".
+        geometryName (str, optional): Base name of the output file(s).
+            Defaults to "".
+        matFile (str, optional): _description_. Defaults to "".
+        outFormat (typing.Tuple[str], optional): Format for the output
+            geometry. Available format are: mcnp, openMC_XML, openMC_PY,
+            phits and serpent. Several output format can be written in the
+            same geouned run. Defaults to ("mcnp",).
+        voidGen (bool, optional): Generate voids of the geometry. Defaults
+            to True.
+        debug (bool, optional): Write step files of original and decomposed
+            solids, for each solid in the STEP file. Defaults to False.
+        compSolids (bool, optional): Join subsolids of STEP file as a single
+            compound solid. Step files generated with SpaceClaim have not
+            exactly the same level of solids as FreeCAD. It may a happened
+            that solids defined has separated solids are read by FreeCAD
+            as a single compound solid (and will produce only one MCNP
+            cell). In this case compSolids should be set to False. Defaults
+            to True.
+        volSDEF (bool, optional): Write SDEF definition and tally of solid
+            cell for stochastic volume checking. Defaults to False.
+        dummyMat (bool, optional): Write dummy material definition card in
+            the MCNP output file for all material labels present in the
+            model. Dummy material definition is "MX 1001 1". Defaults to
+            False.
+        volCARD (bool, optional): Write the CAD calculated volume in the
+            cell definition using the VOL card. Defaults to True.
+        UCARD (_type_, optional): Write universe card in the cell definition
+            with the specified universe number (if value = 0 Universe card
+            is not written). Defaults to None.
+        simplify (str, optional): Simplify the cell definition considering
+            relative surfaces position and using Boolean logics. Available
+            options are: "no" no optimization, "void" only void cells are
+            simplified. Algorithm is faster but the simplification is not
+            optimal. "voidfull" : only void cells are simplified with the
+            most optimal algorithm. The time of the conversion can be
+            multiplied by 5 or more. "full" : all the cells (solids and
+            voids) are simplified. Defaults to "No".
+        cellRange (list, optional): Range of cell to be converted (only one
+            range is allowed, e.g [100,220]). Default all solids are
+            converted. Defaults to [].
+        exportSolids (str, optional): Export CAD solid after reading.
+            The execution is stopped after export, the translation is not
+            carried out. Defaults to "".
+        minVoidSize (float, optional): Minimum size of the edges of the
+            void cell. Units are in mm. Defaults to 200.0.
+        maxBracket (int, optional): Maximum number of brackets (solid
+            complementary) allowed in void cell definition. Defaults to 30.
+        voidMat (list, optional): Assign a material defined by the user
+            instead of void for cells without material definition and the
+            cells generated in the automatic void generation. The format
+            is a 3 valued tuple (mat_label, mat_density, mat_description).
+            Example (100,1e-3,'Air assigned to Void'). Defaults to [].
+        voidExclude (list, optional): #TODO see issue 87. Defaults to [].
+        startCell (int, optional): Starting cell numbering label. Defaults to 1.
+        startSurf (int, optional): Starting surface numbering label. Defaults to 1.
+        cellCommentFile (bool, optional): Write an additional file with
+            comment associated to each CAD cell in the MCNP output file.
+            Defaults to False.
+        cellSummaryFile (bool, optional): Write an additional file with
+            information on the CAD cell translated. Defaults to True.
+        sort_enclosure (bool, optional): If enclosures are defined in the
+            CAD models, the voids cells of the enclosure will be located in
+            the output file in the same location where the enclosure solid
+            is located in the CAD solid tree.. Defaults to False.
+    """
 
     def __init__(
         self,
@@ -54,78 +126,7 @@ class CadToCsg:
         cell_summary_file: bool = True,
         sort_enclosure: bool = False,
     ):
-        """Base class for the conversion of CAD to CSG models
 
-        Args:
-            title (str, optional): Title of the model. Defaults to "Geouned
-                conversion".
-            step_file (str, optional): Name of the CAD file (in STEP format) to
-                be converted. Defaults to "".
-            geometry_name (str, optional): Base name of the output file(s).
-                Defaults to "".
-            mat_file (str, optional): _description_. Defaults to "".
-            out_format (typing.Tuple[str], optional): Format for the output
-                geometry. Available format are: mcnp, openMC_XML, openMC_PY,
-                phits and serpent. Several output format can be written in the
-                same geouned run. Defaults to ("mcnp",).
-            void_gen (bool, optional): Generate voids of the geometry. Defaults
-                to True.
-            debug (bool, optional): Write step files of original and decomposed
-                solids, for each solid in the STEP file. Defaults to False.
-            comp_solids (bool, optional): Join subsolids of STEP file as a single
-                compound solid. Step files generated with SpaceClaim have not
-                exactly the same level of solids as FreeCAD. It may a happened
-                that solids defined has separated solids are read by FreeCAD
-                as a single compound solid (and will produce only one MCNP
-                cell). In this case comp_solids should be set to False. Defaults
-                to True.
-            vol_sdef (bool, optional): Write SDEF definition and tally of solid
-                cell for stochastic volume checking. Defaults to False.
-            dummy_mat (bool, optional): Write dummy material definition card in
-                the MCNP output file for all material labels present in the
-                model. Dummy material definition is "MX 1001 1". Defaults to
-                False.
-            vol_card (bool, optional): Write the CAD calculated volume in the
-                cell definition using the VOL card. Defaults to True.
-            u_card (_type_, optional): Write universe card in the cell definition
-                with the specified universe number (if value = 0 Universe card
-                is not written). Defaults to None.
-            simplify (str, optional): Simplify the cell definition considering
-                relative surfaces position and using Boolean logics. Available
-                options are: "no" no optimization, "void" only void cells are
-                simplified. Algorithm is faster but the simplification is not
-                optimal. "voidfull" : only void cells are simplified with the
-                most optimal algorithm. The time of the conversion can be
-                multiplied by 5 or more. "full" : all the cells (solids and
-                voids) are simplified. Defaults to "No".
-            cell_range (list, optional): Range of cell to be converted (only one
-                range is allowed, e.g [100,220]). Default all solids are
-                converted. Defaults to [].
-            export_solids (str, optional): Export CAD solid after reading.
-                The execution is stopped after export, the translation is not
-                carried out. Defaults to "".
-            min_void_size (float, optional): Minimum size of the edges of the
-                void cell. Units are in mm. Defaults to 200.0.
-            max_bracket (int, optional): Maximum number of brackets (solid
-                complementary) allowed in void cell definition. Defaults to 30.
-            void_mat (list, optional): Assign a material defined by the user
-                instead of void for cells without material definition and the
-                cells generated in the automatic void generation. The format
-                is a 3 valued tuple (mat_label, mat_density, mat_description).
-                Example (100,1e-3,'Air assigned to Void'). Defaults to [].
-            void_exclude (list, optional): #TODO see issue 87. Defaults to [].
-            start_cell (int, optional): Starting cell numbering label. Defaults to 1.
-            start_surf (int, optional): Starting surface numbering label. Defaults to 1.
-            cell_comment_file (bool, optional): Write an additional file with
-                comment associated to each CAD cell in the MCNP output file.
-                Defaults to False.
-            cell_summary_file (bool, optional): Write an additional file with
-                information on the CAD cell translated. Defaults to True.
-            sort_enclosure (bool, optional): If enclosures are defined in the
-                CAD models, the voids cells of the enclosure will be located in
-                the output file in the same location where the enclosure solid
-                is located in the CAD solid tree.. Defaults to False.
-        """
         self.title = title
         self.step_file = step_file
         self.geometry_name = geometry_name
