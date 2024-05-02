@@ -7,6 +7,7 @@ import configparser
 import typing
 from datetime import datetime
 from os import mkdir, path
+from typing import get_type_hints
 
 import FreeCAD
 import Part
@@ -100,9 +101,9 @@ class CadToCsg:
 
     def __init__(
         self,
+        stepFile: str,
         title: str = "Geouned conversion",
-        stepFile: str = "",
-        geometryName: str = "",
+        geometryName: str = "converted_with_geouned",
         matFile: str = "",
         outFormat: typing.Tuple[str] = ("mcnp",),
         voidGen: bool = True,
@@ -125,6 +126,9 @@ class CadToCsg:
         cellCommentFile: bool = False,
         cellSummaryFile: bool = True,
         sort_enclosure: bool = False,
+        options=Options(),
+        numeric_format=McnpNumericFormat(),
+        tolerances=Tolerances(),
     ):
 
         self.title = title
@@ -152,36 +156,32 @@ class CadToCsg:
         self.cellCommentFile = cellCommentFile
         self.cellSummaryFile = cellSummaryFile
         self.sort_enclosure = sort_enclosure
+        self.options = options
+        self.numeric_format = numeric_format
+        self.tolerances = tolerances
 
-        Options.set_default_attribute()
-        McnpNumericFormat.set_default_attribute()
-        Tolerances.set_default_attribute()
-
-    def set_configuration(self, configFile=None):
-
-        if configFile is None:
-            return
+    @classmethod
+    def from_config(cls, filename):
 
         config = configparser.ConfigParser()
         config.optionxform = str
-        config.read(configFile)
+        config.read(filename)
         for section in config.sections():
             if section == "Files":
                 for key in config["Files"].keys():
                     if key in ("geometryName", "matFile", "title"):
-                        self.set(key, config.get("Files", key))
-
+                        setattr(cls, key, config.get("Files", key))
                     elif key == "stepFile":
                         value = config.get("Files", key).strip()
                         lst = value.split()
                         if value[0] in ("(", "[") and value[-1] in ("]", ")"):
                             data = value[1:-1].split(",")
                             data = [x.strip() for x in data]
-                            self.set(key, data)
+                            setattr(cls, key, data)
                         elif len(lst) > 1:
-                            self.set(key, lst)
+                            setattr(cls, key, lst)
                         else:
-                            self.set(key, value)
+                            setattr(cls, key, value)
 
                     elif key == "outFormat":
                         raw = config.get("Files", key).strip()
@@ -198,7 +198,7 @@ class CadToCsg:
                                 outFormat.append("serpent")
                             elif v.lower() == "phits":
                                 outFormat.append("phits")
-                        self.set(key, tuple(outFormat))
+                        setattr(cls, key, tuple(outFormat))
 
             elif section == "Parameters":
                 for key in config["Parameters"].keys():
@@ -213,7 +213,7 @@ class CadToCsg:
                         "cellCommentFile",
                         "sort_enclosure",
                     ):
-                        self.set(key, config.getboolean("Parameters", key))
+                        setattr(cls, key, config.getboolean("Parameters", key))
                     elif key in (
                         "minVoidSize",
                         "maxSurf",
@@ -221,135 +221,43 @@ class CadToCsg:
                         "startCell",
                         "startSurf",
                     ):
-                        self.set(key, config.getint("Parameters", key))
+                        setattr(cls, key, config.getint("Parameters", key))
                     elif key in ("exportSolids", "UCARD", "simplify"):
-                        self.set(key, config.get("Parameters", key))
+                        setattr(cls, key, config.get("Parameters", key))
                     elif key == "voidMat":
                         value = config.get("Parameters", key).strip()
                         data = value[1:-1].split(",")
-                        self.set(key, (int(data[0]), float(data[1]), data[2]))
+                        setattr(cls, key, (int(data[0]), float(data[1]), data[2]))
                     else:
                         value = config.get("Parameters", key).strip()
                         data = value[1:-1].split(",")
-                        self.set(key, tuple(map(int, data)))
+                        setattr(cls, key, tuple(map(int, data)))
 
             elif section == "Options":
-                for key in config["Options"].keys():
-                    if key in Options.default_values.keys():
-                        if Options.type_dict[key] is bool:
-                            Options.set_attribute(
-                                key, config.getboolean("Options", key)
-                            )
-                        elif (
-                            Options.type_dict[key] is float
-                            or Options.type_dict[key] is int
-                        ):
-                            Options.set_attribute(key, config.getfloat("Options", key))
+                option_attribute_names_and_types = get_type_hints(Options)
+                key_value_pairs = convert_config_keys_to_dict(config, option_attribute_names_and_types, "Options")
+                cls.options = Options(**key_value_pairs)
 
             elif section == "Tolerances":
-                for key in config["Tolerances"].keys():
-                    eqvKey = Tolerances.KwrdEquiv[key]
-                    if eqvKey in Tolerances.default_values.keys():
-                        if Tolerances.type_dict[eqvKey] is bool:
-                            Tolerances.set_attribute(
-                                eqvKey, config.getboolean("Tolerances", key)
-                            )
-                        elif Tolerances.type_dict[eqvKey] is float:
-                            Tolerances.set_attribute(
-                                eqvKey, config.getfloat("Tolerances", key)
-                            )
+                option_attribute_names_and_types = get_type_hints(Tolerances)
+                key_value_pairs = convert_config_keys_to_dict(config, option_attribute_names_and_types, "Tolerances")
+                cls.tolerances = Tolerances(**key_value_pairs)
 
             elif section == "MCNP_Numeric_Format":
-                PdEntry = False
-                for key in config["MCNP_Numeric_Format"].keys():
-                    if key in McnpNumericFormat.default_values.keys():
-                        McnpNumericFormat.set_attribute(
-                            key, config.get("MCNP_Numeric_Format", key)
-                        )
-                        if key == "P_d":
-                            PdEntry = True
+                option_attribute_names_and_types = get_type_hints(Tolerances)
+                key_value_pairs = convert_config_keys_to_dict(config, option_attribute_names_and_types, "Tolerances")
+                # TODO check why special case for p_d this is needed, perhaps it can just be another attribute set by user
+                if "P_d" in key_value_pairs.keys():
+                    PdEntry = True
+                else:
+                    PdEntry = False
+                cls.numeric_format = McnpNumericFormat(**key_value_pairs)
 
             else:
-                print(f"bad section name : {section}")
-
-        if self.__dict__["geometryName"] == "":
-            self.__dict__["geometryName"] = self.__dict__["stepFile"][:-4]
+                print(f"bad section name : {section} found in config file {filename}")
 
         if Options.prnt3PPlane and not PdEntry:
             McnpNumericFormat.P_d = "22.15e"
-
-        print(self.__dict__)
-
-    def set(self, kwrd, value):
-
-        if kwrd in McnpNumericFormat.default_values.keys():
-            McnpNumericFormat.set_attribute(kwrd, value)
-            return
-        elif kwrd in Tolerances.default_values.keys():
-            Tolerances.set_attribute(kwrd, value)
-            return
-        elif kwrd in Options.default_values.keys():
-            Options.set_attribute(kwrd, value)
-            return
-        elif kwrd not in self.__dict__.keys():
-            print(f"Bad entry : {kwrd}")
-            return
-
-        if kwrd == "stepFile":
-            if isinstance(value, (list, tuple)):
-                for v in value:
-                    if not isinstance(v, str):
-                        print(f"elemt in {kwrd} list should be string")
-                        return
-            elif not isinstance(value, str):
-                print(f"{kwrd} should be string or tuple of strings")
-                return
-
-        elif kwrd == "UCARD":
-            if value == "None":
-                value = None
-            elif value.isdigit():
-                value = int(value)
-            else:
-                print(f"{kwrd} value should be None or integer")
-                return
-        elif kwrd == "outFormat":
-            if len(value) == 0:
-                return
-        elif kwrd in ("geometryName", "matFile", "exportSolids"):
-            if not isinstance(value, str):
-                print(f"{kwrd} value should be str instance")
-                return
-        elif kwrd in ("cellRange", "voidMat", "voidExclude"):
-            if not isinstance(value, (list, tuple)):
-                print(f"{kwrd} value should be list or tuple")
-                return
-        elif kwrd in ("minVoidSize", "maxSurf", "maxBracket", "startCell", "startSurf"):
-            if not isinstance(value, int):
-                print(f"{kwrd} value should be integer")
-                return
-        elif kwrd in (
-            "voidGen",
-            "debug",
-            "compSolids",
-            "simplifyCTable",
-            "volSDEF",
-            "volCARD",
-            "dummyMat",
-            "cellSummaryFile",
-            "cellCommentFile",
-            "sort_enclosure",
-        ):
-            if not isinstance(value, bool):
-                print(f"{kwrd} value should be boolean")
-                return
-
-        self.__dict__[kwrd] = value
-        if kwrd == "stepFile" and self.__dict__["geometryName"] == "":
-            if isinstance(value, (tuple, list)):
-                self.__dict__["geometryName"] == "joined_step_files"
-            else:
-                self.__dict__["geometryName"] == value[:-4]
 
     def start(self):
 
@@ -850,3 +758,23 @@ def sort_enclosure(MetaList, MetaVoid, offSet=0):
         update_comment(m, idLabel)
 
     return newMeta
+
+def convert_config_keys_to_dict(config, option_attribute_names_and_types, key_name):
+    config_dict = {}
+    for key, _ in config[key_name].items():
+        if key in option_attribute_names_and_types.keys():
+            if option_attribute_names_and_types[key] is bool:
+                value = config.getboolean(key_name)
+            elif option_attribute_names_and_types[key] is float:
+                value =config.getfloat(key_name)
+            elif option_attribute_names_and_types[key] is int:
+                value = config.getint(key_name)
+            config_dict[key] = value
+        else:
+            msg = (
+                f"{key} was found in the config Options section "
+                "but is not an acceptable key name. Acceptable key "
+                f"names are {option_attribute_names_and_types}"
+            )
+            raise ValueError(msg)
+    return config_dict
