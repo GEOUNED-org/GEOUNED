@@ -6,7 +6,6 @@ from ..Utils import BasicFunctions_part2 as BF
 from ..Utils import Geometry_GU as GU
 from ..Utils.BasicFunctions_part1 import is_opposite, is_parallel
 from ..Utils.booleanFunction import BoolSequence
-from ..Utils.Options.Classes import Options as opt
 from ..Utils.Options.Classes import Tolerances as tol
 
 
@@ -84,7 +83,7 @@ def get_id(face_in, Surfaces):
     return 0
 
 
-def translate(meta_list, surfaces, universe_box, debug):
+def translate(meta_list, surfaces, universe_box, debug, verbose):
     tot_solid = len(meta_list)
     for i, m in enumerate(meta_list):
         if m.IsEnclosure:
@@ -102,11 +101,10 @@ def translate(meta_list, surfaces, universe_box, debug):
                 Part.makeCompound(m.Solids), "Plane3Pts", universe_box, MakeObj=False
             )
         )
-        set_definition(m, surfaces)
+        set_definitions(m, surfaces, verbose)
 
 
-# TODO rename this, but be careful as there are other functions in the code with the same name
-def set_definition(meta_obj, surfaces):
+def set_definitions(meta_obj, surfaces, verbose):
     solids = meta_obj.Solids
     s_def = BoolSequence(operator="OR")
 
@@ -120,7 +118,7 @@ def set_definition(meta_obj, surfaces):
             if abs(face.Area) < 1e-2:
                 continue
             if face.Area < 0:
-                if opt.verbose:
+                if verbose:
                     print("Warning : Negative surface Area")
             if str(face.Surface) != "<Plane object>":
                 print("Warning : All surfaces must be plane")

@@ -96,7 +96,7 @@ class TorusGu(SurfacesGu):
 class SolidGu:
     """GEOUNED Solid Class"""
 
-    def __init__(self, solid, plane3Pts=False):
+    def __init__(self, solid, tor_distance, tor_angle, relativeTol, plane3Pts=False):
         self.solid = solid
         faces = define_list_face_gu(solid.Faces, plane3Pts)
         self.Faces = faces
@@ -105,6 +105,9 @@ class SolidGu:
         self.Edges = solid.Edges
         self.TorusVParams = {}
         self.TorusUParams = {}
+        self.tor_distance = tor_distance
+        self.tor_angle = tor_angle
+        self.relativeTol = relativeTol
 
         toroidIndex = []
         for i, face in enumerate(self.Faces):
@@ -113,7 +116,9 @@ class SolidGu:
             toroidIndex.append(i)
 
         if len(toroidIndex) != 0:
-            tFaces = self.__same_torus_surf__(toroidIndex)
+            tFaces = self.__same_torus_surf__(
+                toroidIndex, tor_distance, tor_angle, relativeTol
+            )
             for i, tSet in enumerate(tFaces):
                 URange = self.__merge_periodic_uv__("U", tSet)
                 VRange = self.__merge_periodic_uv__("V", tSet)
@@ -121,7 +126,7 @@ class SolidGu:
                     self.TorusVParams[t] = (i, VRange)
                     self.TorusUParams[t] = (i, URange)
 
-    def __same_torus_surf__(self, torusList):
+    def __same_torus_surf__(self, torusList, tor_distance, tor_angle, relativeTol):
         """group as a single face all the neighbour faces of the same torus"""
         sameTorusFace = []
         temp = torusList[:]
@@ -132,9 +137,9 @@ class SolidGu:
                 if is_same_torus(
                     self.Faces[i].Surface,
                     self.Faces[j].Surface,
-                    dtol=tol.tor_distance,
-                    atol=tol.tor_angle,
-                    rel_tol=tol.relativeTol,
+                    dtol=tor_distance,
+                    atol=tor_angle,
+                    rel_tol=relativeTol,
                 ):
                     current.append(j)
             for c in current:

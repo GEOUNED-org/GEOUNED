@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from geouned import CadToCsg
+import geouned
 
 path_to_cad = Path("testing/inputSTEP")
 step_files = list(path_to_cad.rglob("*.stp")) + list(path_to_cad.rglob("*.step"))
@@ -23,40 +23,36 @@ def test_conversion(input_step_file):
     output_dir.mkdir(parents=True, exist_ok=True)
     output_filename_stem = output_dir / input_step_file.stem
 
-    # creates the config file contents
-    template = {
-        "title": "Input Test",
-        "stepFile": f"{input_step_file.resolve()}",
-        "geometryName": f"{output_filename_stem.resolve()}",
-        "outFormat": ("mcnp", "openMC_XML", "openMC_PY", "serpent", "phits"),
-        "compSolids": False,
-        "volCARD": False,
-        "volSDEF": True,
-        "voidGen": True,
-        "dummyMat": True,
-        "minVoidSize": 100,
-        "cellSummaryFile": False,
-        "cellCommentFile": False,
-        "debug": False,
-        "simplify": "no",
-        "forceCylinder": False,
-        "splitTolerance": 0,
-        "newSplitPlane": True,
-        "nPlaneReverse": 0,
-    }
-
     # deletes the output MC files if they already exists
     suffixes = (".mcnp", ".xml", ".inp", ".py", ".serp")
     for suffix in suffixes:
         output_filename_stem.with_suffix(suffix).unlink(missing_ok=True)
 
-    GEO = CadToCsg("Input Test")
+    my_options = geouned.Options(
+        forceCylinder=False,
+        splitTolerance=0,
+        newSplitPlane=True,
+        nPlaneReverse=0,
+    )
+    geo = geouned.CadToCsg(
+        title="Input Test",
+        stepFile=f"{input_step_file.resolve()}",
+        geometryName=f"{output_filename_stem.resolve()}",
+        outFormat=("mcnp", "openMC_XML", "openMC_PY", "serpent", "phits"),
+        compSolids=False,
+        volCARD=False,
+        volSDEF=True,
+        voidGen=True,
+        dummyMat=True,
+        minVoidSize=100,
+        cellSummaryFile=False,
+        cellCommentFile=False,
+        debug=False,
+        simplify="no",
+        options=my_options,
+    )
 
-    # set parameters values stored in template dictionary
-    for key, value in template.items():
-        GEO.set(key, value)
-
-    GEO.start()
+    geo.start()
 
     for suffix in suffixes:
         assert output_filename_stem.with_suffix(suffix).exists()

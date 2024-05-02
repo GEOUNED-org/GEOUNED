@@ -163,6 +163,8 @@ class CadToCsg:
     @classmethod
     def from_config(cls, filename):
 
+        csg_to_csg = cls()
+
         config = configparser.ConfigParser()
         config.optionxform = str
         config.read(filename)
@@ -170,18 +172,18 @@ class CadToCsg:
             if section == "Files":
                 for key in config["Files"].keys():
                     if key in ("geometryName", "matFile", "title"):
-                        setattr(cls, key, config.get("Files", key))
+                        setattr(csg_to_csg, key, config.get("Files", key))
                     elif key == "stepFile":
                         value = config.get("Files", key).strip()
                         lst = value.split()
                         if value[0] in ("(", "[") and value[-1] in ("]", ")"):
                             data = value[1:-1].split(",")
                             data = [x.strip() for x in data]
-                            setattr(cls, key, data)
+                            setattr(csg_to_csg, key, data)
                         elif len(lst) > 1:
-                            setattr(cls, key, lst)
+                            setattr(csg_to_csg, key, lst)
                         else:
-                            setattr(cls, key, value)
+                            setattr(csg_to_csg, key, value)
 
                     elif key == "outFormat":
                         raw = config.get("Files", key).strip()
@@ -198,7 +200,7 @@ class CadToCsg:
                                 outFormat.append("serpent")
                             elif v.lower() == "phits":
                                 outFormat.append("phits")
-                        setattr(cls, key, tuple(outFormat))
+                        setattr(csg_to_csg, key, tuple(outFormat))
 
             elif section == "Parameters":
                 for key in config["Parameters"].keys():
@@ -213,7 +215,7 @@ class CadToCsg:
                         "cellCommentFile",
                         "sort_enclosure",
                     ):
-                        setattr(cls, key, config.getboolean("Parameters", key))
+                        setattr(csg_to_csg, key, config.getboolean("Parameters", key))
                     elif key in (
                         "minVoidSize",
                         "maxSurf",
@@ -221,42 +223,50 @@ class CadToCsg:
                         "startCell",
                         "startSurf",
                     ):
-                        setattr(cls, key, config.getint("Parameters", key))
+                        setattr(csg_to_csg, key, config.getint("Parameters", key))
                     elif key in ("exportSolids", "UCARD", "simplify"):
-                        setattr(cls, key, config.get("Parameters", key))
+                        setattr(csg_to_csg, key, config.get("Parameters", key))
                     elif key == "voidMat":
                         value = config.get("Parameters", key).strip()
                         data = value[1:-1].split(",")
-                        setattr(cls, key, (int(data[0]), float(data[1]), data[2]))
+                        setattr(
+                            csg_to_csg, key, (int(data[0]), float(data[1]), data[2])
+                        )
                     else:
                         value = config.get("Parameters", key).strip()
                         data = value[1:-1].split(",")
-                        setattr(cls, key, tuple(map(int, data)))
+                        setattr(csg_to_csg, key, tuple(map(int, data)))
 
             elif section == "Options":
                 option_attribute_names_and_types = get_type_hints(Options)
-                key_value_pairs = convert_config_keys_to_dict(config, option_attribute_names_and_types, "Options")
-                cls.options = Options(**key_value_pairs)
+                key_value_pairs = convert_config_keys_to_dict(
+                    config, option_attribute_names_and_types, "Options"
+                )
+                csg_to_csg.options = Options(**key_value_pairs)
 
             elif section == "Tolerances":
                 option_attribute_names_and_types = get_type_hints(Tolerances)
-                key_value_pairs = convert_config_keys_to_dict(config, option_attribute_names_and_types, "Tolerances")
-                cls.tolerances = Tolerances(**key_value_pairs)
+                key_value_pairs = convert_config_keys_to_dict(
+                    config, option_attribute_names_and_types, "Tolerances"
+                )
+                csg_to_csg.tolerances = Tolerances(**key_value_pairs)
 
             elif section == "MCNP_Numeric_Format":
                 option_attribute_names_and_types = get_type_hints(Tolerances)
-                key_value_pairs = convert_config_keys_to_dict(config, option_attribute_names_and_types, "Tolerances")
+                key_value_pairs = convert_config_keys_to_dict(
+                    config, option_attribute_names_and_types, "Tolerances"
+                )
                 # TODO check why special case for p_d this is needed, perhaps it can just be another attribute set by user
                 if "P_d" in key_value_pairs.keys():
                     PdEntry = True
                 else:
                     PdEntry = False
-                cls.numeric_format = McnpNumericFormat(**key_value_pairs)
+                csg_to_csg.numeric_format = McnpNumericFormat(**key_value_pairs)
 
             else:
                 print(f"bad section name : {section} found in config file {filename}")
 
-        if Options.prnt3PPlane and not PdEntry:
+        if csg_to_csg.options.prnt3PPlane and not PdEntry:
             McnpNumericFormat.P_d = "22.15e"
 
     def start(self):
@@ -336,17 +346,47 @@ class CadToCsg:
         warnEnclosures = []
         coneInfo = dict()
         tempTime0 = datetime.now()
-        if not Options.Facets:
+        if not self.options.Facets:
 
             # decompose all solids in elementary solids (convex ones)
             warningSolidList = decompose_solids(
-                MetaList, Surfaces, UniverseBox, self.debug, True
+                MetaList=MetaList,
+                Surfaces=Surfaces,
+                UniverseBox=UniverseBox,
+                debug=self.debug,
+                meta=True,
+                nPlaneReverse=self.options.nPlaneReverse,
+                splitTolerance=self.options.splitTolerance,
+                pln_distance=self.tolerances.pln_distance,
+                pln_angle=self.tolerances.pln_angle,
+                relativeTol=self.tolerances.relativeTol,
+                verbose=self.options.verbose,
+                tor_distance=self.tolerances.tor_distance,
+                tor_angle=self.tolerances.tor_angle,
+                scale_up=self.options.scaleUp,
+                cyl_angle=self.tolerances.cyl_angle,
+                cyl_distance=self.tolerances.cyl_distance,
             )
 
             # decompose Enclosure solids
             if self.voidGen and EnclosureList:
                 warningEnclosureList = decompose_solids(
-                    EnclosureList, Surfaces, UniverseBox, self.debug, False
+                    MetaList=EnclosureList,
+                    Surfaces=Surfaces,
+                    UniverseBox=UniverseBox,
+                    debug=self.debug,
+                    meta=False,
+                    nPlaneReverse=self.options.nPlaneReverse,
+                    splitTolerance=self.options.splitTolerance,
+                    pln_distance=self.tolerances.pln_distance,
+                    pln_angle=self.tolerances.pln_angle,
+                    relativeTol=self.tolerances.relativeTol,
+                    verbose=self.options.verbose,
+                    tor_distance=self.tolerances.tor_distance,
+                    tor_angle=self.tolerances.tor_angle,
+                    scale_up=self.options.scaleUp,
+                    cyl_angle=self.tolerances.cyl_angle,
+                    cyl_distance=self.tolerances.cyl_distance,
                 )
 
             print("End of decomposition phase")
@@ -357,7 +397,9 @@ class CadToCsg:
                 if m.IsEnclosure:
                     continue
                 print("Building cell: ", j + 1)
-                cones = Conv.cellDef(m, Surfaces, UniverseBox)
+                cones = Conv.cellDef(
+                    m, Surfaces, UniverseBox, self.options.forceCylinder
+                )
                 if cones:
                     coneInfo[m.__id__] = cones
                 if j in warningSolidList:
@@ -370,11 +412,26 @@ class CadToCsg:
                 Conv.no_overlapping_cell(MetaList, Surfaces)
 
         else:
-            translate(MetaList, Surfaces, UniverseBox, self.debug)
+            translate(MetaList, Surfaces, UniverseBox, self.debug, self.options.verbose)
             # decompose Enclosure solids
             if self.voidGen and EnclosureList:
                 warningEnclosureList = decompose_solids(
-                    EnclosureList, Surfaces, UniverseBox, self.debug, False
+                    MataList=EnclosureList,
+                    Surfaces=Surfaces,
+                    UniverseBox=UniverseBox,
+                    debug=self.debug,
+                    meta=False,
+                    nPlaneReverse=self.options.nPlaneReverse,
+                    splitTolerance=self.options.splitTolerance,
+                    pln_distance=self.tolerances.pln_distance,
+                    pln_angle=self.tolerances.pln_angle,
+                    relativeTol=self.tolerances.relativeTol,
+                    verbose=self.options.verbose,
+                    tor_distance=self.tolerances.tor_distance,
+                    tor_angle=self.tolerances.tor_angle,
+                    scale_up=self.options.scaleUp,
+                    cyl_angle=self.tolerances.cyl_angle,
+                    cyl_distance=self.tolerances.cyl_distance,
                 )
 
         tempstr2 = str(datetime.now() - tempTime)
@@ -385,7 +442,9 @@ class CadToCsg:
         if self.voidGen and EnclosureList:
             for j, m in enumerate(EnclosureList):
                 print("Building Enclosure Cell: ", j + 1)
-                cones = Conv.cellDef(m, Surfaces, UniverseBox)
+                cones = Conv.cellDef(
+                    m, Surfaces, UniverseBox, self.options.forceCylinder
+                )
                 if cones:
                     coneInfo[m.__id__] = cones
                 if j in warningEnclosureList:
@@ -420,6 +479,8 @@ class CadToCsg:
                 self.simplify,
                 self.sort_enclosure,
                 init,
+                self.options.enlargeBox,
+                self.options.verbose,
             )
 
         # if self.simplify == 'full' and not Options.forceNoOverlap:
@@ -434,7 +495,12 @@ class CadToCsg:
                     continue
                 print("simplify cell", c.__id__)
                 Box = UF.get_box(c)
-                CT = build_c_table_from_solids(Box, (c.Surfaces, Surfs), option="full")
+                CT = build_c_table_from_solids(
+                    Box=Box,
+                    SurfInfo=(c.Surfaces, Surfs),
+                    scale_up=self.options.scale_up,
+                    option="full",
+                )
                 c.Definition.simplify(CT)
                 c.Definition.clean()
                 if type(c.Definition.elements) is bool:
@@ -534,7 +600,24 @@ class CadToCsg:
         print("Translation time of void cells", tempTime2 - tempTime1)
 
 
-def decompose_solids(MetaList, Surfaces, UniverseBox, debug, meta):
+def decompose_solids(
+    MetaList,
+    Surfaces,
+    UniverseBox,
+    debug,
+    meta,
+    nPlaneReverse,
+    splitTolerance,
+    relativeTol,
+    pln_distance,
+    pln_angle,
+    verbose,
+    tor_distance,
+    tor_angle,
+    scale_up,
+    cyl_angle,
+    cyl_distance,
+):
     totsolid = len(MetaList)
     warningSolids = []
     for i, m in enumerate(MetaList):
@@ -550,7 +633,21 @@ def decompose_solids(MetaList, Surfaces, UniverseBox, debug, meta):
             else:
                 m.Solids[0].exportStep(f"debug/origSolid_{i}.stp")
 
-        comsolid, err = Decom.SplitSolid(Part.makeCompound(m.Solids), UniverseBox)
+        comsolid, err = Decom.split_solid(
+            solidShape=Part.makeCompound(m.Solids),
+            nPlaneReverse=nPlaneReverse,
+            universe_box=UniverseBox,
+            splitTolerance=splitTolerance,
+            pln_distance=pln_distance,
+            pln_angle=pln_angle,
+            relativeTol=relativeTol,
+            verbose=verbose,
+            tor_distance=tor_distance,
+            tor_angle=tor_angle,
+            scale_up=scale_up,
+            cyl_angle=cyl_angle,
+            cyl_distance=cyl_distance,
+        )
 
         if err != 0:
             if not path.exists("Suspicious_solids"):
@@ -759,6 +856,7 @@ def sort_enclosure(MetaList, MetaVoid, offSet=0):
 
     return newMeta
 
+
 def convert_config_keys_to_dict(config, option_attribute_names_and_types, key_name):
     config_dict = {}
     for key, _ in config[key_name].items():
@@ -766,7 +864,7 @@ def convert_config_keys_to_dict(config, option_attribute_names_and_types, key_na
             if option_attribute_names_and_types[key] is bool:
                 value = config.getboolean(key_name)
             elif option_attribute_names_and_types[key] is float:
-                value =config.getfloat(key_name)
+                value = config.getfloat(key_name)
             elif option_attribute_names_and_types[key] is int:
                 value = config.getint(key_name)
             config_dict[key] = value

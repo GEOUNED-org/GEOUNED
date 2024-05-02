@@ -5,7 +5,6 @@ from ..LoadFile import LoadFunctions as LF
 from ..Utils.BasicFunctions_part1 import is_opposite
 from ..Utils.booleanFunction import BoolSequence
 from ..Utils.Functions import GeounedSolid, GeounedSurface
-from ..Utils.Options.Classes import Options as opt
 from ..Void import voidFunctions as VF
 from .VoidBoxClass import VoidBox
 
@@ -22,6 +21,8 @@ def void_generation(
     simplify,
     sort_enclosure,
     init,
+    enlargeBox,
+    verbose,
 ):
     voidList = []
 
@@ -59,6 +60,8 @@ def void_generation(
         maxbracket,
         minVoidSize,
         simplify,
+        enlargeBox,
+        verbose,
         Lev0=True,
     )
     voidList.append(voids)
@@ -83,6 +86,8 @@ def void_generation(
                 maxbracket,
                 minVoidSize,
                 simplify,
+                enlargeBox,
+                verbose,
                 False,
             )
             voidList.append(voids)
@@ -100,6 +105,8 @@ def get_void_def(
     maxbracket,
     minVoidSize,
     simplify,
+    enlargeBox,
+    verbose,
     Lev0=False,
 ):
 
@@ -150,7 +157,12 @@ def get_void_def(
 
                 print(f"build complementary {iloop} {iz}")
 
-                cell, CellIn = z.get_void_complementary(Surfaces, simplify=simplifyVoid)
+                cell, CellIn = z.get_void_complementary(
+                    Surfaces=Surfaces,
+                    enlargeBox=enlargeBox,
+                    verbose=verbose,
+                    simplify=simplifyVoid,
+                )
                 if cell is not None:
                     VoidCell = (cell, (boxDim, CellIn))
                     VoidDef.append(VoidCell)
@@ -164,7 +176,7 @@ def get_void_def(
         mVoid = GeounedSolid(i)
         mVoid.Void = True
         mVoid.CellType = "void"
-        mVoid.set_definition(vcell[0], simplify=True)
+        mVoid.set_definition(vcell[0])
         mVoid.set_material(Enclosure.Material, Enclosure.Rho, Enclosure.MatInfo)
         mVoid.set_dilution(Enclosure.Dilution)
 

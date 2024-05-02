@@ -19,8 +19,6 @@ from ..Utils.BasicFunctions_part1 import (
 from ..Utils.booleanFunction import BoolSequence, insert_in_sequence
 from ..Utils.BooleanSolids import build_c_table_from_solids, remove_extra_surfaces
 from ..Utils.Functions import GeounedSurface
-from ..Utils.Options.Classes import Options as opt
-from ..Utils.Options.Classes import Tolerances as tol
 
 
 def get_id(facein, surfaces):
@@ -149,12 +147,12 @@ def is_inverted(solid):
     return False
 
 
-def gen_plane(face, solid):
+def gen_plane(face, solid, verbose):
     """Generate an additional plane when convex surfaces of second order are presented as a face of the solid"""
 
     surf = face.Surface
     if str(surf) == "<Cylinder object>":
-        return gen_plane_cylinder(face, solid)
+        return gen_plane_cylinder(face, solid, verbose)
     if str(surf) == "<Cone object>":
         return gen_plane_cone(face, solid)
     if str(surf) == "Sphere":
@@ -284,7 +282,7 @@ def gen_plane_sphere(face, solid):
     return Part.Plane(face.Surface.Center, normal).toShape()
 
 
-def gen_plane_cylinder(face, solid):
+def gen_plane_cylinder(face, solid, verbose):
 
     surf = face.Surface
     rad = surf.Radius
@@ -297,7 +295,7 @@ def gen_plane_cylinder(face, solid):
 
     for i, face2 in enumerate(solid.Faces):
         if face2.Area < tol.min_area:
-            if opt.verbose:
+            if verbose:
                 print(
                     f"Warning: {str(surf)} surface removed from cell definition. Face area < Min area ({face2.Area} < {tol.min_area}) "
                 )
@@ -327,7 +325,7 @@ def gen_plane_cylinder(face, solid):
     p2 = solid.Faces[i2].valueAt(u_2, v_2)
 
     if p1.isEqual(p2, 1e-5):
-        if opt.verbose:
+        if verbose:
             print("Error in the additional place definition")
         return None
 
@@ -337,7 +335,7 @@ def gen_plane_cylinder(face, solid):
     return plane
 
 
-def gen_plane_cylinder_old(face, solid):
+def gen_plane_cylinder_old(face, solid, verbose):
 
     surf = face.Surface
     rad = surf.Radius
@@ -349,7 +347,7 @@ def gen_plane_cylinder_old(face, solid):
 
     for i, face2 in enumerate(solid.Faces):
         if face2.Area < tol.min_area:
-            if opt.verbose:
+            if verbose:
                 print(
                     f"Warning: {str(surf)} surface removed from cell definition. Face area < Min area ({face2.Area} < {tol.min_area}) "
                 )
@@ -419,7 +417,7 @@ def gen_plane_cylinder_old(face, solid):
     v_2 = solid.Faces[face_index_2[1]].valueAt(node_max[0], node_max[1])
 
     if v_1.isEqual(v_2, 1e-5):
-        if opt.verbose:
+        if verbose:
             print("Error in the additional place definition")
         return None
 
@@ -440,7 +438,7 @@ def gen_plane_cone(face, solid):
 
     for i, face2 in enumerate(solid.Faces):
         if face2.Area < tol.min_area:
-            if opt.verbose:
+            if verbose:
                 print(
                     f"Warning: {str(Surf)} surface removed from cell definition. Face area < Min area ({face2.Area} < {tol.min_area}) "
                 )
@@ -467,7 +465,7 @@ def gen_plane_cone(face, solid):
     p2 = solid.Faces[i2].valueAt(u_2, v_2)
 
     if p1.isEqual(p2, 1e-5):
-        if opt.verbose:
+        if verbose:
             print("Error in the additional place definition")
         return None
 
@@ -476,7 +474,7 @@ def gen_plane_cone(face, solid):
     return plane
 
 
-def gen_plane_cone_old(face, solid):
+def gen_plane_cone_old(face, solid, verbose):
 
     surf = face.Surface
     if str(surf) != "<Cone object>":
@@ -486,7 +484,7 @@ def gen_plane_cone_old(face, solid):
 
     for i, face2 in enumerate(solid.Faces):
         if face2.Area < tol.min_area:
-            if opt.verbose:
+            if verbose:
                 print(
                     f"Warning: {str(surf)} surface removed from cell definition. Face area < Min area ({face2.Area} < {tol.min_area}) "
                 )
@@ -553,7 +551,7 @@ def gen_plane_cone_old(face, solid):
     v_2 = solid.Faces[face_index_2[1]].valueAt(node_max[0], node_max[1])
 
     if v_1.isEqual(v_2, 1e-5):
-        if opt.verbose:
+        if verbose:
             print("Error in the additional place definition")
         return None
 
@@ -741,7 +739,7 @@ def gen_torus_annex_v_surface(face, v_params, force_cylinder=False):
         )
 
 
-def cellDef(meta_obj, surfaces, universe_box):
+def cellDef(meta_obj, surfaces, universe_box, verbose, forceCylinder):
 
     solids = meta_obj.Solids
     del_list = []
@@ -760,13 +758,13 @@ def cellDef(meta_obj, surfaces, universe_box):
         for iface, face in enumerate(solid_gu.Faces):
             surface_type = str(face.Surface)
             if abs(face.Area) < tol.min_area:
-                if opt.verbose:
+                if verbose:
                     print(
                         f"Warning: {surface_type} surface removed from cell definition. Face area < Min area ({face.Area} < {tol.min_area}) "
                     )
                 continue
             if face.Area < 0:
-                if opt.verbose:
+                if verbose:
                     print("Warning : Negative surface Area")
             if face.Orientation not in ("Forward", "Reversed"):
                 continue
@@ -801,7 +799,7 @@ def cellDef(meta_obj, surfaces, universe_box):
                         plane = GU.PlaneGu(plane)
                 except:
                     plane = None
-                    if opt.verbose:
+                    if verbose:
                         print("Warning: generation of additional plane has failed")
 
                 if plane is not None:
@@ -895,7 +893,7 @@ def cellDef(meta_obj, surfaces, universe_box):
                             v_var = "%i" % idT
                         else:
                             surf_params, surf_type, in_surf = gen_torus_annex_v_surface(
-                                face, VminMax, opt.forceCylinder
+                                face, VminMax, forceCylinder
                             )
 
                             if surf_type == "Cone":
@@ -931,7 +929,7 @@ def cellDef(meta_obj, surfaces, universe_box):
                         surf_piece.append(var)
                         surf_obj.append(face)
                 else:
-                    if opt.verbose:
+                    if verbose:
                         print(
                             "Only Torus with axis along X, Y , Z axis can be reproduced"
                         )
@@ -942,7 +940,7 @@ def cellDef(meta_obj, surfaces, universe_box):
 
                 surf = face
                 if id == 0:
-                    if opt.verbose:
+                    if verbose:
                         print("Warning: ", surface_type, " not found in surface list")
                     if surface_type == "<Plane object>":
                         dim1 = face.ParameterRange[1] - face.ParameterRange[0]
@@ -1077,7 +1075,7 @@ def append_comp(new_cell, cell_def, cell_cad, meta_complementary):
         return append
 
 
-def no_overlapping_cell(metaList, surfaces):
+def no_overlapping_cell(metaList, surfaces, scale_up):
 
     Surfs = {}
     for lst in surfaces.values():
@@ -1124,14 +1122,20 @@ def no_overlapping_cell(metaList, surfaces):
             # evaluate only diagonal elements of the Constraint Table (fastest) and remove surface not
             # crossing in the solid boundBox
             CT = build_c_table_from_solids(
-                box, (tuple(t_def.get_surfaces_numbers()), Surfs), option="diag"
+                Box=box,
+                SurfInfo=(tuple(t_def.get_surfaces_numbers()), Surfs),
+                scale_up=scale_up,
+                option="diag",
             )
 
             new_def = remove_extra_surfaces(t_def, CT)
 
             # evaluate full constraint Table with less surfaces involved
             CT = build_c_table_from_solids(
-                box, (tuple(new_def.get_surfaces_numbers()), Surfs), option="full"
+                Box=box,
+                SurfInfo=(tuple(new_def.get_surfaces_numbers()), Surfs),
+                scale_up=scale_up,
+                option="full",
             )
 
             if new_def.operator == "AND":

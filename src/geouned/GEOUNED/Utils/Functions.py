@@ -18,7 +18,6 @@ from ..Utils.BasicFunctions_part1 import (
     is_parallel,
 )
 from ..Utils.Options.Classes import Options
-from ..Utils.Options.Classes import Tolerances as tol
 from . import BasicFunctions_part2 as BF
 
 
@@ -154,7 +153,7 @@ class GeounedSolid:
     def set_son_enclosures(self, sonEnclosures):
         self.SonEnclosures = sonEnclosures
 
-    def set_definition(self, definition, simplify=False):
+    def set_definition(self, definition):
 
         if definition is None:
             self.NullCell = True
@@ -425,10 +424,10 @@ class SurfacesDict(dict):
         del self[self.__last_obj__[0]][self.__last_obj__[1]]
         return
 
-    def extend(self, surface):
+    def extend(self, surface, pln_distance, pln_angle, relativeTol):
         for Pkey in ["PX", "PY", "PZ", "P"]:
             for s in surface[Pkey]:
-                self.add_plane(s)
+                self.add_plane(s, pln_distance, pln_angle, relativeTol)
         for s in surface["Cyl"]:
             self.add_cylinder(s)
         for s in surface["Cone"]:
@@ -438,20 +437,20 @@ class SurfacesDict(dict):
         for s in surface["Tor"]:
             self.add_torus(s)
 
-    def add_plane(self, plane, fuzzy=False):
+    def add_plane(self, plane, pln_distance, pln_angle, relativeTol, fuzzy=False):
         ex = FreeCAD.Vector(1, 0, 0)
         ey = FreeCAD.Vector(0, 1, 0)
         ez = FreeCAD.Vector(0, 0, 1)
 
-        if is_parallel(plane.Surf.Axis, ex, tol.pln_angle):
+        if is_parallel(plane.Surf.Axis, ex, pln_angle):
             add_plane = True
             for i, p in enumerate(self["PX"]):
                 if BF.is_same_plane(
                     plane.Surf,
                     p.Surf,
-                    dtol=tol.pln_distance,
-                    atol=tol.pln_angle,
-                    rel_tol=tol.relativeTol,
+                    dtol=pln_distance,
+                    atol=pln_angle,
+                    rel_tol=relativeTol,
                     fuzzy=(fuzzy, p.Index),
                 ):
                     add_plane = False
@@ -465,15 +464,15 @@ class SurfacesDict(dict):
                 self["PX"].append(plane)
                 self.__surfIndex__["PX"].append(plane.Index)
 
-        elif is_parallel(plane.Surf.Axis, ey, tol.pln_angle):
+        elif is_parallel(plane.Surf.Axis, ey, pln_angle):
             add_plane = True
             for i, p in enumerate(self["PY"]):
                 if BF.is_same_plane(
                     plane.Surf,
                     p.Surf,
-                    dtol=tol.pln_distance,
-                    atol=tol.pln_angle,
-                    rel_tol=tol.relativeTol,
+                    dtol=pln_distance,
+                    atol=pln_angle,
+                    rel_tol=relativeTol,
                     fuzzy=(fuzzy, p.Index),
                 ):
                     add_plane = False
@@ -487,15 +486,15 @@ class SurfacesDict(dict):
                 self["PY"].append(plane)
                 self.__surfIndex__["PY"].append(plane.Index)
 
-        elif is_parallel(plane.Surf.Axis, ez, tol.pln_angle):
+        elif is_parallel(plane.Surf.Axis, ez, pln_angle):
             add_plane = True
             for i, p in enumerate(self["PZ"]):
                 if BF.is_same_plane(
                     plane.Surf,
                     p.Surf,
-                    dtol=tol.pln_distance,
-                    atol=tol.pln_angle,
-                    rel_tol=tol.relativeTol,
+                    dtol=pln_distance,
+                    atol=pln_angle,
+                    rel_tol=relativeTol,
                     fuzzy=(fuzzy, p.Index),
                 ):
                     add_plane = False
@@ -515,9 +514,9 @@ class SurfacesDict(dict):
                 if BF.is_same_plane(
                     plane.Surf,
                     p.Surf,
-                    dtol=tol.pln_distance,
-                    atol=tol.pln_angle,
-                    rel_tol=tol.relativeTol,
+                    dtol=pln_distance,
+                    atol=pln_angle,
+                    rel_tol=relativeTol,
                     fuzzy=(fuzzy, p.Index),
                 ):
                     add_plane = False
@@ -536,15 +535,15 @@ class SurfacesDict(dict):
         else:
             return index, True
 
-    def add_cylinder(self, cyl, fuzzy=False):
+    def add_cylinder(self, cyl, cyl_distance, cyl_angle, relativeTol, fuzzy=False):
         addCyl = True
         for i, c in enumerate(self["Cyl"]):
             if BF.is_same_cylinder(
                 cyl.Surf,
                 c.Surf,
-                dtol=tol.cyl_distance,
-                atol=tol.cyl_angle,
-                rel_tol=tol.relativeTol,
+                dtol=cyl_distance,
+                atol=cyl_angle,
+                rel_tol=relativeTol,
                 fuzzy=(fuzzy, c.Index),
             ):
                 addCyl = False
@@ -562,15 +561,15 @@ class SurfacesDict(dict):
         else:
             return index, True
 
-    def add_cone(self, cone):
+    def add_cone(self, cone, kne_distance, kne_angle, relativeTol):
         cone_added = True
         for i, c in enumerate(self["Cone"]):
             if BF.is_same_cone(
                 cone.Surf,
                 c.Surf,
-                dtol=tol.kne_distance,
-                atol=tol.kne_angle,
-                rel_tol=tol.relativeTol,
+                dtol=kne_distance,
+                atol=kne_angle,
+                rel_tol=relativeTol,
             ):
                 cone_added = False
                 index = c.Index
@@ -586,12 +585,10 @@ class SurfacesDict(dict):
         else:
             return index, True
 
-    def add_sphere(self, sph):
+    def add_sphere(self, sph, sph_distance, relativeTol):
         sphere_added = True
         for i, s in enumerate(self["Sph"]):
-            if BF.is_same_sphere(
-                sph.Surf, s.Surf, tol.sph_distance, rel_tol=tol.relativeTol
-            ):
+            if BF.is_same_sphere(sph.Surf, s.Surf, sph_distance, rel_tol=relativeTol):
                 sphere_added = False
                 index = s.Index
                 self.__last_obj__ = ("Sph", i)
@@ -606,15 +603,15 @@ class SurfacesDict(dict):
         else:
             return index, True
 
-    def add_torus(self, tor):
+    def add_torus(self, tor, tor_distance, tor_angle, relativeTol):
         add_torus = True
         for i, s in enumerate(self["Tor"]):
             if BF.is_same_torus(
                 tor.Surf,
                 s.Surf,
-                dtol=tol.tor_distance,
-                atol=tol.tor_angle,
-                rel_tol=tol.relativeTol,
+                dtol=tor_distance,
+                atol=tor_angle,
+                rel_tol=relativeTol,
             ):
                 add_torus = False
                 index = s.Index
@@ -631,15 +628,15 @@ class SurfacesDict(dict):
             return index, True
 
 
-def split_bop(solid, tools, tolerance, scale=0.1):
+def split_bop(solid, tools, tolerance, scale_up, splitTolerance, scale=0.1):
 
     if tolerance >= 0.1:
         compSolid = BOPTools.SplitAPI.slice(solid, tools, "Split", tolerance=tolerance)
 
     elif tolerance < 1e-12:
-        if Options.scaleUp:
-            tol = 1e-13 if Options.splitTolerance == 0 else Options.splitTolerance
-            compSolid = split_bop(solid, tools, tol / scale, 1.0 / scale)
+        if scale_up:
+            tol = 1e-13 if splitTolerance == 0 else splitTolerance
+            compSolid = split_bop(solid, tools, tol / scale, scale_up, splitTolerance, 1.0 / scale)
         else:
             compSolid = BOPTools.SplitAPI.slice(
                 solid, tools, "Split", tolerance=tolerance
@@ -651,6 +648,6 @@ def split_bop(solid, tools, tolerance, scale=0.1):
                 solid, tools, "Split", tolerance=tolerance
             )
         except:
-            compSolid = split_bop(solid, tools, tolerance * scale, scale)
+            compSolid = split_bop(solid, tools, tolerance * scale, scale_up, splitTolerance, scale)
 
     return compSolid
