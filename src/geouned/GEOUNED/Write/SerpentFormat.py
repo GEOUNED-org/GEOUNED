@@ -14,7 +14,7 @@ from .Functions import serpent_surface, change_surf_sign, write_serpent_cell_def
 
 class SerpentInput:
     def __init__(
-        self, Meta, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat, stepFile
+        self, Meta, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat
     ):
         self.Title = title
         self.VolSDEF = volSDEF
@@ -28,13 +28,6 @@ class SerpentInput:
             "Universe": self.U0CARD,
         }
         self.part = "p"
-
-        self.StepFile = stepFile
-        if isinstance(self.StepFile, (tuple, list)):
-            self.StepFile = "; ".join(self.StepFile)
-
-        if self.Title == "":
-            self.Title = self.StepFile
 
         self.__get_surface_table__()
         self.__simplify_planes__(Surfaces)

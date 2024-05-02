@@ -15,7 +15,7 @@ from .Functions import CardLine, mcnp_surface, change_surf_sign, write_mcnp_cell
 
 class McnpInput:
     def __init__(
-        self, Meta, Surfaces, stepFile, title, volSDEF, volCARD, UCARD, dummyMat
+        self, Meta, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat
     ):
         self.Title = title
         self.VolSDEF = volSDEF
@@ -29,13 +29,6 @@ class McnpInput:
             "Universe": self.U0CARD,
         }
         self.part = "P"
-
-        self.StepFile = stepFile
-        if isinstance(self.StepFile, (tuple, list)):
-            self.StepFile = "; ".join(self.StepFile)
-
-        if self.Title == "":
-            self.Title = self.StepFile
 
         self.__get_surface_table__()
         self.__simplify_planes__(Surfaces)

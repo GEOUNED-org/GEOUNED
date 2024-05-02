@@ -589,25 +589,32 @@ class CadToCsg:
         # add plane definition to cone
         process_cones(MetaList, coneInfo, Surfaces, UniverseBox)
 
+        if self.title == "":
+            if isinstance(self.stepFile, str):
+                title = self.StepFile
+            else:
+                title = "; ".join(self.StepFile)
+        else:
+            title = self.title
+
         # write outputformat input
         write_geometry(
-            UniverseBox,
-            MetaList,
-            Surfaces,
-            self.stepFile,
-            self.title,
-            self.volSDEF,
-            self.volCARD,
-            self.UCARD,
-            self.dummyMat,
-            self.geometryName,
-            self.outFormat,
-            self.cellCommentFile,
-            self.cellSummaryFile,
-            self.voidGen,
-            self.matFile,
-            self.voidMat,
-            self.startCell,
+            UniverseBox=UniverseBox,
+            MetaList=MetaList,
+            Surfaces=Surfaces,
+            title=title,
+            volSDEF=self.volSDEF,
+            volCARD=self.volCARD,
+            UCARD=self.UCARD,
+            dummyMat=self.dummyMat,
+            geometryName=self.geometryName,
+            outFormat=self.outFormat,
+            cellCommentFile=self.cellCommentFile,
+            cellSummaryFile=self.cellSummaryFile,
+            voidGen=self.voidGen,
+            matFile=self.matFile,
+            voidMat=self.voidMat,
+            startCell=self.startCell,
         )
 
         print("End of MCNP, OpenMC, Serpent and PHITS translation phase")

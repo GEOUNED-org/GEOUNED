@@ -41,7 +41,6 @@ class PhitsInput:
         matFile,
         voidMat,
         startCell,
-        stepFile,
     ):
         self.Title = title
         self.VolSDEF = volSDEF
@@ -53,13 +52,6 @@ class PhitsInput:
         self.startCell = startCell
         self.Cells = Meta
         self.Options = {"Volume": self.VolCARD, "Universe": self.U0CARD}
-
-        self.StepFile = stepFile
-        if isinstance(self.StepFile, (tuple, list)):
-            self.StepFile = "; ".join(self.StepFile)
-
-        if self.Title == "":
-            self.Title = self.StepFile
 
         self.__get_surface_table__()
         self.__simplify_planes__(Surfaces)

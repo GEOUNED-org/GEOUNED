@@ -9,7 +9,6 @@ def write_geometry(
     UniverseBox,
     MetaList,
     Surfaces,
-    stepFile,
     title,
     volSDEF,
     volCARD,
@@ -56,7 +55,7 @@ def write_geometry(
             outSphere = None
 
         MCNPfile = McnpInput(
-            MetaList, Surfaces, stepFile, title, volSDEF, volCARD, UCARD, dummyMat
+            MetaList, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat
         )
         MCNPfile.set_sdef((outSphere, outBox))
         MCNPfile.write_input(mcnpFilename)
@@ -88,7 +87,7 @@ def write_geometry(
             outSphere = None
 
         Serpentfile = SerpentInput(
-            MetaList, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat, stepFile
+            MetaList, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat
         )
         # Serpentfile.set_sdef((outSphere,outBox))
         Serpentfile.write_input(serpentFilename)
@@ -122,7 +121,6 @@ def write_geometry(
             matFile,
             voidMat,
             startCell,
-            stepFile,
         )
         # PHITSfile.setSDEF_PHITS((PHITS_outSphere,PHITS_outBox))
         PHITSfile.write_phits(phitsFilename)
