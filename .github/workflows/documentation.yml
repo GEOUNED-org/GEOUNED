@@ -1,10 +1,13 @@
 name: documentation
 
 on:
+  pull_request:
+    branches:
+      - dev
+      - main
   push:
     branches:
       - main
-      - dev
 
 permissions:
   contents: write
@@ -39,6 +42,7 @@ jobs:
         run: |
           sphinx-build docs _build
       - name: Deploy to GitHub Pages
+        if: github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v4
         with:
           publish_branch: gh-pages
