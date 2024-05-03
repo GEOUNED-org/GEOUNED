@@ -96,7 +96,7 @@ class SolidGu:
     """GEOUNED Solid Class"""
 
     def __init__(
-        self, solid, tor_distance, tor_angle, relativeTol, distance, plane3Pts=False
+        self, solid, tolerances, plane3Pts=False
     ):
         self.solid = solid
         faces = define_list_face_gu(solid.Faces, plane3Pts)
@@ -106,9 +106,7 @@ class SolidGu:
         self.Edges = solid.Edges
         self.TorusVParams = {}
         self.TorusUParams = {}
-        self.tor_distance = tor_distance
-        self.tor_angle = tor_angle
-        self.relativeTol = relativeTol
+        self.tolerances=tolerances
 
         toroidIndex = []
         for i, face in enumerate(self.Faces):
@@ -118,11 +116,11 @@ class SolidGu:
 
         if len(toroidIndex) != 0:
             tFaces = self.__same_torus_surf__(
-                toroidIndex, tor_distance, tor_angle, relativeTol, distance
+                toroidIndex, tolerances.tor_distance, tolerances.tor_angle, tolerances.relativeTol, tolerances.distance
             )
             for i, tSet in enumerate(tFaces):
-                URange = self.__merge_periodic_uv__("U", tSet)
-                VRange = self.__merge_periodic_uv__("V", tSet)
+                URange = self.__merge_periodic_uv__("U", tSet, tolerances)
+                VRange = self.__merge_periodic_uv__("V", tSet, tolerances)
                 for t in tSet:
                     self.TorusVParams[t] = (i, VRange)
                     self.TorusUParams[t] = (i, URange)
@@ -149,9 +147,9 @@ class SolidGu:
                 temp.remove(c)
             sameTorusFace.append(current)
 
-        return self.__separate_surfaces__(sameTorusFace)
+        return self.__separate_surfaces__(sameTorusFace, distance)
 
-    def __separate_surfaces__(self, faceList):
+    def __separate_surfaces__(self, faceList, distance):
         """group all faces in faceList forming a continuous surface"""
         sameSurfaces = []
         for tset in faceList:
@@ -195,7 +193,7 @@ class SolidGu:
 
         return mergedParams
 
-    def __merge_periodic_uv__(self, parameter, faceList):
+    def __merge_periodic_uv__(self, parameter, faceList, tolerances):
         two_pi = 2.0 * math.pi
         if parameter == "U":
             i1 = 0
@@ -214,15 +212,15 @@ class SolidGu:
         params.sort()
         V0 = params[0][0]
         V1 = params[-1][1]
-        if arcLength >= two_pi * (1.0 - tol.relativePrecision):
+        if arcLength >= two_pi * (1.0 - tolerances.relativePrecision):
             mergedParams = (True, (V0, V0 + two_pi))
         else:
-            if is_same_value(V0, 0.0, tol.relativePrecision) and is_same_value(
-                V1, two_pi, tol.relativePrecision
+            if is_same_value(V0, 0.0, tolerances.relativePrecision) and is_same_value(
+                V1, two_pi, tolerances.relativePrecision
             ):
                 for i in range(len(params) - 1):
                     if not is_same_value(
-                        params[i][1], params[i + 1][0], tol.relativePrecision
+                        params[i][1], params[i + 1][0], tolerances.relativePrecision
                     ):
                         break
                 v_min = params[i + 1][0] - two_pi

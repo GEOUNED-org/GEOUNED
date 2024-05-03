@@ -59,10 +59,7 @@ def cut_full_cylinder(
 ):
     solid_gu = GU.SolidGu(
         solid=solid,
-        tor_distance=tolerances.tor_distance,
-        tor_angle=tolerances.tor_angle,
-        relativeTol=tolerances.relativeTol,
-        distance=tolerances.distance,
+        tolerances=tolerances,
     )
     surfaces = UF.SurfacesDict()
     flag_inv = CD.is_inverted(solid_gu.solid)
@@ -270,10 +267,7 @@ def extract_surfaces(
             solid_parts.append(
                 GU.SolidGu(
                     solid=s,
-                    tor_distance=tolerances.tor_distance,
-                    tor_angle=tolerances.tor_angle,
-                    relativeTol=tolerances.relativeTol,
-                    distance=tolerances.distance,
+                    tolerances=tolerances
                 )
             )
     else:
@@ -285,11 +279,8 @@ def extract_surfaces(
         solid_parts = [
             GU.SolidGu(
                 solid=solid,
-                tor_distance=tolerances.tor_distance,
-                tor_angle=tolerances.tor_angle,
-                relativeTol=tolerances.relativeTol,
+                tolerances=tolerances,
                 plane3Pts=P3P,
-                distance=tolerances.distance,
             )
         ]
 
@@ -375,9 +366,9 @@ def extract_surfaces(
                             p.build_surface()
                         surfaces.add_plane(
                             plane=p,
-                            pln_distance=tolerances.pln_distance,
-                            pln_angle=tolerances.pln_angle,
-                            relativeTol=tolerances.relativeTol,
+                            tolerances=tolerances,
+                            options=options,
+                            numeric_format=numeric_format,
                             fuzzy=False,
                         )
 
@@ -1187,10 +1178,7 @@ def split_2nd_o_plane(
     flag_inv = CD.is_inverted(solid)
     solid_GU = GU.SolidGu(
         solid=solid,
-        tor_distance=tolerances.tor_distance,
-        tor_angle=tolerances.tor_angle,
-        relativeTol=tolerances.relativeTol,
-        distance=tolerances.distance,
+        tolerances=tolerances
     )
     planes = plane_2nd_order(
         solid_GU, None, flag_inv, options.verbose, distance=tolerances.distance, convex=True

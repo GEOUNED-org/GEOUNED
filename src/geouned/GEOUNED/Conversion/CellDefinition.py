@@ -772,10 +772,7 @@ def cellDef(
         flag_inv = is_inverted(solid)
         solid_gu = GU.SolidGu(
             solid=solid,
-            tor_distance=tolerances.tor_distance,
-            tor_angle=tolerances.tor_angle,
-            relativeTol=tolerances.relativeTol,
-            distance=tolerances.distance,
+            tolerances=tolerances,
             plane3Pts=False,
         )
         last_torus = -1
