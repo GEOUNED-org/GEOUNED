@@ -6,7 +6,6 @@ from ..Utils import BasicFunctions_part2 as BF
 from ..Utils import Geometry_GU as GU
 from ..Utils.BasicFunctions_part1 import is_opposite, is_parallel
 from ..Utils.booleanFunction import BoolSequence
-from ..Utils.Options.Classes import Tolerances as tol
 
 
 def commonEdge(face1, face2):
@@ -59,13 +58,13 @@ def is_inverted(solid):
         return False
 
 
-def get_id(face_in, Surfaces):
+def get_id(face_in, Surfaces, pln_distance, pln_angle, relativeTol):
 
-    if is_parallel(face_in.Axis, FreeCAD.Vector(1, 0, 0), tol.pln_angle):
+    if is_parallel(face_in.Axis, FreeCAD.Vector(1, 0, 0), pln_angle):
         plane = "PX"
-    elif is_parallel(face_in.Axis, FreeCAD.Vector(0, 1, 0), tol.pln_angle):
+    elif is_parallel(face_in.Axis, FreeCAD.Vector(0, 1, 0), pln_angle):
         plane = "PY"
-    elif is_parallel(face_in.Axis, FreeCAD.Vector(0, 0, 1), tol.pln_angle):
+    elif is_parallel(face_in.Axis, FreeCAD.Vector(0, 0, 1), pln_angle):
         plane = "PZ"
     else:
         plane = "P"
@@ -74,9 +73,9 @@ def get_id(face_in, Surfaces):
         if BF.is_same_plane(
             face_in,
             s.Surf,
-            dtol=tol.pln_distance,
-            atol=tol.pln_angle,
-            rel_tol=tol.relativeTol,
+            dtol=pln_distance,
+            atol=pln_angle,
+            rel_tol=relativeTol,
         ):
             return s.Index
 
@@ -128,7 +127,7 @@ def set_definitions(meta_obj, surfaces, verbose):
 
             id = get_id(face.Surface, surfaces)
             s = surfaces.get_surface(id)
-            if is_opposite(face.Surface.Axis, s.Surf.Axis, tol.pln_angle):
+            if is_opposite(face.Surface.Axis, s.Surf.Axis, pln_angle):
                 id = -id
             if face.Orientation == "Forward":
                 id = -id

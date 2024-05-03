@@ -370,7 +370,7 @@ class CadToCsg:
                 kne_angle=self.tolerances.kne_angle,
                 kne_distance=self.tolerances.kne_distance,
                 relativePrecision=self.tolerances.relativePrecision,
-                sph_distance=self.tolerances.sph_distance
+                sph_distance=self.tolerances.sph_distance,
             )
 
             # decompose Enclosure solids
@@ -396,7 +396,7 @@ class CadToCsg:
                     kne_angle=self.tolerances.kne_angle,
                     kne_distance=self.tolerances.kne_distance,
                     relativePrecision=self.tolerances.relativePrecision,
-                    sph_distance=self.tolerances.sph_distance
+                    sph_distance=self.tolerances.sph_distance,
                 )
 
             print("End of decomposition phase")
@@ -408,11 +408,24 @@ class CadToCsg:
                     continue
                 print("Building cell: ", j + 1)
                 cones = Conv.cellDef(
-                    meta_obj= m, surfaces=Surfaces, universe_box=UniverseBox,
-                    verbose=self.options.verbose, forceCylinder=self.options.forceCylinder,
+                    meta_obj=m,
+                    surfaces=Surfaces,
+                    universe_box=UniverseBox,
+                    verbose=self.options.verbose,
+                    forceCylinder=self.options.forceCylinder,
                     tor_distance=self.tolerances.tor_distance,
-                    tor_angle=self.tolerances.tor_angle, relativeTol=self.tolerances.relativeTol,
-                    distance=self.tolerances.distance
+                    tor_angle=self.tolerances.tor_angle,
+                    relativeTol=self.tolerances.relativeTol,
+                    distance=self.tolerances.distance,
+                    angle=self.tolerances.angle,
+                    min_area=self.tolerances.min_area,
+                    pln_angle=self.tolerances.pln_angle,
+                    cyl_distance=self.tolerances.cyl_distance,
+                    cyl_angle=self.tolerances.cyl_angle,
+                    pln_distance=self.tolerances.pln_distance,
+                    kne_distance=self.tolerances.kne_distance,
+                    kne_angle=self.tolerances.kne_angle,
+                    sph_distance=self.tolerances.sph_distance,
                 )
                 if cones:
                     coneInfo[m.__id__] = cones
@@ -422,7 +435,7 @@ class CadToCsg:
                     print("none", j, m.__id__)
                     print(m.Definition)
 
-            if Options.forceNoOverlap:
+            if self.options.forceNoOverlap:
                 Conv.no_overlapping_cell(MetaList, Surfaces)
 
         else:
@@ -450,7 +463,7 @@ class CadToCsg:
                     kne_angle=self.tolerances.kne_angle,
                     kne_distance=self.tolerances.kne_distance,
                     relativePrecision=self.tolerances.relativePrecision,
-                    sph_distance=self.tolerances.sph_distance
+                    sph_distance=self.tolerances.sph_distance,
                 )
 
         tempstr2 = str(datetime.now() - tempTime)
@@ -462,7 +475,18 @@ class CadToCsg:
             for j, m in enumerate(EnclosureList):
                 print("Building Enclosure Cell: ", j + 1)
                 cones = Conv.cellDef(
-                    m, Surfaces, UniverseBox, self.options.forceCylinder
+                    meta_obj=m,
+                    surfaces=Surfaces,
+                    universe_box=UniverseBox,
+                    verbose=self.options.verbose,
+                    forceCylinder=self.options.forceCylinder,
+                    tor_distance=self.tolerances.tor_distance,
+                    tor_angle=self.tolerances.tor_angle,
+                    relativeTol=self.tolerances.relativeTol,
+                    distance=self.tolerances.distance,
+                    angle=self.tolerances.angle,
+                    min_area=self.tolerances.min_area,
+                    pln_angle=self.tolerances.pln_angle,
                 )
                 if cones:
                     coneInfo[m.__id__] = cones
@@ -699,7 +723,9 @@ def decompose_solids(
             else:
                 comsolid.exportStep(f"debug/compSolid_{i}.stp")
         ext_surfaces = Decom.extract_surfaces(
-            solid=comsolid, kind="All", universe_box=UniverseBox, 
+            solid=comsolid,
+            kind="All",
+            universe_box=UniverseBox,
             relativeTol=relativeTol,
             pln_distance=pln_distance,
             pln_angle=pln_angle,
@@ -710,13 +736,19 @@ def decompose_solids(
             kne_distance=kne_distance,
             kne_angle=kne_angle,
             distance=distance,
-            MakeObj=True
+            MakeObj=True,
         )
         Surfaces.extend(
             surface=ext_surfaces,
-            pln_distance=pln_distance, pln_angle=pln_angle, relativeTol=relativeTol,
-            cyl_angle=cyl_angle,cyl_distance=cyl_distance,kne_distance=kne_distance,
-            kne_angle=kne_angle,sph_distance=sph_distance,tor_distance=tor_distance
+            pln_distance=pln_distance,
+            pln_angle=pln_angle,
+            relativeTol=relativeTol,
+            cyl_angle=cyl_angle,
+            cyl_distance=cyl_distance,
+            kne_distance=kne_distance,
+            kne_angle=kne_angle,
+            sph_distance=sph_distance,
+            tor_distance=tor_distance,
         )
         m.set_cad_solid()
         m.update_solids(comsolid.Solids)

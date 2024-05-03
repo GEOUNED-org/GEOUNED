@@ -21,7 +21,20 @@ from ..Utils.BooleanSolids import build_c_table_from_solids, remove_extra_surfac
 from ..Utils.Functions import GeounedSurface
 
 
-def get_id(facein, surfaces):
+def get_id(
+    facein,
+    surfaces,
+    pln_angle,
+    cyl_distance,
+    cyl_angle,
+    relativeTol,
+    pln_distance,
+    kne_distance,
+    kne_angle,
+    sph_distance,
+    tor_distance,
+    tor_angle,
+):
 
     surfin = str(facein)
     if surfin == "<Plane object>":
@@ -68,9 +81,7 @@ def get_id(facein, surfaces):
 
     elif surfin[0:6] == "Sphere":
         for s in surfaces["Sph"]:
-            if BF.is_same_sphere(
-                facein, s.Surf, sph_distance, rel_tol=relativeTol
-            ):
+            if BF.is_same_sphere(facein, s.Surf, sph_distance, rel_tol=relativeTol):
                 return s.Index
 
     elif surfin == "<Toroid object>":
@@ -655,7 +666,7 @@ def gen_torus_annex_u_planes_org(face, u_params):
             ), True  # (d1 : d2)
 
 
-def gen_torus_annex_v_surface(face, v_params, force_cylinder=False):
+def gen_torus_annex_v_surface(face, v_params, distance, force_cylinder=False):
     if is_parallel(face.Surface.Axis, FreeCAD.Vector(1, 0, 0), tor_angle):
         axis = FreeCAD.Vector(1, 0, 0)
     elif is_parallel(face.Surface.Axis, FreeCAD.Vector(0, 1, 0), tor_angle):
@@ -739,7 +750,26 @@ def gen_torus_annex_v_surface(face, v_params, force_cylinder=False):
         )
 
 
-def cellDef(meta_obj, surfaces, universe_box, verbose, forceCylinder, tor_distance, tor_angle, relativeTol, distance):
+def cellDef(
+    meta_obj,
+    surfaces,
+    universe_box,
+    verbose,
+    forceCylinder,
+    tor_distance,
+    tor_angle,
+    relativeTol,
+    distance,
+    angle,
+    min_area,
+    pln_angle,
+    cyl_distance,#
+    cyl_angle,
+    pln_distance,
+    kne_distance,
+    kne_angle,
+    sph_distance
+):
 
     solids = meta_obj.Solids
     del_list = []
@@ -759,7 +789,7 @@ def cellDef(meta_obj, surfaces, universe_box, verbose, forceCylinder, tor_distan
             tor_angle=tor_angle,
             relativeTol=relativeTol,
             distance=distance,
-            plane3Pts=False
+            plane3Pts=False,
         )
         last_torus = -1
         for iface, face in enumerate(solid_gu.Faces):
@@ -793,7 +823,20 @@ def cellDef(meta_obj, surfaces, universe_box, verbose, forceCylinder, tor_distan
                 and orient == "Reversed"
             ):
                 # cone additional plane is added afterward
-                id_face = get_id(face.Surface, surfaces)
+                id_face = get_id(
+                    facein=face.Surface,
+                    surfaces=surfaces,
+                    pln_angle=pln_angle,
+                    cyl_distance=cyl_distance,
+                    cyl_angle=cyl_angle,
+                    relativeTol=relativeTol,
+                    pln_distance=pln_distance,
+                    kne_distance=kne_distance,
+                    kne_angle=kne_angle,
+                    sph_distance=sph_distance,
+                    tor_distance=tor_distance,
+                    tor_angle=tor_angle,
+                )
                 if surface_type == "<Cone object>":
                     cones.add(id_face)
                 if str(id_face) not in surf_piece:
@@ -836,16 +879,24 @@ def cellDef(meta_obj, surfaces, universe_box, verbose, forceCylinder, tor_distan
 
                 if (
                     is_parallel(face.Surface.Axis, FreeCAD.Vector(1, 0, 0), angle)
-                    or is_parallel(
-                        face.Surface.Axis, FreeCAD.Vector(0, 1, 0), angle
-                    )
-                    or is_parallel(
-                        face.Surface.Axis, FreeCAD.Vector(0, 0, 1), angle
-                    )
+                    or is_parallel(face.Surface.Axis, FreeCAD.Vector(0, 1, 0), angle)
+                    or is_parallel(face.Surface.Axis, FreeCAD.Vector(0, 0, 1), angle)
                 ):
 
-                    idT = get_id(face.Surface, surfaces)
-
+                    idT = get_id(
+                        facein=face.Surface,
+                        surfaces=surfaces,
+                        pln_angle=pln_angle,
+                        cyl_distance=cyl_distance,
+                        cyl_angle=cyl_angle,
+                        relativeTol=relativeTol,
+                        pln_distance=pln_distance,
+                        kne_distance=kne_distance,
+                        kne_angle=kne_angle,
+                        sph_distance=sph_distance,
+                        tor_distance=tor_distance,
+                        tor_angle=tor_angle,
+                    )
                     index, u_params = solid_gu.TorusUParams[iface]
                     if index == last_torus:
                         continue
@@ -875,9 +926,7 @@ def cellDef(meta_obj, surfaces, universe_box, verbose, forceCylinder, tor_distan
                             id2, exist = surfaces.add_plane(plane)
                             if exist:
                                 p = surfaces.get_surface(id2)
-                                if is_opposite(
-                                    plane.Surf.Axis, p.Surf.Axis, pln_angle
-                                ):
+                                if is_opposite(plane.Surf.Axis, p.Surf.Axis, pln_angle):
                                     id2 = -id2
 
                             u_var = (
@@ -900,7 +949,10 @@ def cellDef(meta_obj, surfaces, universe_box, verbose, forceCylinder, tor_distan
                             v_var = "%i" % idT
                         else:
                             surf_params, surf_type, in_surf = gen_torus_annex_v_surface(
-                                face, VminMax, forceCylinder
+                                face=face,
+                                v_params=VminMax,
+                                distance=distance,
+                                force_cylinder=forceCylinder,
                             )
 
                             if surf_type == "Cone":
@@ -941,7 +993,20 @@ def cellDef(meta_obj, surfaces, universe_box, verbose, forceCylinder, tor_distan
                             "Only Torus with axis along X, Y , Z axis can be reproduced"
                         )
             else:
-                id = get_id(face.Surface, surfaces)
+                id = get_id(
+                        facein=face.Surface,
+                        surfaces=surfaces,
+                        pln_angle=pln_angle,
+                        cyl_distance=cyl_distance,
+                        cyl_angle=cyl_angle,
+                        relativeTol=relativeTol,
+                        pln_distance=pln_distance,
+                        kne_distance=kne_distance,
+                        kne_angle=kne_angle,
+                        sph_distance=sph_distance,
+                        tor_distance=tor_distance,
+                        tor_angle=tor_angle,
+                    )
                 if surface_type == "<Cone object>":
                     cones.add(-id)
 

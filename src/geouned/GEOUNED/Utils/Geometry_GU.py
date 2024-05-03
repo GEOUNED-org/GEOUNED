@@ -8,7 +8,6 @@
 import math
 import Part
 
-from ..Utils.Options.Classes import Tolerances as tol
 from .BasicFunctions_part1 import is_same_value
 from .BasicFunctions_part2 import is_same_torus
 

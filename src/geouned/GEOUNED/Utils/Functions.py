@@ -424,14 +424,36 @@ class SurfacesDict(dict):
         del self[self.__last_obj__[0]][self.__last_obj__[1]]
         return
 
-    def extend(self, surface, pln_distance, pln_angle, relativeTol, cyl_angle,cyl_distance,kne_distance,kne_angle,sph_distance,tor_distance):
+    def extend(
+        self,
+        surface,
+        pln_distance,
+        pln_angle,
+        relativeTol,
+        cyl_angle,
+        cyl_distance,
+        kne_distance,
+        kne_angle,
+        sph_distance,
+        tor_distance,
+    ):
         for Pkey in ["PX", "PY", "PZ", "P"]:
             for s in surface[Pkey]:
                 self.add_plane(s, pln_distance, pln_angle, relativeTol)
         for s in surface["Cyl"]:
-            self.add_cylinder(cyl=s, cyl_distance=cyl_distance,cyl_angle=cyl_angle,relativeTol=relativeTol )
+            self.add_cylinder(
+                cyl=s,
+                cyl_distance=cyl_distance,
+                cyl_angle=cyl_angle,
+                relativeTol=relativeTol,
+            )
         for s in surface["Cone"]:
-            self.add_cone(cone=s, kne_distance=kne_distance, kne_angle=kne_angle, relativeTol=relativeTol)
+            self.add_cone(
+                cone=s,
+                kne_distance=kne_distance,
+                kne_angle=kne_angle,
+                relativeTol=relativeTol,
+            )
         for s in surface["Sph"]:
             self.add_sphere(sph=s, sph_distance=sph_distance, relativeTol=relativeTol)
         for s in surface["Tor"]:
