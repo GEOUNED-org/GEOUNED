@@ -163,16 +163,19 @@ class VoidBox:
     def get_void_complementary(
         self,
         Surfaces,
-        enlargeBox,
-        verbose,
-        nPlaneReverse,
-        splitTolerance,
-        scale_up,
-        pln_distance,
-        pln_angle,
-        relativeTol,
-        simplify="no",
+        options,
+        tolerances,
+        numeric_format,
+        settings
     ):
+        # simplifyVoid was not used in this function
+        # if "full" in settings.simplify.lower():
+        #     simplifyVoid = "full"
+        # elif "void" in settings.simplify.lower():
+        #     simplifyVoid = "diag"
+        # else:
+        #     simplifyVoid = "no"
+
         if self.PieceEnclosure is None:
             boxDef = BoolSequence(operator="AND")
             center = self.BoundBox.Center
@@ -180,9 +183,7 @@ class VoidBox:
             for p in self.get_bound_planes():
                 id, exist = Surfaces.add_plane(
                     plane=p,
-                    pln_distance=pln_distance,
-                    pln_angle=pln_angle,
-                    relativeTol=relativeTol,
+                    tolerances=tolerances, options=options, numeric_format=numeric_format,
                     fuzzy=False,
                 )
                 if exist:
@@ -194,7 +195,7 @@ class VoidBox:
                 else:
                     boxDef.elements.append(-id)
                 enclosure = False
-            d = enlargeBox
+            d = options.enlargeBox
 
         else:
             UniverseBox = self.PieceEnclosure.BoundBox
@@ -202,8 +203,8 @@ class VoidBox:
             comsolid, err = Decom.split_solid(
                 Part.makeCompound(TempPieceEnclosure.Solids),
                 UniverseBox,
-                nPlaneReverse,
-                splitTolerance,
+                options.nPlaneReverse,
+                options.splitTolerance,
             )
             Surfaces.extend(
                 Decom.extract_surfaces(comsolid, "All", UniverseBox, MakeObj=True)
@@ -214,7 +215,7 @@ class VoidBox:
             boxDef = TempPieceEnclosure.Definition
             bBox = self.PieceEnclosure.BoundBox
             enclosure = True
-            d = max(enlargeBox, 2)
+            d = max(options.enlargeBox, 2)
 
         Box = Part.makeBox(
             bBox.XLength + 2 * d,
@@ -247,7 +248,7 @@ class VoidBox:
 
         complementary = BoolSequence(operator="AND")
         complementary.append(boxDef)
-        if simplify != "no":
+        if settings.simplify != "no":
             surfList = voidSolidDef.get_surfaces_numbers()
 
             if enclosure:
@@ -267,7 +268,7 @@ class VoidBox:
                 for i in surfList:
                     surfaceDict[i] = Surfaces.get_surface(i)
                 CTable = build_c_table_from_solids(
-                    Box=Box, SurfInfo=surfaceDict, scale_up=scale_up, option=simplify
+                    Box=Box, SurfInfo=surfaceDict, scale_up=options.scale_up, option=settings.simplify
                 )
             else:
                 if res is True:
@@ -316,7 +317,7 @@ class VoidBox:
                 compSeq = BoolSequence(operator="AND")
 
             for comp in voidSolidDef.elements:
-                if simplify == "no":
+                if settings.simplify == "no":
                     comp.check()
                     if type(comp.elements) is bool:
                         chk = comp.elements
@@ -325,7 +326,7 @@ class VoidBox:
 
                     # solid in cover full Void cell volume  => Void cell doesn't exist
                     if chk is True:
-                        if verbose:
+                        if options.verbose:
                             print("warning void Cell should not exist")
                         return None, None
 
@@ -336,7 +337,7 @@ class VoidBox:
                 pmoc = comp.get_complementary()
                 compSeq.append(pmoc)
 
-        if simplify == "full":
+        if settings.simplify == "full":
             if enclosure:
                 complementary.append(compSeq)
                 complementary.simplify(CTable)

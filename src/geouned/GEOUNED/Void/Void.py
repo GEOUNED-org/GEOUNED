@@ -15,7 +15,7 @@ def void_generation(
     Surfaces,
     UniverseBox,
     init,
-    settings,options,tolerances
+    settings,options,tolerances,numeric_format
 ):
     voidList = []
 
@@ -43,24 +43,17 @@ def void_generation(
 
     # get voids in 0 Level Enclosure (original Universe)
     # if exist Level 1 enclosures are considered as material cells
-    print("Build Void highest enclosure")
+    if options.verbose:
+        print("Build Void highest enclosure")
 
     voids = get_void_def(
         MetaList=newMetaList,
         Surfaces=Surfaces,
         Enclosure=EnclosureBox,
-        max_surf=settings.max_surf,
-        max_bracket=settings.max_bracket,
-        minVoidSize=settings.minVoidSize,
-        simplify=settings.simplify,
-        enlargeBox=options.enlargeBox,
-        verbose=options.verbose,
-        nPlaneReverse=options.nPlaneReverse,
-        splitTolerance=options.splitTolerance,
-        scale_up=options.scale_up,
-        pln_distance=tolerances.pln_distance,
-        pln_angle=tolerances.pln_angle,
-        relativeTol=tolerances.relativeTol,
+        settings=settings,
+        options=options,
+        tolerances=tolerances,
+        numeric_format=numeric_format,
         Lev0=True,
     )
     voidList.append(voids)
@@ -81,18 +74,10 @@ def void_generation(
                 MetaList=newMetaList,
                 Surfaces=Surfaces,
                 Enclosure=encl,
-                max_surf=max_surf,
-                max_bracket=max_bracket,
-                minVoidSize=minVoidSize,
-                simplify=simplify,
-                enlargeBox=enlargeBox,
-                verbose=verbose,
-                nPlaneReverse=nPlaneReverse,
-                splitTolerance=splitTolerance,
-                scale_up=scale_up,
-                pln_distance=pln_distance,
-                pln_angle=pln_angle,
-                relativeTol=relativeTol,
+                settings=settings,
+                options=options,
+                tolerances=tolerances,
+                numeric_format=numeric_format,
                 Lev0=False,
             )
             voidList.append(voids)
@@ -108,28 +93,12 @@ def get_void_def(
     MetaList,
     Surfaces,
     Enclosure,
-    max_surf,
-    max_bracket,
-    minVoidSize,
-    simplify,
-    enlargeBox,
-    verbose,
-    nPlaneReverse,
-    splitTolerance,
-    scale_up,
-    pln_distance,
-    pln_angle,
-    relativeTol,
+    settings,
+    options,
+    tolerances,
+    numeric_format,
     Lev0=False,
 ):
-
-    # TODO on another PR this can be removed with an attribute setter on the CadToCsg class
-    if "full" in simplify.lower():
-        simplifyVoid = "full"
-    elif "void" in simplify.lower():
-        simplifyVoid = "diag"
-    else:
-        simplifyVoid = "no"
 
     if Lev0:
         Universe = VoidBox(MetaList, Enclosure.BoundBox)
@@ -147,11 +116,11 @@ def get_void_def(
 
         for iz, z in enumerate(Initial):
             nsurfaces, nbrackets = z.get_numbers()
-            if verbose:
+            if options.verbose:
                 print(f"{iloop} {iz + 1}/{nvoid} {nsurfaces} {nbrackets}")
 
-            if nsurfaces > max_surf and nbrackets > max_bracket:
-                newspace = z.split(minVoidSize)
+            if nsurfaces > settings.max_surf and nbrackets > settings.max_bracket:
+                newspace = z.split(settings.minVoidSize)
             else:
                 newspace = None
 
@@ -172,15 +141,9 @@ def get_void_def(
 
                 cell, CellIn = z.get_void_complementary(
                     Surfaces=Surfaces,
-                    enlargeBox=enlargeBox,
-                    verbose=verbose,
-                    nPlaneReverse=nPlaneReverse,
-                    splitTolerance=splitTolerance,
-                    scale_up=scale_up,
-                    pln_distance=pln_distance,
-                    pln_angle=pln_angle,
-                    relativeTol=relativeTol,
-                    simplify=simplifyVoid,
+                    options=options,
+                    tolerances=tolerances,
+                    numeric_format=numeric_format
                 )
                 if cell is not None:
                     VoidCell = (cell, (boxDim, CellIn))
