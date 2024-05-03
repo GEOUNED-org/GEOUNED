@@ -8,3 +8,11 @@ Python API reference
     :members:
     :show-inheritance:
 
+.. autoclass:: Tolerances
+    :members:
+    :show-inheritance:
+
+.. autoclass:: Options
+    :members:
+    :show-inheritance:
+
