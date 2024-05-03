@@ -13,13 +13,18 @@ from .Functions import CardLine, mcnp_surface, change_surf_sign, write_mcnp_cell
 
 
 class McnpInput:
-    def __init__(self, Meta, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat):
+    def __init__(self, Meta, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat,
+                 prnt3PPlane, StepFile, tolerances, numerical_format):
         self.Title = title
+        self.StepFile = StepFile
         self.VolSDEF = volSDEF
         self.VolCARD = volCARD
         self.U0CARD = UCARD
         self.dummyMat = dummyMat
         self.Cells = Meta
+        self.prnt3PPlane = prnt3PPlane
+        self.tolerances = tolerances
+        self.numerical_format = numerical_format
         self.Options = {
             "Volume": self.VolCARD,
             "Particle": ("n", "p"),
@@ -28,7 +33,7 @@ class McnpInput:
         self.part = "P"
 
         self.__get_surface_table__()
-        self.__simplify_planes__(Surfaces)
+        self.__simplify_planes__(Surfaces, prnt3PPlane)
 
         self.Surfaces = self.__sorted_surfaces__(Surfaces)
         self.Materials = set()
@@ -154,7 +159,7 @@ C **************************************************************
     def __write_surfaces__(self, surface):
         """Write the surfaces in MCNP format"""
 
-        MCNP_def = mcnp_surface(surface.Index, surface.Type, surface.Surf)
+        MCNP_def = mcnp_surface(surface.Index, surface.Type, surface.Surf, self.tolerances, self.numerical_format)
         if MCNP_def:
             MCNP_def += "\n"
             self.inpfile.write(MCNP_def)
@@ -280,7 +285,7 @@ C **************************************************************
                     self.surfaceTable[index] = {i}
         return
 
-    def __simplify_planes__(self, Surfaces):
+    def __simplify_planes__(self, Surfaces, prnt3PPlane):
 
         for p in Surfaces["PX"]:
             if p.Surf.Axis[0] < 0:
@@ -297,7 +302,7 @@ C **************************************************************
                 p.Surf.Axis = FreeCAD.Vector(0, 0, 1)
                 self.__change_surf_sign__(p)
 
-        if opt.prnt3PPlane:
+        if prnt3PPlane:
             for p in Surfaces["P"]:
                 if p.Surf.pointDef:
                     axis, d = points_to_coeffs(p.Surf.Points)

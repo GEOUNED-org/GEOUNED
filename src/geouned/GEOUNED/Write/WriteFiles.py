@@ -22,6 +22,10 @@ def write_geometry(
     matFile,
     voidMat,
     startCell,
+    prnt3PPlane,
+    StepFile,
+    tolerances,
+    numeric_format
 ):
 
     # Currently there are two was of setting outFormat (via a .set method and
@@ -55,7 +59,8 @@ def write_geometry(
             outSphere = None
 
         MCNPfile = McnpInput(
-            MetaList, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat
+            MetaList, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat,
+            prnt3PPlane, StepFile, tolerances, numeric_format
         )
         MCNPfile.set_sdef((outSphere, outBox))
         MCNPfile.write_input(mcnpFilename)

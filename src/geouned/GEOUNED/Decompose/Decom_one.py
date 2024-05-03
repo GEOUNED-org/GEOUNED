@@ -33,6 +33,8 @@ def split_full_cylinder(
     tor_angle,
     scale_up,
     distance,
+    cyl_angle,
+    cyl_distance
 ):
     explode = []
     bases = [solid]
@@ -50,6 +52,8 @@ def split_full_cylinder(
                 tor_angle=tor_angle,
                 scale_up=scale_up,
                 distance=distance,
+                cyl_angle=cyl_angle,
+                cyl_distance=cyl_distance,
             )
             if len(cut_solids) == 1:
                 explode.extend(cut_solids)
@@ -74,6 +78,8 @@ def cut_full_cylinder(
     tor_angle,
     scale_up,
     distance,
+    cyl_angle,
+    cyl_distance,
 ):
     solid_gu = GU.SolidGu(
         solid=solid,
@@ -107,7 +113,12 @@ def cut_full_cylinder(
                     ("Cylinder", (orig, dir, rad, dim_l)), universe_box
                 )
                 cylinder.build_surface()
-                surfaces.add_cylinder(cylinder, False)
+                surfaces.add_cylinder(
+                    cyl=cylinder,
+                    cyl_distance=cyl_distance,
+                    cyl_angle=cyl_angle,
+                    relativeTol=relativeTol,
+                     fuzzy= False)
 
                 # add planes if cylinder axis is cut by a plane (plane quasi perpedicular to axis)
                 for p in cyl_bound_planes(face, universe_box):
@@ -1494,6 +1505,8 @@ def split_solid(
             tor_angle=tor_angle,
             scale_up=scale_up,
             distance=distance,
+            cyl_angle=cyl_angle,
+            cyl_distance=cyl_distance,
         )
         piece, err = split_component(
             solidShape=explode,

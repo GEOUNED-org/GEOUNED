@@ -160,6 +160,7 @@ class CadToCsg:
         self.numeric_format = numeric_format
         self.tolerances = tolerances
 
+        # set internally by the class
         self.UniverseBox = None
 
     @classmethod
@@ -651,6 +652,10 @@ class CadToCsg:
             matFile=self.matFile,
             voidMat=self.voidMat,
             startCell=self.startCell,
+            prnt3PPlane=self.options.prnt3PPlane,
+            StepFile=self.stepFile,
+            tolerances=self.tolerances,
+            numeric_format=self.numeric_format
         )
 
 
