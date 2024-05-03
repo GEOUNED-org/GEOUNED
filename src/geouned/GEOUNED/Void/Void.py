@@ -22,7 +22,14 @@ def void_generation(
     sort_enclosure,
     init,
     enlargeBox,
+    nPlaneReverse,
+    splitTolerance,
+    scale_up,
     verbose,
+    pln_distance,
+    pln_angle,
+    relativeTol,
+    sph_distance,
 ):
     voidList = []
 
@@ -53,15 +60,21 @@ def void_generation(
     print("Build Void highest enclosure")
 
     voids = get_void_def(
-        newMetaList,
-        Surfaces,
-        EnclosureBox,
-        maxsurf,
-        maxbracket,
-        minVoidSize,
-        simplify,
-        enlargeBox,
-        verbose,
+        MetaList=newMetaList,
+        Surfaces=Surfaces,
+        Enclosure=EnclosureBox,
+        maxsurf=maxsurf,
+        maxbracket=maxbracket,
+        minVoidSize=minVoidSize,
+        simplify=simplify,
+        enlargeBox=enlargeBox,
+        verbose=verbose,
+        nPlaneReverse=nPlaneReverse,
+        splitTolerance=splitTolerance,
+        scale_up=scale_up,
+        pln_distance=pln_distance,
+        pln_angle=pln_angle,
+        relativeTol=relativeTol,
         Lev0=True,
     )
     voidList.append(voids)
@@ -79,20 +92,28 @@ def void_generation(
             print(f"Build Void enclosure {j} in enclosure level {i + 1}")
             # select solids overlapping current enclosure "encl", and lower level enclosures
             voids = get_void_def(
-                newMetaList,
-                Surfaces,
-                encl,
-                maxsurf,
-                maxbracket,
-                minVoidSize,
-                simplify,
-                enlargeBox,
-                verbose,
-                False,
+                MetaList=newMetaList,
+                Surfaces=Surfaces,
+                Enclosure=encl,
+                maxsurf=maxsurf,
+                maxbracket=maxbracket,
+                minVoidSize=minVoidSize,
+                simplify=simplify,
+                enlargeBox=enlargeBox,
+                verbose=verbose,
+                nPlaneReverse=nPlaneReverse,
+                splitTolerance=splitTolerance,
+                scale_up=scale_up,
+                pln_distance=pln_distance,
+                pln_angle=pln_angle,
+                relativeTol=relativeTol,
+                Lev0=False,
             )
             voidList.append(voids)
 
-    voidList.append(set_graveyard_cell(Surfaces, UniverseBox))
+    voidList.append(set_graveyard_cell(Surfaces, UniverseBox, 
+                                       pln_distance, pln_angle, 
+                                       relativeTol, sph_distance))
 
     return VF.update_void_list(init, voidList, NestedEnclosure, sort_enclosure)
 
@@ -107,6 +128,12 @@ def get_void_def(
     simplify,
     enlargeBox,
     verbose,
+    nPlaneReverse,
+    splitTolerance,
+    scale_up,
+    pln_distance,
+    pln_angle,
+    relativeTol,
     Lev0=False,
 ):
 
@@ -134,7 +161,7 @@ def get_void_def(
 
         for iz, z in enumerate(Initial):
             nsurfaces, nbrackets = z.get_numbers()
-            if opt.verbose:
+            if verbose:
                 print(f"{iloop} {iz + 1}/{nvoid} {nsurfaces} {nbrackets}")
 
             if nsurfaces > maxsurf and nbrackets > maxbracket:
@@ -161,6 +188,12 @@ def get_void_def(
                     Surfaces=Surfaces,
                     enlargeBox=enlargeBox,
                     verbose=verbose,
+                    nPlaneReverse=nPlaneReverse,
+                    splitTolerance=splitTolerance,
+                    scale_up=scale_up,
+                    pln_distance=pln_distance,
+                    pln_angle=pln_angle,
+                    relativeTol=relativeTol,
                     simplify=simplifyVoid,
                 )
                 if cell is not None:
@@ -187,14 +220,15 @@ def get_void_def(
     return voidList
 
 
-def set_graveyard_cell(Surfaces, UniverseBox):
+def set_graveyard_cell(Surfaces, UniverseBox, pln_distance,
+                       pln_angle, relativeTol, sph_distance):
     Universe = VoidBox([], UniverseBox)
 
-    externalBox = get_universe_complementary(Universe, Surfaces)
+    externalBox = get_universe_complementary(Universe, Surfaces, pln_distance, pln_angle, relativeTol)
     center = UniverseBox.Center
     radius = 0.51 * UniverseBox.DiagonalLength
     sphere = GeounedSurface(("Sphere", (center, radius)), UniverseBox)
-    id, exist = Surfaces.add_sphere(sphere)
+    id, _ = Surfaces.add_sphere(sphere, sph_distance, relativeTol)
 
     sphdef = BoolSequence(str(-id))
     sphdef.operator = "AND"
@@ -219,11 +253,16 @@ def set_graveyard_cell(Surfaces, UniverseBox):
     return (mVoidSphIn, mVoidSphOut)
 
 
-# TODO check this is being used
-def get_universe_complementary(Universe, Surfaces):
+def get_universe_complementary(Universe, Surfaces, pln_distance, pln_angle, relativeTol):
     Def = BoolSequence(operator="OR")
     for p in Universe.get_bound_planes():
-        id, exist = Surfaces.add_plane(p)
+        id, exist = Surfaces.add_plane(
+            plane=p,
+            pln_distance=pln_distance,
+            pln_angle=pln_angle,
+            relativeTol=relativeTol,
+            fuzzy=False,
+        )
         if not exist:
             Def.elements.append(-id)
         else:

@@ -168,6 +168,9 @@ class VoidBox:
         nPlaneReverse,
         splitTolerance,
         scale_up,
+        pln_distance,
+        pln_angle,
+        relativeTol,
         simplify="no",
     ):
         if self.PieceEnclosure is None:
@@ -175,7 +178,13 @@ class VoidBox:
             center = self.BoundBox.Center
             bBox = self.BoundBox
             for p in self.get_bound_planes():
-                id, exist = Surfaces.add_plane(p)
+                id, exist = Surfaces.add_plane(
+                    plane=p,
+                    pln_distance=pln_distance,
+                    pln_angle=pln_angle,
+                    relativeTol=relativeTol,
+                    fuzzy=False,
+                )
                 if exist:
                     s = Surfaces.get_surface(id)
                     if is_opposite(p.Surf.Axis, s.Surf.Axis):
