@@ -367,6 +367,10 @@ class CadToCsg:
                 cyl_angle=self.tolerances.cyl_angle,
                 cyl_distance=self.tolerances.cyl_distance,
                 distance=self.tolerances.distance,
+                kne_angle=self.tolerances.kne_angle,
+                kne_distance=self.tolerances.kne_distance,
+                relativePrecision=self.tolerances.relativePrecision,
+                sph_distance=self.tolerances.sph_distance
             )
 
             # decompose Enclosure solids
@@ -389,6 +393,10 @@ class CadToCsg:
                     cyl_angle=self.tolerances.cyl_angle,
                     cyl_distance=self.tolerances.cyl_distance,
                     distance=self.tolerances.distance,
+                    kne_angle=self.tolerances.kne_angle,
+                    kne_distance=self.tolerances.kne_distance,
+                    relativePrecision=self.tolerances.relativePrecision,
+                    sph_distance=self.tolerances.sph_distance
                 )
 
             print("End of decomposition phase")
@@ -400,7 +408,11 @@ class CadToCsg:
                     continue
                 print("Building cell: ", j + 1)
                 cones = Conv.cellDef(
-                    m, Surfaces, UniverseBox, self.options.forceCylinder
+                    meta_obj= m, surfaces=Surfaces, universe_box=UniverseBox,
+                    verbose=self.options.verbose, forceCylinder=self.options.forceCylinder,
+                    tor_distance=self.tolerances.tor_distance,
+                    tor_angle=self.tolerances.tor_angle, relativeTol=self.tolerances.relativeTol,
+                    distance=self.tolerances.distance
                 )
                 if cones:
                     coneInfo[m.__id__] = cones
@@ -435,7 +447,10 @@ class CadToCsg:
                     cyl_angle=self.tolerances.cyl_angle,
                     cyl_distance=self.tolerances.cyl_distance,
                     distance=self.tolerances.distance,
-                    tolerance=self.tolerances.tolerances
+                    kne_angle=self.tolerances.kne_angle,
+                    kne_distance=self.tolerances.kne_distance,
+                    relativePrecision=self.tolerances.relativePrecision,
+                    sph_distance=self.tolerances.sph_distance
                 )
 
         tempstr2 = str(datetime.now() - tempTime)
@@ -622,7 +637,10 @@ def decompose_solids(
     cyl_angle,
     cyl_distance,
     distance,
-    tolerance,
+    kne_angle,
+    kne_distance,
+    relativePrecision,
+    sph_distance,
 ):
     totsolid = len(MetaList)
     warningSolids = []
@@ -654,7 +672,9 @@ def decompose_solids(
             cyl_angle=cyl_angle,
             cyl_distance=cyl_distance,
             distance=distance,
-            tolerance=tolerance
+            kne_angle=kne_angle,
+            kne_distance=kne_distance,
+            relativePrecision=relativePrecision,
         )
 
         if err != 0:
@@ -678,8 +698,25 @@ def decompose_solids(
                 comsolid.exportStep(f"debug/compEnclosure_{i}.stp")
             else:
                 comsolid.exportStep(f"debug/compSolid_{i}.stp")
+        ext_surfaces = Decom.extract_surfaces(
+            solid=comsolid, kind="All", universe_box=UniverseBox, 
+            relativeTol=relativeTol,
+            pln_distance=pln_distance,
+            pln_angle=pln_angle,
+            tor_distance=tor_distance,
+            tor_angle=tor_angle,
+            cyl_distance=cyl_distance,
+            cyl_angle=cyl_angle,
+            kne_distance=kne_distance,
+            kne_angle=kne_angle,
+            distance=distance,
+            MakeObj=True
+        )
         Surfaces.extend(
-            Decom.extract_surfaces(comsolid, "All", UniverseBox, MakeObj=True)
+            surface=ext_surfaces,
+            pln_distance=pln_distance, pln_angle=pln_angle, relativeTol=relativeTol,
+            cyl_angle=cyl_angle,cyl_distance=cyl_distance,kne_distance=kne_distance,
+            kne_angle=kne_angle,sph_distance=sph_distance,tor_distance=tor_distance
         )
         m.set_cad_solid()
         m.update_solids(comsolid.Solids)

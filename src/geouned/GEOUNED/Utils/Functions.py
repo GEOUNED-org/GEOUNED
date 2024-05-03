@@ -424,18 +424,18 @@ class SurfacesDict(dict):
         del self[self.__last_obj__[0]][self.__last_obj__[1]]
         return
 
-    def extend(self, surface, pln_distance, pln_angle, relativeTol):
+    def extend(self, surface, pln_distance, pln_angle, relativeTol, cyl_angle,cyl_distance,kne_distance,kne_angle,sph_distance,tor_distance):
         for Pkey in ["PX", "PY", "PZ", "P"]:
             for s in surface[Pkey]:
                 self.add_plane(s, pln_distance, pln_angle, relativeTol)
         for s in surface["Cyl"]:
-            self.add_cylinder(s)
+            self.add_cylinder(cyl=s, cyl_distance=cyl_distance,cyl_angle=cyl_angle,relativeTol=relativeTol )
         for s in surface["Cone"]:
-            self.add_cone(s)
+            self.add_cone(cone=s, kne_distance=kne_distance, kne_angle=kne_angle, relativeTol=relativeTol)
         for s in surface["Sph"]:
-            self.add_sphere(s)
+            self.add_sphere(sph=s, sph_distance=sph_distance, relativeTol=relativeTol)
         for s in surface["Tor"]:
-            self.add_torus(s)
+            self.add_torus(tor=s, tor_distance=tor_distance, relativeTol=relativeTol)
 
     def add_plane(self, plane, pln_distance, pln_angle, relativeTol, fuzzy=False):
         ex = FreeCAD.Vector(1, 0, 0)
@@ -628,30 +628,28 @@ class SurfacesDict(dict):
             return index, True
 
 
-def split_bop(solid, tools, tolerance, scale_up, splitTolerance, scale=0.1):
+def split_bop(solid, tools, splitTolerance, scale_up, scale=0.1):
 
-    if tolerance >= 0.1:
-        compSolid = BOPTools.SplitAPI.slice(solid, tools, "Split", tolerance=tolerance)
+    if splitTolerance >= 0.1:
+        compSolid = BOPTools.SplitAPI.slice(
+            solid, tools, "Split", tolerance=splitTolerance
+        )
 
-    elif tolerance < 1e-12:
+    elif splitTolerance < 1e-12:
         if scale_up:
             tol = 1e-13 if splitTolerance == 0 else splitTolerance
-            compSolid = split_bop(
-                solid, tools, tol / scale, scale_up, splitTolerance, 1.0 / scale
-            )
+            compSolid = split_bop(solid, tools, tol / scale, scale_up, 1.0 / scale)
         else:
             compSolid = BOPTools.SplitAPI.slice(
-                solid, tools, "Split", tolerance=tolerance
+                solid, tools, "Split", tolerance=splitTolerance
             )
 
     else:
         try:
             compSolid = BOPTools.SplitAPI.slice(
-                solid, tools, "Split", tolerance=tolerance
+                solid, tools, "Split", tolerance=splitTolerance
             )
         except:
-            compSolid = split_bop(
-                solid, tools, tolerance * scale, scale_up, splitTolerance, scale
-            )
+            compSolid = split_bop(solid, tools, splitTolerance * scale, scale_up, scale)
 
     return compSolid

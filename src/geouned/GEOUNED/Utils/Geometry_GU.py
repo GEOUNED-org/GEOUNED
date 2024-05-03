@@ -96,7 +96,9 @@ class TorusGu(SurfacesGu):
 class SolidGu:
     """GEOUNED Solid Class"""
 
-    def __init__(self, solid, tor_distance, tor_angle, relativeTol, plane3Pts=False):
+    def __init__(
+        self, solid, tor_distance, tor_angle, relativeTol, distance, plane3Pts=False
+    ):
         self.solid = solid
         faces = define_list_face_gu(solid.Faces, plane3Pts)
         self.Faces = faces
@@ -117,7 +119,7 @@ class SolidGu:
 
         if len(toroidIndex) != 0:
             tFaces = self.__same_torus_surf__(
-                toroidIndex, tor_distance, tor_angle, relativeTol
+                toroidIndex, tor_distance, tor_angle, relativeTol, distance
             )
             for i, tSet in enumerate(tFaces):
                 URange = self.__merge_periodic_uv__("U", tSet)
@@ -126,7 +128,9 @@ class SolidGu:
                     self.TorusVParams[t] = (i, VRange)
                     self.TorusUParams[t] = (i, URange)
 
-    def __same_torus_surf__(self, torusList, tor_distance, tor_angle, relativeTol):
+    def __same_torus_surf__(
+        self, torusList, tor_distance, tor_angle, relativeTol, distance
+    ):
         """group as a single face all the neighbour faces of the same torus"""
         sameTorusFace = []
         temp = torusList[:]
@@ -161,7 +165,7 @@ class SolidGu:
                     for tindex in temp:
                         if (
                             self.Faces[current[i]].distToShape(self.Faces[tindex])[0]
-                            < tol.distance
+                            < distance
                         ):
                             if tindex not in current:
                                 current.append(tindex)
