@@ -421,10 +421,8 @@ def split_solid_fast(solid, surf, box):
         if dist > 1e-6:  # face doesn't intersect solid
             sgn = check_sign(solid, surf)
             if sgn == 1:
-                return (
-                    1,
-                    0,
-                )  # values of s2 and -s2   "0" means this region doesn't exist
+                # values of s2 and -s2   "0" means this region doesn't exist
+                return (1, 0),
             else:
                 return (0, 1)
         else:
