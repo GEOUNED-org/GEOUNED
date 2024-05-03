@@ -406,7 +406,7 @@ def extract_surfaces(
                     surfaces.add_torus(torus)
 
                 if kind in ["Planes", "All"]:
-                    for p in torus_bound_planes(face, universe_box):
+                    for p in torus_bound_planes(face=face, boundBox= universe_box, value=tolerances.value, angle=tolerances.angle):
                         if MakeObj:
                             p.build_surface()
                         surfaces.add_plane(p)

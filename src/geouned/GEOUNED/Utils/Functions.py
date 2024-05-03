@@ -632,15 +632,15 @@ class SurfacesDict(dict):
         else:
             return index, True
 
-    def add_torus(self, tor, tor_distance, tor_angle, relativeTol):
+    def add_torus(self, tor, tolerances):
         add_torus = True
         for i, s in enumerate(self["Tor"]):
             if BF.is_same_torus(
                 tor.Surf,
                 s.Surf,
-                dtol=tor_distance,
-                atol=tor_angle,
-                rel_tol=relativeTol,
+                dtol=tolerances.tor_distance,
+                atol=tolerances.tor_angle,
+                rel_tol=tolerances.relativeTol,
             ):
                 add_torus = False
                 index = s.Index
