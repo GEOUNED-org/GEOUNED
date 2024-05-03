@@ -1253,7 +1253,7 @@ def extra_plane_cyl_face(face, box, surfaces):
     return planes_id
 
 
-def add_cone_plane(definition, cones_list, surfaces, universe_box):
+def add_cone_plane(definition, cones_list, surfaces, universe_box, angle):
     x_axis = FreeCAD.Vector(1, 0, 0)
     y_axis = FreeCAD.Vector(0, 1, 0)
     z_axis = FreeCAD.Vector(0, 0, 1)

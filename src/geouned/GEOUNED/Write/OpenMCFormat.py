@@ -10,9 +10,12 @@ from .Functions import open_mc_surface, change_surf_sign, write_openmc_region
 
 
 class OpenmcInput:
-    def __init__(self, Meta, Surfaces):
+    def __init__(self, Meta, Surfaces, tolerances, numeric_format, options):
 
         self.Cells = Meta
+        self.tolerances = tolerances
+        self.numeric_format = numeric_format
+        self.options = options
 
         self.__get_surface_table__()
         self.__simplify_planes__(Surfaces)
@@ -72,7 +75,9 @@ class OpenmcInput:
     def __write_xml_surfaces__(self, surface, boundary=False):
         """Write the surfaces in xml OpenMC format"""
 
-        surfType, coeffs = open_mc_surface(surface.Type, surface.Surf)
+        surfType, coeffs = open_mc_surface(
+            Type=surface.Type, surf=surface.Surf, tolerances=self.tolerances,
+            numeric_format=self.numeric_format)
 
         if not boundary:
             OMCsurf = '  <surface id="{}" type="{}" coeffs="{}" />\n'.format(
@@ -148,7 +153,9 @@ import openmc
         """Write the surfaces in python OpenMC format"""
 
         surfType, coeffs = open_mc_surface(
-            surface.Type, surface.Surf, out_xml=False, quadricForm=opt.quadricPY
+            Type=surface.Type, surf=surface.Surf,
+            tolerances=self.tolerances, numeric_format=self.numeric_format, out_xml=False,
+            quadricForm=self.options.quadricPY
         )
 
         if not boundary:

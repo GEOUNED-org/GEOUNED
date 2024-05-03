@@ -3,7 +3,7 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
 [![documentation](https://github.com/GEOUNED-org/GEOUNED/actions/workflows/documentation.yml/badge.svg)](https://github.com/GEOUNED-org/GEOUNED/actions/workflows/documentation.yml)
 
-:book: [Documentation](https://GEOUNED-org.github.io/GEOUNED/python_api.html)
+:book: [Documentation](https://geouned-org.github.io/GEOUNED/)
 
 
 # GEOUNED
@@ -24,7 +24,7 @@ Otherwise, the source code included in the ~src/ folder can be directly download
 import sys
 GEO_path='the path in your local computer'
 sys.path.append('GEO_path')
-``` 
+```
 
 the same should be made for FreeCAD libraries. You can also define appropriately the PYTHONPATH variable for both modules. 
 

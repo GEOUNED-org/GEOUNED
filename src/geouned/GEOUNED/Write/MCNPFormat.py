@@ -14,7 +14,7 @@ from .Functions import CardLine, mcnp_surface, change_surf_sign, write_mcnp_cell
 
 class McnpInput:
     def __init__(self, Meta, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat,
-                 prnt3PPlane, StepFile, tolerances, numerical_format):
+                 prnt3PPlane, StepFile, tolerances, numeric_format, options):
         self.Title = title
         self.StepFile = StepFile
         self.VolSDEF = volSDEF
@@ -24,12 +24,11 @@ class McnpInput:
         self.Cells = Meta
         self.prnt3PPlane = prnt3PPlane
         self.tolerances = tolerances
-        self.numerical_format = numerical_format
-        self.Options = {
-            "Volume": self.VolCARD,
-            "Particle": ("n", "p"),
-            "Universe": self.U0CARD,
-        }
+        self.numeric_format = numeric_format
+        self.options = options
+
+        # TODO allow user to edit these from CadToCsg class
+        self.particle= ("n", "p")
         self.part = "P"
 
         self.__get_surface_table__()
@@ -159,7 +158,9 @@ C **************************************************************
     def __write_surfaces__(self, surface):
         """Write the surfaces in MCNP format"""
 
-        MCNP_def = mcnp_surface(surface.Index, surface.Type, surface.Surf, self.tolerances, self.numerical_format)
+        MCNP_def = mcnp_surface(id=surface.Index, Type=surface.Type,
+                                surf=surface.Surf, tolerances=self.tolerances,
+                                options=self.options,  numeric_format=self.numeric_format)
         if MCNP_def:
             MCNP_def += "\n"
             self.inpfile.write(MCNP_def)
@@ -216,21 +217,21 @@ C **************************************************************
     def __option_format__(self, cell):
 
         option = ""
-        if self.Options["Volume"]:
+        if self.VolCARD:
             if not cell.Void:
                 option = f"{'':11s}Vol={cell.Volume * 0.001:e}\n"
             else:
                 option = f"{'':11s}Vol=1.0\n"
 
         option += f"{'':11s}"
-        for p in self.Options["Particle"]:
+        for p in self.particle:
             if cell.MatInfo == "Graveyard":
                 option += f"imp:{p}=0     "
             else:
                 option += f"imp:{p}=1.0   "
 
-        if self.Options["Universe"] is not None:
-            option += f"U={self.Options['Universe']}  "
+        if self.U0CARD is not None:
+            option += f"U={self.U0CARD}  "
         option += "\n"
 
         return option

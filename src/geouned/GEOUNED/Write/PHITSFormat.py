@@ -40,6 +40,9 @@ class PhitsInput:
         matFile,
         voidMat,
         startCell,
+        prnt3PPlane,
+        StepFile,
+        tolerances, numeric_format, options
     ):
         self.Title = title
         self.VolSDEF = volSDEF
@@ -50,7 +53,11 @@ class PhitsInput:
         self.voidMat = voidMat
         self.startCell = startCell
         self.Cells = Meta
-        self.Options = {"Volume": self.VolCARD, "Universe": self.U0CARD}
+        self.prnt3PPlane=prnt3PPlane
+        self.StepFile=StepFile
+        self.tolerances=tolerances
+        self.numeric_format=numeric_format
+        self.options=options
 
         self.__get_surface_table__()
         self.__simplify_planes__(Surfaces)
@@ -115,7 +122,7 @@ $ set all at 1.0cm3 tentatively.
 $
 [VOLUME] off\n"""
 
-        if self.Options["Volume"]:
+        if self.VolCARD:
             self.inpfile.write(volHeader)
             self.__write_phits_volume_block__()
             self.inpfile.write(" \n")
@@ -370,7 +377,7 @@ $ **************************************************************
     def __write_phits_surfaces__(self, surface):
         """Write the surfaces in PHITS format"""
 
-        PHITS_def = phits_surface(surface.Index, surface.Type, surface.Surf)
+        PHITS_def = phits_surface(surface.Index, surface.Type, surface.Surf, self.tolerances, self.numeric_format, self.options)
         if PHITS_def:
             PHITS_def += "\n"
             self.inpfile.write(PHITS_def)
@@ -415,7 +422,7 @@ $ **************************************************************
         enclenvChk = []
         enclenvChk = self.__stepfile_label_chk__(self.StepFile)
 
-        if enclenvChk and self.Options["Volume"]:
+        if enclenvChk and self.VolCARD:
             for i, cell in enumerate(self.Cells):
                 if cell.__id__ is not None:
                     if cell.Void and startVoidIndex == eliminated_endVoidIndex:
@@ -441,7 +448,7 @@ $ **************************************************************
                     else:
                         vol += f"{'':6s}{cell.label}{'':6s}{cell.Volume * 0.001:6e}\n"
         else:
-            if self.Options["Volume"]:
+            if self.VolCARD:
                 for i, cell in enumerate(self.Cells):
                     if cell.__id__ is not None:
                         if cell.Void:
@@ -457,7 +464,7 @@ $ **************************************************************
         # If you want for all eliminated the merged void cells to come apperes in [VOLUME],
         # apply this commented out section instead
         # and comment out above from "startVoidIndex =..." to "... self.inpfile.write(vol)"
-        if self.Options['Volume']:
+        if self.VolCard:
             for i,cell in enumerate(self.Cells):
                 if cell.__id__ is not None :
                     if cell.Void : 
@@ -481,14 +488,14 @@ $ **************************************************************
     def __option_format__(self, cell):
 
         option = ""
-        if self.Options["Volume"]:
+        if self.VolCARD:
             if not cell.Void:
                 option = f"${'':11s}Vol={cell.Volume * 0.001:e} cm3\n"
             else:
                 option = f"${'':11s}Vol=1.0 cm3\n"
 
-        if self.Options["Universe"] is not None:
-            option += f"{'':11s}U={self.Options['Universe']}\n"
+        if self.U0CARD is not None:
+            option += f"{'':11s}U={self.U0CARD}\n"
 
         return option
 
@@ -559,7 +566,7 @@ $ **************************************************************
                 p.Surf.Axis = FreeCAD.Vector(0, 0, 1)
                 self.__change_surf_sign__(p)
 
-        if opt.prnt3PPlane:
+        if self.prnt3PPlane:
             for p in Surfaces["P"]:
                 if p.Surf.pointDef:
                     axis, d = points_to_coeffs(p.Surf.Points)

@@ -25,7 +25,8 @@ def write_geometry(
     prnt3PPlane,
     StepFile,
     tolerances,
-    numeric_format
+    numeric_format,
+    options
 ):
 
     # Currently there are two was of setting outFormat (via a .set method and
@@ -60,13 +61,13 @@ def write_geometry(
 
         MCNPfile = McnpInput(
             MetaList, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat,
-            prnt3PPlane, StepFile, tolerances, numeric_format
+            prnt3PPlane, StepFile, tolerances, numeric_format, options=options
         )
         MCNPfile.set_sdef((outSphere, outBox))
         MCNPfile.write_input(mcnpFilename)
 
     if "openMC_XML" in outFormat or "openMC_PY" in outFormat:
-        OMCFile = OpenmcInput(MetaList, Surfaces)
+        OMCFile = OpenmcInput(Meta=MetaList, Surfaces=Surfaces, tolerances=tolerances, numeric_format=numeric_format, options=options)
 
     if "openMC_XML" in outFormat:
         omcFilename = geometryName + ".xml"
@@ -92,7 +93,8 @@ def write_geometry(
             outSphere = None
 
         Serpentfile = SerpentInput(
-            MetaList, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat
+            MetaList, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat,
+            prnt3PPlane, StepFile, tolerances, numeric_format, options
         )
         # Serpentfile.set_sdef((outSphere,outBox))
         Serpentfile.write_input(serpentFilename)
@@ -126,6 +128,11 @@ def write_geometry(
             matFile,
             voidMat,
             startCell,
+            prnt3PPlane,
+            StepFile,
+            tolerances,
+            numeric_format,
+            options
         )
         # PHITSfile.setSDEF_PHITS((PHITS_outSphere,PHITS_outBox))
         PHITSfile.write_phits(phitsFilename)
