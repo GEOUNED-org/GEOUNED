@@ -18,7 +18,7 @@ If you have install GEOUNED and FreeCAD into your system PYthon then you can sim
     import geouned
     geo = geouned.CadToCsg(
         step_file = 'cuboid.stp',
-        out_formats = ['openMC_XML', 'openMC_PY', 'PHITS', 'Serpent', 'MCNP']
+        out_formats = ['openmc_xml', 'openmc_py', 'PHITS', 'Serpent', 'MCNP']
     )
     geo.start()
 

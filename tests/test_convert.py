@@ -34,25 +34,31 @@ def test_conversion(input_step_file):
         newSplitPlane=True,
         nPlaneReverse=0,
     )
-    geo = geouned.CadToCsg(
-        title="Input Test",
-        stepFile=f"{input_step_file.resolve()}",
-        geometryName=f"{output_filename_stem.resolve()}",
-        outFormat=("mcnp", "openMC_XML", "openMC_PY", "serpent", "phits"),
+    
+    my_settings = geouned.Settings(
         compSolids=False,
-        volCARD=False,
-        volSDEF=True,
-        voidGen=True,
-        dummyMat=True,
         minVoidSize=100,
-        cellSummaryFile=False,
-        cellCommentFile=False,
         debug=False,
         simplify="no",
+    )
+
+    geo = geouned.CadToCsg(
+        stepFile=f"{input_step_file.resolve()}",
         options=my_options,
+        settings=my_settings,
     )
 
     geo.start()
+    geo.export_csg(
+        cellSummaryFile=False,
+        cellCommentFile=False,
+        dummyMat=True,
+        title="Input Test",
+        geometry_name=f"{output_filename_stem.resolve()}",
+        out_formats=("mcnp", "openmc_xml", "openmc_py", "serpent", "phits"),
+        volCARD=False,
+        volSDEF=True,
+    )
 
     for suffix in suffixes:
         assert output_filename_stem.with_suffix(suffix).exists()

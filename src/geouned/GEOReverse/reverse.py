@@ -34,12 +34,12 @@ def reverse(optFile="configRevese.ini"):
     # get geometry definition from MCNP input
     if inFormat == "mcnp":
         geom = McnpInput(geomfile)
-    elif inFormat == "openMC_XML":
+    elif inFormat == "openmc_xml":
         geom = XmlInput(geomfile)
     else:
         msg = (
             f"input format type {inFormat} is not supported."
-            'Supported options are "mcnp" or "openMC_XML"'
+            'Supported options are "mcnp" or "openmc_xml"'
         )
         raise ValueError(msg)
 

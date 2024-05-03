@@ -29,14 +29,7 @@ def write_geometry(
     options
 ):
 
-    # Currently there are two was of setting outFormat (via a .set method and
-    # a class attribute. Once we have a single method then move this validating
-    # input code to the attribute @setter
-    supported_mc_codes = ("mcnp", "openMC_XML", "openMC_PY", "serpent", "phits")
-    for out_format in outFormat:
-        if out_format not in supported_mc_codes:
-            msg = f"outFormat {out_format} not in supported MC codes ({supported_mc_codes})"
-            raise ValueError(msg)
+    files_written = []
 
     # write cells comments in file
     if cellCommentFile:
@@ -65,17 +58,20 @@ def write_geometry(
         )
         MCNPfile.set_sdef((outSphere, outBox))
         MCNPfile.write_input(mcnpFilename)
+        files_written.append(mcnpFilename)
 
-    if "openMC_XML" in outFormat or "openMC_PY" in outFormat:
+    if "openmc_xml" in outFormat or "openmc_py" in outFormat:
         OMCFile = OpenmcInput(Meta=MetaList, Surfaces=Surfaces, tolerances=tolerances, numeric_format=numeric_format, options=options)
 
-    if "openMC_XML" in outFormat:
+    if "openmc_xml" in outFormat:
         omcFilename = geometryName + ".xml"
         OMCFile.write_xml(omcFilename)
+        files_written.append(omcFilename)
 
-    if "openMC_PY" in outFormat:
+    if "openmc_py" in outFormat:
         omcFilename = geometryName + ".py"
         OMCFile.write_py(omcFilename)
+        files_written.append(omcFilename)
 
     if "serpent" in outFormat:
         serpentFilename = geometryName + ".serp"
@@ -98,6 +94,7 @@ def write_geometry(
         )
         # Serpentfile.set_sdef((outSphere,outBox))
         Serpentfile.write_input(serpentFilename)
+        files_written.append(serpentFilename)
 
     if "phits" in outFormat:
         phitsFilename = geometryName + ".inp"
@@ -136,3 +133,5 @@ def write_geometry(
         )
         # PHITSfile.setSDEF_PHITS((PHITS_outSphere,PHITS_outBox))
         PHITSfile.write_phits(phitsFilename)
+        files_written.append(phitsFilename)
+        return files_written

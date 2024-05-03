@@ -563,6 +563,9 @@ class SurfacesDict(dict):
             if BF.is_same_cylinder(
                 cyl.Surf,
                 c.Surf,
+                tolerances=tolerances,
+                options=options,
+                numeric_format=numeric_format,
                 dtol=cyl_distance,
                 atol=cyl_angle,
                 rel_tol=relativeTol,

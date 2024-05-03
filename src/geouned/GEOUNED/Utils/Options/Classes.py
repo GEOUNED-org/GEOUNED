@@ -38,7 +38,7 @@ class Options:
             geometry is defined by cells compound by only triangular plane
             faces. Defaults to False.
         prnt3PPlane (bool, optional): print 3 point plane definition in
-            MCNP output as 3 points coordinates. Defaults to False.
+            output as 3 points coordinates. Defaults to False.
         forceNoOverlap (bool, optional): force no overlaping cell
             definition. Adjacent cell definition are rested from current
             cell definition. Defaults to False.
@@ -131,8 +131,8 @@ class Tolerances:
         self.min_area = min_area
 
 
-class McnpNumericFormat:
-    """_summary_
+class NumericFormat:
+    """Numerical format options for each of the surface types.
 
     Args:
         P_abc (str, optional): Plane general a,b,c params. Defaults to "14.7e".
@@ -183,3 +183,89 @@ class McnpNumericFormat:
         self.GQ_1to6 = GQ_1to6
         self.GQ_7to9 = GQ_7to9
         self.GQ_10 = GQ_10
+
+class Settings:
+    """Settings for changing the way the CAD to CSG conversion is done
+    
+    Args:
+        stepFile (str, optional): Name of the CAD file (in STEP format) to
+            be converted. Defaults to "".
+        matFile (str, optional): _description_. Defaults to "".
+        voidGen (bool, optional): Generate voids of the geometry. Defaults
+            to True.
+        debug (bool, optional): Write step files of original and decomposed
+            solids, for each solid in the STEP file. Defaults to False.
+        compSolids (bool, optional): Join subsolids of STEP file as a single
+            compound solid. Step files generated with SpaceClaim have not
+            exactly the same level of solids as FreeCAD. It may a happened
+            that solids defined has separated solids are read by FreeCAD
+            as a single compound solid (and will produce only one MCNP
+            cell). In this case compSolids should be set to False. Defaults
+            to True.
+        simplify (str, optional): Simplify the cell definition considering
+            relative surfaces position and using Boolean logics. Available
+            options are: "no" no optimization, "void" only void cells are
+            simplified. Algorithm is faster but the simplification is not
+            optimal. "voidfull" : only void cells are simplified with the
+            most optimal algorithm. The time of the conversion can be
+            multiplied by 5 or more. "full" : all the cells (solids and
+            voids) are simplified. Defaults to "No".
+        cellRange (list, optional): Range of cell to be converted (only one
+            range is allowed, e.g [100,220]). Default all solids are
+            converted. Defaults to [].
+        exportSolids (str, optional): Export CAD solid after reading.
+            The execution is stopped after export, the translation is not
+            carried out. Defaults to "".
+        minVoidSize (float, optional): Minimum size of the edges of the
+            void cell. Units are in mm. Defaults to 200.0.
+        maxSurf (int, optional): #TODO
+        maxBracket (int, optional): Maximum number of brackets (solid
+            complementary) allowed in void cell definition. Defaults to 30.
+        voidMat (list, optional): Assign a material defined by the user
+            instead of void for cells without material definition and the
+            cells generated in the automatic void generation. The format
+            is a 3 valued tuple (mat_label, mat_density, mat_description).
+            Example (100,1e-3,'Air assigned to Void'). Defaults to [].
+        voidExclude (list, optional): #TODO see issue 87. Defaults to [].
+        startCell (int, optional): Starting cell numbering label. Defaults to 1.
+        startSurf (int, optional): Starting surface numbering label. Defaults to 1.
+        sort_enclosure (bool, optional): If enclosures are defined in the
+            CAD models, the voids cells of the enclosure will be located in
+            the output file in the same location where the enclosure solid
+            is located in the CAD solid tree.. Defaults to False.
+    """
+
+    def __init__(
+        self,
+        matFile: str = "",
+        voidGen: bool = True,
+        debug: bool = False,
+        compSolids: bool = True,
+        simplify: str = "No",
+        cellRange=[],
+        exportSolids: str = "",
+        minVoidSize: float = 200.0,  # units mm
+        maxSurf: int = 50,
+        maxBracket: int = 30,
+        voidMat=[],
+        voidExclude=[],
+        startCell: int = 1,
+        startSurf: int = 1,
+        sort_enclosure: bool = False,
+    ):
+
+        self.matFile = matFile
+        self.voidGen = voidGen
+        self.debug = debug
+        self.compSolids = compSolids
+        self.simplify = simplify
+        self.cellRange = cellRange
+        self.exportSolids = exportSolids
+        self.minVoidSize = minVoidSize
+        self.maxSurf = maxSurf
+        self.maxBracket = maxBracket
+        self.voidMat = voidMat
+        self.voidExclude = voidExclude
+        self.startCell = startCell
+        self.startSurf = startSurf
+        self.sort_enclosure = sort_enclosure
