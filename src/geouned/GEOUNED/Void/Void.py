@@ -83,10 +83,9 @@ def void_generation(
             voidList.append(voids)
 
     voidList.append(set_graveyard_cell(Surfaces, UniverseBox, 
-                                       pln_distance, pln_angle, 
-                                       relativeTol, sph_distance))
+                                       tolerances, options, numeric_format))
 
-    return VF.update_void_list(init, voidList, NestedEnclosure, sort_enclosure)
+    return VF.update_void_list(init, voidList, NestedEnclosure, settings.sort_enclosure)
 
 
 def get_void_def(
@@ -143,7 +142,8 @@ def get_void_def(
                     Surfaces=Surfaces,
                     options=options,
                     tolerances=tolerances,
-                    numeric_format=numeric_format
+                    numeric_format=numeric_format,
+                    settings=settings
                 )
                 if cell is not None:
                     VoidCell = (cell, (boxDim, CellIn))
@@ -169,15 +169,14 @@ def get_void_def(
     return voidList
 
 
-def set_graveyard_cell(Surfaces, UniverseBox, pln_distance,
-                       pln_angle, relativeTol, sph_distance):
+def set_graveyard_cell(Surfaces, UniverseBox, tolerances, options, numeric_format):
     Universe = VoidBox([], UniverseBox)
 
-    externalBox = get_universe_complementary(Universe, Surfaces, pln_distance, pln_angle, relativeTol)
+    externalBox = get_universe_complementary(Universe, Surfaces, tolerances, options, numeric_format)
     center = UniverseBox.Center
     radius = 0.51 * UniverseBox.DiagonalLength
     sphere = GeounedSurface(("Sphere", (center, radius)), UniverseBox)
-    id, _ = Surfaces.add_sphere(sphere, sph_distance, relativeTol)
+    id, _ = Surfaces.add_sphere(sphere, tolerances.sph_distance, tolerances.relativeTol)
 
     sphdef = BoolSequence(str(-id))
     sphdef.operator = "AND"
@@ -202,14 +201,12 @@ def set_graveyard_cell(Surfaces, UniverseBox, pln_distance,
     return (mVoidSphIn, mVoidSphOut)
 
 
-def get_universe_complementary(Universe, Surfaces, pln_distance, pln_angle, relativeTol):
+def get_universe_complementary(Universe, Surfaces, tolerances, options, numeric_format):
     Def = BoolSequence(operator="OR")
     for p in Universe.get_bound_planes():
         id, exist = Surfaces.add_plane(
             plane=p,
-            pln_distance=pln_distance,
-            pln_angle=pln_angle,
-            relativeTol=relativeTol,
+            tolerances=tolerances, options=options, numeric_format=numeric_format,
             fuzzy=False,
         )
         if not exist:

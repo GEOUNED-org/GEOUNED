@@ -6,27 +6,23 @@ from .SerpentFormat import SerpentInput
 
 
 def write_geometry(
+    StepFile,
+    volSDEF,
+    title,
+    UCARD,
+    volCARD,
+    geometryName,
+    outFormat,
+    dummyMat,
+    cellCommentFile,
+    cellSummaryFile,
     UniverseBox,
     MetaList,
     Surfaces,
-    title,
-    volSDEF,
-    volCARD,
-    UCARD,
-    dummyMat,
-    geometryName,
-    outFormat,
-    cellCommentFile,
-    cellSummaryFile,
-    voidGen,
-    matFile,
-    voidMat,
-    startCell,
-    prnt3PPlane,
-    StepFile,
+    settings,
     tolerances,
     numeric_format,
-    options
+    options,
 ):
 
     files_written = []
@@ -47,14 +43,14 @@ def write_geometry(
             UniverseBox.ZMin,
             UniverseBox.ZMax,
         )
-        if voidGen:
+        if settings.voidGen:
             outSphere = (Surfaces["Sph"][-1].Index, Surfaces["Sph"][-1].Surf.Radius)
         else:
             outSphere = None
 
         MCNPfile = McnpInput(
             MetaList, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat,
-            prnt3PPlane, StepFile, tolerances, numeric_format, options=options
+            options.prnt3PPlane, StepFile, tolerances, numeric_format, options=options
         )
         MCNPfile.set_sdef((outSphere, outBox))
         MCNPfile.write_input(mcnpFilename)
@@ -83,14 +79,14 @@ def write_geometry(
             UniverseBox.ZMin,
             UniverseBox.ZMax,
         )
-        if voidGen:
+        if settings.voidGen:
             outSphere = (Surfaces["Sph"][-1].Index, Surfaces["Sph"][-1].Surf.Radius)
         else:
             outSphere = None
 
         Serpentfile = SerpentInput(
             MetaList, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat,
-            prnt3PPlane, StepFile, tolerances, numeric_format, options
+            options.prnt3PPlane, StepFile, tolerances, numeric_format, options
         )
         # Serpentfile.set_sdef((outSphere,outBox))
         Serpentfile.write_input(serpentFilename)
@@ -106,7 +102,7 @@ def write_geometry(
             UniverseBox.ZMin,
             UniverseBox.ZMax,
         )
-        if voidGen:
+        if settings.voidGen:
             PHITS_outSphere = (
                 Surfaces["Sph"][-1].Index,
                 Surfaces["Sph"][-1].Surf.Radius,
@@ -122,10 +118,10 @@ def write_geometry(
             volCARD,
             UCARD,
             dummyMat,
-            matFile,
-            voidMat,
-            startCell,
-            prnt3PPlane,
+            settings.matFile,
+            settings.voidMat,
+            settings.startCell,
+            options.prnt3PPlane,
             StepFile,
             tolerances,
             numeric_format,
