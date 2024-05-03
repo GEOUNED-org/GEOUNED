@@ -17,7 +17,7 @@ from ..Utils.BasicFunctions_part1 import (
     TorusParams,
     is_parallel,
 )
-from ..Utils.Options.Classes import Options
+from .Classes import Options
 from . import BasicFunctions_part2 as BF
 
 
@@ -436,16 +436,15 @@ class SurfacesDict(dict):
         kne_angle,
         sph_distance,
         tor_distance,
+        tolerances, options, numeric_format
     ):
         for Pkey in ["PX", "PY", "PZ", "P"]:
             for s in surface[Pkey]:
-                self.add_plane(s, pln_distance, pln_angle, relativeTol)
+                self.add_plane(s, pln_distance, pln_angle, relativeTol, tolerances, options, numeric_format)
         for s in surface["Cyl"]:
             self.add_cylinder(
                 cyl=s,
-                cyl_distance=cyl_distance,
-                cyl_angle=cyl_angle,
-                relativeTol=relativeTol,
+                tolerances=tolerances,
             )
         for s in surface["Cone"]:
             self.add_cone(
@@ -459,20 +458,23 @@ class SurfacesDict(dict):
         for s in surface["Tor"]:
             self.add_torus(tor=s, tor_distance=tor_distance, relativeTol=relativeTol)
 
-    def add_plane(self, plane, pln_distance, pln_angle, relativeTol, fuzzy=False):
+    def add_plane(self, plane, tolerances, options, numeric_format, fuzzy=False):
         ex = FreeCAD.Vector(1, 0, 0)
         ey = FreeCAD.Vector(0, 1, 0)
         ez = FreeCAD.Vector(0, 0, 1)
 
-        if is_parallel(plane.Surf.Axis, ex, pln_angle):
+        if is_parallel(plane.Surf.Axis, ex, tolerances.pln_angle):
             add_plane = True
             for i, p in enumerate(self["PX"]):
                 if BF.is_same_plane(
-                    plane.Surf,
-                    p.Surf,
-                    dtol=pln_distance,
-                    atol=pln_angle,
-                    rel_tol=relativeTol,
+                    p1=plane.Surf,
+                    p2=p.Surf,
+                    tolerances=tolerances,
+                    options=options,
+                    numeric_format=numeric_format,
+                    dtol=tolerances.pln_distance,
+                    atol=tolerances.pln_angle,
+                    rel_tol=tolerances.relativeTol,
                     fuzzy=(fuzzy, p.Index),
                 ):
                     add_plane = False
@@ -486,15 +488,18 @@ class SurfacesDict(dict):
                 self["PX"].append(plane)
                 self.__surfIndex__["PX"].append(plane.Index)
 
-        elif is_parallel(plane.Surf.Axis, ey, pln_angle):
+        elif is_parallel(plane.Surf.Axis, ey, tolerances.pln_angle):
             add_plane = True
             for i, p in enumerate(self["PY"]):
                 if BF.is_same_plane(
                     plane.Surf,
                     p.Surf,
-                    dtol=pln_distance,
-                    atol=pln_angle,
-                    rel_tol=relativeTol,
+                    tolerances=tolerances,
+                    options=options,
+                    numeric_format=numeric_format,
+                    dtol=tolerances.pln_distance,
+                    atol=tolerances.pln_angle,
+                    rel_tol=tolerances.relativeTol,
                     fuzzy=(fuzzy, p.Index),
                 ):
                     add_plane = False
@@ -508,15 +513,15 @@ class SurfacesDict(dict):
                 self["PY"].append(plane)
                 self.__surfIndex__["PY"].append(plane.Index)
 
-        elif is_parallel(plane.Surf.Axis, ez, pln_angle):
+        elif is_parallel(plane.Surf.Axis, ez, tolerances.pln_angle):
             add_plane = True
             for i, p in enumerate(self["PZ"]):
                 if BF.is_same_plane(
                     plane.Surf,
                     p.Surf,
-                    dtol=pln_distance,
-                    atol=pln_angle,
-                    rel_tol=relativeTol,
+                    dtol=tolerances.pln_distance,
+                    atol=tolerances.pln_angle,
+                    rel_tol=tolerances.relativeTol,
                     fuzzy=(fuzzy, p.Index),
                 ):
                     add_plane = False
@@ -536,9 +541,12 @@ class SurfacesDict(dict):
                 if BF.is_same_plane(
                     plane.Surf,
                     p.Surf,
-                    dtol=pln_distance,
-                    atol=pln_angle,
-                    rel_tol=relativeTol,
+                    tolerances=tolerances,
+                    options=options,
+                    numeric_format=numeric_format,
+                    dtol=tolerances.pln_distance,
+                    atol=tolerances.pln_angle,
+                    rel_tol=tolerances.relativeTol,
                     fuzzy=(fuzzy, p.Index),
                 ):
                     add_plane = False
@@ -557,7 +565,7 @@ class SurfacesDict(dict):
         else:
             return index, True
 
-    def add_cylinder(self, cyl, cyl_distance, cyl_angle, relativeTol, fuzzy=False):
+    def add_cylinder(self, cyl, tolerances, options, numeric_format, fuzzy=False):
         addCyl = True
         for i, c in enumerate(self["Cyl"]):
             if BF.is_same_cylinder(
@@ -566,9 +574,9 @@ class SurfacesDict(dict):
                 tolerances=tolerances,
                 options=options,
                 numeric_format=numeric_format,
-                dtol=cyl_distance,
-                atol=cyl_angle,
-                rel_tol=relativeTol,
+                dtol=tolerances.cyl_distance,
+                atol=tolerances.cyl_angle,
+                rel_tol=tolerances.relativeTol,
                 fuzzy=(fuzzy, c.Index),
             ):
                 addCyl = False

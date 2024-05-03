@@ -1,2 +1,2 @@
 from .core import CadToCsg
-from .Utils.Options.Classes import NumericFormat, Options, Tolerances, Settings
+from .Utils.Classes import NumericFormat, Options, Tolerances, Settings
