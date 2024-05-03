@@ -125,6 +125,7 @@ class CadToCsg:
         cellCommentFile: bool = False,
         cellSummaryFile: bool = True,
         sort_enclosure: bool = False,
+        tolerance: Tolerances = Tolerances(),
     ):
 
         self.title = title
@@ -152,10 +153,10 @@ class CadToCsg:
         self.cellCommentFile = cellCommentFile
         self.cellSummaryFile = cellSummaryFile
         self.sort_enclosure = sort_enclosure
+        self.tolerance = tolerance
 
         Options.set_default_attribute()
         McnpNumericFormat.set_default_attribute()
-        Tolerances.set_default_attribute()
 
     def set_configuration(self, configFile=None):
 
@@ -450,7 +451,7 @@ class CadToCsg:
                 if m.IsEnclosure:
                     continue
                 print("Building cell: ", j + 1)
-                cones = Conv.cellDef(m, Surfaces, UniverseBox)
+                cones = Conv.cellDef(m, Surfaces, UniverseBox, self.tolerance)
                 if cones:
                     coneInfo[m.__id__] = cones
                 if j in warningSolidList:
@@ -478,7 +479,7 @@ class CadToCsg:
         if self.voidGen and EnclosureList:
             for j, m in enumerate(EnclosureList):
                 print("Building Enclosure Cell: ", j + 1)
-                cones = Conv.cellDef(m, Surfaces, UniverseBox)
+                cones = Conv.cellDef(m, Surfaces, UniverseBox, self.tolerance)
                 if cones:
                     coneInfo[m.__id__] = cones
                 if j in warningEnclosureList:
@@ -501,7 +502,13 @@ class CadToCsg:
             else:
                 init = 0
             MetaVoid = Void.void_generation(
-                MetaReduced, EnclosureList, Surfaces, UniverseBox, code_setting, init
+                MetaReduced,
+                EnclosureList,
+                Surfaces,
+                UniverseBox,
+                code_setting,
+                self.tolerance,
+                init,
             )
 
         # if code_setting['simplify'] == 'full' and not Options.forceNoOverlap:
@@ -577,7 +584,7 @@ class CadToCsg:
         print_warning_solids(warnSolids, warnEnclosures)
 
         # add plane definition to cone
-        process_cones(MetaList, coneInfo, Surfaces, UniverseBox)
+        process_cones(MetaList, coneInfo, Surfaces, UniverseBox, self.tolerance)
 
         # write outputformat input
         write_geometry(UniverseBox, MetaList, Surfaces, code_setting)
@@ -648,7 +655,7 @@ def update_comment(meta, idLabel):
     meta.set_comments(Void.void_comment_line((meta.__commentInfo__[0], newLabel)))
 
 
-def process_cones(MetaList, coneInfo, Surfaces, UniverseBox):
+def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, tolerance):
     cellId = tuple(coneInfo.keys())
     for m in MetaList:
         if m.__id__ not in cellId and not m.Void:
@@ -661,9 +668,11 @@ def process_cones(MetaList, coneInfo, Surfaces, UniverseBox):
             for Id in m.__commentInfo__[1]:
                 if Id in cellId:
                     cones.update(-x for x in coneInfo[Id])
-            Conv.add_cone_plane(m.Definition, cones, Surfaces, UniverseBox)
+            Conv.add_cone_plane(m.Definition, cones, Surfaces, UniverseBox, tolerance)
         elif not m.Void:
-            Conv.add_cone_plane(m.Definition, coneInfo[m.__id__], Surfaces, UniverseBox)
+            Conv.add_cone_plane(
+                m.Definition, coneInfo[m.__id__], Surfaces, UniverseBox, tolerance
+            )
 
 
 def get_universe(MetaList):

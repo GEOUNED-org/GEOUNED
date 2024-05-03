@@ -13,9 +13,10 @@ from ..Utils.Options.Classes import Options as opt
 
 
 class VoidBox:
-    def __init__(self, MetaSolids, Enclosure):
+    def __init__(self, MetaSolids, Enclosure, tolerance):
 
         self.Objects = []
+        self.tolerance = tolerance
         if "BoundBox" in str(Enclosure):
             self.BoundBox = Enclosure
             self.PieceEnclosure = None
@@ -100,8 +101,8 @@ class VoidBox:
         box2 = FreeCAD.BoundBox(VMin2, VMax2)
 
         if self.PieceEnclosure == None:
-            Space1 = VoidBox(self.Objects, box1)
-            Space2 = VoidBox(self.Objects, box2)
+            Space1 = VoidBox(self.Objects, box1, self.tolerance)
+            Space2 = VoidBox(self.Objects, box2, self.tolerance)
             VoidBoxTuple = (Space1, Space2)
         else:
             Space1 = self.piece_enclosure_split(box1)
@@ -141,10 +142,10 @@ class VoidBox:
         except ZeroDivisionError:
             return None
         if abs(reldif) <= Tolerance:
-            return VoidBox(self.Objects, Box)
+            return VoidBox(self.Objects, Box, self.tolerance)
         elif ShapeObject.Solids:
             Solid = ShapeObject.Solids[0]
-            return VoidBox(self.Objects, Solid)
+            return VoidBox(self.Objects, Solid, self.tolerance)
         else:
             return None
 
@@ -189,7 +190,7 @@ class VoidBox:
                 Decom.extract_surfaces(comsolid, "All", UniverseBox, MakeObj=True)
             )
             TempPieceEnclosure.update_solids(comsolid.Solids)
-            Conv.cellDef(TempPieceEnclosure, Surfaces, UniverseBox)
+            Conv.cellDef(TempPieceEnclosure, Surfaces, UniverseBox, self.tolerance)
 
             boxDef = TempPieceEnclosure.Definition
             bBox = self.PieceEnclosure.BoundBox

@@ -10,7 +10,9 @@ from ..Void import voidFunctions as VF
 from .VoidBoxClass import VoidBox
 
 
-def void_generation(MetaList, EnclosureList, Surfaces, UniverseBox, setting, init):
+def void_generation(
+    MetaList, EnclosureList, Surfaces, UniverseBox, setting, tolerance, init
+):
     voidList = []
 
     if EnclosureList:
@@ -40,7 +42,9 @@ def void_generation(MetaList, EnclosureList, Surfaces, UniverseBox, setting, ini
     # if exist Level 1 enclosures are considered as material cells
     print("Build Void highest enclosure")
 
-    voids = get_void_def(newMetaList, Surfaces, EnclosureBox, setting, Lev0=True)
+    voids = get_void_def(
+        newMetaList, Surfaces, EnclosureBox, setting, tolerance, Lev0=True
+    )
     voidList.append(voids)
 
     # Perform enclosure void
@@ -55,17 +59,17 @@ def void_generation(MetaList, EnclosureList, Surfaces, UniverseBox, setting, ini
             newMetaList = VF.select_solids(MetaList, encl.SonEnclosures, encl)
             print(f"Build Void enclosure {j} in enclosure level {i + 1}")
             # select solids overlapping current enclosure "encl", and lower level enclosures
-            voids = get_void_def(newMetaList, Surfaces, encl, setting)
+            voids = get_void_def(newMetaList, Surfaces, encl, setting, tolerance)
             voidList.append(voids)
 
-    voidList.append(set_graveyard_cell(Surfaces, UniverseBox))
+    voidList.append(set_graveyard_cell(Surfaces, UniverseBox, tolerance))
 
     return VF.update_void_list(
         init, voidList, NestedEnclosure, setting["sort_enclosure"]
     )
 
 
-def get_void_def(MetaList, Surfaces, Enclosure, setting, Lev0=False):
+def get_void_def(MetaList, Surfaces, Enclosure, setting, tolerance, Lev0=False):
 
     maxsurf = setting["maxSurf"]
     maxbracket = setting["maxBracket"]
@@ -79,9 +83,9 @@ def get_void_def(MetaList, Surfaces, Enclosure, setting, Lev0=False):
         simplifyVoid = "no"
 
     if Lev0:
-        Universe = VoidBox(MetaList, Enclosure.BoundBox)
+        Universe = VoidBox(MetaList, Enclosure.BoundBox, tolerance)
     else:
-        Universe = VoidBox(MetaList, Enclosure.CADSolid)
+        Universe = VoidBox(MetaList, Enclosure.CADSolid, tolerance)
 
     Initial = [Universe]
     VoidDef = []
@@ -142,8 +146,8 @@ def get_void_def(MetaList, Surfaces, Enclosure, setting, Lev0=False):
     return voidList
 
 
-def set_graveyard_cell(Surfaces, UniverseBox):
-    Universe = VoidBox([], UniverseBox)
+def set_graveyard_cell(Surfaces, UniverseBox, tolerance):
+    Universe = VoidBox([], UniverseBox, tolerance)
 
     externalBox = get_universe_complementary(Universe, Surfaces)
     center = UniverseBox.Center
