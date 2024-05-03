@@ -422,7 +422,7 @@ def split_solid_fast(solid, surf, box):
             sgn = check_sign(solid, surf)
             if sgn == 1:
                 # values of s2 and -s2   "0" means this region doesn't exist
-                return ((1, 0),)
+                return (1, 0)
             else:
                 return (0, 1)
         else:
