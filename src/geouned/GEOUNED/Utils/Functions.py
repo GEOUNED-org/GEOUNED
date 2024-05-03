@@ -427,36 +427,29 @@ class SurfacesDict(dict):
     def extend(
         self,
         surface,
-        pln_distance,
-        pln_angle,
-        relativeTol,
-        cyl_angle,
-        cyl_distance,
-        kne_distance,
-        kne_angle,
-        sph_distance,
-        tor_distance,
         tolerances, options, numeric_format
     ):
         for Pkey in ["PX", "PY", "PZ", "P"]:
             for s in surface[Pkey]:
-                self.add_plane(s, pln_distance, pln_angle, relativeTol, tolerances, options, numeric_format)
+                self.add_plane(s, tolerances, options, numeric_format)
         for s in surface["Cyl"]:
             self.add_cylinder(
                 cyl=s,
                 tolerances=tolerances,
+                options=options,
+                numeric_format=numeric_format,
             )
         for s in surface["Cone"]:
             self.add_cone(
                 cone=s,
-                kne_distance=kne_distance,
-                kne_angle=kne_angle,
-                relativeTol=relativeTol,
+                kne_distance=tolerances.kne_distance,
+                kne_angle=tolerances.kne_angle,
+                relativeTol=tolerances.relativeTol,
             )
         for s in surface["Sph"]:
-            self.add_sphere(sph=s, sph_distance=sph_distance, relativeTol=relativeTol)
+            self.add_sphere(sph=s, sph_distance=tolerances.sph_distance, relativeTol=tolerances.relativeTol)
         for s in surface["Tor"]:
-            self.add_torus(tor=s, tor_distance=tor_distance, relativeTol=relativeTol)
+            self.add_torus(tor=s, tor_distance=tolerances.tor_distance, relativeTol=tolerances.relativeTol)
 
     def add_plane(self, plane, tolerances, options, numeric_format, fuzzy=False):
         ex = FreeCAD.Vector(1, 0, 0)

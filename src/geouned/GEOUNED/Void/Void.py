@@ -14,22 +14,8 @@ def void_generation(
     EnclosureList,
     Surfaces,
     UniverseBox,
-    voidMat,
-    maxsurf,
-    maxbracket,
-    minVoidSize,
-    simplify,
-    sort_enclosure,
     init,
-    enlargeBox,
-    nPlaneReverse,
-    splitTolerance,
-    scale_up,
-    verbose,
-    pln_distance,
-    pln_angle,
-    relativeTol,
-    sph_distance,
+    settings,options,tolerances
 ):
     voidList = []
 
@@ -52,8 +38,8 @@ def void_generation(
     )
 
     EnclosureBox = GeounedSolid(None, Box)
-    if voidMat:
-        EnclosureBox.set_material(voidMat[0], voidMat[1], voidMat[2])
+    if settings.voidMat:
+        EnclosureBox.set_material(settings.voidMat[0], settings.voidMat[1], settings.voidMat[2])
 
     # get voids in 0 Level Enclosure (original Universe)
     # if exist Level 1 enclosures are considered as material cells
@@ -63,18 +49,18 @@ def void_generation(
         MetaList=newMetaList,
         Surfaces=Surfaces,
         Enclosure=EnclosureBox,
-        maxsurf=maxsurf,
-        maxbracket=maxbracket,
-        minVoidSize=minVoidSize,
-        simplify=simplify,
-        enlargeBox=enlargeBox,
-        verbose=verbose,
-        nPlaneReverse=nPlaneReverse,
-        splitTolerance=splitTolerance,
-        scale_up=scale_up,
-        pln_distance=pln_distance,
-        pln_angle=pln_angle,
-        relativeTol=relativeTol,
+        max_surf=settings.max_surf,
+        max_bracket=settings.max_bracket,
+        minVoidSize=settings.minVoidSize,
+        simplify=settings.simplify,
+        enlargeBox=options.enlargeBox,
+        verbose=options.verbose,
+        nPlaneReverse=options.nPlaneReverse,
+        splitTolerance=options.splitTolerance,
+        scale_up=options.scale_up,
+        pln_distance=tolerances.pln_distance,
+        pln_angle=tolerances.pln_angle,
+        relativeTol=tolerances.relativeTol,
         Lev0=True,
     )
     voidList.append(voids)
@@ -95,8 +81,8 @@ def void_generation(
                 MetaList=newMetaList,
                 Surfaces=Surfaces,
                 Enclosure=encl,
-                maxsurf=maxsurf,
-                maxbracket=maxbracket,
+                max_surf=max_surf,
+                max_bracket=max_bracket,
                 minVoidSize=minVoidSize,
                 simplify=simplify,
                 enlargeBox=enlargeBox,
@@ -122,8 +108,8 @@ def get_void_def(
     MetaList,
     Surfaces,
     Enclosure,
-    maxsurf,
-    maxbracket,
+    max_surf,
+    max_bracket,
     minVoidSize,
     simplify,
     enlargeBox,
@@ -164,7 +150,7 @@ def get_void_def(
             if verbose:
                 print(f"{iloop} {iz + 1}/{nvoid} {nsurfaces} {nbrackets}")
 
-            if nsurfaces > maxsurf and nbrackets > maxbracket:
+            if nsurfaces > max_surf and nbrackets > max_bracket:
                 newspace = z.split(minVoidSize)
             else:
                 newspace = None
