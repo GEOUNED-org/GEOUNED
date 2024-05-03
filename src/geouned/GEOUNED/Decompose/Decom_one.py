@@ -203,10 +203,10 @@ def cyl_bound_planes(face, boundBox):
     return planes
 
 
-def torus_bound_planes(face, boundBox):
+def torus_bound_planes(face, boundBox, value, angle):
     params = face.ParameterRange
     planes = []
-    if is_same_value(params[1] - params[0], twoPi, tol.value):
+    if is_same_value(params[1] - params[0], twoPi, value):
         return planes
 
     Edges = face.OuterWire.Edges
@@ -219,7 +219,7 @@ def torus_bound_planes(face, boundBox):
 
         if curve[0:6] == "Circle":
             dir = e.Curve.Axis
-            if not is_parallel(dir, face.Surface.Axis, tol.angle):
+            if not is_parallel(dir, face.Surface.Axis, angle):
                 center = e.Curve.Center
                 dim1 = e.Curve.Radius
                 dim2 = e.Curve.Radius
@@ -245,14 +245,14 @@ def torus_bound_planes(face, boundBox):
     return planes
 
 
-def plane_spline_curve(edge):
+def plane_spline_curve(edge, value):
 
     normal = edge.derivative1At(0).cross(edge.derivative1At(0.5))
     normal.normalize()
     curve_2d = True
     for p in (0.25, 0.75, 1):
         # check if derivative orthogonal to curve normal vector
-        if abs(normal.dot(edge.derivative1At(p))) > tol.value:
+        if abs(normal.dot(edge.derivative1At(p))) > value:
             curve_2d = False
             break
 
@@ -346,7 +346,8 @@ def extract_surfaces(
                         cyl_distance=cyl_distance,
                         cyl_angle=cyl_angle,
                         relativeTol=relativeTol,
-                        fuzzy=fuzzy)
+                        fuzzy=fuzzy,
+                    )
 
                 if kind in ["Planes", "All"]:
                     # add planes if cylinder axis is cut by a plane (plane quasi perpedicular to axis)
@@ -378,7 +379,13 @@ def extract_surfaces(
                     for p in cyl_bound_planes(face, universe_box):
                         if MakeObj:
                             p.build_surface()
-                        surfaces.add_plane(p)
+                        surfaces.add_plane(
+                            plane=p,
+                            pln_distance=pln_distance,
+                            pln_angle=pln_angle,
+                            relativeTol=relativeTol,
+                            fuzzy=False,
+                        )
 
             elif surf[0:6] == "Sphere" and kind in ["Sph", "All"]:
                 rad = face.Surface.Radius
@@ -392,7 +399,13 @@ def extract_surfaces(
                     for p in cyl_bound_planes(face, universe_box):
                         if MakeObj:
                             p.build_surface()
-                        surfaces.add_plane(p)
+                        surfaces.add_plane(
+                            plane=p,
+                            pln_distance=pln_distance,
+                            pln_angle=pln_angle,
+                            relativeTol=relativeTol,
+                            fuzzy=False,
+                        )
 
             elif surf == "<Toroid object>":
                 if kind in ["Tor", "All"]:
@@ -446,11 +459,11 @@ def is_already_in_planes(plane, Array):
 #
 #   Check if to faces are joint
 #
-def contiguous_face(face1, face2):
-    return face1.distToShape(face2)[0] < tol.distance
+def contiguous_face(face1, face2, distance):
+    return face1.distToShape(face2)[0] < distance
 
 
-def same_faces(Faces):
+def same_faces(Faces, distance):
     Connection = OrderedDict()
     if len(Faces) == 1:
         return []
@@ -460,7 +473,7 @@ def same_faces(Faces):
         if not Faces[i + 1 :]:
             continue
         for j, face2 in enumerate(Faces[i + 1 :]):
-            if contiguous_face(face1, face2):
+            if contiguous_face(face1, face2, distance):
 
                 Couples.append(i + 1 + j)
 
@@ -490,7 +503,7 @@ def same_faces(Faces):
 
 # Tolerance in this function are not the general once
 # function should be reviewed
-def gen_plane_cylinder(face, solid, verbose):
+def gen_plane_cylinder(face, solid, verbose, distance):
     Surf = face.Surface
     rad = Surf.Radius
     if face.Area < 1e-2:
@@ -527,7 +540,7 @@ def gen_plane_cylinder(face, solid, verbose):
 
     face_index = [face_index_0[0]]  # la face de entrada
 
-    for k in same_faces(Faces_p):
+    for k in same_faces(Faces_p, distance):
         face_index.append(face_index_0[k])
 
     # commented to let plane cut rounded corner
@@ -618,7 +631,7 @@ def gen_plane_cylinder(face, solid, verbose):
 
 # Tolerance in this function are not the general once
 # function should be reviewed
-def gen_plane_cone(face, solid):
+def gen_plane_cone(face, solid, distance):
 
     if face.Area < 1e-2:
         return None
@@ -653,7 +666,7 @@ def gen_plane_cone(face, solid):
 
     face_index = [face_index_0[0]]  # la face de entrada
 
-    for k in same_faces(Faces_p):
+    for k in same_faces(Faces_p, distance):
         face_index.append(face_index_0[k])
 
     # same as cylinder commennt
@@ -738,7 +751,7 @@ def gen_plane_cone(face, solid):
     return plane
 
 
-def plane_2nd_order(solid_GU, face, flag_inv, convex=True):
+def plane_2nd_order(solid_GU, face, flag_inv, verbose, distance, convex=True):
     planes = []
 
     if face is None:
@@ -755,7 +768,7 @@ def plane_2nd_order(solid_GU, face, flag_inv, convex=True):
             if convex and orient == "Reversed":  # convex face condition
                 pp = None
                 if str(face.Surface) == "<Cylinder object>":
-                    pp = gen_plane_cylinder(face, solid_GU)
+                    pp = gen_plane_cylinder(face=face, solid=solid_GU, verbose=verbose, distance=distance)
                 elif str(face.Surface) == "<Cone object>":
                     pp = gen_plane_cone(face, solid_GU)
                 if pp is not None:
@@ -775,7 +788,7 @@ def plane_2nd_order(solid_GU, face, flag_inv, convex=True):
 
         if not convex and orient == "Forward":
             if str(face.Surface) == "<Cylinder object>":
-                pp = gen_plane_cylinder(face, solid_GU)
+                pp = gen_plane_cylinder(face=face, solid=solid_GU, verbose=verbose, distance=distance)
             elif str(face.Surface) == "<Cone object>":
                 pp = gen_plane_cone(face, solid_GU)
             if pp is not None:
@@ -865,7 +878,7 @@ def split_planes_new(
     return simpleSolid, 0
 
 
-def split_planes_org(Solids, universe_box, relativeTol, pln_distance, pln_angle):
+def split_planes_org(Solids, universe_box, relativeTol, pln_distance, pln_angle, relativePrecision, splitTolerance, verbose):
     Bases = []
     err = 0
     for sol in Solids:
@@ -910,7 +923,7 @@ def split_planes_org(Solids, universe_box, relativeTol, pln_distance, pln_angle)
                 if len(comsolid.Solids) == 1:
                     if (
                         abs(comsolid.Solids[0].Volume - base.Volume) / base.Volume
-                        > tol.relativePrecision
+                        > relativePrecision
                     ):
                         if verbose:
                             print(
@@ -1064,7 +1077,8 @@ def split_p_planes_new(
             tools=tools,
             tolerance=splitTolerance,
             scale_up=scale_up,
-            splitTolerance=splitTolerance)
+            splitTolerance=splitTolerance,
+        )
 
         if len(comsolid.Solids) > 1:
             out_solid = comsolid.Solids
@@ -1135,7 +1149,7 @@ def split_2nd_order(
                     tor_distance=tor_distance,
                     tor_angle=tor_angle,
                     cyl_distance=cyl_distance,
-                    cyl_angle=cyl_angle
+                    cyl_angle=cyl_angle,
                 )
                 if len(Surfaces[kind]) == 0:
                     kindBase.append(solid)
@@ -1175,14 +1189,18 @@ def split_2nd_order(
     return Base, err
 
 
-def split_2nd_order_planes(Solids):
+def split_2nd_order_planes(
+    Solids, splitTolerance, tor_distance, tor_angle, relativeTol, verbose, distance,tolerance, scale_up
+):
     err = 0
     simpleSolid = []
     Bases = Solids
     while True:
         newBases = []
         for base in Bases:
-            cut_solids, err = split_2nd_o_plane(base)
+            cut_solids, err = split_2nd_o_plane(
+                base, splitTolerance, tor_distance, tor_angle, relativeTol, verbose, distance, tolerance, scale_up
+            )
             if len(cut_solids) == 1:
                 simpleSolid.extend(cut_solids)
             else:
@@ -1195,17 +1213,31 @@ def split_2nd_order_planes(Solids):
     return simpleSolid, err
 
 
-def split_2nd_o_plane(solid, splitTolerance):
+def split_2nd_o_plane(
+    solid, splitTolerance, tor_distance, tor_angle, relativeTol, verbose, distance, tolerance, scale_up
+):
 
     err = 0
     flag_inv = CD.is_inverted(solid)
-    solid_GU = GU.SolidGu(solid)
-    planes = plane_2nd_order(solid_GU, None, flag_inv, convex=True)
+    solid_GU = GU.SolidGu(
+        solid=solid,
+        tor_distance=tor_distance,
+        tor_angle=tor_angle,
+        relativeTol=relativeTol,
+    )
+    planes = plane_2nd_order(solid_GU, None, flag_inv, verbose, distance=distance, convex=True)
     if not planes:
         return [solid], err
 
     for p in planes:
-        comsolid = UF.split_bop(solid, [p], splitTolerance)
+        comsolid = UF.split_bop(
+            solid=solid,
+            tools=[p],
+            tolerance=tolerance,
+            scale_up=scale_up,
+            splitTolerance=splitTolerance,
+            scale = 0.1,
+        )
         if not comsolid.Solids:
             comsolid = solid
             continue
@@ -1250,6 +1282,8 @@ def split_component(
     scale_up,
     cyl_distance,
     cyl_angle,
+    distance,
+    tolerance,
 ):
     err = 0
     err2 = 0
@@ -1285,11 +1319,18 @@ def split_component(
         tor_angle=tor_angle,
         tor_distance=tor_distance,
         cyl_distance=cyl_distance,
-        cyl_angle=cyl_angle
+        cyl_angle=cyl_angle,
     )
     err += err1
 
-    split, err2 = split_2nd_order_planes(split1)
+    split, err2 = split_2nd_order_planes(
+        Solids=split1,
+        splitTolerance=splitTolerance,
+        tor_distance=tor_distance,
+        tor_angle=tor_angle,
+        relativeTol=relativeTol,
+        verbose=verbose, distance=distance, tolerance=tolerance, scale_up=scale_up
+    )
     err += err2
     Pieces = []
     for part in split:
@@ -1329,7 +1370,9 @@ def split_solid(
     tor_angle,
     scale_up,
     cyl_angle,
-    cyl_distance
+    cyl_distance,
+    distance,
+    tolerance,
 ):
 
     solid_parts = []
@@ -1360,7 +1403,9 @@ def split_solid(
             tor_distance=tor_distance,
             scale_up=scale_up,
             cyl_distance=cyl_distance,
-            cyl_angle=cyl_angle
+            cyl_angle=cyl_angle,
+            distance=distance,
+            toleranc=tolerance
         )
         solid_parts.append(piece)
 

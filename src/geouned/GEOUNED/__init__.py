@@ -366,6 +366,7 @@ class CadToCsg:
                 scale_up=self.options.scaleUp,
                 cyl_angle=self.tolerances.cyl_angle,
                 cyl_distance=self.tolerances.cyl_distance,
+                distance=self.tolerances.distance,
             )
 
             # decompose Enclosure solids
@@ -387,6 +388,7 @@ class CadToCsg:
                     scale_up=self.options.scaleUp,
                     cyl_angle=self.tolerances.cyl_angle,
                     cyl_distance=self.tolerances.cyl_distance,
+                    distance=self.tolerances.distance,
                 )
 
             print("End of decomposition phase")
@@ -432,6 +434,8 @@ class CadToCsg:
                     scale_up=self.options.scaleUp,
                     cyl_angle=self.tolerances.cyl_angle,
                     cyl_distance=self.tolerances.cyl_distance,
+                    distance=self.tolerances.distance,
+                    tolerance=self.tolerances.tolerances
                 )
 
         tempstr2 = str(datetime.now() - tempTime)
@@ -617,6 +621,8 @@ def decompose_solids(
     scale_up,
     cyl_angle,
     cyl_distance,
+    distance,
+    tolerance,
 ):
     totsolid = len(MetaList)
     warningSolids = []
@@ -647,6 +653,8 @@ def decompose_solids(
             scale_up=scale_up,
             cyl_angle=cyl_angle,
             cyl_distance=cyl_distance,
+            distance=distance,
+            tolerance=tolerance
         )
 
         if err != 0:
