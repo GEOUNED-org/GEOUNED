@@ -3,7 +3,6 @@
 
 # We load the STEP and the materials
 
-import configparser
 import typing
 from datetime import datetime
 from os import mkdir, path
@@ -11,6 +10,7 @@ from typing import get_type_hints
 
 import FreeCAD
 import Part
+import json5
 
 from .CodeVersion import GEOUNED_Version, GEOUNED_ReleaseDate
 from .Conversion import CellDefinition as Conv
@@ -23,20 +23,20 @@ from .Utils.Classes import NumericFormat, Options, Tolerances, Settings
 from .Void import Void as Void
 from .Write.Functions import write_mcnp_cell_def
 from .Write.WriteFiles import write_geometry
-
+from .Utils.Classes import Tolerances , Options, NumericFormat, Settings
 
 class CadToCsg:
     """Base class for the conversion of CAD to CSG models"""
 
     def __init__(
         self,
-        stepFile: str,
+        step_file: str,
         settings=Settings(),
         options=Options(),
         numeric_format=NumericFormat(),
         tolerances=Tolerances(),
     ):
-        self.stepFile = stepFile
+        self.step_file = step_file
         self.settings = settings
         self.options = options
         self.numeric_format = numeric_format
@@ -48,108 +48,37 @@ class CadToCsg:
         self.MetaList = None
 
     @classmethod
-    def from_config(cls, filename: str='config.ini') -> 'geouned.CadToCsg':
+    def from_config(cls, filename: str='config.json') -> 'geouned.CadToCsg':
+        from pathlib import Path
+        if not Path(filename).exists():
+            raise FileNotFoundError(f"config file {filename} not found")
 
-        csg_to_csg = cls()
+        with open(filename) as f:
+            config = json5.load(f)
 
-        config = configparser.ConfigParser()
-        config.optionxform = str
-        config.read(filename)
-        for section in config.sections():
-            if section == "Files":
-                for key in config["Files"].keys():
-                    if key in ("matFile"):
-                        setattr(csg_to_csg, key, config.get("Files", key))
-                    elif key == "stepFile":
-                        value = config.get("Files", key).strip()
-                        lst = value.split()
-                        if value[0] in ("(", "[") and value[-1] in ("]", ")"):
-                            data = value[1:-1].split(",")
-                            data = [x.strip() for x in data]
-                            setattr(csg_to_csg, key, data)
-                        elif len(lst) > 1:
-                            setattr(csg_to_csg, key, lst)
-                        else:
-                            setattr(csg_to_csg, key, value)
+        csg_to_csg = cls(step_file=config['step_file'])
+        for key in config.keys():
 
-                    elif key == "outFormat":
-                        raw = config.get("Files", key).strip()
-                        values = tuple(x.strip() for x in raw.split(","))
-                        outFormat = []
-                        for v in values:
-                            if v.lower() == "mcnp":
-                                outFormat.append("mcnp")
-                            elif v.lower() == "openmc_xml":
-                                outFormat.append("openmc_xml")
-                            elif v.lower() == "openmc_py":
-                                outFormat.append("openmc_py")
-                            elif v.lower() == "serpent":
-                                outFormat.append("serpent")
-                            elif v.lower() == "phits":
-                                outFormat.append("phits")
-                        setattr(csg_to_csg, key, tuple(outFormat))
+            if key in ['step_file']:
+                pass  # this has already been used when initializing csg_to_csg
 
-            elif section == "Parameters":
-                for key in config["Parameters"].keys():
-                    if key in (
-                        "voidGen",
-                        "debug",
-                        "compSolids",
-                        "sort_enclosure",
-                    ):
-                        setattr(csg_to_csg, key, config.getboolean("Parameters", key))
-                    elif key in (
-                        "minVoidSize",
-                        "max_surf",
-                        "max_bracket",
-                        "startCell",
-                        "startSurf",
-                    ):
-                        setattr(csg_to_csg, key, config.getint("Parameters", key))
-                    elif key in ("exportSolids", "simplify"):
-                        setattr(csg_to_csg, key, config.get("Parameters", key))
-                    elif key == "voidMat":
-                        value = config.get("Parameters", key).strip()
-                        data = value[1:-1].split(",")
-                        setattr(
-                            csg_to_csg, key, (int(data[0]), float(data[1]), data[2])
-                        )
-                    else:
-                        value = config.get("Parameters", key).strip()
-                        data = value[1:-1].split(",")
-                        setattr(csg_to_csg, key, tuple(map(int, data)))
+            elif key == "Tolerances":
+                csg_to_csg.tolerances = Tolerances(**config['Tolerances'])
 
-            elif section == "Options":
-                option_attribute_names_and_types = get_type_hints(Options)
-                key_value_pairs = convert_config_keys_to_dict(
-                    config, option_attribute_names_and_types, "Options"
-                )
-                csg_to_csg.options = Options(**key_value_pairs)
+            elif key == "Options":
+                csg_to_csg.options = Options(**config['Options'])
 
-            elif section == "Tolerances":
-                option_attribute_names_and_types = get_type_hints(Tolerances)
-                key_value_pairs = convert_config_keys_to_dict(
-                    config, option_attribute_names_and_types, "Tolerances"
-                )
-                csg_to_csg.tolerances = Tolerances(**key_value_pairs)
+            elif key == "NumericFormat":
+                csg_to_csg.numeric_format = NumericFormat(**config['NumericFormat'])
 
-            elif section == "MCNP_Numeric_Format":
-                option_attribute_names_and_types = get_type_hints(Tolerances)
-                key_value_pairs = convert_config_keys_to_dict(
-                    config, option_attribute_names_and_types, "Tolerances"
-                )
-                # TODO check why special case for p_d this is needed, perhaps it can just be another attribute set by user
-                if "P_d" in key_value_pairs.keys():
-                    PdEntry = True
-                else:
-                    PdEntry = False
-                csg_to_csg.numeric_format = NumericFormat(**key_value_pairs)
+            elif key == "Settings":
+                csg_to_csg.settings = Settings(**config['Settings'])
 
             else:
-                print(f"bad section name : {section} found in config file {filename}")
+                print(f"Invalid key '{key}' found in config file {filename}. Acceptable key names are 'step_file', 'Settings', 'Parameters', 'Tolerances' and 'NumericFormat'")
 
-        if csg_to_csg.options.prnt3PPlane and not PdEntry:
-            csg_to_csg.P_d = "22.15e"
+        print(csg_to_csg.__dict__)
+        csg_to_csg.start()
 
     def start(self):
 
@@ -160,23 +89,23 @@ class CadToCsg:
 
         if self.__dict__ is None:
             raise ValueError("Cannot run the code. Input are missing")
-        if self.stepFile == "":
+        if self.step_file == "":
             raise ValueError("Cannot run the code. Step file name is missing")
 
-        if isinstance(self.stepFile, (tuple, list)):
-            for stp in self.stepFile:
+        if isinstance(self.step_file, (tuple, list)):
+            for stp in self.step_file:
                 if not path.isfile(stp):
                     raise FileNotFoundError(f"Step file {stp} not found.\nStop.")
         else:
-            if not path.isfile(self.stepFile):
-                raise FileNotFoundError(f"Step file {self.stepFile} not found.\nStop.")
+            if not path.isfile(self.step_file):
+                raise FileNotFoundError(f"Step file {self.step_file} not found.\nStop.")
 
         startTime = datetime.now()
 
-        if isinstance(self.stepFile, (list, tuple)):
+        if isinstance(self.step_file, (list, tuple)):
             MetaChunk = []
             EnclosureChunk = []
-            for stp in self.stepFile:
+            for stp in self.step_file:
                 print(f"reading step file : {stp}")
                 Meta, Enclosure = Load.load_cad(
                     filename=stp,
@@ -190,9 +119,9 @@ class CadToCsg:
             self.MetaList = join_meta_lists(MetaChunk)
             EnclosureList = join_meta_lists(EnclosureChunk)
         else:
-            print(f"reading step file : {self.stepFile}")
+            print(f"reading step file : {self.step_file}")
             self.MetaList, EnclosureList = Load.load_cad(
-                filename=self.stepFile, mat_filename=self.settings.matFile,
+                filename=self.step_file, mat_filename=self.settings.matFile,
                 default_mat=self.settings.voidMat, delLastNumber=self.options.delLastNumber,
                 comp_solids=self.settings.compSolids
             )
@@ -488,7 +417,7 @@ class CadToCsg:
                 raise ValueError(msg)
 
         files_written = write_geometry(
-            StepFile=self.stepFile,
+            step_file=self.step_file,
             volSDEF=volSDEF,
             title=title,
             UCARD=UCARD,

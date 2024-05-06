@@ -403,7 +403,7 @@ def extract_surfaces(
                     )
                     if MakeObj:
                         torus.build_surface()
-                    surfaces.add_torus(torus)
+                    surfaces.add_torus(tor=torus, tolerances=tolerances)
 
                 if kind in ["Planes", "All"]:
                     for p in torus_bound_planes(face=face, boundBox= universe_box, value=tolerances.value, angle=tolerances.angle):
