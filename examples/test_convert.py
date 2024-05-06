@@ -11,10 +11,10 @@ input_step_file = step_files[0]
 # sets up an output folder for the result
 
 my_options = geouned.Options(
-    forceCylinder = True,
-    splitTolerance = 0,
-    newSplitPlane = True,
-    nPlaneReverse = 0,
+    forceCylinder=True,
+    splitTolerance=0,
+    newSplitPlane=True,
+    nPlaneReverse=0,
 )
 
 my_settings = geouned.Settings(
@@ -26,9 +26,7 @@ my_settings = geouned.Settings(
 )
 
 geo = geouned.CadToCsg(
-    stepFile=f"{input_step_file.resolve()}",
-    settings=my_settings,
-    options = my_options
+    stepFile=f"{input_step_file.resolve()}", settings=my_settings, options=my_options
 )
 
 geo.start()

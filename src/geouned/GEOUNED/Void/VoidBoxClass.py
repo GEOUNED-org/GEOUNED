@@ -161,12 +161,7 @@ class VoidBox:
         return
 
     def get_void_complementary(
-        self,
-        Surfaces,
-        options,
-        tolerances,
-        numeric_format,
-        settings
+        self, Surfaces, options, tolerances, numeric_format, settings
     ):
         # simplifyVoid was not used in this function
         # if "full" in settings.simplify.lower():
@@ -183,7 +178,9 @@ class VoidBox:
             for p in self.get_bound_planes():
                 id, exist = Surfaces.add_plane(
                     plane=p,
-                    tolerances=tolerances, options=options, numeric_format=numeric_format,
+                    tolerances=tolerances,
+                    options=options,
+                    numeric_format=numeric_format,
                     fuzzy=False,
                 )
                 if exist:
@@ -268,7 +265,11 @@ class VoidBox:
                 for i in surfList:
                     surfaceDict[i] = Surfaces.get_surface(i)
                 CTable = build_c_table_from_solids(
-                    Box=Box, SurfInfo=surfaceDict, scale_up=options.scale_up, option=settings.simplify
+                    Box=Box,
+                    SurfInfo=surfaceDict,
+                    scale_up=options.scale_up,
+                    option=settings.simplify,
+                    splitTolerance=options.splitTolerance,
                 )
             else:
                 if res is True:

@@ -95,9 +95,7 @@ class TorusGu(SurfacesGu):
 class SolidGu:
     """GEOUNED Solid Class"""
 
-    def __init__(
-        self, solid, tolerances, plane3Pts=False
-    ):
+    def __init__(self, solid, tolerances, plane3Pts=False):
         self.solid = solid
         faces = define_list_face_gu(solid.Faces, plane3Pts)
         self.Faces = faces
@@ -106,7 +104,7 @@ class SolidGu:
         self.Edges = solid.Edges
         self.TorusVParams = {}
         self.TorusUParams = {}
-        self.tolerances=tolerances
+        self.tolerances = tolerances
 
         toroidIndex = []
         for i, face in enumerate(self.Faces):
@@ -116,7 +114,11 @@ class SolidGu:
 
         if len(toroidIndex) != 0:
             tFaces = self.__same_torus_surf__(
-                toroidIndex, tolerances.tor_distance, tolerances.tor_angle, tolerances.relativeTol, tolerances.distance
+                toroidIndex,
+                tolerances.tor_distance,
+                tolerances.tor_angle,
+                tolerances.relativeTol,
+                tolerances.distance,
             )
             for i, tSet in enumerate(tFaces):
                 URange = self.__merge_periodic_uv__("U", tSet, tolerances)

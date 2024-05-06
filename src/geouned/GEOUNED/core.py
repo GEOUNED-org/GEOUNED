@@ -23,7 +23,8 @@ from .Utils.Classes import NumericFormat, Options, Tolerances, Settings
 from .Void import Void as Void
 from .Write.Functions import write_mcnp_cell_def
 from .Write.WriteFiles import write_geometry
-from .Utils.Classes import Tolerances , Options, NumericFormat, Settings
+from .Utils.Classes import Tolerances, Options, NumericFormat, Settings
+
 
 class CadToCsg:
     """Base class for the conversion of CAD to CSG models"""
@@ -48,44 +49,53 @@ class CadToCsg:
         self.MetaList = None
 
     @classmethod
-    def from_config(cls, filename: str='config.json') -> 'geouned.CadToCsg':
+    def from_config(cls, filename: str = "config.json") -> "geouned.CadToCsg":
         from pathlib import Path
+
         if not Path(filename).exists():
             raise FileNotFoundError(f"config file {filename} not found")
 
         with open(filename) as f:
             config = json5.load(f)
 
-        csg_to_csg = cls(step_file=config['step_file'])
+        csg_to_csg = cls(step_file=config["step_file"])
         for key in config.keys():
 
-            if key in ['step_file']:
+            if key in ["step_file"]:
                 pass  # this has already been used when initializing csg_to_csg
 
             elif key == "Tolerances":
-                csg_to_csg.tolerances = Tolerances(**config['Tolerances'])
+                csg_to_csg.tolerances = Tolerances(**config["Tolerances"])
 
             elif key == "Options":
-                csg_to_csg.options = Options(**config['Options'])
+                csg_to_csg.options = Options(**config["Options"])
 
             elif key == "NumericFormat":
-                csg_to_csg.numeric_format = NumericFormat(**config['NumericFormat'])
+                csg_to_csg.numeric_format = NumericFormat(**config["NumericFormat"])
 
             elif key == "Settings":
-                csg_to_csg.settings = Settings(**config['Settings'])
+                csg_to_csg.settings = Settings(**config["Settings"])
 
             else:
-                print(f"Invalid key '{key}' found in config file {filename}. Acceptable key names are 'step_file', 'Settings', 'Parameters', 'Tolerances' and 'NumericFormat'")
+                raise ValueError(
+                    f"Invalid key '{key}' found in config file {filename}. Acceptable key names are 'step_file', 'Settings', 'Parameters', 'Tolerances' and 'NumericFormat'"
+                )
 
-        print(csg_to_csg.__dict__)
         csg_to_csg.start()
+        if "export_csg" in config.keys():
+            csg_to_csg.export_csg(**config["export_csg"])
+        else:
+            csg_to_csg.export_csg()
+        return csg_to_csg
 
     def start(self):
 
         if self.options.verbose:
             print("started converting")
             FreeCAD_Version = "{V[0]:}.{V[1]:}.{V[2]:}".format(V=FreeCAD.Version())
-            print(f"GEOUNED version {GEOUNED_Version} {GEOUNED_ReleaseDate} \nFreeCAD version {FreeCAD_Version}")
+            print(
+                f"GEOUNED version {GEOUNED_Version} {GEOUNED_ReleaseDate} \nFreeCAD version {FreeCAD_Version}"
+            )
 
         if self.__dict__ is None:
             raise ValueError("Cannot run the code. Input are missing")
@@ -112,8 +122,8 @@ class CadToCsg:
                     mat_filename=self.matFile,
                     default_mat=[],
                     delLastNumber=self.options.delLastNumber,
-                    comp_solids=True
-                    )
+                    comp_solids=True,
+                )
                 MetaChunk.append(Meta)
                 EnclosureChunk.append(Enclosure)
             self.MetaList = join_meta_lists(MetaChunk)
@@ -121,9 +131,11 @@ class CadToCsg:
         else:
             print(f"reading step file : {self.step_file}")
             self.MetaList, EnclosureList = Load.load_cad(
-                filename=self.step_file, mat_filename=self.settings.matFile,
-                default_mat=self.settings.voidMat, delLastNumber=self.options.delLastNumber,
-                comp_solids=self.settings.compSolids
+                filename=self.step_file,
+                mat_filename=self.settings.matFile,
+                default_mat=self.settings.voidMat,
+                delLastNumber=self.options.delLastNumber,
+                comp_solids=self.settings.compSolids,
             )
 
         if self.options.verbose:
@@ -133,7 +145,9 @@ class CadToCsg:
 
         # Select a specific solid range from original STEP solids
         if self.settings.cellRange:
-            self.MetaList = self.MetaList[self.settings.cellRange[0] : self.settings.cellRange[1]]
+            self.MetaList = self.MetaList[
+                self.settings.cellRange[0] : self.settings.cellRange[1]
+            ]
 
         # export in STEP format solids read from input file
         # terminate excution
@@ -173,7 +187,7 @@ class CadToCsg:
                 meta=True,
                 tolerances=self.tolerances,
                 options=self.options,
-                numeric_format=self.numeric_format
+                numeric_format=self.numeric_format,
             )
 
             # decompose Enclosure solids
@@ -186,7 +200,7 @@ class CadToCsg:
                     meta=False,
                     tolerances=self.tolerances,
                     options=self.options,
-                    numeric_format=self.numeric_format
+                    numeric_format=self.numeric_format,
                 )
 
             if self.options.verbose:
@@ -204,7 +218,7 @@ class CadToCsg:
                     universe_box=self.UniverseBox,
                     tolerances=self.tolerances,
                     options=self.options,
-                    numeric_format=self.numeric_format
+                    numeric_format=self.numeric_format,
                 )
                 if cones:
                     coneInfo[m.__id__] = cones
@@ -219,7 +233,13 @@ class CadToCsg:
                 Conv.no_overlapping_cell(self.MetaList, self.Surfaces)
 
         else:
-            translate(self.MetaList, self.Surfaces, self.UniverseBox, self.debug, self.options.verbose)
+            translate(
+                self.MetaList,
+                self.Surfaces,
+                self.UniverseBox,
+                self.debug,
+                self.options.verbose,
+            )
             # decompose Enclosure solids
             if self.voidGen and EnclosureList:
                 warningEnclosureList = decompose_solids(
@@ -230,7 +250,7 @@ class CadToCsg:
                     meta=False,
                     tolerances=self.tolerances,
                     options=self.options,
-                    numeric_format=self.numeric_format
+                    numeric_format=self.numeric_format,
                 )
 
         if self.options.verbose:
@@ -281,7 +301,7 @@ class CadToCsg:
                 settings=self.settings,
                 tolerances=self.tolerances,
                 options=self.options,
-                numeric_format=self.numeric_format
+                numeric_format=self.numeric_format,
             )
 
         # if self.simplify == 'full' and not Options.forceNoOverlap:
@@ -301,13 +321,16 @@ class CadToCsg:
                     Box=Box,
                     SurfInfo=(c.Surfaces, Surfs),
                     scale_up=self.options.scale_up,
+                    splitTolerance=self.options.splitTolerance,
                     option="full",
                 )
                 c.Definition.simplify(CT)
                 c.Definition.clean()
                 if type(c.Definition.elements) is bool:
                     if self.options.verbose:
-                        print(f"unexpected constant cell {c.__id__} :{c.Definition.elements}")
+                        print(
+                            f"unexpected constant cell {c.__id__} :{c.Definition.elements}"
+                        )
 
         if self.options.verbose:
             tempTime2 = datetime.now()
@@ -364,24 +387,36 @@ class CadToCsg:
             print_warning_solids(warnSolids, warnEnclosures)
 
             # add plane definition to cone
-            process_cones(self.MetaList, coneInfo, self.Surfaces, self.UniverseBox, self.tolerances.angle)
+            process_cones(
+                self.MetaList,
+                coneInfo,
+                self.Surfaces,
+                self.UniverseBox,
+                self.tolerances.angle,
+            )
 
             print(f"Process finished, time = {datetime.now() - startTime}")
 
             print("Translation time of solid cells", tempTime1 - tempTime0)
             print("Translation time of void cells", tempTime2 - tempTime1)
-   
+
     def export_csg(
-            self,
-            title: str = "Geouned conversion",
-            geometry_name: str = "converted_with_geouned",
-            out_formats: typing.Tuple[str] = ("openmc_xml", "openmc_py", "serpent", "phits", "mcnp"),
-            volSDEF: bool = False,
-            volCARD: bool = True,
-            UCARD=None,
-            dummyMat: bool = False,
-            cellCommentFile: bool = False,
-            cellSummaryFile: bool = True,
+        self,
+        title: str = "Geouned conversion",
+        geometry_name: str = "converted_with_geouned",
+        out_formats: typing.Tuple[str] = (
+            "openmc_xml",
+            "openmc_py",
+            "serpent",
+            "phits",
+            "mcnp",
+        ),
+        volSDEF: bool = False,
+        volCARD: bool = True,
+        UCARD=None,
+        dummyMat: bool = False,
+        cellCommentFile: bool = False,
+        cellSummaryFile: bool = True,
     ):
         """Writes out a CSG file in the requested Monte Carlo code format
 
@@ -433,21 +468,13 @@ class CadToCsg:
             settings=self.settings,
             tolerances=self.tolerances,
             numeric_format=self.numeric_format,
-            options=self.options
+            options=self.options,
         )
         print(f"Written CSG geometry files {files_written}")
 
 
-
 def decompose_solids(
-    MetaList,
-    Surfaces,
-    UniverseBox,
-    debug,
-    meta,
-    tolerances,
-    options,
-    numeric_format
+    MetaList, Surfaces, UniverseBox, debug, meta, tolerances, options, numeric_format
 ):
     totsolid = len(MetaList)
     warningSolids = []
@@ -469,7 +496,7 @@ def decompose_solids(
             universe_box=UniverseBox,
             tolerances=tolerances,
             options=options,
-            numeric_format=numeric_format
+            numeric_format=numeric_format,
         )
 
         if err != 0:
@@ -505,7 +532,8 @@ def decompose_solids(
         Surfaces.extend(
             surface=ext_surfaces,
             tolerances=tolerances,
-            options=options,numeric_format=numeric_format
+            options=options,
+            numeric_format=numeric_format,
         )
         m.set_cad_solid()
         m.update_solids(comsolid.Solids)
@@ -537,7 +565,9 @@ def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, angle):
                     cones.update(-x for x in coneInfo[Id])
             Conv.add_cone_plane(m.Definition, cones, Surfaces, UniverseBox, angle)
         elif not m.Void:
-            Conv.add_cone_plane(m.Definition, coneInfo[m.__id__], Surfaces, UniverseBox, angle)
+            Conv.add_cone_plane(
+                m.Definition, coneInfo[m.__id__], Surfaces, UniverseBox, angle
+            )
 
 
 def get_universe(MetaList):

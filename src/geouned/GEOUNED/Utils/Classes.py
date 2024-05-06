@@ -43,6 +43,7 @@ class Options:
             definition. Adjacent cell definition are rested from current
             cell definition. Defaults to False.
     """
+
     def __init__(
         self,
         forceCylinder: bool = False,
@@ -58,7 +59,6 @@ class Options:
         prnt3PPlane: bool = False,
         forceNoOverlap: bool = False,
     ):
-
 
         self.forceCylinder = forceCylinder
         self.newSplitPlane = newSplitPlane
@@ -184,9 +184,10 @@ class NumericFormat:
         self.GQ_7to9 = GQ_7to9
         self.GQ_10 = GQ_10
 
+
 class Settings:
     """Settings for changing the way the CAD to CSG conversion is done
-    
+
     Args:
         stepFile (str, optional): Name of the CAD file (in STEP format) to
             be converted. Defaults to "".

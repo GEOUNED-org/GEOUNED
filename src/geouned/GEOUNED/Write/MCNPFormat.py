@@ -13,8 +13,21 @@ from .Functions import CardLine, mcnp_surface, change_surf_sign, write_mcnp_cell
 
 
 class McnpInput:
-    def __init__(self, Meta, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat,
-                 prnt3PPlane, StepFile, tolerances, numeric_format, options):
+    def __init__(
+        self,
+        Meta,
+        Surfaces,
+        title,
+        volSDEF,
+        volCARD,
+        UCARD,
+        dummyMat,
+        prnt3PPlane,
+        StepFile,
+        tolerances,
+        numeric_format,
+        options,
+    ):
         self.Title = title
         self.StepFile = StepFile
         self.VolSDEF = volSDEF
@@ -28,7 +41,7 @@ class McnpInput:
         self.options = options
 
         # TODO allow user to edit these from CadToCsg class
-        self.particle= ("n", "p")
+        self.particle = ("n", "p")
         self.part = "P"
 
         self.__get_surface_table__()
@@ -158,9 +171,14 @@ C **************************************************************
     def __write_surfaces__(self, surface):
         """Write the surfaces in MCNP format"""
 
-        MCNP_def = mcnp_surface(id=surface.Index, Type=surface.Type,
-                                surf=surface.Surf, tolerances=self.tolerances,
-                                options=self.options,  numeric_format=self.numeric_format)
+        MCNP_def = mcnp_surface(
+            id=surface.Index,
+            Type=surface.Type,
+            surf=surface.Surf,
+            tolerances=self.tolerances,
+            options=self.options,
+            numeric_format=self.numeric_format,
+        )
         if MCNP_def:
             MCNP_def += "\n"
             self.inpfile.write(MCNP_def)

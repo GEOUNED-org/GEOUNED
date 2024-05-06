@@ -239,7 +239,7 @@ def combine_diag_elements(d1, d2):
         return CTelement((0, 0, 1, 0))
 
 
-def build_c_table_from_solids(Box, SurfInfo, scale_up, option="diag"):
+def build_c_table_from_solids(Box, SurfInfo, scale_up, splitTolerance, option="diag"):
 
     if type(SurfInfo) is dict:
         surfaces = SurfInfo
@@ -266,8 +266,10 @@ def build_c_table_from_solids(Box, SurfInfo, scale_up, option="diag"):
         CTable.diagonal = False
 
     for i, s1 in enumerate(surfaceList):
-        res, splitRegions = split_solid_fast(Box, surfaces[s1], True, scale_up)
-        # res,splitRegions = split_solid_fast(Box,Surfaces.get_surface(s1),True)
+        res, splitRegions = split_solid_fast(
+            Box, surfaces[s1], True, scale_up, splitTolerance
+        )
+        # res,splitRegions = split_solid_fast(Box,Surfaces.get_surface(s1),True, scale_up, splitTolerance)
 
         CTable.add_element(s1, s1, CTelement(res, s1, s1))
         if option == "diag":
@@ -280,9 +282,11 @@ def build_c_table_from_solids(Box, SurfInfo, scale_up, option="diag"):
             pos0 = None
             for solid in posS1:
 
-                pos = split_solid_fast(solid, surfaces[s2], False)
+                pos = split_solid_fast(
+                    solid, surfaces[s2], False, scale_up, splitTolerance
+                )
 
-                # pos = split_solid_fast(solid,Surfaces.get_surface(s2),False)
+                # pos = split_solid_fast(solid,Surfaces.get_surface(s2),False, scale_up, splitTolerance)
                 if pos == (1, 1):
                     break  # s2 intersect S1 Region
                 if pos0 is None:
@@ -295,7 +299,9 @@ def build_c_table_from_solids(Box, SurfInfo, scale_up, option="diag"):
             neg0 = None
             for solid in negS1:
                 # neg = split_solid_fast(solid,Surfaces.get_surface(s2),False)
-                neg = split_solid_fast(solid, surfaces[s2], False, scale_up)
+                neg = split_solid_fast(
+                    solid, surfaces[s2], False, scale_up, splitTolerance
+                )
                 if neg == (1, 1):
                     break  # s2 intersect S1 Region
                 if neg0 is None:
@@ -380,14 +386,14 @@ def remove_extra_surfaces(CellSeq, CTable):
     return newDef
 
 
-def split_solid_fast(solid, surf, box, scale_up):
+def split_solid_fast(solid, surf, box, scale_up, splitTolerance):
 
     if box:
         if surf.shape:
             comsolid = split_bop(
                 solid=solid,
                 tools=[surf.shape],
-                tolerance=opt.splitTolerance,
+                splitTolerance=splitTolerance,
                 scale_up=scale_up,
             )
         else:

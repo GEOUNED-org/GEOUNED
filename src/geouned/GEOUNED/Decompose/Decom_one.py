@@ -22,12 +22,7 @@ from ..Utils.BasicFunctions_part2 import is_duplicate_in_list
 twoPi = math.pi * 2
 
 
-def split_full_cylinder(
-    solid,
-    tolerances,
-    options,
-    numeric_format
-):
+def split_full_cylinder(solid, tolerances, options, numeric_format):
     explode = []
     bases = [solid]
     while True:
@@ -37,7 +32,7 @@ def split_full_cylinder(
                 solid=base,
                 tolerances=tolerances,
                 options=options,
-                numeric_format=numeric_format
+                numeric_format=numeric_format,
             )
             if len(cut_solids) == 1:
                 explode.extend(cut_solids)
@@ -51,12 +46,7 @@ def split_full_cylinder(
     return Part.makeCompound(explode)
 
 
-def cut_full_cylinder(
-    solid,
-    tolerances,
-    options,
-    numeric_format
-):
+def cut_full_cylinder(solid, tolerances, options, numeric_format):
     solid_gu = GU.SolidGu(
         solid=solid,
         tolerances=tolerances,
@@ -91,7 +81,8 @@ def cut_full_cylinder(
                     tolerances=tolerances,
                     options=options,
                     numeric_format=numeric_format,
-                    fuzzy= False)
+                    fuzzy=False,
+                )
 
                 # add planes if cylinder axis is cut by a plane (plane quasi perpedicular to axis)
                 for p in cyl_bound_planes(face, universe_box):
@@ -127,7 +118,10 @@ def cut_full_cylinder(
 
         try:
             comsolid = UF.split_bop(
-                solids=solid, tools=tools, tolerance=options.splitTolerance, scale_up=options.scale_up
+                solids=solid,
+                tools=tools,
+                tolerance=options.splitTolerance,
+                scale_up=options.scale_up,
             )
         except:
             comsolid = solid
@@ -142,7 +136,10 @@ def cut_full_cylinder(
     tool = (surfaces["Cyl"][0].shape,)
     try:
         comsolid = UF.split_bop(
-            solids=solid, tools=tools, tolerance=options.splitTolerance, scale_up=options.scale_up
+            solids=solid,
+            tools=tools,
+            tolerance=options.splitTolerance,
+            scale_up=options.scale_up,
         )
     except:
         comsolid = solid
@@ -225,7 +222,7 @@ def torus_bound_planes(face, boundBox, value, angle):
             planes.append(plane)
 
         elif curve == "<BSplineCurve object>":
-            planeParams = plane_spline_curve(e)
+            planeParams = plane_spline_curve(e, value)
             if planeParams is not None:
                 plane = UF.GeounedSurface(("Plane", planeParams), boundBox)
                 planes.append(plane)
@@ -264,12 +261,7 @@ def extract_surfaces(
         fuzzy = True
         solid_parts = []
         for s in solid.Solids:
-            solid_parts.append(
-                GU.SolidGu(
-                    solid=s,
-                    tolerances=tolerances
-                )
-            )
+            solid_parts.append(GU.SolidGu(solid=s, tolerances=tolerances))
     else:
         fuzzy = False
         if kind == "Plane3Pts":
@@ -336,9 +328,10 @@ def extract_surfaces(
                             p.build_surface()
                         surfaces.add_plane(
                             plane=p,
+                            numeric_format=numeric_format,
                             tolerances=tolerances,
                             options=options,
-                            numeric_format=numeric_format,
+                            fuzzy=False,
                         )
 
             elif surf == "<Cone object>":
@@ -353,12 +346,7 @@ def extract_surfaces(
                     )
                     if MakeObj:
                         cone.build_surface()
-                    surfaces.add_cone(
-                        cone=cone,
-                        kne_distance=tolerances.kne_distance,
-                        kne_angle=tolerances.kne_angle,
-                        relativeTol=tolerances.relativeTol,
-                    )
+                    surfaces.add_cone(cone=cone, tolerances=tolerances)
 
                 if kind in ["Planes", "All"]:
                     for p in cyl_bound_planes(face, universe_box):
@@ -378,7 +366,11 @@ def extract_surfaces(
                 sphere = UF.GeounedSurface(("Sphere", (pnt, rad)), universe_box)
                 if MakeObj:
                     sphere.build_surface()
-                surfaces.add_sphere(sphere)
+                surfaces.add_sphere(
+                    sph=sphere,
+                    sph_distance=tolerances.sph_distance,
+                    relativeTol=tolerances.relativeTol,
+                )
 
                 if kind in ["Planes", "All"]:
                     for p in cyl_bound_planes(face, universe_box):
@@ -386,9 +378,9 @@ def extract_surfaces(
                             p.build_surface()
                         surfaces.add_plane(
                             plane=p,
-                            pln_distance=tolerances.pln_distance,
-                            pln_angle=tolerances.pln_angle,
-                            relativeTol=tolerances.relativeTol,
+                            numeric_format=numeric_format,
+                            tolerances=tolerances,
+                            options=options,
                             fuzzy=False,
                         )
 
@@ -406,10 +398,21 @@ def extract_surfaces(
                     surfaces.add_torus(tor=torus, tolerances=tolerances)
 
                 if kind in ["Planes", "All"]:
-                    for p in torus_bound_planes(face=face, boundBox= universe_box, value=tolerances.value, angle=tolerances.angle):
+                    for p in torus_bound_planes(
+                        face=face,
+                        boundBox=universe_box,
+                        value=tolerances.value,
+                        angle=tolerances.angle,
+                    ):
                         if MakeObj:
                             p.build_surface()
-                        surfaces.add_plane(p)
+                        surfaces.add_plane(
+                            plane=p,
+                            numeric_format=numeric_format,
+                            tolerances=tolerances,
+                            options=options,
+                            fuzzy=False,
+                        )
 
             elif surf == "<Plane object>" and kind == "Plane3Pts":
                 pos = face.CenterOfMass
@@ -423,7 +426,13 @@ def extract_surfaces(
                 )
                 if MakeObj:
                     plane.build_surface()
-                surfaces.add_plane(plane, fuzzy)
+                surfaces.add_plane(
+                    plane=plane,
+                    numeric_format=numeric_format,
+                    tolerances=tolerances,
+                    options=options,
+                    fuzzy=fuzzy,
+                )
 
     return surfaces
 
@@ -800,7 +809,7 @@ def split_planes(
             universe_box=universe_box,
             tolerances=tolerances,
             options=options,
-            numeric_format=numeric_format
+            numeric_format=numeric_format,
         )
     else:
         return split_planes_org(
@@ -817,13 +826,7 @@ def split_planes(
         )
 
 
-def split_planes_new(
-    Solids,
-    universe_box,
-    tolerances,
-    options,
-    numeric_format
-):
+def split_planes_new(Solids, universe_box, tolerances, options, numeric_format):
     Bases = Solids[:]
     simpleSolid = []
 
@@ -836,7 +839,7 @@ def split_planes_new(
                 universe_box=universe_box,
                 tolerances=tolerances,
                 options=options,
-                numeric_format=numeric_format
+                numeric_format=numeric_format,
             )
             if len(cut_solids) == 1:
                 simpleSolid.extend(cut_solids)
@@ -850,13 +853,7 @@ def split_planes_new(
     return simpleSolid, 0
 
 
-def split_planes_org(
-    Solids,
-    universe_box,
-    tolerances,
-    options,
-    numeric_format
-):
+def split_planes_org(Solids, universe_box, tolerances, options, numeric_format):
     Bases = []
     err = 0
     for sol in Solids:
@@ -1008,20 +1005,14 @@ def sort_planes(PlaneList, sortElements=False):
     return sortedPlanes
 
 
-def split_p_planes_new(
-    solid,
-    universe_box,
-    tolerances,
-    options,
-    numeric_format
-):
+def split_p_planes_new(solid, universe_box, tolerances, options, numeric_format):
     SPlanes = extract_surfaces(
         solid=solid,
         kind="Planes",
         universe_box=universe_box,
         tolerances=tolerances,
-    options=options,
-    numeric_format=numeric_format
+        options=options,
+        numeric_format=numeric_format,
     )
 
     Planes = []
@@ -1052,13 +1043,7 @@ def split_p_planes_new(
     return out_solid
 
 
-def split_p_planes_org(
-    solid,
-    universe_box,
-    numeric_format,
-    options,
-    tolerances
-):
+def split_p_planes_org(solid, universe_box, numeric_format, options, tolerances):
     SPlanes = extract_surfaces(
         solid=solid,
         kind="Planes",
@@ -1080,13 +1065,7 @@ def split_p_planes_org(
     return out_solid
 
 
-def split_2nd_order(
-    Solids,
-    universe_box,
-    tolerances,
-    options,
-    numeric_format
-):
+def split_2nd_order(Solids, universe_box, tolerances, options, numeric_format):
     err = 0
     Base = Solids
     for kind in ["Cyl", "Cone", "Sph", "Tor"]:
@@ -1100,7 +1079,7 @@ def split_2nd_order(
                     universe_box=universe_box,
                     tolerances=tolerances,
                     options=options,
-                    numeric_format=numeric_format
+                    numeric_format=numeric_format,
                 )
                 if len(Surfaces[kind]) == 0:
                     kindBase.append(solid)
@@ -1109,7 +1088,9 @@ def split_2nd_order(
                     for s in Surfaces[kind]:
                         s.build_surface()
                         try:
-                            comsolid = UF.split_bop(solid, [s.shape], options.splitTolerance)
+                            comsolid = UF.split_bop(
+                                solid, [s.shape], options.splitTolerance
+                            )
                             solidsInCom = []
                             for s in comsolid.Solids:
                                 if s.Volume > 1e-9:
@@ -1153,8 +1134,8 @@ def split_2nd_order_planes(
         for base in Bases:
             cut_solids, err = split_2nd_o_plane(
                 base,
-                    options,
-    tolerances,
+                options,
+                tolerances,
             )
             if len(cut_solids) == 1:
                 simpleSolid.extend(cut_solids)
@@ -1170,18 +1151,20 @@ def split_2nd_order_planes(
 
 def split_2nd_o_plane(
     solid,
-        options,
+    options,
     tolerances,
 ):
 
     err = 0
     flag_inv = CD.is_inverted(solid)
-    solid_GU = GU.SolidGu(
-        solid=solid,
-        tolerances=tolerances
-    )
+    solid_GU = GU.SolidGu(solid=solid, tolerances=tolerances)
     planes = plane_2nd_order(
-        solid_GU, None, flag_inv, options.verbose, distance=tolerances.distance, convex=True
+        solid_GU,
+        None,
+        flag_inv,
+        options.verbose,
+        distance=tolerances.distance,
+        convex=True,
     )
     if not planes:
         return [solid], err
@@ -1198,7 +1181,9 @@ def split_2nd_o_plane(
             comsolid = solid
             continue
         if len(comsolid.Solids) > 1:
-            removed, err = remove_solids(Solids=comsolid.Solids, verbose=options.verbose)
+            removed, err = remove_solids(
+                Solids=comsolid.Solids, verbose=options.verbose
+            )
             comsolid = Part.makeCompound(removed)
             if len(removed) > 1:
                 break
@@ -1224,13 +1209,7 @@ def remove_solids(Solids, verbose):
     return Solids_Clean, err
 
 
-def split_component(
-    solidShape,
-    universe_box,
-    options,
-    tolerances,
-    numeric_format
-):
+def split_component(solidShape, universe_box, options, tolerances, numeric_format):
     err = 0
     err2 = 0
 
@@ -1243,7 +1222,7 @@ def split_component(
         universe_box=universe_box,
         options=options,
         tolerances=tolerances,
-        numeric_format=numeric_format
+        numeric_format=numeric_format,
     )
     # Split with explicit 2nd order surfaces bounding the solid
 
@@ -1252,7 +1231,7 @@ def split_component(
         universe_box,
         options=options,
         tolerances=tolerances,
-        numeric_format=numeric_format
+        numeric_format=numeric_format,
     )
     err += err1
 
@@ -1287,13 +1266,7 @@ def split_component(
     return comsolid, err
 
 
-def split_solid(
-    solidShape,
-    universe_box,
-    tolerances,
-    options,
-    numeric_format
-):
+def split_solid(solidShape, universe_box, tolerances, options, numeric_format):
 
     solid_parts = []
 
@@ -1303,14 +1276,14 @@ def split_solid(
             solid=solid,
             tolerances=tolerances,
             options=options,
-            numeric_format=numeric_format
+            numeric_format=numeric_format,
         )
         piece, err = split_component(
             solidShape=explode,
             universe_box=universe_box,
             tolerances=tolerances,
             options=options,
-            numeric_format=numeric_format
+            numeric_format=numeric_format,
         )
         solid_parts.append(piece)
 

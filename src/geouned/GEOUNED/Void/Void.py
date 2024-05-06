@@ -15,7 +15,10 @@ def void_generation(
     Surfaces,
     UniverseBox,
     init,
-    settings,options,tolerances,numeric_format
+    settings,
+    options,
+    tolerances,
+    numeric_format,
 ):
     voidList = []
 
@@ -39,7 +42,9 @@ def void_generation(
 
     EnclosureBox = GeounedSolid(None, Box)
     if settings.voidMat:
-        EnclosureBox.set_material(settings.voidMat[0], settings.voidMat[1], settings.voidMat[2])
+        EnclosureBox.set_material(
+            settings.voidMat[0], settings.voidMat[1], settings.voidMat[2]
+        )
 
     # get voids in 0 Level Enclosure (original Universe)
     # if exist Level 1 enclosures are considered as material cells
@@ -82,8 +87,9 @@ def void_generation(
             )
             voidList.append(voids)
 
-    voidList.append(set_graveyard_cell(Surfaces, UniverseBox, 
-                                       tolerances, options, numeric_format))
+    voidList.append(
+        set_graveyard_cell(Surfaces, UniverseBox, tolerances, options, numeric_format)
+    )
 
     return VF.update_void_list(init, voidList, NestedEnclosure, settings.sort_enclosure)
 
@@ -143,7 +149,7 @@ def get_void_def(
                     options=options,
                     tolerances=tolerances,
                     numeric_format=numeric_format,
-                    settings=settings
+                    settings=settings,
                 )
                 if cell is not None:
                     VoidCell = (cell, (boxDim, CellIn))
@@ -172,7 +178,9 @@ def get_void_def(
 def set_graveyard_cell(Surfaces, UniverseBox, tolerances, options, numeric_format):
     Universe = VoidBox([], UniverseBox)
 
-    externalBox = get_universe_complementary(Universe, Surfaces, tolerances, options, numeric_format)
+    externalBox = get_universe_complementary(
+        Universe, Surfaces, tolerances, options, numeric_format
+    )
     center = UniverseBox.Center
     radius = 0.51 * UniverseBox.DiagonalLength
     sphere = GeounedSurface(("Sphere", (center, radius)), UniverseBox)
@@ -206,7 +214,9 @@ def get_universe_complementary(Universe, Surfaces, tolerances, options, numeric_
     for p in Universe.get_bound_planes():
         id, exist = Surfaces.add_plane(
             plane=p,
-            tolerances=tolerances, options=options, numeric_format=numeric_format,
+            tolerances=tolerances,
+            options=options,
+            numeric_format=numeric_format,
             fuzzy=False,
         )
         if not exist:

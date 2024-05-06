@@ -6,7 +6,7 @@ from .SerpentFormat import SerpentInput
 
 
 def write_geometry(
-    StepFile,
+    step_file,
     volSDEF,
     title,
     UCARD,
@@ -49,15 +49,31 @@ def write_geometry(
             outSphere = None
 
         MCNPfile = McnpInput(
-            MetaList, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat,
-            options.prnt3PPlane, StepFile, tolerances, numeric_format, options=options
+            MetaList,
+            Surfaces,
+            title,
+            volSDEF,
+            volCARD,
+            UCARD,
+            dummyMat,
+            options.prnt3PPlane,
+            step_file,
+            tolerances,
+            numeric_format,
+            options=options,
         )
         MCNPfile.set_sdef((outSphere, outBox))
         MCNPfile.write_input(mcnpFilename)
         files_written.append(mcnpFilename)
 
     if "openmc_xml" in outFormat or "openmc_py" in outFormat:
-        OMCFile = OpenmcInput(Meta=MetaList, Surfaces=Surfaces, tolerances=tolerances, numeric_format=numeric_format, options=options)
+        OMCFile = OpenmcInput(
+            Meta=MetaList,
+            Surfaces=Surfaces,
+            tolerances=tolerances,
+            numeric_format=numeric_format,
+            options=options,
+        )
 
     if "openmc_xml" in outFormat:
         omcFilename = geometryName + ".xml"
@@ -85,8 +101,18 @@ def write_geometry(
             outSphere = None
 
         Serpentfile = SerpentInput(
-            MetaList, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat,
-            options.prnt3PPlane, StepFile, tolerances, numeric_format, options
+            MetaList,
+            Surfaces,
+            title,
+            volSDEF,
+            volCARD,
+            UCARD,
+            dummyMat,
+            options.prnt3PPlane,
+            step_file,
+            tolerances,
+            numeric_format,
+            options,
         )
         # Serpentfile.set_sdef((outSphere,outBox))
         Serpentfile.write_input(serpentFilename)
@@ -122,10 +148,10 @@ def write_geometry(
             settings.voidMat,
             settings.startCell,
             options.prnt3PPlane,
-            StepFile,
+            step_file,
             tolerances,
             numeric_format,
-            options
+            options,
         )
         # PHITSfile.setSDEF_PHITS((PHITS_outSphere,PHITS_outBox))
         PHITSfile.write_phits(phitsFilename)

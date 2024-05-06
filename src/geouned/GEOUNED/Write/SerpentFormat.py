@@ -12,12 +12,25 @@ from .Functions import serpent_surface, change_surf_sign, write_serpent_cell_def
 
 
 class SerpentInput:
-    def __init__(self, Meta, Surfaces, title, volSDEF, volCARD, UCARD, dummyMat,
-                 prnt3PPlane, StepFile, tolerances, numeric_format, options):
-        self.prnt3PPlane=prnt3PPlane
-        self.StepFile=StepFile
-        self.tolerances=tolerances
-        self.numeric_format=numeric_format
+    def __init__(
+        self,
+        Meta,
+        Surfaces,
+        title,
+        volSDEF,
+        volCARD,
+        UCARD,
+        dummyMat,
+        prnt3PPlane,
+        StepFile,
+        tolerances,
+        numeric_format,
+        options,
+    ):
+        self.prnt3PPlane = prnt3PPlane
+        self.StepFile = StepFile
+        self.tolerances = tolerances
+        self.numeric_format = numeric_format
         self.Title = title
         self.VolSDEF = volSDEF
         self.VolCARD = volCARD
@@ -27,7 +40,7 @@ class SerpentInput:
         self.options = options
 
         # TODO allow user to edit these from CadToCsg class
-        self.particle= ("n", "p")
+        self.particle = ("n", "p")
         self.part = "p"
 
         self.__get_surface_table__()
@@ -133,14 +146,10 @@ class SerpentInput:
 
         if self.U0CARD is not None:
             if cell.Material == 0:
-                cellHeader = (
-                    f'cell {index:<5d} {self.U0CARD} {"void":<5d}  '
-                )
+                cellHeader = f'cell {index:<5d} {self.U0CARD} {"void":<5d}  '
             else:
                 self.Materials.add(cell.Material)
-                cellHeader = (
-                    f'cell {index:<5d} {self.U0CARD} {cell.Material:<5d} '
-                )
+                cellHeader = f"cell {index:<5d} {self.U0CARD} {cell.Material:<5d} "
 
             serpent_cell = (
                 f"{cellHeader}{self.__cell_format__(cell.Definition, offset=len(cellHeader))}"
@@ -167,8 +176,14 @@ class SerpentInput:
     def __write_surfaces__(self, surface):
         """Write the surfaces in Serpent format"""
 
-        Serpent_def = serpent_surface(surface.Index, surface.Type, surface.Surf,
-                                      self.tolerances, self.numeric_format, self.options)
+        Serpent_def = serpent_surface(
+            surface.Index,
+            surface.Type,
+            surface.Surf,
+            self.tolerances,
+            self.numeric_format,
+            self.options,
+        )
         if Serpent_def:
             Serpent_def += "\n"
             self.inpfile.write(Serpent_def)

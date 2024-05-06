@@ -42,7 +42,9 @@ class PhitsInput:
         startCell,
         prnt3PPlane,
         StepFile,
-        tolerances, numeric_format, options
+        tolerances,
+        numeric_format,
+        options,
     ):
         self.Title = title
         self.VolSDEF = volSDEF
@@ -53,11 +55,11 @@ class PhitsInput:
         self.voidMat = voidMat
         self.startCell = startCell
         self.Cells = Meta
-        self.prnt3PPlane=prnt3PPlane
-        self.StepFile=StepFile
-        self.tolerances=tolerances
-        self.numeric_format=numeric_format
-        self.options=options
+        self.prnt3PPlane = prnt3PPlane
+        self.StepFile = StepFile
+        self.tolerances = tolerances
+        self.numeric_format = numeric_format
+        self.options = options
 
         self.__get_surface_table__()
         self.__simplify_planes__(Surfaces)
@@ -377,7 +379,14 @@ $ **************************************************************
     def __write_phits_surfaces__(self, surface):
         """Write the surfaces in PHITS format"""
 
-        PHITS_def = phits_surface(surface.Index, surface.Type, surface.Surf, self.tolerances, self.numeric_format, self.options)
+        PHITS_def = phits_surface(
+            surface.Index,
+            surface.Type,
+            surface.Surf,
+            self.tolerances,
+            self.numeric_format,
+            self.options,
+        )
         if PHITS_def:
             PHITS_def += "\n"
             self.inpfile.write(PHITS_def)

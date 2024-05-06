@@ -424,11 +424,7 @@ class SurfacesDict(dict):
         del self[self.__last_obj__[0]][self.__last_obj__[1]]
         return
 
-    def extend(
-        self,
-        surface,
-        tolerances, options, numeric_format
-    ):
+    def extend(self, surface, tolerances, options, numeric_format):
         for Pkey in ["PX", "PY", "PZ", "P"]:
             for s in surface[Pkey]:
                 self.add_plane(s, tolerances, options, numeric_format)
@@ -440,16 +436,18 @@ class SurfacesDict(dict):
                 numeric_format=numeric_format,
             )
         for s in surface["Cone"]:
-            self.add_cone(
-                cone=s,
-                kne_distance=tolerances.kne_distance,
-                kne_angle=tolerances.kne_angle,
+            self.add_cone(cone=s, tolerances=tolerances)
+        for s in surface["Sph"]:
+            self.add_sphere(
+                sph=s,
+                sph_distance=tolerances.sph_distance,
                 relativeTol=tolerances.relativeTol,
             )
-        for s in surface["Sph"]:
-            self.add_sphere(sph=s, sph_distance=tolerances.sph_distance, relativeTol=tolerances.relativeTol)
         for s in surface["Tor"]:
-            self.add_torus(tor=s, tor_distance=tolerances.tor_distance, relativeTol=tolerances.relativeTol)
+            self.add_torus(
+                tor=s,
+                tolerances=tolerances,
+            )
 
     def add_plane(self, plane, tolerances, options, numeric_format, fuzzy=False):
         ex = FreeCAD.Vector(1, 0, 0)
@@ -590,15 +588,15 @@ class SurfacesDict(dict):
         else:
             return index, True
 
-    def add_cone(self, cone, kne_distance, kne_angle, relativeTol):
+    def add_cone(self, cone, tolerances):
         cone_added = True
         for i, c in enumerate(self["Cone"]):
             if BF.is_same_cone(
                 cone.Surf,
                 c.Surf,
-                dtol=kne_distance,
-                atol=kne_angle,
-                rel_tol=relativeTol,
+                dtol=tolerances.kne_distance,
+                atol=tolerances.kne_angle,
+                rel_tol=tolerances.relativeTol,
             ):
                 cone_added = False
                 index = c.Index

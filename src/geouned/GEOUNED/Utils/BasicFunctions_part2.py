@@ -31,23 +31,41 @@ def Fuzzy(index, dtype, surf1, surf2, val, tol, tolerances, options, numeric_for
         same_surf_fic.write(line)
 
     elif dtype == "cylRad":
-        cyl1str = mcnp_surface(index, "Cylinder", surf1, tolerances, options, numeric_format)
-        cyl2str = mcnp_surface(0, "Cylinder", surf2, tolerances, options, numeric_format)
+        cyl1str = mcnp_surface(
+            index, "Cylinder", surf1, tolerances, options, numeric_format
+        )
+        cyl2str = mcnp_surface(
+            0, "Cylinder", surf2, tolerances, options, numeric_format
+        )
         line = "Same surface : {}\nDiff Radius / Tolerance: {} {}\n {}\n {}\n\n".format(
             same, val, tol, cyl1str, cyl2str
         )
         same_surf_fic.write(line)
 
     elif dtype == "cylAxs":
-        cyl1str = mcnp_surface(index, "Cylinder", surf1, tolerances, options, numeric_format)
-        cyl2str = mcnp_surface(0, "Cylinder", surf2, tolerances, options, numeric_format)
+        cyl1str = mcnp_surface(
+            index, "Cylinder", surf1, tolerances, options, numeric_format
+        )
+        cyl2str = mcnp_surface(
+            0, "Cylinder", surf2, tolerances, options, numeric_format
+        )
         line = "Same surface : {}\nDist Axis / Tolerance: {} {}\n {}\n {}\n\n".format(
             same, val, tol, cyl1str, cyl2str
         )
         same_surf_fic.write(line)
 
 
-def is_same_plane(p1, p2, tolerances, options, numeric_format, dtol=1e-6, atol=1e-6, rel_tol=True, fuzzy=(False, 0)):
+def is_same_plane(
+    p1,
+    p2,
+    tolerances,
+    options,
+    numeric_format,
+    dtol=1e-6,
+    atol=1e-6,
+    rel_tol=True,
+    fuzzy=(False, 0),
+):
     if is_parallel(p1.Axis, p2.Axis, atol):
         d1 = p1.Axis.dot(p1.Position)
         d2 = p2.Axis.dot(p2.Position)
@@ -61,12 +79,24 @@ def is_same_plane(p1, p2, tolerances, options, numeric_format, dtol=1e-6, atol=1
 
         isSame, is_fuzzy = is_in_tolerance(d, tol, 0.5 * tol, 2 * tol)
         if is_fuzzy and fuzzy[0]:
-            Fuzzy(fuzzy[1], "plane", p2, p1, d, tol, tolerances, options, numeric_format)
+            Fuzzy(
+                fuzzy[1], "plane", p2, p1, d, tol, tolerances, options, numeric_format
+            )
         return isSame
     return False
 
 
-def is_same_cylinder(cyl1, cyl2, tolerances, options, numeric_format, dtol=1e-6, atol=1e-6, rel_tol=True, fuzzy=(False, 0)):
+def is_same_cylinder(
+    cyl1,
+    cyl2,
+    tolerances,
+    options,
+    numeric_format,
+    dtol=1e-6,
+    atol=1e-6,
+    rel_tol=True,
+    fuzzy=(False, 0),
+):
     if rel_tol:
         rtol = dtol * max(cyl2.Radius, cyl1.Radius)
     else:
@@ -76,7 +106,17 @@ def is_same_cylinder(cyl1, cyl2, tolerances, options, numeric_format, dtol=1e-6,
         cyl2.Radius - cyl1.Radius, rtol, 0.5 * rtol, 2 * rtol
     )
     if is_fuzzy and fuzzy[0]:
-        Fuzzy(fuzzy[1], "cylRad", cyl2, cyl1, abs(cyl2.Radius - cyl1.Radius), rtol, tolerances, options, numeric_format)
+        Fuzzy(
+            fuzzy[1],
+            "cylRad",
+            cyl2,
+            cyl1,
+            abs(cyl2.Radius - cyl1.Radius),
+            rtol,
+            tolerances,
+            options,
+            numeric_format,
+        )
 
     if is_same_rad:
         if is_parallel(cyl1.Axis, cyl2.Axis, atol):
@@ -90,7 +130,17 @@ def is_same_cylinder(cyl1, cyl2, tolerances, options, numeric_format, dtol=1e-6,
 
             is_same_center, is_fuzzy = is_in_tolerance(d, tol, 0.5 * tol, 2 * tol)
             if is_fuzzy and fuzzy[0]:
-                Fuzzy(fuzzy[1], "cylAxs", cyl1, cyl2, d, tol, tolerances, options, numeric_format)
+                Fuzzy(
+                    fuzzy[1],
+                    "cylAxs",
+                    cyl1,
+                    cyl2,
+                    d,
+                    tol,
+                    tolerances,
+                    options,
+                    numeric_format,
+                )
 
             return is_same_center
     return False

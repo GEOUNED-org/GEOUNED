@@ -76,8 +76,11 @@ class OpenmcInput:
         """Write the surfaces in xml OpenMC format"""
 
         surfType, coeffs = open_mc_surface(
-            Type=surface.Type, surf=surface.Surf, tolerances=self.tolerances,
-            numeric_format=self.numeric_format)
+            Type=surface.Type,
+            surf=surface.Surf,
+            tolerances=self.tolerances,
+            numeric_format=self.numeric_format,
+        )
 
         if not boundary:
             OMCsurf = '  <surface id="{}" type="{}" coeffs="{}" />\n'.format(
@@ -153,9 +156,12 @@ import openmc
         """Write the surfaces in python OpenMC format"""
 
         surfType, coeffs = open_mc_surface(
-            Type=surface.Type, surf=surface.Surf,
-            tolerances=self.tolerances, numeric_format=self.numeric_format, out_xml=False,
-            quadricForm=self.options.quadricPY
+            Type=surface.Type,
+            surf=surface.Surf,
+            tolerances=self.tolerances,
+            numeric_format=self.numeric_format,
+            out_xml=False,
+            quadricForm=self.options.quadricPY,
         )
 
         if not boundary:
