@@ -39,7 +39,7 @@ class CadToCsg:
 
     def __init__(
         self,
-        step_file: typing.Union[str, list[str]],
+        step_file: typing.Union[str, typing.Sequence[str]],
         settings=Settings(),
         options=Options(),
         numeric_format=NumericFormat(),
