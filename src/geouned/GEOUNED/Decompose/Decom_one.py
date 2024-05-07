@@ -23,6 +23,7 @@ twoPi = math.pi * 2
 
 
 def split_full_cylinder(solid, tolerances, options, numeric_format):
+    """splits all the closed cylinders (the cylinders than have a 2 pi end)"""
     explode = []
     bases = [solid]
     while True:
@@ -191,7 +192,7 @@ def cyl_bound_planes(face, boundBox):
 def torus_bound_planes(face, boundBox, value, angle):
     params = face.ParameterRange
     planes = []
-    if is_same_value(params[1] - params[0], twoPi, value):
+    if is_same_value(v1=params[1] - params[0], v2= twoPi, tolerance=value):
         return planes
 
     Edges = face.OuterWire.Edges
@@ -204,7 +205,7 @@ def torus_bound_planes(face, boundBox, value, angle):
 
         if curve[0:6] == "Circle":
             dir = e.Curve.Axis
-            if not is_parallel(dir, face.Surface.Axis, angle):
+            if not is_parallel(vector_1=dir, vector_2=face.Surface.Axis, tolerance=angle):
                 center = e.Curve.Center
                 dim1 = e.Curve.Radius
                 dim2 = e.Curve.Radius
@@ -894,13 +895,13 @@ def split_planes_org(Solids, universe_box, tolerances, options, numeric_format):
                 for p in Planes[imin]:
                     p.build_surface()
                     Tools.append(p.shape)
-                comsolid = UF.split_bop(base, Tools, splitTolerance)
+                comsolid = UF.split_bop(base, Tools, tolerances.splitTolerance)
                 if len(comsolid.Solids) == 1:
                     if (
                         abs(comsolid.Solids[0].Volume - base.Volume) / base.Volume
-                        > relativePrecision
+                        > tolerances.relativePrecision
                     ):
-                        if verbose:
+                        if options.verbose:
                             print(
                                 "Warning. Part of the split object is missing original base is used instead",
                                 abs(comsolid.Solids[0].Volume - base.Volume)
@@ -929,7 +930,7 @@ def split_planes_org(Solids, universe_box, tolerances, options, numeric_format):
         Bases = newBase
 
     XYZBases = []
-    for ii, s in enumerate(Bases):
+    for _, s in enumerate(Bases):
         XYZBases.append(s[0])
 
     simpleSolid = []
@@ -1035,6 +1036,7 @@ def split_p_planes_new(solid, universe_box, tolerances, options, numeric_format)
             tools=tools,
             scale_up=options.scale_up,
             splitTolerance=options.splitTolerance,
+            scale=0.1
         )
 
         if len(comsolid.Solids) > 1:
@@ -1210,6 +1212,7 @@ def remove_solids(Solids, verbose):
 
 
 def split_component(solidShape, universe_box, options, tolerances, numeric_format):
+
     err = 0
     err2 = 0
 
@@ -1227,8 +1230,8 @@ def split_component(solidShape, universe_box, options, tolerances, numeric_forma
     # Split with explicit 2nd order surfaces bounding the solid
 
     split1, err1 = split_2nd_order(
-        split0,
-        universe_box,
+        Solids=split0,
+        universe_box=universe_box,
         options=options,
         tolerances=tolerances,
         numeric_format=numeric_format,
@@ -1267,11 +1270,11 @@ def split_component(solidShape, universe_box, options, tolerances, numeric_forma
 
 
 def split_solid(solidShape, universe_box, tolerances, options, numeric_format):
-
+    """splits solids wi"""
     solid_parts = []
 
     for solid in solidShape.Solids:
-
+        
         explode = split_full_cylinder(
             solid=solid,
             tolerances=tolerances,

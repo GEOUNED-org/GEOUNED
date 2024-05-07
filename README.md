@@ -3,7 +3,7 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
 [![documentation](https://github.com/GEOUNED-org/GEOUNED/actions/workflows/documentation.yml/badge.svg)](https://github.com/GEOUNED-org/GEOUNED/actions/workflows/documentation.yml)
 
-:book: [Documentation](https://geouned-org.github.io/GEOUNED/)
+:book: [Documentation](https://GEOUNED-org.github.io/GEOUNED/)
 
 
 # GEOUNED

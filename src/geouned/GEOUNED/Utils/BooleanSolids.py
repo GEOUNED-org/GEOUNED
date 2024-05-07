@@ -267,7 +267,8 @@ def build_c_table_from_solids(Box, SurfInfo, scale_up, splitTolerance, option="d
 
     for i, s1 in enumerate(surfaceList):
         res, splitRegions = split_solid_fast(
-            Box, surfaces[s1], True, scale_up, splitTolerance
+            solid=Box,
+            surf=surfaces[s1], box=True, scale_up=scale_up, splitTolerance=splitTolerance
         )
         # res,splitRegions = split_solid_fast(Box,Surfaces.get_surface(s1),True, scale_up, splitTolerance)
 
@@ -283,7 +284,8 @@ def build_c_table_from_solids(Box, SurfInfo, scale_up, splitTolerance, option="d
             for solid in posS1:
 
                 pos = split_solid_fast(
-                    solid, surfaces[s2], False, scale_up, splitTolerance
+                    solid=solid, surf=surfaces[s2], box=False,
+                    scale_up=scale_up, splitTolerance=splitTolerance
                 )
 
                 # pos = split_solid_fast(solid,Surfaces.get_surface(s2),False, scale_up, splitTolerance)
@@ -300,7 +302,11 @@ def build_c_table_from_solids(Box, SurfInfo, scale_up, splitTolerance, option="d
             for solid in negS1:
                 # neg = split_solid_fast(solid,Surfaces.get_surface(s2),False)
                 neg = split_solid_fast(
-                    solid, surfaces[s2], False, scale_up, splitTolerance
+                    solid=solid,
+                    surf=surfaces[s2],
+                    box=False,
+                    scale_up=scale_up,
+                    splitTolerance=splitTolerance
                 )
                 if neg == (1, 1):
                     break  # s2 intersect S1 Region
@@ -386,7 +392,7 @@ def remove_extra_surfaces(CellSeq, CTable):
     return newDef
 
 
-def split_solid_fast(solid, surf, box, scale_up, splitTolerance):
+def split_solid_fast(solid, surf, box: bool, scale_up, splitTolerance):
 
     if box:
         if surf.shape:
