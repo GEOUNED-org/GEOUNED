@@ -135,6 +135,8 @@ Then you will be able to run import GEOUNED from within Python
     import geouned
 
 
+
+
 Developer install with Mamba
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -201,10 +203,11 @@ Then change directory into the repository root like this
 
 Install GEOUNED with pip, we also prefix this with "python -m" to ensure that pip install uses the correct Python interpreter.
 We are also adding the -e to get an editable install so that when you make local changes to the repo these are picked up in your Python scripts straight away (without needing to reinstall).
+We also include all the optional dependencies so that we can run tests locally and build the docs locally.
 
 .. code-block:: sh
 
-    python -m pip install -e .
+    python -m pip install -e .[tests,docs]
 
 Then you will be able to run import GEOUNED from within Python
 
