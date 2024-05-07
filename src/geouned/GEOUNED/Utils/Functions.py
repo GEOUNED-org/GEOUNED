@@ -618,7 +618,12 @@ class SurfacesDict(dict):
     def add_sphere(self, sph, sph_distance, relativeTol):
         sphere_added = True
         for i, s in enumerate(self["Sph"]):
-            if BF.is_same_sphere(sph.Surf, s.Surf, sph_distance, rel_tol=relativeTol):
+            if BF.is_same_sphere(
+                sph1=sph.Surf,
+                sph2=s.Surf,
+                tolerance=sph_distance,
+                rel_tol=relativeTol
+            ):
                 sphere_added = False
                 index = s.Index
                 self.__last_obj__ = ("Sph", i)
