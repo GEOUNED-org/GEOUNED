@@ -469,7 +469,9 @@ class CadToCsg:
         """
 
         if self.UniverseBox == None and self.Surfaces == None and self.MetaList == None:
-            raise ValueError('Run the CadToCsg.start() method prior to running the CadToCsg.export_to_csg() method')
+            raise ValueError(
+                "Run the CadToCsg.start() method prior to running the CadToCsg.export_to_csg() method"
+            )
 
         supported_mc_codes = ("mcnp", "openmc_xml", "openmc_py", "serpent", "phits")
         for out_format in out_formats:
