@@ -15,54 +15,54 @@ if os.getenv("GITHUB_ACTIONS"):
     step_files.remove(Path("testing/inputSTEP/large/Triangle.stp"))
 
 
-# @pytest.mark.parametrize("input_step_file", step_files)
-# def test_conversion(input_step_file):
-#     """Test that step files can be converted to openmc and mcnp files"""
+@pytest.mark.parametrize("input_step_file", step_files)
+def test_conversion(input_step_file):
+    """Test that step files can be converted to openmc and mcnp files"""
 
-#     # sets up an output folder for the results
-#     output_dir = Path("tests_outputs") / input_step_file.with_suffix("")
-#     output_dir.mkdir(parents=True, exist_ok=True)
-#     output_filename_stem = output_dir / input_step_file.stem
+    # sets up an output folder for the results
+    output_dir = Path("tests_outputs") / input_step_file.with_suffix("")
+    output_dir.mkdir(parents=True, exist_ok=True)
+    output_filename_stem = output_dir / input_step_file.stem
 
-#     # deletes the output MC files if they already exists
-#     suffixes = (".mcnp", ".xml", ".inp", ".py", ".serp")
-#     for suffix in suffixes:
-#         output_filename_stem.with_suffix(suffix).unlink(missing_ok=True)
+    # deletes the output MC files if they already exists
+    suffixes = (".mcnp", ".xml", ".inp", ".py", ".serp")
+    for suffix in suffixes:
+        output_filename_stem.with_suffix(suffix).unlink(missing_ok=True)
 
-#     my_options = geouned.Options(
-#         forceCylinder=False,
-#         splitTolerance=0,
-#         newSplitPlane=True,
-#         nPlaneReverse=0,
-#     )
+    my_options = geouned.Options(
+        forceCylinder=False,
+        splitTolerance=0,
+        newSplitPlane=True,
+        nPlaneReverse=0,
+    )
 
-#     my_settings = geouned.Settings(
-#         compSolids=False,
-#         minVoidSize=100,
-#         debug=False,
-#         simplify="no",
-#     )
+    my_settings = geouned.Settings(
+        compSolids=False,
+        minVoidSize=100,
+        debug=False,
+        simplify="no",
+    )
 
-#     geo = geouned.CadToCsg(
-#         step_file=f"{input_step_file.resolve()}",
-#         options=my_options,
-#         settings=my_settings,
-#     )
+    geo = geouned.CadToCsg(
+        step_file=f"{input_step_file.resolve()}",
+        options=my_options,
+        settings=my_settings,
+    )
 
-#     geo.start()
-#     geo.export_csg(
-#         cellSummaryFile=False,
-#         cellCommentFile=False,
-#         dummyMat=True,
-#         title="Input Test",
-#         geometry_name=f"{output_filename_stem.resolve()}",
-#         out_formats=("mcnp", "openmc_xml", "openmc_py", "serpent", "phits"),
-#         volCARD=False,
-#         volSDEF=True,
-#     )
+    geo.start()
+    geo.export_csg(
+        cellSummaryFile=False,
+        cellCommentFile=False,
+        dummyMat=True,
+        title="Input Test",
+        geometry_name=f"{output_filename_stem.resolve()}",
+        out_formats=("mcnp", "openmc_xml", "openmc_py", "serpent", "phits"),
+        volCARD=False,
+        volSDEF=True,
+    )
 
-#     for suffix in suffixes:
-#         assert output_filename_stem.with_suffix(suffix).exists()
+    for suffix in suffixes:
+        assert output_filename_stem.with_suffix(suffix).exists()
 
 
 def test_attribute_setting_from_config():
@@ -137,34 +137,15 @@ def test_attribute_setting_from_config():
     config_dict = {
         "step_file": str(step_files[0]),
         "Options": {"forceCylinder": True},
-        "Tolerances": {"relativeTol": True},
-        "NumericFormat": {"P_abc": 2e7},
-        "Settings": {"voidGen": False},
+        "Tolerances": {"relativePrecision": 1.23e-6},
+        "NumericFormat": {"P_abc": "15.6e"},
+        "Settings": {"debug": True},
     }
     with open("config.json", "w") as fp:
-        json.dump(config_dict, fp)
+        json.dump(config_dict, fp, indent=2)
 
     geo = geouned.CadToCsg.from_config("config.json")
     assert geo.options.forceCylinder == True
-    assert geo.tolerances.relativeTol == True
-    assert geo.numeric_format.P_abc == 2e7
-    assert geo.settings.voidGen == False
-
-
-# {
-#     step_file: "step_filename.stp",
-#     Settings:{
-#         matFile: "materials.txt",
-#         compSolids: true,
-#         startCell:1,
-#     },
-#     export_csg:{
-#         title : "title of the model in MCNP input",
-#         UCARD : 101,
-#         outFormat: ["mcnp", "openmc_py", "openmc_xml"],
-#         geometryName: "pieza",
-#         volSDEF  :false,
-#         volCARD  :false,
-#         dummyMat: false,
-#     }
-# }
+    assert geo.tolerances.relativePrecision == 1.23e-6
+    assert geo.numeric_format.P_abc == "15.6e"
+    assert geo.settings.debug == True

@@ -533,8 +533,8 @@ class SurfacesDict(dict):
             add_plane = True
             for i, p in enumerate(self["P"]):
                 if BF.is_same_plane(
-                    plane.Surf,
-                    p.Surf,
+                    p1=plane.Surf,
+                    p2=p.Surf,
                     tolerances=tolerances,
                     options=options,
                     numeric_format=numeric_format,
