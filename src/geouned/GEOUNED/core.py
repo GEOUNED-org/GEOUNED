@@ -259,7 +259,9 @@ class CadToCsg:
                         print(m.Definition)
 
             if self.options.forceNoOverlap:
-                Conv.no_overlapping_cell(metaList=self.MetaList, surfaces=self.Surfaces, options=self.options)
+                Conv.no_overlapping_cell(
+                    metaList=self.MetaList, surfaces=self.Surfaces, options=self.options
+                )
 
         else:
             translate(

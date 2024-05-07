@@ -17,8 +17,10 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
+
 def main():
     geouned.CadToCsg.from_config(args.input)
+
 
 if __name__ == "__main__":
     main()
