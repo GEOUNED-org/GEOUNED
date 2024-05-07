@@ -1,5 +1,6 @@
 class Options:
     """A class for containing conversion options
+
     Args:
         forceCylinder (bool, optional): Use cylinder (instead of cones) as
             ancillary surface where unclosed torus surfaces are involved in

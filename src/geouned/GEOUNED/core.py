@@ -27,11 +27,19 @@ from .Utils.Classes import Tolerances, Options, NumericFormat, Settings
 
 
 class CadToCsg:
-    """Base class for the conversion of CAD to CSG models"""
+    """Base class for the conversion of CAD to CSG models
+
+    Args:
+        step_file (str, optional): The filename(s) of the config file. Defaults to "config.json".
+        settings (geouned.Settings()): The settings to use for the conversions
+        options (geouned.Options()): The options to use for the conversions
+        numeric_format (geouned.NumericFormat()): The numeric_format to use for the conversions
+        tolerances (geouned.Tolerances()): The tolerances to use for the conversions
+    """
 
     def __init__(
         self,
-        step_file: str,
+        step_file: typing.Union[str, list[str]],
         settings=Settings(),
         options=Options(),
         numeric_format=NumericFormat(),
@@ -49,7 +57,22 @@ class CadToCsg:
         self.MetaList = None
 
     @classmethod
-    def from_config(cls, filename: str = "config.json") -> "geouned.CadToCsg":
+    def from_config(cls, filename: str = "config.json"):
+        """Creates a CadToCsg instance and runs .start() and .export_to_csg()
+        on the instance. Populating the options, tolerance, settings,
+        numeric format and argments for the export_to_csg method from the
+        contents of the config json file.
+
+        Args:
+            filename (str, optional): The filename of the config file. Defaults to "config.json".
+
+        Raises:
+            FileNotFoundError: If the config file is not found
+            ValueError: If the config JSON file is found to contain an invalid key
+
+        Returns:
+            geouned.CadToCsg: returns a geouned CadToCsg class instance.
+        """
         from pathlib import Path
 
         if not Path(filename).exists():
@@ -89,6 +112,8 @@ class CadToCsg:
         return csg_to_csg
 
     def start(self):
+        """Converts the CAD to an internat CSG representation, performing
+        decomposition, void production and other processing steps."""
 
         if self.options.verbose:
             print("started converting")
@@ -97,8 +122,6 @@ class CadToCsg:
                 f"GEOUNED version {GEOUNED_Version} {GEOUNED_ReleaseDate} \nFreeCAD version {FreeCAD_Version}"
             )
 
-        if self.__dict__ is None:
-            raise ValueError("Cannot run the code. Input are missing")
         if self.step_file == "":
             raise ValueError("Cannot run the code. Step file name is missing")
 
@@ -418,7 +441,7 @@ class CadToCsg:
         cellCommentFile: bool = False,
         cellSummaryFile: bool = True,
     ):
-        """Writes out a CSG file in the requested Monte Carlo code format
+        """Writes out a CSG file in the requested Monte Carlo code format.
 
         Args:
             title (str, optional): Title of the model written at the top of the output file. Defaults to "Geouned conversion".
@@ -444,6 +467,9 @@ class CadToCsg:
             cellSummaryFile (bool, optional): Write an additional file with
                information on the CAD cell translated. Defaults to True.
         """
+
+        if self.UniverseBox == None and self.Surfaces == None and self.MetaList == None:
+            raise ValueError('Run the CadToCsg.start() method prior to running the CadToCsg.export_to_csg() method')
 
         supported_mc_codes = ("mcnp", "openmc_xml", "openmc_py", "serpent", "phits")
         for out_format in out_formats:
