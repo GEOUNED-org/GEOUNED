@@ -121,8 +121,8 @@ class SolidGu:
                 tolerances.distance,
             )
             for i, tSet in enumerate(tFaces):
-                URange = self.__merge_periodic_uv__("U", tSet, tolerances)
-                VRange = self.__merge_periodic_uv__("V", tSet, tolerances)
+                URange = self.__merge_periodic_uv__(parameter="U", faceList=tSet, tolerances=tolerances)
+                VRange = self.__merge_periodic_uv__(parameter="V", faceList=tSet, tolerances=tolerances)
                 for t in tSet:
                     self.TorusVParams[t] = (i, VRange)
                     self.TorusUParams[t] = (i, URange)
@@ -149,7 +149,7 @@ class SolidGu:
                 temp.remove(c)
             sameTorusFace.append(current)
 
-        return self.__separate_surfaces__(sameTorusFace, distance)
+        return self.__separate_surfaces__(faceList=sameTorusFace, distance=distance)
 
     def __separate_surfaces__(self, faceList, distance):
         """group all faces in faceList forming a continuous surface"""
