@@ -136,10 +136,10 @@ def test_attribute_setting_from_config():
 
     config_dict = {
         "step_file": str(step_files[0]),
-        "Options":{"forceCylinder":True},
-        "Tolerances":{"relativeTol":True},
-        "NumericFormat":{"P_abc":2e7},
-        "Settings":{"voidGen":False},
+        "Options": {"forceCylinder": True},
+        "Tolerances": {"relativeTol": True},
+        "NumericFormat": {"P_abc": 2e7},
+        "Settings": {"voidGen": False},
     }
     with open("config.json", "w") as fp:
         json.dump(config_dict, fp)
@@ -149,6 +149,7 @@ def test_attribute_setting_from_config():
     assert geo.tolerances.relativeTol == True
     assert geo.numeric_format.P_abc == 2e7
     assert geo.settings.voidGen == False
+
 
 # {
 #     step_file: "step_filename.stp",

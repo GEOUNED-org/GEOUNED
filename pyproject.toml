@@ -20,6 +20,10 @@ classifiers = [
     "License :: OSI Approved :: European Union Public Licence 1.2 (EUPL 1.2)",
     "Operating System :: OS Independent",
 ]
+dependencies = [
+    "json5",
+    "numpy",
+]
 
 [project.urls]
 Homepage = "https://github.com/GEOUNED-org"
@@ -30,7 +34,6 @@ Documentation = "https://github.com/GEOUNED-org/GEOUNED/docs"
 tests = [
     "pytest",
     "black==24.4.2",
-    "json5",
 ]
 docs = [
   "sphinx",
