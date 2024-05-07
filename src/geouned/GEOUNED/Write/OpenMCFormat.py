@@ -23,8 +23,9 @@ class OpenmcInput:
         self.Surfaces = self.__sorted_surfaces__(Surfaces)
         self.Materials = set()
 
-    def write_xml(self, filename):
-        print(f"write OpenMC xml file {filename}")
+    def write_xml(self, filename, verbose):
+        if verbose:
+            print(f"Writing OpenMC xml file {filename}")
         self.inpfile = open(filename, "w", encoding="utf-8")
         self.__write_xml_header__()
 
@@ -94,8 +95,9 @@ class OpenmcInput:
         self.inpfile.write(OMCsurf)
         return
 
-    def write_py(self, filename):
-        print(f"write OpenMC python script {filename}")
+    def write_py(self, filename, verbose):
+        if verbose:
+            print(f"write OpenMC python script {filename}")
 
         # get all the materials present in the model
         for cell in self.Cells:

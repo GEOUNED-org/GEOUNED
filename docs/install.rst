@@ -12,8 +12,8 @@ Users have had success installing FreeCAD and making use of the FreeCAD Python a
 Linux
 -----
 
-Mamba
-~~~~~
+Mamba (recommended)
+~~~~~~~~~~~~~~~~~~~
 
 First we need to install a Mamba distribution. There are a few options but here we opt for Miniforge3 as it includes Mamba.
 
@@ -72,12 +72,9 @@ Then you will be able to run import GEOUNED from within Python
 
     import geouned
 
-Conda
-~~~~~
+First we need to install a Conda distribution. There are a few options but we here we opt for `MiniConda3<https://docs.anaconda.com/free/miniconda/>`_ as it downloads quicker than the fuller `AnaConda<https://www.anaconda.com/download>`_.
 
-First we need to install a Conda distribution. There are a few options but we here we opt for [MiniConda3](https://docs.anaconda.com/free/miniconda/) as it downloads quicker than the fuller [AnaConda](https://www.anaconda.com/download).
-
-You can follow the install instructions for [MiniConda3 here](https://docs.anaconda.com/free/miniconda/) or follow the commands below.
+You can follow the install instructions for `MiniConda3<https://docs.anaconda.com/free/miniconda/>`_ or follow the commands below.
 Download.
 
 .. code-block:: sh

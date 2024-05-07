@@ -102,4 +102,29 @@ Here is the Python code to convert the cad using this config file
 Command line usage
 ------------------
 
-TODO
+GEOUNED can also be used from the command line with the command
+
+This example loads up a config file with the default name (config.json)
+
+.. code-block:: bash
+
+    geouned_cadtocsg
+
+This example specifies a JSON config file name called "example.json"
+
+.. code-block:: bash
+
+    geouned_cadtocsg -i configuration.json
+
+Both JSON and `JSON5 <https://json5.org/>`_ file formats are supported for config files.
+This example specifies a JSON5 config file name called "example.json5"
+
+.. code-block:: bash
+
+    geouned_cadtocsg -i configuration.json5
+
+This example prints the options to the command line.
+
+.. code-block:: bash
+
+    geouned_cadtocsg --help

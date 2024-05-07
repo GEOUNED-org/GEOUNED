@@ -63,7 +63,7 @@ def write_geometry(
             options=options,
         )
         MCNPfile.set_sdef((outSphere, outBox))
-        MCNPfile.write_input(mcnpFilename)
+        MCNPfile.write_input(mcnpFilename, options.verbose)
         files_written.append(mcnpFilename)
 
     if "openmc_xml" in outFormat or "openmc_py" in outFormat:
@@ -77,12 +77,12 @@ def write_geometry(
 
     if "openmc_xml" in outFormat:
         omcFilename = geometryName + ".xml"
-        OMCFile.write_xml(omcFilename)
+        OMCFile.write_xml(omcFilename, options.verbose)
         files_written.append(omcFilename)
 
     if "openmc_py" in outFormat:
         omcFilename = geometryName + ".py"
-        OMCFile.write_py(omcFilename)
+        OMCFile.write_py(omcFilename, options.verbose)
         files_written.append(omcFilename)
 
     if "serpent" in outFormat:
@@ -115,7 +115,7 @@ def write_geometry(
             options,
         )
         # Serpentfile.set_sdef((outSphere,outBox))
-        Serpentfile.write_input(serpentFilename)
+        Serpentfile.write_input(serpentFilename, options.verbose)
         files_written.append(serpentFilename)
 
     if "phits" in outFormat:
@@ -154,6 +154,6 @@ def write_geometry(
             options,
         )
         # PHITSfile.setSDEF_PHITS((PHITS_outSphere,PHITS_outBox))
-        PHITSfile.write_phits(phitsFilename)
+        PHITSfile.write_phits(phitsFilename, options.verbose)
         files_written.append(phitsFilename)
-        return files_written
+    return files_written

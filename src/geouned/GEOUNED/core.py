@@ -89,8 +89,8 @@ class CadToCsg:
         csg_to_csg = cls(step_file=config["step_file"])
         for key in config.keys():
 
-            if key in ["step_file"]:
-                pass  # this has already been used when initializing csg_to_csg
+            if key in ["step_file", "export_csg"]:
+                pass  # these two keys are used before or after this loop
 
             elif key == "Tolerances":
                 csg_to_csg.tolerances = Tolerances(**config["Tolerances"])
@@ -259,7 +259,7 @@ class CadToCsg:
                         print(m.Definition)
 
             if self.options.forceNoOverlap:
-                Conv.no_overlapping_cell(self.MetaList, self.Surfaces)
+                Conv.no_overlapping_cell(metaList=self.MetaList, surfaces=self.Surfaces, options=self.options)
 
         else:
             translate(
@@ -349,8 +349,7 @@ class CadToCsg:
                 CT = build_c_table_from_solids(
                     Box=Box,
                     SurfInfo=(c.Surfaces, Surfs),
-                    scale_up=self.options.scale_up,
-                    splitTolerance=self.options.splitTolerance,
+                    options=self.options,
                     option="full",
                 )
                 c.Definition.simplify(CT)

@@ -239,7 +239,7 @@ def combine_diag_elements(d1, d2):
         return CTelement((0, 0, 1, 0))
 
 
-def build_c_table_from_solids(Box, SurfInfo, scale_up, splitTolerance, option="diag"):
+def build_c_table_from_solids(Box, SurfInfo, options, option="diag"):
 
     if type(SurfInfo) is dict:
         surfaces = SurfInfo
@@ -270,8 +270,7 @@ def build_c_table_from_solids(Box, SurfInfo, scale_up, splitTolerance, option="d
             solid=Box,
             surf=surfaces[s1],
             box=True,
-            scale_up=scale_up,
-            splitTolerance=splitTolerance,
+            options=options,
         )
         # res,splitRegions = split_solid_fast(Box,Surfaces.get_surface(s1),True, scale_up, splitTolerance)
 
@@ -290,8 +289,7 @@ def build_c_table_from_solids(Box, SurfInfo, scale_up, splitTolerance, option="d
                     solid=solid,
                     surf=surfaces[s2],
                     box=False,
-                    scale_up=scale_up,
-                    splitTolerance=splitTolerance,
+                    options=options,
                 )
 
                 # pos = split_solid_fast(solid,Surfaces.get_surface(s2),False, scale_up, splitTolerance)
@@ -311,8 +309,7 @@ def build_c_table_from_solids(Box, SurfInfo, scale_up, splitTolerance, option="d
                     solid=solid,
                     surf=surfaces[s2],
                     box=False,
-                    scale_up=scale_up,
-                    splitTolerance=splitTolerance,
+                    options=options,
                 )
                 if neg == (1, 1):
                     break  # s2 intersect S1 Region
@@ -398,15 +395,15 @@ def remove_extra_surfaces(CellSeq, CTable):
     return newDef
 
 
-def split_solid_fast(solid, surf, box: bool, scale_up, splitTolerance):
+def split_solid_fast(solid, surf, box: bool, options):
 
     if box:
         if surf.shape:
             comsolid = split_bop(
                 solid=solid,
                 tools=[surf.shape],
-                splitTolerance=splitTolerance,
-                scale_up=scale_up,
+                tolerance=options.splitTolerance,
+                options=options,
             )
         else:
             return check_sign(solid, surf), None

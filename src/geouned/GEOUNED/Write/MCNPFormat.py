@@ -77,8 +77,9 @@ class McnpInput:
         SP3 = "SP3 0  1 \n"
         self.SDEF_box = (sdef, SI1, SI2, SI3, SP1, SP2, SP3)
 
-    def write_input(self, filename):
-        print(f"write MCNP file {filename}")
+    def write_input(self, filename, verbose):
+        if verbose:
+            print(f"write MCNP file {filename}")
         self.inpfile = open(filename, "w", encoding="utf-8")
         self.__write_header__()
         self.__write_cell_block__()

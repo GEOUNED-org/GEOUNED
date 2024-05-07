@@ -1139,7 +1139,7 @@ def append_comp(new_cell, cell_def, cell_cad, meta_complementary):
         return append
 
 
-def no_overlapping_cell(metaList, surfaces, scale_up, splitTolerance):
+def no_overlapping_cell(metaList, surfaces, options):
 
     Surfs = {}
     for lst in surfaces.values():
@@ -1188,8 +1188,7 @@ def no_overlapping_cell(metaList, surfaces, scale_up, splitTolerance):
             CT = build_c_table_from_solids(
                 Box=box,
                 SurfInfo=(tuple(t_def.get_surfaces_numbers()), Surfs),
-                scale_up=scale_up,
-                splitTolerance=splitTolerance,
+                options=options,
                 option="diag",
             )
 
@@ -1199,8 +1198,7 @@ def no_overlapping_cell(metaList, surfaces, scale_up, splitTolerance):
             CT = build_c_table_from_solids(
                 Box=box,
                 SurfInfo=(tuple(new_def.get_surfaces_numbers()), Surfs),
-                scale_up=scale_up,
-                splitTolerance=splitTolerance,
+                options=options,
                 option="full",
             )
 

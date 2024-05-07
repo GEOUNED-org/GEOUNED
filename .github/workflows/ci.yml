@@ -53,7 +53,15 @@ jobs:
             python -c 'import geouned'
             python -c 'from geouned import CadToCsg'
             python -c 'from geouned.GEOReverse import reverse'
+            geouned_cadtocsg --help
             python -m pip install .[tests]
+
+        - name: testing CLI
+          run: |
+            cd examples
+            geouned_cadtocsg -i configuration.json
+            geouned_cadtocsg --input configuration.json5
+            cd ..
 
         - name: testing GEOUNED functionality
           run: python -m pytest -v tests/test_convert.py

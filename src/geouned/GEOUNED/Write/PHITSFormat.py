@@ -69,8 +69,9 @@ class PhitsInput:
 
         return
 
-    def write_phits(self, filename):
-        print(f"write PHITS file {filename}")
+    def write_phits(self, filename, verbose):
+        if verbose:
+            print(f"write PHITS file {filename}")
         self.inpfile = open(filename, "w", encoding="utf-8")
         self.__write_phits_header__()
 

@@ -267,9 +267,8 @@ class VoidBox:
                 CTable = build_c_table_from_solids(
                     Box=Box,
                     SurfInfo=surfaceDict,
-                    scale_up=options.scale_up,
+                    options=options,
                     option=settings.simplify,
-                    splitTolerance=options.splitTolerance,
                 )
             else:
                 if res is True:

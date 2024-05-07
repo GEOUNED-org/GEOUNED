@@ -1,0 +1,16 @@
+{
+    step_file: "cylinder.stp",
+    Settings:{
+        compSolids: true, 
+        startCell:1,
+    },
+    export_csg:{
+        title : "title of the model",
+        UCARD : 101,
+        out_formats: ["mcnp", "openmc_py", "openmc_xml"],
+        geometry_name: "cylinder",
+        volSDEF  :false,
+        volCARD  :false,
+        dummyMat: false,
+    }
+}
