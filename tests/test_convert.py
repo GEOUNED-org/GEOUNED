@@ -41,6 +41,7 @@ def test_conversion(input_step_file):
         minVoidSize=100,
         debug=False,
         simplify="no",
+        voidGen=True,
     )
 
     geo = geouned.CadToCsg(

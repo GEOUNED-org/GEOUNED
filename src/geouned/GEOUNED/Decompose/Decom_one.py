@@ -192,7 +192,7 @@ def cyl_bound_planes(face, boundBox):
 def torus_bound_planes(face, boundBox, value, angle):
     params = face.ParameterRange
     planes = []
-    if is_same_value(v1=params[1] - params[0], v2= twoPi, tolerance=value):
+    if is_same_value(v1=params[1] - params[0], v2=twoPi, tolerance=value):
         return planes
 
     Edges = face.OuterWire.Edges
@@ -205,7 +205,9 @@ def torus_bound_planes(face, boundBox, value, angle):
 
         if curve[0:6] == "Circle":
             dir = e.Curve.Axis
-            if not is_parallel(vector_1=dir, vector_2=face.Surface.Axis, tolerance=angle):
+            if not is_parallel(
+                vector_1=dir, vector_2=face.Surface.Axis, tolerance=angle
+            ):
                 center = e.Curve.Center
                 dim1 = e.Curve.Radius
                 dim2 = e.Curve.Radius
@@ -1036,7 +1038,7 @@ def split_p_planes_new(solid, universe_box, tolerances, options, numeric_format)
             tools=tools,
             scale_up=options.scale_up,
             splitTolerance=options.splitTolerance,
-            scale=0.1
+            scale=0.1,
         )
 
         if len(comsolid.Solids) > 1:
@@ -1274,7 +1276,7 @@ def split_solid(solidShape, universe_box, tolerances, options, numeric_format):
     solid_parts = []
 
     for solid in solidShape.Solids:
-        
+
         explode = split_full_cylinder(
             solid=solid,
             tolerances=tolerances,

@@ -83,6 +83,7 @@ class GeounedSolid:
     """Gathers all the information on each CAD solid, material, density (both from label)
     definition of the cell, type of cell (void, enclosure, material solid).
     """
+
     def __init__(self, id, comsolid=None):
         refine = True
         if not comsolid:
@@ -376,6 +377,7 @@ class GeounedSurface:
 
 class SurfacesDict(dict):
     """Used to store all the surfaces found in the model. When adding a new surface it checks the surface doesn't already exist"""
+
     def __init__(self, surfaces=None, offset=0):
         self.IndexOffset = offset
         surfname = ["PX", "PY", "PZ", "P", "Cyl", "Cone", "Sph", "Tor"]
@@ -619,10 +621,7 @@ class SurfacesDict(dict):
         sphere_added = True
         for i, s in enumerate(self["Sph"]):
             if BF.is_same_sphere(
-                sph1=sph.Surf,
-                sph2=s.Surf,
-                tolerance=sph_distance,
-                rel_tol=relativeTol
+                sph1=sph.Surf, sph2=s.Surf, tolerance=sph_distance, rel_tol=relativeTol
             ):
                 sphere_added = False
                 index = s.Index

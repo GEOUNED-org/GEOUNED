@@ -20,7 +20,8 @@ same_surf_fic = open("fuzzySurfaces", "w")
 
 def Fuzzy(index, dtype, surf1, surf2, val, tol, tolerances, options, numeric_format):
     """Compares two surfaces (planes, or cylinders) to see if they are the considered the same surface.
-    Also keeps track of surfaces which are on the boarder line and writes these two a file"""
+    Also keeps track of surfaces which are on the boarder line and writes these two a file
+    """
 
     same = val <= tol
 
@@ -29,14 +30,18 @@ def Fuzzy(index, dtype, surf1, surf2, val, tol, tolerances, options, numeric_for
             id=index,
             Type="Plane",
             surf=surf1,
-            tolerances=tolerances, options=options, numeric_format=numeric_format)
+            tolerances=tolerances,
+            options=options,
+            numeric_format=numeric_format,
+        )
         p2str = mcnp_surface(
             id=0,
             Type="Plane",
             surf=surf2,
             tolerances=tolerances,
             options=options,
-            numeric_format=numeric_format)
+            numeric_format=numeric_format,
+        )
         line = "Same surface : {}\nPlane distance / Tolerance : {} {}\n {}\n {}\n\n".format(
             same, val, tol, p1str, p2str
         )
@@ -44,20 +49,40 @@ def Fuzzy(index, dtype, surf1, surf2, val, tol, tolerances, options, numeric_for
 
     elif dtype == "cylRad":
         cyl1str = mcnp_surface(
-            id=index, Type="Cylinder", surf=surf1, tolerances=tolerances, options=options, numeric_format=numeric_format
+            id=index,
+            Type="Cylinder",
+            surf=surf1,
+            tolerances=tolerances,
+            options=options,
+            numeric_format=numeric_format,
         )
         cyl2str = mcnp_surface(
-            id=0, Type="Cylinder", surf=surf2, tolerances=tolerances, options=options, numeric_format=numeric_format
+            id=0,
+            Type="Cylinder",
+            surf=surf2,
+            tolerances=tolerances,
+            options=options,
+            numeric_format=numeric_format,
         )
         line = f"Same surface : {same}\nDiff Radius / Tolerance: {val} {tol}\n {cyl1str}\n {cyl2str}\n\n"
         same_surf_fic.write(line)
 
     elif dtype == "cylAxs":
         cyl1str = mcnp_surface(
-            id=index, Type="Cylinder", surf=surf1, tolerances=tolerances, options=options, numeric_format=numeric_format
+            id=index,
+            Type="Cylinder",
+            surf=surf1,
+            tolerances=tolerances,
+            options=options,
+            numeric_format=numeric_format,
         )
         cyl2str = mcnp_surface(
-            id=0, Type="Cylinder", surf=surf2, tolerances=tolerances, options=options, numeric_format=numeric_format
+            id=0,
+            Type="Cylinder",
+            surf=surf2,
+            tolerances=tolerances,
+            options=options,
+            numeric_format=numeric_format,
         )
         line = "Same surface : {same}\nDist Axis / Tolerance: {val} {tol}\n {cyl1str}\n {cyl2str}\n\n"
         same_surf_fic.write(line)
@@ -96,7 +121,7 @@ def is_same_plane(
                 tol=tol,
                 tolerances=tolerances,
                 options=options,
-                numeric_format=numeric_format
+                numeric_format=numeric_format,
             )
         return isSame
     return False

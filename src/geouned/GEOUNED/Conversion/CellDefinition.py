@@ -890,7 +890,9 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
                         if exist:
                             p = surfaces.get_surface(id1)
                             if is_opposite(
-                                vector_1=plane.Surf.Axis, vector_2=p.Surf.Axis, tolerance=tolerances.pln_angle
+                                vector_1=plane.Surf.Axis,
+                                vector_2=p.Surf.Axis,
+                                tolerance=tolerances.pln_angle,
                             ):
                                 id1 = -id1
 
@@ -904,7 +906,9 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
                             if exist:
                                 p = surfaces.get_surface(id2)
                                 if is_opposite(
-                                    vector_1=plane.Surf.Axis, vector_2=p.Surf.Axis, tolerance=tolerances.pln_angle
+                                    vector_1=plane.Surf.Axis,
+                                    vector_2=p.Surf.Axis,
+                                    tolerance=tolerances.pln_angle,
                                 ):
                                     id2 = -id2
 
@@ -1266,7 +1270,9 @@ def add_cone_plane(definition, cones_list, surfaces, universe_box, angle):
 
         if exist:
             p = surfaces.get_surface(pid)
-            if is_opposite(vector_1=plane.Surf.Axis, vector_2=p.Surf.Axis, tolerance=pln_angle):
+            if is_opposite(
+                vector_1=plane.Surf.Axis, vector_2=p.Surf.Axis, tolerance=pln_angle
+            ):
                 pid = -pid
 
         if cid > 0:

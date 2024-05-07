@@ -714,7 +714,7 @@ def open_mc_surface(
                 r=numeric_format.T_r,
             )
         else:
-            coeffs = "x0={},y0={},z0={},r{},r1={},r2={}".format(
+            coeffs = "x0={},y0={},z0={},r={},r1={},r2={}".format(
                 Center.x, Center.y, Center.z, majRad, minRad, minRad
             )
 

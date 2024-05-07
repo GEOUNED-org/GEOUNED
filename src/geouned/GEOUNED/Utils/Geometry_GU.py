@@ -121,8 +121,12 @@ class SolidGu:
                 tolerances.distance,
             )
             for i, tSet in enumerate(tFaces):
-                URange = self.__merge_periodic_uv__(parameter="U", faceList=tSet, tolerances=tolerances)
-                VRange = self.__merge_periodic_uv__(parameter="V", faceList=tSet, tolerances=tolerances)
+                URange = self.__merge_periodic_uv__(
+                    parameter="U", faceList=tSet, tolerances=tolerances
+                )
+                VRange = self.__merge_periodic_uv__(
+                    parameter="V", faceList=tSet, tolerances=tolerances
+                )
                 for t in tSet:
                     self.TorusVParams[t] = (i, VRange)
                     self.TorusUParams[t] = (i, URange)

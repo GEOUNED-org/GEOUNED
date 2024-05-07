@@ -54,8 +54,12 @@ class CadToCsg:
         # set internally by the class
         self.UniverseBox = None  # freecad bounding vox for the full CAD model
         self.Surfaces = None  # contains all the surfaces used in the model
-        self.MetaList = None  # contains void cells obtained after void generation process
-        self.EnclosureList = None  # list of GeounedSolids, these are enclosure cad shapes
+        self.MetaList = (
+            None  # contains void cells obtained after void generation process
+        )
+        self.EnclosureList = (
+            None  # list of GeounedSolids, these are enclosure cad shapes
+        )
 
     @classmethod
     def from_config(cls, filename: str = "config.json"):
@@ -506,7 +510,7 @@ class CadToCsg:
 def decompose_solids(
     MetaList, Surfaces, UniverseBox, debug, meta, tolerances, options, numeric_format
 ):
-    """loops through all the solid CAD shapes and each time decomposes the solid making the """
+    """loops through all the solid CAD shapes and each time decomposes the solid making the"""
     totsolid = len(MetaList)
     warningSolids = []
     for i, m in enumerate(MetaList):
