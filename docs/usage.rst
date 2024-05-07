@@ -92,9 +92,6 @@ Here is the Python code to convert the cad using this config file
 .. code-block:: python
 
     import geouned
-
-    # this loads the config which contains all the class args and the args needed
-    # for an export call and does the whole conversion
     geouned.CadToCsg.from_config("config.json5")
 
 
@@ -102,7 +99,7 @@ Here is the Python code to convert the cad using this config file
 Command line usage
 ------------------
 
-GEOUNED can also be used from the command line with the command
+GEOUNED can also be used from the command line with the command geouned_cadtocsg
 
 This example loads up a config file with the default name (config.json)
 
@@ -110,20 +107,20 @@ This example loads up a config file with the default name (config.json)
 
     geouned_cadtocsg
 
-This example specifies a JSON config file name called "example.json"
+This example specifies a JSON config file name called "example.json" which can be found `here <https://github.com/shimwell/GEOUNED/blob/classes_done_in_standard_way/examples/configuration.json>`_
 
 .. code-block:: bash
 
     geouned_cadtocsg -i configuration.json
 
 Both JSON and `JSON5 <https://json5.org/>`_ file formats are supported for config files.
-This example specifies a JSON5 config file name called "example.json5"
+This example specifies a JSON5 config file name called "example.json5" which can be found `here <https://github.com/shimwell/GEOUNED/blob/classes_done_in_standard_way/examples/configuration.json5>`_
 
 .. code-block:: bash
 
     geouned_cadtocsg -i configuration.json5
 
-This example prints the options to the command line.
+This example prints out the command line options to the terminal.
 
 .. code-block:: bash
 
