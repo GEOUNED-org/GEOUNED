@@ -30,6 +30,7 @@ Documentation = "https://github.com/GEOUNED-org/GEOUNED/docs"
 tests = [
     "pytest",
     "black==24.4.2",
+    "json5",
 ]
 docs = [
   "sphinx",
