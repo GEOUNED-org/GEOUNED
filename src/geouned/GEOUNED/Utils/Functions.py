@@ -672,7 +672,7 @@ def split_bop(solid, tools, splitTolerance, scale_up, scale=0.1):
     elif splitTolerance < 1e-12:
         if scale_up:
             tol = 1e-13 if splitTolerance == 0 else splitTolerance
-            compSolid = split_bop(solid, tools, tol / scale, scale_up, 1.0 / scale)
+            compSolid = split_bop(solid, tools, tol / scale, 1.0 / scale)
         else:
             compSolid = BOPTools.SplitAPI.slice(
                 solid, tools, "Split", tolerance=splitTolerance
@@ -684,6 +684,6 @@ def split_bop(solid, tools, splitTolerance, scale_up, scale=0.1):
                 solid, tools, "Split", tolerance=splitTolerance
             )
         except:
-            compSolid = split_bop(solid, tools, splitTolerance * scale, scale_up, scale)
+            compSolid = split_bop(solid, tools, splitTolerance * scale, scale)
 
     return compSolid
