@@ -28,7 +28,7 @@ def Fuzzy(index, dtype, surf1, surf2, val, tol, tolerances, options, numeric_for
     if dtype == "plane":
         p1str = mcnp_surface(
             id=index,
-            Type="Plane",
+            surface_type="Plane",
             surf=surf1,
             tolerances=tolerances,
             options=options,
@@ -36,7 +36,7 @@ def Fuzzy(index, dtype, surf1, surf2, val, tol, tolerances, options, numeric_for
         )
         p2str = mcnp_surface(
             id=0,
-            Type="Plane",
+            surface_type="Plane",
             surf=surf2,
             tolerances=tolerances,
             options=options,
@@ -50,7 +50,7 @@ def Fuzzy(index, dtype, surf1, surf2, val, tol, tolerances, options, numeric_for
     elif dtype == "cylRad":
         cyl1str = mcnp_surface(
             id=index,
-            Type="Cylinder",
+            surface_type="Cylinder",
             surf=surf1,
             tolerances=tolerances,
             options=options,
@@ -58,7 +58,7 @@ def Fuzzy(index, dtype, surf1, surf2, val, tol, tolerances, options, numeric_for
         )
         cyl2str = mcnp_surface(
             id=0,
-            Type="Cylinder",
+            surface_type="Cylinder",
             surf=surf2,
             tolerances=tolerances,
             options=options,
@@ -70,7 +70,7 @@ def Fuzzy(index, dtype, surf1, surf2, val, tol, tolerances, options, numeric_for
     elif dtype == "cylAxs":
         cyl1str = mcnp_surface(
             id=index,
-            Type="Cylinder",
+            surface_type="Cylinder",
             surf=surf1,
             tolerances=tolerances,
             options=options,
@@ -78,7 +78,7 @@ def Fuzzy(index, dtype, surf1, surf2, val, tol, tolerances, options, numeric_for
         )
         cyl2str = mcnp_surface(
             id=0,
-            Type="Cylinder",
+            surface_type="Cylinder",
             surf=surf2,
             tolerances=tolerances,
             options=options,

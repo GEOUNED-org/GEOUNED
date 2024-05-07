@@ -76,7 +76,7 @@ class OpenmcInput:
         """Write the surfaces in xml OpenMC format"""
 
         surfType, coeffs = open_mc_surface(
-            Type=surface.Type,
+            surface_type=surface.Type,
             surf=surface.Surf,
             tolerances=self.tolerances,
             numeric_format=self.numeric_format,
@@ -156,7 +156,7 @@ import openmc
         """Write the surfaces in python OpenMC format"""
 
         surfType, coeffs = open_mc_surface(
-            Type=surface.Type,
+            surface_type=surface.Type,
             surf=surface.Surf,
             tolerances=self.tolerances,
             numeric_format=self.numeric_format,
@@ -270,7 +270,7 @@ import openmc
 
         if p.Index not in self.surfaceTable.keys():
             print(
-                f"{p.Type} Surface {p.Index} not used in cell definition)",
+                f"{p.surface_type} Surface {p.Index} not used in cell definition)",
                 p.Surf.Axis,
                 p.Surf.Position,
             )

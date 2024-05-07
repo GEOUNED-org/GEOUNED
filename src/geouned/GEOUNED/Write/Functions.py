@@ -243,10 +243,10 @@ def write_sequence_omc_py(seq, prefix="S"):
     return line
 
 
-def mcnp_surface(id, Type, surf, tolerances, options, numeric_format):
+def mcnp_surface(id, surface_type, surf, tolerances, options, numeric_format):
     mcnp_def = ""
 
-    if Type == "Plane":
+    if surface_type == "Plane":
         if surf.pointDef and options.prnt3PPlane:
             P1 = surf.Points[0]
             P2 = surf.Points[1]
@@ -284,7 +284,7 @@ def mcnp_surface(id, Type, surf, tolerances, options, numeric_format):
                     d=numeric_format.P_d,
                 )
 
-    elif Type == "Cylinder":
+    elif surface_type == "Cylinder":
         Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
         Pos = surf.Center * 0.1
@@ -337,7 +337,7 @@ def mcnp_surface(id, Type, surf, tolerances, options, numeric_format):
         #    rad=surf.Radius/10.0
         #    mcnp_def='%i  RCC  %13.7E %13.7E %13.7E %13.7E\n       %13.7E %13.7E %13.7E' %(id,Vx,Vy,Vz,Hx,Hy,Hz,rad)
 
-    elif Type == "Cone":
+    elif surface_type == "Cone":
         Apex = surf.Apex * 0.1
         Dir = surf.Axis * 0.1
         tan = math.tan(surf.SemiAngle)
@@ -430,7 +430,7 @@ def mcnp_surface(id, Type, surf, tolerances, options, numeric_format):
                 j=numeric_format.GQ_10,
             )
 
-    elif Type == "Sphere":
+    elif surface_type == "Sphere":
         # corresponding logic
         rad = surf.Radius * 0.1
         pnt = surf.Center * 0.1
@@ -447,7 +447,7 @@ def mcnp_surface(id, Type, surf, tolerances, options, numeric_format):
                 r=numeric_format.S_r,
             )
 
-    elif Type == "Torus":
+    elif surface_type == "Torus":
         Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
         Pos = surf.Center * 0.1
@@ -500,9 +500,9 @@ def mcnp_surface(id, Type, surf, tolerances, options, numeric_format):
 
 
 def open_mc_surface(
-    Type, surf, tolerances, numeric_format, out_xml=True, quadricForm=False
+    surface_type, surf, tolerances, numeric_format, out_xml=True, quadricForm=False
 ):
-    if Type == "Plane":
+    if surface_type == "Plane":
         A = surf.Axis.x
         B = surf.Axis.y
         C = surf.Axis.z
@@ -541,7 +541,7 @@ def open_mc_surface(
                 omc_surf = "Plane"
                 coeffs = f"a={A},b={B},c={C},d={D}"
 
-    elif Type == "Cylinder":
+    elif surface_type == "Cylinder":
         pos = surf.Center * 0.1
         Rad = surf.Radius * 0.1
         Dir = FreeCAD.Vector(surf.Axis)
@@ -600,7 +600,7 @@ def open_mc_surface(
                         pos.x, pos.y, pos.z, Rad, Dir.x, Dir.y, Dir.z
                     )
 
-    elif Type == "Cone":
+    elif surface_type == "Cone":
         Apex = surf.Apex * 0.1
         Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
@@ -679,7 +679,7 @@ def open_mc_surface(
                         Apex.x, Apex.y, Apex.z, tan2, Dir.x, Dir.y, Dir.z
                     )
 
-    elif Type == "Sphere":
+    elif surface_type == "Sphere":
         Center = surf.Center * 0.1
         Rad = surf.Radius * 0.1
         if out_xml:
@@ -696,7 +696,7 @@ def open_mc_surface(
             omc_surf = "Sphere"
             coeffs = f"x0={Center.x},y0={Center.y},z0={Center.z},r={Rad}"
 
-    elif Type == "Torus":
+    elif surface_type == "Torus":
         Center = surf.Center * 0.1
         minRad = surf.MinorRadius * 0.1
         majRad = surf.MajorRadius * 0.1
@@ -732,10 +732,10 @@ def open_mc_surface(
     return omc_surf, coeffs
 
 
-def serpent_surface(id, Type, surf, tolerances, numeric_format, options):
+def serpent_surface(id, surface_type, surf, tolerances, numeric_format, options):
     serpent_def = ""
 
-    if Type == "Plane":
+    if surface_type == "Plane":
         if surf.pointDef and options.prnt3PPlane:
             P1 = surf.Points[0]
             P2 = surf.Points[1]
@@ -758,7 +758,7 @@ def serpent_surface(id, Type, surf, tolerances, numeric_format, options):
             else:
                 serpent_def = f"surf {id} plane {A:{numeric_format.P_d}} {B:{numeric_format.P_d}} {C:{numeric_format.P_d}} {D/10:{numeric_format.P_d}}"
 
-    elif Type == "Cylinder":
+    elif surface_type == "Cylinder":
         Dir = surf.Axis
         Dir.normalize()
         Pos = surf.Center * 0.1
@@ -784,7 +784,7 @@ surf quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
                 j=numeric_format.GQ_10,
             )
 
-    elif Type == "Cone":
+    elif surface_type == "Cone":
         Apex = surf.Apex * 0.1
         Dir = surf.Axis * 0.1
         tan = math.tan(surf.SemiAngle)
@@ -840,13 +840,13 @@ surf quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
         else:
             Q = Qform.q_form_cone(Dir, Apex, tan)
 
-    elif Type == "Sphere":
+    elif surface_type == "Sphere":
         rad = surf.Radius * 0.1
         pnt = surf.Center * 0.1
         # Serpent has only explicit spheres at the origin
         serpent_def = f"surf {id} sph {pnt.x:{numeric_format.S_xyz}} {pnt.y:{numeric_format.S_xyz}} {pnt.z:{numeric_format.S_xyz}} {rad:{numeric_format.S_r}}"
 
-    elif Type == "Torus":
+    elif surface_type == "Torus":
         Dir = surf.Axis
         Dir.normalize()
         Pos = surf.Center * 0.1
@@ -865,10 +865,10 @@ surf quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
     return serpent_def
 
 
-def phits_surface(id, Type, surf, tolerances, numeric_format, options):
+def phits_surface(id, surface_type, surf, tolerances, numeric_format, options):
     phits_def = ""
 
-    if Type == "Plane":
+    if surface_type == "Plane":
         if surf.pointDef and options.prnt3PPlane:
             P1 = surf.Points[0]
             P2 = surf.Points[1]
@@ -906,7 +906,7 @@ def phits_surface(id, Type, surf, tolerances, numeric_format, options):
                     d=numeric_format.P_d,
                 )
 
-    elif Type == "Cylinder":
+    elif surface_type == "Cylinder":
         Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
         Pos = surf.Center * 0.1
@@ -959,7 +959,7 @@ def phits_surface(id, Type, surf, tolerances, numeric_format, options):
         #    rad=surf.Radius/10.0
         #    mcnp_def='%i  RCC  %13.7E %13.7E %13.7E %13.7E\n       %13.7E %13.7E %13.7E' %(id,Vx,Vy,Vz,Hx,Hy,Hz,rad)
 
-    elif Type == "Cone":
+    elif surface_type == "Cone":
         Apex = surf.Apex * 0.1
         Dir = surf.Axis * 0.1
         tan = math.tan(surf.SemiAngle)
@@ -1052,7 +1052,7 @@ def phits_surface(id, Type, surf, tolerances, numeric_format, options):
                 j=numeric_format.GQ_10,
             )
 
-    elif Type == "Sphere":
+    elif surface_type == "Sphere":
         # corresponding logic
         rad = surf.Radius * 0.1
         pnt = surf.Center * 0.1
@@ -1069,7 +1069,7 @@ def phits_surface(id, Type, surf, tolerances, numeric_format, options):
                 r=numeric_format.S_r,
             )
 
-    elif Type == "Torus":
+    elif surface_type == "Torus":
         Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
         Pos = surf.Center * 0.1

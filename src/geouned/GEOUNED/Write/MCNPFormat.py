@@ -173,7 +173,7 @@ C **************************************************************
 
         MCNP_def = mcnp_surface(
             id=surface.Index,
-            Type=surface.Type,
+            surface_type=surface.Type,
             surf=surface.Surf,
             tolerances=self.tolerances,
             options=self.options,
