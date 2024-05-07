@@ -60,7 +60,7 @@ def load_cad(filename, mat_filename, delLastNumber, default_mat=[], comp_solids=
 
     for elem in doc_objects:
         if elem.TypeId == "Part::Feature":
-            comment = LF.getCommentTree(elem)
+            comment = LF.getCommentTree(elem, delLastNumber)
             if not elem.Shape.Solids:
                 print(
                     "Warning: Element {:} has no associated solid".format(
@@ -77,7 +77,7 @@ def load_cad(filename, mat_filename, delLastNumber, default_mat=[], comp_solids=
                 comment = comment + "/" + label
                 if elem.InList:
                     # MIO: lightly modification of label if required
-                    label_in_list = LF.get_label(elem.InList[0].Label)
+                    label_in_list = LF.get_label(elem.InList[0].Label, delLastNumber)
                     encl_label = re.search(
                         "enclosure(?P<encl>[0-9]+)_(?P<parent>[0-9]+)_", label_in_list
                     )
@@ -107,7 +107,7 @@ def load_cad(filename, mat_filename, delLastNumber, default_mat=[], comp_solids=
                     xelem = [elem]
                     while xelem and not tempre_mat:
                         # MIO: Modification of label if required
-                        temp_label = LF.get_label(xelem[0].Label)
+                        temp_label = LF.get_label(xelem[0].Label, delLastNumber)
                         tempre_mat = re.search("_m(?P<mat>\d+)_", "_" + temp_label)
                         xelem = xelem[0].InList
 
@@ -115,7 +115,7 @@ def load_cad(filename, mat_filename, delLastNumber, default_mat=[], comp_solids=
                     xelem = [elem]
                     while xelem and not tempre_dil:
                         # MIO: Modification of label if required
-                        temp_label = LF.get_label(xelem[0].Label)
+                        temp_label = LF.get_label(xelem[0].Label, delLastNumber)
                         tempre_dil = re.search("_d(?P<dil>\d*\.\d*)_", temp_label)
                         xelem = xelem[0].InList
                     # Paco end

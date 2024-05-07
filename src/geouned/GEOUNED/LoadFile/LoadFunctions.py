@@ -18,11 +18,11 @@ def get_label(label, delLastNumber):
         return label
 
 
-def getCommentTree(obj):
+def getCommentTree(obj, delLastNumber):
     recursive_list = []
     c_obj = obj
     while c_obj.InList:
-        label = get_label(c_obj.InList[0].Label)
+        label = get_label(c_obj.InList[0].Label, delLastNumber)
         recursive_list.append(label)
         c_obj = c_obj.InList[0]
 
