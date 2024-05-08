@@ -22,11 +22,11 @@ def get_label(label, options):
         return label
 
 
-def getCommentTree(obj):
+def getCommentTree(obj, options):
     recursive_list = []
     c_obj = obj
     while c_obj.InList:
-        label = get_label(c_obj.InList[0].Label)
+        label = get_label(c_obj.InList[0].Label, options)
         recursive_list.append(label)
         c_obj = c_obj.InList[0]
 

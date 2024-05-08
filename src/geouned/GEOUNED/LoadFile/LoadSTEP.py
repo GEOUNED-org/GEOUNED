@@ -63,7 +63,7 @@ def load_cad(filename, mat_filename, options, default_mat=[], comp_solids=True):
 
     for elem in doc_objects:
         if elem.TypeId == "Part::Feature":
-            comment = LF.getCommentTree(elem)
+            comment = LF.getCommentTree(elem, options)
             if not elem.Shape.Solids:
                 logger.warning(
                     "Element {:} has no associated solid".format(
