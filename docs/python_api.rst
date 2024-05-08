@@ -8,3 +8,6 @@ Python API reference
     :members:
     :show-inheritance:
 
+.. autoclass:: Options
+    :members:
+    :show-inheritance:
