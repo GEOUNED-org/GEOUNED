@@ -5,14 +5,9 @@ import math
 
 import FreeCAD
 
-from ..Utils.BasicFunctions_part1 import (
-    is_in_line,
-    is_in_plane,
-    is_in_tolerance,
-    is_opposite,
-    is_parallel,
-    is_same_value,
-)
+from ..Utils.BasicFunctions_part1 import (is_in_line, is_in_plane,
+                                          is_in_tolerance, is_opposite,
+                                          is_parallel, is_same_value)
 from ..Write.Functions import mcnp_surface
 
 same_surf_fic = open("fuzzySurfaces", "w")

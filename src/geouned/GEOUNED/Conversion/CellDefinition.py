@@ -10,15 +10,11 @@ import Part
 from ..Utils import BasicFunctions_part2 as BF
 from ..Utils import Functions as UF
 from ..Utils import Geometry_GU as GU
-from ..Utils.BasicFunctions_part1 import (
-    is_in_line,
-    is_opposite,
-    is_parallel,
-    is_same_value,
-    sign_plane,
-)
+from ..Utils.BasicFunctions_part1 import (is_in_line, is_opposite, is_parallel,
+                                          is_same_value, sign_plane)
 from ..Utils.booleanFunction import BoolSequence, insert_in_sequence
-from ..Utils.BooleanSolids import build_c_table_from_solids, remove_extra_surfaces
+from ..Utils.BooleanSolids import (build_c_table_from_solids,
+                                   remove_extra_surfaces)
 from ..Utils.Functions import GeounedSurface
 from ..Utils.Options.Classes import Options as opt
 from ..Utils.Options.Classes import Tolerances as tol

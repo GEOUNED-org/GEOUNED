@@ -10,7 +10,8 @@ from ..CodeVersion import *
 from ..Utils.BasicFunctions_part1 import is_opposite, points_to_coeffs
 from ..Utils.Functions import SurfacesDict
 from ..Utils.Options.Classes import Options as opt
-from .Functions import change_surf_sign, serpent_surface, write_serpent_cell_def
+from .Functions import (change_surf_sign, serpent_surface,
+                        write_serpent_cell_def)
 
 logger = logging.getLogger(__name__)
 
