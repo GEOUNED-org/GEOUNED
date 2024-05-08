@@ -2,8 +2,8 @@
 # Define the class storing Boolean expression of the cell definition
 #
 
-import re
 import logging
+import re
 
 logger = logging.getLogger(__name__)
 

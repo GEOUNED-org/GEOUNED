@@ -9,8 +9,8 @@ try:
 except ImportError:
     pass
 
-from .GEOUNED import *
 from .GEOReverse import *
+from .GEOUNED import *
 
 logging.basicConfig(
     filename="geouned.log",

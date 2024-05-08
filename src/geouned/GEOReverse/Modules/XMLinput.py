@@ -7,7 +7,7 @@ import FreeCAD
 import numpy as np
 from numpy import linalg as LA
 
-from .Objects import CadCell, Plane, Sphere, Cylinder, Cone, Torus
+from .Objects import CadCell, Cone, Cylinder, Plane, Sphere, Torus
 from .XMLParser import get_cards
 
 

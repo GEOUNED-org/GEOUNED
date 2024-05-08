@@ -4,19 +4,19 @@ The tests assumes that the test_convert script has previously been run and
 that xml files exist in the tests_outputs folder.
 """
 
-import sys
 import math
 import os
+import sys
 from pathlib import Path
 
 try:
     import freecad  # importing conda package if present
 except:
     pass
+import openmc
 import Part
 import pytest
 from FreeCAD import Import
-import openmc
 
 with open("cross_sections.xml", "w") as file:
     file.write(

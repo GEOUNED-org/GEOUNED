@@ -5,8 +5,8 @@
 #  each time an attribute of FreeCAD object is called. This leads to code crash with memory failure
 #  when attribues are call large amount of times. Like it is in this code.
 
-import math
 import logging
+import math
 
 import Part
 

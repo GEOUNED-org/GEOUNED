@@ -4,13 +4,14 @@
 # We load the STEP and the materials
 
 import configparser
-import typing
 import logging
+import typing
 from datetime import datetime
 from os import mkdir, path
 
 import FreeCAD
 import Part
+from tqdm import tqdm
 
 from .CodeVersion import *
 from .Conversion import CellDefinition as Conv
@@ -381,20 +382,18 @@ class CadToCsg:
         startTime = datetime.now()
 
         if isinstance(self.stepFile, (list, tuple)):
-            MetaChunk = []
-            EnclosureChunk = []
-            for stp in self.stepFile:
-                logger.info(f"read step file : {stp}")
-                Meta, Enclosure = Load.load_cad(stp, self.matFile)
-                MetaChunk.append(Meta)
-                EnclosureChunk.append(Enclosure)
-            MetaList = join_meta_lists(MetaChunk)
-            EnclosureList = join_meta_lists(EnclosureChunk)
+            step_files = self.stepFile
         else:
-            logger.info(f"read step file : {self.stepFile}")
-            MetaList, EnclosureList = Load.load_cad(
-                self.stepFile, self.matFile, self.voidMat, self.compSolids
-            )
+            step_files = [self.stepFile]
+        MetaChunk = []
+        EnclosureChunk = []
+        for stp in tqdm(step_files, desc="loading CAD files"):
+            logger.info(f"read step file : {stp}")
+            Meta, Enclosure = Load.load_cad(stp, self.matFile)
+            MetaChunk.append(Meta)
+            EnclosureChunk.append(Enclosure)
+        MetaList = join_meta_lists(MetaChunk)
+        EnclosureList = join_meta_lists(EnclosureChunk)
 
         logger.info("End of loading phase")
         tempstr1 = str(datetime.now() - startTime)
@@ -514,7 +513,7 @@ class CadToCsg:
                 for s in lst:
                     Surfs[s.Index] = s
 
-            for c in MetaList:
+            for c in tqdm(MetaList, desc="simplifying"):
                 if c.Definition.level == 0 or c.IsEnclosure:
                     continue
                 logger.info(f"simplify cell {c.__id__}")
@@ -597,7 +596,7 @@ class CadToCsg:
 def decompose_solids(MetaList, Surfaces, UniverseBox, setting, meta):
     totsolid = len(MetaList)
     warningSolids = []
-    for i, m in enumerate(MetaList):
+    for i, m in enumerate(tqdm(MetaList, desc="decomposing solids")):
         if meta and m.IsEnclosure:
             continue
         logger.info(f"Decomposing solid: {i + 1}/{totsolid} ")

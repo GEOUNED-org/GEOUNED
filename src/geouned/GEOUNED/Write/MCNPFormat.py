@@ -1,9 +1,8 @@
 ##############################
 # Module to write MCNP input #
 ##############################
-import math
 import logging
-
+import math
 from datetime import datetime
 
 import FreeCAD
@@ -12,7 +11,7 @@ from ..CodeVersion import *
 from ..Utils.BasicFunctions_part1 import is_opposite, points_to_coeffs
 from ..Utils.Functions import SurfacesDict
 from ..Utils.Options.Classes import Options as opt
-from .Functions import CardLine, mcnp_surface, change_surf_sign, write_mcnp_cell_def
+from .Functions import CardLine, change_surf_sign, mcnp_surface, write_mcnp_cell_def
 
 logger = logging.getLogger(__name__)
 

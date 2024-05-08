@@ -11,8 +11,8 @@
 # 5. Eliminated the only MCNP related parts
 # 6. Added some comments to remind
 
-import re
 import logging
+import re
 from datetime import datetime
 
 import FreeCAD
@@ -23,8 +23,8 @@ from ..Utils.Functions import SurfacesDict
 from ..Utils.Options.Classes import Options as opt
 from ..Write.Functions import (
     CellString,
-    phits_surface,
     change_surf_sign,
+    phits_surface,
     write_phits_cell_def,
 )
 

@@ -2,8 +2,8 @@
 #   Conversion to MCNP v0.0
 #   Only one solid and planar surfaces
 #
-import math
 import logging
+import math
 
 import FreeCAD
 

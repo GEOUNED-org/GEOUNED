@@ -1,9 +1,9 @@
 #
 # Module to load a STEP file
 #
+import logging
 import os
 import re
-import logging
 
 import FreeCAD
 import Part

@@ -1,8 +1,8 @@
 ############################
 # Module for Cell definiton #
 #############################
-import math
 import logging
+import math
 
 import FreeCAD
 import Part

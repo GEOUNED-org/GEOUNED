@@ -9,7 +9,7 @@ import FreeCAD
 from ..CodeVersion import *
 from ..Utils.Functions import SurfacesDict
 from ..Utils.Options.Classes import Options as opt
-from .Functions import open_mc_surface, change_surf_sign, write_openmc_region
+from .Functions import change_surf_sign, open_mc_surface, write_openmc_region
 
 logger = logging.getLogger(__name__)
 

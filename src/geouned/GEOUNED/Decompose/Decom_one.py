@@ -2,8 +2,8 @@
 #   Only one solid and planar surfaces
 #
 
-import math
 import logging
+import math
 from collections import OrderedDict
 
 import FreeCAD
@@ -764,11 +764,8 @@ def split_planes_org(Solids, universe_box):
                         abs(comsolid.Solids[0].Volume - base.Volume) / base.Volume
                         > tol.relativePrecision
                     ):
-                        logger.info(
-                            "Warning. Part of the split object is missing original base is used instead",
-                            abs(comsolid.Solids[0].Volume - base.Volume) / base.Volume,
-                            comsolid.Solids[0].Volume,
-                            base.Volume,
+                        logger.warning(
+                            f"Part of the split object is missing original base is used instead {abs(comsolid.Solids[0].Volume - base.Volume) / base.Volume} {comsolid.Solids[0].Volume} {base.Volume}"
                         )
                         base.exportStep("tmp_base.stp")
                         s = Part.Shape()

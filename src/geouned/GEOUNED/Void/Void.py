@@ -2,6 +2,7 @@ import logging
 
 import FreeCAD
 import Part
+from tqdm import tqdm
 
 from ..LoadFile import LoadFunctions as LF
 from ..Utils.BasicFunctions_part1 import is_opposite
@@ -50,7 +51,7 @@ def void_generation(MetaList, EnclosureList, Surfaces, UniverseBox, setting, ini
     # Perform enclosure void
     # Loop until the lowest enclosure level
 
-    for i, Level in enumerate(NestedEnclosure):
+    for i, Level in enumerate(tqdm(NestedEnclosure, desc="void generation")):
 
         logger.info("Build Void highest enclosure")
         for j, encl in enumerate(Level):
