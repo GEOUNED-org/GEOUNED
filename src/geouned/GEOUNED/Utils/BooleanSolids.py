@@ -216,7 +216,7 @@ class ConstraintTable(dict):
                 falseVal = Seq.evaluate(falseSet)
                 return falseVal if type(falseVal) is bool else None
             else:
-                logger.info("Bad trouble surfaces {} is on none side of the box!!")
+                logger.info("Bad trouble surfaces is on none side of the box!!")
                 return False
 
 
