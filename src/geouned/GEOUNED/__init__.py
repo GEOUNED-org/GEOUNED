@@ -385,7 +385,7 @@ class CadToCsg:
             step_files = [self.stepFile]
         MetaChunk = []
         EnclosureChunk = []
-        for stp in tqdm(step_files, desc="loading CAD files"):
+        for stp in tqdm(step_files, desc="Loading CAD files"):
             logger.info(f"read step file : {stp}")
             Meta, Enclosure = Load.load_cad(stp, self.matFile)
             MetaChunk.append(Meta)
@@ -446,7 +446,7 @@ class CadToCsg:
 
             # start Building CGS cells phase
 
-            for j, m in enumerate(tqdm(MetaList, desc="translating solid cells")):
+            for j, m in enumerate(tqdm(MetaList, desc="Translating solid cells")):
                 if m.IsEnclosure:
                     continue
                 logger.info(f"Building cell: {j+1}")
@@ -511,7 +511,7 @@ class CadToCsg:
                 for s in lst:
                     Surfs[s.Index] = s
 
-            for c in tqdm(MetaList, desc="simplifying"):
+            for c in tqdm(MetaList, desc="Simplifying"):
                 if c.Definition.level == 0 or c.IsEnclosure:
                     continue
                 logger.info(f"simplify cell {c.__id__}")
@@ -594,10 +594,10 @@ class CadToCsg:
 def decompose_solids(MetaList, Surfaces, UniverseBox, setting, meta):
     totsolid = len(MetaList)
     warningSolids = []
-    for i, m in enumerate(tqdm(MetaList, desc="decomposing solids")):
+    for i, m in enumerate(tqdm(MetaList, desc="Decomposing solids")):
         if meta and m.IsEnclosure:
             continue
-        logger.info(f"Decomposing solid: {i + 1}/{totsolid} ")
+        logger.info(f"Decomposing solid: {i + 1}/{totsolid}")
         if setting["debug"]:
             logger.info(m.Comments)
             if not path.exists("debug"):

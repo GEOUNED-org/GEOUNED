@@ -51,7 +51,7 @@ def void_generation(MetaList, EnclosureList, Surfaces, UniverseBox, setting, ini
     # Perform enclosure void
     # Loop until the lowest enclosure level
 
-    for i, Level in enumerate(tqdm(NestedEnclosure, desc="void generation")):
+    for i, Level in enumerate(tqdm(NestedEnclosure, desc="Void generation")):
 
         logger.info("Build Void highest enclosure")
         for j, encl in enumerate(Level):
