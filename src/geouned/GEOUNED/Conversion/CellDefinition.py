@@ -1066,7 +1066,7 @@ def append_comp(new_cell, cell_def, cell_cad, meta_complementary):
         return append
 
 
-def no_overlapping_cell(metaList, surfaces):
+def no_overlapping_cell(metaList, surfaces, options):
 
     Surfs = {}
     for lst in surfaces.values():
@@ -1113,14 +1113,14 @@ def no_overlapping_cell(metaList, surfaces):
             # evaluate only diagonal elements of the Constraint Table (fastest) and remove surface not
             # crossing in the solid boundBox
             CT = build_c_table_from_solids(
-                box, (tuple(t_def.get_surfaces_numbers()), Surfs), option="diag"
+                box, (tuple(t_def.get_surfaces_numbers()), Surfs), option="diag", options=options
             )
 
             new_def = remove_extra_surfaces(t_def, CT)
 
             # evaluate full constraint Table with less surfaces involved
             CT = build_c_table_from_solids(
-                box, (tuple(new_def.get_surfaces_numbers()), Surfs), option="full"
+                box, (tuple(new_def.get_surfaces_numbers()), Surfs), option="full", options=options
             )
 
             if new_def.operator == "AND":

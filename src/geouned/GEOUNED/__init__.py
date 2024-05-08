@@ -465,7 +465,7 @@ class CadToCsg:
                     logger.info(m.Definition)
 
             if self.options.forceNoOverlap:
-                Conv.no_overlapping_cell(MetaList, Surfaces)
+                Conv.no_overlapping_cell(MetaList, Surfaces, self.options)
 
         else:
             translate(MetaList, Surfaces, UniverseBox, code_setting)
