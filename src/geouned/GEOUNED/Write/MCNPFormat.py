@@ -10,20 +10,20 @@ import FreeCAD
 from ..CodeVersion import *
 from ..Utils.BasicFunctions_part1 import is_opposite, points_to_coeffs
 from ..Utils.Functions import SurfacesDict
-from ..Utils.Options.Classes import Options as opt
 from .Functions import CardLine, change_surf_sign, mcnp_surface, write_mcnp_cell_def
 
 logger = logging.getLogger(__name__)
 
 
 class McnpInput:
-    def __init__(self, Meta, Surfaces, setting):
+    def __init__(self, Meta, Surfaces, setting, options):
         self.Title = setting["title"]
         self.VolSDEF = setting["volSDEF"]
         self.VolCARD = setting["volCARD"]
         self.U0CARD = setting["UCARD"]
         self.dummyMat = setting["dummyMat"]
         self.Cells = Meta
+        self.options = options
         self.Options = {
             "Volume": self.VolCARD,
             "Particle": ("n", "p"),
@@ -308,7 +308,7 @@ C **************************************************************
                 p.Surf.Axis = FreeCAD.Vector(0, 0, 1)
                 self.__change_surf_sign__(p)
 
-        if opt.prnt3PPlane:
+        if self.options.prnt3PPlane:
             for p in Surfaces["P"]:
                 if p.Surf.pointDef:
                     axis, d = points_to_coeffs(p.Surf.Points)

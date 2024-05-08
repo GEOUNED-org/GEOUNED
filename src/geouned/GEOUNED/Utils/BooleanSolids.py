@@ -9,7 +9,6 @@ import FreeCAD
 
 from ..Utils.booleanFunction import BoolSequence
 from ..Utils.Functions import GeounedSurface, split_bop
-from ..Utils.Options.Classes import Options as opt
 
 BoolVals = (None, True, False)
 
@@ -383,11 +382,11 @@ def remove_extra_surfaces(CellSeq, CTable):
     return newDef
 
 
-def split_solid_fast(solid, surf, box):
+def split_solid_fast(solid, surf, box, options):
 
     if box:
         if surf.shape:
-            comsolid = split_bop(solid, [surf.shape], opt.splitTolerance)
+            comsolid = split_bop(solid, [surf.shape], options.splitTolerance)
         else:
             return check_sign(solid, surf), None
 

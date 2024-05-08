@@ -31,7 +31,7 @@ def extract_materials(filename):
     return m_dict
 
 
-def load_cad(filename, mat_filename, default_mat=[], comp_solids=True):
+def load_cad(filename, mat_filename, options, default_mat=[], comp_solids=True):
 
     # Set document solid tree options when opening CAD differing from version 0.18
     if int(FreeCAD.Version()[1]) > 18:
@@ -76,7 +76,7 @@ def load_cad(filename, mat_filename, default_mat=[], comp_solids=True):
                 tempre_dil = None
 
                 # MIO: lightly modification of label if required
-                label = LF.get_label(elem.Label)
+                label = LF.get_label(elem.Label, options)
                 comment = comment + "/" + label
                 if elem.InList:
                     # MIO: lightly modification of label if required

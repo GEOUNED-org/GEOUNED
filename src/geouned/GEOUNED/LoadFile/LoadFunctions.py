@@ -4,15 +4,15 @@ import re
 import FreeCAD
 
 from ..Utils.Functions import GeounedSolid
-from ..Utils.Options.Classes import Options as opt
+
 
 logger = logging.getLogger(__name__)
 
 
-def get_label(label):
+def get_label(label, options):
     """Deleting the last word of the string if this is a number
     Only if the option delLastNumber is True"""
-    if not opt.delLastNumber:
+    if not options.delLastNumber:
         return label
     wrd = label.split()
     try:

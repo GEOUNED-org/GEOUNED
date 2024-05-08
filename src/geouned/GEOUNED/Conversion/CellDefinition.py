@@ -20,7 +20,6 @@ from ..Utils.BasicFunctions_part1 import (
 from ..Utils.booleanFunction import BoolSequence, insert_in_sequence
 from ..Utils.BooleanSolids import build_c_table_from_solids, remove_extra_surfaces
 from ..Utils.Functions import GeounedSurface
-from ..Utils.Options.Classes import Options as opt
 from ..Utils.Options.Classes import Tolerances as tol
 
 logger = logging.getLogger(__name__)
@@ -736,7 +735,7 @@ def gen_torus_annex_v_surface(face, v_params, force_cylinder=False):
         )
 
 
-def cellDef(meta_obj, surfaces, universe_box):
+def cellDef(meta_obj, surfaces, universe_box, options):
 
     solids = meta_obj.Solids
     del_list = []
@@ -887,7 +886,7 @@ def cellDef(meta_obj, surfaces, universe_box):
                             v_var = "%i" % idT
                         else:
                             surf_params, surf_type, in_surf = gen_torus_annex_v_surface(
-                                face, VminMax, opt.forceCylinder
+                                face, VminMax, options.forceCylinder
                             )
 
                             if surf_type == "Cone":

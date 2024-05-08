@@ -8,16 +8,16 @@ import FreeCAD
 
 from ..CodeVersion import *
 from ..Utils.Functions import SurfacesDict
-from ..Utils.Options.Classes import Options as opt
 from .Functions import change_surf_sign, open_mc_surface, write_openmc_region
 
 logger = logging.getLogger(__name__)
 
 
 class OpenmcInput:
-    def __init__(self, Meta, Surfaces):
+    def __init__(self, Meta, Surfaces, options):
 
         self.Cells = Meta
+        self.options = options
 
         self.__get_surface_table__()
         self.__simplify_planes__(Surfaces)
@@ -69,7 +69,7 @@ class OpenmcInput:
             matName = f"{cell.Material}"
 
         OMCcell = '  <cell id="{}" material="{}" name="{}" region="{}" universe="1"/>\n'.format(
-            index, matName, cellName, write_openmc_region(cell.Definition, "XML")
+            index, matName, cellName, write_openmc_region(cell.Definition, self.options, "XML")
         )
         self.inpfile.write(OMCcell)
         return
@@ -77,7 +77,7 @@ class OpenmcInput:
     def __write_xml_surfaces__(self, surface, boundary=False):
         """Write the surfaces in xml OpenMC format"""
 
-        surfType, coeffs = open_mc_surface(surface.Type, surface.Surf)
+        surfType, coeffs = open_mc_surface(surface.Type, surface.Surf, self.options)
 
         if not boundary:
             OMCsurf = '  <surface id="{}" type="{}" coeffs="{}" />\n'.format(
@@ -153,7 +153,7 @@ import openmc
         """Write the surfaces in python OpenMC format"""
 
         surfType, coeffs = open_mc_surface(
-            surface.Type, surface.Surf, out_xml=False, quadricForm=opt.quadricPY
+            surface.Type, surface.Surf, self.options, out_xml=False, quadricForm=self.options.quadricPY
         )
 
         if not boundary:
@@ -195,12 +195,12 @@ import openmc
 
         if cell.Material == 0:
             OMCcell = 'C{} = openmc.Cell(name="{}", region={})\n'.format(
-                index, cellName, write_openmc_region(cell.Definition, "PY")
+                index, cellName, write_openmc_region(cell.Definition, self.options, "PY")
             )
         else:
             matName = f"M{cell.Material}"
             OMCcell = 'C{} = openmc.Cell(name="{}", fill={}, region={})\n'.format(
-                index, cellName, matName, write_openmc_region(cell.Definition, "PY")
+                index, cellName, matName, write_openmc_region(cell.Definition, self.options, "PY")
             )
         self.inpfile.write(OMCcell)
         return

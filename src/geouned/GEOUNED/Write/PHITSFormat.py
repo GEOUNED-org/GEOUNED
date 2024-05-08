@@ -20,7 +20,6 @@ import FreeCAD
 from ..CodeVersion import *
 from ..Utils.BasicFunctions_part1 import is_opposite, points_to_coeffs
 from ..Utils.Functions import SurfacesDict
-from ..Utils.Options.Classes import Options as opt
 from ..Write.Functions import (
     CellString,
     change_surf_sign,
@@ -32,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 
 class PhitsInput:
-    def __init__(self, Meta, Surfaces, setting):
+    def __init__(self, Meta, Surfaces, setting, options):
         self.Title = setting["title"]
         self.VolSDEF = setting["volSDEF"]
         self.VolCARD = setting["volCARD"]
@@ -42,6 +41,7 @@ class PhitsInput:
         self.voidMat = setting["voidMat"]
         self.startCell = setting["startCell"]
         self.Cells = Meta
+        self.options = options
         self.Options = {"Volume": self.VolCARD, "Universe": self.U0CARD}
 
         self.StepFile = setting["stepFile"]
@@ -369,7 +369,7 @@ $ **************************************************************
     def __write_phits_surfaces__(self, surface):
         """Write the surfaces in PHITS format"""
 
-        PHITS_def = phits_surface(surface.Index, surface.Type, surface.Surf)
+        PHITS_def = phits_surface(surface.Index, surface.Type, surface.Surf, self.options)
         if PHITS_def:
             PHITS_def += "\n"
             self.inpfile.write(PHITS_def)
@@ -554,7 +554,7 @@ $ **************************************************************
                 p.Surf.Axis = FreeCAD.Vector(0, 0, 1)
                 self.__change_surf_sign__(p)
 
-        if opt.prnt3PPlane:
+        if self.options.prnt3PPlane:
             for p in Surfaces["P"]:
                 if p.Surf.pointDef:
                     axis, d = points_to_coeffs(p.Surf.Points)

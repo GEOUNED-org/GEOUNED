@@ -11,7 +11,6 @@ from ..Utils.BasicFunctions_part1 import is_opposite
 from ..Utils.booleanFunction import BoolSequence
 from ..Utils.BooleanSolids import build_c_table_from_solids, remove_extra_surfaces
 from ..Utils.Functions import GeounedSolid, GeounedSurface
-from ..Utils.Options.Classes import Options as opt
 
 logger = logging.getLogger(__name__)
 
@@ -165,7 +164,7 @@ class VoidBox:
             self.__remove_extra_comp__(m, Cube, mode="dist")
         return
 
-    def get_void_complementary(self, Surfaces, simplify="no"):
+    def get_void_complementary(self, Surfaces, options, simplify="no"):
         if self.PieceEnclosure is None:
             boxDef = BoolSequence(operator="AND")
             center = self.BoundBox.Center
@@ -181,7 +180,7 @@ class VoidBox:
                 else:
                     boxDef.elements.append(-id)
                 enclosure = False
-            d = opt.enlargeBox
+            d = options.enlargeBox
 
         else:
             UniverseBox = self.PieceEnclosure.BoundBox
@@ -198,7 +197,7 @@ class VoidBox:
             boxDef = TempPieceEnclosure.Definition
             bBox = self.PieceEnclosure.BoundBox
             enclosure = True
-            d = max(opt.enlargeBox, 2)
+            d = max(options.enlargeBox, 2)
 
         Box = Part.makeBox(
             bBox.XLength + 2 * d,
