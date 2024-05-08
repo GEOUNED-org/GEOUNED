@@ -12,6 +12,7 @@ from ..Utils.Options.Classes import Tolerances as tol
 
 logger = logging.getLogger(__name__)
 
+
 def commonEdge(face1, face2):
     for e1 in face1.Edges:
         for e2 in face2.Edges:

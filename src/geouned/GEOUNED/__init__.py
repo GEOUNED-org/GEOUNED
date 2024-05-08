@@ -26,6 +26,7 @@ from .Write.WriteFiles import write_geometry
 
 logger = logging.getLogger(__name__)
 
+
 class CadToCsg:
     """Base class for the conversion of CAD to CSG models
 

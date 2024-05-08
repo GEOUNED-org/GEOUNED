@@ -25,6 +25,7 @@ from ..Utils.Options.Classes import Tolerances as tol
 
 logger = logging.getLogger(__name__)
 
+
 def get_id(facein, surfaces):
 
     surfin = str(facein)
@@ -299,7 +300,9 @@ def gen_plane_cylinder(face, solid):
 
     for i, face2 in enumerate(solid.Faces):
         if face2.Area < tol.min_area:
-            logger.warning(f"surface {str(surf)} removed from cell definition. Face area < Min area ({face2.Area} < {tol.min_area})")
+            logger.warning(
+                f"surface {str(surf)} removed from cell definition. Face area < Min area ({face2.Area} < {tol.min_area})"
+            )
             continue
         if str(face2.Surface) == "<Cylinder object>" and not (face2.isEqual(face)):
             if (
@@ -348,7 +351,9 @@ def gen_plane_cylinder_old(face, solid):
     for i, face2 in enumerate(solid.Faces):
         if face2.Area < tol.min_area:
             if opt.verbose:
-                logger.warning(f"surface {str(surf)}  removed from cell definition. Face area < Min area ({face2.Area} < {tol.min_area})")
+                logger.warning(
+                    f"surface {str(surf)}  removed from cell definition. Face area < Min area ({face2.Area} < {tol.min_area})"
+                )
             continue
         if str(face2.Surface) == "<Cylinder object>" and not (face2.isEqual(face)):
             if (

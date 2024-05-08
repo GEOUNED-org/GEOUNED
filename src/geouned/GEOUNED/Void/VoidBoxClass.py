@@ -14,6 +14,8 @@ from ..Utils.Functions import GeounedSolid, GeounedSurface
 from ..Utils.Options.Classes import Options as opt
 
 logger = logging.getLogger(__name__)
+
+
 class VoidBox:
     def __init__(self, MetaSolids, Enclosure):
 

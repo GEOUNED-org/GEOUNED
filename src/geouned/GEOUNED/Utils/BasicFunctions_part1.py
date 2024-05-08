@@ -8,6 +8,7 @@ import FreeCAD
 
 logger = logging.getLogger(__name__)
 
+
 def is_same_value(v1, v2, tolerance=1e-6):
     return abs(v1 - v2) < tolerance
 

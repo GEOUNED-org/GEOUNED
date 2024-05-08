@@ -14,6 +14,8 @@ from ..Utils.Options.Classes import Options as opt
 BoolVals = (None, True, False)
 
 logger = logging.getLogger(__name__)
+
+
 class CTelement:
     def __init__(self, val=None, S1=None, S2=None):
         self.diagonal = False

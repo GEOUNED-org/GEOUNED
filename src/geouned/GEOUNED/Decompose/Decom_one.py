@@ -1059,7 +1059,9 @@ def split_component(solidShape, universe_box):
 
     if abs(Volch) > 1e-2:  # 1% of Volume change
         if opt.verbose:
-            logger.info(f"Warning: Volume has changed after decomposition: {Volch:11.4E}")
+            logger.info(
+                f"Warning: Volume has changed after decomposition: {Volch:11.4E}"
+            )
         err += 4
 
     return comsolid, err

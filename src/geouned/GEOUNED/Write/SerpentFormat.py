@@ -14,6 +14,7 @@ from .Functions import serpent_surface, change_surf_sign, write_serpent_cell_def
 
 logger = logging.getLogger(__name__)
 
+
 class SerpentInput:
     def __init__(self, Meta, Surfaces, setting):
         self.Title = setting["title"]

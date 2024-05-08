@@ -13,6 +13,7 @@ from .Functions import open_mc_surface, change_surf_sign, write_openmc_region
 
 logger = logging.getLogger(__name__)
 
+
 class OpenmcInput:
     def __init__(self, Meta, Surfaces):
 

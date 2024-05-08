@@ -11,6 +11,7 @@ import FreeCAD
 
 logger = logging.getLogger(__name__)
 
+
 def rotation_matrix(u, v):
     """Definition of the rotation matrix for two vectors"""
 

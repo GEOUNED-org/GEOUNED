@@ -209,7 +209,9 @@ class GeounedSolid:
                 try:
                     distShape = sol1.distToShape(sol2)[0]
                 except:
-                    logger.info("Failed solid1.distToshape(solid2), try with inverted solids")
+                    logger.info(
+                        "Failed solid1.distToshape(solid2), try with inverted solids"
+                    )
                     distShape = sol2.distToShape(sol1)[0]
                     logger.info("inverted disToShape OK", distShape)
                 dist = min(dist, distShape)

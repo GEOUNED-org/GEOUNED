@@ -8,6 +8,7 @@ from ..Utils.Options.Classes import Options as opt
 
 logger = logging.getLogger(__name__)
 
+
 def get_label(label):
     """Deleting the last word of the string if this is a number
     Only if the option delLastNumber is True"""

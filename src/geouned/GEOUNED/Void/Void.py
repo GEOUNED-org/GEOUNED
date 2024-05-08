@@ -13,6 +13,7 @@ from .VoidBoxClass import VoidBox
 
 logger = logging.getLogger(__name__)
 
+
 def void_generation(MetaList, EnclosureList, Surfaces, UniverseBox, setting, init):
     voidList = []
 

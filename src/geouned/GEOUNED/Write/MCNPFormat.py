@@ -16,6 +16,7 @@ from .Functions import CardLine, mcnp_surface, change_surf_sign, write_mcnp_cell
 
 logger = logging.getLogger(__name__)
 
+
 class McnpInput:
     def __init__(self, Meta, Surfaces, setting):
         self.Title = setting["title"]

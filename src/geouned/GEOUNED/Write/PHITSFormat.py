@@ -29,6 +29,8 @@ from ..Write.Functions import (
 )
 
 logger = logging.getLogger(__name__)
+
+
 class PhitsInput:
     def __init__(self, Meta, Surfaces, setting):
         self.Title = setting["title"]
