@@ -1,5 +1,7 @@
 """File with the VoidBox class"""
 
+import logging
+
 import FreeCAD
 import Part
 
@@ -10,6 +12,8 @@ from ..Utils.booleanFunction import BoolSequence
 from ..Utils.BooleanSolids import build_c_table_from_solids, remove_extra_surfaces
 from ..Utils.Functions import GeounedSolid, GeounedSurface
 from ..Utils.Options.Classes import Options as opt
+
+logger = logging.getLogger(__name__)
 
 
 class VoidBox:
@@ -303,8 +307,7 @@ class VoidBox:
 
                     # solid in cover full Void cell volume  => Void cell doesn't exist
                     if chk is True:
-                        if opt.verbose:
-                            print("warning void Cell should not exist")
+                        logger.warning("void Cell should not exist")
                         return None, None
 
                     # solid cell is not in void cell Void cell volume  => doesn't contribute to void definition

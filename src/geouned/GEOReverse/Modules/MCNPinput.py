@@ -7,19 +7,19 @@ import numpy as np
 from numpy import linalg as LA
 
 from .Objects import (
+    Box,
     CadCell,
-    Plane,
-    Sphere,
-    Cylinder,
     Cone,
-    EllipticCone,
-    Hyperboloid,
+    Cylinder,
     Ellipsoid,
+    EllipticCone,
     EllipticCylinder,
     HyperbolicCylinder,
+    Hyperboloid,
     Paraboloid,
+    Plane,
+    Sphere,
     Torus,
-    Box,
 )
 from .Parser import parser as mp
 from .remh import CellCardString, remove_hash

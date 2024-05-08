@@ -5,12 +5,16 @@
 #  each time an attribute of FreeCAD object is called. This leads to code crash with memory failure
 #  when attribues are call large amount of times. Like it is in this code.
 
+import logging
 import math
+
 import Part
 
 from ..Utils.Options.Classes import Tolerances as tol
 from .BasicFunctions_part1 import is_same_value
 from .BasicFunctions_part2 import is_same_torus
+
+logger = logging.getLogger(__name__)
 
 
 # SURFACES
@@ -297,7 +301,7 @@ def define_surface(face, plane3Pts):
     elif kind_surf == "<Toroid object>":
         Surf_GU = TorusGu(face)
     else:
-        print("bad Surface type", kind_surf)
+        logger.info("bad Surface type", kind_surf)
         Surf_GU = None
     return Surf_GU
 

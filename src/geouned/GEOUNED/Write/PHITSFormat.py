@@ -11,6 +11,7 @@
 # 5. Eliminated the only MCNP related parts
 # 6. Added some comments to remind
 
+import logging
 import re
 from datetime import datetime
 
@@ -22,10 +23,12 @@ from ..Utils.Functions import SurfacesDict
 from ..Utils.Options.Classes import Options as opt
 from ..Write.Functions import (
     CellString,
-    phits_surface,
     change_surf_sign,
+    phits_surface,
     write_phits_cell_def,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class PhitsInput:
@@ -57,7 +60,7 @@ class PhitsInput:
         return
 
     def write_phits(self, filename):
-        print(f"write PHITS file {filename}")
+        logger.info(f"write PHITS file {filename}")
         self.inpfile = open(filename, "w", encoding="utf-8")
         self.__write_phits_header__()
 
@@ -163,7 +166,7 @@ $ **************************************************************
         enclenvChk = self.__stepfile_label_chk__(self.StepFile)
 
         if enclenvChk:
-            print("Unified the inner void cell(s) definition")
+            logger.info("Unified the inner void cell(s) definition")
             for i, cell in enumerate(self.Cells):
                 self.__write_phits_cells_uni_void_def__(cell)
             return
@@ -333,7 +336,7 @@ $ **************************************************************
         # In addition, if you set volCARD = True and want for all void regions to come apperes in [VOLUME],
         # comment out some part in the def __write_phits_volume_block__() section also.       
         if cell.Material == 0:
-            print(cell.IsEnclosure)
+            logger.info(cell.IsEnclosure)
             if cell.MatInfo == 'Graveyard':
                 cellHeader = '{:<5d} {:<5d}  '.format(index,-1)
             else:
@@ -371,7 +374,7 @@ $ **************************************************************
             PHITS_def += "\n"
             self.inpfile.write(PHITS_def)
         else:
-            print(f"Surface {surface.Type} cannot be written in PHITS input")
+            logger.info(f"Surface {surface.Type} cannot be written in PHITS input")
         return
 
     def __write_phits_source_block__(self):
@@ -416,10 +419,8 @@ $ **************************************************************
                 if cell.__id__ is not None:
                     if cell.Void and startVoidIndex == eliminated_endVoidIndex:
                         if cell.label == startVoidIndex:
-                            print(
-                                "Eliminated the merged void cell {} from [VOLUME] section".format(
-                                    cell.label
-                                )
+                            logger.info(
+                                f"Eliminated the merged void cell {cell.label} from [VOLUME] section"
                             )
                         else:
                             vol += f"{'':6s}{cell.label}{'':6s}1.0\n"
@@ -427,10 +428,8 @@ $ **************************************************************
                         if cell.label in range(
                             startVoidIndex, eliminated_endVoidIndex + 1
                         ):
-                            print(
-                                "Eliminated the merged void cell {} from [VOLUME] section".format(
-                                    cell.label
-                                )
+                            logger.info(
+                                "Eliminated the merged void cell {cell.label} from [VOLUME] section"
                             )
                         else:
                             vol += f"{'':6s}{cell.label}{'':6s}1.0\n"
@@ -578,7 +577,7 @@ $ **************************************************************
     def __change_surf_sign__(self, p):
 
         if p.Index not in self.surfaceTable.keys():
-            print(
+            logger.info(
                 f"{p.Type} Surface {p.Index} not used in cell definition)",
                 p.Surf.Axis,
                 p.Surf.Position,

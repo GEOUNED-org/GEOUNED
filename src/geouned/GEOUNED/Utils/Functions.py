@@ -1,12 +1,15 @@
 #
 # Set of useful functions used in different parts of the code
 #
+import logging
 import math
 
 import BOPTools.SplitAPI
 import FreeCAD
 import numpy as np
 import Part
+
+logger = logging.getLogger(__name__)
 
 from ..Utils.BasicFunctions_part1 import (
     ConeParams,
@@ -206,9 +209,11 @@ class GeounedSolid:
                 try:
                     distShape = sol1.distToShape(sol2)[0]
                 except:
-                    print("Failed solid1.distToshape(solid2), try with inverted solids")
+                    logger.info(
+                        "Failed solid1.distToshape(solid2), try with inverted solids"
+                    )
                     distShape = sol2.distToShape(sol1)[0]
-                    print("inverted disToShape OK", distShape)
+                    logger.info("inverted disToShape OK", distShape)
                 dist = min(dist, distShape)
                 if dist == 0:
                     break
@@ -369,7 +374,7 @@ class GeounedSurface:
             self.shape = torus.Faces[0]
             return
         else:
-            print(f"Error: Type {self.Type} is not defined")
+            logger.error(f"Type {self.Type} is not defined")
             return
 
 
@@ -397,7 +402,7 @@ class SurfacesDict(dict):
 
     def __str__(self):
         for key in self.keys():
-            print(key, self[key])
+            logger.info(key, self[key])
         return ""
 
     def get_surface(self, index):
@@ -416,7 +421,7 @@ class SurfacesDict(dict):
             self.__last_obj__ = (key, i)
             return self[key][i]
 
-        print(f"Index {index} not found in Surfaces")
+        logger.info(f"Index {index} not found in Surfaces")
         return None
 
     def del_surface(self, index):

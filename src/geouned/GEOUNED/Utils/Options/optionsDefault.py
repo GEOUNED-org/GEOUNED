@@ -3,7 +3,6 @@ default_values = {
     "forceCylinder": False,  # Force using cylinders instead cones for auxillary surfaces of torus surface definition
     "newSplitPlane": True,  # Use new module for planes splitting in decomposition module
     "delLastNumber": False,  # Deleting the last word in the comment if it is a number
-    "verbose": False,  # Display information during conversion process
     "enlargeBox": 2,  # Enlarge box Boundary when evaluating Ctable (dimension in mm)
     "nPlaneReverse": 0,  # numbers of plane thresold whether cut of parallel planes are made fisrt with lowest or highest number
     "splitTolerance": 0,  # First try for fuzzy tolerance used in BOPTOOL Split function. If BOPTSplit crash try lower value for tolerance
@@ -18,7 +17,6 @@ type_dict = {
     "forceCylinder": bool,  # Force using cylinders instead cones for auxillary surfaces of torus surface definition
     "newSplitPlane": bool,  # Use new module for planes splitting in decomposition module
     "delLastNumber": bool,  # Deleting the last word in the comment if it is a number
-    "verbose": bool,  # Display information during conversion process
     "enlargeBox": float,  # Enlarge box Boundary when evaluating Ctable (dimension in mm)
     "nPlaneReverse": int,  # numbers of plane thresold whether cut of parallel planes are made fisrt with lowest or highest number
     "splitTolerance": int,  # First try for fuzzy tolerance used in BOPTOOL Split function. If BOPTSplit crash try lower value for tolerance

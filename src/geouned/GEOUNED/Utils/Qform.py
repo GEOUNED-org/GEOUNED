@@ -18,8 +18,7 @@ def rotation_matrix(u, v):
 
     u.normalize()
     v.normalize()
-    #    print(u, v)
-    #    print(u.Length, v.Length, Axis.Length)
+
     cose = u.dot(v)
     seno = u.cross(v).Length
 

@@ -1,7 +1,7 @@
 import Part
 
 from .options import Options
-from .splitFunction import SplitSolid, joinBase, SplitBase
+from .splitFunction import SplitBase, SplitSolid, joinBase
 from .Utils.booleanFunction import BoolSequence
 
 

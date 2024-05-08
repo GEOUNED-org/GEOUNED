@@ -13,7 +13,7 @@ class Options:
 
 
 class Tolerances:
-    from .tolerancesDefault import default_values, type_dict, KwrdEquiv
+    from .tolerancesDefault import KwrdEquiv, default_values, type_dict
 
     @classmethod
     def set_default_attribute(cls):
