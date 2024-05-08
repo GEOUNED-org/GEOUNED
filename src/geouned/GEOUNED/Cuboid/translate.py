@@ -1,3 +1,4 @@
+import logging
 import FreeCAD
 import Part
 
@@ -9,6 +10,7 @@ from ..Utils.booleanFunction import BoolSequence
 from ..Utils.Options.Classes import Options as opt
 from ..Utils.Options.Classes import Tolerances as tol
 
+logger = logging.getLogger(__name__)
 
 def commonEdge(face1, face2):
     for e1 in face1.Edges:
@@ -89,9 +91,9 @@ def translate(meta_list, surfaces, universe_box, setting):
     for i, m in enumerate(meta_list):
         if m.IsEnclosure:
             continue
-        print(f"Decomposing solid: {i}/{tot_solid} ")
+        logger.info(f"Decomposing solid: {i}/{tot_solid} ")
         if setting["debug"]:
-            print(m.Comments)
+            logger.info(m.Comments)
             if m.IsEnclosure:
                 m.Solids[0].exportStep(f"origEnclosure_{i}.stp")
             else:
@@ -121,9 +123,9 @@ def set_definition(meta_obj, surfaces):
                 continue
             if face.Area < 0:
                 if opt.verbose:
-                    print("Warning : Negative surface Area")
+                    logger.warning("Negative surface Area")
             if str(face.Surface) != "<Plane object>":
-                print("Warning : All surfaces must be plane")
+                logger.warning("All surfaces must be plane")
                 continue
             if face.Orientation not in ("Forward", "Reversed"):
                 continue

@@ -3,6 +3,9 @@
 #
 
 import re
+import logging
+
+logger = logging.getLogger(__name__)
 
 mostinner = re.compile(r"\([^\(^\)]*\)")  # identify most inner parentheses
 number = re.compile(
@@ -217,7 +220,7 @@ class BoolSequence:
         if self.level > 0:
             return True
         if true_set is None and false_set is None:
-            print(f"{val_name} is not true nor false")
+            logger.info(f"{val_name} is not true nor false")
             return False
         if true_set is None or false_set is None:
             return True

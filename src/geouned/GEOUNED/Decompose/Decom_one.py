@@ -3,6 +3,7 @@
 #
 
 import math
+import logging
 from collections import OrderedDict
 
 import FreeCAD
@@ -20,6 +21,8 @@ from ..Utils.BasicFunctions_part1 import (
 from ..Utils.BasicFunctions_part2 import is_duplicate_in_list
 from ..Utils.Options.Classes import Options as opt
 from ..Utils.Options.Classes import Tolerances as tol
+
+logger = logging.getLogger(__name__)
 
 twoPi = math.pi * 2
 
@@ -488,7 +491,7 @@ def gen_plane_cylinder(face, solid):
 
     if len(Uval_str_cl) < 2:
         if opt.verbose:
-            print("gen_plane_cylinder : Uval_str_cl should no be void ")
+            logger.info("gen_plane_cylinder : Uval_str_cl should no be void ")
         return None
 
     face_index_2 = [face_index[0], face_index[0]]
@@ -520,7 +523,7 @@ def gen_plane_cylinder(face, solid):
 
     if V1.isEqual(V2, 1e-5):
         if opt.verbose:
-            print("Error in the additional plane definition")
+            logger.error("in the additional plane definition")
         return None
 
     normal = V2.sub(V1).cross(face.Surface.Axis)
@@ -611,7 +614,7 @@ def gen_plane_cone(face, solid):
 
     if len(Uval_str_cl) < 2:
         if opt.verbose:
-            print("gen_plane_cone : Uval_str_cl should no be void ")
+            logger.info("gen_plane_cone : Uval_str_cl should no be void ")
         return None
 
     face_index_2 = [face_index[0], face_index[0]]
@@ -641,7 +644,7 @@ def gen_plane_cone(face, solid):
 
     if V1.isEqual(V2, 1e-5):
         if opt.verbose:
-            print("Error in the additional plane definition")
+            logger.error("in the additional plane definition")
         return None
 
     # normal=V2.sub(V1).cross(face.Surface.Axis)
@@ -766,7 +769,7 @@ def split_planes_org(Solids, universe_box):
                         > tol.relativePrecision
                     ):
                         if opt.verbose:
-                            print(
+                            logger.info(
                                 "Warning. Part of the split object is missing original base is used instead",
                                 abs(comsolid.Solids[0].Volume - base.Volume)
                                 / base.Volume,
@@ -941,7 +944,7 @@ def split_2nd_order(Solids, universe_box):
                                 break
                         except:
                             if opt.verbose:
-                                print(
+                                logger.info(
                                     "Failed split base with {} surface".format(
                                         s.shape.Faces[0].Surface
                                     )
@@ -1010,7 +1013,7 @@ def remove_solids(Solids):
     for solid in Solids:
         if solid.Volume <= Vol_tol:
             if opt.verbose:
-                print(
+                logger.info(
                     "Warning: remove_solids degenerated solids are produced",
                     solid.Volume,
                 )
@@ -1041,7 +1044,7 @@ def split_component(solidShape, universe_box):
     for part in split:
         if part.Volume <= 1e-10:
             if opt.verbose:
-                print(
+                logger.info(
                     "Warning: split_component degenerated solids are produced",
                     part.Volume,
                 )
@@ -1056,7 +1059,7 @@ def split_component(solidShape, universe_box):
 
     if abs(Volch) > 1e-2:  # 1% of Volume change
         if opt.verbose:
-            print(f"Warning: Volume has changed after decomposition: {Volch:11.4E}")
+            logger.info(f"Warning: Volume has changed after decomposition: {Volch:11.4E}")
         err += 4
 
     return comsolid, err

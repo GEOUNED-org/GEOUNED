@@ -2,6 +2,8 @@
 # Module to write MCNP input #
 ##############################
 
+import logging
+
 import FreeCAD
 
 from ..CodeVersion import *
@@ -9,6 +11,7 @@ from ..Utils.Functions import SurfacesDict
 from ..Utils.Options.Classes import Options as opt
 from .Functions import open_mc_surface, change_surf_sign, write_openmc_region
 
+logger = logging.getLogger(__name__)
 
 class OpenmcInput:
     def __init__(self, Meta, Surfaces):
@@ -22,7 +25,7 @@ class OpenmcInput:
         self.Materials = set()
 
     def write_xml(self, filename):
-        print(f"write OpenMC xml file {filename}")
+        logger.info(f"write OpenMC xml file {filename}")
         self.inpfile = open(filename, "w", encoding="utf-8")
         self.__write_xml_header__()
 
@@ -88,7 +91,7 @@ class OpenmcInput:
         return
 
     def write_py(self, filename):
-        print(f"write OpenMC python script {filename}")
+        logger.info(f"write OpenMC python script {filename}")
 
         # get all the materials present in the model
         for cell in self.Cells:
@@ -257,7 +260,7 @@ import openmc
     def __change_surf_sign__(self, p):
 
         if p.Index not in self.surfaceTable.keys():
-            print(
+            logger.info(
                 f"{p.Type} Surface {p.Index} not used in cell definition)",
                 p.Surf.Axis,
                 p.Surf.Position,

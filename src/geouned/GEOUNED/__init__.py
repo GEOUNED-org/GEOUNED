@@ -5,6 +5,7 @@
 
 import configparser
 import typing
+import logging
 from datetime import datetime
 from os import mkdir, path
 
@@ -23,6 +24,7 @@ from .Void import Void as Void
 from .Write.Functions import write_mcnp_cell_def
 from .Write.WriteFiles import write_geometry
 
+logger = logging.getLogger(__name__)
 
 class CadToCsg:
     """Base class for the conversion of CAD to CSG models
@@ -270,7 +272,7 @@ class CadToCsg:
                             PdEntry = True
 
             else:
-                print(f"bad section name : {section}")
+                logger.info(f"bad section name : {section}")
 
         if self.__dict__["geometryName"] == "":
             self.__dict__["geometryName"] = self.__dict__["stepFile"][:-4]
@@ -278,7 +280,7 @@ class CadToCsg:
         if Options.prnt3PPlane and not PdEntry:
             McnpNumericFormat.P_d = "22.15e"
 
-        print(self.__dict__)
+        logger.info(self.__dict__)
 
     def set(self, kwrd, value):
 
@@ -292,17 +294,17 @@ class CadToCsg:
             Options.set_attribute(kwrd, value)
             return
         elif kwrd not in self.__dict__.keys():
-            print(f"Bad entry : {kwrd}")
+            logger.info(f"Bad entry : {kwrd}")
             return
 
         if kwrd == "stepFile":
             if isinstance(value, (list, tuple)):
                 for v in value:
                     if not isinstance(v, str):
-                        print(f"elemt in {kwrd} list should be string")
+                        logger.info(f"elemt in {kwrd} list should be string")
                         return
             elif not isinstance(value, str):
-                print(f"{kwrd} should be string or tuple of strings")
+                logger.info(f"{kwrd} should be string or tuple of strings")
                 return
 
         elif kwrd == "UCARD":
@@ -311,22 +313,22 @@ class CadToCsg:
             elif value.isdigit():
                 value = int(value)
             else:
-                print(f"{kwrd} value should be None or integer")
+                logger.info(f"{kwrd} value should be None or integer")
                 return
         elif kwrd == "outFormat":
             if len(value) == 0:
                 return
         elif kwrd in ("geometryName", "matFile", "exportSolids"):
             if not isinstance(value, str):
-                print(f"{kwrd} value should be str instance")
+                logger.info(f"{kwrd} value should be str instance")
                 return
         elif kwrd in ("cellRange", "voidMat", "voidExclude"):
             if not isinstance(value, (list, tuple)):
-                print(f"{kwrd} value should be list or tuple")
+                logger.info(f"{kwrd} value should be list or tuple")
                 return
         elif kwrd in ("minVoidSize", "maxSurf", "maxBracket", "startCell", "startSurf"):
             if not isinstance(value, int):
-                print(f"{kwrd} value should be integer")
+                logger.info(f"{kwrd} value should be integer")
                 return
         elif kwrd in (
             "voidGen",
@@ -341,7 +343,7 @@ class CadToCsg:
             "sort_enclosure",
         ):
             if not isinstance(value, bool):
-                print(f"{kwrd} value should be boolean")
+                logger.info(f"{kwrd} value should be boolean")
                 return
 
         self.__dict__[kwrd] = value
@@ -353,9 +355,9 @@ class CadToCsg:
 
     def start(self):
 
-        print("start")
+        logger.info("start")
         FreeCAD_Version = "{V[0]:}.{V[1]:}.{V[2]:}".format(V=FreeCAD.Version())
-        print(
+        logger.info(
             "GEOUNED version {} {} \nFreeCAD version {}".format(
                 GEOUNED_Version, GEOUNED_ReleaseDate, FreeCAD_Version
             )
@@ -381,21 +383,21 @@ class CadToCsg:
             MetaChunk = []
             EnclosureChunk = []
             for stp in self.stepFile:
-                print(f"read step file : {stp}")
+                logger.info(f"read step file : {stp}")
                 Meta, Enclosure = Load.load_cad(stp, self.matFile)
                 MetaChunk.append(Meta)
                 EnclosureChunk.append(Enclosure)
             MetaList = join_meta_lists(MetaChunk)
             EnclosureList = join_meta_lists(EnclosureChunk)
         else:
-            print(f"read step file : {self.stepFile}")
+            logger.info(f"read step file : {self.stepFile}")
             MetaList, EnclosureList = Load.load_cad(
                 self.stepFile, self.matFile, self.voidMat, self.compSolids
             )
 
-        print("End of loading phase")
+        logger.info("End of loading phase")
         tempstr1 = str(datetime.now() - startTime)
-        print(tempstr1)
+        logger.info(tempstr1)
         tempTime = datetime.now()
 
         # Select a specific solid range from original STEP solids
@@ -442,22 +444,22 @@ class CadToCsg:
                     EnclosureList, Surfaces, UniverseBox, code_setting, False
                 )
 
-            print("End of decomposition phase")
+            logger.info("End of decomposition phase")
 
             # start Building CGS cells phase
 
             for j, m in enumerate(MetaList):
                 if m.IsEnclosure:
                     continue
-                print("Building cell: ", j + 1)
+                logger.info(f"Building cell: {j+1}")
                 cones = Conv.cellDef(m, Surfaces, UniverseBox)
                 if cones:
                     coneInfo[m.__id__] = cones
                 if j in warningSolidList:
                     warnSolids.append(m)
                 if not m.Solids:
-                    print("none", j, m.__id__)
-                    print(m.Definition)
+                    logger.info(f"none {j}, {m.__id__}")
+                    logger.info(m.Definition)
 
             if Options.forceNoOverlap:
                 Conv.no_overlapping_cell(MetaList, Surfaces)
@@ -471,13 +473,13 @@ class CadToCsg:
                 )
 
         tempstr2 = str(datetime.now() - tempTime)
-        print(tempstr2)
+        logger.info(tempstr2)
 
         #  building enclosure solids
 
         if self.voidGen and EnclosureList:
             for j, m in enumerate(EnclosureList):
-                print("Building Enclosure Cell: ", j + 1)
+                logger.info(f"Building Enclosure Cell: {j + 1}")
                 cones = Conv.cellDef(m, Surfaces, UniverseBox)
                 if cones:
                     coneInfo[m.__id__] = cones
@@ -489,8 +491,8 @@ class CadToCsg:
         # void generation phase
         MetaVoid = []
         if self.voidGen:
-            print("Build Void")
-            print(self.voidExclude)
+            logger.info("Build Void")
+            logger.info(self.voidExclude)
             if not self.voidExclude:
                 MetaReduced = MetaList
             else:
@@ -514,20 +516,20 @@ class CadToCsg:
             for c in MetaList:
                 if c.Definition.level == 0 or c.IsEnclosure:
                     continue
-                print("simplify cell", c.__id__)
+                logger.info(f"simplify cell {c.__id__}")
                 Box = UF.get_box(c)
                 CT = build_c_table_from_solids(Box, (c.Surfaces, Surfs), option="full")
                 c.Definition.simplify(CT)
                 c.Definition.clean()
                 if type(c.Definition.elements) is bool:
-                    print(
+                    logger.info(
                         f"unexpected constant cell {c.__id__} :{c.Definition.elements}"
                     )
 
         tempTime2 = datetime.now()
-        print("build Time:", tempTime2 - tempTime1)
+        logger.info(f"build Time: {tempTime2} - {tempTime1}")
 
-        print(datetime.now() - startTime)
+        logger.info(datetime.now() - startTime)
 
         cellOffSet = self.startCell - 1
         if EnclosureList and self.sort_enclosure:
@@ -582,13 +584,13 @@ class CadToCsg:
         # write outputformat input
         write_geometry(UniverseBox, MetaList, Surfaces, code_setting)
 
-        print("End of MCNP, OpenMC, Serpent and PHITS translation phase")
+        logger.info("End of MCNP, OpenMC, Serpent and PHITS translation phase")
 
-        print("Process finished")
-        print(datetime.now() - startTime)
+        logger.info("Process finished")
+        logger.info(datetime.now() - startTime)
 
-        print("Translation time of solid cells", tempTime1 - tempTime0)
-        print("Translation time of void cells", tempTime2 - tempTime1)
+        logger.info(f"Translation time of solid cells {tempTime1} - {tempTime0}")
+        logger.info(f"Translation time of void cells {tempTime2} - {tempTime1}")
 
 
 def decompose_solids(MetaList, Surfaces, UniverseBox, setting, meta):
@@ -597,9 +599,9 @@ def decompose_solids(MetaList, Surfaces, UniverseBox, setting, meta):
     for i, m in enumerate(MetaList):
         if meta and m.IsEnclosure:
             continue
-        print(f"Decomposing solid: {i + 1}/{totsolid} ")
+        logger.info(f"Decomposing solid: {i + 1}/{totsolid} ")
         if setting["debug"]:
-            print(m.Comments)
+            logger.info(m.Comments)
             if not path.exists("debug"):
                 mkdir("debug")
             if m.IsEnclosure:

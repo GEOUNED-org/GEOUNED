@@ -5,9 +5,11 @@
 #
 
 import math
+import logging
 
 import FreeCAD
 
+logger = logging.getLogger(__name__)
 
 def rotation_matrix(u, v):
     """Definition of the rotation matrix for two vectors"""
@@ -18,8 +20,8 @@ def rotation_matrix(u, v):
 
     u.normalize()
     v.normalize()
-    #    print(u, v)
-    #    print(u.Length, v.Length, Axis.Length)
+    #    logger.info(u, v)
+    #    logger.info(u.Length, v.Length, Axis.Length)
     cose = u.dot(v)
     seno = u.cross(v).Length
 

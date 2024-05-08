@@ -3,6 +3,7 @@
 #   Only one solid and planar surfaces
 #
 import math
+import logging
 
 import FreeCAD
 
@@ -12,7 +13,7 @@ from ..Utils.Options.Classes import Options as opt
 
 BoolVals = (None, True, False)
 
-
+logger = logging.getLogger(__name__)
 class CTelement:
     def __init__(self, val=None, S1=None, S2=None):
         self.diagonal = False
@@ -213,7 +214,7 @@ class ConstraintTable(dict):
                 falseVal = Seq.evaluate(falseSet)
                 return falseVal if type(falseVal) is bool else None
             else:
-                print("Bad trouble surfaces {} is on none side of the box!!")
+                logger.info("Bad trouble surfaces {} is on none side of the box!!")
                 return False
 
 
@@ -510,7 +511,7 @@ def point_from_surface(solid):
             d *= 0.5
             pp = pface + d * normal
 
-    print(f"Solid not found in bounding Box (Volume : {solid.Volume})")
+    logger.info(f"Solid not found in bounding Box (Volume : {solid.Volume})")
     return None
 
 
