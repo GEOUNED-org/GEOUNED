@@ -755,8 +755,8 @@ def cellDef(meta_obj, surfaces, universe_box):
         for iface, face in enumerate(solid_gu.Faces):
             surface_type = str(face.Surface)
             if abs(face.Area) < tol.min_area:
-                logger.info(
-                    f"Warning: {surface_type} surface removed from cell definition. Face area < Min area ({face.Area} < {tol.min_area}) "
+                logger.warning(
+                    f"{surface_type} surface removed from cell definition. Face area < Min area ({face.Area} < {tol.min_area}) "
                 )
                 continue
             if face.Area < 0:

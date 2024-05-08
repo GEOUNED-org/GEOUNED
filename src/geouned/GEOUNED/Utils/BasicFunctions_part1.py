@@ -2,11 +2,8 @@
 # Set of useful functions used in different parts of the code
 #
 import math
-import logging
 
 import FreeCAD
-
-logger = logging.getLogger(__name__)
 
 
 def is_same_value(v1, v2, tolerance=1e-6):

@@ -2,7 +2,6 @@
 # Set of useful functions used in different parts of the code
 #
 import math
-import logging
 
 import FreeCAD
 
@@ -16,7 +15,6 @@ from ..Utils.BasicFunctions_part1 import (
 )
 from ..Write.Functions import mcnp_surface
 
-logger = logging.getLogger(__name__)
 
 same_surf_fic = open("fuzzySurfaces", "w")
 
