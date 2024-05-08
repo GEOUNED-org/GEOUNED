@@ -15,7 +15,6 @@ from .GEOReverse import *
 logging.basicConfig(
     filename="geouned.log",
     filemode="w",
-    encoding="utf-8",
     level=logging.DEBUG,
     format="%(asctime)s :: %(levelname)s :: %(funcName)s :: %(lineno)d :: %(message)s",
 )
