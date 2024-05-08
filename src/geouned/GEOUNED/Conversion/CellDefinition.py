@@ -2,6 +2,7 @@
 # Module for Cell definiton #
 #############################
 import math
+import logging
 
 import FreeCAD
 import Part
@@ -19,6 +20,8 @@ from ..Utils.BasicFunctions_part1 import (
 from ..Utils.booleanFunction import BoolSequence, insert_in_sequence
 from ..Utils.BooleanSolids import build_c_table_from_solids, remove_extra_surfaces
 from ..Utils.Functions import GeounedSurface
+
+logger = logging.getLogger(__name__)
 
 
 def get_id(facein, surfaces, tolerances, options, numeric_format):
@@ -303,11 +306,18 @@ def gen_plane_cylinder(face, solid, verbose):
     face_index = [my_index]
 
     for i, face2 in enumerate(solid.Faces):
+<<<<<<< HEAD
         if face2.Area < min_area:
             if verbose:
                 print(
                     f"Warning: {str(surf)} surface removed from cell definition. Face area < Min area ({face2.Area} < {min_area}) "
                 )
+=======
+        if face2.Area < tol.min_area:
+            logger.warning(
+                f"surface {str(surf)} removed from cell definition. Face area < Min area ({face2.Area} < {tol.min_area})"
+            )
+>>>>>>> replace_print_with_logger
             continue
         if str(face2.Surface) == "<Cylinder object>" and not (face2.isEqual(face)):
             if (
@@ -334,8 +344,12 @@ def gen_plane_cylinder(face, solid, verbose):
     p2 = solid.Faces[i2].valueAt(u_2, v_2)
 
     if p1.isEqual(p2, 1e-5):
+<<<<<<< HEAD
         if verbose:
             print("Error in the additional place definition")
+=======
+        logger.error("Error in the additional place definition")
+>>>>>>> replace_print_with_logger
         return None
 
     normal = p2.sub(p1).cross(face.Surface.Axis)
@@ -355,11 +369,18 @@ def gen_plane_cylinder_old(face, solid, verbose):
     face_index = [solid.Faces.index(face)]
 
     for i, face2 in enumerate(solid.Faces):
+<<<<<<< HEAD
         if face2.Area < min_area:
             if verbose:
                 print(
                     f"Warning: {str(surf)} surface removed from cell definition. Face area < Min area ({face2.Area} < {min_area}) "
                 )
+=======
+        if face2.Area < tol.min_area:
+            logger.warning(
+                f"surface {str(surf)}  removed from cell definition. Face area < Min area ({face2.Area} < {tol.min_area})"
+            )
+>>>>>>> replace_print_with_logger
             continue
         if str(face2.Surface) == "<Cylinder object>" and not (face2.isEqual(face)):
             if (
@@ -426,8 +447,12 @@ def gen_plane_cylinder_old(face, solid, verbose):
     v_2 = solid.Faces[face_index_2[1]].valueAt(node_max[0], node_max[1])
 
     if v_1.isEqual(v_2, 1e-5):
+<<<<<<< HEAD
         if verbose:
             print("Error in the additional place definition")
+=======
+        logger.error("in the additional place definition")
+>>>>>>> replace_print_with_logger
         return None
 
     normal = v_2.sub(v_1).cross(face.Surface.Axis)
@@ -446,11 +471,18 @@ def gen_plane_cone(face, solid):
     face_index = [myIndex]
 
     for i, face2 in enumerate(solid.Faces):
+<<<<<<< HEAD
         if face2.Area < min_area:
             if verbose:
                 print(
                     f"Warning: {str(Surf)} surface removed from cell definition. Face area < Min area ({face2.Area} < {min_area}) "
                 )
+=======
+        if face2.Area < tol.min_area:
+            logger.warning(
+                f"{str(Surf)} surface removed from cell definition. Face area < Min area ({face2.Area} < {tol.min_area})"
+            )
+>>>>>>> replace_print_with_logger
             continue
         if str(face2.Surface) == "<Cone object>" and not (face2.isEqual(face)):
             if (
@@ -474,8 +506,12 @@ def gen_plane_cone(face, solid):
     p2 = solid.Faces[i2].valueAt(u_2, v_2)
 
     if p1.isEqual(p2, 1e-5):
+<<<<<<< HEAD
         if verbose:
             print("Error in the additional place definition")
+=======
+        logger.error("in the additional place definition")
+>>>>>>> replace_print_with_logger
         return None
 
     plane = Part.Plane(p1, p2, face.Surface.Apex).toShape()
@@ -492,11 +528,18 @@ def gen_plane_cone_old(face, solid, verbose):
     face_index = [solid.Faces.index(face)]
 
     for i, face2 in enumerate(solid.Faces):
+<<<<<<< HEAD
         if face2.Area < min_area:
             if verbose:
                 print(
                     f"Warning: {str(surf)} surface removed from cell definition. Face area < Min area ({face2.Area} < {min_area}) "
                 )
+=======
+        if face2.Area < tol.min_area:
+            logger.warning(
+                f"{str(surf)} surface removed from cell definition. Face area < Min area ({face2.Area} < {tol.min_area})"
+            )
+>>>>>>> replace_print_with_logger
             continue
         if str(face2.Surface) == "<Cone object>" and not (face2.isEqual(face)):
             if (
@@ -560,8 +603,12 @@ def gen_plane_cone_old(face, solid, verbose):
     v_2 = solid.Faces[face_index_2[1]].valueAt(node_max[0], node_max[1])
 
     if v_1.isEqual(v_2, 1e-5):
+<<<<<<< HEAD
         if verbose:
             print("Error in the additional place definition")
+=======
+        logger.error("in the additional place definition")
+>>>>>>> replace_print_with_logger
         return None
 
     plane = Part.Plane(v_1, v_2, face.Surface.Apex).toShape()
@@ -770,6 +817,7 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
         last_torus = -1
         for iface, face in enumerate(solid_gu.Faces):
             surface_type = str(face.Surface)
+<<<<<<< HEAD
             if abs(face.Area) < tolerances.min_area:
                 if options.verbose:
                     print(
@@ -779,6 +827,15 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
             if face.Area < 0:
                 if options.verbose:
                     print("Warning : Negative surface Area")
+=======
+            if abs(face.Area) < tol.min_area:
+                logger.warning(
+                    f"{surface_type} surface removed from cell definition. Face area < Min area ({face.Area} < {tol.min_area}) "
+                )
+                continue
+            if face.Area < 0:
+                logger.warning("Negative surface Area")
+>>>>>>> replace_print_with_logger
             if face.Orientation not in ("Forward", "Reversed"):
                 continue
             if flag_inv:
@@ -818,8 +875,12 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
                         plane = GU.PlaneGu(plane)
                 except:
                     plane = None
+<<<<<<< HEAD
                     if options.verbose:
                         print("Warning: generation of additional plane has failed")
+=======
+                    logger.warning("generation of additional plane has failed")
+>>>>>>> replace_print_with_logger
 
                 if plane is not None:
                     p = GeounedSurface(
@@ -985,10 +1046,16 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
                         surf_piece.append(var)
                         surf_obj.append(face)
                 else:
+<<<<<<< HEAD
                     if options.verbose:
                         print(
                             "Only Torus with axis along X, Y , Z axis can be reproduced"
                         )
+=======
+                    logger.info(
+                        "Only Torus with axis along X, Y , Z axis can be reproduced"
+                    )
+>>>>>>> replace_print_with_logger
             else:
                 id = get_id(
                     facein=face.Surface,
@@ -1002,8 +1069,12 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
 
                 surf = face
                 if id == 0:
+<<<<<<< HEAD
                     if options.verbose:
                         print("Warning: ", surface_type, " not found in surface list")
+=======
+                    logger.warning(f" {surface_type}, not found in surface list")
+>>>>>>> replace_print_with_logger
                     if surface_type == "<Plane object>":
                         dim1 = face.ParameterRange[1] - face.ParameterRange[0]
                         dim2 = face.ParameterRange[3] - face.ParameterRange[2]
@@ -1180,7 +1251,7 @@ def no_overlapping_cell(metaList, surfaces, options):
     for m, t_def_and_simplify in zip(metaList[1:], new_definition_list):
         t_def, simplify = t_def_and_simplify
         if True in simplify:
-            print(f"reduce cell {m.__id__}")
+            logger.info(f"reduce cell {m.__id__}")
             box = UF.get_box(m)
 
             # evaluate only diagonal elements of the Constraint Table (fastest) and remove surface not

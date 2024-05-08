@@ -2,6 +2,8 @@
 # Module to write MCNP input #
 ##############################
 import math
+import logging
+
 from datetime import datetime
 
 import FreeCAD
@@ -10,6 +12,8 @@ from ..CodeVersion import *
 from ..Utils.BasicFunctions_part1 import is_opposite, points_to_coeffs
 from ..Utils.Functions import SurfacesDict
 from .Functions import CardLine, mcnp_surface, change_surf_sign, write_mcnp_cell_def
+
+logger = logging.getLogger(__name__)
 
 
 class McnpInput:
@@ -77,9 +81,14 @@ class McnpInput:
         SP3 = "SP3 0  1 \n"
         self.SDEF_box = (sdef, SI1, SI2, SI3, SP1, SP2, SP3)
 
+<<<<<<< HEAD
     def write_input(self, filename, verbose):
         if verbose:
             print(f"write MCNP file {filename}")
+=======
+    def write_input(self, filename):
+        logger.info(f"write MCNP file {filename}")
+>>>>>>> replace_print_with_logger
         self.inpfile = open(filename, "w", encoding="utf-8")
         self.__write_header__()
         self.__write_cell_block__()
@@ -184,7 +193,7 @@ C **************************************************************
             MCNP_def += "\n"
             self.inpfile.write(MCNP_def)
         else:
-            print(f"Surface {surface.Type} cannot be written in MCNP input")
+            logger.info(f"Surface {surface.Type} cannot be written in MCNP input")
         return
 
     def __write_source_block__(self):
@@ -346,7 +355,7 @@ C **************************************************************
     def __change_surf_sign__(self, p):
 
         if p.Index not in self.surfaceTable.keys():
-            print(
+            logger.info(
                 f"{p.Type} Surface {p.Index} not used in cell definition)",
                 p.Surf.Axis,
                 p.Surf.Position,

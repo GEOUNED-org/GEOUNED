@@ -6,10 +6,14 @@
 #  when attribues are call large amount of times. Like it is in this code.
 
 import math
+import logging
+
 import Part
 
 from .BasicFunctions_part1 import is_same_value
 from .BasicFunctions_part2 import is_same_torus
+
+logger = logging.getLogger(__name__)
 
 
 # SURFACES
@@ -309,7 +313,7 @@ def define_surface(face, plane3Pts):
     elif kind_surf == "<Toroid object>":
         Surf_GU = TorusGu(face)
     else:
-        print("bad Surface type", kind_surf)
+        logger.info("bad Surface type", kind_surf)
         Surf_GU = None
     return Surf_GU
 

@@ -3,6 +3,7 @@
 #
 import os
 import re
+import logging
 
 import FreeCAD
 import Part
@@ -10,6 +11,8 @@ from FreeCAD import Import
 
 from ..Utils import Functions as UF
 from . import LoadFunctions as LF
+
+logger = logging.getLogger(__name__)
 
 
 # Paco mod
@@ -41,7 +44,7 @@ def load_cad(filename, mat_filename, delLastNumber, default_mat=[], comp_solids=
         if os.path.exists(mat_filename):
             m_dict = extract_materials(mat_filename)
         else:
-            print(f"Material definition file {mat_filename} does not exist.")
+            logger.info(f"Material definition file {mat_filename} does not exist.")
             m_dict = {}
     else:
         m_dict = {}
@@ -62,8 +65,8 @@ def load_cad(filename, mat_filename, delLastNumber, default_mat=[], comp_solids=
         if elem.TypeId == "Part::Feature":
             comment = LF.getCommentTree(elem, delLastNumber)
             if not elem.Shape.Solids:
-                print(
-                    "Warning: Element {:} has no associated solid".format(
+                logger.warning(
+                    "Element {:} has no associated solid".format(
                         comment + "/" + elem.Label
                     )
                 )
@@ -155,7 +158,7 @@ def load_cad(filename, mat_filename, delLastNumber, default_mat=[], comp_solids=
                                 )
                                 missing_mat.add(mat_label)
                     else:
-                        # print('Warning : No material label associated to solid {}.\nDefault material used instead.'.format(comment))
+                        # logger.info('Warning : No material label associated to solid {}.\nDefault material used instead.'.format(comment))
                         if default_mat:
                             meta_list[i_solid].set_material(*default_mat)
                     if tempre_dil:
@@ -180,10 +183,10 @@ def load_cad(filename, mat_filename, delLastNumber, default_mat=[], comp_solids=
 
     LF.joinEnvelopes(meta_list)
     if missing_mat:
-        print(
-            "Warning!! At least one material in the CAD model is not present in the material file"
+        logger.warning(
+            "At least one material in the CAD model is not present in the material file"
         )
-        print("List of not present materials:", missing_mat)
+        logger.info(f"List of not present materials: {missing_mat}")
 
     enclosure_list = LF.set_enclosure_solid_list(meta_list)
     if enclosure_list:

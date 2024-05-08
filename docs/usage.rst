@@ -107,14 +107,14 @@ This example loads up a config file with the default name (config.json)
 
     geouned_cadtocsg
 
-This example specifies a JSON config file name called "example.json" which can be found `here <https://github.com/shimwell/GEOUNED/blob/classes_done_in_standard_way/examples/configuration.json>`_
+This example specifies a JSON config file name called "configuration.json" which can be found `here <https://github.com/shimwell/GEOUNED/blob/classes_done_in_standard_way/examples/configuration.json>`_
 
 .. code-block:: bash
 
     geouned_cadtocsg -i configuration.json
 
 Both JSON and `JSON5 <https://json5.org/>`_ file formats are supported for config files.
-This example specifies a JSON5 config file name called "example.json5" which can be found `here <https://github.com/shimwell/GEOUNED/blob/classes_done_in_standard_way/examples/configuration.json5>`_
+This example specifies a JSON5 config file name called "configuration.json5" which can be found `here <https://github.com/shimwell/GEOUNED/blob/classes_done_in_standard_way/examples/configuration.json5>`_
 
 .. code-block:: bash
 

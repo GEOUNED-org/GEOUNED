@@ -1,3 +1,5 @@
+import logging
+
 # this try except attempts to import freecad (lowercase) which is the conda
 # package name for FreeCAD (mixed case) upon import the conda package appends
 # the sys path for Conda installed FreeCAD, consequently FreeCAD can then be
@@ -9,3 +11,10 @@ except ImportError:
 
 from .GEOUNED import *
 from .GEOReverse import *
+
+logging.basicConfig(
+    filename="geouned.log",
+    filemode="w",
+    level=logging.DEBUG,
+    format="%(asctime)s :: %(levelname)s :: %(funcName)s :: %(lineno)d :: %(message)s",
+)
