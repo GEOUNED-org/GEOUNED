@@ -301,7 +301,7 @@ def define_surface(face, plane3Pts):
     elif kind_surf == "<Toroid object>":
         Surf_GU = TorusGu(face)
     else:
-        logger.info("bad Surface type", kind_surf)
+        logger.info(f"bad Surface type {kind_surf}")
         Surf_GU = None
     return Surf_GU
 

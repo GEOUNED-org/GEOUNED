@@ -158,7 +158,7 @@ def load_cad(filename, mat_filename, options, default_mat=[], comp_solids=True):
                                 )
                                 missing_mat.add(mat_label)
                     else:
-                        # logger.info('Warning : No material label associated to solid {}.\nDefault material used instead.'.format(comment))
+                        # logger.warning('No material label associated to solid {}.\nDefault material used instead.'.format(comment))
                         if default_mat:
                             meta_list[i_solid].set_material(*default_mat)
                     if tempre_dil:

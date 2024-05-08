@@ -180,10 +180,11 @@ def check_enclosure(freecad_doc, enclosure_list):
     if temp_list:
         stop = True
         logger.info(
-            "One or more nested enclosure labels in CAD solid tree view/structure tree do not have any CAD solid.\n",
-            "Each nested enclosure must have only one solid.\nCode STOPS.",
-            "\nList of problematic nested enclosure labels:",
+            "One or more nested enclosure labels in CAD solid tree view/structure tree do not have any CAD solid."
         )
+        logger.info("Each nested enclosure must have only one solid. Code STOPS.")
+        logger.info("List of problematic nested enclosure labels:")
+
         for elem in temp_list:
             logger.info(elem.EnclosureID)
 
@@ -209,7 +210,7 @@ def check_enclosure(freecad_doc, enclosure_list):
         logger.info('"0" cannot be label on child Enclosure')
     if 0 not in pid_set:
         stop = True
-        logger.info(' "0" should parent label of most external enclosure(s)')
+        logger.info('"0" should parent label of most external enclosure(s)')
     if repeated_id:
         stop = True
         logger.info("Child label cannot be repeated.\nRepeated labels :")
@@ -274,13 +275,13 @@ def check_enclosure(freecad_doc, enclosure_list):
 
     if not_embedded:
         stop = True
-        logger.info(" Following enclosures are not fully embedded in Parent enclosure")
+        logger.info("Following enclosures are not fully embedded in Parent enclosure")
         for elemt in not_embedded:
             logger.info(f"{elemt[0]}_{elemt[1]}")
 
     if overlap:
         stop = True
-        logger.info(" Following enclosures overlapping ")
+        logger.info("Following enclosures overlapping ")
         for elemt in overlap:
             logger.info(f"{elemt[0]}_{elemt[1]}")
 

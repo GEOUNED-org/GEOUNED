@@ -93,7 +93,7 @@ def translate(meta_list, surfaces, universe_box, setting):
     for i, m in enumerate(meta_list):
         if m.IsEnclosure:
             continue
-        logger.info(f"Decomposing solid: {i}/{tot_solid} ")
+        logger.info(f"Decomposing solid: {i}/{tot_solid}")
         if setting["debug"]:
             logger.info(m.Comments)
             if m.IsEnclosure:

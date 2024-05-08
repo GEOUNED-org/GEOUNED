@@ -350,7 +350,7 @@ def gen_plane_cylinder_old(face, solid):
     for i, face2 in enumerate(solid.Faces):
         if face2.Area < tol.min_area:
             logger.warning(
-                f"surface {str(surf)}  removed from cell definition. Face area < Min area ({face2.Area} < {tol.min_area})"
+                f"surface {str(surf)} removed from cell definition. Face area < Min area ({face2.Area} < {tol.min_area})"
             )
             continue
         if str(face2.Surface) == "<Cylinder object>" and not (face2.isEqual(face)):
@@ -755,7 +755,7 @@ def cellDef(meta_obj, surfaces, universe_box, options):
             surface_type = str(face.Surface)
             if abs(face.Area) < tol.min_area:
                 logger.warning(
-                    f"{surface_type} surface removed from cell definition. Face area < Min area ({face.Area} < {tol.min_area}) "
+                    f"{surface_type} surface removed from cell definition. Face area < Min area ({face.Area} < {tol.min_area})"
                 )
                 continue
             if face.Area < 0:
@@ -923,7 +923,7 @@ def cellDef(meta_obj, surfaces, universe_box, options):
                         surf_obj.append(face)
                 else:
                     logger.info(
-                        "Only Torus with axis along X, Y , Z axis can be reproduced"
+                        "Only Torus with axis along X, Y, Z axis can be reproduced"
                     )
             else:
                 id = get_id(face.Surface, surfaces)
@@ -932,7 +932,7 @@ def cellDef(meta_obj, surfaces, universe_box, options):
 
                 surf = face
                 if id == 0:
-                    logger.warning(f" {surface_type}, not found in surface list")
+                    logger.warning(f"{surface_type} not found in surface list")
                     if surface_type == "<Plane object>":
                         dim1 = face.ParameterRange[1] - face.ParameterRange[0]
                         dim2 = face.ParameterRange[3] - face.ParameterRange[2]

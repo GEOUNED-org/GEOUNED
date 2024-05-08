@@ -212,7 +212,7 @@ class GeounedSolid:
                         "Failed solid1.distToshape(solid2), try with inverted solids"
                     )
                     distShape = sol2.distToShape(sol1)[0]
-                    logger.info("inverted disToShape OK", distShape)
+                    logger.info(f"inverted disToShape OK {distShape}")
                 dist = min(dist, distShape)
                 if dist == 0:
                     break
@@ -401,7 +401,7 @@ class SurfacesDict(dict):
 
     def __str__(self):
         for key in self.keys():
-            logger.info(key, self[key])
+            logger.info(f"{key}, {self[key]}")
         return ""
 
     def get_surface(self, index):
