@@ -448,7 +448,7 @@ class CadToCsg:
 
             # start Building CGS cells phase
 
-            for j, m in enumerate(MetaList):
+            for j, m in enumerate(tqdm(MetaList, desc="translating solid cells")):
                 if m.IsEnclosure:
                     continue
                 logger.info(f"Building cell: {j+1}")
