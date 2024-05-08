@@ -429,7 +429,7 @@ $ **************************************************************
                             startVoidIndex, eliminated_endVoidIndex + 1
                         ):
                             logger.info(
-                                "Eliminated the merged void cell {cell.label} from [VOLUME] section"
+                                f"Eliminated the merged void cell {cell.label} from [VOLUME] section"
                             )
                         else:
                             vol += f"{'':6s}{cell.label}{'':6s}1.0\n"
@@ -578,9 +578,7 @@ $ **************************************************************
 
         if p.Index not in self.surfaceTable.keys():
             logger.info(
-                f"{p.Type} Surface {p.Index} not used in cell definition)",
-                p.Surf.Axis,
-                p.Surf.Position,
+                f"{p.Type} Surface {p.Index} not used in cell definition) {p.Surf.Axis} {p.Surf.Position}"
             )
             return
 

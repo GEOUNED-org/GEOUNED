@@ -358,12 +358,10 @@ class CadToCsg:
     def start(self):
 
         logger.info("start")
-        FreeCAD_Version = "{V[0]:}.{V[1]:}.{V[2]:}".format(V=FreeCAD.Version())
+        freecad_version = ".".join(FreeCAD.Version()[:3])
         logger.info(
-            "GEOUNED version {} {} \nFreeCAD version {}".format(
-                GEOUNED_Version, GEOUNED_ReleaseDate, FreeCAD_Version
+            f"GEOUNED version {GEOUNED_Version} {GEOUNED_ReleaseDate} \nFreeCAD version {freecad_version}"
             )
-        )
 
         code_setting = self.__dict__
         if code_setting is None:

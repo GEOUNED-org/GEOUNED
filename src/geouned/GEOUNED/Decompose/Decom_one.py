@@ -490,7 +490,7 @@ def gen_plane_cylinder(face, solid):
             Uval_str_cl.append(num_str1)
 
     if len(Uval_str_cl) < 2:
-        logger.info("gen_plane_cylinder : Uval_str_cl should no be void ")
+        logger.info("gen_plane_cylinder : Uval_str_cl should no be void")
         return None
 
     face_index_2 = [face_index[0], face_index[0]]
@@ -611,7 +611,7 @@ def gen_plane_cone(face, solid):
             Uval_str_cl.append(num_str1)
 
     if len(Uval_str_cl) < 2:
-        logger.info("gen_plane_cone : Uval_str_cl should no be void ")
+        logger.info("gen_plane_cone : Uval_str_cl should no be void")
         return None
 
     face_index_2 = [face_index[0], face_index[0]]
@@ -935,9 +935,7 @@ def split_2nd_order(Solids, universe_box):
                                 break
                         except:
                             logger.info(
-                                "Failed split base with {} surface".format(
-                                    s.shape.Faces[0].Surface
-                                )
+                                "Failed split base with {s.shape.Faces[0].Surface} surface"
                             )
                             err += 2
 
@@ -1002,9 +1000,8 @@ def remove_solids(Solids):
     Solids_Clean = []
     for solid in Solids:
         if solid.Volume <= Vol_tol:
-            logger.info(
-                "Warning: remove_solids degenerated solids are produced",
-                solid.Volume,
+            logger.warning(
+                f"remove_solids degenerated solids are produced {solid.Volume}"
             )
             err = 2
             continue
@@ -1032,9 +1029,8 @@ def split_component(solidShape, universe_box):
     Pieces = []
     for part in split:
         if part.Volume <= 1e-10:
-            logger.info(
-                "Warning: split_component degenerated solids are produced",
-                part.Volume,
+            logger.warning(
+                f"split_component degenerated solids are produced {part.Volume}",
             )
             err += 2
             continue
