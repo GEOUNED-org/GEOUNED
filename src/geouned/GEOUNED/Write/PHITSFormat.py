@@ -369,7 +369,9 @@ $ **************************************************************
     def __write_phits_surfaces__(self, surface):
         """Write the surfaces in PHITS format"""
 
-        PHITS_def = phits_surface(surface.Index, surface.Type, surface.Surf, self.options)
+        PHITS_def = phits_surface(
+            surface.Index, surface.Type, surface.Surf, self.options
+        )
         if PHITS_def:
             PHITS_def += "\n"
             self.inpfile.write(PHITS_def)

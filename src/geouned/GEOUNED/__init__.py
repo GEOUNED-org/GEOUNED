@@ -131,7 +131,7 @@ class CadToCsg:
         cellCommentFile: bool = False,
         cellSummaryFile: bool = True,
         sort_enclosure: bool = False,
-        options: Options = Options()
+        options: Options = Options(),
     ):
 
         self.title = title
@@ -247,10 +247,11 @@ class CadToCsg:
                         if attributes_and_types[key] is bool:
                             value = config.getboolean("Options", key)
                         elif (
-                            attributes_and_types[key] is float or attributes_and_types[key] is int
+                            attributes_and_types[key] is float
+                            or attributes_and_types[key] is int
                         ):
                             value = config.getfloat("Options", key)
-                        setattr(self.options, key, value) 
+                        setattr(self.options, key, value)
 
             elif section == "Tolerances":
                 for key in config["Tolerances"].keys():
@@ -440,7 +441,12 @@ class CadToCsg:
             # decompose Enclosure solids
             if self.voidGen and EnclosureList:
                 warningEnclosureList = decompose_solids(
-                    EnclosureList, Surfaces, UniverseBox, code_setting, False, self.options
+                    EnclosureList,
+                    Surfaces,
+                    UniverseBox,
+                    code_setting,
+                    False,
+                    self.options,
                 )
 
             logger.info("End of decomposition phase")
@@ -468,7 +474,12 @@ class CadToCsg:
             # decompose Enclosure solids
             if self.voidGen and EnclosureList:
                 warningEnclosureList = decompose_solids(
-                    EnclosureList, Surfaces, UniverseBox, code_setting, False, self.options
+                    EnclosureList,
+                    Surfaces,
+                    UniverseBox,
+                    code_setting,
+                    False,
+                    self.options,
                 )
 
         tempstr2 = str(datetime.now() - tempTime)
@@ -502,7 +513,13 @@ class CadToCsg:
             else:
                 init = 0
             MetaVoid = Void.void_generation(
-                MetaReduced, EnclosureList, Surfaces, UniverseBox, code_setting, init, self.options
+                MetaReduced,
+                EnclosureList,
+                Surfaces,
+                UniverseBox,
+                code_setting,
+                init,
+                self.options,
             )
 
         # if code_setting['simplify'] == 'full' and not self.options.forceNoOverlap:
@@ -608,7 +625,9 @@ def decompose_solids(MetaList, Surfaces, UniverseBox, setting, meta, options):
             else:
                 m.Solids[0].exportStep(f"debug/origSolid_{i}.stp")
 
-        comsolid, err = Decom.SplitSolid(Part.makeCompound(m.Solids), UniverseBox, options)
+        comsolid, err = Decom.SplitSolid(
+            Part.makeCompound(m.Solids), UniverseBox, options
+        )
 
         if err != 0:
             if not path.exists("Suspicious_solids"):

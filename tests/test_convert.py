@@ -47,16 +47,13 @@ def test_conversion(input_step_file):
         output_filename_stem.with_suffix(suffix).unlink(missing_ok=True)
 
     my_options = geouned.Options(
-        forceCylinder = False,
-        splitTolerance = 0,
-        newSplitPlane = True,
-        nPlaneReverse = 0,
+        forceCylinder=False,
+        splitTolerance=0,
+        newSplitPlane=True,
+        nPlaneReverse=0,
     )
 
-    geo = geouned.CadToCsg(
-        title="Input Test",
-        options=my_options
-    )
+    geo = geouned.CadToCsg(title="Input Test", options=my_options)
 
     # set parameters values stored in template dictionary
     for key, value in template.items():

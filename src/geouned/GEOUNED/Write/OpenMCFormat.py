@@ -69,7 +69,10 @@ class OpenmcInput:
             matName = f"{cell.Material}"
 
         OMCcell = '  <cell id="{}" material="{}" name="{}" region="{}" universe="1"/>\n'.format(
-            index, matName, cellName, write_openmc_region(cell.Definition, self.options, "XML")
+            index,
+            matName,
+            cellName,
+            write_openmc_region(cell.Definition, self.options, "XML"),
         )
         self.inpfile.write(OMCcell)
         return
@@ -153,7 +156,11 @@ import openmc
         """Write the surfaces in python OpenMC format"""
 
         surfType, coeffs = open_mc_surface(
-            surface.Type, surface.Surf, self.options, out_xml=False, quadricForm=self.options.quadricPY
+            surface.Type,
+            surface.Surf,
+            self.options,
+            out_xml=False,
+            quadricForm=self.options.quadricPY,
         )
 
         if not boundary:
@@ -195,12 +202,17 @@ import openmc
 
         if cell.Material == 0:
             OMCcell = 'C{} = openmc.Cell(name="{}", region={})\n'.format(
-                index, cellName, write_openmc_region(cell.Definition, self.options, "PY")
+                index,
+                cellName,
+                write_openmc_region(cell.Definition, self.options, "PY"),
             )
         else:
             matName = f"M{cell.Material}"
             OMCcell = 'C{} = openmc.Cell(name="{}", fill={}, region={})\n'.format(
-                index, cellName, matName, write_openmc_region(cell.Definition, self.options, "PY")
+                index,
+                cellName,
+                matName,
+                write_openmc_region(cell.Definition, self.options, "PY"),
             )
         self.inpfile.write(OMCcell)
         return

@@ -14,7 +14,9 @@ from .VoidBoxClass import VoidBox
 logger = logging.getLogger(__name__)
 
 
-def void_generation(MetaList, EnclosureList, Surfaces, UniverseBox, setting, init, options):
+def void_generation(
+    MetaList, EnclosureList, Surfaces, UniverseBox, setting, init, options
+):
     voidList = []
 
     if EnclosureList:
@@ -44,7 +46,9 @@ def void_generation(MetaList, EnclosureList, Surfaces, UniverseBox, setting, ini
     # if exist Level 1 enclosures are considered as material cells
     logger.info("Build Void highest enclosure")
 
-    voids = get_void_def(newMetaList, Surfaces, EnclosureBox, setting, options, Lev0=True)
+    voids = get_void_def(
+        newMetaList, Surfaces, EnclosureBox, setting, options, Lev0=True
+    )
     voidList.append(voids)
 
     # Perform enclosure void
@@ -120,7 +124,9 @@ def get_void_def(MetaList, Surfaces, Enclosure, setting, options, Lev0=False):
 
                 logger.info(f"build complementary {iloop} {iz}")
 
-                cell, CellIn = z.get_void_complementary(Surfaces, options, simplify=simplifyVoid)
+                cell, CellIn = z.get_void_complementary(
+                    Surfaces, options, simplify=simplifyVoid
+                )
                 if cell is not None:
                     VoidCell = (cell, (boxDim, CellIn))
                     VoidDef.append(VoidCell)
