@@ -123,8 +123,7 @@ def set_definition(meta_obj, surfaces):
             if abs(face.Area) < 1e-2:
                 continue
             if face.Area < 0:
-                if opt.verbose:
-                    logger.warning("Negative surface Area")
+                logger.warning("Negative surface Area")
             if str(face.Surface) != "<Plane object>":
                 logger.warning("All surfaces must be plane")
                 continue

@@ -490,8 +490,7 @@ def gen_plane_cylinder(face, solid):
             Uval_str_cl.append(num_str1)
 
     if len(Uval_str_cl) < 2:
-        if opt.verbose:
-            logger.info("gen_plane_cylinder : Uval_str_cl should no be void ")
+        logger.info("gen_plane_cylinder : Uval_str_cl should no be void ")
         return None
 
     face_index_2 = [face_index[0], face_index[0]]
@@ -522,8 +521,7 @@ def gen_plane_cylinder(face, solid):
     V2 = solid.Faces[face_index_2[1]].valueAt(Node_max[0], Node_max[1])
 
     if V1.isEqual(V2, 1e-5):
-        if opt.verbose:
-            logger.error("in the additional plane definition")
+        logger.error("in the additional plane definition")
         return None
 
     normal = V2.sub(V1).cross(face.Surface.Axis)
@@ -613,8 +611,7 @@ def gen_plane_cone(face, solid):
             Uval_str_cl.append(num_str1)
 
     if len(Uval_str_cl) < 2:
-        if opt.verbose:
-            logger.info("gen_plane_cone : Uval_str_cl should no be void ")
+        logger.info("gen_plane_cone : Uval_str_cl should no be void ")
         return None
 
     face_index_2 = [face_index[0], face_index[0]]
@@ -643,8 +640,7 @@ def gen_plane_cone(face, solid):
     V2 = solid.Faces[face_index_2[1]].valueAt(Node_max[0], Node_max[1])
 
     if V1.isEqual(V2, 1e-5):
-        if opt.verbose:
-            logger.error("in the additional plane definition")
+        logger.error("in the additional plane definition")
         return None
 
     # normal=V2.sub(V1).cross(face.Surface.Axis)
@@ -768,14 +764,12 @@ def split_planes_org(Solids, universe_box):
                         abs(comsolid.Solids[0].Volume - base.Volume) / base.Volume
                         > tol.relativePrecision
                     ):
-                        if opt.verbose:
-                            logger.info(
-                                "Warning. Part of the split object is missing original base is used instead",
-                                abs(comsolid.Solids[0].Volume - base.Volume)
-                                / base.Volume,
-                                comsolid.Solids[0].Volume,
-                                base.Volume,
-                            )
+                        logger.info(
+                            "Warning. Part of the split object is missing original base is used instead",
+                            abs(comsolid.Solids[0].Volume - base.Volume) / base.Volume,
+                            comsolid.Solids[0].Volume,
+                            base.Volume,
+                        )
                         base.exportStep("tmp_base.stp")
                         s = Part.Shape()
                         s.read("tmp_base.stp")
@@ -943,12 +937,11 @@ def split_2nd_order(Solids, universe_box):
                                 cutBase.extend(solidsInCom)
                                 break
                         except:
-                            if opt.verbose:
-                                logger.info(
-                                    "Failed split base with {} surface".format(
-                                        s.shape.Faces[0].Surface
-                                    )
+                            logger.info(
+                                "Failed split base with {} surface".format(
+                                    s.shape.Faces[0].Surface
                                 )
+                            )
                             err += 2
 
                     if simple:
@@ -1012,11 +1005,10 @@ def remove_solids(Solids):
     Solids_Clean = []
     for solid in Solids:
         if solid.Volume <= Vol_tol:
-            if opt.verbose:
-                logger.info(
-                    "Warning: remove_solids degenerated solids are produced",
-                    solid.Volume,
-                )
+            logger.info(
+                "Warning: remove_solids degenerated solids are produced",
+                solid.Volume,
+            )
             err = 2
             continue
         Solids_Clean.append(solid)
@@ -1043,11 +1035,10 @@ def split_component(solidShape, universe_box):
     Pieces = []
     for part in split:
         if part.Volume <= 1e-10:
-            if opt.verbose:
-                logger.info(
-                    "Warning: split_component degenerated solids are produced",
-                    part.Volume,
-                )
+            logger.info(
+                "Warning: split_component degenerated solids are produced",
+                part.Volume,
+            )
             err += 2
             continue
         Pieces.append(part)
@@ -1058,10 +1049,7 @@ def split_component(solidShape, universe_box):
     Volch = (Volini - Volend) / Volini
 
     if abs(Volch) > 1e-2:  # 1% of Volume change
-        if opt.verbose:
-            logger.info(
-                f"Warning: Volume has changed after decomposition: {Volch:11.4E}"
-            )
+        logger.info(f"Warning: Volume has changed after decomposition: {Volch:11.4E}")
         err += 4
 
     return comsolid, err

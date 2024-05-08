@@ -98,8 +98,7 @@ def get_void_def(MetaList, Surfaces, Enclosure, setting, Lev0=False):
 
         for iz, z in enumerate(Initial):
             nsurfaces, nbrackets = z.get_numbers()
-            if opt.verbose:
-                logger.info(f"{iloop} {iz + 1}/{nvoid} {nsurfaces} {nbrackets}")
+            logger.info(f"{iloop} {iz + 1}/{nvoid} {nsurfaces} {nbrackets}")
 
             if nsurfaces > maxsurf and nbrackets > maxbracket:
                 newspace = z.split(minSize)

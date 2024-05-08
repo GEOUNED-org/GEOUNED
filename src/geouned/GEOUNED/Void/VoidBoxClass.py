@@ -307,8 +307,7 @@ class VoidBox:
 
                     # solid in cover full Void cell volume  => Void cell doesn't exist
                     if chk is True:
-                        if opt.verbose:
-                            logger.warning("void Cell should not exist")
+                        logger.warning("void Cell should not exist")
                         return None, None
 
                     # solid cell is not in void cell Void cell volume  => doesn't contribute to void definition
