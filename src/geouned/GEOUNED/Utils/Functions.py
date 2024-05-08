@@ -11,10 +11,15 @@ import Part
 
 logger = logging.getLogger(__name__)
 
-from ..Utils.BasicFunctions_part1 import (ConeParams, CylinderParams,
-                                          Plane3PtsParams, PlaneParams,
-                                          SphereParams, TorusParams,
-                                          is_parallel)
+from ..Utils.BasicFunctions_part1 import (
+    ConeParams,
+    CylinderParams,
+    Plane3PtsParams,
+    PlaneParams,
+    SphereParams,
+    TorusParams,
+    is_parallel,
+)
 from ..Utils.Options.Classes import Options
 from ..Utils.Options.Classes import Tolerances as tol
 from . import BasicFunctions_part2 as BF
