@@ -387,7 +387,9 @@ class CadToCsg:
         EnclosureChunk = []
         for stp in tqdm(step_files, desc="Loading CAD files"):
             logger.info(f"read step file : {stp}")
-            Meta, Enclosure = Load.load_cad(stp, self.matFile, self.options, self.voidMat, self.compSolids)
+            Meta, Enclosure = Load.load_cad(
+                stp, self.matFile, self.options, self.voidMat, self.compSolids
+            )
             MetaChunk.append(Meta)
             EnclosureChunk.append(Enclosure)
         MetaList = join_meta_lists(MetaChunk)
