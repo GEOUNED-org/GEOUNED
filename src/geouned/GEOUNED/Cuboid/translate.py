@@ -96,7 +96,7 @@ def translate(meta_list, surfaces, universe_box, debug, verbose):
             print(m.Comments)
 =======
         logger.info(f"Decomposing solid: {i}/{tot_solid} ")
-        if setting["debug"]:
+        if debug:
             logger.info(m.Comments)
 >>>>>>> replace_print_with_logger
             if m.IsEnclosure:
@@ -126,12 +126,7 @@ def set_definitions(meta_obj, surfaces, verbose):
             if abs(face.Area) < 1e-2:
                 continue
             if face.Area < 0:
-<<<<<<< HEAD
-                if verbose:
-                    print("Warning : Negative surface Area")
-=======
                 logger.warning("Negative surface Area")
->>>>>>> replace_print_with_logger
             if str(face.Surface) != "<Plane object>":
                 logger.warning("All surfaces must be plane")
                 continue
