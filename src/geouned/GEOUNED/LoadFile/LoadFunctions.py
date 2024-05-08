@@ -179,7 +179,9 @@ def check_enclosure(freecad_doc, enclosure_list):
 
     if temp_list:
         stop = True
-        logger.info("One or more nested enclosure labels in CAD solid tree view/structure tree do not have any CAD solid.")
+        logger.info(
+            "One or more nested enclosure labels in CAD solid tree view/structure tree do not have any CAD solid."
+        )
         logger.info("Each nested enclosure must have only one solid. Code STOPS.")
         logger.info("List of problematic nested enclosure labels:")
 

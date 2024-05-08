@@ -344,7 +344,8 @@ class SerpentInput:
 
         if p.Index not in self.surfaceTable.keys():
             logger.info(
-                f"{p.Type} Surface {p.Index} not used in cell definition) {p.Surf.Axis} {p.Surf.Position}")
+                f"{p.Type} Surface {p.Index} not used in cell definition) {p.Surf.Axis} {p.Surf.Position}"
+            )
             return
 
         for ic in self.surfaceTable[p.Index]:

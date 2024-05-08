@@ -361,7 +361,7 @@ class CadToCsg:
         freecad_version = ".".join(FreeCAD.Version()[:3])
         logger.info(
             f"GEOUNED version {GEOUNED_Version} {GEOUNED_ReleaseDate} \nFreeCAD version {freecad_version}"
-            )
+        )
 
         code_setting = self.__dict__
         if code_setting is None:
