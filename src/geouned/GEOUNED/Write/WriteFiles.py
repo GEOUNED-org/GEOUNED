@@ -72,7 +72,9 @@ def write_geometry(UniverseBox, MetaList, Surfaces, code_setting, options, toler
         else:
             outSphere = None
 
-        Serpentfile = SerpentInput(MetaList, Surfaces, code_setting, options, tolerances)
+        Serpentfile = SerpentInput(
+            MetaList, Surfaces, code_setting, options, tolerances
+        )
         # Serpentfile.set_sdef((outSphere,outBox))
         Serpentfile.write_input(serpentFilename)
 

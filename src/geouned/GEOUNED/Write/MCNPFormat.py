@@ -166,7 +166,9 @@ C **************************************************************
     def __write_surfaces__(self, surface):
         """Write the surfaces in MCNP format"""
 
-        MCNP_def = mcnp_surface(surface.Index, surface.Type, surface.Surf, self.tolerances)
+        MCNP_def = mcnp_surface(
+            surface.Index, surface.Type, surface.Surf, self.tolerances
+        )
         if MCNP_def:
             MCNP_def += "\n"
             self.inpfile.write(MCNP_def)

@@ -260,9 +260,7 @@ class CadToCsg:
                     if key in attributes_and_types.keys():
                         if attributes_and_types[key] is bool:
                             value = config.getboolean("Tolerances", key)
-                        elif (
-                            attributes_and_types[key] is float
-                        ):
+                        elif attributes_and_types[key] is float:
                             value = config.getfloat("Tolerances", key)
                         setattr(self.tolerances, key, value)
 
@@ -432,7 +430,13 @@ class CadToCsg:
 
             # decompose all solids in elementary solids (convex ones)
             warningSolidList = decompose_solids(
-                MetaList, Surfaces, UniverseBox, code_setting, True, self.options, self.tolerances
+                MetaList,
+                Surfaces,
+                UniverseBox,
+                code_setting,
+                True,
+                self.options,
+                self.tolerances,
             )
 
             # decompose Enclosure solids
@@ -444,7 +448,7 @@ class CadToCsg:
                     code_setting,
                     False,
                     self.options,
-                    self.tolerances
+                    self.tolerances,
                 )
 
             logger.info("End of decomposition phase")
@@ -455,7 +459,9 @@ class CadToCsg:
                 if m.IsEnclosure:
                     continue
                 logger.info(f"Building cell: {j+1}")
-                cones = Conv.cellDef(m, Surfaces, UniverseBox, self.options, self.tolerances)
+                cones = Conv.cellDef(
+                    m, Surfaces, UniverseBox, self.options, self.tolerances
+                )
                 if cones:
                     coneInfo[m.__id__] = cones
                 if j in warningSolidList:
@@ -478,7 +484,7 @@ class CadToCsg:
                     code_setting,
                     False,
                     self.options,
-                    self.tolerances
+                    self.tolerances,
                 )
 
         tempstr2 = str(datetime.now() - tempTime)
@@ -598,7 +604,9 @@ class CadToCsg:
         process_cones(MetaList, coneInfo, Surfaces, UniverseBox, self.tolerances)
 
         # write outputformat input
-        write_geometry(UniverseBox, MetaList, Surfaces, code_setting, self.options, self.tolerances)
+        write_geometry(
+            UniverseBox, MetaList, Surfaces, code_setting, self.options, self.tolerances
+        )
 
         logger.info("End of MCNP, OpenMC, Serpent and PHITS translation phase")
 
@@ -609,7 +617,9 @@ class CadToCsg:
         logger.info(f"Translation time of void cells {tempTime2} - {tempTime1}")
 
 
-def decompose_solids(MetaList, Surfaces, UniverseBox, setting, meta, options, tolerances):
+def decompose_solids(
+    MetaList, Surfaces, UniverseBox, setting, meta, options, tolerances
+):
     totsolid = len(MetaList)
     warningSolids = []
     for i, m in enumerate(tqdm(MetaList, desc="Decomposing solids")):
@@ -651,7 +661,10 @@ def decompose_solids(MetaList, Surfaces, UniverseBox, setting, meta, options, to
             else:
                 comsolid.exportStep(f"debug/compSolid_{i}.stp")
         Surfaces.extend(
-            Decom.extract_surfaces(comsolid, "All", UniverseBox, tolerances, MakeObj=True), tolerances
+            Decom.extract_surfaces(
+                comsolid, "All", UniverseBox, tolerances, MakeObj=True
+            ),
+            tolerances,
         )
         m.set_cad_solid()
         m.update_solids(comsolid.Solids)
@@ -683,7 +696,9 @@ def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, tolerances):
                     cones.update(-x for x in coneInfo[Id])
             Conv.add_cone_plane(m.Definition, cones, Surfaces, UniverseBox, tolerances)
         elif not m.Void:
-            Conv.add_cone_plane(m.Definition, coneInfo[m.__id__], Surfaces, UniverseBox, tolerances)
+            Conv.add_cone_plane(
+                m.Definition, coneInfo[m.__id__], Surfaces, UniverseBox, tolerances
+            )
 
 
 def get_universe(MetaList):

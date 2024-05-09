@@ -822,7 +822,9 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances):
             elif surface_type == "<Toroid object>":
 
                 if (
-                    is_parallel(face.Surface.Axis, FreeCAD.Vector(1, 0, 0), tolerances.angle)
+                    is_parallel(
+                        face.Surface.Axis, FreeCAD.Vector(1, 0, 0), tolerances.angle
+                    )
                     or is_parallel(
                         face.Surface.Axis, FreeCAD.Vector(0, 1, 0), tolerances.angle
                     )
@@ -842,7 +844,9 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances):
                     u_closed, u_minMax = u_params
                     # u_closed = True
                     if not u_closed:
-                        planes, ORop = gen_torus_annex_u_planes(face, u_minMax, tolerances)
+                        planes, ORop = gen_torus_annex_u_planes(
+                            face, u_minMax, tolerances
+                        )
                         plane1, plane2 = planes
                         plane = GeounedSurface(
                             ("Plane", plane1), universe_box, Face="Build"
@@ -850,7 +854,9 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances):
                         id1, exist = surfaces.add_plane(plane, tolerances, False)
                         if exist:
                             p = surfaces.get_surface(id1)
-                            if is_opposite(plane.Surf.Axis, p.Surf.Axis, tolerances.pln_angle):
+                            if is_opposite(
+                                plane.Surf.Axis, p.Surf.Axis, tolerances.pln_angle
+                            ):
                                 id1 = -id1
 
                         if plane2 is None:
@@ -908,11 +914,15 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances):
                                 plane = GeounedSurface(
                                     ("Plane", surf_params), universe_box, Face="Build"
                                 )
-                                id2, exist = surfaces.add_plane(plane, tolerances, False)
+                                id2, exist = surfaces.add_plane(
+                                    plane, tolerances, False
+                                )
                                 if exist:
                                     p = surfaces.get_surface(id2)
                                     if is_opposite(
-                                        plane.Surf.Axis, p.Surf.Axis, tolerances.pln_angle
+                                        plane.Surf.Axis,
+                                        p.Surf.Axis,
+                                        tolerances.pln_angle,
                                     ):
                                         id2 = -id2
 
@@ -972,7 +982,9 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances):
 
                 if surface_type == "<Plane object>":
                     s = surfaces.get_surface(id)
-                    if is_opposite(face.Surface.Axis, s.Surf.Axis, tolerances.pln_angle):
+                    if is_opposite(
+                        face.Surface.Axis, s.Surf.Axis, tolerances.pln_angle
+                    ):
                         var = -var
 
                 if str(var) in surf_piece:

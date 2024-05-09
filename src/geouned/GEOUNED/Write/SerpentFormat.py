@@ -175,7 +175,9 @@ class SerpentInput:
     def __write_surfaces__(self, surface):
         """Write the surfaces in Serpent format"""
 
-        Serpent_def = serpent_surface(surface.Index, surface.Type, surface.Surf, self.options, self.tolerances)
+        Serpent_def = serpent_surface(
+            surface.Index, surface.Type, surface.Surf, self.options, self.tolerances
+        )
         if Serpent_def:
             Serpent_def += "\n"
             self.inpfile.write(Serpent_def)

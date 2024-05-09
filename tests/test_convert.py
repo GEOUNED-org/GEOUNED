@@ -57,9 +57,7 @@ def test_conversion(input_step_file):
     my_tolerances = geouned.Tolerances()
 
     geo = geouned.CadToCsg(
-        title="Input Test",
-        options=my_options,
-        tolerances=my_tolerances
+        title="Input Test", options=my_options, tolerances=my_tolerances
     )
 
     # set parameters values stored in template dictionary

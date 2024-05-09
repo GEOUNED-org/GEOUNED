@@ -213,12 +213,14 @@ class SolidGu:
         if arcLength >= two_pi * (1.0 - self.tolerances.relativePrecision):
             mergedParams = (True, (V0, V0 + two_pi))
         else:
-            if is_same_value(V0, 0.0, self.tolerances.relativePrecision) and is_same_value(
-                V1, two_pi, self.tolerances.relativePrecision
-            ):
+            if is_same_value(
+                V0, 0.0, self.tolerances.relativePrecision
+            ) and is_same_value(V1, two_pi, self.tolerances.relativePrecision):
                 for i in range(len(params) - 1):
                     if not is_same_value(
-                        params[i][1], params[i + 1][0], self.tolerances.relativePrecision
+                        params[i][1],
+                        params[i + 1][0],
+                        self.tolerances.relativePrecision,
                     ):
                         break
                 v_min = params[i + 1][0] - two_pi

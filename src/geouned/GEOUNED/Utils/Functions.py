@@ -598,7 +598,10 @@ class SurfacesDict(dict):
         sphere_added = True
         for i, s in enumerate(self["Sph"]):
             if BF.is_same_sphere(
-                sph.Surf, s.Surf, tolerances.sph_distance, rel_tol=tolerances.relativeTol
+                sph.Surf,
+                s.Surf,
+                tolerances.sph_distance,
+                rel_tol=tolerances.relativeTol,
             ):
                 sphere_added = False
                 index = s.Index
@@ -614,7 +617,7 @@ class SurfacesDict(dict):
         else:
             return index, True
 
-    def add_torus(self, tor,  tolerances):
+    def add_torus(self, tor, tolerances):
         add_torus = True
         for i, s in enumerate(self["Tor"]):
             if BF.is_same_torus(

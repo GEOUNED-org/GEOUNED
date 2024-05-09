@@ -740,7 +740,9 @@ def split_planes_org(Solids, universe_box, options, tolerances):
 
             base = item[0]
             index = item[1]
-            SPlanes = extract_surfaces(base, "Planes", universe_box, tolerances, MakeObj=True)
+            SPlanes = extract_surfaces(
+                base, "Planes", universe_box, tolerances, MakeObj=True
+            )
             Planes = [SPlanes["PX"], SPlanes["PY"], SPlanes["PZ"]]
             for i in index:
                 del Planes[i]
@@ -911,7 +913,9 @@ def split_2nd_order(Solids, universe_box, options, tolerances):
         while True:
             cutBase = []
             for solid in Base:
-                Surfaces = extract_surfaces(solid, kind, universe_box, tolerances, False)
+                Surfaces = extract_surfaces(
+                    solid, kind, universe_box, tolerances, False
+                )
                 if len(Surfaces[kind]) == 0:
                     kindBase.append(solid)
                 else:

@@ -63,7 +63,9 @@ def void_generation(
             newMetaList = VF.select_solids(MetaList, encl.SonEnclosures, encl)
             logger.info(f"Build Void enclosure {j} in enclosure level {i + 1}")
             # select solids overlapping current enclosure "encl", and lower level enclosures
-            voids = get_void_def(newMetaList, Surfaces, encl, setting, options, tolerances)
+            voids = get_void_def(
+                newMetaList, Surfaces, encl, setting, options, tolerances
+            )
             voidList.append(voids)
 
     voidList.append(set_graveyard_cell(Surfaces, UniverseBox, tolerances))
@@ -73,7 +75,9 @@ def void_generation(
     )
 
 
-def get_void_def(MetaList, Surfaces, Enclosure, setting, options, tolerances, Lev0=False):
+def get_void_def(
+    MetaList, Surfaces, Enclosure, setting, options, tolerances, Lev0=False
+):
 
     maxsurf = setting["maxSurf"]
     maxbracket = setting["maxBracket"]
