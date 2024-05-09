@@ -242,8 +242,8 @@ class CadToCsg:
                         self.set(key, tuple(map(int, data)))
 
             elif section == "Options":
+                attributes_and_types = get_type_hints(Options())
                 for key in config["Options"].keys():
-                    attributes_and_types = get_type_hints(Options())
                     if key in attributes_and_types.keys():
                         if attributes_and_types[key] is bool:
                             value = config.getboolean("Options", key)
@@ -255,8 +255,8 @@ class CadToCsg:
                         setattr(self.options, key, value)
 
             elif section == "Tolerances":
+                attributes_and_types = get_type_hints(Tolerances())
                 for key in config["Tolerances"].keys():
-                    attributes_and_types = get_type_hints(Tolerances())
                     if key in attributes_and_types.keys():
                         if attributes_and_types[key] is bool:
                             value = config.getboolean("Tolerances", key)
