@@ -474,7 +474,14 @@ class CadToCsg:
                 Conv.no_overlapping_cell(MetaList, Surfaces, self.options)
 
         else:
-            translate(MetaList, Surfaces, UniverseBox, code_setting)
+            translate(
+                MetaList,
+                Surfaces,
+                UniverseBox,
+                code_setting,
+                self.options,
+                self.tolerances,
+            )
             # decompose Enclosure solids
             if self.voidGen and EnclosureList:
                 warningEnclosureList = decompose_solids(
@@ -601,7 +608,9 @@ class CadToCsg:
         print_warning_solids(warnSolids, warnEnclosures)
 
         # add plane definition to cone
-        process_cones(MetaList, coneInfo, Surfaces, UniverseBox, self.tolerances)
+        process_cones(
+            MetaList, coneInfo, Surfaces, UniverseBox, self.options, self.tolerances
+        )
 
         # write outputformat input
         write_geometry(
@@ -662,8 +671,9 @@ def decompose_solids(
                 comsolid.exportStep(f"debug/compSolid_{i}.stp")
         Surfaces.extend(
             Decom.extract_surfaces(
-                comsolid, "All", UniverseBox, tolerances, MakeObj=True
+                comsolid, "All", UniverseBox, options, tolerances, MakeObj=True
             ),
+            options,
             tolerances,
         )
         m.set_cad_solid()
@@ -681,7 +691,7 @@ def update_comment(meta, idLabel):
     meta.set_comments(Void.void_comment_line((meta.__commentInfo__[0], newLabel)))
 
 
-def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, tolerances):
+def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances):
     cellId = tuple(coneInfo.keys())
     for m in MetaList:
         if m.__id__ not in cellId and not m.Void:
@@ -694,10 +704,17 @@ def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, tolerances):
             for Id in m.__commentInfo__[1]:
                 if Id in cellId:
                     cones.update(-x for x in coneInfo[Id])
-            Conv.add_cone_plane(m.Definition, cones, Surfaces, UniverseBox, tolerances)
+            Conv.add_cone_plane(
+                m.Definition, cones, Surfaces, UniverseBox, options, tolerances
+            )
         elif not m.Void:
             Conv.add_cone_plane(
-                m.Definition, coneInfo[m.__id__], Surfaces, UniverseBox, tolerances
+                m.Definition,
+                coneInfo[m.__id__],
+                Surfaces,
+                UniverseBox,
+                options,
+                tolerances,
             )
 
 

@@ -167,7 +167,7 @@ C **************************************************************
         """Write the surfaces in MCNP format"""
 
         MCNP_def = mcnp_surface(
-            surface.Index, surface.Type, surface.Surf, self.tolerances
+            surface.Index, surface.Type, surface.Surf, self.options, self.tolerances
         )
         if MCNP_def:
             MCNP_def += "\n"

@@ -102,7 +102,7 @@ class VoidBox:
         box1 = FreeCAD.BoundBox(VMin1, VMax1)
         box2 = FreeCAD.BoundBox(VMin2, VMax2)
 
-        if self.PieceEnclosure == None:
+        if self.PieceEnclosure is None:
             Space1 = VoidBox(self.Objects, box1)
             Space2 = VoidBox(self.Objects, box2)
             VoidBoxTuple = (Space1, Space2)
@@ -110,11 +110,11 @@ class VoidBox:
             Space1 = self.piece_enclosure_split(box1)
             Space2 = self.piece_enclosure_split(box2)
             VoidBoxTuple = (Space1, Space2)
-            if Space1 == None:
+            if Space1 is None:
                 VoidBoxTuple = (Space2,)
-            if Space2 == None:
+            if Space2 is None:
                 VoidBoxTuple = (Space1,)
-            if Space1 == None and Space2 == None:
+            if Space1 is None and Space2 is None:
                 VoidBoxTuple = ()
 
         return VoidBoxTuple
@@ -170,7 +170,7 @@ class VoidBox:
             center = self.BoundBox.Center
             bBox = self.BoundBox
             for p in self.get_bound_planes():
-                id, exist = Surfaces.add_plane(p, tolerances, False)
+                id, exist = Surfaces.add_plane(p, options, tolerances, False)
                 if exist:
                     s = Surfaces.get_surface(id)
                     if is_opposite(p.Surf.Axis, s.Surf.Axis):
@@ -189,7 +189,9 @@ class VoidBox:
                 Part.makeCompound(TempPieceEnclosure.Solids), UniverseBox
             )
             Surfaces.extend(
-                Decom.extract_surfaces(comsolid, "All", UniverseBox, MakeObj=True)
+                Decom.extract_surfaces(
+                    comsolid, "All", UniverseBox, options, tolerances, MakeObj=True
+                )
             )
             TempPieceEnclosure.update_solids(comsolid.Solids)
             Conv.cellDef(TempPieceEnclosure, Surfaces, UniverseBox)

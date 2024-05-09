@@ -428,12 +428,12 @@ class SurfacesDict(dict):
         del self[self.__last_obj__[0]][self.__last_obj__[1]]
         return
 
-    def extend(self, surface, tolerances):
+    def extend(self, surface, options, tolerances):
         for Pkey in ["PX", "PY", "PZ", "P"]:
             for s in surface[Pkey]:
-                self.add_plane(s, tolerances, False)
+                self.add_plane(s, options, tolerances, False)
         for s in surface["Cyl"]:
-            self.add_cylinder(s, tolerances, False)
+            self.add_cylinder(s, options, tolerances, False)
         for s in surface["Cone"]:
             self.add_cone(s, tolerances)
         for s in surface["Sph"]:
@@ -441,7 +441,7 @@ class SurfacesDict(dict):
         for s in surface["Tor"]:
             self.add_torus(s, tolerances)
 
-    def add_plane(self, plane, tolerances, fuzzy):
+    def add_plane(self, plane, options, tolerances, fuzzy):
         ex = FreeCAD.Vector(1, 0, 0)
         ey = FreeCAD.Vector(0, 1, 0)
         ez = FreeCAD.Vector(0, 0, 1)
@@ -452,6 +452,7 @@ class SurfacesDict(dict):
                 if BF.is_same_plane(
                     plane.Surf,
                     p.Surf,
+                    options=options,
                     tolerances=tolerances,
                     dtol=tolerances.pln_distance,
                     atol=tolerances.pln_angle,
@@ -475,6 +476,7 @@ class SurfacesDict(dict):
                 if BF.is_same_plane(
                     plane.Surf,
                     p.Surf,
+                    options=options,
                     tolerances=tolerances,
                     dtol=tolerances.pln_distance,
                     atol=tolerances.pln_angle,
@@ -498,6 +500,7 @@ class SurfacesDict(dict):
                 if BF.is_same_plane(
                     plane.Surf,
                     p.Surf,
+                    options=options,
                     tolerances=tolerances,
                     dtol=tolerances.pln_distance,
                     atol=tolerances.pln_angle,
@@ -521,6 +524,7 @@ class SurfacesDict(dict):
                 if BF.is_same_plane(
                     plane.Surf,
                     p.Surf,
+                    options=options,
                     tolerances=tolerances,
                     dtol=tolerances.pln_distance,
                     atol=tolerances.pln_angle,
@@ -543,12 +547,13 @@ class SurfacesDict(dict):
         else:
             return index, True
 
-    def add_cylinder(self, cyl, tolerances, fuzzy=False):
+    def add_cylinder(self, cyl, options, tolerances, fuzzy=False):
         addCyl = True
         for i, c in enumerate(self["Cyl"]):
             if BF.is_same_cylinder(
                 cyl.Surf,
                 c.Surf,
+                options=options,
                 tolerances=tolerances,
                 dtol=tolerances.cyl_distance,
                 atol=tolerances.cyl_angle,
