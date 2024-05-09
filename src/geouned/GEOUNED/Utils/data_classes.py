@@ -72,7 +72,7 @@ class Options:
 
 
 class Tolerances:
-    """_summary_
+    """A class for containing tolerances values
 
     Args:
         relativeTol (bool, optional): _description_. Defaults to False.
