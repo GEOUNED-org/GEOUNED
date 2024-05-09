@@ -12,10 +12,10 @@ try:
     import freecad  # importing conda package if present
 except:
     pass
+import openmc
 import Part
 import pytest
 from FreeCAD import Import
-import openmc
 
 openmc.config["cross_sections"] = Path("tests/cross_sections.xml").resolve()
 

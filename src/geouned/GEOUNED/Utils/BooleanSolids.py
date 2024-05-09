@@ -2,15 +2,17 @@
 #   Conversion to MCNP v0.0
 #   Only one solid and planar surfaces
 #
+import logging
 import math
 
 import FreeCAD
 
 from ..Utils.booleanFunction import BoolSequence
 from ..Utils.Functions import GeounedSurface, split_bop
-from ..Utils.Options.Classes import Options as opt
 
 BoolVals = (None, True, False)
+
+logger = logging.getLogger(__name__)
 
 
 class CTelement:
@@ -213,7 +215,7 @@ class ConstraintTable(dict):
                 falseVal = Seq.evaluate(falseSet)
                 return falseVal if type(falseVal) is bool else None
             else:
-                print("Bad trouble surfaces {} is on none side of the box!!")
+                logger.info("Bad trouble surfaces is on none side of the box!!")
                 return False
 
 
@@ -239,7 +241,7 @@ def combine_diag_elements(d1, d2):
         return CTelement((0, 0, 1, 0))
 
 
-def build_c_table_from_solids(Box, SurfInfo, option="diag"):
+def build_c_table_from_solids(Box, SurfInfo, option, options):
 
     if type(SurfInfo) is dict:
         surfaces = SurfInfo
@@ -266,7 +268,7 @@ def build_c_table_from_solids(Box, SurfInfo, option="diag"):
         CTable.diagonal = False
 
     for i, s1 in enumerate(surfaceList):
-        res, splitRegions = split_solid_fast(Box, surfaces[s1], True)
+        res, splitRegions = split_solid_fast(Box, surfaces[s1], True, options)
         # res,splitRegions = split_solid_fast(Box,Surfaces.get_surface(s1),True)
 
         CTable.add_element(s1, s1, CTelement(res, s1, s1))
@@ -280,7 +282,7 @@ def build_c_table_from_solids(Box, SurfInfo, option="diag"):
             pos0 = None
             for solid in posS1:
 
-                pos = split_solid_fast(solid, surfaces[s2], False)
+                pos = split_solid_fast(solid, surfaces[s2], False, options)
 
                 # pos = split_solid_fast(solid,Surfaces.get_surface(s2),False)
                 if pos == (1, 1):
@@ -295,7 +297,7 @@ def build_c_table_from_solids(Box, SurfInfo, option="diag"):
             neg0 = None
             for solid in negS1:
                 # neg = split_solid_fast(solid,Surfaces.get_surface(s2),False)
-                neg = split_solid_fast(solid, surfaces[s2], False)
+                neg = split_solid_fast(solid, surfaces[s2], False, options)
                 if neg == (1, 1):
                     break  # s2 intersect S1 Region
                 if neg0 is None:
@@ -380,11 +382,11 @@ def remove_extra_surfaces(CellSeq, CTable):
     return newDef
 
 
-def split_solid_fast(solid, surf, box):
+def split_solid_fast(solid, surf, box, options):
 
     if box:
         if surf.shape:
-            comsolid = split_bop(solid, [surf.shape], opt.splitTolerance)
+            comsolid = split_bop(solid, [surf.shape], options.splitTolerance, options)
         else:
             return check_sign(solid, surf), None
 
@@ -510,7 +512,7 @@ def point_from_surface(solid):
             d *= 0.5
             pp = pface + d * normal
 
-    print(f"Solid not found in bounding Box (Volume : {solid.Volume})")
+    logger.info(f"Solid not found in bounding Box (Volume : {solid.Volume})")
     return None
 
 

@@ -1,12 +1,15 @@
 #
 # Set of useful functions used in different parts of the code
 #
+import logging
 import math
 
 import BOPTools.SplitAPI
 import FreeCAD
 import numpy as np
 import Part
+
+logger = logging.getLogger(__name__)
 
 from ..Utils.BasicFunctions_part1 import (
     ConeParams,
@@ -17,14 +20,13 @@ from ..Utils.BasicFunctions_part1 import (
     TorusParams,
     is_parallel,
 )
-from ..Utils.Options.Classes import Options
 from ..Utils.Options.Classes import Tolerances as tol
 from . import BasicFunctions_part2 as BF
 
 
-def get_box(comp):
+def get_box(comp, options):
     bb = FreeCAD.BoundBox(comp.BoundBox)
-    bb.enlarge(Options.enlargeBox)
+    bb.enlarge(options.enlargeBox)
     xMin, yMin, zMin = bb.XMin, bb.YMin, bb.ZMin
     xLength, yLength, zLength = bb.XLength, bb.YLength, bb.ZLength
 
@@ -206,9 +208,11 @@ class GeounedSolid:
                 try:
                     distShape = sol1.distToShape(sol2)[0]
                 except:
-                    print("Failed solid1.distToshape(solid2), try with inverted solids")
+                    logger.info(
+                        "Failed solid1.distToshape(solid2), try with inverted solids"
+                    )
                     distShape = sol2.distToShape(sol1)[0]
-                    print("inverted disToShape OK", distShape)
+                    logger.info(f"inverted disToShape OK {distShape}")
                 dist = min(dist, distShape)
                 if dist == 0:
                     break
@@ -369,7 +373,7 @@ class GeounedSurface:
             self.shape = torus.Faces[0]
             return
         else:
-            print(f"Error: Type {self.Type} is not defined")
+            logger.error(f"Type {self.Type} is not defined")
             return
 
 
@@ -397,7 +401,7 @@ class SurfacesDict(dict):
 
     def __str__(self):
         for key in self.keys():
-            print(key, self[key])
+            logger.info(f"{key}, {self[key]}")
         return ""
 
     def get_surface(self, index):
@@ -416,7 +420,7 @@ class SurfacesDict(dict):
             self.__last_obj__ = (key, i)
             return self[key][i]
 
-        print(f"Index {index} not found in Surfaces")
+        logger.info(f"Index {index} not found in Surfaces")
         return None
 
     def del_surface(self, index):
@@ -631,15 +635,15 @@ class SurfacesDict(dict):
             return index, True
 
 
-def split_bop(solid, tools, tolerance, scale=0.1):
+def split_bop(solid, tools, tolerance, options, scale=0.1):
 
     if tolerance >= 0.1:
         compSolid = BOPTools.SplitAPI.slice(solid, tools, "Split", tolerance=tolerance)
 
     elif tolerance < 1e-12:
-        if Options.scaleUp:
-            tol = 1e-13 if Options.splitTolerance == 0 else Options.splitTolerance
-            compSolid = split_bop(solid, tools, tol / scale, 1.0 / scale)
+        if options.scaleUp:
+            tol = 1e-13 if options.splitTolerance == 0 else options.splitTolerance
+            compSolid = split_bop(solid, tools, tol / scale, options, 1.0 / scale)
         else:
             compSolid = BOPTools.SplitAPI.slice(
                 solid, tools, "Split", tolerance=tolerance
@@ -651,6 +655,6 @@ def split_bop(solid, tools, tolerance, scale=0.1):
                 solid, tools, "Split", tolerance=tolerance
             )
         except:
-            compSolid = split_bop(solid, tools, tolerance * scale, scale)
+            compSolid = split_bop(solid, tools, tolerance * scale, options, scale)
 
     return compSolid

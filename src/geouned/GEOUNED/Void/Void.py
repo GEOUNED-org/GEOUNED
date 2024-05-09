@@ -1,16 +1,22 @@
+import logging
+
 import FreeCAD
 import Part
+from tqdm import tqdm
 
 from ..LoadFile import LoadFunctions as LF
 from ..Utils.BasicFunctions_part1 import is_opposite
 from ..Utils.booleanFunction import BoolSequence
 from ..Utils.Functions import GeounedSolid, GeounedSurface
-from ..Utils.Options.Classes import Options as opt
 from ..Void import voidFunctions as VF
 from .VoidBoxClass import VoidBox
 
+logger = logging.getLogger(__name__)
 
-def void_generation(MetaList, EnclosureList, Surfaces, UniverseBox, setting, init):
+
+def void_generation(
+    MetaList, EnclosureList, Surfaces, UniverseBox, setting, init, options
+):
     voidList = []
 
     if EnclosureList:
@@ -38,24 +44,26 @@ def void_generation(MetaList, EnclosureList, Surfaces, UniverseBox, setting, ini
 
     # get voids in 0 Level Enclosure (original Universe)
     # if exist Level 1 enclosures are considered as material cells
-    print("Build Void highest enclosure")
+    logger.info("Build Void highest enclosure")
 
-    voids = get_void_def(newMetaList, Surfaces, EnclosureBox, setting, Lev0=True)
+    voids = get_void_def(
+        newMetaList, Surfaces, EnclosureBox, setting, options, Lev0=True
+    )
     voidList.append(voids)
 
     # Perform enclosure void
     # Loop until the lowest enclosure level
 
-    for i, Level in enumerate(NestedEnclosure):
+    for i, Level in enumerate(tqdm(NestedEnclosure, desc="Void generation")):
 
-        print("Build Void highest enclosure")
+        logger.info("Build Void highest enclosure")
         for j, encl in enumerate(Level):
             if encl.CellType == "envelope":
                 continue
             newMetaList = VF.select_solids(MetaList, encl.SonEnclosures, encl)
-            print(f"Build Void enclosure {j} in enclosure level {i + 1}")
+            logger.info(f"Build Void enclosure {j} in enclosure level {i + 1}")
             # select solids overlapping current enclosure "encl", and lower level enclosures
-            voids = get_void_def(newMetaList, Surfaces, encl, setting)
+            voids = get_void_def(newMetaList, Surfaces, encl, setting, options)
             voidList.append(voids)
 
     voidList.append(set_graveyard_cell(Surfaces, UniverseBox))
@@ -65,7 +73,7 @@ def void_generation(MetaList, EnclosureList, Surfaces, UniverseBox, setting, ini
     )
 
 
-def get_void_def(MetaList, Surfaces, Enclosure, setting, Lev0=False):
+def get_void_def(MetaList, Surfaces, Enclosure, setting, options, Lev0=False):
 
     maxsurf = setting["maxSurf"]
     maxbracket = setting["maxBracket"]
@@ -90,12 +98,11 @@ def get_void_def(MetaList, Surfaces, Enclosure, setting, Lev0=False):
         Temp = []
         iloop += 1
         nvoid = len(Initial)
-        print("Loop, Box to Split :", iloop, nvoid)
+        logger.info("Loop, Box to Split :{iloop}, {nvoid}")
 
         for iz, z in enumerate(Initial):
             nsurfaces, nbrackets = z.get_numbers()
-            if opt.verbose:
-                print(f"{iloop} {iz + 1}/{nvoid} {nsurfaces} {nbrackets}")
+            logger.info(f"{iloop} {iz + 1}/{nvoid} {nsurfaces} {nbrackets}")
 
             if nsurfaces > maxsurf and nbrackets > maxbracket:
                 newspace = z.split(minSize)
@@ -115,9 +122,11 @@ def get_void_def(MetaList, Surfaces, Enclosure, setting, Lev0=False):
                     z.BoundBox.ZMax * 0.1,
                 )
 
-                print(f"build complementary {iloop} {iz}")
+                logger.info(f"build complementary {iloop} {iz}")
 
-                cell, CellIn = z.get_void_complementary(Surfaces, simplify=simplifyVoid)
+                cell, CellIn = z.get_void_complementary(
+                    Surfaces, options, simplify=simplifyVoid
+                )
                 if cell is not None:
                     VoidCell = (cell, (boxDim, CellIn))
                     VoidDef.append(VoidCell)

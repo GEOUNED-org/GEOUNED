@@ -1,6 +1,7 @@
 #
 # Module to load a STEP file
 #
+import logging
 import os
 import re
 
@@ -10,6 +11,8 @@ from FreeCAD import Import
 
 from ..Utils import Functions as UF
 from . import LoadFunctions as LF
+
+logger = logging.getLogger(__name__)
 
 
 # Paco mod
@@ -28,7 +31,7 @@ def extract_materials(filename):
     return m_dict
 
 
-def load_cad(filename, mat_filename, default_mat=[], comp_solids=True):
+def load_cad(filename, mat_filename, options, default_mat=[], comp_solids=True):
 
     # Set document solid tree options when opening CAD differing from version 0.18
     if int(FreeCAD.Version()[1]) > 18:
@@ -41,7 +44,7 @@ def load_cad(filename, mat_filename, default_mat=[], comp_solids=True):
         if os.path.exists(mat_filename):
             m_dict = extract_materials(mat_filename)
         else:
-            print(f"Material definition file {mat_filename} does not exist.")
+            logger.info(f"Material definition file {mat_filename} does not exist.")
             m_dict = {}
     else:
         m_dict = {}
@@ -60,10 +63,10 @@ def load_cad(filename, mat_filename, default_mat=[], comp_solids=True):
 
     for elem in doc_objects:
         if elem.TypeId == "Part::Feature":
-            comment = LF.getCommentTree(elem)
+            comment = LF.getCommentTree(elem, options)
             if not elem.Shape.Solids:
-                print(
-                    "Warning: Element {:} has no associated solid".format(
+                logger.warning(
+                    "Element {:} has no associated solid".format(
                         comment + "/" + elem.Label
                     )
                 )
@@ -73,11 +76,11 @@ def load_cad(filename, mat_filename, default_mat=[], comp_solids=True):
                 tempre_dil = None
 
                 # MIO: lightly modification of label if required
-                label = LF.get_label(elem.Label)
+                label = LF.get_label(elem.Label, options)
                 comment = comment + "/" + label
                 if elem.InList:
                     # MIO: lightly modification of label if required
-                    label_in_list = LF.get_label(elem.InList[0].Label)
+                    label_in_list = LF.get_label(elem.InList[0].Label, options)
                     encl_label = re.search(
                         "enclosure(?P<encl>[0-9]+)_(?P<parent>[0-9]+)_", label_in_list
                     )
@@ -107,7 +110,7 @@ def load_cad(filename, mat_filename, default_mat=[], comp_solids=True):
                     xelem = [elem]
                     while xelem and not tempre_mat:
                         # MIO: Modification of label if required
-                        temp_label = LF.get_label(xelem[0].Label)
+                        temp_label = LF.get_label(xelem[0].Label, options)
                         tempre_mat = re.search("_m(?P<mat>\d+)_", "_" + temp_label)
                         xelem = xelem[0].InList
 
@@ -115,7 +118,7 @@ def load_cad(filename, mat_filename, default_mat=[], comp_solids=True):
                     xelem = [elem]
                     while xelem and not tempre_dil:
                         # MIO: Modification of label if required
-                        temp_label = LF.get_label(xelem[0].Label)
+                        temp_label = LF.get_label(xelem[0].Label, options)
                         tempre_dil = re.search("_d(?P<dil>\d*\.\d*)_", temp_label)
                         xelem = xelem[0].InList
                     # Paco end
@@ -155,7 +158,7 @@ def load_cad(filename, mat_filename, default_mat=[], comp_solids=True):
                                 )
                                 missing_mat.add(mat_label)
                     else:
-                        # print('Warning : No material label associated to solid {}.\nDefault material used instead.'.format(comment))
+                        # logger.warning('No material label associated to solid {}.\nDefault material used instead.'.format(comment))
                         if default_mat:
                             meta_list[i_solid].set_material(*default_mat)
                     if tempre_dil:
@@ -180,10 +183,10 @@ def load_cad(filename, mat_filename, default_mat=[], comp_solids=True):
 
     LF.joinEnvelopes(meta_list)
     if missing_mat:
-        print(
-            "Warning!! At least one material in the CAD model is not present in the material file"
+        logger.warning(
+            "At least one material in the CAD model is not present in the material file"
         )
-        print("List of not present materials:", missing_mat)
+        logger.info(f"List of not present materials: {missing_mat}")
 
     enclosure_list = LF.set_enclosure_solid_list(meta_list)
     if enclosure_list:

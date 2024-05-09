@@ -1,15 +1,18 @@
+import logging
 import re
 
 import FreeCAD
 
 from ..Utils.Functions import GeounedSolid
-from ..Utils.Options.Classes import Options as opt
 
 
-def get_label(label):
+logger = logging.getLogger(__name__)
+
+
+def get_label(label, options):
     """Deleting the last word of the string if this is a number
     Only if the option delLastNumber is True"""
-    if not opt.delLastNumber:
+    if not options.delLastNumber:
         return label
     wrd = label.split()
     try:
@@ -19,11 +22,11 @@ def get_label(label):
         return label
 
 
-def getCommentTree(obj):
+def getCommentTree(obj, options):
     recursive_list = []
     c_obj = obj
     while c_obj.InList:
-        label = get_label(c_obj.InList[0].Label)
+        label = get_label(c_obj.InList[0].Label, options)
         recursive_list.append(label)
         c_obj = c_obj.InList[0]
 
@@ -176,13 +179,14 @@ def check_enclosure(freecad_doc, enclosure_list):
 
     if temp_list:
         stop = True
-        print(
-            "One or more nested enclosure labels in CAD solid tree view/structure tree do not have any CAD solid.\n",
-            "Each nested enclosure must have only one solid.\nCode STOPS.",
-            "\nList of problematic nested enclosure labels:",
+        logger.info(
+            "One or more nested enclosure labels in CAD solid tree view/structure tree do not have any CAD solid."
         )
+        logger.info("Each nested enclosure must have only one solid. Code STOPS.")
+        logger.info("List of problematic nested enclosure labels:")
+
         for elem in temp_list:
-            print(elem.EnclosureID)
+            logger.info(elem.EnclosureID)
 
     # check enclosure Labels don't make loops
 
@@ -203,15 +207,15 @@ def check_enclosure(freecad_doc, enclosure_list):
 
     if 0 in sid_list:
         stop = True
-        print('"0" cannot be label on child Enclosure')
+        logger.info('"0" cannot be label on child Enclosure')
     if 0 not in pid_set:
         stop = True
-        print(' "0" should parent label of most external enclosure(s)')
+        logger.info('"0" should parent label of most external enclosure(s)')
     if repeated_id:
         stop = True
-        print("Child label cannot be repeated.\nRepeated labels :")
+        logger.info("Child label cannot be repeated.\nRepeated labels :")
         for lab in repeated_id:
-            print(lab)
+            logger.info(lab)
 
     # this stop should not be move to the end of routine
     # if previous point not satisfied point 4) may lead to infinite loop
@@ -239,10 +243,10 @@ def check_enclosure(freecad_doc, enclosure_list):
         parent = next_parent
 
     if encl_dict.keys():
-        print("Following enclosure produce loop")
+        logger.info("Following enclosure produce loop")
         for p in encl_dict.keys():
             for s in encl_dict[p]:
-                print(f"{s}_{p}")
+                logger.info(f"{s}_{p}")
         raise ValueError("GEOUNED.LoadFunctions.check_enclosure failed")
 
     # check enclosures solids are correctly nested and don't overlap each other
@@ -271,15 +275,15 @@ def check_enclosure(freecad_doc, enclosure_list):
 
     if not_embedded:
         stop = True
-        print(" Following enclosures are not fully embedded in Parent enclosure")
+        logger.info("Following enclosures are not fully embedded in Parent enclosure")
         for elemt in not_embedded:
-            print("{}_{}").format(elemt[0], elemt[1])
+            logger.info(f"{elemt[0]}_{elemt[1]}")
 
     if overlap:
         stop = True
-        print(" Following enclosures overlapping ")
+        logger.info("Following enclosures overlapping ")
         for elemt in overlap:
-            print("{}_{}").format(elemt[0], elemt[1])
+            logger.info(f"{elemt[0]}_{elemt[1]}")
 
     if stop:
         raise ValueError("GEOUNED.LoadFunctions.check_enclosure failed")

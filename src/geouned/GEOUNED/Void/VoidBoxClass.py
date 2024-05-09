@@ -1,5 +1,7 @@
 """File with the VoidBox class"""
 
+import logging
+
 import FreeCAD
 import Part
 
@@ -9,7 +11,8 @@ from ..Utils.BasicFunctions_part1 import is_opposite
 from ..Utils.booleanFunction import BoolSequence
 from ..Utils.BooleanSolids import build_c_table_from_solids, remove_extra_surfaces
 from ..Utils.Functions import GeounedSolid, GeounedSurface
-from ..Utils.Options.Classes import Options as opt
+
+logger = logging.getLogger(__name__)
 
 
 class VoidBox:
@@ -161,7 +164,7 @@ class VoidBox:
             self.__remove_extra_comp__(m, Cube, mode="dist")
         return
 
-    def get_void_complementary(self, Surfaces, simplify="no"):
+    def get_void_complementary(self, Surfaces, options, simplify="no"):
         if self.PieceEnclosure is None:
             boxDef = BoolSequence(operator="AND")
             center = self.BoundBox.Center
@@ -177,7 +180,7 @@ class VoidBox:
                 else:
                     boxDef.elements.append(-id)
                 enclosure = False
-            d = opt.enlargeBox
+            d = options.enlargeBox
 
         else:
             UniverseBox = self.PieceEnclosure.BoundBox
@@ -194,7 +197,7 @@ class VoidBox:
             boxDef = TempPieceEnclosure.Definition
             bBox = self.PieceEnclosure.BoundBox
             enclosure = True
-            d = max(opt.enlargeBox, 2)
+            d = max(options.enlargeBox, 2)
 
         Box = Part.makeBox(
             bBox.XLength + 2 * d,
@@ -246,7 +249,9 @@ class VoidBox:
                 surfaceDict = {}
                 for i in surfList:
                     surfaceDict[i] = Surfaces.get_surface(i)
-                CTable = build_c_table_from_solids(Box, surfaceDict, option=simplify)
+                CTable = build_c_table_from_solids(
+                    Box, surfaceDict, option=simplify, options=options
+                )
             else:
                 if res is True:
                     return None, None
@@ -303,8 +308,7 @@ class VoidBox:
 
                     # solid in cover full Void cell volume  => Void cell doesn't exist
                     if chk is True:
-                        if opt.verbose:
-                            print("warning void Cell should not exist")
+                        logger.warning("void Cell should not exist")
                         return None, None
 
                     # solid cell is not in void cell Void cell volume  => doesn't contribute to void definition

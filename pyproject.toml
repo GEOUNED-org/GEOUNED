@@ -20,6 +20,10 @@ classifiers = [
     "License :: OSI Approved :: European Union Public Licence 1.2 (EUPL 1.2)",
     "Operating System :: OS Independent",
 ]
+dependencies = [
+  "tqdm",
+  "numpy",
+]
 
 [project.urls]
 Homepage = "https://github.com/GEOUNED-org"
@@ -30,4 +34,10 @@ Documentation = "https://github.com/GEOUNED-org/GEOUNED/docs"
 tests = [
     "pytest",
     "black==24.4.2",
+]
+docs = [
+  "sphinx",
+  "sphinx_rtd_theme",
+  "sphinx_autodoc_typehints",
+  "sphinx_rtd_theme",
 ]

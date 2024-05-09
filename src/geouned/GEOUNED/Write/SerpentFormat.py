@@ -1,6 +1,7 @@
 #################################
 # Module to write Serpent input #
 #################################
+import logging
 from datetime import datetime
 
 import FreeCAD
@@ -8,12 +9,13 @@ import FreeCAD
 from ..CodeVersion import *
 from ..Utils.BasicFunctions_part1 import is_opposite, points_to_coeffs
 from ..Utils.Functions import SurfacesDict
-from ..Utils.Options.Classes import Options as opt
-from .Functions import serpent_surface, change_surf_sign, write_serpent_cell_def
+from .Functions import change_surf_sign, serpent_surface, write_serpent_cell_def
+
+logger = logging.getLogger(__name__)
 
 
 class SerpentInput:
-    def __init__(self, Meta, Surfaces, setting):
+    def __init__(self, Meta, Surfaces, setting, options):
         self.Title = setting["title"]
         self.VolSDEF = setting["volSDEF"]
         self.VolCARD = setting["volCARD"]
@@ -35,7 +37,7 @@ class SerpentInput:
             self.Title = self.StepFile
 
         self.__get_surface_table__()
-        self.__simplify_planes__(Surfaces)
+        self.__simplify_planes__(Surfaces, options)
 
         self.Surfaces = self.__sorted_surfaces__(Surfaces)
         self.Materials = set()
@@ -61,7 +63,7 @@ class SerpentInput:
     #     self.SDEF_box    = (sdef,SI1,SI2,SI3,SP1,SP2,SP3)
 
     def write_input(self, filename):
-        print(f"write Serpent file {filename}")
+        logger.info(f"write Serpent file {filename}")
         with open(file=filename, mode="w", encoding="utf-8") as self.inpfile:
             self.__write_header__()
             cellblockHeader = """\
@@ -175,7 +177,7 @@ class SerpentInput:
             Serpent_def += "\n"
             self.inpfile.write(Serpent_def)
         else:
-            print(f"Surface {surface.Type} cannot be written in Serpent input")
+            logger.info(f"Surface {surface.Type} cannot be written in Serpent input")
         return
 
     # No void all option in Serpent. For now remove addition of source.
@@ -298,7 +300,7 @@ class SerpentInput:
                     self.surfaceTable[index] = {i}
         return
 
-    def __simplify_planes__(self, Surfaces):
+    def __simplify_planes__(self, Surfaces, options):
 
         for p in Surfaces["PX"]:
             if p.Surf.Axis[0] < 0:
@@ -315,7 +317,7 @@ class SerpentInput:
                 p.Surf.Axis = FreeCAD.Vector(0, 0, 1)
                 self.__change_surf_sign__(p)
 
-        if opt.prnt3PPlane:
+        if options.prnt3PPlane:
             for p in Surfaces["P"]:
                 if p.Surf.pointDef:
                     axis, d = points_to_coeffs(p.Surf.Points)
@@ -339,10 +341,8 @@ class SerpentInput:
     def __change_surf_sign__(self, p):
 
         if p.Index not in self.surfaceTable.keys():
-            print(
-                f"{p.Type} Surface {p.Index} not used in cell definition)",
-                p.Surf.Axis,
-                p.Surf.Position,
+            logger.info(
+                f"{p.Type} Surface {p.Index} not used in cell definition) {p.Surf.Axis} {p.Surf.Position}"
             )
             return
 

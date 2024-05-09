@@ -6,12 +6,13 @@
 # only if modules are not in the PYTHONPATH or directly installed in the python distribution used
 import sys
 
+from geouned import CadToCsg
+from geouned.GEOReverse import reverse
+
 # geo_path="C:\\Users\\Juan\\Documents\\work\\GEOUNED\\RepoGit\\GitHub\\GEOUNEDcode\\src"
 # sys.path.append(geo_path)
 # sys.path.append('C:\\Program Files\\FreeCAD 0.19\\bin...')
 
-from geouned import CadToCsg
-from geouned.GEOReverse import reverse
 
 runReverse = False
 if len(sys.argv) < 2:
