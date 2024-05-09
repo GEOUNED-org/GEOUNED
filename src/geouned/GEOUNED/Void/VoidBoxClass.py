@@ -102,7 +102,7 @@ class VoidBox:
         box1 = FreeCAD.BoundBox(VMin1, VMax1)
         box2 = FreeCAD.BoundBox(VMin2, VMax2)
 
-        if self.PieceEnclosure == None:
+        if self.PieceEnclosure is None:
             Space1 = VoidBox(self.Objects, box1)
             Space2 = VoidBox(self.Objects, box2)
             VoidBoxTuple = (Space1, Space2)
@@ -110,11 +110,11 @@ class VoidBox:
             Space1 = self.piece_enclosure_split(box1)
             Space2 = self.piece_enclosure_split(box2)
             VoidBoxTuple = (Space1, Space2)
-            if Space1 == None:
+            if Space1 is None:
                 VoidBoxTuple = (Space2,)
-            if Space2 == None:
+            if Space2 is None:
                 VoidBoxTuple = (Space1,)
-            if Space1 == None and Space2 == None:
+            if Space1 is None and Space2 is None:
                 VoidBoxTuple = ()
 
         return VoidBoxTuple

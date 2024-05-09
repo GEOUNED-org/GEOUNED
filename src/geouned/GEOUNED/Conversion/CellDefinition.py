@@ -154,14 +154,14 @@ def is_inverted(solid):
     return False
 
 
-def gen_plane(face, solid):
+def gen_plane(face, solid, tolerances):
     """Generate an additional plane when convex surfaces of second order are presented as a face of the solid"""
 
     surf = face.Surface
     if str(surf) == "<Cylinder object>":
-        return gen_plane_cylinder(face, solid)
+        return gen_plane_cylinder(face, solid, tolerances)
     if str(surf) == "<Cone object>":
-        return gen_plane_cone(face, solid)
+        return gen_plane_cone(face, solid, tolerances)
     if str(surf) == "Sphere":
         return gen_plane_sphere(face, solid)
 
@@ -791,7 +791,7 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances):
                     surf_obj.append(face)
 
                 try:
-                    plane = gen_plane(face, solid_gu)
+                    plane = gen_plane(face, solid_gu, tolerances)
                     if plane is not None:
                         plane = GU.PlaneGu(plane)
                 except:

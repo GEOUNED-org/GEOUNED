@@ -349,7 +349,7 @@ def remove_extra_surfaces(CellSeq, CTable):
         # if subcell has finite volume check it intersection with the box
         if not nullcell:
             res = CTable.solid_in_box(subCell)
-            if res == None:
+            if res is None:
                 # subcell intersect the box
                 # get the surfaces of the solids out of the box
                 # get reduced definition
