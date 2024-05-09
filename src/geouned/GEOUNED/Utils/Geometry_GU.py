@@ -10,7 +10,6 @@ import math
 
 import Part
 
-from ..Utils.Options.Classes import Tolerances as tol
 from .BasicFunctions_part1 import is_same_value
 from .BasicFunctions_part2 import is_same_torus
 
@@ -100,10 +99,11 @@ class TorusGu(SurfacesGu):
 class SolidGu:
     """GEOUNED Solid Class"""
 
-    def __init__(self, solid, plane3Pts=False):
+    def __init__(self, solid, tolerances, plane3Pts=False):
         self.solid = solid
         faces = define_list_face_gu(solid.Faces, plane3Pts)
         self.Faces = faces
+        self.tolerances = tolerances
         self.Solids = solid.Solids
         self.BoundBox = solid.BoundBox
         self.Edges = solid.Edges
@@ -136,9 +136,9 @@ class SolidGu:
                 if is_same_torus(
                     self.Faces[i].Surface,
                     self.Faces[j].Surface,
-                    dtol=tol.tor_distance,
-                    atol=tol.tor_angle,
-                    rel_tol=tol.relativeTol,
+                    dtol=self.tolerances.tor_distance,
+                    atol=self.tolerances.tor_angle,
+                    rel_tol=self.tolerances.relativeTol,
                 ):
                     current.append(j)
             for c in current:
@@ -160,7 +160,7 @@ class SolidGu:
                     for tindex in temp:
                         if (
                             self.Faces[current[i]].distToShape(self.Faces[tindex])[0]
-                            < tol.distance
+                            < self.tolerances.distance
                         ):
                             if tindex not in current:
                                 current.append(tindex)
@@ -210,15 +210,15 @@ class SolidGu:
         params.sort()
         V0 = params[0][0]
         V1 = params[-1][1]
-        if arcLength >= two_pi * (1.0 - tol.relativePrecision):
+        if arcLength >= two_pi * (1.0 - self.tolerances.relativePrecision):
             mergedParams = (True, (V0, V0 + two_pi))
         else:
-            if is_same_value(V0, 0.0, tol.relativePrecision) and is_same_value(
-                V1, two_pi, tol.relativePrecision
+            if is_same_value(V0, 0.0, self.tolerances.relativePrecision) and is_same_value(
+                V1, two_pi, self.tolerances.relativePrecision
             ):
                 for i in range(len(params) - 1):
                     if not is_same_value(
-                        params[i][1], params[i + 1][0], tol.relativePrecision
+                        params[i][1], params[i + 1][0], self.tolerances.relativePrecision
                     ):
                         break
                 v_min = params[i + 1][0] - two_pi

@@ -9,8 +9,6 @@ from ..Utils import Geometry_GU as GU
 from ..Utils.BasicFunctions_part1 import is_opposite, is_parallel
 from ..Utils.booleanFunction import BoolSequence
 
-from ..Utils.Options.Classes import Tolerances as tol
-
 logger = logging.getLogger(__name__)
 
 
@@ -64,13 +62,13 @@ def is_inverted(solid):
         return False
 
 
-def get_id(face_in, Surfaces):
+def get_id(face_in, Surfaces, tolerances):
 
-    if is_parallel(face_in.Axis, FreeCAD.Vector(1, 0, 0), tol.pln_angle):
+    if is_parallel(face_in.Axis, FreeCAD.Vector(1, 0, 0), tolerances.pln_angle):
         plane = "PX"
-    elif is_parallel(face_in.Axis, FreeCAD.Vector(0, 1, 0), tol.pln_angle):
+    elif is_parallel(face_in.Axis, FreeCAD.Vector(0, 1, 0), tolerances.pln_angle):
         plane = "PY"
-    elif is_parallel(face_in.Axis, FreeCAD.Vector(0, 0, 1), tol.pln_angle):
+    elif is_parallel(face_in.Axis, FreeCAD.Vector(0, 0, 1), tolerances.pln_angle):
         plane = "PZ"
     else:
         plane = "P"
@@ -79,9 +77,10 @@ def get_id(face_in, Surfaces):
         if BF.is_same_plane(
             face_in,
             s.Surf,
-            dtol=tol.pln_distance,
-            atol=tol.pln_angle,
-            rel_tol=tol.relativeTol,
+            tolerances=tolerances,
+            dtol=tolerances.pln_distance,
+            atol=tolerances.pln_angle,
+            rel_tol=tolerances.relativeTol,
         ):
             return s.Index
 
@@ -110,14 +109,14 @@ def translate(meta_list, surfaces, universe_box, setting):
 
 
 # TODO rename this, but be careful as there are other functions in the code with the same name
-def set_definition(meta_obj, surfaces):
+def set_definition(meta_obj, surfaces, tolerances):
     solids = meta_obj.Solids
     s_def = BoolSequence(operator="OR")
 
     for sol in solids:
         subSol = BoolSequence(operator="AND")
         flag_inv = is_inverted(sol)
-        solid_gu = GU.SolidGu(sol, plane3Pts=True)
+        solid_gu = GU.SolidGu(sol, tolerances=tolerances, plane3Pts=True)
 
         faces = []
         for face in solid_gu.Faces:
@@ -133,7 +132,7 @@ def set_definition(meta_obj, surfaces):
 
             id = get_id(face.Surface, surfaces)
             s = surfaces.get_surface(id)
-            if is_opposite(face.Surface.Axis, s.Surf.Axis, tol.pln_angle):
+            if is_opposite(face.Surface.Axis, s.Surf.Axis, tolerances.pln_angle):
                 id = -id
             if face.Orientation == "Forward":
                 id = -id

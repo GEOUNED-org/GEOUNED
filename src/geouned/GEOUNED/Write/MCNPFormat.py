@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 class McnpInput:
-    def __init__(self, Meta, Surfaces, setting, options):
+    def __init__(self, Meta, Surfaces, setting, options, tolerances):
         self.Title = setting["title"]
         self.VolSDEF = setting["volSDEF"]
         self.VolCARD = setting["volCARD"]
@@ -24,6 +24,7 @@ class McnpInput:
         self.dummyMat = setting["dummyMat"]
         self.Cells = Meta
         self.options = options
+        self.tolerances = tolerances
         self.Options = {
             "Volume": self.VolCARD,
             "Particle": ("n", "p"),
@@ -165,7 +166,7 @@ C **************************************************************
     def __write_surfaces__(self, surface):
         """Write the surfaces in MCNP format"""
 
-        MCNP_def = mcnp_surface(surface.Index, surface.Type, surface.Surf)
+        MCNP_def = mcnp_surface(surface.Index, surface.Type, surface.Surf, self.tolerances)
         if MCNP_def:
             MCNP_def += "\n"
             self.inpfile.write(MCNP_def)
