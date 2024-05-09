@@ -474,7 +474,14 @@ class CadToCsg:
                 Conv.no_overlapping_cell(MetaList, Surfaces, self.options)
 
         else:
-            translate(MetaList, Surfaces, UniverseBox, code_setting, self.options, self.tolerances)
+            translate(
+                MetaList,
+                Surfaces,
+                UniverseBox,
+                code_setting,
+                self.options,
+                self.tolerances,
+            )
             # decompose Enclosure solids
             if self.voidGen and EnclosureList:
                 warningEnclosureList = decompose_solids(
@@ -601,7 +608,9 @@ class CadToCsg:
         print_warning_solids(warnSolids, warnEnclosures)
 
         # add plane definition to cone
-        process_cones(MetaList, coneInfo, Surfaces, UniverseBox, self.options, self.tolerances)
+        process_cones(
+            MetaList, coneInfo, Surfaces, UniverseBox, self.options, self.tolerances
+        )
 
         # write outputformat input
         write_geometry(
@@ -664,7 +673,8 @@ def decompose_solids(
             Decom.extract_surfaces(
                 comsolid, "All", UniverseBox, options, tolerances, MakeObj=True
             ),
-            options, tolerances,
+            options,
+            tolerances,
         )
         m.set_cad_solid()
         m.update_solids(comsolid.Solids)
@@ -694,10 +704,17 @@ def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances
             for Id in m.__commentInfo__[1]:
                 if Id in cellId:
                     cones.update(-x for x in coneInfo[Id])
-            Conv.add_cone_plane(m.Definition, cones, Surfaces, UniverseBox, options, tolerances)
+            Conv.add_cone_plane(
+                m.Definition, cones, Surfaces, UniverseBox, options, tolerances
+            )
         elif not m.Void:
             Conv.add_cone_plane(
-                m.Definition, coneInfo[m.__id__], Surfaces, UniverseBox, options, tolerances
+                m.Definition,
+                coneInfo[m.__id__],
+                Surfaces,
+                UniverseBox,
+                options,
+                tolerances,
             )
 
 

@@ -88,7 +88,14 @@ def get_id(face_in, Surfaces, options, tolerances):
     return 0
 
 
-def translate(meta_list, surfaces, universe_box, setting, options, tolerances,):
+def translate(
+    meta_list,
+    surfaces,
+    universe_box,
+    setting,
+    options,
+    tolerances,
+):
     tot_solid = len(meta_list)
     for i, m in enumerate(meta_list):
         if m.IsEnclosure:
@@ -103,7 +110,12 @@ def translate(meta_list, surfaces, universe_box, setting, options, tolerances,):
 
         surfaces.extend(
             Decom.extract_surfaces(
-                Part.makeCompound(m.Solids), "Plane3Pts", universe_box, options, tolerances, MakeObj=False
+                Part.makeCompound(m.Solids),
+                "Plane3Pts",
+                universe_box,
+                options,
+                tolerances,
+                MakeObj=False,
             )
         )
         set_definition(m, surfaces)

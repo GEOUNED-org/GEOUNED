@@ -865,7 +865,9 @@ def sort_planes(PlaneList, sortElements=False):
 
 
 def split_p_planes_new(solid, universe_box, options, tolerances):
-    SPlanes = extract_surfaces(solid, "Planes", universe_box, options, tolerances, False)
+    SPlanes = extract_surfaces(
+        solid, "Planes", universe_box, options, tolerances, False
+    )
 
     Planes = []
     for P in ("PX", "PY", "PZ", "P"):
@@ -891,7 +893,9 @@ def split_p_planes_new(solid, universe_box, options, tolerances):
 
 
 def split_p_planes_org(solid, universe_box, options, tolerances):
-    SPlanes = extract_surfaces(solid, "Planes", universe_box, options, tolerances, False)
+    SPlanes = extract_surfaces(
+        solid, "Planes", universe_box, options, tolerances, False
+    )
 
     if len(SPlanes["P"]) == 0:
         return [solid]

@@ -189,7 +189,9 @@ class VoidBox:
                 Part.makeCompound(TempPieceEnclosure.Solids), UniverseBox
             )
             Surfaces.extend(
-                Decom.extract_surfaces(comsolid, "All", UniverseBox, options, tolerances, MakeObj=True)
+                Decom.extract_surfaces(
+                    comsolid, "All", UniverseBox, options, tolerances, MakeObj=True
+                )
             )
             TempPieceEnclosure.update_solids(comsolid.Solids)
             Conv.cellDef(TempPieceEnclosure, Surfaces, UniverseBox)

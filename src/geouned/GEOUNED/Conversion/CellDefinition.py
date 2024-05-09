@@ -853,7 +853,9 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances):
                         plane = GeounedSurface(
                             ("Plane", plane1), universe_box, Face="Build"
                         )
-                        id1, exist = surfaces.add_plane(plane, options, tolerances, False)
+                        id1, exist = surfaces.add_plane(
+                            plane, options, tolerances, False
+                        )
                         if exist:
                             p = surfaces.get_surface(id1)
                             if is_opposite(
@@ -867,7 +869,9 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances):
                             plane = GeounedSurface(
                                 ("Plane", plane2), universe_box, Face="Build"
                             )
-                            id2, exist = surfaces.add_plane(plane, options, tolerances, False)
+                            id2, exist = surfaces.add_plane(
+                                plane, options, tolerances, False
+                            )
                             if exist:
                                 p = surfaces.get_surface(id2)
                                 if is_opposite(
@@ -910,7 +914,9 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances):
                                     universe_box,
                                     Face="Build",
                                 )
-                                id2, exist = surfaces.add_cylinder(cyl, options, tolerances)
+                                id2, exist = surfaces.add_cylinder(
+                                    cyl, options, tolerances
+                                )
 
                             elif surf_type == "Plane":
                                 plane = GeounedSurface(
@@ -957,7 +963,9 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances):
                             universe_box,
                             Face="Build",
                         )
-                        id, exist = surfaces.add_plane(plane, options, tolerances, False)
+                        id, exist = surfaces.add_plane(
+                            plane, options, tolerances, False
+                        )
                         surf = plane.shape
                     elif surface_type == "<Cylinder object>":
                         dim_l = face.ParameterRange[3] - face.ParameterRange[2]

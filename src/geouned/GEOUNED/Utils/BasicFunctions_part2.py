@@ -69,7 +69,14 @@ def is_same_plane(
 
 
 def is_same_cylinder(
-    cyl1, cyl2, options, tolerances, dtol=1e-6, atol=1e-6, rel_tol=True, fuzzy=(False, 0)
+    cyl1,
+    cyl2,
+    options,
+    tolerances,
+    dtol=1e-6,
+    atol=1e-6,
+    rel_tol=True,
+    fuzzy=(False, 0),
 ):
     if rel_tol:
         rtol = dtol * max(cyl2.Radius, cyl1.Radius)
