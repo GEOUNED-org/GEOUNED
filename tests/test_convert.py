@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from geouned import CadToCsg
+import geouned
 
 path_to_cad = Path("testing/inputSTEP")
 step_files = list(path_to_cad.rglob("*.stp")) + list(path_to_cad.rglob("*.step"))
@@ -39,10 +39,6 @@ def test_conversion(input_step_file):
         "cellCommentFile": False,
         "debug": False,
         "simplify": "no",
-        "forceCylinder": False,
-        "splitTolerance": 0,
-        "newSplitPlane": True,
-        "nPlaneReverse": 0,
     }
 
     # deletes the output MC files if they already exists
@@ -50,13 +46,20 @@ def test_conversion(input_step_file):
     for suffix in suffixes:
         output_filename_stem.with_suffix(suffix).unlink(missing_ok=True)
 
-    GEO = CadToCsg("Input Test")
+    my_options = geouned.Options(
+        forceCylinder=False,
+        splitTolerance=0,
+        newSplitPlane=True,
+        nPlaneReverse=0,
+    )
+
+    geo = geouned.CadToCsg(title="Input Test", options=my_options)
 
     # set parameters values stored in template dictionary
     for key, value in template.items():
-        GEO.set(key, value)
+        geo.set(key, value)
 
-    GEO.start()
+    geo.start()
 
     for suffix in suffixes:
         assert output_filename_stem.with_suffix(suffix).exists()

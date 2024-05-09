@@ -8,6 +8,7 @@ import logging
 import typing
 from datetime import datetime
 from os import mkdir, path
+from typing import get_type_hints
 
 import FreeCAD
 import Part
@@ -20,10 +21,11 @@ from .Decompose import Decom_one as Decom
 from .LoadFile import LoadSTEP as Load
 from .Utils import Functions as UF
 from .Utils.BooleanSolids import build_c_table_from_solids
-from .Utils.Options.Classes import McnpNumericFormat, Options, Tolerances
+from .Utils.Options.Classes import McnpNumericFormat, Tolerances
 from .Void import Void as Void
 from .Write.Functions import write_mcnp_cell_def
 from .Write.WriteFiles import write_geometry
+from .Utils.data_classes import Options
 
 logger = logging.getLogger(__name__)
 
@@ -129,6 +131,7 @@ class CadToCsg:
         cellCommentFile: bool = False,
         cellSummaryFile: bool = True,
         sort_enclosure: bool = False,
+        options: Options = Options(),
     ):
 
         self.title = title
@@ -156,8 +159,8 @@ class CadToCsg:
         self.cellCommentFile = cellCommentFile
         self.cellSummaryFile = cellSummaryFile
         self.sort_enclosure = sort_enclosure
+        self.options = options
 
-        Options.set_default_attribute()
         McnpNumericFormat.set_default_attribute()
         Tolerances.set_default_attribute()
 
@@ -239,16 +242,16 @@ class CadToCsg:
 
             elif section == "Options":
                 for key in config["Options"].keys():
-                    if key in Options.default_values.keys():
-                        if Options.type_dict[key] is bool:
-                            Options.set_attribute(
-                                key, config.getboolean("Options", key)
-                            )
+                    attributes_and_types = get_type_hints(Options())
+                    if key in attributes_and_types.keys():
+                        if attributes_and_types[key] is bool:
+                            value = config.getboolean("Options", key)
                         elif (
-                            Options.type_dict[key] is float
-                            or Options.type_dict[key] is int
+                            attributes_and_types[key] is float
+                            or attributes_and_types[key] is int
                         ):
-                            Options.set_attribute(key, config.getfloat("Options", key))
+                            value = config.getfloat("Options", key)
+                        setattr(self.options, key, value)
 
             elif section == "Tolerances":
                 for key in config["Tolerances"].keys():
@@ -279,7 +282,7 @@ class CadToCsg:
         if self.__dict__["geometryName"] == "":
             self.__dict__["geometryName"] = self.__dict__["stepFile"][:-4]
 
-        if Options.prnt3PPlane and not PdEntry:
+        if self.options.prnt3PPlane and not PdEntry:
             McnpNumericFormat.P_d = "22.15e"
 
         logger.info(self.__dict__)
@@ -291,9 +294,6 @@ class CadToCsg:
             return
         elif kwrd in Tolerances.default_values.keys():
             Tolerances.set_attribute(kwrd, value)
-            return
-        elif kwrd in Options.default_values.keys():
-            Options.set_attribute(kwrd, value)
             return
         elif kwrd not in self.__dict__.keys():
             logger.info(f"Bad entry : {kwrd}")
@@ -387,7 +387,9 @@ class CadToCsg:
         EnclosureChunk = []
         for stp in tqdm(step_files, desc="Loading CAD files"):
             logger.info(f"read step file : {stp}")
-            Meta, Enclosure = Load.load_cad(stp, self.matFile)
+            Meta, Enclosure = Load.load_cad(
+                stp, self.matFile, self.options, self.voidMat, self.compSolids
+            )
             MetaChunk.append(Meta)
             EnclosureChunk.append(Enclosure)
         MetaList = join_meta_lists(MetaChunk)
@@ -429,17 +431,22 @@ class CadToCsg:
         warnEnclosures = []
         coneInfo = dict()
         tempTime0 = datetime.now()
-        if not Options.Facets:
+        if not self.options.Facets:
 
             # decompose all solids in elementary solids (convex ones)
             warningSolidList = decompose_solids(
-                MetaList, Surfaces, UniverseBox, code_setting, True
+                MetaList, Surfaces, UniverseBox, code_setting, True, self.options
             )
 
             # decompose Enclosure solids
             if self.voidGen and EnclosureList:
                 warningEnclosureList = decompose_solids(
-                    EnclosureList, Surfaces, UniverseBox, code_setting, False
+                    EnclosureList,
+                    Surfaces,
+                    UniverseBox,
+                    code_setting,
+                    False,
+                    self.options,
                 )
 
             logger.info("End of decomposition phase")
@@ -450,7 +457,7 @@ class CadToCsg:
                 if m.IsEnclosure:
                     continue
                 logger.info(f"Building cell: {j+1}")
-                cones = Conv.cellDef(m, Surfaces, UniverseBox)
+                cones = Conv.cellDef(m, Surfaces, UniverseBox, self.options)
                 if cones:
                     coneInfo[m.__id__] = cones
                 if j in warningSolidList:
@@ -459,15 +466,20 @@ class CadToCsg:
                     logger.info(f"none {j}, {m.__id__}")
                     logger.info(m.Definition)
 
-            if Options.forceNoOverlap:
-                Conv.no_overlapping_cell(MetaList, Surfaces)
+            if self.options.forceNoOverlap:
+                Conv.no_overlapping_cell(MetaList, Surfaces, self.options)
 
         else:
             translate(MetaList, Surfaces, UniverseBox, code_setting)
             # decompose Enclosure solids
             if self.voidGen and EnclosureList:
                 warningEnclosureList = decompose_solids(
-                    EnclosureList, Surfaces, UniverseBox, code_setting, False
+                    EnclosureList,
+                    Surfaces,
+                    UniverseBox,
+                    code_setting,
+                    False,
+                    self.options,
                 )
 
         tempstr2 = str(datetime.now() - tempTime)
@@ -501,10 +513,16 @@ class CadToCsg:
             else:
                 init = 0
             MetaVoid = Void.void_generation(
-                MetaReduced, EnclosureList, Surfaces, UniverseBox, code_setting, init
+                MetaReduced,
+                EnclosureList,
+                Surfaces,
+                UniverseBox,
+                code_setting,
+                init,
+                self.options,
             )
 
-        # if code_setting['simplify'] == 'full' and not Options.forceNoOverlap:
+        # if code_setting['simplify'] == 'full' and not self.options.forceNoOverlap:
         if self.simplify == "full":
             Surfs = {}
             for lst in Surfaces.values():
@@ -580,7 +598,7 @@ class CadToCsg:
         process_cones(MetaList, coneInfo, Surfaces, UniverseBox)
 
         # write outputformat input
-        write_geometry(UniverseBox, MetaList, Surfaces, code_setting)
+        write_geometry(UniverseBox, MetaList, Surfaces, code_setting, self.options)
 
         logger.info("End of MCNP, OpenMC, Serpent and PHITS translation phase")
 
@@ -591,7 +609,7 @@ class CadToCsg:
         logger.info(f"Translation time of void cells {tempTime2} - {tempTime1}")
 
 
-def decompose_solids(MetaList, Surfaces, UniverseBox, setting, meta):
+def decompose_solids(MetaList, Surfaces, UniverseBox, setting, meta, options):
     totsolid = len(MetaList)
     warningSolids = []
     for i, m in enumerate(tqdm(MetaList, desc="Decomposing solids")):
@@ -607,7 +625,9 @@ def decompose_solids(MetaList, Surfaces, UniverseBox, setting, meta):
             else:
                 m.Solids[0].exportStep(f"debug/origSolid_{i}.stp")
 
-        comsolid, err = Decom.SplitSolid(Part.makeCompound(m.Solids), UniverseBox)
+        comsolid, err = Decom.SplitSolid(
+            Part.makeCompound(m.Solids), UniverseBox, options
+        )
 
         if err != 0:
             if not path.exists("Suspicious_solids"):

@@ -6,7 +6,6 @@ import FreeCAD
 from ..Utils import Qform as Qform
 from ..Utils.BasicFunctions_part1 import is_opposite, is_parallel
 from ..Utils.Options.Classes import McnpNumericFormat as nf
-from ..Utils.Options.Classes import Options as opt
 from ..Utils.Options.Classes import Tolerances as tol
 from .StringFunctions import remove_redundant
 
@@ -128,11 +127,11 @@ def write_phits_cell_def(definition, tabspace=0, offset=0):
     return sdef.str
 
 
-def write_openmc_region(definition, w_type="XML"):
+def write_openmc_region(definition, options, w_type="XML"):
     if w_type == "XML":
         return write_sequence_omc_xml(definition)
     if w_type == "PY":
-        return write_sequence_omc_py(definition)
+        return write_sequence_omc_py(definition, options)
 
 
 def write_sequence_mcnp(Seq):
@@ -222,7 +221,7 @@ def write_sequence_omc_xml(seq):
     return line
 
 
-def write_sequence_omc_py(seq, prefix="S"):
+def write_sequence_omc_py(seq, options, prefix="S"):
 
     strSurf = lambda surf: (f"-{prefix}{-surf}" if surf < 0 else f"+{prefix}{surf}")
 
@@ -237,7 +236,7 @@ def write_sequence_omc_py(seq, prefix="S"):
             if type(e) is int:
                 terms.append(strSurf(e))
             else:
-                terms.append(write_sequence_omc_py(e))
+                terms.append(write_sequence_omc_py(e, options))
 
         if seq.operator == "AND":
             line = f"({' & '.join(terms)})"
@@ -250,7 +249,7 @@ def mcnp_surface(id, Type, surf):
     mcnp_def = ""
 
     if Type == "Plane":
-        if surf.pointDef and opt.prnt3PPlane:
+        if surf.pointDef and options.prnt3PPlane:
             P1 = surf.Points[0]
             P2 = surf.Points[1]
             P3 = surf.Points[2]
@@ -437,7 +436,7 @@ def mcnp_surface(id, Type, surf):
     return trim(mcnp_def, 80)
 
 
-def open_mc_surface(Type, surf, out_xml=True, quadricForm=False):
+def open_mc_surface(Type, surf, options, out_xml=True, quadricForm=False):
     if Type == "Plane":
         A = surf.Axis.x
         B = surf.Axis.y
@@ -646,7 +645,7 @@ def serpent_surface(id, Type, surf):
     serpent_def = ""
 
     if Type == "Plane":
-        if surf.pointDef and opt.prnt3PPlane:
+        if surf.pointDef and options.prnt3PPlane:
             P1 = surf.Points[0]
             P2 = surf.Points[1]
             P3 = surf.Points[2]
@@ -764,11 +763,11 @@ surf quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
     return serpent_def
 
 
-def phits_surface(id, Type, surf):
+def phits_surface(id, Type, surf, options):
     phits_def = ""
 
     if Type == "Plane":
-        if surf.pointDef and opt.prnt3PPlane:
+        if surf.pointDef and options.prnt3PPlane:
             P1 = surf.Points[0]
             P2 = surf.Points[1]
             P3 = surf.Points[2]

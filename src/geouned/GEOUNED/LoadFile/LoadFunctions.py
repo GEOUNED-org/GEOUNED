@@ -4,15 +4,15 @@ import re
 import FreeCAD
 
 from ..Utils.Functions import GeounedSolid
-from ..Utils.Options.Classes import Options as opt
+
 
 logger = logging.getLogger(__name__)
 
 
-def get_label(label):
+def get_label(label, options):
     """Deleting the last word of the string if this is a number
     Only if the option delLastNumber is True"""
-    if not opt.delLastNumber:
+    if not options.delLastNumber:
         return label
     wrd = label.split()
     try:
@@ -22,11 +22,11 @@ def get_label(label):
         return label
 
 
-def getCommentTree(obj):
+def getCommentTree(obj, options):
     recursive_list = []
     c_obj = obj
     while c_obj.InList:
-        label = get_label(c_obj.InList[0].Label)
+        label = get_label(c_obj.InList[0].Label, options)
         recursive_list.append(label)
         c_obj = c_obj.InList[0]
 

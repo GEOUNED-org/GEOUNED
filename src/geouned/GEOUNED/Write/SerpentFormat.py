@@ -9,14 +9,13 @@ import FreeCAD
 from ..CodeVersion import *
 from ..Utils.BasicFunctions_part1 import is_opposite, points_to_coeffs
 from ..Utils.Functions import SurfacesDict
-from ..Utils.Options.Classes import Options as opt
 from .Functions import change_surf_sign, serpent_surface, write_serpent_cell_def
 
 logger = logging.getLogger(__name__)
 
 
 class SerpentInput:
-    def __init__(self, Meta, Surfaces, setting):
+    def __init__(self, Meta, Surfaces, setting, options):
         self.Title = setting["title"]
         self.VolSDEF = setting["volSDEF"]
         self.VolCARD = setting["volCARD"]
@@ -38,7 +37,7 @@ class SerpentInput:
             self.Title = self.StepFile
 
         self.__get_surface_table__()
-        self.__simplify_planes__(Surfaces)
+        self.__simplify_planes__(Surfaces, options)
 
         self.Surfaces = self.__sorted_surfaces__(Surfaces)
         self.Materials = set()
@@ -302,7 +301,7 @@ class SerpentInput:
                     self.surfaceTable[index] = {i}
         return
 
-    def __simplify_planes__(self, Surfaces):
+    def __simplify_planes__(self, Surfaces, options):
 
         for p in Surfaces["PX"]:
             if p.Surf.Axis[0] < 0:
@@ -319,7 +318,7 @@ class SerpentInput:
                 p.Surf.Axis = FreeCAD.Vector(0, 0, 1)
                 self.__change_surf_sign__(p)
 
-        if opt.prnt3PPlane:
+        if options.prnt3PPlane:
             for p in Surfaces["P"]:
                 if p.Surf.pointDef:
                     axis, d = points_to_coeffs(p.Surf.Points)

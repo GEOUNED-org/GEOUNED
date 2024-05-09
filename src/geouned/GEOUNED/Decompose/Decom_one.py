@@ -19,7 +19,7 @@ from ..Utils.BasicFunctions_part1 import (
     is_same_value,
 )
 from ..Utils.BasicFunctions_part2 import is_duplicate_in_list
-from ..Utils.Options.Classes import Options as opt
+
 from ..Utils.Options.Classes import Tolerances as tol
 
 logger = logging.getLogger(__name__)
@@ -27,13 +27,13 @@ logger = logging.getLogger(__name__)
 twoPi = math.pi * 2
 
 
-def split_full_cylinder(solid):
+def split_full_cylinder(solid, options):
     explode = []
     bases = [solid]
     while True:
         new_bases = []
         for base in bases:
-            cut_solids = cut_full_cylinder(base)
+            cut_solids = cut_full_cylinder(base, options)
             if len(cut_solids) == 1:
                 explode.extend(cut_solids)
             else:
@@ -46,7 +46,7 @@ def split_full_cylinder(solid):
     return Part.makeCompound(explode)
 
 
-def cut_full_cylinder(solid):
+def cut_full_cylinder(solid, options):
     solid_gu = GU.SolidGu(solid)
     surfaces = UF.SurfacesDict()
     flag_inv = CD.is_inverted(solid_gu.solid)
@@ -88,7 +88,7 @@ def cut_full_cylinder(solid):
 
     if len(planes) == 0:
         return [solid]
-    if len(planes[-1]) < opt.nPlaneReverse:
+    if len(planes[-1]) < options.nPlaneReverse:
         planes.reverse()
 
     cut = False
@@ -102,7 +102,7 @@ def cut_full_cylinder(solid):
             tools = (pp[0].shape,)
 
         try:
-            comsolid = UF.split_bop(solid, tools, opt.splitTolerance)
+            comsolid = UF.split_bop(solid, tools, options.splitTolerance, options)
         except:
             comsolid = solid
         if len(comsolid.Solids) > 1:
@@ -115,7 +115,7 @@ def cut_full_cylinder(solid):
 
     tool = (surfaces["Cyl"][0].shape,)
     try:
-        comsolid = UF.split_bop(solid, tool, opt.splitTolerance)
+        comsolid = UF.split_bop(solid, tool, options.splitTolerance, options)
     except:
         comsolid = solid
 
@@ -697,14 +697,14 @@ def plane_2nd_order(solid_GU, face, flag_inv, convex=True):
     return planes
 
 
-def split_planes(Solids, universe_box, newVersion=True):
+def split_planes(Solids, universe_box, options, newVersion=True):
     if newVersion:
-        return split_planes_new(Solids, universe_box)
+        return split_planes_new(Solids, universe_box, options)
     else:
         return split_planes_org(Solids, universe_box)
 
 
-def split_planes_new(Solids, universe_box):
+def split_planes_new(Solids, universe_box, options):
     Bases = Solids[:]
     simpleSolid = []
 
@@ -712,7 +712,7 @@ def split_planes_new(Solids, universe_box):
     while True:
         newBases = []
         for base in Bases:
-            cut_solids = split_p_planes_new(base, universe_box)
+            cut_solids = split_p_planes_new(base, universe_box, options)
             if len(cut_solids) == 1:
                 simpleSolid.extend(cut_solids)
             else:
@@ -725,7 +725,7 @@ def split_planes_new(Solids, universe_box):
     return simpleSolid, 0
 
 
-def split_planes_org(Solids, universe_box):
+def split_planes_org(Solids, universe_box, options):
     Bases = []
     err = 0
     for sol in Solids:
@@ -758,7 +758,7 @@ def split_planes_org(Solids, universe_box):
                 for p in Planes[imin]:
                     p.build_surface()
                     Tools.append(p.shape)
-                comsolid = UF.split_bop(base, Tools, opt.splitTolerance)
+                comsolid = UF.split_bop(base, Tools, options.splitTolerance, options)
                 if len(comsolid.Solids) == 1:
                     if (
                         abs(comsolid.Solids[0].Volume - base.Volume) / base.Volume
@@ -864,7 +864,7 @@ def sort_planes(PlaneList, sortElements=False):
     return sortedPlanes
 
 
-def split_p_planes_new(solid, universe_box):
+def split_p_planes_new(solid, universe_box, options):
     SPlanes = extract_surfaces(solid, "Planes", universe_box)
 
     Planes = []
@@ -875,14 +875,14 @@ def split_p_planes_new(solid, universe_box):
 
     if len(Planes) == 0:
         return [solid]
-    if len(Planes[-1]) < opt.nPlaneReverse:
+    if len(Planes[-1]) < options.nPlaneReverse:
         Planes.reverse()
     out_solid = [solid]
     for pp in Planes:
         for p in pp:
             p.build_surface()
         tools = tuple(p.shape for p in pp)
-        comsolid = UF.split_bop(solid, tools, opt.splitTolerance)
+        comsolid = UF.split_bop(solid, tools, options.splitTolerance, options)
 
         if len(comsolid.Solids) > 1:
             out_solid = comsolid.Solids
@@ -890,7 +890,7 @@ def split_p_planes_new(solid, universe_box):
     return out_solid
 
 
-def split_p_planes_org(solid, universe_box):
+def split_p_planes_org(solid, universe_box, options):
     SPlanes = extract_surfaces(solid, "Planes", universe_box)
 
     if len(SPlanes["P"]) == 0:
@@ -898,14 +898,14 @@ def split_p_planes_org(solid, universe_box):
     out_solid = [solid]
     for p in SPlanes["P"]:
         p.build_surface()
-        comsolid = UF.split_bop(solid, [p.shape], opt.splitTolerance)
+        comsolid = UF.split_bop(solid, [p.shape], options.splitTolerance, options)
         if len(comsolid.Solids) > 1:
             out_solid = comsolid.Solids
             break
     return out_solid
 
 
-def split_2nd_order(Solids, universe_box):
+def split_2nd_order(Solids, universe_box, options):
     err = 0
     Base = Solids
     for kind in ["Cyl", "Cone", "Sph", "Tor"]:
@@ -922,7 +922,7 @@ def split_2nd_order(Solids, universe_box):
                         s.build_surface()
                         try:
                             comsolid = UF.split_bop(
-                                solid, [s.shape], opt.splitTolerance
+                                solid, [s.shape], options.splitTolerance, options
                             )
                             solidsInCom = []
                             for s in comsolid.Solids:
@@ -951,14 +951,14 @@ def split_2nd_order(Solids, universe_box):
     return Base, err
 
 
-def split_2nd_order_planes(Solids):
+def split_2nd_order_planes(Solids, options):
     err = 0
     simpleSolid = []
     Bases = Solids
     while True:
         newBases = []
         for base in Bases:
-            cut_solids, err = split_2nd_o_plane(base)
+            cut_solids, err = split_2nd_o_plane(base, options)
             if len(cut_solids) == 1:
                 simpleSolid.extend(cut_solids)
             else:
@@ -971,7 +971,7 @@ def split_2nd_order_planes(Solids):
     return simpleSolid, err
 
 
-def split_2nd_o_plane(solid):
+def split_2nd_o_plane(solid, options):
 
     err = 0
     flag_inv = CD.is_inverted(solid)
@@ -981,7 +981,7 @@ def split_2nd_o_plane(solid):
         return [solid], err
 
     for p in planes:
-        comsolid = UF.split_bop(solid, [p], opt.splitTolerance)
+        comsolid = UF.split_bop(solid, [p], options.splitTolerance, options)
         if not comsolid.Solids:
             comsolid = solid
             continue
@@ -1010,7 +1010,7 @@ def remove_solids(Solids):
     return Solids_Clean, err
 
 
-def split_component(solidShape, universe_box):
+def split_component(solidShape, universe_box, options):
     err = 0
     err2 = 0
 
@@ -1018,13 +1018,13 @@ def split_component(solidShape, universe_box):
     Solids = solidShape.Solids
     # Split with explicit planes bounding the solid and
     # implicit planes interface of two 2nd order surfaces
-    split0, err = split_planes(Solids, universe_box, opt.newSplitPlane)
+    split0, err = split_planes(Solids, universe_box, options)
     # Split with explicit 2nd order surfaces bounding the solid
 
-    split1, err1 = split_2nd_order(split0, universe_box)
+    split1, err1 = split_2nd_order(split0, universe_box, options)
     err += err1
 
-    split, err2 = split_2nd_order_planes(split1)
+    split, err2 = split_2nd_order_planes(split1, options)
     err += err2
     Pieces = []
     for part in split:
@@ -1049,14 +1049,14 @@ def split_component(solidShape, universe_box):
 
 
 # TODO rename function but be careful as there are functions with the same name elsewhere in the code
-def SplitSolid(solidShape, universe_box):
+def SplitSolid(solidShape, universe_box, options):
 
     solid_parts = []
 
     for solid in solidShape.Solids:
 
-        explode = split_full_cylinder(solid)
-        piece, err = split_component(explode, universe_box)
+        explode = split_full_cylinder(solid, options)
+        piece, err = split_component(explode, universe_box, options)
         solid_parts.append(piece)
 
     return Part.makeCompound(solid_parts), err

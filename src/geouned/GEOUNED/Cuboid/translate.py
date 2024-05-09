@@ -8,7 +8,7 @@ from ..Utils import BasicFunctions_part2 as BF
 from ..Utils import Geometry_GU as GU
 from ..Utils.BasicFunctions_part1 import is_opposite, is_parallel
 from ..Utils.booleanFunction import BoolSequence
-from ..Utils.Options.Classes import Options as opt
+
 from ..Utils.Options.Classes import Tolerances as tol
 
 logger = logging.getLogger(__name__)

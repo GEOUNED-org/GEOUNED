@@ -20,14 +20,13 @@ from ..Utils.BasicFunctions_part1 import (
     TorusParams,
     is_parallel,
 )
-from ..Utils.Options.Classes import Options
 from ..Utils.Options.Classes import Tolerances as tol
 from . import BasicFunctions_part2 as BF
 
 
-def get_box(comp):
+def get_box(comp, options):
     bb = FreeCAD.BoundBox(comp.BoundBox)
-    bb.enlarge(Options.enlargeBox)
+    bb.enlarge(options.enlargeBox)
     xMin, yMin, zMin = bb.XMin, bb.YMin, bb.ZMin
     xLength, yLength, zLength = bb.XLength, bb.YLength, bb.ZLength
 
@@ -636,15 +635,15 @@ class SurfacesDict(dict):
             return index, True
 
 
-def split_bop(solid, tools, tolerance, scale=0.1):
+def split_bop(solid, tools, tolerance, options, scale=0.1):
 
     if tolerance >= 0.1:
         compSolid = BOPTools.SplitAPI.slice(solid, tools, "Split", tolerance=tolerance)
 
     elif tolerance < 1e-12:
-        if Options.scaleUp:
-            tol = 1e-13 if Options.splitTolerance == 0 else Options.splitTolerance
-            compSolid = split_bop(solid, tools, tol / scale, 1.0 / scale)
+        if options.scaleUp:
+            tol = 1e-13 if options.splitTolerance == 0 else options.splitTolerance
+            compSolid = split_bop(solid, tools, tol / scale, options, 1.0 / scale)
         else:
             compSolid = BOPTools.SplitAPI.slice(
                 solid, tools, "Split", tolerance=tolerance
@@ -656,6 +655,6 @@ def split_bop(solid, tools, tolerance, scale=0.1):
                 solid, tools, "Split", tolerance=tolerance
             )
         except:
-            compSolid = split_bop(solid, tools, tolerance * scale, scale)
+            compSolid = split_bop(solid, tools, tolerance * scale, options, scale)
 
     return compSolid
