@@ -62,7 +62,7 @@ def is_inverted(solid):
         return False
 
 
-def get_id(face_in, Surfaces, tolerances):
+def get_id(face_in, Surfaces, options, tolerances):
 
     if is_parallel(face_in.Axis, FreeCAD.Vector(1, 0, 0), tolerances.pln_angle):
         plane = "PX"
@@ -77,6 +77,7 @@ def get_id(face_in, Surfaces, tolerances):
         if BF.is_same_plane(
             face_in,
             s.Surf,
+            options=options,
             tolerances=tolerances,
             dtol=tolerances.pln_distance,
             atol=tolerances.pln_angle,
@@ -87,7 +88,7 @@ def get_id(face_in, Surfaces, tolerances):
     return 0
 
 
-def translate(meta_list, surfaces, universe_box, setting):
+def translate(meta_list, surfaces, universe_box, setting, options, tolerances,):
     tot_solid = len(meta_list)
     for i, m in enumerate(meta_list):
         if m.IsEnclosure:
@@ -102,7 +103,7 @@ def translate(meta_list, surfaces, universe_box, setting):
 
         surfaces.extend(
             Decom.extract_surfaces(
-                Part.makeCompound(m.Solids), "Plane3Pts", universe_box, MakeObj=False
+                Part.makeCompound(m.Solids), "Plane3Pts", universe_box, options, tolerances, MakeObj=False
             )
         )
         set_definition(m, surfaces)

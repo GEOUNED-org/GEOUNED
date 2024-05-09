@@ -170,7 +170,7 @@ class VoidBox:
             center = self.BoundBox.Center
             bBox = self.BoundBox
             for p in self.get_bound_planes():
-                id, exist = Surfaces.add_plane(p, tolerances, False)
+                id, exist = Surfaces.add_plane(p, options, tolerances, False)
                 if exist:
                     s = Surfaces.get_surface(id)
                     if is_opposite(p.Surf.Axis, s.Surf.Axis):
@@ -189,7 +189,7 @@ class VoidBox:
                 Part.makeCompound(TempPieceEnclosure.Solids), UniverseBox
             )
             Surfaces.extend(
-                Decom.extract_surfaces(comsolid, "All", UniverseBox, MakeObj=True)
+                Decom.extract_surfaces(comsolid, "All", UniverseBox, options, tolerances, MakeObj=True)
             )
             TempPieceEnclosure.update_solids(comsolid.Solids)
             Conv.cellDef(TempPieceEnclosure, Surfaces, UniverseBox)

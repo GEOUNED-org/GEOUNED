@@ -244,7 +244,7 @@ def write_sequence_omc_py(seq, options, prefix="S"):
     return line
 
 
-def mcnp_surface(id, Type, surf, tolerances):
+def mcnp_surface(id, Type, surf, options, tolerances):
     mcnp_def = ""
 
     if Type == "Plane":

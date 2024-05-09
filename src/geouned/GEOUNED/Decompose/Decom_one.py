@@ -71,12 +71,12 @@ def cut_full_cylinder(solid, options, tolerances):
                     ("Cylinder", (orig, dir, rad, dim_l)), universe_box
                 )
                 cylinder.build_surface()
-                surfaces.add_cylinder(cylinder, False)
+                surfaces.add_cylinder(cylinder, options, tolerances, False)
 
                 # add planes if cylinder axis is cut by a plane (plane quasi perpedicular to axis)
                 for p in cyl_bound_planes(face, universe_box):
                     p.build_surface()
-                    surfaces.add_plane(p, tolerances, False)
+                    surfaces.add_plane(p, options, tolerances, False)
                 break
 
     planes = []
@@ -221,7 +221,7 @@ def plane_spline_curve(edge, tolerances):
         return None
 
 
-def extract_surfaces(solid, kind, universe_box, tolerances, MakeObj):
+def extract_surfaces(solid, kind, universe_box, options, tolerances, MakeObj):
     if kind == "All":
         fuzzy = True
         solid_parts = []
@@ -253,7 +253,7 @@ def extract_surfaces(solid, kind, universe_box, tolerances, MakeObj):
                 )
                 if MakeObj:
                     plane.build_surface()
-                surfaces.add_plane(plane, tolerances, fuzzy)
+                surfaces.add_plane(plane, options, tolerances, fuzzy)
 
             elif surf == "<Cylinder object>":
                 dir = face.Surface.Axis
@@ -266,14 +266,14 @@ def extract_surfaces(solid, kind, universe_box, tolerances, MakeObj):
                     )
                     if MakeObj:
                         cylinder.build_surface()
-                    surfaces.add_cylinder(cylinder, tolerances, fuzzy)
+                    surfaces.add_cylinder(cylinder, options, tolerances, fuzzy)
 
                 if kind in ["Planes", "All"]:
                     # add planes if cylinder axis is cut by a plane (plane quasi perpedicular to axis)
                     for p in cyl_bound_planes(face, universe_box):
                         if MakeObj:
                             p.build_surface()
-                        surfaces.add_plane(p, tolerances, False)
+                        surfaces.add_plane(p, options, tolerances, False)
 
             elif surf == "<Cone object>":
                 dir = face.Surface.Axis
@@ -293,7 +293,7 @@ def extract_surfaces(solid, kind, universe_box, tolerances, MakeObj):
                     for p in cyl_bound_planes(face, universe_box):
                         if MakeObj:
                             p.build_surface()
-                        surfaces.add_plane(p, tolerances, False)
+                        surfaces.add_plane(p, options, tolerances, False)
 
             elif surf[0:6] == "Sphere" and kind in ["Sph", "All"]:
                 rad = face.Surface.Radius
@@ -307,7 +307,7 @@ def extract_surfaces(solid, kind, universe_box, tolerances, MakeObj):
                     for p in cyl_bound_planes(face, universe_box):
                         if MakeObj:
                             p.build_surface()
-                        surfaces.add_plane(p, tolerances, False)
+                        surfaces.add_plane(p, options, tolerances, False)
 
             elif surf == "<Toroid object>":
                 if kind in ["Tor", "All"]:
@@ -326,7 +326,7 @@ def extract_surfaces(solid, kind, universe_box, tolerances, MakeObj):
                     for p in torus_bound_planes(face, universe_box, tolerances):
                         if MakeObj:
                             p.build_surface()
-                        surfaces.add_plane(p, tolerances, False)
+                        surfaces.add_plane(p, options, tolerances, False)
 
             elif surf == "<Plane object>" and kind == "Plane3Pts":
                 pos = face.CenterOfMass
@@ -340,7 +340,7 @@ def extract_surfaces(solid, kind, universe_box, tolerances, MakeObj):
                 )
                 if MakeObj:
                     plane.build_surface()
-                surfaces.add_plane(plane, tolerances, fuzzy)
+                surfaces.add_plane(plane, options, tolerances, fuzzy)
 
     return surfaces
 
@@ -741,7 +741,7 @@ def split_planes_org(Solids, universe_box, options, tolerances):
             base = item[0]
             index = item[1]
             SPlanes = extract_surfaces(
-                base, "Planes", universe_box, tolerances, MakeObj=True
+                base, "Planes", universe_box, options, tolerances, MakeObj=True
             )
             Planes = [SPlanes["PX"], SPlanes["PY"], SPlanes["PZ"]]
             for i in index:
@@ -865,7 +865,7 @@ def sort_planes(PlaneList, sortElements=False):
 
 
 def split_p_planes_new(solid, universe_box, options, tolerances):
-    SPlanes = extract_surfaces(solid, "Planes", universe_box, tolerances, False)
+    SPlanes = extract_surfaces(solid, "Planes", universe_box, options, tolerances, False)
 
     Planes = []
     for P in ("PX", "PY", "PZ", "P"):
@@ -891,7 +891,7 @@ def split_p_planes_new(solid, universe_box, options, tolerances):
 
 
 def split_p_planes_org(solid, universe_box, options, tolerances):
-    SPlanes = extract_surfaces(solid, "Planes", universe_box, tolerances, False)
+    SPlanes = extract_surfaces(solid, "Planes", universe_box, options, tolerances, False)
 
     if len(SPlanes["P"]) == 0:
         return [solid]
@@ -914,7 +914,7 @@ def split_2nd_order(Solids, universe_box, options, tolerances):
             cutBase = []
             for solid in Base:
                 Surfaces = extract_surfaces(
-                    solid, kind, universe_box, tolerances, False
+                    solid, kind, universe_box, options, tolerances, False
                 )
                 if len(Surfaces[kind]) == 0:
                     kindBase.append(solid)

@@ -68,7 +68,7 @@ def void_generation(
             )
             voidList.append(voids)
 
-    voidList.append(set_graveyard_cell(Surfaces, UniverseBox, tolerances))
+    voidList.append(set_graveyard_cell(Surfaces, UniverseBox, options, tolerances))
 
     return VF.update_void_list(
         init, voidList, NestedEnclosure, setting["sort_enclosure"]
@@ -155,10 +155,10 @@ def get_void_def(
     return voidList
 
 
-def set_graveyard_cell(Surfaces, UniverseBox, tolerances):
+def set_graveyard_cell(Surfaces, UniverseBox, options, tolerances):
     Universe = VoidBox([], UniverseBox)
 
-    externalBox = get_universe_complementary(Universe, Surfaces, tolerances)
+    externalBox = get_universe_complementary(Universe, Surfaces, options, tolerances)
     center = UniverseBox.Center
     radius = 0.51 * UniverseBox.DiagonalLength
     sphere = GeounedSurface(("Sphere", (center, radius)), UniverseBox)
@@ -188,10 +188,10 @@ def set_graveyard_cell(Surfaces, UniverseBox, tolerances):
 
 
 # TODO check this is being used
-def get_universe_complementary(Universe, Surfaces, tolerances):
+def get_universe_complementary(Universe, Surfaces, options, tolerances):
     Def = BoolSequence(operator="OR")
     for p in Universe.get_bound_planes():
-        id, exist = Surfaces.add_plane(p, tolerances, False)
+        id, exist = Surfaces.add_plane(p, options, tolerances, False)
         if not exist:
             Def.elements.append(-id)
         else:
