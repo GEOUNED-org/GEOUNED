@@ -40,7 +40,7 @@ Modification in 0.9.7 Release Date 06/12/2022
   - allow to convert geometry to openMC XML format and script input file
   - change the entry "mcnpfile" by "geometryName" in FILES section. Now geometryName is the generic name of output geometry file.
     mncp input file will have ".mcnp" extension and openMC XML the ".xml" extension.
-  - new entry "outFormat" is added in FILES section. "outFormat" is used to select the output geometry format (mcnp and/or openMC_xml). 
+  - new entry "outFormat" is added in FILES section. "outFormat" is used to select the output geometry format (mcnp and/or openmc_xml). 
     Default value is only mcnp
   - new entry splitTolerance. Change the Tolerance value of the FreeCAD function split. Default Value  0.
   - new entry Verbose. Print on screen warning. Default False.

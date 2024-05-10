@@ -153,15 +153,15 @@ class CadToCsg:
                         values = tuple(x.strip() for x in raw.split(","))
                         outFormat = []
                         for v in values:
-                            if v.lower() == "mcnp":
+                            if v == "mcnp":
                                 outFormat.append("mcnp")
-                            elif v.lower() == "openmc_xml":
-                                outFormat.append("openMC_XML")
-                            elif v.lower() == "openmc_py":
-                                outFormat.append("openMC_PY")
-                            elif v.lower() == "serpent":
+                            elif v == "openmc_xml":
+                                outFormat.append("openmc_xml")
+                            elif v == "openmc_py":
+                                outFormat.append("openmc_py")
+                            elif v == "serpent":
                                 outFormat.append("serpent")
-                            elif v.lower() == "phits":
+                            elif v == "phits":
                                 outFormat.append("phits")
                         self.set(key, tuple(outFormat))
 

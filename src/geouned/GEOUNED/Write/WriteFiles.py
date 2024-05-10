@@ -46,14 +46,14 @@ def write_geometry(
         MCNPfile.set_sdef((outSphere, outBox))
         MCNPfile.write_input(mcnpFilename)
 
-    if "openMC_XML" in out_formats or "openMC_PY" in out_formats:
+    if "openmc_xml" in out_formats or "openmc_py" in out_formats:
         OMCFile = OpenmcInput(meta_list, surfaces, options, tolerances, numeric_format)
 
-    if "openMC_XML" in out_formats:
+    if "openmc_xml" in out_formats:
         omcFilename = filename_stem + ".xml"
         OMCFile.write_xml(omcFilename)
 
-    if "openMC_PY" in out_formats:
+    if "openmc_py" in out_formats:
         omcFilename = filename_stem + ".py"
         OMCFile.write_py(omcFilename)
 
