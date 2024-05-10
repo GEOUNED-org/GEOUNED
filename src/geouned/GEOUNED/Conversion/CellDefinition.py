@@ -23,8 +23,8 @@ from ..Utils.Functions import GeounedSurface
 
 logger = logging.getLogger(__name__)
 
-
-def get_id(facein, surfaces, options, tolerances):
+# TODO rename this function as there are two with the same name
+def get_id(facein, surfaces, options, tolerances, numeric_format):
 
     surfin = str(facein)
     if surfin == "<Plane object>":
@@ -43,6 +43,7 @@ def get_id(facein, surfaces, options, tolerances):
                 s.Surf,
                 options=options,
                 tolerances=tolerances,
+                numeric_format=numeric_format,
             ):
                 return s.Index
 
@@ -53,6 +54,7 @@ def get_id(facein, surfaces, options, tolerances):
                 s.Surf,
                 options=options,
                 tolerances=tolerances,
+                numeric_format=numeric_format,
             ):
                 return s.Index
 
@@ -732,7 +734,7 @@ def gen_torus_annex_v_surface(face, v_params, tolerances, force_cylinder=False):
         )
 
 
-def cellDef(meta_obj, surfaces, universe_box, options, tolerances):
+def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_format):
 
     solids = meta_obj.Solids
     del_list = []
@@ -777,7 +779,7 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances):
                 and orient == "Reversed"
             ):
                 # cone additional plane is added afterward
-                id_face = get_id(face.Surface, surfaces, options, tolerances)
+                id_face = get_id(face.Surface, surfaces, options, tolerances, numeric_format)
                 if surface_type == "<Cone object>":
                     cones.add(id_face)
                 if str(id_face) not in surf_piece:
@@ -799,7 +801,7 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances):
                         Face="Build",
                     )
 
-                    id, exist = surfaces.add_plane(p, options, tolerances, False)
+                    id, exist = surfaces.add_plane(p, options, tolerances, numeric_format, False)
                     sign = sign_plane(face.CenterOfMass, p)
                     if exist:
                         pp = surfaces.get_surface(id)
@@ -829,7 +831,7 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances):
                     )
                 ):
 
-                    idT = get_id(face.Surface, surfaces, options, tolerances)
+                    idT = get_id(face.Surface, surfaces, options, tolerances, numeric_format)
 
                     index, u_params = solid_gu.TorusUParams[iface]
                     if index == last_torus:
@@ -848,7 +850,7 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances):
                             ("Plane", plane1), universe_box, Face="Build"
                         )
                         id1, exist = surfaces.add_plane(
-                            plane, options, tolerances, False
+                            plane, options, tolerances, numeric_format, False
                         )
                         if exist:
                             p = surfaces.get_surface(id1)
@@ -864,7 +866,7 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances):
                                 ("Plane", plane2), universe_box, Face="Build"
                             )
                             id2, exist = surfaces.add_plane(
-                                plane, options, tolerances, False
+                                plane, options, tolerances, numeric_format, False
                             )
                             if exist:
                                 p = surfaces.get_surface(id2)
@@ -909,7 +911,7 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances):
                                     Face="Build",
                                 )
                                 id2, exist = surfaces.add_cylinder(
-                                    cyl, options, tolerances
+                                    cyl, options, tolerances, numeric_format
                                 )
 
                             elif surf_type == "Plane":
@@ -917,7 +919,7 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances):
                                     ("Plane", surf_params), universe_box, Face="Build"
                                 )
                                 id2, exist = surfaces.add_plane(
-                                    plane, options, tolerances, False
+                                    plane, options, tolerances, numeric_format, False
                                 )
                                 if exist:
                                     p = surfaces.get_surface(id2)
@@ -939,7 +941,7 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances):
                         "Only Torus with axis along X, Y, Z axis can be reproduced"
                     )
             else:
-                id = get_id(face.Surface, surfaces, options, tolerances)
+                id = get_id(face.Surface, surfaces, options, tolerances, numeric_format)
                 if surface_type == "<Cone object>":
                     cones.add(-id)
 
@@ -958,7 +960,7 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances):
                             Face="Build",
                         )
                         id, exist = surfaces.add_plane(
-                            plane, options, tolerances, False
+                            plane, options, tolerances, numeric_format, False
                         )
                         surf = plane.shape
                     elif surface_type == "<Cylinder object>":
@@ -976,7 +978,9 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances):
                             universe_box,
                             Face="Build",
                         )
-                        id, exist = surfaces.add_cylinder(cylinder, options, tolerances)
+                        id, exist = surfaces.add_cylinder(
+                            cylinder, options, tolerances, numeric_format
+                        )
                         surf = cylinder.shape
 
                 if orient == "Reversed":
@@ -1163,7 +1167,7 @@ def no_overlapping_cell(metaList, surfaces, options):
 
 
 # TODO this function looks like it is not used in the code.
-def extra_plane_cyl_face(face, box, surfaces, options, tolerances):
+def extra_plane_cyl_face(face, box, surfaces, options, tolerances, numeric_format):
     wire = face.OuterWire
     planes_id = []
     for e in wire.OrderedEdges:
@@ -1180,7 +1184,7 @@ def extra_plane_cyl_face(face, box, surfaces, options, tolerances):
             plane = GeounedSurface(
                 ("Plane", (center, dir, dim1, dim2)), box, Face="Build"
             )
-            id, exist = surfaces.add_plane(plane, options, tolerances, False)
+            id, exist = surfaces.add_plane(plane, options, tolerances, numeric_format, False)
             if exist:
                 pp = surfaces.get_surface(id)
                 if is_opposite(plane.Surf.Axis, pp.Surf.Axis, tolerances.pln_angle):
@@ -1189,7 +1193,7 @@ def extra_plane_cyl_face(face, box, surfaces, options, tolerances):
     return planes_id
 
 
-def add_cone_plane(definition, cones_list, surfaces, universe_box, options, tolerances):
+def add_cone_plane(definition, cones_list, surfaces, universe_box, options, tolerances, numeric_format):
     x_axis = FreeCAD.Vector(1, 0, 0)
     y_axis = FreeCAD.Vector(0, 1, 0)
     z_axis = FreeCAD.Vector(0, 0, 1)
@@ -1208,7 +1212,7 @@ def add_cone_plane(definition, cones_list, surfaces, universe_box, options, tole
             universe_box,
             Face="Build",
         )
-        pid, exist = surfaces.add_plane(plane, options, tolerances, False)
+        pid, exist = surfaces.add_plane(plane, options, tolerances, numeric_format, False)
 
         if exist:
             p = surfaces.get_surface(pid)

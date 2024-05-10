@@ -61,8 +61,8 @@ def is_inverted(solid):
     else:
         return False
 
-
-def get_id(face_in, Surfaces, options, tolerances):
+# TODO rename this function as there are two with the same name
+def get_id(face_in, Surfaces, options, tolerances, numeric_format):
 
     if is_parallel(face_in.Axis, FreeCAD.Vector(1, 0, 0), tolerances.pln_angle):
         plane = "PX"
@@ -79,6 +79,7 @@ def get_id(face_in, Surfaces, options, tolerances):
             s.Surf,
             options=options,
             tolerances=tolerances,
+            numeric_format=numeric_format,
         ):
             return s.Index
 
@@ -92,6 +93,7 @@ def translate(
     setting,
     options,
     tolerances,
+    numeric_format
 ):
     tot_solid = len(meta_list)
     for i, m in enumerate(meta_list):
@@ -112,14 +114,15 @@ def translate(
                 universe_box,
                 options,
                 tolerances,
+                numeric_format,
                 MakeObj=False,
             )
         )
-        set_definition(m, surfaces)
+        set_definition(m, surfaces, options, tolerances)
 
 
 # TODO rename this, but be careful as there are other functions in the code with the same name
-def set_definition(meta_obj, surfaces, tolerances):
+def set_definition(meta_obj, surfaces, options, tolerances):
     solids = meta_obj.Solids
     s_def = BoolSequence(operator="OR")
 
@@ -140,7 +143,7 @@ def set_definition(meta_obj, surfaces, tolerances):
             if face.Orientation not in ("Forward", "Reversed"):
                 continue
 
-            id = get_id(face.Surface, surfaces)
+            id = get_id(face.Surface, surfaces, options, tolerances)
             s = surfaces.get_surface(id)
             if is_opposite(face.Surface.Axis, s.Surf.Axis, tolerances.pln_angle):
                 id = -id

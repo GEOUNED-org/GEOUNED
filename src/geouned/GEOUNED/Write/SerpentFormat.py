@@ -15,9 +15,10 @@ logger = logging.getLogger(__name__)
 
 
 class SerpentInput:
-    def __init__(self, Meta, Surfaces, setting, options, tolerances):
+    def __init__(self, Meta, Surfaces, setting, options, tolerances, numeric_format):
         self.options = options
         self.tolerances = tolerances
+        self.numeric_format = numeric_format
         self.Title = setting["title"]
         self.VolSDEF = setting["volSDEF"]
         self.VolCARD = setting["volCARD"]
@@ -176,7 +177,7 @@ class SerpentInput:
         """Write the surfaces in Serpent format"""
 
         Serpent_def = serpent_surface(
-            surface.Index, surface.Type, surface.Surf, self.options, self.tolerances
+            surface.Index, surface.Type, surface.Surf, self.options, self.tolerances, self.numeric_format
         )
         if Serpent_def:
             Serpent_def += "\n"

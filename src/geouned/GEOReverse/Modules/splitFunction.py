@@ -33,7 +33,7 @@ def joinBase(baseList):
     newbase = FuseSolid(shape)
     return SplitBase(newbase, surf)
 
-
+# TODO rename this function as there are two with the name name
 def SplitSolid(base, surfacesCut, cellObj, solidTool=False, tolerance=0.01):  # 1e-2
     # split Base (shape Object or list/tuple of shapes)
     # with selected surfaces (list of surfaces objects) cutting the base(s) (surfacesCut)

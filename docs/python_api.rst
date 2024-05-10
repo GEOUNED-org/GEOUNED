@@ -15,3 +15,7 @@ Python API reference
 .. autoclass:: Tolerances
     :members:
     :show-inheritance:
+
+.. autoclass:: NumericFormat
+    :members:
+    :show-inheritance:

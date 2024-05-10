@@ -126,3 +126,57 @@ class Tolerances:
         self.tor_distance = tor_distance
         self.tor_angle = tor_angle
         self.min_area = min_area
+
+
+class NumericFormat:
+    """Numerical format options for each of the surface types.
+
+    Args:
+        P_abc (str, optional): Plane general a,b,c params. Defaults to "14.7e".
+        P_d (str, optional): Plane general d params. Defaults to "14.7e".
+        P_xyz (str, optional): PX/PY/PZ params. Defaults to "14.7e".
+        S_r (str, optional): SO/SX/SY/SZ/S radius. Defaults to "14.7e".
+        S_xyz (str, optional): SO/SX/SY/SZ/S center. Defaults to "14.7e".
+        C_r (str, optional): Cylinder radius. Defaults to "12f".
+        C_xyz (str, optional): Cylinder center. Defaults to "12f".
+        K_xyz (str, optional): Cone apex. Defaults to "13.6e".
+        K_tan2 (str, optional): Cone tan^2 value. Defaults to "12f".
+        T_r (str, optional): Torus radii. Defaults to "14.7e".
+        T_xyz (str, optional): Torus center. Defaults to "14.7e".
+        GQ_1to6 (str, optional): GQ 1 to 6 coefficients (order 2 x2,y2,z2,xy,...). Defaults to "18.15f".
+        GQ_7to9 (str, optional): GQ 7 to 9 coefficients (order 1 x,y,z). Defaults to "18.15f".
+        GQ_10 (str, optional): GQ 10 coefficient. Defaults to "18.15f".
+    """
+
+    def __init__(
+        self,
+        P_abc: str = "14.7e",
+        P_d: str = "14.7e",
+        P_xyz: str = "14.7e",
+        S_r: str = "14.7e",
+        S_xyz: str = "14.7e",
+        C_r: str = "12f",
+        C_xyz: str = "12f",
+        K_xyz: str = "13.6e",
+        K_tan2: str = "12f",
+        T_r: str = "14.7e",
+        T_xyz: str = "14.7e",
+        GQ_1to6: str = "18.15f",
+        GQ_7to9: str = "18.15f",
+        GQ_10: str = "18.15f",
+    ):
+
+        self.P_abc = P_abc
+        self.P_d = P_d
+        self.P_xyz = P_xyz
+        self.S_r = S_r
+        self.S_xyz = S_xyz
+        self.C_r = C_r
+        self.C_xyz = C_xyz
+        self.K_xyz = K_xyz
+        self.K_tan2 = K_tan2
+        self.T_r = T_r
+        self.T_xyz = T_xyz
+        self.GQ_1to6 = GQ_1to6
+        self.GQ_7to9 = GQ_7to9
+        self.GQ_10 = GQ_10
