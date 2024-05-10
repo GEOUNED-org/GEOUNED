@@ -69,3 +69,60 @@ class Options:
         self.Facets = Facets
         self.prnt3PPlane = prnt3PPlane
         self.forceNoOverlap = forceNoOverlap
+
+
+class Tolerances:
+    """A class for containing tolerances values
+
+    Args:
+        relativeTol (bool, optional): _description_. Defaults to False.
+        relativePrecision (float, optional): relative precision. Defaults to 1.0e-6.
+        value (float, optional): Tolerance in single value comparison. Defaults to 1.0e-6.
+        distance (float, optional): General Distance Tolerance. Defaults to 1.0e-4.
+        angle (float, optional): General Angle Tolerance. Defaults to 1.0e-4.
+        pln_distance (float, optional): distance between planes equal planes if distance between parallel planes < 1e-4 cm. Defaults to 1.0e-4.
+        pln_angle (float, optional): angle between axis. 1e-4 : planes separate each other 0.1mm each 1m. Defaults to 1.0e-4.
+        cyl_distance (float, optional): distance between radius/center. Defaults to 1.0e-4.
+        cyl_angle (float, optional): angle between axis. Defaults to 1.0e-4.
+        sph_distance (float, optional): distance between radius/center. Defaults to 1.0e-4.
+        kne_distance (float, optional): distance between apex. Defaults to 1.0e-4.
+        kne_angle (float, optional): angle between semiangles/axis. Defaults to 1.0e-4.
+        tor_distance (float, optional): distance between Major/Minor radii/center. Defaults to 1.0e-4.
+        tor_angle (float, optional): angle between axis. Defaults to 1.0e-4.
+        min_area (float, optional): minimum face area to consider in cell definition. Defaults to 1.0e-2.
+    """
+
+    def __init__(
+        self,
+        relativeTol: bool = False,
+        relativePrecision: float = 1.0e-6,
+        value: float = 1.0e-6,
+        distance: float = 1.0e-4,
+        angle: float = 1.0e-4,
+        pln_distance: float = 1.0e-4,
+        pln_angle: float = 1.0e-4,
+        cyl_distance: float = 1.0e-4,
+        cyl_angle: float = 1.0e-4,
+        sph_distance: float = 1.0e-4,
+        kne_distance: float = 1.0e-4,
+        kne_angle: float = 1.0e-4,
+        tor_distance: float = 1.0e-4,
+        tor_angle: float = 1.0e-4,
+        min_area: float = 1.0e-2,
+    ):
+
+        self.relativeTol = relativeTol
+        self.relativePrecision = relativePrecision
+        self.value = value
+        self.distance = distance
+        self.angle = angle
+        self.pln_distance = pln_distance
+        self.pln_angle = pln_angle
+        self.cyl_distance = cyl_distance
+        self.cyl_angle = cyl_angle
+        self.sph_distance = sph_distance
+        self.kne_distance = kne_distance
+        self.kne_angle = kne_angle
+        self.tor_distance = tor_distance
+        self.tor_angle = tor_angle
+        self.min_area = min_area

@@ -5,7 +5,7 @@ from .PHITSFormat import PhitsInput
 from .SerpentFormat import SerpentInput
 
 
-def write_geometry(UniverseBox, MetaList, Surfaces, code_setting, options):
+def write_geometry(UniverseBox, MetaList, Surfaces, code_setting, options, tolerances):
 
     baseName = code_setting["geometryName"]
 
@@ -39,7 +39,7 @@ def write_geometry(UniverseBox, MetaList, Surfaces, code_setting, options):
         else:
             outSphere = None
 
-        MCNPfile = McnpInput(MetaList, Surfaces, code_setting, options)
+        MCNPfile = McnpInput(MetaList, Surfaces, code_setting, options, tolerances)
         MCNPfile.set_sdef((outSphere, outBox))
         MCNPfile.write_input(mcnpFilename)
 
@@ -47,7 +47,7 @@ def write_geometry(UniverseBox, MetaList, Surfaces, code_setting, options):
         "openMC_XML" in code_setting["outFormat"]
         or "openMC_PY" in code_setting["outFormat"]
     ):
-        OMCFile = OpenmcInput(MetaList, Surfaces, options)
+        OMCFile = OpenmcInput(MetaList, Surfaces, options, tolerances)
 
     if "openMC_XML" in code_setting["outFormat"]:
         omcFilename = baseName + ".xml"
@@ -72,7 +72,9 @@ def write_geometry(UniverseBox, MetaList, Surfaces, code_setting, options):
         else:
             outSphere = None
 
-        Serpentfile = SerpentInput(MetaList, Surfaces, code_setting, options)
+        Serpentfile = SerpentInput(
+            MetaList, Surfaces, code_setting, options, tolerances
+        )
         # Serpentfile.set_sdef((outSphere,outBox))
         Serpentfile.write_input(serpentFilename)
 
@@ -94,6 +96,6 @@ def write_geometry(UniverseBox, MetaList, Surfaces, code_setting, options):
         else:
             PHITS_outSphere = None
 
-        PHITSfile = PhitsInput(MetaList, Surfaces, code_setting, options)
+        PHITSfile = PhitsInput(MetaList, Surfaces, code_setting, options, tolerances)
         # PHITSfile.setSDEF_PHITS((PHITS_outSphere,PHITS_outBox))
         PHITSfile.write_phits(phitsFilename)
