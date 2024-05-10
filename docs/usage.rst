@@ -8,12 +8,12 @@ Python package usage
 
 The Python API has two main classes.
 The first main class is ``CadToCsg()`` which converts CAD geometry to Constructive Solid Geometry (CSG).
-There are many arguments that can be passed into the ``CadToCsg()`` class which are documented in the Python API section.
+There are many arguments that can be passed into the ``CadToCsg()`` class which are documented in the `Python API section <python_api.html>`_ of the documentation.
 
 
-The most minimal use case below shows GEOUNED being imported and the CadToCsg being used to convert a STEP CAD file called 'cuboid.stp' into a varity of CSG format. 
-If you have install GEOUNED and FreeCAD into your system PYthon then you can simply run a .py script with python.
-
+If you have install GEOUNED and FreeCAD into your system Python then you can simply run a .py script with Python.
+The most minimal use case below shows GEOUNED being imported and the CadToCsg being used to convert a STEP CAD file called 'cuboid.stp' into a vanity of CSG format. 
+The example makes use of default  attributes.
 
 .. code-block:: python
 
@@ -22,9 +22,8 @@ If you have install GEOUNED and FreeCAD into your system PYthon then you can sim
     geo.start()
     geo.export_csg()
 
-The above examples makes use of default :meth:`geouned.Options`, :meth:`geouned.Tolerances` and :meth:`geouned.NumericFormat`
-Users can change any of these to suit the conversion desired.
-The following example changes several default values of the conversion.
+Users can change :meth:`geouned.Options`, :meth:`geouned.Tolerances` and :meth:`geouned.NumericFormat` to suit the conversion desired.
+The following example shows a more complete usage with several default attributes changed.
 
 .. code-block:: python
 
@@ -37,8 +36,18 @@ The following example changes several default values of the conversion.
         nPlaneReverse=0,
     )
 
+    my_tolerances = geouned.Tolerances(
+        min_area=0.011
+    )
+    my_numeric_format = geouned.NumericFormat(
+        C_r="13f"
+    )
+
     geo = geouned.CadToCsg(
-        stepFile='cuboid.stp', options=my_options
+        stepFile='cuboid.stp',
+        options=my_options,
+        tolerances=my_tolerances
+        numeric_format=my_numeric_format
     )
 
     geo.start()

@@ -14,10 +14,12 @@ logger = logging.getLogger(__name__)
 
 
 class OpenmcInput:
-    def __init__(self, Meta, Surfaces, options):
+    def __init__(self, Meta, Surfaces, options, tolerances, numeric_format):
 
         self.Cells = Meta
         self.options = options
+        self.tolerances = tolerances
+        self.numeric_format = numeric_format
 
         self.__get_surface_table__()
         self.__simplify_planes__(Surfaces)
@@ -77,7 +79,9 @@ class OpenmcInput:
     def __write_xml_surfaces__(self, surface, boundary=False):
         """Write the surfaces in xml OpenMC format"""
 
-        surfType, coeffs = open_mc_surface(surface.Type, surface.Surf, self.options)
+        surfType, coeffs = open_mc_surface(
+            surface.Type, surface.Surf, self.tolerances, self.numeric_format
+        )
 
         if not boundary:
             OMCsurf = '  <surface id="{}" type="{}" coeffs="{}" />\n'.format(
@@ -153,7 +157,8 @@ import openmc
         surfType, coeffs = open_mc_surface(
             surface.Type,
             surface.Surf,
-            self.options,
+            self.tolerances,
+            self.numeric_format,
             out_xml=False,
             quadricForm=self.options.quadricPY,
         )

@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 
 class PhitsInput:
-    def __init__(self, Meta, Surfaces, setting, options):
+    def __init__(self, Meta, Surfaces, setting, options, tolerances, numeric_format):
         self.Title = setting["title"]
         self.VolSDEF = setting["volSDEF"]
         self.VolCARD = setting["volCARD"]
@@ -41,6 +41,8 @@ class PhitsInput:
         self.voidMat = setting["voidMat"]
         self.startCell = setting["startCell"]
         self.Cells = Meta
+        self.tolerances = tolerances
+        self.numeric_format = numeric_format
         self.options = options
         self.Options = {"Volume": self.VolCARD, "Universe": self.U0CARD}
 
@@ -369,7 +371,12 @@ $ **************************************************************
         """Write the surfaces in PHITS format"""
 
         PHITS_def = phits_surface(
-            surface.Index, surface.Type, surface.Surf, self.options
+            surface.Index,
+            surface.Type,
+            surface.Surf,
+            self.options,
+            self.tolerances,
+            self.numeric_format,
         )
         if PHITS_def:
             PHITS_def += "\n"

@@ -102,7 +102,7 @@ class VoidBox:
         box1 = FreeCAD.BoundBox(VMin1, VMax1)
         box2 = FreeCAD.BoundBox(VMin2, VMax2)
 
-        if self.PieceEnclosure == None:
+        if self.PieceEnclosure is None:
             Space1 = VoidBox(self.Objects, box1)
             Space2 = VoidBox(self.Objects, box2)
             VoidBoxTuple = (Space1, Space2)
@@ -110,11 +110,11 @@ class VoidBox:
             Space1 = self.piece_enclosure_split(box1)
             Space2 = self.piece_enclosure_split(box2)
             VoidBoxTuple = (Space1, Space2)
-            if Space1 == None:
+            if Space1 is None:
                 VoidBoxTuple = (Space2,)
-            if Space2 == None:
+            if Space2 is None:
                 VoidBoxTuple = (Space1,)
-            if Space1 == None and Space2 == None:
+            if Space1 is None and Space2 is None:
                 VoidBoxTuple = ()
 
         return VoidBoxTuple
@@ -164,13 +164,17 @@ class VoidBox:
             self.__remove_extra_comp__(m, Cube, mode="dist")
         return
 
-    def get_void_complementary(self, Surfaces, options, simplify="no"):
+    def get_void_complementary(
+        self, Surfaces, options, tolerances, numeric_format, simplify="no"
+    ):
         if self.PieceEnclosure is None:
             boxDef = BoolSequence(operator="AND")
             center = self.BoundBox.Center
             bBox = self.BoundBox
             for p in self.get_bound_planes():
-                id, exist = Surfaces.add_plane(p)
+                id, exist = Surfaces.add_plane(
+                    p, options, tolerances, numeric_format, False
+                )
                 if exist:
                     s = Surfaces.get_surface(id)
                     if is_opposite(p.Surf.Axis, s.Surf.Axis):
@@ -186,13 +190,32 @@ class VoidBox:
             UniverseBox = self.PieceEnclosure.BoundBox
             TempPieceEnclosure = GeounedSolid(None, self.PieceEnclosure)
             comsolid, err = Decom.SplitSolid(
-                Part.makeCompound(TempPieceEnclosure.Solids), UniverseBox
+                Part.makeCompound(TempPieceEnclosure.Solids),
+                UniverseBox,
+                options,
+                tolerances,
+                numeric_format,
             )
             Surfaces.extend(
-                Decom.extract_surfaces(comsolid, "All", UniverseBox, MakeObj=True)
+                Decom.extract_surfaces(
+                    comsolid,
+                    "All",
+                    UniverseBox,
+                    options,
+                    tolerances,
+                    numeric_format,
+                    MakeObj=True,
+                )
             )
             TempPieceEnclosure.update_solids(comsolid.Solids)
-            Conv.cellDef(TempPieceEnclosure, Surfaces, UniverseBox)
+            Conv.cellDef(
+                TempPieceEnclosure,
+                Surfaces,
+                UniverseBox,
+                options,
+                tolerances,
+                numeric_format,
+            )
 
             boxDef = TempPieceEnclosure.Definition
             bBox = self.PieceEnclosure.BoundBox

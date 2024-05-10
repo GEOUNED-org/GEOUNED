@@ -15,8 +15,9 @@ from .Functions import CardLine, change_surf_sign, mcnp_surface, write_mcnp_cell
 logger = logging.getLogger(__name__)
 
 
+# TODO rename as there are two classes with this name
 class McnpInput:
-    def __init__(self, Meta, Surfaces, setting, options):
+    def __init__(self, Meta, Surfaces, setting, options, tolerances, numeric_format):
         self.Title = setting["title"]
         self.VolSDEF = setting["volSDEF"]
         self.VolCARD = setting["volCARD"]
@@ -24,6 +25,8 @@ class McnpInput:
         self.dummyMat = setting["dummyMat"]
         self.Cells = Meta
         self.options = options
+        self.tolerances = tolerances
+        self.numeric_format = numeric_format
         self.Options = {
             "Volume": self.VolCARD,
             "Particle": ("n", "p"),
@@ -165,7 +168,14 @@ C **************************************************************
     def __write_surfaces__(self, surface):
         """Write the surfaces in MCNP format"""
 
-        MCNP_def = mcnp_surface(surface.Index, surface.Type, surface.Surf)
+        MCNP_def = mcnp_surface(
+            surface.Index,
+            surface.Type,
+            surface.Surf,
+            self.options,
+            self.tolerances,
+            self.numeric_format,
+        )
         if MCNP_def:
             MCNP_def += "\n"
             self.inpfile.write(MCNP_def)

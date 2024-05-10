@@ -53,7 +53,18 @@ def test_conversion(input_step_file):
         nPlaneReverse=0,
     )
 
-    geo = geouned.CadToCsg(title="Input Test", options=my_options)
+    # default values used, just checking it can be passed in
+    my_tolerances = geouned.Tolerances(min_area=0.01)
+
+    # default values used, just checking it can be passed in
+    my_numeric_format = geouned.NumericFormat(C_r="12f")
+
+    geo = geouned.CadToCsg(
+        title="Input Test",
+        options=my_options,
+        tolerances=my_tolerances,
+        numeric_format=my_numeric_format,
+    )
 
     # set parameters values stored in template dictionary
     for key, value in template.items():
