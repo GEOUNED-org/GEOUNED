@@ -454,9 +454,6 @@ class SurfacesDict(dict):
                     p.Surf,
                     options=options,
                     tolerances=tolerances,
-                    dtol=tolerances.pln_distance,
-                    atol=tolerances.pln_angle,
-                    rel_tol=tolerances.relativeTol,
                     fuzzy=(fuzzy, p.Index),
                 ):
                     add_plane = False
@@ -478,9 +475,6 @@ class SurfacesDict(dict):
                     p.Surf,
                     options=options,
                     tolerances=tolerances,
-                    dtol=tolerances.pln_distance,
-                    atol=tolerances.pln_angle,
-                    rel_tol=tolerances.relativeTol,
                     fuzzy=(fuzzy, p.Index),
                 ):
                     add_plane = False
@@ -502,9 +496,6 @@ class SurfacesDict(dict):
                     p.Surf,
                     options=options,
                     tolerances=tolerances,
-                    dtol=tolerances.pln_distance,
-                    atol=tolerances.pln_angle,
-                    rel_tol=tolerances.relativeTol,
                     fuzzy=(fuzzy, p.Index),
                 ):
                     add_plane = False
@@ -526,9 +517,6 @@ class SurfacesDict(dict):
                     p.Surf,
                     options=options,
                     tolerances=tolerances,
-                    dtol=tolerances.pln_distance,
-                    atol=tolerances.pln_angle,
-                    rel_tol=tolerances.relativeTol,
                     fuzzy=(fuzzy, p.Index),
                 ):
                     add_plane = False
@@ -555,9 +543,6 @@ class SurfacesDict(dict):
                 c.Surf,
                 options=options,
                 tolerances=tolerances,
-                dtol=tolerances.cyl_distance,
-                atol=tolerances.cyl_angle,
-                rel_tol=tolerances.relativeTol,
                 fuzzy=(fuzzy, c.Index),
             ):
                 addCyl = False

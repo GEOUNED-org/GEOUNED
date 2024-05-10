@@ -48,18 +48,18 @@ def Fuzzy(index, dtype, surf1, surf2, val, tol, options, tolerances):
 
 
 def is_same_plane(
-    p1, p2, options, tolerances, dtol=1e-6, atol=1e-6, rel_tol=True, fuzzy=(False, 0)
+    p1, p2, options, tolerances, fuzzy=(False, 0)
 ):
-    if is_parallel(p1.Axis, p2.Axis, atol):
+    if is_parallel(p1.Axis, p2.Axis, tolerances.pln_angle):
         d1 = p1.Axis.dot(p1.Position)
         d2 = p2.Axis.dot(p2.Position)
-        if is_opposite(p1.Axis, p2.Axis, atol):
+        if is_opposite(p1.Axis, p2.Axis, tolerances.pln_angle):
             d2 = -d2
         d = abs(d1 - d2)
-        if rel_tol:
-            tol = dtol * max(p2.dim1, p2.dim2)
+        if tolerances.relativeTol:
+            tol = tolerances.pln_distance * max(p2.dim1, p2.dim2)
         else:
-            tol = dtol
+            tol = tolerances.pln_distance
 
         isSame, is_fuzzy = is_in_tolerance(d, tol, 0.5 * tol, 2 * tol)
         if is_fuzzy and fuzzy[0]:
@@ -73,15 +73,12 @@ def is_same_cylinder(
     cyl2,
     options,
     tolerances,
-    dtol=1e-6,
-    atol=1e-6,
-    rel_tol=True,
     fuzzy=(False, 0),
 ):
-    if rel_tol:
-        rtol = dtol * max(cyl2.Radius, cyl1.Radius)
+    if tolerances.relativeTol:
+        rtol = tolerances.cyl_distance * max(cyl2.Radius, cyl1.Radius)
     else:
-        rtol = dtol
+        rtol = tolerances.cyl_distance
 
     is_same_rad, is_fuzzy = is_in_tolerance(
         cyl2.Radius - cyl1.Radius, rtol, 0.5 * rtol, 2 * rtol
@@ -99,14 +96,14 @@ def is_same_cylinder(
         )
 
     if is_same_rad:
-        if is_parallel(cyl1.Axis, cyl2.Axis, atol):
+        if is_parallel(cyl1.Axis, cyl2.Axis, tolerances.cyl_angle):
             c12 = cyl1.Center - cyl2.Center
             d = cyl1.Axis.cross(c12).Length
 
-            if rel_tol:
-                tol = dtol * max(cyl1.Center.Length, cyl2.Center.Length)
+            if tolerances.relativeTol:
+                tol = tolerances.cyl_distance * max(cyl1.Center.Length, cyl2.Center.Length)
             else:
-                tol = dtol
+                tol = tolerances.cyl_distance
 
             is_same_center, is_fuzzy = is_in_tolerance(d, tol, 0.5 * tol, 2 * tol)
             if is_fuzzy and fuzzy[0]:

@@ -79,9 +79,6 @@ def get_id(face_in, Surfaces, options, tolerances):
             s.Surf,
             options=options,
             tolerances=tolerances,
-            dtol=tolerances.pln_distance,
-            atol=tolerances.pln_angle,
-            rel_tol=tolerances.relativeTol,
         ):
             return s.Index
 
