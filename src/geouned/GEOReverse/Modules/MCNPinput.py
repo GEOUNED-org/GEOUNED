@@ -25,6 +25,7 @@ from .Parser import parser as mp
 from .remh import CellCardString, remove_hash
 
 
+# TODO rename as there are two classes with this name
 class McnpInput:
     def __init__(self, name):
         if not os.path.isfile(name):

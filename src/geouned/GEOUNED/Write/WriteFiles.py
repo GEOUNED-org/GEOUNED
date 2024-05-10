@@ -5,7 +5,9 @@ from .PHITSFormat import PhitsInput
 from .SerpentFormat import SerpentInput
 
 
-def write_geometry(UniverseBox, MetaList, Surfaces, code_setting, options, tolerances):
+def write_geometry(
+    UniverseBox, MetaList, Surfaces, code_setting, options, tolerances, numeric_format
+):
 
     baseName = code_setting["geometryName"]
 
@@ -39,7 +41,9 @@ def write_geometry(UniverseBox, MetaList, Surfaces, code_setting, options, toler
         else:
             outSphere = None
 
-        MCNPfile = McnpInput(MetaList, Surfaces, code_setting, options, tolerances)
+        MCNPfile = McnpInput(
+            MetaList, Surfaces, code_setting, options, tolerances, numeric_format
+        )
         MCNPfile.set_sdef((outSphere, outBox))
         MCNPfile.write_input(mcnpFilename)
 
@@ -47,7 +51,7 @@ def write_geometry(UniverseBox, MetaList, Surfaces, code_setting, options, toler
         "openMC_XML" in code_setting["outFormat"]
         or "openMC_PY" in code_setting["outFormat"]
     ):
-        OMCFile = OpenmcInput(MetaList, Surfaces, options, tolerances)
+        OMCFile = OpenmcInput(MetaList, Surfaces, options, tolerances, numeric_format)
 
     if "openMC_XML" in code_setting["outFormat"]:
         omcFilename = baseName + ".xml"
@@ -73,7 +77,7 @@ def write_geometry(UniverseBox, MetaList, Surfaces, code_setting, options, toler
             outSphere = None
 
         Serpentfile = SerpentInput(
-            MetaList, Surfaces, code_setting, options, tolerances
+            MetaList, Surfaces, code_setting, options, tolerances, numeric_format
         )
         # Serpentfile.set_sdef((outSphere,outBox))
         Serpentfile.write_input(serpentFilename)
@@ -96,6 +100,8 @@ def write_geometry(UniverseBox, MetaList, Surfaces, code_setting, options, toler
         else:
             PHITS_outSphere = None
 
-        PHITSfile = PhitsInput(MetaList, Surfaces, code_setting, options, tolerances)
+        PHITSfile = PhitsInput(
+            MetaList, Surfaces, code_setting, options, tolerances, numeric_format
+        )
         # PHITSfile.setSDEF_PHITS((PHITS_outSphere,PHITS_outBox))
         PHITSfile.write_phits(phitsFilename)

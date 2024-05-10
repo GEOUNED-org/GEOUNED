@@ -428,12 +428,12 @@ class SurfacesDict(dict):
         del self[self.__last_obj__[0]][self.__last_obj__[1]]
         return
 
-    def extend(self, surface, options, tolerances):
+    def extend(self, surface, options, tolerances, numeric_format):
         for Pkey in ["PX", "PY", "PZ", "P"]:
             for s in surface[Pkey]:
-                self.add_plane(s, options, tolerances, False)
+                self.add_plane(s, options, tolerances, numeric_format, False)
         for s in surface["Cyl"]:
-            self.add_cylinder(s, options, tolerances, False)
+            self.add_cylinder(s, options, tolerances, numeric_format, False)
         for s in surface["Cone"]:
             self.add_cone(s, tolerances)
         for s in surface["Sph"]:
@@ -441,7 +441,7 @@ class SurfacesDict(dict):
         for s in surface["Tor"]:
             self.add_torus(s, tolerances)
 
-    def add_plane(self, plane, options, tolerances, fuzzy):
+    def add_plane(self, plane, options, tolerances, numeric_format, fuzzy):
         ex = FreeCAD.Vector(1, 0, 0)
         ey = FreeCAD.Vector(0, 1, 0)
         ez = FreeCAD.Vector(0, 0, 1)
@@ -454,6 +454,7 @@ class SurfacesDict(dict):
                     p.Surf,
                     options=options,
                     tolerances=tolerances,
+                    numeric_format=numeric_format,
                     fuzzy=(fuzzy, p.Index),
                 ):
                     add_plane = False
@@ -475,6 +476,7 @@ class SurfacesDict(dict):
                     p.Surf,
                     options=options,
                     tolerances=tolerances,
+                    numeric_format=numeric_format,
                     fuzzy=(fuzzy, p.Index),
                 ):
                     add_plane = False
@@ -496,6 +498,7 @@ class SurfacesDict(dict):
                     p.Surf,
                     options=options,
                     tolerances=tolerances,
+                    numeric_format=numeric_format,
                     fuzzy=(fuzzy, p.Index),
                 ):
                     add_plane = False
@@ -517,6 +520,7 @@ class SurfacesDict(dict):
                     p.Surf,
                     options=options,
                     tolerances=tolerances,
+                    numeric_format=numeric_format,
                     fuzzy=(fuzzy, p.Index),
                 ):
                     add_plane = False
@@ -535,7 +539,7 @@ class SurfacesDict(dict):
         else:
             return index, True
 
-    def add_cylinder(self, cyl, options, tolerances, fuzzy=False):
+    def add_cylinder(self, cyl, options, tolerances, numeric_format, fuzzy=False):
         addCyl = True
         for i, c in enumerate(self["Cyl"]):
             if BF.is_same_cylinder(
@@ -543,6 +547,7 @@ class SurfacesDict(dict):
                 c.Surf,
                 options=options,
                 tolerances=tolerances,
+                numeric_format=numeric_format,
                 fuzzy=(fuzzy, c.Index),
             ):
                 addCyl = False

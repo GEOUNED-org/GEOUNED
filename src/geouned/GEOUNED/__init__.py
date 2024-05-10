@@ -21,11 +21,10 @@ from .Decompose import Decom_one as Decom
 from .LoadFile import LoadSTEP as Load
 from .Utils import Functions as UF
 from .Utils.BooleanSolids import build_c_table_from_solids
-from .Utils.Options.Classes import McnpNumericFormat
 from .Void import Void as Void
 from .Write.Functions import write_mcnp_cell_def
 from .Write.WriteFiles import write_geometry
-from .Utils.data_classes import Options, Tolerances
+from .Utils.data_classes import Options, Tolerances, NumericFormat
 
 logger = logging.getLogger(__name__)
 
@@ -133,6 +132,7 @@ class CadToCsg:
         sort_enclosure: bool = False,
         options: Options = Options(),
         tolerances: Tolerances = Tolerances(),
+        numeric_format: NumericFormat = NumericFormat(),
     ):
 
         self.title = title
@@ -162,8 +162,7 @@ class CadToCsg:
         self.sort_enclosure = sort_enclosure
         self.options = options
         self.tolerances = tolerances
-
-        McnpNumericFormat.set_default_attribute()
+        self.numeric_format = numeric_format
 
     def set_configuration(self, configFile=None):
 
@@ -265,12 +264,12 @@ class CadToCsg:
                         setattr(self.tolerances, key, value)
 
             elif section == "MCNP_Numeric_Format":
+                attributes_and_types = get_type_hints(NumericFormat())
                 PdEntry = False
                 for key in config["MCNP_Numeric_Format"].keys():
-                    if key in McnpNumericFormat.default_values.keys():
-                        McnpNumericFormat.set_attribute(
-                            key, config.get("MCNP_Numeric_Format", key)
-                        )
+                    if key in attributes_and_types.keys():
+                        value = config.get("MCNP_Numeric_Format", key)
+                        setattr(self.numeric_format, key, value)
                         if key == "P_d":
                             PdEntry = True
 
@@ -280,19 +279,13 @@ class CadToCsg:
         if self.__dict__["geometryName"] == "":
             self.__dict__["geometryName"] = self.__dict__["stepFile"][:-4]
 
+        # TODO see if we can find another way to do this
         if self.options.prnt3PPlane and not PdEntry:
-            McnpNumericFormat.P_d = "22.15e"
+            self.NumericFormat.P_d = "22.15e"
 
         logger.info(self.__dict__)
 
     def set(self, kwrd, value):
-
-        if kwrd in McnpNumericFormat.default_values.keys():
-            McnpNumericFormat.set_attribute(kwrd, value)
-            return
-        elif kwrd not in self.__dict__.keys():
-            logger.info(f"Bad entry : {kwrd}")
-            return
 
         if kwrd == "stepFile":
             if isinstance(value, (list, tuple)):
@@ -437,6 +430,7 @@ class CadToCsg:
                 True,
                 self.options,
                 self.tolerances,
+                self.numeric_format,
             )
 
             # decompose Enclosure solids
@@ -449,6 +443,7 @@ class CadToCsg:
                     False,
                     self.options,
                     self.tolerances,
+                    self.numeric_format,
                 )
 
             logger.info("End of decomposition phase")
@@ -460,7 +455,12 @@ class CadToCsg:
                     continue
                 logger.info(f"Building cell: {j+1}")
                 cones = Conv.cellDef(
-                    m, Surfaces, UniverseBox, self.options, self.tolerances
+                    m,
+                    Surfaces,
+                    UniverseBox,
+                    self.options,
+                    self.tolerances,
+                    self.numeric_format,
                 )
                 if cones:
                     coneInfo[m.__id__] = cones
@@ -492,6 +492,7 @@ class CadToCsg:
                     False,
                     self.options,
                     self.tolerances,
+                    self.numeric_format,
                 )
 
         tempstr2 = str(datetime.now() - tempTime)
@@ -502,7 +503,14 @@ class CadToCsg:
         if self.voidGen and EnclosureList:
             for j, m in enumerate(EnclosureList):
                 logger.info(f"Building Enclosure Cell: {j + 1}")
-                cones = Conv.cellDef(m, Surfaces, UniverseBox)
+                cones = Conv.cellDef(
+                    m,
+                    Surfaces,
+                    UniverseBox,
+                    self.options,
+                    self.tolerances,
+                    self.numeric_format,
+                )
                 if cones:
                     coneInfo[m.__id__] = cones
                 if j in warningEnclosureList:
@@ -533,6 +541,7 @@ class CadToCsg:
                 init,
                 self.options,
                 self.tolerances,
+                self.numeric_format,
             )
 
         # if code_setting['simplify'] == 'full' and not self.options.forceNoOverlap:
@@ -609,12 +618,24 @@ class CadToCsg:
 
         # add plane definition to cone
         process_cones(
-            MetaList, coneInfo, Surfaces, UniverseBox, self.options, self.tolerances
+            MetaList,
+            coneInfo,
+            Surfaces,
+            UniverseBox,
+            self.options,
+            self.tolerances,
+            self.numeric_format,
         )
 
         # write outputformat input
         write_geometry(
-            UniverseBox, MetaList, Surfaces, code_setting, self.options, self.tolerances
+            UniverseBox,
+            MetaList,
+            Surfaces,
+            code_setting,
+            self.options,
+            self.tolerances,
+            self.numeric_format,
         )
 
         logger.info("End of MCNP, OpenMC, Serpent and PHITS translation phase")
@@ -627,7 +648,7 @@ class CadToCsg:
 
 
 def decompose_solids(
-    MetaList, Surfaces, UniverseBox, setting, meta, options, tolerances
+    MetaList, Surfaces, UniverseBox, setting, meta, options, tolerances, numeric_format
 ):
     totsolid = len(MetaList)
     warningSolids = []
@@ -645,7 +666,11 @@ def decompose_solids(
                 m.Solids[0].exportStep(f"debug/origSolid_{i}.stp")
 
         comsolid, err = Decom.SplitSolid(
-            Part.makeCompound(m.Solids), UniverseBox, options, tolerances
+            Part.makeCompound(m.Solids),
+            UniverseBox,
+            options,
+            tolerances,
+            numeric_format,
         )
 
         if err != 0:
@@ -671,10 +696,17 @@ def decompose_solids(
                 comsolid.exportStep(f"debug/compSolid_{i}.stp")
         Surfaces.extend(
             Decom.extract_surfaces(
-                comsolid, "All", UniverseBox, options, tolerances, MakeObj=True
+                comsolid,
+                "All",
+                UniverseBox,
+                options,
+                tolerances,
+                numeric_format,
+                MakeObj=True,
             ),
             options,
             tolerances,
+            numeric_format,
         )
         m.set_cad_solid()
         m.update_solids(comsolid.Solids)
@@ -691,7 +723,9 @@ def update_comment(meta, idLabel):
     meta.set_comments(Void.void_comment_line((meta.__commentInfo__[0], newLabel)))
 
 
-def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances):
+def process_cones(
+    MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances, numeric_format
+):
     cellId = tuple(coneInfo.keys())
     for m in MetaList:
         if m.__id__ not in cellId and not m.Void:
@@ -705,7 +739,13 @@ def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances
                 if Id in cellId:
                     cones.update(-x for x in coneInfo[Id])
             Conv.add_cone_plane(
-                m.Definition, cones, Surfaces, UniverseBox, options, tolerances
+                m.Definition,
+                cones,
+                Surfaces,
+                UniverseBox,
+                options,
+                tolerances,
+                numeric_format,
             )
         elif not m.Void:
             Conv.add_cone_plane(
@@ -715,6 +755,7 @@ def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances
                 UniverseBox,
                 options,
                 tolerances,
+                numeric_format,
             )
 
 

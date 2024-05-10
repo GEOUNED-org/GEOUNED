@@ -39,11 +39,15 @@ The following example shows a more complete usage with several default attribute
     my_tolerances = geouned.Tolerances(
         min_area=0.011
     )
+    my_numeric_format = geouned.NumericFormat(
+        C_r="13f"
+    )
 
     geo = geouned.CadToCsg(
         stepFile='cuboid.stp',
         options=my_options,
         tolerances=my_tolerances
+        numeric_format=my_numeric_format
     )
 
     geo.start()

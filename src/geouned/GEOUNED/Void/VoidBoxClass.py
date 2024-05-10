@@ -164,13 +164,17 @@ class VoidBox:
             self.__remove_extra_comp__(m, Cube, mode="dist")
         return
 
-    def get_void_complementary(self, Surfaces, options, tolerances, simplify="no"):
+    def get_void_complementary(
+        self, Surfaces, options, tolerances, numeric_format, simplify="no"
+    ):
         if self.PieceEnclosure is None:
             boxDef = BoolSequence(operator="AND")
             center = self.BoundBox.Center
             bBox = self.BoundBox
             for p in self.get_bound_planes():
-                id, exist = Surfaces.add_plane(p, options, tolerances, False)
+                id, exist = Surfaces.add_plane(
+                    p, options, tolerances, numeric_format, False
+                )
                 if exist:
                     s = Surfaces.get_surface(id)
                     if is_opposite(p.Surf.Axis, s.Surf.Axis):
@@ -186,15 +190,32 @@ class VoidBox:
             UniverseBox = self.PieceEnclosure.BoundBox
             TempPieceEnclosure = GeounedSolid(None, self.PieceEnclosure)
             comsolid, err = Decom.SplitSolid(
-                Part.makeCompound(TempPieceEnclosure.Solids), UniverseBox
+                Part.makeCompound(TempPieceEnclosure.Solids),
+                UniverseBox,
+                options,
+                tolerances,
+                numeric_format,
             )
             Surfaces.extend(
                 Decom.extract_surfaces(
-                    comsolid, "All", UniverseBox, options, tolerances, MakeObj=True
+                    comsolid,
+                    "All",
+                    UniverseBox,
+                    options,
+                    tolerances,
+                    numeric_format,
+                    MakeObj=True,
                 )
             )
             TempPieceEnclosure.update_solids(comsolid.Solids)
-            Conv.cellDef(TempPieceEnclosure, Surfaces, UniverseBox)
+            Conv.cellDef(
+                TempPieceEnclosure,
+                Surfaces,
+                UniverseBox,
+                options,
+                tolerances,
+                numeric_format,
+            )
 
             boxDef = TempPieceEnclosure.Definition
             bBox = self.PieceEnclosure.BoundBox
