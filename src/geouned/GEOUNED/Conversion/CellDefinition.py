@@ -23,6 +23,7 @@ from ..Utils.Functions import GeounedSurface
 
 logger = logging.getLogger(__name__)
 
+
 # TODO rename this function as there are two with the same name
 def get_id(facein, surfaces, options, tolerances, numeric_format):
 
@@ -779,7 +780,9 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
                 and orient == "Reversed"
             ):
                 # cone additional plane is added afterward
-                id_face = get_id(face.Surface, surfaces, options, tolerances, numeric_format)
+                id_face = get_id(
+                    face.Surface, surfaces, options, tolerances, numeric_format
+                )
                 if surface_type == "<Cone object>":
                     cones.add(id_face)
                 if str(id_face) not in surf_piece:
@@ -801,7 +804,9 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
                         Face="Build",
                     )
 
-                    id, exist = surfaces.add_plane(p, options, tolerances, numeric_format, False)
+                    id, exist = surfaces.add_plane(
+                        p, options, tolerances, numeric_format, False
+                    )
                     sign = sign_plane(face.CenterOfMass, p)
                     if exist:
                         pp = surfaces.get_surface(id)
@@ -831,7 +836,9 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
                     )
                 ):
 
-                    idT = get_id(face.Surface, surfaces, options, tolerances, numeric_format)
+                    idT = get_id(
+                        face.Surface, surfaces, options, tolerances, numeric_format
+                    )
 
                     index, u_params = solid_gu.TorusUParams[iface]
                     if index == last_torus:
@@ -1184,7 +1191,9 @@ def extra_plane_cyl_face(face, box, surfaces, options, tolerances, numeric_forma
             plane = GeounedSurface(
                 ("Plane", (center, dir, dim1, dim2)), box, Face="Build"
             )
-            id, exist = surfaces.add_plane(plane, options, tolerances, numeric_format, False)
+            id, exist = surfaces.add_plane(
+                plane, options, tolerances, numeric_format, False
+            )
             if exist:
                 pp = surfaces.get_surface(id)
                 if is_opposite(plane.Surf.Axis, pp.Surf.Axis, tolerances.pln_angle):
@@ -1193,7 +1202,9 @@ def extra_plane_cyl_face(face, box, surfaces, options, tolerances, numeric_forma
     return planes_id
 
 
-def add_cone_plane(definition, cones_list, surfaces, universe_box, options, tolerances, numeric_format):
+def add_cone_plane(
+    definition, cones_list, surfaces, universe_box, options, tolerances, numeric_format
+):
     x_axis = FreeCAD.Vector(1, 0, 0)
     y_axis = FreeCAD.Vector(0, 1, 0)
     z_axis = FreeCAD.Vector(0, 0, 1)
@@ -1212,7 +1223,9 @@ def add_cone_plane(definition, cones_list, surfaces, universe_box, options, tole
             universe_box,
             Face="Build",
         )
-        pid, exist = surfaces.add_plane(plane, options, tolerances, numeric_format, False)
+        pid, exist = surfaces.add_plane(
+            plane, options, tolerances, numeric_format, False
+        )
 
         if exist:
             p = surfaces.get_surface(pid)

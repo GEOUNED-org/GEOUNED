@@ -82,7 +82,9 @@ class OpenmcInput:
     def __write_xml_surfaces__(self, surface, boundary=False):
         """Write the surfaces in xml OpenMC format"""
 
-        surfType, coeffs = open_mc_surface(surface.Type, surface.Surf, self.tolerances, self.numeric_format)
+        surfType, coeffs = open_mc_surface(
+            surface.Type, surface.Surf, self.tolerances, self.numeric_format
+        )
 
         if not boundary:
             OMCsurf = '  <surface id="{}" type="{}" coeffs="{}" />\n'.format(

@@ -5,7 +5,9 @@ from .PHITSFormat import PhitsInput
 from .SerpentFormat import SerpentInput
 
 
-def write_geometry(UniverseBox, MetaList, Surfaces, code_setting, options, tolerances, numeric_format):
+def write_geometry(
+    UniverseBox, MetaList, Surfaces, code_setting, options, tolerances, numeric_format
+):
 
     baseName = code_setting["geometryName"]
 
@@ -39,7 +41,9 @@ def write_geometry(UniverseBox, MetaList, Surfaces, code_setting, options, toler
         else:
             outSphere = None
 
-        MCNPfile = McnpInput(MetaList, Surfaces, code_setting, options, tolerances, numeric_format)
+        MCNPfile = McnpInput(
+            MetaList, Surfaces, code_setting, options, tolerances, numeric_format
+        )
         MCNPfile.set_sdef((outSphere, outBox))
         MCNPfile.write_input(mcnpFilename)
 
@@ -96,6 +100,8 @@ def write_geometry(UniverseBox, MetaList, Surfaces, code_setting, options, toler
         else:
             PHITS_outSphere = None
 
-        PHITSfile = PhitsInput(MetaList, Surfaces, code_setting, options, tolerances, numeric_format)
+        PHITSfile = PhitsInput(
+            MetaList, Surfaces, code_setting, options, tolerances, numeric_format
+        )
         # PHITSfile.setSDEF_PHITS((PHITS_outSphere,PHITS_outBox))
         PHITSfile.write_phits(phitsFilename)

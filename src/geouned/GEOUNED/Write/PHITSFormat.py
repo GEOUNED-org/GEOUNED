@@ -372,7 +372,12 @@ $ **************************************************************
         """Write the surfaces in PHITS format"""
 
         PHITS_def = phits_surface(
-            surface.Index, surface.Type, surface.Surf, self.options, self.tolerances, self.numeric_format
+            surface.Index,
+            surface.Type,
+            surface.Surf,
+            self.options,
+            self.tolerances,
+            self.numeric_format,
         )
         if PHITS_def:
             PHITS_def += "\n"

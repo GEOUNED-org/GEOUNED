@@ -14,6 +14,7 @@ from .Functions import CardLine, change_surf_sign, mcnp_surface, write_mcnp_cell
 
 logger = logging.getLogger(__name__)
 
+
 # TODO rename as there are two classes with this name
 class McnpInput:
     def __init__(self, Meta, Surfaces, setting, options, tolerances, numeric_format):

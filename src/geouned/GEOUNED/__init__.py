@@ -618,12 +618,24 @@ class CadToCsg:
 
         # add plane definition to cone
         process_cones(
-            MetaList, coneInfo, Surfaces, UniverseBox, self.options, self.tolerances, self.numeric_format
+            MetaList,
+            coneInfo,
+            Surfaces,
+            UniverseBox,
+            self.options,
+            self.tolerances,
+            self.numeric_format,
         )
 
         # write outputformat input
         write_geometry(
-            UniverseBox, MetaList, Surfaces, code_setting, self.options, self.tolerances, self.numeric_format
+            UniverseBox,
+            MetaList,
+            Surfaces,
+            code_setting,
+            self.options,
+            self.tolerances,
+            self.numeric_format,
         )
 
         logger.info("End of MCNP, OpenMC, Serpent and PHITS translation phase")
@@ -684,7 +696,13 @@ def decompose_solids(
                 comsolid.exportStep(f"debug/compSolid_{i}.stp")
         Surfaces.extend(
             Decom.extract_surfaces(
-                comsolid, "All", UniverseBox, options, tolerances, numeric_format, MakeObj=True
+                comsolid,
+                "All",
+                UniverseBox,
+                options,
+                tolerances,
+                numeric_format,
+                MakeObj=True,
             ),
             options,
             tolerances,
@@ -705,7 +723,9 @@ def update_comment(meta, idLabel):
     meta.set_comments(Void.void_comment_line((meta.__commentInfo__[0], newLabel)))
 
 
-def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances, numeric_format):
+def process_cones(
+    MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances, numeric_format
+):
     cellId = tuple(coneInfo.keys())
     for m in MetaList:
         if m.__id__ not in cellId and not m.Void:
@@ -719,7 +739,13 @@ def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances
                 if Id in cellId:
                     cones.update(-x for x in coneInfo[Id])
             Conv.add_cone_plane(
-                m.Definition, cones, Surfaces, UniverseBox, options, tolerances, numeric_format
+                m.Definition,
+                cones,
+                Surfaces,
+                UniverseBox,
+                options,
+                tolerances,
+                numeric_format,
             )
         elif not m.Void:
             Conv.add_cone_plane(
@@ -729,7 +755,7 @@ def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances
                 UniverseBox,
                 options,
                 tolerances,
-                numeric_format
+                numeric_format,
             )
 
 

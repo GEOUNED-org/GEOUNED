@@ -61,6 +61,7 @@ def is_inverted(solid):
     else:
         return False
 
+
 # TODO rename this function as there are two with the same name
 def get_id(face_in, Surfaces, options, tolerances, numeric_format):
 
@@ -87,13 +88,7 @@ def get_id(face_in, Surfaces, options, tolerances, numeric_format):
 
 
 def translate(
-    meta_list,
-    surfaces,
-    universe_box,
-    setting,
-    options,
-    tolerances,
-    numeric_format
+    meta_list, surfaces, universe_box, setting, options, tolerances, numeric_format
 ):
     tot_solid = len(meta_list)
     for i, m in enumerate(meta_list):

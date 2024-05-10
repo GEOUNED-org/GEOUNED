@@ -198,7 +198,13 @@ class VoidBox:
             )
             Surfaces.extend(
                 Decom.extract_surfaces(
-                    comsolid, "All", UniverseBox, options, tolerances, numeric_format, MakeObj=True
+                    comsolid,
+                    "All",
+                    UniverseBox,
+                    options,
+                    tolerances,
+                    numeric_format,
+                    MakeObj=True,
                 )
             )
             TempPieceEnclosure.update_solids(comsolid.Solids)

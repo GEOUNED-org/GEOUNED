@@ -177,7 +177,12 @@ class SerpentInput:
         """Write the surfaces in Serpent format"""
 
         Serpent_def = serpent_surface(
-            surface.Index, surface.Type, surface.Surf, self.options, self.tolerances, self.numeric_format
+            surface.Index,
+            surface.Type,
+            surface.Surf,
+            self.options,
+            self.tolerances,
+            self.numeric_format,
         )
         if Serpent_def:
             Serpent_def += "\n"
