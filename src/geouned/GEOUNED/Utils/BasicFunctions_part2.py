@@ -47,9 +47,7 @@ def Fuzzy(index, dtype, surf1, surf2, val, tol, options, tolerances):
         same_surf_fic.write(line)
 
 
-def is_same_plane(
-    p1, p2, options, tolerances, fuzzy=(False, 0)
-):
+def is_same_plane(p1, p2, options, tolerances, fuzzy=(False, 0)):
     if is_parallel(p1.Axis, p2.Axis, tolerances.pln_angle):
         d1 = p1.Axis.dot(p1.Position)
         d2 = p2.Axis.dot(p2.Position)
@@ -101,7 +99,9 @@ def is_same_cylinder(
             d = cyl1.Axis.cross(c12).Length
 
             if tolerances.relativeTol:
-                tol = tolerances.cyl_distance * max(cyl1.Center.Length, cyl2.Center.Length)
+                tol = tolerances.cyl_distance * max(
+                    cyl1.Center.Length, cyl2.Center.Length
+                )
             else:
                 tol = tolerances.cyl_distance
 
