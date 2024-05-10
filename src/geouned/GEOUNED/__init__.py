@@ -26,7 +26,7 @@ from .Write.Functions import write_mcnp_cell_def
 from .Write.WriteFiles import write_geometry
 from .Utils.data_classes import Options, Tolerances, NumericFormat
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("general_logger")
 
 
 class CadToCsg:
@@ -786,8 +786,10 @@ def get_universe(MetaList):
 
 def print_warning_solids(warnSolids, warnEnclosures):
 
+    solids_logger = logging.getLogger("solids_logger")
+
     if warnSolids or warnEnclosures:
-        fic = open("Warning_Solids_definition.txt", "w")
+        pass
     else:
         return
 
@@ -798,7 +800,7 @@ def print_warning_solids(warnSolids, warnEnclosures):
             lines += f"{sol.label}\n"
             lines += f"{sol.Comments}\n"
             lines += f"{write_mcnp_cell_def(sol.Definition)}\n"
-        fic.write(lines)
+        solids_logger.info(lines)
 
     if warnEnclosures:
         lines = "Enclosures :\n"
@@ -808,9 +810,7 @@ def print_warning_solids(warnSolids, warnEnclosures):
             lines += f"{sol.Comments}\n"
             lines += f"{write_mcnp_cell_def(sol.Definition)}\n"
 
-        fic.write(lines)
-
-    fic.close()
+        solids_logger.info(lines)
 
 
 def join_meta_lists(MList):

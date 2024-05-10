@@ -12,7 +12,7 @@ from ..Utils.booleanFunction import BoolSequence
 from ..Utils.BooleanSolids import build_c_table_from_solids, remove_extra_surfaces
 from ..Utils.Functions import GeounedSolid, GeounedSurface
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("general_logger")
 
 
 class VoidBox:

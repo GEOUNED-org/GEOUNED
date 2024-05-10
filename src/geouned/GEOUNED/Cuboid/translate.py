@@ -9,7 +9,7 @@ from ..Utils import Geometry_GU as GU
 from ..Utils.BasicFunctions_part1 import is_opposite, is_parallel
 from ..Utils.booleanFunction import BoolSequence
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("general_logger")
 
 
 def commonEdge(face1, face2):

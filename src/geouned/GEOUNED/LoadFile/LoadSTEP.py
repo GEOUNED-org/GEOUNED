@@ -12,7 +12,7 @@ from FreeCAD import Import
 from ..Utils import Functions as UF
 from . import LoadFunctions as LF
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("general_logger")
 
 
 # Paco mod

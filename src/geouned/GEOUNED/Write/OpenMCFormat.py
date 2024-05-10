@@ -10,7 +10,7 @@ from ..CodeVersion import *
 from ..Utils.Functions import SurfacesDict
 from .Functions import change_surf_sign, open_mc_surface, write_openmc_region
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("general_logger")
 
 
 class OpenmcInput:

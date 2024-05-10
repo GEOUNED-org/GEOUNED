@@ -27,7 +27,7 @@ from ..Write.Functions import (
     write_phits_cell_def,
 )
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("general_logger")
 
 
 class PhitsInput:

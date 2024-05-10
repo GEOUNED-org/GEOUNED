@@ -2,7 +2,7 @@
 # Set of useful functions used in different parts of the code
 #
 import math
-
+import logging
 import FreeCAD
 
 from ..Utils.BasicFunctions_part1 import (
@@ -15,20 +15,20 @@ from ..Utils.BasicFunctions_part1 import (
 )
 from ..Write.Functions import mcnp_surface
 
-same_surf_fic = open("fuzzySurfaces", "w")
-
 
 def Fuzzy(index, dtype, surf1, surf2, val, tol, options, tolerances, numeric_format):
+
+    fuzzy_logger = logging.getLogger("fuzzy_logger")
 
     same = val <= tol
 
     if dtype == "plane":
         p1str = mcnp_surface(index, "Plane", surf1, options, tolerances, numeric_format)
         p2str = mcnp_surface(0, "Plane", surf2, options, tolerances, numeric_format)
-        line = "Same surface : {}\nPlane distance / Tolerance : {} {}\n {}\n {}\n\n".format(
-            same, val, tol, p1str, p2str
+        fuzzy_logger.info(f"Same surface : {same}")
+        fuzzy_logger.info(
+            f"Plane distance / Tolerance : {val} {tol}\n {p1str}\n {p2str}\n\n"
         )
-        same_surf_fic.write(line)
 
     elif dtype == "cylRad":
         cyl1str = mcnp_surface(
@@ -37,10 +37,9 @@ def Fuzzy(index, dtype, surf1, surf2, val, tol, options, tolerances, numeric_for
         cyl2str = mcnp_surface(
             0, "Cylinder", surf2, options, tolerances, numeric_format
         )
-        line = "Same surface : {}\nDiff Radius / Tolerance: {} {}\n {}\n {}\n\n".format(
-            same, val, tol, cyl1str, cyl2str
-        )
-        same_surf_fic.write(line)
+        fuzzy_logger.info(f"Same surface : {same}")
+        fuzzy_logger.info(f"Diff Radius / Tolerance: {val} {tol}")
+        fuzzy_logger.info(f"{cyl1str}\n {cyl2str}\n\n")
 
     elif dtype == "cylAxs":
         cyl1str = mcnp_surface(
@@ -49,10 +48,9 @@ def Fuzzy(index, dtype, surf1, surf2, val, tol, options, tolerances, numeric_for
         cyl2str = mcnp_surface(
             0, "Cylinder", surf2, options, tolerances, numeric_format
         )
-        line = "Same surface : {}\nDist Axis / Tolerance: {} {}\n {}\n {}\n\n".format(
-            same, val, tol, cyl1str, cyl2str
-        )
-        same_surf_fic.write(line)
+        fuzzy_logger.info(f"Same surface : {same}")
+        fuzzy_logger.info(f"Dist Axis / Tolerance: {val} {tol}")
+        fuzzy_logger.info(f"{cyl1str} {cyl2str}")
 
 
 def is_same_plane(p1, p2, options, tolerances, numeric_format, fuzzy=(False, 0)):
