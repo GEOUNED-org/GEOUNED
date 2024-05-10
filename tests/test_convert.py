@@ -83,11 +83,11 @@ def test_conversion(input_step_file):
         matFile="",
         voidGen=True,
         debug=False,
-        compSolids=False, # changed from the default
+        compSolids=False,  # changed from the default
         simplify="no",
         cellRange=[],
         exportSolids="",
-        minVoidSize=100, # changed from the default
+        minVoidSize=100,  # changed from the default
         maxSurf=50,
         maxBracket=30,
         voidMat=[],

@@ -243,7 +243,6 @@ class CadToCsg:
 
         logger.info(self.__dict__)
 
-
     def set(self, kwrd, value):
 
         if kwrd == "stepFile":
@@ -650,33 +649,33 @@ class CadToCsg:
                 msg = f"outFormat {outFormat} not in supported MC codes. The supported codes are {supported_mc_codes}"
                 raise ValueError(msg)
 
-        #TODO this dictionary is just a temporary solution until we have a Settings class
+        # TODO this dictionary is just a temporary solution until we have a Settings class
         # these are all the function arguments that can be passed in directly to write_geometry the future
         code_setting = {
-            'title': title,
-            'volSDEF':volSDEF,
-            'volCARD':volCARD,
-            'UCARD':UCARD,
-            'dummyMat':dummyMat,
+            "title": title,
+            "volSDEF": volSDEF,
+            "volCARD": volCARD,
+            "UCARD": UCARD,
+            "dummyMat": dummyMat,
         }
         # these are all the class arguments that can be part of a Settings class in the future
-        code_setting['voidGen'] = self.voidGen
-        code_setting['matFile'] = self.matFile
-        code_setting['voidGen'] = self.voidGen
-        code_setting['debug'] = self.debug
-        code_setting['compSolids'] = self.compSolids
-        code_setting['simplify'] = self.simplify
-        code_setting['cellRange'] = self.cellRange
-        code_setting['exportSolids'] = self.exportSolids
-        code_setting['minVoidSize'] = self.minVoidSize
-        code_setting['maxSurf'] = self.maxSurf
-        code_setting['maxBracket'] = self.maxBracket
-        code_setting['voidMat'] = self.voidMat
-        code_setting['voidExclude'] = self.voidExclude
-        code_setting['startCell'] = self.startCell
-        code_setting['startSurf'] = self.startSurf
-        code_setting['sort_enclosure'] = self.sort_enclosure
-        code_setting['stepFile'] = self.stepFile
+        code_setting["voidGen"] = self.voidGen
+        code_setting["matFile"] = self.matFile
+        code_setting["voidGen"] = self.voidGen
+        code_setting["debug"] = self.debug
+        code_setting["compSolids"] = self.compSolids
+        code_setting["simplify"] = self.simplify
+        code_setting["cellRange"] = self.cellRange
+        code_setting["exportSolids"] = self.exportSolids
+        code_setting["minVoidSize"] = self.minVoidSize
+        code_setting["maxSurf"] = self.maxSurf
+        code_setting["maxBracket"] = self.maxBracket
+        code_setting["voidMat"] = self.voidMat
+        code_setting["voidExclude"] = self.voidExclude
+        code_setting["startCell"] = self.startCell
+        code_setting["startSurf"] = self.startSurf
+        code_setting["sort_enclosure"] = self.sort_enclosure
+        code_setting["stepFile"] = self.stepFile
 
         write_geometry(
             universe_box=self.UniverseBox,
@@ -691,7 +690,6 @@ class CadToCsg:
             tolerances=self.tolerances,
             numeric_format=self.numeric_format,
         )
-
 
 
 def decompose_solids(
