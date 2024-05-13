@@ -24,7 +24,7 @@ from .Utils.BooleanSolids import build_c_table_from_solids
 from .Void import Void as Void
 from .Write.Functions import write_mcnp_cell_def
 from .Write.WriteFiles import write_geometry
-from .Utils.data_classes import Options, Tolerances, NumericFormat
+from .Utils.data_classes import Options, Tolerances, NumericFormat, Settings
 
 logger = logging.getLogger(__name__)
 
@@ -108,61 +108,35 @@ class CadToCsg:
         title: str = "Geouned conversion",
         stepFile: str = "",
         geometryName: str = "",
-        matFile: str = "",
         outFormat: typing.Tuple[str] = ("mcnp",),
-        voidGen: bool = True,
-        debug: bool = False,
-        compSolids: bool = True,
         volSDEF: bool = False,
         dummyMat: bool = False,
         volCARD: bool = True,
         UCARD=None,
-        simplify: str = "No",
-        cellRange=[],
-        exportSolids: str = "",
         minVoidSize: float = 200.0,  # units mm
-        maxSurf: int = 50,
-        maxBracket: int = 30,
-        voidMat=[],
-        voidExclude=[],
-        startCell: int = 1,
-        startSurf: int = 1,
         cellCommentFile: bool = False,
         cellSummaryFile: bool = True,
-        sort_enclosure: bool = False,
         options: Options = Options(),
         tolerances: Tolerances = Tolerances(),
         numeric_format: NumericFormat = NumericFormat(),
+        settings: Settings = Settings(),
     ):
 
         self.title = title
         self.stepFile = stepFile
         self.geometryName = geometryName
-        self.matFile = matFile
         self.outFormat = outFormat
-        self.voidGen = voidGen
-        self.debug = debug
-        self.compSolids = compSolids
         self.volSDEF = volSDEF
         self.dummyMat = dummyMat
         self.volCARD = volCARD
         self.UCARD = UCARD
-        self.simplify = simplify
-        self.cellRange = cellRange
-        self.exportSolids = exportSolids
         self.minVoidSize = minVoidSize
-        self.maxSurf = maxSurf
-        self.maxBracket = maxBracket
-        self.voidMat = voidMat
-        self.voidExclude = voidExclude
-        self.startCell = startCell
-        self.startSurf = startSurf
         self.cellCommentFile = cellCommentFile
         self.cellSummaryFile = cellSummaryFile
-        self.sort_enclosure = sort_enclosure
         self.options = options
         self.tolerances = tolerances
         self.numeric_format = numeric_format
+        self.settings = settings
 
     def set_configuration(self, configFile=None):
 
@@ -351,9 +325,6 @@ class CadToCsg:
             f"GEOUNED version {GEOUNED_Version} {GEOUNED_ReleaseDate} \nFreeCAD version {freecad_version}"
         )
 
-        code_setting = self.__dict__
-        if code_setting is None:
-            raise ValueError("Cannot run the code. Input are missing")
         if self.stepFile == "":
             raise ValueError("Cannot run the code. Step file name is missing")
 
@@ -375,9 +346,7 @@ class CadToCsg:
         EnclosureChunk = []
         for stp in tqdm(step_files, desc="Loading CAD files"):
             logger.info(f"read step file : {stp}")
-            Meta, Enclosure = Load.load_cad(
-                stp, self.matFile, self.options, self.voidMat, self.compSolids
-            )
+            Meta, Enclosure = Load.load_cad(stp, self.settings, self.options)
             MetaChunk.append(Meta)
             EnclosureChunk.append(Enclosure)
         MetaList = join_meta_lists(MetaChunk)
@@ -389,20 +358,20 @@ class CadToCsg:
         tempTime = datetime.now()
 
         # Select a specific solid range from original STEP solids
-        if self.cellRange:
-            MetaList = MetaList[self.cellRange[0] : self.cellRange[1]]
+        if self.settings.cellRange:
+            MetaList = MetaList[self.settings.cellRange[0] : self.settings.cellRange[1]]
 
         # export in STEP format solids read from input file
         # terminate excution
-        if self.exportSolids != "":
+        if self.settings.exportSolids != "":
             solids = []
             for m in MetaList:
                 if m.IsEnclosure:
                     continue
                 solids.extend(m.Solids)
-            Part.makeCompound(solids).exportStep(self.exportSolids)
+            Part.makeCompound(solids).exportStep(self.settings.exportSolids)
             msg = (
-                f"Solids exported in file {self.exportSolids}\n"
+                f"Solids exported in file {self.settings.exportSolids}\n"
                 "GEOUNED Finish. No solid translation performed."
             )
             raise ValueError(msg)
@@ -413,7 +382,7 @@ class CadToCsg:
         else:
             UniverseBox = get_universe(MetaList)
 
-        Surfaces = UF.SurfacesDict(offset=self.startSurf - 1)
+        Surfaces = UF.SurfacesDict(offset=self.settings.startSurf - 1)
 
         warnSolids = []
         warnEnclosures = []
@@ -426,7 +395,7 @@ class CadToCsg:
                 MetaList,
                 Surfaces,
                 UniverseBox,
-                code_setting,
+                self.settings,
                 True,
                 self.options,
                 self.tolerances,
@@ -434,12 +403,12 @@ class CadToCsg:
             )
 
             # decompose Enclosure solids
-            if self.voidGen and EnclosureList:
+            if self.settings.voidGen and EnclosureList:
                 warningEnclosureList = decompose_solids(
                     EnclosureList,
                     Surfaces,
                     UniverseBox,
-                    code_setting,
+                    self.settings,
                     False,
                     self.options,
                     self.tolerances,
@@ -478,17 +447,17 @@ class CadToCsg:
                 MetaList,
                 Surfaces,
                 UniverseBox,
-                code_setting,
+                self.settings,
                 self.options,
                 self.tolerances,
             )
             # decompose Enclosure solids
-            if self.voidGen and EnclosureList:
+            if self.settings.voidGen and EnclosureList:
                 warningEnclosureList = decompose_solids(
                     EnclosureList,
                     Surfaces,
                     UniverseBox,
-                    code_setting,
+                    self.settings,
                     False,
                     self.options,
                     self.tolerances,
@@ -500,7 +469,7 @@ class CadToCsg:
 
         #  building enclosure solids
 
-        if self.voidGen and EnclosureList:
+        if self.settings.voidGen and EnclosureList:
             for j, m in enumerate(EnclosureList):
                 logger.info(f"Building Enclosure Cell: {j + 1}")
                 cones = Conv.cellDef(
@@ -520,13 +489,13 @@ class CadToCsg:
 
         # void generation phase
         MetaVoid = []
-        if self.voidGen:
+        if self.settings.voidGen:
             logger.info("Build Void")
-            logger.info(self.voidExclude)
-            if not self.voidExclude:
+            logger.info(self.settings.voidExclude)
+            if not self.settings.voidExclude:
                 MetaReduced = MetaList
             else:
-                MetaReduced = exclude_cells(MetaList, self.voidExclude)
+                MetaReduced = exclude_cells(MetaList, self.settings.voidExclude)
 
             if MetaList:
                 init = MetaList[-1].__id__ - len(EnclosureList)
@@ -537,15 +506,15 @@ class CadToCsg:
                 EnclosureList,
                 Surfaces,
                 UniverseBox,
-                code_setting,
+                self.settings,
                 init,
                 self.options,
                 self.tolerances,
                 self.numeric_format,
             )
 
-        # if code_setting['simplify'] == 'full' and not self.options.forceNoOverlap:
-        if self.simplify == "full":
+        # if self.settings.simplify == 'full' and not self.options.forceNoOverlap:
+        if self.settings.simplify == "full":
             Surfs = {}
             for lst in Surfaces.values():
                 for s in lst:
@@ -569,8 +538,8 @@ class CadToCsg:
 
         logger.info(datetime.now() - startTime)
 
-        cellOffSet = self.startCell - 1
-        if EnclosureList and self.sort_enclosure:
+        cellOffSet = self.settings.startCell - 1
+        if EnclosureList and self.settings.sort_enclosure:
             # sort group solid cell / void cell sequence in each for each enclosure
             # if a solid belong to several enclosure, its definition will be written
             # for the highest enclosure level or if same enclosure level in the first
@@ -629,13 +598,23 @@ class CadToCsg:
 
         # write outputformat input
         write_geometry(
-            UniverseBox,
-            MetaList,
-            Surfaces,
-            code_setting,
-            self.options,
-            self.tolerances,
-            self.numeric_format,
+            UniverseBox=UniverseBox,
+            MetaList=MetaList,
+            Surfaces=Surfaces,
+            settings=self.settings,
+            options=self.options,
+            tolerances=self.tolerances,
+            numeric_format=self.numeric_format,
+            geometryName=self.geometryName,
+            outFormat=self.outFormat,
+            cellCommentFile=self.cellCommentFile,
+            cellSummaryFile=self.cellSummaryFile,
+            title=self.title,
+            volSDEF=self.volSDEF,
+            volCARD=self.volCARD,
+            UCARD=self.UCARD,
+            dummyMat=self.dummyMat,
+            stepFile=self.stepFile,
         )
 
         logger.info("End of MCNP, OpenMC, Serpent and PHITS translation phase")
@@ -656,7 +635,7 @@ def decompose_solids(
         if meta and m.IsEnclosure:
             continue
         logger.info(f"Decomposing solid: {i + 1}/{totsolid}")
-        if setting["debug"]:
+        if setting.debug:
             logger.info(m.Comments)
             if not path.exists("debug"):
                 mkdir("debug")
@@ -689,7 +668,7 @@ def decompose_solids(
 
             warningSolids.append(i)
 
-        if setting["debug"]:
+        if setting.debug:
             if m.IsEnclosure:
                 comsolid.exportStep(f"debug/compEnclosure_{i}.stp")
             else:
