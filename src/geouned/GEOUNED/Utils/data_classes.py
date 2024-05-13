@@ -1,3 +1,5 @@
+from numbers import Real
+
 class Options:
     """A class for containing conversion options
 
@@ -15,13 +17,13 @@ class Options:
             planes. Defaults to True.
         delLastNumber (bool, optional): Deleting the last word in the
             comment if it is a number. Defaults to False.
-        enlargeBox (float, optional): Enlarge box boundary when evaluating
+        enlargeBox (Real, optional): Enlarge box boundary when evaluating
             the constraint table during the simplification of the void cell
             definition. (unit is millimeter). Defaults to 2.
         nPlaneReverse (int, optional): Threshold value to determine whether
             cut with parallel planes should be carried out first. Defaults
             to 0.
-        splitTolerance (float, optional): Fuzzy tolerance value used in the
+        splitTolerance (Real, optional): Fuzzy tolerance value used in the
             FreeCAD function “BOPTools.SplitAPI.slice”. This function is
             used during the solid decomposition process. Defaults to 0.
         scaleUp (bool, optional): Scale up Fuzzy tolerance once get below
@@ -48,9 +50,9 @@ class Options:
         forceCylinder: bool = False,
         newSplitPlane: bool = True,
         delLastNumber: bool = False,
-        enlargeBox: float = 2.0,
+        enlargeBox: Real = 2.0,
         nPlaneReverse: int = 0,
-        splitTolerance: float = 0.0,
+        splitTolerance: Real = 0.0,
         scaleUp: bool = True,
         quadricPY: bool = False,
         Facets: bool = False,
@@ -105,9 +107,11 @@ class Options:
         return self._enlargeBox
 
     @enlargeBox.setter
-    def enlargeBox(self, value: float):
-        if not isinstance(value, float):
-            raise TypeError(f'geouned.Options.enlargeBox should be a float, not a {type(value)}')
+    def enlargeBox(self, value: Real):
+        if not isinstance(value, Real):
+            raise TypeError(f'geouned.Options.enlargeBox should be a Real, not a {type(value)}')
+        if value < 0:
+            raise ValueError(f'geouned.Options.enlargeBox should be above 0, not {value}')
         self._enlargeBox = value
 
     @property
@@ -125,9 +129,11 @@ class Options:
         return self._splitTolerance
 
     @splitTolerance.setter
-    def splitTolerance(self, value: float):
-        if not isinstance(value, float):
-            raise TypeError(f'geouned.Options.splitTolerance should be a float, not a {type(value)}')
+    def splitTolerance(self, value: Real):
+        if not isinstance(value, Real):
+            raise TypeError(f'geouned.Options.splitTolerance should be a Real, not a {type(value)}')
+        if value < 0:
+            raise ValueError(f'geouned.Options.splitTolerance should be above 0, not {value}')
         self._splitTolerance = value
 
     @property
