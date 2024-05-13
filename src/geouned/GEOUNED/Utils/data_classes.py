@@ -1,5 +1,6 @@
 from numbers import Real
 
+
 class Options:
     """A class for containing conversion options
 
@@ -79,7 +80,9 @@ class Options:
     @forceCylinder.setter
     def forceCylinder(self, value: bool):
         if not isinstance(value, bool):
-            raise TypeError(f'geouned.Options.forceCylinder should be a bool, not a {type(value)}')
+            raise TypeError(
+                f"geouned.Options.forceCylinder should be a bool, not a {type(value)}"
+            )
         self._forceCylinder = value
 
     @property
@@ -89,7 +92,9 @@ class Options:
     @newSplitPlane.setter
     def newSplitPlane(self, value: bool):
         if not isinstance(value, bool):
-            raise TypeError(f'geouned.Options.newSplitPlane should be a bool, not a {type(value)}')
+            raise TypeError(
+                f"geouned.Options.newSplitPlane should be a bool, not a {type(value)}"
+            )
         self._newSplitPlane = value
 
     @property
@@ -99,7 +104,9 @@ class Options:
     @delLastNumber.setter
     def delLastNumber(self, value: bool):
         if not isinstance(value, bool):
-            raise TypeError(f'geouned.Options.delLastNumber should be a bool, not a {type(value)}')
+            raise TypeError(
+                f"geouned.Options.delLastNumber should be a bool, not a {type(value)}"
+            )
         self._delLastNumber = value
 
     @property
@@ -109,9 +116,13 @@ class Options:
     @enlargeBox.setter
     def enlargeBox(self, value: Real):
         if not isinstance(value, Real):
-            raise TypeError(f'geouned.Options.enlargeBox should be a Real, not a {type(value)}')
+            raise TypeError(
+                f"geouned.Options.enlargeBox should be a Real, not a {type(value)}"
+            )
         if value < 0:
-            raise ValueError(f'geouned.Options.enlargeBox should be above 0, not {value}')
+            raise ValueError(
+                f"geouned.Options.enlargeBox should be above 0, not {value}"
+            )
         self._enlargeBox = value
 
     @property
@@ -121,7 +132,9 @@ class Options:
     @nPlaneReverse.setter
     def nPlaneReverse(self, value: int):
         if not isinstance(value, int):
-            raise TypeError(f'geouned.Options.nPlaneReverse should be a int, not a {type(value)}')
+            raise TypeError(
+                f"geouned.Options.nPlaneReverse should be a int, not a {type(value)}"
+            )
         self._nPlaneReverse = value
 
     @property
@@ -131,9 +144,13 @@ class Options:
     @splitTolerance.setter
     def splitTolerance(self, value: Real):
         if not isinstance(value, Real):
-            raise TypeError(f'geouned.Options.splitTolerance should be a Real, not a {type(value)}')
+            raise TypeError(
+                f"geouned.Options.splitTolerance should be a Real, not a {type(value)}"
+            )
         if value < 0:
-            raise ValueError(f'geouned.Options.splitTolerance should be above 0, not {value}')
+            raise ValueError(
+                f"geouned.Options.splitTolerance should be above 0, not {value}"
+            )
         self._splitTolerance = value
 
     @property
@@ -143,7 +160,9 @@ class Options:
     @scaleUp.setter
     def scaleUp(self, value: bool):
         if not isinstance(value, bool):
-            raise TypeError(f'geouned.Options.scaleUp should be a bool, not a {type(value)}')
+            raise TypeError(
+                f"geouned.Options.scaleUp should be a bool, not a {type(value)}"
+            )
         self._scaleUp = value
 
     @property
@@ -153,7 +172,9 @@ class Options:
     @quadricPY.setter
     def quadricPY(self, value: bool):
         if not isinstance(value, bool):
-            raise TypeError(f'geouned.Options.quadricPY should be a bool, not a {type(value)}')
+            raise TypeError(
+                f"geouned.Options.quadricPY should be a bool, not a {type(value)}"
+            )
         self._quadricPY = value
 
     @property
@@ -163,7 +184,9 @@ class Options:
     @Facets.setter
     def Facets(self, value: bool):
         if not isinstance(value, bool):
-            raise TypeError(f'geouned.Options.Facets should be a bool, not a {type(value)}')
+            raise TypeError(
+                f"geouned.Options.Facets should be a bool, not a {type(value)}"
+            )
         self._Facets = value
 
     @property
@@ -173,7 +196,9 @@ class Options:
     @prnt3PPlane.setter
     def prnt3PPlane(self, value: bool):
         if not isinstance(value, bool):
-            raise TypeError(f'geouned.Options.prnt3PPlane should be a bool, not a {type(value)}')
+            raise TypeError(
+                f"geouned.Options.prnt3PPlane should be a bool, not a {type(value)}"
+            )
         self._prnt3PPlane = value
 
     @property
@@ -183,8 +208,11 @@ class Options:
     @forceNoOverlap.setter
     def forceNoOverlap(self, value: bool):
         if not isinstance(value, bool):
-            raise TypeError(f'geouned.Options.forceNoOverlap should be a bool, not a {type(value)}')
+            raise TypeError(
+                f"geouned.Options.forceNoOverlap should be a bool, not a {type(value)}"
+            )
         self._forceNoOverlap = value
+
 
 class Tolerances:
     """A class for containing tolerances values
