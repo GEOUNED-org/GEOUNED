@@ -70,6 +70,115 @@ class Options:
         self.prnt3PPlane = prnt3PPlane
         self.forceNoOverlap = forceNoOverlap
 
+    @property
+    def forceCylinder(self):
+        return self._forceCylinder
+
+    @forceCylinder.setter
+    def forceCylinder(self, value: bool):
+        if not isinstance(value, bool):
+            raise TypeError(f'geouned.Options.forceCylinder should be a bool, not a {type(value)}')
+        self._forceCylinder = value
+
+    @property
+    def newSplitPlane(self):
+        return self._newSplitPlane
+
+    @newSplitPlane.setter
+    def newSplitPlane(self, value: bool):
+        if not isinstance(value, bool):
+            raise TypeError(f'geouned.Options.newSplitPlane should be a bool, not a {type(value)}')
+        self._newSplitPlane = value
+
+    @property
+    def delLastNumber(self):
+        return self._delLastNumber
+
+    @delLastNumber.setter
+    def delLastNumber(self, value: bool):
+        if not isinstance(value, bool):
+            raise TypeError(f'geouned.Options.delLastNumber should be a bool, not a {type(value)}')
+        self._delLastNumber = value
+
+    @property
+    def enlargeBox(self):
+        return self._enlargeBox
+
+    @enlargeBox.setter
+    def enlargeBox(self, value: float):
+        if not isinstance(value, float):
+            raise TypeError(f'geouned.Options.enlargeBox should be a float, not a {type(value)}')
+        self._enlargeBox = value
+
+    @property
+    def nPlaneReverse(self):
+        return self._nPlaneReverse
+
+    @nPlaneReverse.setter
+    def nPlaneReverse(self, value: int):
+        if not isinstance(value, int):
+            raise TypeError(f'geouned.Options.nPlaneReverse should be a int, not a {type(value)}')
+        self._nPlaneReverse = value
+
+    @property
+    def splitTolerance(self):
+        return self._splitTolerance
+
+    @splitTolerance.setter
+    def splitTolerance(self, value: float):
+        if not isinstance(value, float):
+            raise TypeError(f'geouned.Options.splitTolerance should be a float, not a {type(value)}')
+        self._splitTolerance = value
+
+    @property
+    def scaleUp(self):
+        return self._scaleUp
+
+    @scaleUp.setter
+    def scaleUp(self, value: bool):
+        if not isinstance(value, bool):
+            raise TypeError(f'geouned.Options.scaleUp should be a bool, not a {type(value)}')
+        self._scaleUp = value
+
+    @property
+    def quadricPY(self):
+        return self._quadricPY
+
+    @quadricPY.setter
+    def quadricPY(self, value: bool):
+        if not isinstance(value, bool):
+            raise TypeError(f'geouned.Options.quadricPY should be a bool, not a {type(value)}')
+        self._quadricPY = value
+
+    @property
+    def Facets(self):
+        return self._Facets
+
+    @Facets.setter
+    def Facets(self, value: bool):
+        if not isinstance(value, bool):
+            raise TypeError(f'geouned.Options.Facets should be a bool, not a {type(value)}')
+        self._Facets = value
+
+    @property
+    def prnt3PPlane(self):
+        return self._prnt3PPlane
+
+    @prnt3PPlane.setter
+    def prnt3PPlane(self, value: bool):
+        if not isinstance(value, bool):
+            raise TypeError(f'geouned.Options.prnt3PPlane should be a bool, not a {type(value)}')
+        self._prnt3PPlane = value
+
+    @property
+    def forceNoOverlap(self):
+        return self._forceNoOverlap
+
+    @forceNoOverlap.setter
+    def forceNoOverlap(self, value: bool):
+        if not isinstance(value, bool):
+            raise TypeError(f'geouned.Options.forceNoOverlap should be a bool, not a {type(value)}')
+        self._forceNoOverlap = value
 
 class Tolerances:
     """A class for containing tolerances values
