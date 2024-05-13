@@ -450,6 +450,7 @@ class Tolerances:
             )
         self._min_area = min_area
 
+
 class NumericFormat:
     """Numerical format options for each of the surface types.
 
@@ -502,3 +503,171 @@ class NumericFormat:
         self.GQ_1to6 = GQ_1to6
         self.GQ_7to9 = GQ_7to9
         self.GQ_10 = GQ_10
+
+    @property
+    def P_abc(self):
+        return self._P_abc
+
+    @P_abc.setter
+    def P_abc(self, P_abc: str):
+        if not isinstance(P_abc, str):
+            raise TypeError(
+                f"geouned.Tolerances.P_abc should be a str, not a {type(P_abc)}"
+            )
+        self._P_abc = P_abc
+
+    @property
+    def P_d(self):
+        return self._P_d
+
+    @P_d.setter
+    def P_d(self, P_d: str):
+        if not isinstance(P_d, str):
+            raise TypeError(
+                f"geouned.Tolerances.P_d should be a str, not a {type(P_d)}"
+            )
+        self._P_d = P_d
+
+    @property
+    def P_xyz(self):
+        return self._P_xyz
+
+    @P_xyz.setter
+    def P_xyz(self, P_xyz: str):
+        if not isinstance(P_xyz, str):
+            raise TypeError(
+                f"geouned.Tolerances.P_xyz should be a str, not a {type(P_xyz)}"
+            )
+        self._P_xyz = P_xyz
+
+    @property
+    def S_r(self):
+        return self._S_r
+
+    @S_r.setter
+    def S_r(self, S_r: str):
+        if not isinstance(S_r, str):
+            raise TypeError(
+                f"geouned.Tolerances.S_r should be a str, not a {type(S_r)}"
+            )
+        self._S_r = S_r
+
+    @property
+    def S_xyz(self):
+        return self._S_xyz
+
+    @S_xyz.setter
+    def S_xyz(self, S_xyz: str):
+        if not isinstance(S_xyz, str):
+            raise TypeError(
+                f"geouned.Tolerances.S_xyz should be a str, not a {type(S_xyz)}"
+            )
+        self._S_xyz = S_xyz
+
+    @property
+    def C_r(self):
+        return self._C_r
+
+    @C_r.setter
+    def C_r(self, C_r: str):
+        if not isinstance(C_r, str):
+            raise TypeError(
+                f"geouned.Tolerances.C_r should be a str, not a {type(C_r)}"
+            )
+        self._C_r = C_r
+
+    @property
+    def C_xyz(self):
+        return self._C_xyz
+
+    @C_xyz.setter
+    def C_xyz(self, C_xyz: str):
+        if not isinstance(C_xyz, str):
+            raise TypeError(
+                f"geouned.Tolerances.C_xyz should be a str, not a {type(C_xyz)}"
+            )
+        self._C_xyz = C_xyz
+
+    @property
+    def K_xyz(self):
+        return self._K_xyz
+
+    @K_xyz.setter
+    def K_xyz(self, K_xyz: str):
+        if not isinstance(K_xyz, str):
+            raise TypeError(
+                f"geouned.Tolerances.K_xyz should be a str, not a {type(K_xyz)}"
+            )
+        self._K_xyz = K_xyz
+
+    @property
+    def K_tan2(self):
+        return self._K_tan2
+
+    @K_tan2.setter
+    def K_tan2(self, K_tan2: str):
+        if not isinstance(K_tan2, str):
+            raise TypeError(
+                f"geouned.Tolerances.K_tan2 should be a str, not a {type(K_tan2)}"
+            )
+        self._K_tan2 = K_tan2
+
+    @property
+    def T_r(self):
+        return self._T_r
+
+    @T_r.setter
+    def T_r(self, T_r: str):
+        if not isinstance(T_r, str):
+            raise TypeError(
+                f"geouned.Tolerances.T_r should be a str, not a {type(T_r)}"
+            )
+        self._T_r = T_r
+
+    @property
+    def T_xyz(self):
+        return self._T_xyz
+
+    @T_xyz.setter
+    def T_xyz(self, T_xyz: str):
+        if not isinstance(T_xyz, str):
+            raise TypeError(
+                f"geouned.Tolerances.T_xyz should be a str, not a {type(T_xyz)}"
+            )
+        self._T_xyz = T_xyz
+
+    @property
+    def GQ_1to6(self):
+        return self._GQ_1to6
+
+    @GQ_1to6.setter
+    def GQ_1to6(self, GQ_1to6: str):
+        if not isinstance(GQ_1to6, str):
+            raise TypeError(
+                f"geouned.Tolerances.GQ_1to6 should be a str, not a {type(GQ_1to6)}"
+            )
+        self._GQ_1to6 = GQ_1to6
+
+    @property
+    def GQ_7to9(self):
+        return self._GQ_7to9
+
+    @GQ_7to9.setter
+    def GQ_7to9(self, GQ_7to9: str):
+        if not isinstance(GQ_7to9, str):
+            raise TypeError(
+                f"geouned.Tolerances.GQ_7to9 should be a str, not a {type(GQ_7to9)}"
+            )
+        self._GQ_7to9 = GQ_7to9
+
+    @property
+    def GQ_10(self):
+        return self._GQ_10
+
+    @GQ_10.setter
+    def GQ_10(self, GQ_10: str):
+        if not isinstance(GQ_10, str):
+            raise TypeError(
+                f"geouned.Tolerances.GQ_10 should be a str, not a {type(GQ_10)}"
+            )
+        self._GQ_10 = GQ_10
