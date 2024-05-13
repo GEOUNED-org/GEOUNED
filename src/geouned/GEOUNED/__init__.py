@@ -164,11 +164,14 @@ class CadToCsg:
         self.tolerances = tolerances
         self.numeric_format = numeric_format
 
-    def set_configuration(self, configFile=None):
+    @classmethod
+    def from_config_ini(cls, configFile):
 
-        if configFile is None:
-            return
-
+        geo = CadToCsg()
+        options_from_config = Options()
+        tolerances_from_config = Tolerances()
+        numeric_format_from_config = NumericFormat()
+       
         config = configparser.ConfigParser()
         config.optionxform = str
         config.read(configFile)
@@ -176,7 +179,7 @@ class CadToCsg:
             if section == "Files":
                 for key in config["Files"].keys():
                     if key in ("geometryName", "matFile", "title"):
-                        self.set(key, config.get("Files", key))
+                        setattr(geo, key, config.get("Files", key))
 
                     elif key == "stepFile":
                         value = config.get("Files", key).strip()
@@ -184,11 +187,11 @@ class CadToCsg:
                         if value[0] in ("(", "[") and value[-1] in ("]", ")"):
                             data = value[1:-1].split(",")
                             data = [x.strip() for x in data]
-                            self.set(key, data)
+                            setattr(geo, key, data)
                         elif len(lst) > 1:
-                            self.set(key, lst)
+                            setattr(geo, key, lst)
                         else:
-                            self.set(key, value)
+                            setattr(geo, key, value)
 
                     elif key == "outFormat":
                         raw = config.get("Files", key).strip()
@@ -205,7 +208,7 @@ class CadToCsg:
                                 outFormat.append("serpent")
                             elif v.lower() == "phits":
                                 outFormat.append("phits")
-                        self.set(key, tuple(outFormat))
+                        setattr(geo, key, tuple(outFormat))
 
             elif section == "Parameters":
                 for key in config["Parameters"].keys():
@@ -220,7 +223,7 @@ class CadToCsg:
                         "cellCommentFile",
                         "sort_enclosure",
                     ):
-                        self.set(key, config.getboolean("Parameters", key))
+                        setattr(geo, key, config.getboolean("Parameters", key))
                     elif key in (
                         "minVoidSize",
                         "maxSurf",
@@ -228,20 +231,20 @@ class CadToCsg:
                         "startCell",
                         "startSurf",
                     ):
-                        self.set(key, config.getint("Parameters", key))
+                        setattr(geo, key, config.getint("Parameters", key))
                     elif key in ("exportSolids", "UCARD", "simplify"):
-                        self.set(key, config.get("Parameters", key))
+                        setattr(geo, key, config.get("Parameters", key))
                     elif key == "voidMat":
                         value = config.get("Parameters", key).strip()
                         data = value[1:-1].split(",")
-                        self.set(key, (int(data[0]), float(data[1]), data[2]))
+                        setattr(geo, key, (int(data[0]), float(data[1]), data[2]))
                     else:
                         value = config.get("Parameters", key).strip()
                         data = value[1:-1].split(",")
-                        self.set(key, tuple(map(int, data)))
+                        setattr(geo, key, tuple(map(int, data)))
 
             elif section == "Options":
-                attributes_and_types = get_type_hints(Options())
+                attributes_and_types = get_type_hints(Options)
                 for key in config["Options"].keys():
                     if key in attributes_and_types.keys():
                         if attributes_and_types[key] is bool:
@@ -251,97 +254,98 @@ class CadToCsg:
                             or attributes_and_types[key] is int
                         ):
                             value = config.getfloat("Options", key)
-                        setattr(self.options, key, value)
+                        setattr(options_from_config, key, value)
 
             elif section == "Tolerances":
-                attributes_and_types = get_type_hints(Tolerances())
+                attributes_and_types = get_type_hints(Tolerances)
                 for key in config["Tolerances"].keys():
                     if key in attributes_and_types.keys():
                         if attributes_and_types[key] is bool:
                             value = config.getboolean("Tolerances", key)
                         elif attributes_and_types[key] is float:
                             value = config.getfloat("Tolerances", key)
-                        setattr(self.tolerances, key, value)
+                        setattr(tolerances_from_config, key, value)
 
-            elif section == "MCNP_Numeric_Format":
-                attributes_and_types = get_type_hints(NumericFormat())
+            elif section == "Numeric_Format":
+                attributes_and_types = get_type_hints(NumericFormat)
                 PdEntry = False
-                for key in config["MCNP_Numeric_Format"].keys():
+                for key in config["Numeric_Format"].keys():
                     if key in attributes_and_types.keys():
-                        value = config.get("MCNP_Numeric_Format", key)
-                        setattr(self.numeric_format, key, value)
+                        value = config.get("Numeric_Format", key)
+                        setattr(numeric_format_from_config, key, value)
                         if key == "P_d":
                             PdEntry = True
 
             else:
                 logger.info(f"bad section name : {section}")
 
-        if self.__dict__["geometryName"] == "":
-            self.__dict__["geometryName"] = self.__dict__["stepFile"][:-4]
-
         # TODO see if we can find another way to do this
-        if self.options.prnt3PPlane and not PdEntry:
-            self.NumericFormat.P_d = "22.15e"
+        if options_from_config.prnt3PPlane and not PdEntry:
+            numeric_format_from_config.P_d = "22.15e"
 
-        logger.info(self.__dict__)
+        geo.options = options_from_config
+        geo.tolerances = tolerances_from_config
+        geo.numeric_format = numeric_format_from_config
 
-    def set(self, kwrd, value):
+        return geo 
 
-        if kwrd == "stepFile":
-            if isinstance(value, (list, tuple)):
-                for v in value:
-                    if not isinstance(v, str):
-                        logger.info(f"elemt in {kwrd} list should be string")
-                        return
-            elif not isinstance(value, str):
-                logger.info(f"{kwrd} should be string or tuple of strings")
-                return
+    # def set(self, kwrd, value):
 
-        elif kwrd == "UCARD":
-            if value == "None":
-                value = None
-            elif value.isdigit():
-                value = int(value)
-            else:
-                logger.info(f"{kwrd} value should be None or integer")
-                return
-        elif kwrd == "outFormat":
-            if len(value) == 0:
-                return
-        elif kwrd in ("geometryName", "matFile", "exportSolids"):
-            if not isinstance(value, str):
-                logger.info(f"{kwrd} value should be str instance")
-                return
-        elif kwrd in ("cellRange", "voidMat", "voidExclude"):
-            if not isinstance(value, (list, tuple)):
-                logger.info(f"{kwrd} value should be list or tuple")
-                return
-        elif kwrd in ("minVoidSize", "maxSurf", "maxBracket", "startCell", "startSurf"):
-            if not isinstance(value, int):
-                logger.info(f"{kwrd} value should be integer")
-                return
-        elif kwrd in (
-            "voidGen",
-            "debug",
-            "compSolids",
-            "simplifyCTable",
-            "volSDEF",
-            "volCARD",
-            "dummyMat",
-            "cellSummaryFile",
-            "cellCommentFile",
-            "sort_enclosure",
-        ):
-            if not isinstance(value, bool):
-                logger.info(f"{kwrd} value should be boolean")
-                return
+    #     if kwrd == "stepFile":
+    #         if isinstance(value, (list, tuple)):
+    #             for v in value:
+    #                 if not isinstance(v, str):
+    #                     logger.info(f"elemt in {kwrd} list should be string")
+    #                     return
+    #         elif not isinstance(value, str):
+    #             logger.info(f"{kwrd} should be string or tuple of strings")
+    #             return
 
-        self.__dict__[kwrd] = value
-        if kwrd == "stepFile" and self.__dict__["geometryName"] == "":
-            if isinstance(value, (tuple, list)):
-                self.__dict__["geometryName"] == "joined_step_files"
-            else:
-                self.__dict__["geometryName"] == value[:-4]
+    #     elif kwrd == "UCARD":
+    #         if value == "None":
+    #             value = None
+    #         elif value.isdigit():
+    #             value = int(value)
+    #         else:
+    #             logger.info(f"{kwrd} value should be None or integer")
+    #             return
+    #     elif kwrd == "outFormat":
+    #         if len(value) == 0:
+    #             return
+    #     elif kwrd in ("geometryName", "matFile", "exportSolids"):
+    #         if not isinstance(value, str):
+    #             logger.info(f"{kwrd} value should be str instance")
+    #             return
+    #     elif kwrd in ("cellRange", "voidMat", "voidExclude"):
+    #         if not isinstance(value, (list, tuple)):
+    #             logger.info(f"{kwrd} value should be list or tuple")
+    #             return
+    #     elif kwrd in ("minVoidSize", "maxSurf", "maxBracket", "startCell", "startSurf"):
+    #         if not isinstance(value, int):
+    #             logger.info(f"{kwrd} value should be integer")
+    #             return
+    #     elif kwrd in (
+    #         "voidGen",
+    #         "debug",
+    #         "compSolids",
+    #         "simplifyCTable",
+    #         "volSDEF",
+    #         "volCARD",
+    #         "dummyMat",
+    #         "cellSummaryFile",
+    #         "cellCommentFile",
+    #         "sort_enclosure",
+    #     ):
+    #         if not isinstance(value, bool):
+    #             logger.info(f"{kwrd} value should be boolean")
+    #             return
+
+    #     self.__dict__[kwrd] = value
+    #     if kwrd == "stepFile" and self.__dict__["geometryName"] == "":
+    #         if isinstance(value, (tuple, list)):
+    #             self.__dict__["geometryName"] == "joined_step_files"
+    #         else:
+    #             self.__dict__["geometryName"] == value[:-4]
 
     def start(self):
 

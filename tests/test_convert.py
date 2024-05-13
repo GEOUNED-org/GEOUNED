@@ -74,3 +74,12 @@ def test_conversion(input_step_file):
 
     for suffix in suffixes:
         assert output_filename_stem.with_suffix(suffix).exists()
+
+
+def test_from_config_sets_attributes():
+
+    geo = geouned.CadToCsg.from_config_ini('tests/config.ini')
+
+    assert geo.title == "title of the model"
+
+    assert geo.splitTolerance == True
