@@ -270,6 +270,185 @@ class Tolerances:
         self.tor_angle = tor_angle
         self.min_area = min_area
 
+    @property
+    def relativeTol(self):
+        return self._relativeTol
+
+    @relativeTol.setter
+    def relativeTol(self, value: bool):
+        if not isinstance(value, bool):
+            raise TypeError(
+                f"geouned.Tolerances.relativeTol should be a bool, not a {type(value)}"
+            )
+        self._relativeTol = value
+
+    @property
+    def relativePrecision(self):
+        return self._relativePrecision
+
+    @relativePrecision.setter
+    def relativePrecision(self, value: float):
+        if not isinstance(value, float):
+            raise TypeError(
+                f"geouned.Tolerances.relativePrecision should be a float, not a {type(value)}"
+            )
+        self._relativePrecision = value
+
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, value: float):
+        if not isinstance(value, float):
+            raise TypeError(
+                f"geouned.Tolerances.value should be a float, not a {type(value)}"
+            )
+        self._value = value
+
+    @property
+    def distance(self):
+        return self._distance
+
+    @distance.setter
+    def distance(self, distance: float):
+        if not isinstance(distance, float):
+            raise TypeError(
+                f"geouned.Tolerances.distance should be a float, not a {type(distance)}"
+            )
+        self._distance = distance
+
+    @property
+    def angle(self):
+        return self._angle
+
+    @angle.setter
+    def angle(self, angle: float):
+        if not isinstance(angle, float):
+            raise TypeError(
+                f"geouned.Tolerances.angle should be a float, not a {type(angle)}"
+            )
+        self._angle = angle
+
+    @property
+    def pln_distance(self):
+        return self._pln_distance
+
+    @pln_distance.setter
+    def pln_distance(self, pln_distance: float):
+        if not isinstance(pln_distance, float):
+            raise TypeError(
+                f"geouned.Tolerances.pln_distance should be a float, not a {type(pln_distance)}"
+            )
+        self._pln_distance = pln_distance
+
+    @property
+    def cyl_distance(self):
+        return self._cyl_distance
+
+    @cyl_distance.setter
+    def cyl_distance(self, cyl_distance: float):
+        if not isinstance(cyl_distance, float):
+            raise TypeError(
+                f"geouned.Tolerances.cyl_distance should be a float, not a {type(cyl_distance)}"
+            )
+        self._cyl_distance = cyl_distance
+
+    @property
+    def cyl_angle(self):
+        return self._cyl_angle
+
+    @cyl_angle.setter
+    def cyl_angle(self, cyl_angle: float):
+        if not isinstance(cyl_angle, float):
+            raise TypeError(
+                f"geouned.Tolerances.cyl_angle should be a float, not a {type(cyl_angle)}"
+            )
+        self._cyl_angle = cyl_angle
+
+    @property
+    def sph_distance(self):
+        return self._sph_distance
+
+    @sph_distance.setter
+    def sph_distance(self, sph_distance: float):
+        if not isinstance(sph_distance, float):
+            raise TypeError(
+                f"geouned.Tolerances.sph_distance should be a float, not a {type(sph_distance)}"
+            )
+        self._sph_distance = sph_distance
+
+    @property
+    def pln_angle(self):
+        return self._pln_angle
+
+    @pln_angle.setter
+    def pln_angle(self, pln_angle: float):
+        if not isinstance(pln_angle, float):
+            raise TypeError(
+                f"geouned.Tolerances.pln_angle should be a float, not a {type(pln_angle)}"
+            )
+        self._pln_angle = pln_angle
+
+    @property
+    def kne_distance(self):
+        return self._kne_distance
+
+    @kne_distance.setter
+    def kne_distance(self, kne_distance: float):
+        if not isinstance(kne_distance, float):
+            raise TypeError(
+                f"geouned.Tolerances.kne_distance should be a float, not a {type(kne_distance)}"
+            )
+        self._kne_distance = kne_distance
+
+    @property
+    def kne_angle(self):
+        return self._kne_angle
+
+    @kne_angle.setter
+    def kne_angle(self, kne_angle: float):
+        if not isinstance(kne_angle, float):
+            raise TypeError(
+                f"geouned.Tolerances.kne_angle should be a float, not a {type(kne_angle)}"
+            )
+        self._kne_angle = kne_angle
+
+    @property
+    def tor_distance(self):
+        return self._tor_distance
+
+    @tor_distance.setter
+    def tor_distance(self, tor_distance: float):
+        if not isinstance(tor_distance, float):
+            raise TypeError(
+                f"geouned.Tolerances.tor_distance should be a float, not a {type(tor_distance)}"
+            )
+        self._tor_distance = tor_distance
+
+    @property
+    def tor_angle(self):
+        return self._tor_angle
+
+    @tor_angle.setter
+    def tor_angle(self, tor_angle: float):
+        if not isinstance(tor_angle, float):
+            raise TypeError(
+                f"geouned.Tolerances.tor_angle should be a float, not a {type(tor_angle)}"
+            )
+        self._tor_angle = tor_angle
+
+    @property
+    def min_area(self):
+        return self._min_area
+
+    @min_area.setter
+    def min_area(self, min_area: float):
+        if not isinstance(min_area, float):
+            raise TypeError(
+                f"geouned.Tolerances.min_area should be a float, not a {type(min_area)}"
+            )
+        self._min_area = min_area
 
 class NumericFormat:
     """Numerical format options for each of the surface types.
