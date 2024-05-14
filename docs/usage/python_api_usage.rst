@@ -1,9 +1,9 @@
-Python package usage
+Python Package Usage
 ====================
 
 The Python API has two main classes.
 The first main class is ``CadToCsg()`` which converts CAD geometry to Constructive Solid Geometry (CSG).
-There are many arguments that can be passed into the ``CadToCsg()`` class which are documented in the `Python API section <python_api.html>`_ of the documentation.
+There are many arguments that can be passed into the ``CadToCsg()`` class which are documented in the `Python API reference section <../python_api.html>`_ of the documentation.
 
 
 If you have install GEOUNED and FreeCAD into your system Python then you can simply run a .py script with Python.

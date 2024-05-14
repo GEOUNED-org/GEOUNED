@@ -1,5 +1,5 @@
-Command Line Tool
-=================
+Command Line Tool Usage
+=======================
 
 GEOUNED can be used in the command line.
 
@@ -23,7 +23,9 @@ Then execute the command line interface tool to convert your STEP file to CSG fi
 
 The following example shows a usage with every attributes specified in the config.json file.
 
-The contents of the json file closely matches the Class arguments and method arguments when using the Python package.
+The contents of the JSON file closely matches the Class arguments and method arguments when using the Python package.
+
+For a full description of each keyword see the `Python API reference section <../python_api.html>`_ of the documentation.
 
 Here is a complete JSON file specification
 
@@ -106,7 +108,7 @@ Here is a complete JSON file specification
         }
     }
 
-This is run in the same way as the minimal JSON config file
+This is converted in the same way as the minimal JSON config file
 
 .. code-block:: bash
 
