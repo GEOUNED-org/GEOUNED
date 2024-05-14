@@ -63,7 +63,7 @@ def is_same_plane(p1, p2, options, tolerances, numeric_format, fuzzy=(False, 0))
             d2 = -d2
         d = abs(d1 - d2)
         if tolerances.relativeTol:
-            tol = tolerances.pln_distance * max(p2.dim1, p2.dim2)
+            tol = tolerances.pln_distance * max(p2.dimL1, p2.dimL2)
         else:
             tol = tolerances.pln_distance
 
