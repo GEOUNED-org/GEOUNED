@@ -11,8 +11,7 @@ import FreeCAD
 from ..CodeVersion import *
 from ..Utils.BasicFunctions_part1 import is_opposite, points_to_coeffs
 from ..Utils.Functions import SurfacesDict
-from .Functions import (CardLine, change_surf_sign, mcnp_surface,
-                        write_mcnp_cell_def)
+from .Functions import CardLine, change_surf_sign, mcnp_surface, write_mcnp_cell_def
 
 logger = logging.getLogger("general_logger")
 

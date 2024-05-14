@@ -12,8 +12,12 @@ import Part
 from ..Conversion import CellDefinition as CD
 from ..Utils import Functions as UF
 from ..Utils import Geometry_GU as GU
-from ..Utils.BasicFunctions_part1 import (is_in_line, is_in_plane, is_parallel,
-                                          is_same_value)
+from ..Utils.BasicFunctions_part1 import (
+    is_in_line,
+    is_in_plane,
+    is_parallel,
+    is_same_value,
+)
 from ..Utils.BasicFunctions_part2 import is_duplicate_in_list
 
 logger = logging.getLogger("general_logger")
