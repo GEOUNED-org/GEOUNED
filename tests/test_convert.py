@@ -106,31 +106,6 @@ def test_conversion(input_step_file):
     geo.start()
 
     geo.export_csg(
-        title="WCLL v1.0 - Aljaz Kolsek [akolsek(at)ind.uned.es]",
-        geometryName="WCLL",
-        outFormat=(
-            "openMC_XML",
-            "mcnp",
-        ),
-        volSDEF=True,
-        volCARD=False,
-        UCARD=None,
-        dummyMat=True,
-        cellCommentFile=True,
-        cellSummaryFile=True,
-    )
-
-    geo = geouned.CadToCsg(
-        stepFile=f"{input_step_file.resolve()}",
-        options=my_options,
-        settings=my_settings,
-        tolerances=my_tolerances,
-        numeric_format=my_numeric_format,
-    )
-
-    geo.start()
-
-    geo.export_csg(
         title="Converted with GEOUNED",
         geometryName=f"{output_filename_stem.resolve()}",
         outFormat=(
