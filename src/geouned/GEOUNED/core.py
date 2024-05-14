@@ -452,6 +452,7 @@ class CadToCsg:
                 self.options,
                 self.tolerances,
                 self.numeric_format,
+                "Decomposing solids",
             )
 
             # decompose Enclosure solids
@@ -465,6 +466,7 @@ class CadToCsg:
                     self.options,
                     self.tolerances,
                     self.numeric_format,
+                    "Decomposing enclosure solids",
                 )
 
             logger.info("End of decomposition phase")
@@ -514,6 +516,7 @@ class CadToCsg:
                     self.options,
                     self.tolerances,
                     self.numeric_format,
+                    "Decomposing enclosure solids",
                 )
 
         tempstr2 = str(datetime.now() - tempTime)
@@ -656,11 +659,19 @@ class CadToCsg:
 
 
 def decompose_solids(
-    MetaList, Surfaces, UniverseBox, setting, meta, options, tolerances, numeric_format
+    MetaList,
+    Surfaces,
+    UniverseBox,
+    setting,
+    meta,
+    options,
+    tolerances,
+    numeric_format,
+    description,
 ):
     totsolid = len(MetaList)
     warningSolids = []
-    for i, m in enumerate(tqdm(MetaList, desc="Decomposing solids")):
+    for i, m in enumerate(tqdm(MetaList, desc=description)):
         if meta and m.IsEnclosure:
             continue
         logger.info(f"Decomposing solid: {i + 1}/{totsolid}")
