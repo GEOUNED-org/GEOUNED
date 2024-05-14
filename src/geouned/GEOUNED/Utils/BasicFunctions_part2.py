@@ -63,7 +63,7 @@ def is_same_plane(p1, p2, options, tolerances, numeric_format, fuzzy=(False, 0))
             d2 = -d2
         d = abs(d1 - d2)
         if tolerances.relativeTol:
-            tol = tolerances.pln_distance * max(p2.dim1, p2.dim2)
+            tol = tolerances.pln_distance * max(p2.dimL1, p2.dimL2)
         else:
             tol = tolerances.pln_distance
 
@@ -120,7 +120,15 @@ def is_same_cylinder(
             is_same_center, is_fuzzy = is_in_tolerance(d, tol, 0.5 * tol, 2 * tol)
             if is_fuzzy and fuzzy[0]:
                 Fuzzy(
-                    fuzzy[1], "cylAxs", cyl1, cyl2, d, tol, tolerances, numeric_format
+                    fuzzy[1],
+                    "cylAxs",
+                    cyl1,
+                    cyl2,
+                    d,
+                    tol,
+                    options,
+                    tolerances,
+                    numeric_format,
                 )
 
             return is_same_center
