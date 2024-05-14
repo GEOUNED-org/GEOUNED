@@ -31,22 +31,38 @@ logger = logging.getLogger("general_logger")
 
 
 class PhitsInput:
-    def __init__(self, Meta, Surfaces, setting, options, tolerances, numeric_format):
-        self.Title = setting["title"]
-        self.VolSDEF = setting["volSDEF"]
-        self.VolCARD = setting["volCARD"]
-        self.U0CARD = setting["UCARD"]
-        self.DummyMat = setting["dummyMat"]
-        self.Matfile = setting["matFile"]
-        self.voidMat = setting["voidMat"]
-        self.startCell = setting["startCell"]
+    def __init__(
+        self,
+        Meta,
+        Surfaces,
+        options,
+        tolerances,
+        numeric_format,
+        title,
+        volSDEF,
+        volCARD,
+        UCARD,
+        dummyMat,
+        stepFile,
+        matFile,
+        voidMat,
+        startCell,
+    ):
+        self.Title = title
+        self.VolSDEF = volSDEF
+        self.VolCARD = volCARD
+        self.U0CARD = UCARD
+        self.DummyMat = dummyMat
+        self.Matfile = matFile
+        self.voidMat = voidMat
+        self.startCell = startCell
         self.Cells = Meta
         self.tolerances = tolerances
         self.numeric_format = numeric_format
         self.options = options
         self.Options = {"Volume": self.VolCARD, "Universe": self.U0CARD}
 
-        self.StepFile = setting["stepFile"]
+        self.StepFile = stepFile
         if isinstance(self.StepFile, (tuple, list)):
             self.StepFile = "; ".join(self.StepFile)
 

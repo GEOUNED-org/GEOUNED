@@ -15,15 +15,28 @@ logger = logging.getLogger("general_logger")
 
 
 class SerpentInput:
-    def __init__(self, Meta, Surfaces, setting, options, tolerances, numeric_format):
+    def __init__(
+        self,
+        Meta,
+        Surfaces,
+        options,
+        tolerances,
+        numeric_format,
+        title,
+        volSDEF,
+        volCARD,
+        UCARD,
+        dummyMat,
+        stepFile,
+    ):
         self.options = options
         self.tolerances = tolerances
         self.numeric_format = numeric_format
-        self.Title = setting["title"]
-        self.VolSDEF = setting["volSDEF"]
-        self.VolCARD = setting["volCARD"]
-        self.U0CARD = setting["UCARD"]
-        self.dummyMat = setting["dummyMat"]
+        self.Title = title
+        self.VolSDEF = volSDEF
+        self.VolCARD = volCARD
+        self.U0CARD = UCARD
+        self.dummyMat = dummyMat
         self.Cells = Meta
         self.Options = {
             "Volume": self.VolCARD,
@@ -32,12 +45,9 @@ class SerpentInput:
         }
         self.part = "p"
 
-        self.StepFile = setting["stepFile"]
+        self.StepFile = stepFile
         if isinstance(self.StepFile, (tuple, list)):
             self.StepFile = "; ".join(self.StepFile)
-
-        if self.Title == "":
-            self.Title = self.StepFile
 
         self.__get_surface_table__()
         self.__simplify_planes__(Surfaces)
@@ -142,7 +152,9 @@ class SerpentInput:
         if self.Options["Universe"] is not None:
             if cell.Material == 0:
                 cellHeader = (
-                    f'cell {index:<5d} {self.Options["Universe"]} {"void":<5d}  '
+                    # {"void":<5d} has been removed from the end of the line below
+                    # see issue https://github.com/GEOUNED-org/GEOUNED/issues/151 for details
+                    f'cell {index:<5d} {self.Options["Universe"]} '
                 )
             else:
                 self.Materials.add(cell.Material)
