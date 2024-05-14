@@ -191,7 +191,6 @@ class CadToCsg:
             cad_to_csg.export_csg()
         return cad_to_csg
 
-
     # TODO add tests as set_configuration is not currently tested
     def set_configuration(self, configFile=None):
 

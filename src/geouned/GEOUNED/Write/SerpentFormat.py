@@ -153,7 +153,9 @@ class SerpentInput:
         if self.Options["Universe"] is not None:
             if cell.Material == 0:
                 cellHeader = (
-                    f'cell {index:<5d} {self.Options["Universe"]} {"void":<5d}  '
+                    # {"void":<5d} has been removed from the end of the line below
+                    # see issue https://github.com/GEOUNED-org/GEOUNED/issues/151 for details
+                    f'cell {index:<5d} {self.Options["Universe"]} '
                 )
             else:
                 self.Materials.add(cell.Material)
