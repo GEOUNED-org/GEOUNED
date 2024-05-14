@@ -20,7 +20,7 @@ from ..Utils.BasicFunctions_part1 import (
 )
 from ..Utils.BasicFunctions_part2 import is_duplicate_in_list
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("general_logger")
 
 twoPi = math.pi * 2
 

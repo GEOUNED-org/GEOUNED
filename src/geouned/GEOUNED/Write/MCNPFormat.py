@@ -13,7 +13,7 @@ from ..Utils.BasicFunctions_part1 import is_opposite, points_to_coeffs
 from ..Utils.Functions import SurfacesDict
 from .Functions import CardLine, change_surf_sign, mcnp_surface, write_mcnp_cell_def
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("general_logger")
 
 
 # TODO rename as there are two classes with this name

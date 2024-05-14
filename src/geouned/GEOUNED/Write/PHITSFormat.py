@@ -28,7 +28,7 @@ from ..Write.Functions import (
     write_phits_cell_def,
 )
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("general_logger")
 
 
 class PhitsInput:
@@ -81,10 +81,10 @@ class PhitsInput:
     def write_phits(self, filename):
         logger.info(f"write PHITS file {filename}")
         Path(filename).parent.mkdir(parents=True, exist_ok=True)
-        self.inpfile = open(filename, "w", encoding="utf-8")
-        self.__write_phits_header__()
+        with open(file=filename, mode="w", encoding="utf-8") as self.inpfile:
+            self.__write_phits_header__()
 
-        cHeader = """\
+            cHeader = """\
 $
 $ ##########################################################
 $                  CELL DEFINITION
@@ -92,11 +92,11 @@ $ ##########################################################
 $
 [CELL]\n"""
 
-        self.inpfile.write(cHeader)
-        self.__write_phits_cell_block__()
-        self.inpfile.write(" \n")
+            self.inpfile.write(cHeader)
+            self.__write_phits_cell_block__()
+            self.inpfile.write(" \n")
 
-        surfaceHeader = """\
+            surfaceHeader = """\
 $
 $ ##########################################################
 $                  SURFACE DEFINITION
@@ -104,11 +104,11 @@ $ ##########################################################
 $
 [SURFACE]\n"""
 
-        self.inpfile.write(surfaceHeader)
-        self.__write_phits_surface_block__()
-        self.inpfile.write(" \n")
+            self.inpfile.write(surfaceHeader)
+            self.__write_phits_surface_block__()
+            self.inpfile.write(" \n")
 
-        materialHeader = """\
+            materialHeader = """\
 $
 $ ##########################################################
 $                  MATERIAL DEFINITION
@@ -118,12 +118,12 @@ $ Need to change the dummy material definition(H2O1) to appropriate one(s)
 $
 [MATERIAL]\n"""
 
-        if self.DummyMat:
-            self.inpfile.write(materialHeader)
-            self.__write_phits_source_block__()
-            self.inpfile.write(" \n")
+            if self.DummyMat:
+                self.inpfile.write(materialHeader)
+                self.__write_phits_source_block__()
+                self.inpfile.write(" \n")
 
-        volHeader = """\
+            volHeader = """\
 $
 $ ##########################################################
 $                  VOLUME DEFINITION
@@ -134,13 +134,12 @@ $ set all at 1.0cm3 tentatively.
 $
 [VOLUME] off\n"""
 
-        if self.Options["Volume"]:
-            self.inpfile.write(volHeader)
-            self.__write_phits_volume_block__()
-            self.inpfile.write(" \n")
+            if self.Options["Volume"]:
+                self.inpfile.write(volHeader)
+                self.__write_phits_volume_block__()
+                self.inpfile.write(" \n")
 
-        self.inpfile.close()
-        return
+            return
 
     def __write_phits_header__(self):
 

@@ -4,22 +4,10 @@
 Functions for parsing MCNP input files.
 """
 
-import os
 import re
 import warnings
 
 from .PartialFormatter import PartialFormatter
-
-version = "3.6"
-
-try:
-    # This clause define the fallback for cPickle, which is an accelerated
-    # version of pickle in Python2. In Python3 the acceleration is considered
-    # to be package-internal details, therefore the whole clause is an overkill
-    # -- an accelerated version will be imported with pickle, if available.
-    import cPickle
-except ImportError:
-    import pickle as cPickle
 
 # integer with one prefix character
 re_int = re.compile(r"\D{0,1}\d+")
@@ -1211,57 +1199,14 @@ def is_blankline(l):
     return l.strip() == ""
 
 
-if version == "2.7":
+def get_cards(inp, debug=None, preservetabs=False):
+    """
+    Check first existence of a dump file
 
-    def get_cards(inp, debug=None, preservetabs=False):
-        """
-        Check first existence of a dump file
-
-        If dump exists and it is newwer than the input file, read the dump file
-        """
-        from os import stat
-
-        iname = inp
-        dname = f".{os.path.basename(inp)}.~"
-        try:
-            it = stat(iname).st_mtime
-        except OSError as e:
-            raise e
-
-        try:
-            dt = stat(dname).st_mtime
-        except OSError:
-            # print('No dump file exists')
-            dt = it - 1.0
-        if it < dt and debug is None:
-            # print('Reading from dump')
-            # dump is youger
-            dfile = open(dname, "r")
-            cl = cPickle.load(dfile)
-            for c in cl:
-                yield c
-        else:
-            # print('Reading from input')
-            cl = []
-            for c in get_cards_from_input(inp, debug=debug, preservetabs=preservetabs):
-                yield c
-                cl.append(c)
-        if debug is None:
-            # otherwise the instances of c contain the file object, which
-            # cannot be dumped.
-            dfile = open(dname, "w")
-            cPickle.dump(cl, dfile)
-
-else:
-
-    def get_cards(inp, debug=None, preservetabs=False):
-        """
-        Check first existence of a dump file
-
-        If dump exists and it is newwer than the input file, read the dump file
-        """
-        for c in get_cards_from_input(inp, debug=debug, preservetabs=preservetabs):
-            yield c
+    If dump exists and it is newwer than the input file, read the dump file
+    """
+    for c in get_cards_from_input(inp, debug=debug, preservetabs=preservetabs):
+        yield c
 
 
 def index_(line, chars="$&"):

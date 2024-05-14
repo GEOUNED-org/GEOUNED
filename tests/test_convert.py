@@ -208,3 +208,20 @@ def test_writing_to_new_folders():
             cellSummaryFile=True,
             outFormat=[outformat],
         )
+
+
+def test_with_relative_tol_true():
+
+    # test to protect against incorrect attribute usage in FreeCAD
+    # more details https://github.com/GEOUNED-org/GEOUNED/issues/154
+
+    geo = geouned.CadToCsg(
+        stepFile=f"{step_files[1].resolve()}",
+        tolerances=geouned.Tolerances(relativeTol=False),
+    )
+    geo.start()
+    geo = geouned.CadToCsg(
+        stepFile=f"{step_files[1].resolve()}",
+        tolerances=geouned.Tolerances(relativeTol=True),
+    )
+    geo.start()

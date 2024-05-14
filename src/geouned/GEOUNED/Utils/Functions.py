@@ -9,7 +9,7 @@ import FreeCAD
 import numpy as np
 import Part
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("general_logger")
 
 from ..Utils.BasicFunctions_part1 import (
     ConeParams,

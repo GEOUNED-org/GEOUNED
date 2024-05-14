@@ -23,7 +23,7 @@ from .Write.Functions import write_mcnp_cell_def
 from .Write.WriteFiles import write_geometry
 from .Utils.data_classes import Options, Tolerances, NumericFormat, Settings
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("general_logger")
 
 
 class CadToCsg:
@@ -452,6 +452,7 @@ class CadToCsg:
                 self.options,
                 self.tolerances,
                 self.numeric_format,
+                "Decomposing solids",
             )
 
             # decompose Enclosure solids
@@ -465,6 +466,7 @@ class CadToCsg:
                     self.options,
                     self.tolerances,
                     self.numeric_format,
+                    "Decomposing enclosure solids",
                 )
 
             logger.info("End of decomposition phase")
@@ -514,6 +516,7 @@ class CadToCsg:
                     self.options,
                     self.tolerances,
                     self.numeric_format,
+                    "Decomposing enclosure solids",
                 )
 
         tempstr2 = str(datetime.now() - tempTime)
@@ -656,11 +659,19 @@ class CadToCsg:
 
 
 def decompose_solids(
-    MetaList, Surfaces, UniverseBox, setting, meta, options, tolerances, numeric_format
+    MetaList,
+    Surfaces,
+    UniverseBox,
+    setting,
+    meta,
+    options,
+    tolerances,
+    numeric_format,
+    description,
 ):
     totsolid = len(MetaList)
     warningSolids = []
-    for i, m in enumerate(tqdm(MetaList, desc="Decomposing solids")):
+    for i, m in enumerate(tqdm(MetaList, desc=description)):
         if meta and m.IsEnclosure:
             continue
         logger.info(f"Decomposing solid: {i + 1}/{totsolid}")
@@ -794,8 +805,10 @@ def get_universe(MetaList):
 
 def print_warning_solids(warnSolids, warnEnclosures):
 
+    solids_logger = logging.getLogger("solids_logger")
+
     if warnSolids or warnEnclosures:
-        fic = open("Warning_Solids_definition.txt", "w")
+        pass
     else:
         return
 
@@ -806,7 +819,7 @@ def print_warning_solids(warnSolids, warnEnclosures):
             lines += f"{sol.label}\n"
             lines += f"{sol.Comments}\n"
             lines += f"{write_mcnp_cell_def(sol.Definition)}\n"
-        fic.write(lines)
+        solids_logger.info(lines)
 
     if warnEnclosures:
         lines = "Enclosures :\n"
@@ -816,9 +829,7 @@ def print_warning_solids(warnSolids, warnEnclosures):
             lines += f"{sol.Comments}\n"
             lines += f"{write_mcnp_cell_def(sol.Definition)}\n"
 
-        fic.write(lines)
-
-    fic.close()
+        solids_logger.info(lines)
 
 
 def join_meta_lists(MList):
