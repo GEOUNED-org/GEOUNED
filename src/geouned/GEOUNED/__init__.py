@@ -136,7 +136,6 @@ class CadToCsg:
 
         logger.info("End of Monte Carlo code translation phase")
 
-
     def set_configuration(self, configFile=None):
 
         if configFile is None:
@@ -358,7 +357,9 @@ class CadToCsg:
 
         # Select a specific solid range from original STEP solids
         if self.settings.cellRange:
-            self.MetaList = self.MetaList[self.settings.cellRange[0] : self.settings.cellRange[1]]
+            self.MetaList = self.MetaList[
+                self.settings.cellRange[0] : self.settings.cellRange[1]
+            ]
 
         # export in STEP format solids read from input file
         # terminate excution
@@ -600,6 +601,7 @@ class CadToCsg:
 
         logger.info(f"Translation time of solid cells {tempTime1} - {tempTime0}")
         logger.info(f"Translation time of void cells {tempTime2} - {tempTime1}")
+
 
 def decompose_solids(
     MetaList, Surfaces, UniverseBox, setting, meta, options, tolerances, numeric_format
