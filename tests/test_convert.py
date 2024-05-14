@@ -135,7 +135,7 @@ def test_cad_to_csg_from_json():
     my_cad_to_csg = geouned.CadToCsg.from_json("tests/config_complete_defaults.json")
     assert isinstance(my_cad_to_csg, geouned.CadToCsg)
 
-    assert my_cad_to_csg.stepFile == "tests/cuboid.stp"
+    assert my_cad_to_csg.stepFile == "testing/inputSTEP/BC.stp"
     assert my_cad_to_csg.options.forceCylinder == False
     assert my_cad_to_csg.tolerances.relativeTol == False
     assert my_cad_to_csg.numeric_format.P_abc == "14.7e"
@@ -154,7 +154,7 @@ def test_cad_to_csg_from_json():
     my_cad_to_csg = geouned.CadToCsg.from_json("tests/config_non_defaults.json")
     assert isinstance(my_cad_to_csg, geouned.CadToCsg)
 
-    assert my_cad_to_csg.stepFile == "tests/cuboid.stp"
+    assert my_cad_to_csg.stepFile == "testing/inputSTEP/BC.stp"
     assert my_cad_to_csg.options.forceCylinder == True
     assert my_cad_to_csg.tolerances.relativePrecision == 2e-6
     assert my_cad_to_csg.numeric_format.P_abc == "15.7e"

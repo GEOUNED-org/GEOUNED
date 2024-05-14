@@ -1,5 +1,5 @@
 {
-    "stepFile": "tests/cuboid.stp",
+    "stepFile": "testing/inputSTEP/BC.stp",
     "Options": {
         "forceCylinder": true 
     },
