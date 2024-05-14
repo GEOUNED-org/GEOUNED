@@ -17,12 +17,25 @@ logger = logging.getLogger("general_logger")
 
 # TODO rename as there are two classes with this name
 class McnpInput:
-    def __init__(self, Meta, Surfaces, setting, options, tolerances, numeric_format):
-        self.Title = setting["title"]
-        self.VolSDEF = setting["volSDEF"]
-        self.VolCARD = setting["volCARD"]
-        self.U0CARD = setting["UCARD"]
-        self.dummyMat = setting["dummyMat"]
+    def __init__(
+        self,
+        Meta,
+        Surfaces,
+        options,
+        tolerances,
+        numeric_format,
+        title,
+        volSDEF,
+        volCARD,
+        UCARD,
+        dummyMat,
+        stepFile,
+    ):
+        self.Title = title
+        self.VolSDEF = volSDEF
+        self.VolCARD = volCARD
+        self.U0CARD = UCARD
+        self.dummyMat = dummyMat
         self.Cells = Meta
         self.options = options
         self.tolerances = tolerances
@@ -34,12 +47,9 @@ class McnpInput:
         }
         self.part = "P"
 
-        self.StepFile = setting["stepFile"]
+        self.StepFile = stepFile
         if isinstance(self.StepFile, (tuple, list)):
             self.StepFile = "; ".join(self.StepFile)
-
-        if self.Title == "":
-            self.Title = self.StepFile
 
         self.__get_surface_table__()
         self.__simplify_planes__(Surfaces)

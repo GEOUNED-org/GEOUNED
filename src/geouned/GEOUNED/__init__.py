@@ -6,6 +6,7 @@
 import configparser
 import logging
 import typing
+import json
 from datetime import datetime
 from os import mkdir, path
 from typing import get_type_hints
@@ -13,6 +14,7 @@ from typing import get_type_hints
 import FreeCAD
 import Part
 from tqdm import tqdm
+from pathlib import Path
 
 from .CodeVersion import *
 from .Conversion import CellDefinition as Conv
@@ -24,7 +26,7 @@ from .Utils.BooleanSolids import build_c_table_from_solids
 from .Void import Void as Void
 from .Write.Functions import write_mcnp_cell_def
 from .Write.WriteFiles import write_geometry
-from .Utils.data_classes import Options, Tolerances, NumericFormat
+from .Utils.data_classes import Options, Tolerances, NumericFormat, Settings
 
 logger = logging.getLogger("general_logger")
 
@@ -33,139 +35,167 @@ class CadToCsg:
     """Base class for the conversion of CAD to CSG models
 
     Args:
-        title (str, optional): Title of the model. Defaults to "Geouned
-            conversion".
         stepFile (str, optional): Name of the CAD file (in STEP format) to
             be converted. Defaults to "".
-        geometryName (str, optional): Base name of the output file(s).
-            Defaults to "".
-        matFile (str, optional): _description_. Defaults to "".
-        outFormat (typing.Tuple[str], optional): Format for the output
-            geometry. Available format are: mcnp, openMC_XML, openMC_PY,
-            phits and serpent. Several output format can be written in the
-            same geouned run. Defaults to ("mcnp",).
-        voidGen (bool, optional): Generate voids of the geometry. Defaults
-            to True.
-        debug (bool, optional): Write step files of original and decomposed
-            solids, for each solid in the STEP file. Defaults to False.
-        compSolids (bool, optional): Join subsolids of STEP file as a single
-            compound solid. Step files generated with SpaceClaim have not
-            exactly the same level of solids as FreeCAD. It may a happened
-            that solids defined has separated solids are read by FreeCAD
-            as a single compound solid (and will produce only one MCNP
-            cell). In this case compSolids should be set to False. Defaults
-            to True.
-        volSDEF (bool, optional): Write SDEF definition and tally of solid
-            cell for stochastic volume checking. Defaults to False.
-        dummyMat (bool, optional): Write dummy material definition card in
-            the MCNP output file for all material labels present in the
-            model. Dummy material definition is "MX 1001 1". Defaults to
-            False.
-        volCARD (bool, optional): Write the CAD calculated volume in the
-            cell definition using the VOL card. Defaults to True.
-        UCARD (_type_, optional): Write universe card in the cell definition
-            with the specified universe number (if value = 0 Universe card
-            is not written). Defaults to None.
-        simplify (str, optional): Simplify the cell definition considering
-            relative surfaces position and using Boolean logics. Available
-            options are: "no" no optimization, "void" only void cells are
-            simplified. Algorithm is faster but the simplification is not
-            optimal. "voidfull" : only void cells are simplified with the
-            most optimal algorithm. The time of the conversion can be
-            multiplied by 5 or more. "full" : all the cells (solids and
-            voids) are simplified. Defaults to "No".
-        cellRange (list, optional): Range of cell to be converted (only one
-            range is allowed, e.g [100,220]). Default all solids are
-            converted. Defaults to [].
-        exportSolids (str, optional): Export CAD solid after reading.
-            The execution is stopped after export, the translation is not
-            carried out. Defaults to "".
-        minVoidSize (float, optional): Minimum size of the edges of the
-            void cell. Units are in mm. Defaults to 200.0.
-        maxBracket (int, optional): Maximum number of brackets (solid
-            complementary) allowed in void cell definition. Defaults to 30.
-        voidMat (list, optional): Assign a material defined by the user
-            instead of void for cells without material definition and the
-            cells generated in the automatic void generation. The format
-            is a 3 valued tuple (mat_label, mat_density, mat_description).
-            Example (100,1e-3,'Air assigned to Void'). Defaults to [].
-        voidExclude (list, optional): #TODO see issue 87. Defaults to [].
-        startCell (int, optional): Starting cell numbering label. Defaults to 1.
-        startSurf (int, optional): Starting surface numbering label. Defaults to 1.
-        cellCommentFile (bool, optional): Write an additional file with
-            comment associated to each CAD cell in the MCNP output file.
-            Defaults to False.
-        cellSummaryFile (bool, optional): Write an additional file with
-            information on the CAD cell translated. Defaults to True.
-        sort_enclosure (bool, optional): If enclosures are defined in the
-            CAD models, the voids cells of the enclosure will be located in
-            the output file in the same location where the enclosure solid
-            is located in the CAD solid tree.. Defaults to False.
+        options (geouned.Options, optional): An instance of a geouned.Options
+            class with the attributes set for the desired conversion. Defaults
+            to a geouned.Options with default attributes values.
+        tolerances (geouned.Tolerances, optional): An instance of a
+            geouned.Tolerances class with the attributes set for the desired
+            conversion. Defaults to a geouned.Tolerances with default
+            attributes values.
+        numeric_format (geouned.NumericFormat, optional): An instance of a
+            geouned.NumericFormat class with the attributes set for the desired
+            conversion. Defaults to a geouned.NumericFormat with default
+            attributes values.
+        settings (geouned.Settings, optional): An instance of a
+            geouned.Settings class with the attributes set for the desired
+            conversion. Defaults to a geouned.Settings with default
+            attributes values.
     """
 
     def __init__(
         self,
-        title: str = "Geouned conversion",
         stepFile: str = "",
-        geometryName: str = "",
-        matFile: str = "",
-        outFormat: typing.Tuple[str] = ("mcnp",),
-        voidGen: bool = True,
-        debug: bool = False,
-        compSolids: bool = True,
-        volSDEF: bool = False,
-        dummyMat: bool = False,
-        volCARD: bool = True,
-        UCARD=None,
-        simplify: str = "No",
-        cellRange=[],
-        exportSolids: str = "",
-        minVoidSize: float = 200.0,  # units mm
-        maxSurf: int = 50,
-        maxBracket: int = 30,
-        voidMat=[],
-        voidExclude=[],
-        startCell: int = 1,
-        startSurf: int = 1,
-        cellCommentFile: bool = False,
-        cellSummaryFile: bool = True,
-        sort_enclosure: bool = False,
         options: Options = Options(),
         tolerances: Tolerances = Tolerances(),
         numeric_format: NumericFormat = NumericFormat(),
+        settings: Settings = Settings(),
     ):
 
-        self.title = title
         self.stepFile = stepFile
-        self.geometryName = geometryName
-        self.matFile = matFile
-        self.outFormat = outFormat
-        self.voidGen = voidGen
-        self.debug = debug
-        self.compSolids = compSolids
-        self.volSDEF = volSDEF
-        self.dummyMat = dummyMat
-        self.volCARD = volCARD
-        self.UCARD = UCARD
-        self.simplify = simplify
-        self.cellRange = cellRange
-        self.exportSolids = exportSolids
-        self.minVoidSize = minVoidSize
-        self.maxSurf = maxSurf
-        self.maxBracket = maxBracket
-        self.voidMat = voidMat
-        self.voidExclude = voidExclude
-        self.startCell = startCell
-        self.startSurf = startSurf
-        self.cellCommentFile = cellCommentFile
-        self.cellSummaryFile = cellSummaryFile
-        self.sort_enclosure = sort_enclosure
         self.options = options
         self.tolerances = tolerances
         self.numeric_format = numeric_format
+        self.settings = settings
+
+    def export_csg(
+        self,
+        title: str = "Converted with GEOUNED",
+        geometryName: str = "csg",
+        outFormat: typing.Tuple[str] = (
+            "openMC_XML",
+            "openMC_PY",
+            "serpent",
+            "phits",
+            "mcnp",
+        ),
+        volSDEF: bool = False,
+        volCARD: bool = True,
+        UCARD: int = 101,
+        dummyMat: bool = False,
+        cellCommentFile: bool = False,
+        cellSummaryFile: bool = True,
+    ):
+        """Writes out a CSG file in the requested Monte Carlo code format.
+
+        Args:
+            title (str, optional): Title of the model written at the top of the
+                output file. Defaults to "Geouned conversion".
+            geometryName (str, optional): the file stem of the output file(s).
+                Defaults to "converted_with_geouned".
+            outFormat (typing.Tuple[str], optional): Format for the output
+                geometry. Available format are: "mcnp", "openMC_XML",
+                "openMC_PY", "phits" and "serpent". Several output format can
+                be written in the same method call. Defaults to output all codes.
+            volSDEF (bool, optional):  Write SDEF definition and tally of solid
+                cell for stochastic volume checking. Defaults to False.
+            volCARD (bool, optional): Write the CAD calculated volume in the
+                cell definition using the VOL card. Defaults to True.
+            UCARD (int, optional): Write universe card in the cell definition
+                with the specified universe number (if value = 0 Universe card
+                is not written). Defaults to None.
+            dummyMat (bool, optional): Write dummy material definition card in
+               the MCNP output file for all material labels present in the
+               model. Dummy material definition is "MX 1001 1". Defaults to False.
+            cellCommentFile (bool, optional): Write an additional file with
+               comment associated to each CAD cell in the MCNP output file.
+               Defaults to False.
+            cellSummaryFile (bool, optional): Write an additional file with
+               information on the CAD cell translated. Defaults to True.
+        """
+
+        write_geometry(
+            UniverseBox=self.UniverseBox,
+            MetaList=self.MetaList,
+            Surfaces=self.Surfaces,
+            settings=self.settings,
+            options=self.options,
+            tolerances=self.tolerances,
+            numeric_format=self.numeric_format,
+            geometryName=geometryName,
+            outFormat=outFormat,
+            cellCommentFile=cellCommentFile,
+            cellSummaryFile=cellSummaryFile,
+            title=title,
+            volSDEF=volSDEF,
+            volCARD=volCARD,
+            UCARD=UCARD,
+            dummyMat=dummyMat,
+            stepFile=self.stepFile,
+        )
+
+        logger.info("End of Monte Carlo code translation phase")
 
     @classmethod
-    def from_config_ini(cls, configFile):
+    def from_json(cls, filename: str):
+        """Creates a CadToCsg instance and returns the instance. Populating the
+        Options, Tolerance, Settings and NumericFormat attributes from matching
+        key names in the JSON. If export_to_csg key is present then this method
+        also runs .start() and .export_to_csg() on the instance.
+
+        Args:
+            filename str: The filename of the config file. Defaults to "config.json".
+
+        Raises:
+            FileNotFoundError: If the config file is not found
+            ValueError: If the config JSON file is found to contain an invalid key
+
+        Returns:
+            geouned.CadToCsg: returns a geouned CadToCsg class instance.
+        """
+
+        if not Path(filename).exists():
+            raise FileNotFoundError(f"config file {filename} not found")
+
+        with open(filename) as f:
+            config = json.load(f)
+
+        cad_to_csg = cls(stepFile=config["stepFile"])
+        for key in config.keys():
+
+            if key in ["stepFile", "export_csg"]:
+                pass  # these two keys are used before or after this loop
+
+            elif key == "Tolerances":
+                cad_to_csg.tolerances = Tolerances(**config["Tolerances"])
+
+            elif key == "Options":
+                cad_to_csg.options = Options(**config["Options"])
+
+            elif key == "NumericFormat":
+                cad_to_csg.numeric_format = NumericFormat(**config["NumericFormat"])
+
+            elif key == "Settings":
+                cad_to_csg.settings = Settings(**config["Settings"])
+
+            else:
+                raise ValueError(
+                    f"Invalid key '{key}' found in config file {filename}. Acceptable key names are 'stepFile', 'export_csg', 'Settings', 'Parameters', 'Tolerances' and 'NumericFormat'"
+                )
+
+        cad_to_csg.start()
+        if "export_csg" in config.keys():
+            cad_to_csg.export_csg(**config["export_csg"])
+        else:
+            cad_to_csg.export_csg()
+        return cad_to_csg
+
+    # TODO add tests as set_configuration is not currently tested
+    def set_configuration(self, configFile=None):
+
+        if configFile is None:
+            return
 
         geo = CadToCsg()
         options_from_config = Options()
@@ -280,72 +310,69 @@ class CadToCsg:
                 logger.info(f"bad section name : {section}")
 
         # TODO see if we can find another way to do this
-        if options_from_config.prnt3PPlane and not PdEntry:
-            numeric_format_from_config.P_d = "22.15e"
+        if self.options.prnt3PPlane and not PdEntry:
+            self.NumericFormat.P_d = "22.15e"
 
-        geo.options = options_from_config
-        geo.tolerances = tolerances_from_config
-        geo.numeric_format = numeric_format_from_config
+        logger.info(self.__dict__)
 
-        return geo 
+    # TODO add tests as set is not currently tested
+    def set(self, kwrd, value):
 
-    # def set(self, kwrd, value):
+        if kwrd == "stepFile":
+            if isinstance(value, (list, tuple)):
+                for v in value:
+                    if not isinstance(v, str):
+                        logger.info(f"elemt in {kwrd} list should be string")
+                        return
+            elif not isinstance(value, str):
+                logger.info(f"{kwrd} should be string or tuple of strings")
+                return
 
-    #     if kwrd == "stepFile":
-    #         if isinstance(value, (list, tuple)):
-    #             for v in value:
-    #                 if not isinstance(v, str):
-    #                     logger.info(f"elemt in {kwrd} list should be string")
-    #                     return
-    #         elif not isinstance(value, str):
-    #             logger.info(f"{kwrd} should be string or tuple of strings")
-    #             return
+        elif kwrd == "UCARD":
+            if value == "None":
+                value = None
+            elif value.isdigit():
+                value = int(value)
+            else:
+                logger.info(f"{kwrd} value should be None or integer")
+                return
+        elif kwrd == "outFormat":
+            if len(value) == 0:
+                return
+        elif kwrd in ("geometryName", "matFile", "exportSolids"):
+            if not isinstance(value, str):
+                logger.info(f"{kwrd} value should be str instance")
+                return
+        elif kwrd in ("cellRange", "voidMat", "voidExclude"):
+            if not isinstance(value, (list, tuple)):
+                logger.info(f"{kwrd} value should be list or tuple")
+                return
+        elif kwrd in ("minVoidSize", "maxSurf", "maxBracket", "startCell", "startSurf"):
+            if not isinstance(value, int):
+                logger.info(f"{kwrd} value should be integer")
+                return
+        elif kwrd in (
+            "voidGen",
+            "debug",
+            "compSolids",
+            "simplifyCTable",
+            "volSDEF",
+            "volCARD",
+            "dummyMat",
+            "cellSummaryFile",
+            "cellCommentFile",
+            "sort_enclosure",
+        ):
+            if not isinstance(value, bool):
+                logger.info(f"{kwrd} value should be boolean")
+                return
 
-    #     elif kwrd == "UCARD":
-    #         if value == "None":
-    #             value = None
-    #         elif value.isdigit():
-    #             value = int(value)
-    #         else:
-    #             logger.info(f"{kwrd} value should be None or integer")
-    #             return
-    #     elif kwrd == "outFormat":
-    #         if len(value) == 0:
-    #             return
-    #     elif kwrd in ("geometryName", "matFile", "exportSolids"):
-    #         if not isinstance(value, str):
-    #             logger.info(f"{kwrd} value should be str instance")
-    #             return
-    #     elif kwrd in ("cellRange", "voidMat", "voidExclude"):
-    #         if not isinstance(value, (list, tuple)):
-    #             logger.info(f"{kwrd} value should be list or tuple")
-    #             return
-    #     elif kwrd in ("minVoidSize", "maxSurf", "maxBracket", "startCell", "startSurf"):
-    #         if not isinstance(value, int):
-    #             logger.info(f"{kwrd} value should be integer")
-    #             return
-    #     elif kwrd in (
-    #         "voidGen",
-    #         "debug",
-    #         "compSolids",
-    #         "simplifyCTable",
-    #         "volSDEF",
-    #         "volCARD",
-    #         "dummyMat",
-    #         "cellSummaryFile",
-    #         "cellCommentFile",
-    #         "sort_enclosure",
-    #     ):
-    #         if not isinstance(value, bool):
-    #             logger.info(f"{kwrd} value should be boolean")
-    #             return
-
-    #     self.__dict__[kwrd] = value
-    #     if kwrd == "stepFile" and self.__dict__["geometryName"] == "":
-    #         if isinstance(value, (tuple, list)):
-    #             self.__dict__["geometryName"] == "joined_step_files"
-    #         else:
-    #             self.__dict__["geometryName"] == value[:-4]
+        self.__dict__[kwrd] = value
+        if kwrd == "stepFile" and self.__dict__["geometryName"] == "":
+            if isinstance(value, (tuple, list)):
+                self.__dict__["geometryName"] == "joined_step_files"
+            else:
+                self.__dict__["geometryName"] == value[:-4]
 
     def start(self):
 
@@ -355,9 +382,6 @@ class CadToCsg:
             f"GEOUNED version {GEOUNED_Version} {GEOUNED_ReleaseDate} \nFreeCAD version {freecad_version}"
         )
 
-        code_setting = self.__dict__
-        if code_setting is None:
-            raise ValueError("Cannot run the code. Input are missing")
         if self.stepFile == "":
             raise ValueError("Cannot run the code. Step file name is missing")
 
@@ -379,12 +403,10 @@ class CadToCsg:
         EnclosureChunk = []
         for stp in tqdm(step_files, desc="Loading CAD files"):
             logger.info(f"read step file : {stp}")
-            Meta, Enclosure = Load.load_cad(
-                stp, self.matFile, self.options, self.voidMat, self.compSolids
-            )
+            Meta, Enclosure = Load.load_cad(stp, self.settings, self.options)
             MetaChunk.append(Meta)
             EnclosureChunk.append(Enclosure)
-        MetaList = join_meta_lists(MetaChunk)
+        self.MetaList = join_meta_lists(MetaChunk)
         EnclosureList = join_meta_lists(EnclosureChunk)
 
         logger.info("End of loading phase")
@@ -393,31 +415,33 @@ class CadToCsg:
         tempTime = datetime.now()
 
         # Select a specific solid range from original STEP solids
-        if self.cellRange:
-            MetaList = MetaList[self.cellRange[0] : self.cellRange[1]]
+        if self.settings.cellRange:
+            self.MetaList = self.MetaList[
+                self.settings.cellRange[0] : self.settings.cellRange[1]
+            ]
 
         # export in STEP format solids read from input file
         # terminate excution
-        if self.exportSolids != "":
+        if self.settings.exportSolids != "":
             solids = []
-            for m in MetaList:
+            for m in self.MetaList:
                 if m.IsEnclosure:
                     continue
                 solids.extend(m.Solids)
-            Part.makeCompound(solids).exportStep(self.exportSolids)
+            Part.makeCompound(solids).exportStep(self.settings.exportSolids)
             msg = (
-                f"Solids exported in file {self.exportSolids}\n"
+                f"Solids exported in file {self.settings.exportSolids}\n"
                 "GEOUNED Finish. No solid translation performed."
             )
             raise ValueError(msg)
 
         # set up Universe
         if EnclosureList:
-            UniverseBox = get_universe(MetaList + EnclosureList)
+            self.UniverseBox = get_universe(self.MetaList + EnclosureList)
         else:
-            UniverseBox = get_universe(MetaList)
+            self.UniverseBox = get_universe(self.MetaList)
 
-        Surfaces = UF.SurfacesDict(offset=self.startSurf - 1)
+        self.Surfaces = UF.SurfacesDict(offset=self.settings.startSurf - 1)
 
         warnSolids = []
         warnEnclosures = []
@@ -427,10 +451,10 @@ class CadToCsg:
 
             # decompose all solids in elementary solids (convex ones)
             warningSolidList = decompose_solids(
-                MetaList,
-                Surfaces,
-                UniverseBox,
-                code_setting,
+                self.MetaList,
+                self.Surfaces,
+                self.UniverseBox,
+                self.settings,
                 True,
                 self.options,
                 self.tolerances,
@@ -438,12 +462,12 @@ class CadToCsg:
             )
 
             # decompose Enclosure solids
-            if self.voidGen and EnclosureList:
+            if self.settings.voidGen and EnclosureList:
                 warningEnclosureList = decompose_solids(
                     EnclosureList,
-                    Surfaces,
-                    UniverseBox,
-                    code_setting,
+                    self.Surfaces,
+                    self.UniverseBox,
+                    self.settings,
                     False,
                     self.options,
                     self.tolerances,
@@ -454,14 +478,14 @@ class CadToCsg:
 
             # start Building CGS cells phase
 
-            for j, m in enumerate(tqdm(MetaList, desc="Translating solid cells")):
+            for j, m in enumerate(tqdm(self.MetaList, desc="Translating solid cells")):
                 if m.IsEnclosure:
                     continue
                 logger.info(f"Building cell: {j+1}")
                 cones = Conv.cellDef(
                     m,
-                    Surfaces,
-                    UniverseBox,
+                    self.Surfaces,
+                    self.UniverseBox,
                     self.options,
                     self.tolerances,
                     self.numeric_format,
@@ -475,24 +499,24 @@ class CadToCsg:
                     logger.info(m.Definition)
 
             if self.options.forceNoOverlap:
-                Conv.no_overlapping_cell(MetaList, Surfaces, self.options)
+                Conv.no_overlapping_cell(self.MetaList, self.Surfaces, self.options)
 
         else:
             translate(
-                MetaList,
-                Surfaces,
-                UniverseBox,
-                code_setting,
+                self.MetaList,
+                self.Surfaces,
+                self.UniverseBox,
+                self.settings,
                 self.options,
                 self.tolerances,
             )
             # decompose Enclosure solids
-            if self.voidGen and EnclosureList:
+            if self.settings.voidGen and EnclosureList:
                 warningEnclosureList = decompose_solids(
                     EnclosureList,
-                    Surfaces,
-                    UniverseBox,
-                    code_setting,
+                    self.Surfaces,
+                    self.UniverseBox,
+                    self.settings,
                     False,
                     self.options,
                     self.tolerances,
@@ -504,13 +528,13 @@ class CadToCsg:
 
         #  building enclosure solids
 
-        if self.voidGen and EnclosureList:
+        if self.settings.voidGen and EnclosureList:
             for j, m in enumerate(EnclosureList):
                 logger.info(f"Building Enclosure Cell: {j + 1}")
                 cones = Conv.cellDef(
                     m,
-                    Surfaces,
-                    UniverseBox,
+                    self.Surfaces,
+                    self.UniverseBox,
                     self.options,
                     self.tolerances,
                     self.numeric_format,
@@ -524,38 +548,38 @@ class CadToCsg:
 
         # void generation phase
         MetaVoid = []
-        if self.voidGen:
+        if self.settings.voidGen:
             logger.info("Build Void")
-            logger.info(self.voidExclude)
-            if not self.voidExclude:
-                MetaReduced = MetaList
+            logger.info(self.settings.voidExclude)
+            if not self.settings.voidExclude:
+                MetaReduced = self.MetaList
             else:
-                MetaReduced = exclude_cells(MetaList, self.voidExclude)
+                MetaReduced = exclude_cells(self.MetaList, self.settings.voidExclude)
 
-            if MetaList:
-                init = MetaList[-1].__id__ - len(EnclosureList)
+            if self.MetaList:
+                init = self.MetaList[-1].__id__ - len(EnclosureList)
             else:
                 init = 0
             MetaVoid = Void.void_generation(
                 MetaReduced,
                 EnclosureList,
-                Surfaces,
-                UniverseBox,
-                code_setting,
+                self.Surfaces,
+                self.UniverseBox,
+                self.settings,
                 init,
                 self.options,
                 self.tolerances,
                 self.numeric_format,
             )
 
-        # if code_setting['simplify'] == 'full' and not self.options.forceNoOverlap:
-        if self.simplify == "full":
+        # if self.settings.simplify == 'full' and not self.options.forceNoOverlap:
+        if self.settings.simplify == "full":
             Surfs = {}
-            for lst in Surfaces.values():
+            for lst in self.Surfaces.values():
                 for s in lst:
                     Surfs[s.Index] = s
 
-            for c in tqdm(MetaList, desc="Simplifying"):
+            for c in tqdm(self.MetaList, desc="Simplifying"):
                 if c.Definition.level == 0 or c.IsEnclosure:
                     continue
                 logger.info(f"simplify cell {c.__id__}")
@@ -573,19 +597,19 @@ class CadToCsg:
 
         logger.info(datetime.now() - startTime)
 
-        cellOffSet = self.startCell - 1
-        if EnclosureList and self.sort_enclosure:
+        cellOffSet = self.settings.startCell - 1
+        if EnclosureList and self.settings.sort_enclosure:
             # sort group solid cell / void cell sequence in each for each enclosure
             # if a solid belong to several enclosure, its definition will be written
             # for the highest enclosure level or if same enclosure level in the first
             # enclosure found
-            MetaList = sort_enclosure(MetaList, MetaVoid, cellOffSet)
+            self.MetaList = sort_enclosure(self.MetaList, MetaVoid, cellOffSet)
         else:
             # remove Null Cell and apply cell numbering offset
             deleted = []
             idLabel = {0: 0}
             icount = cellOffSet
-            for i, m in enumerate(MetaList):
+            for i, m in enumerate(self.MetaList):
                 if m.NullCell or m.IsEnclosure:
                     deleted.append(i)
                     continue
@@ -595,7 +619,7 @@ class CadToCsg:
                 idLabel[m.__id__] = m.label
 
             for i in reversed(deleted):
-                del MetaList[i]
+                del self.MetaList[i]
 
             lineComment = """\
 ##########################################################
@@ -603,7 +627,7 @@ class CadToCsg:
 ##########################################################"""
             mc = UF.GeounedSolid(None)
             mc.Comments = lineComment
-            MetaList.append(mc)
+            self.MetaList.append(mc)
 
             deleted = []
             for i, m in enumerate(MetaVoid):
@@ -616,33 +640,20 @@ class CadToCsg:
             for i in reversed(deleted):
                 del MetaVoid[i]
 
-            MetaList.extend(MetaVoid)
+            self.MetaList.extend(MetaVoid)
 
         print_warning_solids(warnSolids, warnEnclosures)
 
         # add plane definition to cone
         process_cones(
-            MetaList,
+            self.MetaList,
             coneInfo,
-            Surfaces,
-            UniverseBox,
+            self.Surfaces,
+            self.UniverseBox,
             self.options,
             self.tolerances,
             self.numeric_format,
         )
-
-        # write outputformat input
-        write_geometry(
-            UniverseBox,
-            MetaList,
-            Surfaces,
-            code_setting,
-            self.options,
-            self.tolerances,
-            self.numeric_format,
-        )
-
-        logger.info("End of MCNP, OpenMC, Serpent and PHITS translation phase")
 
         logger.info("Process finished")
         logger.info(datetime.now() - startTime)
@@ -660,7 +671,7 @@ def decompose_solids(
         if meta and m.IsEnclosure:
             continue
         logger.info(f"Decomposing solid: {i + 1}/{totsolid}")
-        if setting["debug"]:
+        if setting.debug:
             logger.info(m.Comments)
             if not path.exists("debug"):
                 mkdir("debug")
@@ -693,7 +704,7 @@ def decompose_solids(
 
             warningSolids.append(i)
 
-        if setting["debug"]:
+        if setting.debug:
             if m.IsEnclosure:
                 comsolid.exportStep(f"debug/compEnclosure_{i}.stp")
             else:
