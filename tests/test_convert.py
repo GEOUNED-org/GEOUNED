@@ -12,7 +12,7 @@ step_files = list(path_to_cad.rglob("*.stp")) + list(path_to_cad.rglob("*.step")
 if os.getenv("GITHUB_ACTIONS"):
     step_files.remove(Path("testing/inputSTEP/large/SCDR.stp"))
     step_files.remove(Path("testing/inputSTEP/large/Triangle.stp"))
-
+suffixes = (".mcnp", ".xml", ".inp", ".py", ".serp")
 
 @pytest.mark.parametrize("input_step_file", step_files)
 def test_conversion(input_step_file):
@@ -24,7 +24,6 @@ def test_conversion(input_step_file):
     output_filename_stem = output_dir / input_step_file.stem
 
     # deletes the output MC files if they already exists
-    suffixes = (".mcnp", ".xml", ".inp", ".py", ".serp")
     for suffix in suffixes:
         output_filename_stem.with_suffix(suffix).unlink(missing_ok=True)
 
@@ -124,3 +123,37 @@ def test_conversion(input_step_file):
 
     for suffix in suffixes:
         assert output_filename_stem.with_suffix(suffix).exists()
+
+def test_cad_to_csg_from_json():
+
+    # deletes the output MC files if they already exists
+    for suffix in suffixes:
+        Path('csg').with_suffix(suffix).unlink(missing_ok=True)
+
+    my_cad_to_csg = geouned.CadToCsg.from_json('tests/config_complete_defaults.json')
+    assert isinstance(my_cad_to_csg, geouned.CadToCsg)
+
+    assert my_cad_to_csg.stepFile == "tests/cuboid.stp"
+    assert my_cad_to_csg.options.forceCylinder == False
+    assert my_cad_to_csg.tolerances.relativeTol == False
+    assert my_cad_to_csg.numeric_format.P_abc == "14.7e"
+    assert my_cad_to_csg.settings.matFile == ""
+
+    for suffix in suffixes:
+        assert Path('csg').with_suffix(suffix).exists()
+
+    # deletes the output MC files if they already exists
+    for suffix in suffixes:
+        Path('csg').with_suffix(suffix).unlink(missing_ok=True)
+    
+    my_cad_to_csg.start()
+    my_cad_to_csg.export_csg()
+
+    my_cad_to_csg = geouned.CadToCsg.from_json('tests/config_non_defaults.json')
+    assert isinstance(my_cad_to_csg, geouned.CadToCsg)
+
+    assert my_cad_to_csg.stepFile == "tests/cuboid.stp"
+    assert my_cad_to_csg.options.forceCylinder == True
+    assert my_cad_to_csg.tolerances.relativePrecision == 2e-6
+    assert my_cad_to_csg.numeric_format.P_abc == "15.7e"
+    assert my_cad_to_csg.settings.matFile == "non default"

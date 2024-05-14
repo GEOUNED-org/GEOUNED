@@ -153,7 +153,7 @@ class SerpentInput:
         if self.Options["Universe"] is not None:
             if cell.Material == 0:
                 cellHeader = (
-                    f'cell {index:<5d} {self.Options["Universe"]} {"void":<5d}  '
+                    f'cell {index:<5d} {self.Options["Universe"]}  '
                 )
             else:
                 self.Materials.add(cell.Material)
