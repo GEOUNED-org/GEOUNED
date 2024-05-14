@@ -12,7 +12,7 @@ from ..Utils.Functions import GeounedSurface, split_bop
 
 BoolVals = (None, True, False)
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("general_logger")
 
 
 class CTelement:

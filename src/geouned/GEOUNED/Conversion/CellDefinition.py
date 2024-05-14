@@ -21,7 +21,7 @@ from ..Utils.booleanFunction import BoolSequence, insert_in_sequence
 from ..Utils.BooleanSolids import build_c_table_from_solids, remove_extra_surfaces
 from ..Utils.Functions import GeounedSurface
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("general_logger")
 
 
 # TODO rename this function as there are two with the same name

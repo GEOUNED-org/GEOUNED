@@ -5,7 +5,7 @@
 import logging
 import re
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("general_logger")
 
 mostinner = re.compile(r"\([^\(^\)]*\)")  # identify most inner parentheses
 number = re.compile(

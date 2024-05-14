@@ -11,7 +11,7 @@ from ..Utils.BasicFunctions_part1 import is_opposite, points_to_coeffs
 from ..Utils.Functions import SurfacesDict
 from .Functions import change_surf_sign, serpent_surface, write_serpent_cell_def
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("general_logger")
 
 
 class SerpentInput:
@@ -77,25 +77,24 @@ class SerpentInput:
 
     def write_input(self, filename):
         logger.info(f"write Serpent file {filename}")
-        self.inpfile = open(filename, "w", encoding="utf-8")
-        self.__write_header__()
-        cellblockHeader = """\
+        with open(file=filename, mode="w", encoding="utf-8") as self.inpfile:
+            self.__write_header__()
+            cellblockHeader = """\
 % --- CELL DEFINITIONS 
 """
-        self.inpfile.write(cellblockHeader)
-        self.__write_cell_block__()
-        self.inpfile.write(" \n")
+            self.inpfile.write(cellblockHeader)
+            self.__write_cell_block__()
+            self.inpfile.write(" \n")
 
-        surfaceHeader = """\
+            surfaceHeader = """\
 % --- SURFACE DEFINITIONS 
 """
-        self.inpfile.write(surfaceHeader)
-        self.__write_surface_block__()
-        self.inpfile.write(" \n")
+            self.inpfile.write(surfaceHeader)
+            self.__write_surface_block__()
+            self.inpfile.write(" \n")
 
-        self.__write_source_block__()
+            self.__write_source_block__()
 
-        self.inpfile.close()
         return
 
     def __write_header__(self):

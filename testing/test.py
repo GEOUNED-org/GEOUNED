@@ -23,8 +23,8 @@ def setInput(inName, inpDir, outDir):
     if outDir == "":
         outDir = "."
 
-    inName = "{}/{}".format(inpDir, inName)
-    outName = "{}/{}".format(outDir, filename)
+    inName = f"{inpDir}/{inName}"
+    outName = f"{outDir}/{filename}"
 
     template = """[Files]
 title    = Input Test
@@ -52,9 +52,8 @@ nPlaneReverse = 0
         inName, outName
     )
 
-    file = open("config.ini", "w")
-    file.write(template)
-    file.close()
+    with open(file="config.ini", mode="w", encoding="utf-8") as outfile:
+        outfile.write(template)
 
 
 def getInputList(folder, ext=None):

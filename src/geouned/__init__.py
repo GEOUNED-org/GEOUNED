@@ -12,9 +12,8 @@ except ImportError:
 from .GEOReverse import *
 from .GEOUNED import *
 
-logging.basicConfig(
-    filename="geouned.log",
-    filemode="w",
-    level=logging.DEBUG,
-    format="%(asctime)s :: %(levelname)s :: %(funcName)s :: %(lineno)d :: %(message)s",
-)
+from .GEOUNED.Utils.log_utils import setup_logger
+
+setup_logger("general_logger", "geouned_general_log.log")
+setup_logger("fuzzy_logger", "geouned_fuzzy_log.log")
+setup_logger("solids_logger", "geouned_solids_log.log")

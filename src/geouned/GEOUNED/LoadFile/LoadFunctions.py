@@ -6,7 +6,7 @@ import FreeCAD
 from ..Utils.Functions import GeounedSolid
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("general_logger")
 
 
 def get_label(label, options):

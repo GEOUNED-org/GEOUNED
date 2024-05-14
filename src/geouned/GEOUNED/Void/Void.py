@@ -11,7 +11,7 @@ from ..Utils.Functions import GeounedSolid, GeounedSurface
 from ..Void import voidFunctions as VF
 from .VoidBoxClass import VoidBox
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("general_logger")
 
 
 def void_generation(

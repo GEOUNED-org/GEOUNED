@@ -13,7 +13,7 @@ import Part
 from .BasicFunctions_part1 import is_same_value
 from .BasicFunctions_part2 import is_same_torus
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("general_logger")
 
 
 # SURFACES
