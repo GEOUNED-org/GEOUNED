@@ -42,24 +42,6 @@ def test_conversion(input_step_file):
         forceNoOverlap=False,
     )
 
-    my_settings = geouned.Settings(
-        matFile="",
-        voidGen=True,
-        debug=False,
-        compSolids=True,
-        simplify="no",
-        cellRange=[],
-        exportSolids="",
-        minVoidSize=200.0,  # units mm
-        maxSurf=50,
-        maxBracket=30,
-        voidMat=[],
-        voidExclude=[],
-        startCell=1,
-        startSurf=1,
-        sort_enclosure=False,
-    )
-
     my_tolerances = geouned.Tolerances(
         relativeTol=False,
         relativePrecision=0.000001,
@@ -77,6 +59,7 @@ def test_conversion(input_step_file):
         tor_angle=0.0001,
         min_area=0.01,
     )
+
     my_numeric_format = geouned.NumericFormat(
         P_abc="14.7e",
         P_d="14.7e",
@@ -92,6 +75,24 @@ def test_conversion(input_step_file):
         GQ_1to6="18.15f",
         GQ_7to9="18.15f",
         GQ_10="18.15f",
+    )
+
+    my_settings = geouned.Settings(
+        matFile="",
+        voidGen=True,
+        debug=False,
+        compSolids=True,
+        simplify="no",
+        cellRange=[],
+        exportSolids="",
+        minVoidSize=200.0,  # units mm
+        maxSurf=50,
+        maxBracket=30,
+        voidMat=[],
+        voidExclude=[],
+        startCell=1,
+        startSurf=1,
+        sort_enclosure=False,
     )
 
     geo = geouned.CadToCsg(
