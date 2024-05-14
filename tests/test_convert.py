@@ -126,7 +126,10 @@ def test_conversion(input_step_file):
         assert output_filename_stem.with_suffix(suffix).exists()
 
 
-@pytest.mark.parametrize("input_json_file", ["tests/config_complete_defaults.json", "tests/config_minimal.json"])
+@pytest.mark.parametrize(
+    "input_json_file",
+    ["tests/config_complete_defaults.json", "tests/config_minimal.json"],
+)
 def test_cad_to_csg_from_json_with_defaults(input_json_file):
 
     # deletes the output MC files if they already exists
@@ -148,9 +151,10 @@ def test_cad_to_csg_from_json_with_defaults(input_json_file):
     # deletes the output MC files if they already exists
     for suffix in suffixes:
         Path("csg").with_suffix(suffix).unlink(missing_ok=True)
-    
+
     my_cad_to_csg.start()
     my_cad_to_csg.export_csg()
+
 
 def test_cad_to_csg_from_json_with_non_defaults():
 
@@ -173,6 +177,6 @@ def test_cad_to_csg_from_json_with_non_defaults():
     # deletes the output MC files if they already exists
     for suffix in suffixes:
         Path("csg").with_suffix(suffix).unlink(missing_ok=True)
-    
+
     my_cad_to_csg.start()
     my_cad_to_csg.export_csg()
