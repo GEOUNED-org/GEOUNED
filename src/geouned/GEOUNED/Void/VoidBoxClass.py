@@ -205,7 +205,7 @@ class VoidBox:
                     tolerances,
                     numeric_format,
                     MakeObj=True,
-                )
+                ), options, tolerances, numeric_format
             )
             TempPieceEnclosure.update_solids(comsolid.Solids)
             Conv.cellDef(
