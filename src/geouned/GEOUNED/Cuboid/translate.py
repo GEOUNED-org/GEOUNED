@@ -95,7 +95,7 @@ def translate(
         if m.IsEnclosure:
             continue
         logger.info(f"Decomposing solid: {i}/{tot_solid}")
-        if setting["debug"]:
+        if setting.debug:
             logger.info(m.Comments)
             if m.IsEnclosure:
                 m.Solids[0].exportStep(f"origEnclosure_{i}.stp")

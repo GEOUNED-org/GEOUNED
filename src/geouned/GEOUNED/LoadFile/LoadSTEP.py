@@ -31,7 +31,7 @@ def extract_materials(filename):
     return m_dict
 
 
-def load_cad(filename, mat_filename, options, default_mat=[], comp_solids=True):
+def load_cad(filename, settings, options):
 
     # Set document solid tree options when opening CAD differing from version 0.18
     if int(FreeCAD.Version()[1]) > 18:
@@ -40,11 +40,11 @@ def load_cad(filename, mat_filename, options, default_mat=[], comp_solids=True):
     cad_simplificado_doc = FreeCAD.newDocument("CAD_simplificado")
     Import.insert(filename, "CAD_simplificado")
 
-    if mat_filename != "":
-        if os.path.exists(mat_filename):
-            m_dict = extract_materials(mat_filename)
+    if settings.matFile != "":
+        if os.path.exists(settings.matFile):
+            m_dict = extract_materials(settings.matFile)
         else:
-            logger.info(f"Material definition file {mat_filename} does not exist.")
+            logger.info(f"Material definition file {settings.matFile} does not exist.")
             m_dict = {}
     else:
         m_dict = {}
@@ -128,7 +128,7 @@ def load_cad(filename, mat_filename, options, default_mat=[], comp_solids=True):
 
                 # compSolid Diferent solid of the same cell are stored in the same metaObject (compSolid)
                 # enclosures and envelopes are always stored as compound
-                if comp_solids or encl_label or envel_label:
+                if settings.compSolids or encl_label or envel_label:
 
                     init = i_solid
                     end = i_solid + len(elem.Shape.Solids)
@@ -159,8 +159,8 @@ def load_cad(filename, mat_filename, options, default_mat=[], comp_solids=True):
                                 missing_mat.add(mat_label)
                     else:
                         # logger.warning('No material label associated to solid {}.\nDefault material used instead.'.format(comment))
-                        if default_mat:
-                            meta_list[i_solid].set_material(*default_mat)
+                        if settings.voidMat:
+                            meta_list[i_solid].set_material(*settings.voidMat)
                     if tempre_dil:
                         meta_list[i_solid].set_dilution(float(tempre_dil.group("dil")))
 

@@ -671,3 +671,284 @@ class NumericFormat:
                 f"geouned.Tolerances.GQ_10 should be a str, not a {type(GQ_10)}"
             )
         self._GQ_10 = GQ_10
+
+
+class Settings:
+    """Settings for changing the way the CAD to CSG conversion is done
+    Args:
+        stepFile (str, optional): Name of the CAD file (in STEP format) to
+            be converted. Defaults to "".
+        matFile (str, optional): _description_. Defaults to "".
+        voidGen (bool, optional): Generate voids of the geometry. Defaults
+            to True.
+        debug (bool, optional): Write step files of original and decomposed
+            solids, for each solid in the STEP file. Defaults to False.
+        compSolids (bool, optional): Join subsolids of STEP file as a single
+            compound solid. Step files generated with SpaceClaim have not
+            exactly the same level of solids as FreeCAD. It may a happened
+            that solids defined has separated solids are read by FreeCAD
+            as a single compound solid (and will produce only one MCNP
+            cell). In this case compSolids should be set to False. Defaults
+            to True.
+        simplify (str, optional): Simplify the cell definition considering
+            relative surfaces position and using Boolean logics. Available
+            options are: "no" no optimization, "void" only void cells are
+            simplified. Algorithm is faster but the simplification is not
+            optimal. "voidfull" : only void cells are simplified with the
+            most optimal algorithm. The time of the conversion can be
+            multiplied by 5 or more. "full" : all the cells (solids and
+            voids) are simplified. Defaults to "No".
+        cellRange (list, optional): Range of cell to be converted (only one
+            range is allowed, e.g [100,220]). Default all solids are
+            converted. Defaults to [].
+        exportSolids (str, optional): Export CAD solid after reading.
+            The execution is stopped after export, the translation is not
+            carried out. Defaults to "".
+        minVoidSize (float, optional): Minimum size of the edges of the
+            void cell. Units are in mm. Defaults to 200.0.
+        maxSurf (int, optional): #TODO
+        maxBracket (int, optional): Maximum number of brackets (solid
+            complementary) allowed in void cell definition. Defaults to 30.
+        voidMat (list, optional): Assign a material defined by the user
+            instead of void for cells without material definition and the
+            cells generated in the automatic void generation. The format
+            is a 3 valued tuple (mat_label, mat_density, mat_description).
+            Example (100,1e-3,'Air assigned to Void'). Defaults to [].
+        voidExclude (list, optional): #TODO see issue 87. Defaults to [].
+        startCell (int, optional): Starting cell numbering label. Defaults to 1.
+        startSurf (int, optional): Starting surface numbering label. Defaults to 1.
+        sort_enclosure (bool, optional): If enclosures are defined in the
+            CAD models, the voids cells of the enclosure will be located in
+            the output file in the same location where the enclosure solid
+            is located in the CAD solid tree.. Defaults to False.
+    """
+
+    def __init__(
+        self,
+        matFile: str = "",
+        voidGen: bool = True,
+        debug: bool = False,
+        compSolids: bool = True,
+        simplify: str = "no",
+        cellRange: list = [],
+        exportSolids: str = "",
+        minVoidSize: float = 200.0,  # units mm
+        maxSurf: int = 50,
+        maxBracket: int = 30,
+        voidMat: list = [],
+        voidExclude: list = [],
+        startCell: int = 1,
+        startSurf: int = 1,
+        sort_enclosure: bool = False,
+    ):
+
+        self.matFile = matFile
+        self.voidGen = voidGen
+        self.debug = debug
+        self.compSolids = compSolids
+        self.simplify = simplify
+        self.cellRange = cellRange
+        self.exportSolids = exportSolids
+        self.minVoidSize = minVoidSize
+        self.maxSurf = maxSurf
+        self.maxBracket = maxBracket
+        self.voidMat = voidMat
+        self.voidExclude = voidExclude
+        self.startCell = startCell
+        self.startSurf = startSurf
+        self.sort_enclosure = sort_enclosure
+
+    @property
+    def matFile(self):
+        return self._matFile
+
+    @matFile.setter
+    def matFile(self, matFile: str):
+        if not isinstance(matFile, str):
+            raise TypeError(
+                f"geouned.Tolerances.matFile should be a str, not a {type(matFile)}"
+            )
+        self._matFile = matFile
+
+    @property
+    def voidGen(self):
+        return self._voidGen
+
+    @voidGen.setter
+    def voidGen(self, voidGen: bool):
+        if not isinstance(voidGen, bool):
+            raise TypeError(
+                f"geouned.Tolerances.voidGen should be a bool, not a {type(voidGen)}"
+            )
+        self._voidGen = voidGen
+
+    @property
+    def debug(self):
+        return self._debug
+
+    @debug.setter
+    def debug(self, debug: bool):
+        if not isinstance(debug, bool):
+            raise TypeError(
+                f"geouned.Tolerances.debug should be a bool, not a {type(debug)}"
+            )
+        self._debug = debug
+
+    @property
+    def compSolids(self):
+        return self._compSolids
+
+    @compSolids.setter
+    def compSolids(self, compSolids: bool):
+        if not isinstance(compSolids, bool):
+            raise TypeError(
+                f"geouned.Tolerances.compSolids should be a bool, not a {type(compSolids)}"
+            )
+        self._compSolids = compSolids
+
+    @property
+    def simplify(self):
+        return self._simplify
+
+    @simplify.setter
+    def simplify(self, simplify: str):
+        if not isinstance(simplify, str):
+            raise TypeError(
+                f"geouned.Tolerances.simplify should be a str, not a {type(simplify)}"
+            )
+        self._simplify = simplify
+
+    @property
+    def cellRange(self):
+        return self._cellRange
+
+    @cellRange.setter
+    def cellRange(self, cellRange: list):
+        if not isinstance(cellRange, list):
+            raise TypeError(
+                f"geouned.Tolerances.cellRange should be a list, not a {type(cellRange)}"
+            )
+        for entry in cellRange:
+            if not isinstance(entry, int):
+                raise TypeError(
+                    f"geouned.Tolerances.cellRange should be a list of ints, not a {type(entry)}"
+                )
+        self._cellRange = cellRange
+
+    @property
+    def exportSolids(self):
+        return self._exportSolids
+
+    @exportSolids.setter
+    def exportSolids(self, exportSolids: str):
+        if not isinstance(exportSolids, str):
+            raise TypeError(
+                f"geouned.Tolerances.exportSolids should be a str, not a {type(exportSolids)}"
+            )
+        self._exportSolids = exportSolids
+
+    @property
+    def minVoidSize(self):
+        return self._minVoidSize
+
+    @minVoidSize.setter
+    def minVoidSize(self, minVoidSize: float):
+        if not isinstance(minVoidSize, float):
+            raise TypeError(
+                f"geouned.Tolerances.minVoidSize should be a float, not a {type(minVoidSize)}"
+            )
+        self._minVoidSize = minVoidSize
+
+    @property
+    def maxSurf(self):
+        return self._maxSurf
+
+    @maxSurf.setter
+    def maxSurf(self, maxSurf: int):
+        if not isinstance(maxSurf, int):
+            raise TypeError(
+                f"geouned.Tolerances.maxSurf should be a int, not a {type(maxSurf)}"
+            )
+        self._maxSurf = maxSurf
+
+    @property
+    def maxBracket(self):
+        return self._maxBracket
+
+    @maxBracket.setter
+    def maxBracket(self, maxBracket: int):
+        if not isinstance(maxBracket, int):
+            raise TypeError(
+                f"geouned.Tolerances.maxBracket should be a int, not a {type(maxBracket)}"
+            )
+        self._maxBracket = maxBracket
+
+    @property
+    def voidMat(self):
+        return self._voidMat
+
+    @voidMat.setter
+    def voidMat(self, voidMat: list):
+        if not isinstance(voidMat, list):
+            raise TypeError(
+                f"geouned.Tolerances.voidMat should be a list, not a {type(voidMat)}"
+            )
+        for entry in voidMat:
+            if not isinstance(entry, int):
+                raise TypeError(
+                    f"geouned.Tolerances.voidMat should be a list of ints, not a {type(entry)}"
+                )
+        self._voidMat = voidMat
+
+    @property
+    def voidExclude(self):
+        return self._voidExclude
+
+    @voidExclude.setter
+    def voidExclude(self, voidExclude: list):
+        if not isinstance(voidExclude, list):
+            raise TypeError(
+                f"geouned.Tolerances.voidExclude should be a list, not a {type(voidExclude)}"
+            )
+        for entry in voidExclude:
+            if not isinstance(entry, int):
+                raise TypeError(
+                    f"geouned.Tolerances.voidExclude should be a list of ints, not a {type(entry)}"
+                )
+        self._voidExclude = voidExclude
+
+    @property
+    def startCell(self):
+        return self._startCell
+
+    @startCell.setter
+    def startCell(self, startCell: int):
+        if not isinstance(startCell, int):
+            raise TypeError(
+                f"geouned.Tolerances.startCell should be a int, not a {type(startCell)}"
+            )
+        self._startCell = startCell
+
+    @property
+    def startSurf(self):
+        return self._startSurf
+
+    @startSurf.setter
+    def startSurf(self, startSurf: int):
+        if not isinstance(startSurf, int):
+            raise TypeError(
+                f"geouned.Tolerances.startSurf should be a int, not a {type(startSurf)}"
+            )
+        self._startSurf = startSurf
+
+    @property
+    def sort_enclosure(self):
+        return self._sort_enclosure
+
+    @sort_enclosure.setter
+    def sort_enclosure(self, sort_enclosure: bool):
+        if not isinstance(sort_enclosure, bool):
+            raise TypeError(
+                f"geouned.Tolerances.sort_enclosure should be a bool, not a {type(sort_enclosure)}"
+            )
+        self._sort_enclosure = sort_enclosure

@@ -46,8 +46,8 @@ def void_generation(
     )
 
     EnclosureBox = GeounedSolid(None, Box)
-    if setting["voidMat"]:
-        voidMat = setting["voidMat"]
+    if setting.voidMat:
+        voidMat = setting.voidMat
         EnclosureBox.set_material(voidMat[0], voidMat[1], voidMat[2])
 
     # get voids in 0 Level Enclosure (original Universe)
@@ -93,9 +93,7 @@ def void_generation(
         set_graveyard_cell(Surfaces, UniverseBox, options, tolerances, numeric_format)
     )
 
-    return VF.update_void_list(
-        init, voidList, NestedEnclosure, setting["sort_enclosure"]
-    )
+    return VF.update_void_list(init, voidList, NestedEnclosure, setting.sort_enclosure)
 
 
 def get_void_def(
@@ -109,13 +107,13 @@ def get_void_def(
     Lev0=False,
 ):
 
-    maxsurf = setting["maxSurf"]
-    maxbracket = setting["maxBracket"]
-    minSize = setting["minVoidSize"]
+    maxsurf = setting.maxSurf
+    maxbracket = setting.maxBracket
+    minSize = setting.minVoidSize
 
-    if "full" in setting["simplify"].lower():
+    if "full" in setting.simplify.lower():
         simplifyVoid = "full"
-    elif "void" in setting["simplify"].lower():
+    elif "void" in setting.simplify.lower():
         simplifyVoid = "diag"
     else:
         simplifyVoid = "no"

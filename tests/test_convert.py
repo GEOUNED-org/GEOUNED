@@ -76,16 +76,15 @@ def test_conversion(input_step_file):
         GQ_10="18.15f",
     )
 
-    geo = geouned.CadToCsg(
-        stepFile=f"{input_step_file.resolve()}",
+    my_settings = geouned.Settings(
         matFile="",
         voidGen=True,
         debug=False,
-        compSolids=False,  # changed from the default
+        compSolids=True,
         simplify="no",
         cellRange=[],
         exportSolids="",
-        minVoidSize=100,  # changed from the default
+        minVoidSize=200.0,  # units mm
         maxSurf=50,
         maxBracket=30,
         voidMat=[],
@@ -93,7 +92,12 @@ def test_conversion(input_step_file):
         startCell=1,
         startSurf=1,
         sort_enclosure=False,
+    )
+
+    geo = geouned.CadToCsg(
+        stepFile=f"{input_step_file.resolve()}",
         options=my_options,
+        settings=my_settings,
         tolerances=my_tolerances,
         numeric_format=my_numeric_format,
         title="Converted with GEOUNED",
