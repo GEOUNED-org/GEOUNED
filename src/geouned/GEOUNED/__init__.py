@@ -6,6 +6,7 @@
 import configparser
 import logging
 import typing
+import json
 from datetime import datetime
 from os import mkdir, path
 from typing import get_type_hints
@@ -13,6 +14,7 @@ from typing import get_type_hints
 import FreeCAD
 import Part
 from tqdm import tqdm
+from pathlib import Path
 
 from .CodeVersion import *
 from .Conversion import CellDefinition as Conv
@@ -72,8 +74,8 @@ class CadToCsg:
         title: str = "Converted with GEOUNED",
         geometryName: str = "csg",
         outFormat: typing.Tuple[str] = (
-            "openmc_xml",
-            "openmc_py",
+            "openMC_XML",
+            "openMC_PY",
             "serpent",
             "phits",
             "mcnp",
@@ -93,10 +95,9 @@ class CadToCsg:
             geometryName (str, optional): the file stem of the output file(s).
                 Defaults to "converted_with_geouned".
             outFormat (typing.Tuple[str], optional): Format for the output
-                geometry. Available format are: "mcnp", "openmc_xml",
-                "openmc_py", "phits" and "serpent". Several output format can
+                geometry. Available format are: "mcnp", "openMC_XML",
+                "openMC_PY", "phits" and "serpent". Several output format can
                 be written in the same method call. Defaults to output all codes.
-                ("openmc_xml", "openmc_py", "serpent", "phits", "mcnp").
             volSDEF (bool, optional):  Write SDEF definition and tally of solid
                 cell for stochastic volume checking. Defaults to False.
             volCARD (bool, optional): Write the CAD calculated volume in the
@@ -136,6 +137,61 @@ class CadToCsg:
 
         logger.info("End of Monte Carlo code translation phase")
 
+    @classmethod
+    def from_json(cls, filename: str):
+        """Creates a CadToCsg instance and returns the instance. Populating the
+        Options, Tolerance, Settings and NumericFormat attributes from matching
+        key names in the JSON. If export_to_csg key is present then this method
+        also runs .start() and .export_to_csg() on the instance.
+
+        Args:
+            filename str: The filename of the config file. Defaults to "config.json".
+
+        Raises:
+            FileNotFoundError: If the config file is not found
+            ValueError: If the config JSON file is found to contain an invalid key
+
+        Returns:
+            geouned.CadToCsg: returns a geouned CadToCsg class instance.
+        """
+
+        if not Path(filename).exists():
+            raise FileNotFoundError(f"config file {filename} not found")
+
+        with open(filename) as f:
+            config = json.load(f)
+
+        cad_to_csg = cls(stepFile=config["stepFile"])
+        for key in config.keys():
+
+            if key in ["stepFile", "export_csg"]:
+                pass  # these two keys are used before or after this loop
+
+            elif key == "Tolerances":
+                cad_to_csg.tolerances = Tolerances(**config["Tolerances"])
+
+            elif key == "Options":
+                cad_to_csg.options = Options(**config["Options"])
+
+            elif key == "NumericFormat":
+                cad_to_csg.numeric_format = NumericFormat(**config["NumericFormat"])
+
+            elif key == "Settings":
+                cad_to_csg.settings = Settings(**config["Settings"])
+
+            else:
+                raise ValueError(
+                    f"Invalid key '{key}' found in config file {filename}. Acceptable key names are 'stepFile', 'export_csg', 'Settings', 'Parameters', 'Tolerances' and 'NumericFormat'"
+                )
+
+        cad_to_csg.start()
+        if "export_csg" in config.keys():
+            cad_to_csg.export_csg(**config["export_csg"])
+        else:
+            cad_to_csg.export_csg()
+        return cad_to_csg
+
+    # TODO add tests as set_configuration is not currently tested
     def set_configuration(self, configFile=None):
 
         if configFile is None:
@@ -257,6 +313,7 @@ class CadToCsg:
 
         logger.info(self.__dict__)
 
+    # TODO add tests as set is not currently tested
     def set(self, kwrd, value):
 
         if kwrd == "stepFile":

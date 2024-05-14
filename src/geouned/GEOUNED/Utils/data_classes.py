@@ -675,6 +675,7 @@ class NumericFormat:
 
 class Settings:
     """Settings for changing the way the CAD to CSG conversion is done
+
     Args:
         stepFile (str, optional): Name of the CAD file (in STEP format) to
             be converted. Defaults to "".
