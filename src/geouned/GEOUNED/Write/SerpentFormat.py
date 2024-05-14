@@ -3,6 +3,7 @@
 #################################
 import logging
 from datetime import datetime
+from pathlib import Path
 
 import FreeCAD
 
@@ -77,6 +78,7 @@ class SerpentInput:
 
     def write_input(self, filename):
         logger.info(f"write Serpent file {filename}")
+        Path(filename).parent.mkdir(parents=True, exist_ok=True)
         self.inpfile = open(filename, "w", encoding="utf-8")
         self.__write_header__()
         cellblockHeader = """\

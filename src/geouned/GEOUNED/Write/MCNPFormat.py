@@ -4,6 +4,7 @@
 import logging
 import math
 from datetime import datetime
+from pathlib import Path
 
 import FreeCAD
 
@@ -85,6 +86,7 @@ class McnpInput:
         self.SDEF_box = (sdef, SI1, SI2, SI3, SP1, SP2, SP3)
 
     def write_input(self, filename):
+        Path(filename).parent.mkdir(parents=True, exist_ok=True)
         logger.info(f"write MCNP file {filename}")
         self.inpfile = open(filename, "w", encoding="utf-8")
         self.__write_header__()
