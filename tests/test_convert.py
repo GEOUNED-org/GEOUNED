@@ -180,3 +180,20 @@ def test_cad_to_csg_from_json_with_non_defaults():
 
     my_cad_to_csg.start()
     my_cad_to_csg.export_csg()
+
+
+def test_with_relative_tol_true():
+
+    # test to protect against incorrect attribute usage in FreeCAD
+    # more details https://github.com/GEOUNED-org/GEOUNED/issues/154
+
+    geo = geouned.CadToCsg(
+        stepFile=f"{step_files[1].resolve()}",
+        tolerances=geouned.Tolerances(relativeTol=False),
+    )
+    geo.start()
+    geo = geouned.CadToCsg(
+        stepFile=f"{step_files[1].resolve()}",
+        tolerances=geouned.Tolerances(relativeTol=True),
+    )
+    geo.start()
