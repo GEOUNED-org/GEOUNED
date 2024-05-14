@@ -28,6 +28,7 @@ def test_conversion(input_step_file):
     for suffix in suffixes:
         output_filename_stem.with_suffix(suffix).unlink(missing_ok=True)
 
+    
     my_options = geouned.Options(
         forceCylinder=False,
         newSplitPlane=True,
@@ -41,7 +42,25 @@ def test_conversion(input_step_file):
         prnt3PPlane=False,
         forceNoOverlap=False,
     )
-
+    
+    my_settings = geouned.Settings(
+        matFile="matList.txt",
+        voidGen=True,
+        debug=False,
+        compSolids=False,
+        simplify="no",
+        cellRange=[],
+        exportSolids="",
+        minVoidSize=100.0,
+        maxSurf=50,
+        maxBracket=30,
+        voidMat=[],
+        voidExclude=[],
+        startCell=1,
+        startSurf=1,
+        sort_enclosure=False,
+    )
+    
     my_tolerances = geouned.Tolerances(
         relativeTol=False,
         relativePrecision=0.000001,
@@ -75,24 +94,32 @@ def test_conversion(input_step_file):
         GQ_7to9="18.15f",
         GQ_10="18.15f",
     )
-
-    my_settings = geouned.Settings(
-        matFile="",
-        voidGen=True,
-        debug=False,
-        compSolids=True,
-        simplify="no",
-        cellRange=[],
-        exportSolids="",
-        minVoidSize=200.0,  # units mm
-        maxSurf=50,
-        maxBracket=30,
-        voidMat=[],
-        voidExclude=[],
-        startCell=1,
-        startSurf=1,
-        sort_enclosure=False,
+    
+    geo = geouned.CadToCsg(
+        stepFile=f"{input_step_file.resolve()}",
+        options=my_options,
+        settings=my_settings,
+        tolerances=my_tolerances,
+        numeric_format=my_numeric_format,
     )
+    
+    geo.start()
+    
+    geo.export_csg(
+        title="WCLL v1.0 - Aljaz Kolsek [akolsek(at)ind.uned.es]",
+        geometryName="WCLL",
+        outFormat=(
+            "openMC_XML",
+            "mcnp",
+        ),
+        volSDEF=True,
+        volCARD=False,
+        UCARD=None,
+        dummyMat=True,
+        cellCommentFile=True,
+        cellSummaryFile=True,
+    )
+
 
     geo = geouned.CadToCsg(
         stepFile=f"{input_step_file.resolve()}",
@@ -180,3 +207,30 @@ def test_cad_to_csg_from_json_with_non_defaults():
 
     my_cad_to_csg.start()
     my_cad_to_csg.export_csg()
+
+
+def test_writing_to_new_folders():
+    """Checks that a folder is created prior to writing output files"""
+
+    geo = geouned.CadToCsg(stepFile = "testing/inputSTEP/BC.stp")
+    geo.start()
+
+    for outformat in ['mcnp', 'phits', 'serpent', 'openMC_XML', 'openMC_PY']:
+        geo.export_csg(
+            geometryName=f'tests_outputs/new_folder_for_testing_{outformat}/csg',
+            cellCommentFile=False,
+            cellSummaryFile=False,
+            outFormat=[outformat]
+        )
+        geo.export_csg(
+            geometryName=f'tests_outputs/new_folder_for_testing_{outformat}_cell_comment/csg',
+            cellCommentFile=True,
+            cellSummaryFile=False,
+            outFormat=[outformat]
+        )
+        geo.export_csg(
+            geometryName=f'tests_outputs/new_folder_for_testing_{outformat}_cell_summary/csg',
+            cellCommentFile=False,
+            cellSummaryFile=True,
+            outFormat=[outformat]
+        )
