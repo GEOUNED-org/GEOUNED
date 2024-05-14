@@ -20,6 +20,7 @@ The example makes use of default  attributes.
     import geouned
     geo = geouned.CadToCsg(stepFile='cuboid.stp')
     geo.start()
+    geo.export_csg()
 
 Users can change :meth:`geouned.Options`, :meth:`geouned.Settings`, :meth:`geouned.Tolerances` and :meth:`geouned.NumericFormat` to suit the conversion desired.
 The following example shows a usage with every attributes specified.
@@ -100,6 +101,11 @@ The following example shows a usage with every attributes specified.
         settings=my_settings,
         tolerances=my_tolerances,
         numeric_format=my_numeric_format,
+    )
+
+    geo.start()
+
+    geo.export_csg(
         title="Converted with GEOUNED",
         geometryName="csg",
         outFormat=(
@@ -116,5 +122,3 @@ The following example shows a usage with every attributes specified.
         cellCommentFile=False,
         cellSummaryFile=False,
     )
-
-    geo.start()

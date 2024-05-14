@@ -100,6 +100,11 @@ def test_conversion(input_step_file):
         settings=my_settings,
         tolerances=my_tolerances,
         numeric_format=my_numeric_format,
+    )
+
+    geo.start()
+
+    geo.export_csg(
         title="Converted with GEOUNED",
         geometryName=f"{output_filename_stem.resolve()}",
         outFormat=(
@@ -116,8 +121,6 @@ def test_conversion(input_step_file):
         cellCommentFile=False,
         cellSummaryFile=False,  # changed from the default
     )
-
-    geo.start()
 
     for suffix in suffixes:
         assert output_filename_stem.with_suffix(suffix).exists()
