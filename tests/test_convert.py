@@ -114,12 +114,12 @@ def test_conversion(input_step_file):
             "phits",
             "mcnp",
         ),
-        volSDEF=True,
-        volCARD=False,
+        volSDEF=True,  # changed from the default
+        volCARD=False,  # changed from the default
         UCARD=None,
-        dummyMat=True,
+        dummyMat=True,  # changed from the default
         cellCommentFile=False,
-        cellSummaryFile=False,
+        cellSummaryFile=False,  # changed from the default
     )
 
     for suffix in suffixes:
