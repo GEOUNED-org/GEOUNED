@@ -21,12 +21,8 @@ import FreeCAD
 from ..CodeVersion import *
 from ..Utils.BasicFunctions_part1 import is_opposite, points_to_coeffs
 from ..Utils.Functions import SurfacesDict
-from ..Write.Functions import (
-    CellString,
-    change_surf_sign,
-    phits_surface,
-    write_phits_cell_def,
-)
+from ..Write.Functions import (CellString, change_surf_sign, phits_surface,
+                               write_phits_cell_def)
 
 logger = logging.getLogger("general_logger")
 

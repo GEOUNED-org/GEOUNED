@@ -6,21 +6,9 @@ import FreeCAD
 import numpy as np
 from numpy import linalg as LA
 
-from .Objects import (
-    Box,
-    CadCell,
-    Cone,
-    Cylinder,
-    Ellipsoid,
-    EllipticCone,
-    EllipticCylinder,
-    HyperbolicCylinder,
-    Hyperboloid,
-    Paraboloid,
-    Plane,
-    Sphere,
-    Torus,
-)
+from .Objects import (Box, CadCell, Cone, Cylinder, Ellipsoid, EllipticCone,
+                      EllipticCylinder, HyperbolicCylinder, Hyperboloid,
+                      Paraboloid, Plane, Sphere, Torus)
 from .Parser import parser as mp
 from .remh import CellCardString, remove_hash
 

@@ -4,8 +4,9 @@
 Convert Cad geometry to CSG format for use in Monte Carlo Codes
 """
 
-import geouned
 import argparse
+
+import geouned
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument(
