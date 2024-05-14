@@ -3,7 +3,7 @@
 Usage
 =====
 
-GEOUNED can be used as a Python package with the API or via the command line with the CLI.
+GEOUNED can be used as a Python package with the API or as a command line tool with the CLI.
 
 
 .. toctree::

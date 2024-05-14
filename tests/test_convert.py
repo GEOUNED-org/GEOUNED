@@ -14,6 +14,7 @@ if os.getenv("GITHUB_ACTIONS"):
     step_files.remove(Path("testing/inputSTEP/large/Triangle.stp"))
 suffixes = (".mcnp", ".xml", ".inp", ".py", ".serp")
 
+json_files = ["tests/config_complete_defaults.json", "tests/config_minimal.json"]
 
 @pytest.mark.parametrize("input_step_file", step_files)
 def test_conversion(input_step_file):
@@ -125,24 +126,28 @@ def test_conversion(input_step_file):
     for suffix in suffixes:
         assert output_filename_stem.with_suffix(suffix).exists()
 
-
-def test_cad_to_csg_from_json():
+@pytest.mark.parametrize("input_json_files", json_files)
+def test_cad_to_csg_from_json_with_defaults(input_json_files):
 
     # deletes the output MC files if they already exists
     for suffix in suffixes:
         Path("csg").with_suffix(suffix).unlink(missing_ok=True)
 
-    my_cad_to_csg = geouned.CadToCsg.from_json("tests/config_complete_defaults.json")
-    assert isinstance(my_cad_to_csg, geouned.CadToCsg)
+    for json_files in input_json_files:
+        my_cad_to_csg = geouned.CadToCsg.from_json(json_files)
+        assert isinstance(my_cad_to_csg, geouned.CadToCsg)
 
-    assert my_cad_to_csg.stepFile == "testing/inputSTEP/BC.stp"
-    assert my_cad_to_csg.options.forceCylinder == False
-    assert my_cad_to_csg.tolerances.relativeTol == False
-    assert my_cad_to_csg.numeric_format.P_abc == "14.7e"
-    assert my_cad_to_csg.settings.matFile == ""
+        assert my_cad_to_csg.stepFile == "testing/inputSTEP/BC.stp"
+        assert my_cad_to_csg.options.forceCylinder == False
+        assert my_cad_to_csg.tolerances.relativeTol == False
+        assert my_cad_to_csg.numeric_format.P_abc == "14.7e"
+        assert my_cad_to_csg.settings.matFile == ""
 
-    for suffix in suffixes:
-        assert Path("csg").with_suffix(suffix).exists()
+        for suffix in suffixes:
+            assert Path("csg").with_suffix(suffix).exists()
+
+
+def test_cad_to_csg_from_json_with_non_defaults():
 
     # deletes the output MC files if they already exists
     for suffix in suffixes:
@@ -159,3 +164,6 @@ def test_cad_to_csg_from_json():
     assert my_cad_to_csg.tolerances.relativePrecision == 2e-6
     assert my_cad_to_csg.numeric_format.P_abc == "15.7e"
     assert my_cad_to_csg.settings.matFile == "non default"
+
+    for suffix in suffixes:
+        assert Path("csg").with_suffix(suffix).exists()
