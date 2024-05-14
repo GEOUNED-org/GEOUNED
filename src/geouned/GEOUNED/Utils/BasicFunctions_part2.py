@@ -120,7 +120,7 @@ def is_same_cylinder(
             is_same_center, is_fuzzy = is_in_tolerance(d, tol, 0.5 * tol, 2 * tol)
             if is_fuzzy and fuzzy[0]:
                 Fuzzy(
-                    fuzzy[1], "cylAxs", cyl1, cyl2, d, tol, tolerances, numeric_format
+                    fuzzy[1], "cylAxs", cyl1, cyl2, d, tol, options, tolerances, numeric_format
                 )
 
             return is_same_center
