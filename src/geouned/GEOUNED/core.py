@@ -1,15 +1,15 @@
 import configparser
+import json
 import logging
 import typing
-import json
 from datetime import datetime
 from os import mkdir, path
+from pathlib import Path
 from typing import get_type_hints
 
 import FreeCAD
 import Part
 from tqdm import tqdm
-from pathlib import Path
 
 from .CodeVersion import *
 from .Conversion import CellDefinition as Conv
@@ -18,10 +18,10 @@ from .Decompose import Decom_one as Decom
 from .LoadFile import LoadSTEP as Load
 from .Utils import Functions as UF
 from .Utils.BooleanSolids import build_c_table_from_solids
+from .Utils.data_classes import NumericFormat, Options, Settings, Tolerances
 from .Void import Void as Void
 from .Write.Functions import write_mcnp_cell_def
 from .Write.WriteFiles import write_geometry
-from .Utils.data_classes import Options, Tolerances, NumericFormat, Settings
 
 logger = logging.getLogger("general_logger")
 

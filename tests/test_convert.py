@@ -59,6 +59,7 @@ def test_conversion(input_step_file):
         tor_angle=0.0001,
         min_area=0.01,
     )
+
     my_numeric_format = geouned.NumericFormat(
         P_abc="14.7e",
         P_d="14.7e",
@@ -180,6 +181,33 @@ def test_cad_to_csg_from_json_with_non_defaults():
 
     my_cad_to_csg.start()
     my_cad_to_csg.export_csg()
+
+
+def test_writing_to_new_folders():
+    """Checks that a folder is created prior to writing output files"""
+
+    geo = geouned.CadToCsg(stepFile="testing/inputSTEP/BC.stp")
+    geo.start()
+
+    for outformat in ["mcnp", "phits", "serpent", "openMC_XML", "openMC_PY"]:
+        geo.export_csg(
+            geometryName=f"tests_outputs/new_folder_for_testing_{outformat}/csg",
+            cellCommentFile=False,
+            cellSummaryFile=False,
+            outFormat=[outformat],
+        )
+        geo.export_csg(
+            geometryName=f"tests_outputs/new_folder_for_testing_{outformat}_cell_comment/csg",
+            cellCommentFile=True,
+            cellSummaryFile=False,
+            outFormat=[outformat],
+        )
+        geo.export_csg(
+            geometryName=f"tests_outputs/new_folder_for_testing_{outformat}_cell_summary/csg",
+            cellCommentFile=False,
+            cellSummaryFile=True,
+            outFormat=[outformat],
+        )
 
 
 def test_with_relative_tol_true():

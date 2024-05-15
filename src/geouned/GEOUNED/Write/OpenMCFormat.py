@@ -3,6 +3,7 @@
 ##############################
 
 import logging
+from pathlib import Path
 
 import FreeCAD
 
@@ -29,6 +30,7 @@ class OpenmcInput:
 
     def write_xml(self, filename):
         logger.info(f"write OpenMC xml file {filename}")
+        Path(filename).parent.mkdir(parents=True, exist_ok=True)
         with open(file=filename, mode="w", encoding="utf-8") as self.inpfile:
             self.__write_xml_header__()
             self.inpfile.write("<geometry>\n")
@@ -103,6 +105,7 @@ class OpenmcInput:
             if cell.Material != 0:
                 self.Materials.add(cell.Material)
 
+        Path(filename).parent.mkdir(parents=True, exist_ok=True)
         with open(file=filename, mode="w", encoding="utf-8") as self.inpfile:
             self.__write_py_header__()
 

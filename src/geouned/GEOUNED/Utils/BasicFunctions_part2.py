@@ -1,8 +1,9 @@
 #
 # Set of useful functions used in different parts of the code
 #
-import math
 import logging
+import math
+
 import FreeCAD
 
 from ..Utils.BasicFunctions_part1 import (

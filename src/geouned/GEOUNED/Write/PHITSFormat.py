@@ -14,6 +14,7 @@
 import logging
 import re
 from datetime import datetime
+from pathlib import Path
 
 import FreeCAD
 
@@ -79,6 +80,7 @@ class PhitsInput:
 
     def write_phits(self, filename):
         logger.info(f"write PHITS file {filename}")
+        Path(filename).parent.mkdir(parents=True, exist_ok=True)
         with open(file=filename, mode="w", encoding="utf-8") as self.inpfile:
             self.__write_phits_header__()
 
