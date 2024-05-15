@@ -11,7 +11,7 @@ You can follow the install instructions for `Miniforge3 here <https://github.com
 
 Download and execute the Miniforge3 Windows installer
 
-You can get it from the Miniforge3 GitHub repository `here <https://github.com/conda-forge/miniforge?tab=readme-ov-file#miniforge-pypy3>`_` or from the link below
+You can get it from the Miniforge3 GitHub repository `here <https://github.com/conda-forge/miniforge?tab=readme-ov-file#miniforge-pypy3>`_ or from the link below
 
 `https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe <https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe>`_
 
