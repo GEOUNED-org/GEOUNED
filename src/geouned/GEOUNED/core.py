@@ -101,7 +101,9 @@ class CadToCsg:
     @numeric_format.setter
     def numeric_format(self, value: numeric_format):
         if not isinstance(value, NumericFormat):
-            raise TypeError(f"geouned.CadToCsg.numeric_format should be an instance of geouned.NumericFormat, not a {type(value)}")
+            raise TypeError(
+                f"geouned.CadToCsg.numeric_format should be an instance of geouned.NumericFormat, not a {type(value)}"
+            )
         self._numeric_format = value
 
     @property
@@ -113,7 +115,6 @@ class CadToCsg:
         if not isinstance(value, Settings):
             raise TypeError(f"geouned.CadToCsg.settings should be an instance of geouned.Settings, not a {type(value)}")
         self._settings = value
-
 
     def export_csg(
         self,
