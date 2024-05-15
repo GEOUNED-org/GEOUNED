@@ -111,7 +111,7 @@ class CadToCsg:
         """
 
         if not isinstance(UCARD, int) and not isinstance(UCARD, type(None)):
-            raise TypeError(f"UCARD should be of type bool not {type(UCARD)}")
+            raise TypeError(f"UCARD should be of type int or None not {type(UCARD)}")
 
         for arg, arg_str in (
             (volSDEF, "volSDEF"),
