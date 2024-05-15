@@ -1,6 +1,10 @@
+[build-system]
+requires = ["setuptools >= 69.4.1", "setuptools_scm[toml]>=8.0.1"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "geouned"
-version = "1.0.1"
+dynamic = ["version"]
 authors = [
   { name="Juan-Pablo Catalan", email="jpcatalan@ind.uned.es" },
   { name="Patrick Sauvan", email="psauvan@ind.uned.es" },
@@ -28,7 +32,7 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/GEOUNED-org"
 Repository = "https://github.com/GEOUNED-org/GEOUNED"
-Documentation = "https://github.com/GEOUNED-org/GEOUNED/docs"
+Documentation = "https://geouned-org.github.io/GEOUNED/index.html"
 
 [project.optional-dependencies]
 tests = [
@@ -47,3 +51,6 @@ geouned_cadtocsg = "geouned.GEOUNED.scripts.geouned_cadtocsg:main"
 
 [tool.black]
 line-length = 128
+
+[tool.setuptools_scm]
+write_to = "src/_version.py"

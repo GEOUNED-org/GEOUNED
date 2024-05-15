@@ -180,3 +180,6 @@ docs/source/_build/**
 docs/build/**
 docs/source/_autosummary/*
 docs/jupyter_execute
+
+# setuptools_scm dynamic version file
+src/_version.py
