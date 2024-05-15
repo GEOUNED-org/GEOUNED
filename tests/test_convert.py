@@ -109,8 +109,8 @@ def test_conversion(input_step_file):
         title="Converted with GEOUNED",
         geometryName=f"{output_filename_stem.resolve()}",
         outFormat=(
-            "openMC_XML",
-            "openMC_PY",
+            "openmc_xml",
+            "openmc_py",
             "serpent",
             "phits",
             "mcnp",
@@ -189,7 +189,7 @@ def test_writing_to_new_folders():
     geo = geouned.CadToCsg(stepFile="testing/inputSTEP/BC.stp")
     geo.start()
 
-    for outformat in ["mcnp", "phits", "serpent", "openMC_XML", "openMC_PY"]:
+    for outformat in ["mcnp", "phits", "serpent", "openmc_xml", "openmc_py"]:
         geo.export_csg(
             geometryName=f"tests_outputs/new_folder_for_testing_{outformat}/csg",
             cellCommentFile=False,

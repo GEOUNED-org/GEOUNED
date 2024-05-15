@@ -69,8 +69,8 @@ class CadToCsg:
         title: str = "Converted with GEOUNED",
         geometryName: str = "csg",
         outFormat: typing.Tuple[str] = (
-            "openMC_XML",
-            "openMC_PY",
+            "openmc_xml",
+            "openmc_py",
             "serpent",
             "phits",
             "mcnp",
@@ -90,8 +90,8 @@ class CadToCsg:
             geometryName (str, optional): the file stem of the output file(s).
                 Defaults to "converted_with_geouned".
             outFormat (typing.Tuple[str], optional): Format for the output
-                geometry. Available format are: "mcnp", "openMC_XML",
-                "openMC_PY", "phits" and "serpent". Several output format can
+                geometry. Available format are: "mcnp", "openmc_xml",
+                "openmc_py", "phits" and "serpent". Several output format can
                 be written in the same method call. Defaults to output all codes.
             volSDEF (bool, optional):  Write SDEF definition and tally of solid
                 cell for stochastic volume checking. Defaults to False.
@@ -221,9 +221,9 @@ class CadToCsg:
                             if v.lower() == "mcnp":
                                 outFormat.append("mcnp")
                             elif v.lower() == "openmc_xml":
-                                outFormat.append("openMC_XML")
+                                outFormat.append("openmc_xml")
                             elif v.lower() == "openmc_py":
-                                outFormat.append("openMC_PY")
+                                outFormat.append("openmc_py")
                             elif v.lower() == "serpent":
                                 outFormat.append("serpent")
                             elif v.lower() == "phits":
