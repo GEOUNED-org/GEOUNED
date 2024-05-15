@@ -77,7 +77,7 @@ class CadToCsg:
         ),
         volSDEF: bool = False,
         volCARD: bool = True,
-        UCARD: int = 101,
+        UCARD: typing.Union[int, type(None)] = 101,
         dummyMat: bool = False,
         cellCommentFile: bool = False,
         cellSummaryFile: bool = True,
@@ -109,6 +109,25 @@ class CadToCsg:
             cellSummaryFile (bool, optional): Write an additional file with
                information on the CAD cell translated. Defaults to True.
         """
+
+        if not isinstance(title, str):
+            raise TypeError(f"title should be of type str not {type(title)}")
+
+        if not isinstance(geometryName, str):
+            raise TypeError(f"geometryName should be of type str not {type(geometryName)}")
+
+        if not isinstance(UCARD, int) and not isinstance(UCARD, type(None)):
+            raise TypeError(f"UCARD should be of type bool not {type(UCARD)}")
+
+        for arg, arg_str in (
+            (volSDEF, "volSDEF"),
+            (volCARD, "volCARD"),
+            (dummyMat, "dummyMat"),
+            (cellCommentFile, "cellCommentFile"),
+            (cellSummaryFile, "cellSummaryFile"),
+        ):
+            if not isinstance(arg, bool):
+                raise TypeError(f"{arg} should be of type bool not {type(arg_str)}")
 
         write_geometry(
             UniverseBox=self.UniverseBox,
