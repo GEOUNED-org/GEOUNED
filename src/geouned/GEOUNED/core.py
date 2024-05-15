@@ -110,12 +110,6 @@ class CadToCsg:
                information on the CAD cell translated. Defaults to True.
         """
 
-        if not isinstance(title, str):
-            raise TypeError(f"title should be of type str not {type(title)}")
-
-        if not isinstance(geometryName, str):
-            raise TypeError(f"geometryName should be of type str not {type(geometryName)}")
-
         if not isinstance(UCARD, int) and not isinstance(UCARD, type(None)):
             raise TypeError(f"UCARD should be of type bool not {type(UCARD)}")
 
@@ -128,6 +122,10 @@ class CadToCsg:
         ):
             if not isinstance(arg, bool):
                 raise TypeError(f"{arg} should be of type bool not {type(arg_str)}")
+
+        for arg, arg_str in ((title, "title"), (geometryName, "geometryName")):
+            if not isinstance(arg, str):
+                raise TypeError(f"{arg} should be of type str not {type(arg_str)}")
 
         write_geometry(
             UniverseBox=self.UniverseBox,
