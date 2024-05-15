@@ -5,12 +5,12 @@ import logging
 import FreeCAD
 import Part
 
-from ..Conversion import CellDefinition as Conv
-from ..Decompose import Decom_one as Decom
-from ..Utils.BasicFunctions_part1 import is_opposite
-from ..Utils.booleanFunction import BoolSequence
-from ..Utils.BooleanSolids import build_c_table_from_solids, remove_extra_surfaces
-from ..Utils.Functions import GeounedSolid, GeounedSurface
+from ..conversion import cell_definition as Conv
+from ..decompose import decom_one as Decom
+from ..utils.basic_functions_part1 import is_opposite
+from ..utils.boolean_function import BoolSequence
+from ..utils.boolean_solids import build_c_table_from_solids, remove_extra_surfaces
+from ..utils.functions import GeounedSolid, GeounedSurface
 
 logger = logging.getLogger("general_logger")
 

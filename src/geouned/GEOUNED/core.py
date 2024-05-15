@@ -11,17 +11,17 @@ import FreeCAD
 import Part
 from tqdm import tqdm
 
-from .CodeVersion import *
-from .Conversion import CellDefinition as Conv
-from .Cuboid.translate import translate
-from .Decompose import Decom_one as Decom
-from .LoadFile import LoadSTEP as Load
-from .Utils import Functions as UF
-from .Utils.BooleanSolids import build_c_table_from_solids
-from .Utils.data_classes import NumericFormat, Options, Settings, Tolerances
-from .Void import Void as Void
-from .Write.Functions import write_mcnp_cell_def
-from .Write.WriteFiles import write_geometry
+from .code_version import *
+from .conversion import cell_definition as Conv
+from .cuboid.translate import translate
+from .decompose import decom_one as Decom
+from .loadfile import load_step as Load
+from .utils import functions as UF
+from .utils.boolean_solids import build_c_table_from_solids
+from .utils.data_classes import NumericFormat, Options, Settings, Tolerances
+from .void import void as void
+from .write.functions import write_mcnp_cell_def
+from .write.write_files import write_geometry
 
 logger = logging.getLogger("general_logger")
 
@@ -546,7 +546,7 @@ class CadToCsg:
                 init = self.MetaList[-1].__id__ - len(EnclosureList)
             else:
                 init = 0
-            MetaVoid = Void.void_generation(
+            MetaVoid = void.void_generation(
                 MetaReduced,
                 EnclosureList,
                 self.Surfaces,
@@ -723,7 +723,7 @@ def update_comment(meta, idLabel):
     if meta.__commentInfo__[1] is None:
         return
     newLabel = (idLabel[i] for i in meta.__commentInfo__[1])
-    meta.set_comments(Void.void_comment_line((meta.__commentInfo__[0], newLabel)))
+    meta.set_comments(void.void_comment_line((meta.__commentInfo__[0], newLabel)))
 
 
 def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances, numeric_format):

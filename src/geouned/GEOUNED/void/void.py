@@ -4,12 +4,12 @@ import FreeCAD
 import Part
 from tqdm import tqdm
 
-from ..LoadFile import LoadFunctions as LF
-from ..Utils.BasicFunctions_part1 import is_opposite
-from ..Utils.booleanFunction import BoolSequence
-from ..Utils.Functions import GeounedSolid, GeounedSurface
-from ..Void import voidFunctions as VF
-from .VoidBoxClass import VoidBox
+from ..loadfile import load_functions as LF
+from ..utils.basic_functions_part1 import is_opposite
+from ..utils.boolean_function import BoolSequence
+from ..utils.functions import GeounedSolid, GeounedSurface
+from . import void_functions as VF
+from .void_box_class import VoidBox
 
 logger = logging.getLogger("general_logger")
 

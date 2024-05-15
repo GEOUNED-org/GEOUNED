@@ -3,9 +3,9 @@ import re
 
 import FreeCAD
 
-from ..Utils import Qform as Qform
-from ..Utils.BasicFunctions_part1 import is_opposite, is_parallel
-from .StringFunctions import remove_redundant
+from ..utils import q_form as q_form
+from ..utils.basic_functions_part1 import is_opposite, is_parallel
+from .string_functions import remove_redundant
 
 
 class CardLine:
@@ -306,7 +306,7 @@ def mcnp_surface(id, Type, surf, options, tolerances, numeric_format):
                 )
         else:
             # Is not still working fine
-            Q = Qform.q_form_cyl(Dir, Pos, rad)
+            Q = q_form.q_form_cyl(Dir, Pos, rad)
             mcnp_def = """\
 {:<6d} GQ  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
           {v[3]:{aTof}} {v[4]:{aTof}} {v[5]:{aTof}}
@@ -411,7 +411,7 @@ def mcnp_surface(id, Type, surf, options, tolerances, numeric_format):
                     t2=numeric_format.K_tan2,
                 )
         else:
-            Q = Qform.q_form_cone(Dir, Apex, tan)
+            Q = q_form.q_form_cone(Dir, Apex, tan)
             mcnp_def = """\
 {:<6d} GQ  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
           {v[3]:{aTof}} {v[4]:{aTof}} {v[5]:{aTof}}
@@ -564,7 +564,7 @@ def open_mc_surface(Type, surf, tolerances, numeric_format, out_xml=True, quadri
         else:
             if out_xml:
                 omc_surf = "quadric"
-                Q = Qform.q_form_cyl(Dir, pos, Rad)
+                Q = q_form.q_form_cyl(Dir, pos, Rad)
                 coeffs = "{v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}} {v[3]:{aTof}} {v[4]:{aTof}} {v[5]:{aTof}} {v[6]:{gToi}} {v[7]:{gToi}} {v[8]:{gToi}} {v[9]:{j}}".format(
                     v=Q,
                     aTof=numeric_format.GQ_1to6,
@@ -574,7 +574,7 @@ def open_mc_surface(Type, surf, tolerances, numeric_format, out_xml=True, quadri
             else:
                 if quadricForm:
                     omc_surf = "Quadric"
-                    Q = Qform.q_form_cyl(Dir, pos, Rad)
+                    Q = q_form.q_form_cyl(Dir, pos, Rad)
                     coeffs = "a={v[0]},b={v[1]},c={v[2]},d={v[3]},e={v[4]},f={v[5]},g={v[6]},h={v[7]},j={v[8]},k={v[9]}".format(
                         v=Q
                     )
@@ -641,7 +641,7 @@ def open_mc_surface(Type, surf, tolerances, numeric_format, out_xml=True, quadri
         else:
             if out_xml:
                 omc_surf = "quadric"
-                Q = Qform.q_form_cone(Dir, Apex, tan)
+                Q = q_form.q_form_cone(Dir, Apex, tan)
                 coeffs = "{v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}} {v[3]:{aTof}} {v[4]:{aTof}} {v[5]:{aTof}} {v[6]:{gToi}} {v[7]:{gToi}} {v[8]:{gToi}} {v[9]:{j}}".format(
                     v=Q,
                     aTof=numeric_format.GQ_1to6,
@@ -651,7 +651,7 @@ def open_mc_surface(Type, surf, tolerances, numeric_format, out_xml=True, quadri
             else:
                 if quadricForm:
                     omc_surf = "Quadric"
-                    Q = Qform.q_form_cone(Dir, Apex, tan)
+                    Q = q_form.q_form_cone(Dir, Apex, tan)
                     coeffs = "a={v[0]},b={v[1]},c={v[2]},d={v[3]},e={v[4]},f={v[5]},g={v[6]},h={v[7]},j={v[8]},k={v[9]}".format(
                         v=Q
                     )
@@ -757,7 +757,7 @@ def serpent_surface(id, Type, surf, options, tolerance, numeric_format):
             serpent_def = f"surf {id} cylz {rad:{numeric_format.C_r}}"
         else:
             # Is not still working fine
-            Q = Qform.q_form_cyl(Dir, Pos, rad)
+            Q = q_form.q_form_cyl(Dir, Pos, rad)
             serpent_def = """\
 surf quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
           {v[3]:{aTof}} {v[4]:{aTof}} {v[5]:{aTof}}
@@ -824,7 +824,7 @@ surf quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
                 t2=numeric_format.K_tan2,
             )
         else:
-            Q = Qform.q_form_cone(Dir, Apex, tan)
+            Q = q_form.q_form_cone(Dir, Apex, tan)
 
     elif Type == "Sphere":
         rad = surf.Radius * 0.1
@@ -920,7 +920,7 @@ def phits_surface(id, Type, surf, options, tolerance, numeric_format):
                 )
         else:
             # Is not still working fine
-            Q = Qform.q_form_cyl(Dir, Pos, rad)
+            Q = q_form.q_form_cyl(Dir, Pos, rad)
             phits_def = """\
 {:<6d} GQ  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
           {v[3]:{aTof}} {v[4]:{aTof}} {v[5]:{aTof}}
@@ -1025,7 +1025,7 @@ def phits_surface(id, Type, surf, options, tolerance, numeric_format):
                     t2=numeric_format.K_tan2,
                 )
         else:
-            Q = Qform.q_form_cone(Dir, Apex, tan)
+            Q = q_form.q_form_cone(Dir, Apex, tan)
             phits_def = """\
 {:<6d} GQ  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
           {v[3]:{aTof}} {v[4]:{aTof}} {v[5]:{aTof}}

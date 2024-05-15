@@ -9,16 +9,16 @@ from collections import OrderedDict
 import FreeCAD
 import Part
 
-from ..Conversion import CellDefinition as CD
-from ..Utils import Functions as UF
-from ..Utils import Geometry_GU as GU
-from ..Utils.BasicFunctions_part1 import (
+from ..conversion import cell_definition as CD
+from ..utils import functions as UF
+from ..utils import geometry_gu as GU
+from ..utils.basic_functions_part1 import (
     is_in_line,
     is_in_plane,
     is_parallel,
     is_same_value,
 )
-from ..Utils.BasicFunctions_part2 import is_duplicate_in_list
+from ..utils.basic_functions_part2 import is_duplicate_in_list
 
 logger = logging.getLogger("general_logger")
 

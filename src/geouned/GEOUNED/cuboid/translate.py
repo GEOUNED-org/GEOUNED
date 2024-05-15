@@ -3,11 +3,11 @@ import logging
 import FreeCAD
 import Part
 
-from ..Decompose import Decom_one as Decom
-from ..Utils import BasicFunctions_part2 as BF
-from ..Utils import Geometry_GU as GU
-from ..Utils.BasicFunctions_part1 import is_opposite, is_parallel
-from ..Utils.booleanFunction import BoolSequence
+from ..decompose import decom_one as Decom
+from ..utils import basic_functions_part2 as BF
+from ..utils import geometry_gu as GU
+from ..utils.basic_functions_part1 import is_opposite, is_parallel
+from ..utils.boolean_function import BoolSequence
 
 logger = logging.getLogger("general_logger")
 

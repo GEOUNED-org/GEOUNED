@@ -10,8 +10,8 @@ import math
 
 import Part
 
-from .BasicFunctions_part1 import is_same_value
-from .BasicFunctions_part2 import is_same_torus
+from .basic_functions_part1 import is_same_value
+from .basic_functions_part2 import is_same_torus
 
 logger = logging.getLogger("general_logger")
 
