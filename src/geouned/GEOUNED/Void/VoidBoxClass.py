@@ -164,17 +164,13 @@ class VoidBox:
             self.__remove_extra_comp__(m, Cube, mode="dist")
         return
 
-    def get_void_complementary(
-        self, Surfaces, options, tolerances, numeric_format, simplify="no"
-    ):
+    def get_void_complementary(self, Surfaces, options, tolerances, numeric_format, simplify="no"):
         if self.PieceEnclosure is None:
             boxDef = BoolSequence(operator="AND")
             center = self.BoundBox.Center
             bBox = self.BoundBox
             for p in self.get_bound_planes():
-                id, exist = Surfaces.add_plane(
-                    p, options, tolerances, numeric_format, False
-                )
+                id, exist = Surfaces.add_plane(p, options, tolerances, numeric_format, False)
                 if exist:
                     s = Surfaces.get_surface(id)
                     if is_opposite(p.Surf.Axis, s.Surf.Axis):
@@ -275,9 +271,7 @@ class VoidBox:
                 surfaceDict = {}
                 for i in surfList:
                     surfaceDict[i] = Surfaces.get_surface(i)
-                CTable = build_c_table_from_solids(
-                    Box, surfaceDict, option=simplify, options=options
-                )
+                CTable = build_c_table_from_solids(Box, surfaceDict, option=simplify, options=options)
             else:
                 if res is True:
                     return None, None

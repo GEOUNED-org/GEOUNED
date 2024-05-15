@@ -72,9 +72,7 @@ def get_id(facein, surfaces, options, tolerances, numeric_format):
 
     elif surfin[0:6] == "Sphere":
         for s in surfaces["Sph"]:
-            if BF.is_same_sphere(
-                facein, s.Surf, tolerances.sph_distance, rel_tol=tolerances.relativeTol
-            ):
+            if BF.is_same_sphere(facein, s.Surf, tolerances.sph_distance, rel_tol=tolerances.relativeTol):
                 return s.Index
 
     elif surfin == "<Toroid object>":
@@ -102,9 +100,7 @@ def is_inverted(solid):
     v = (parameter_range[3] + parameter_range[2]) / 2.0
 
     if str(face.Surface) == "<Cylinder object>":
-        dist1 = face.Surface.value(u, v).distanceToLine(
-            face.Surface.Center, face.Surface.Axis
-        )
+        dist1 = face.Surface.value(u, v).distanceToLine(face.Surface.Center, face.Surface.Axis)
         dist2 = (
             face.Surface.value(u, v)
             .add(face.Surface.normal(u, v).multiply(1.0e-6))
@@ -114,9 +110,7 @@ def is_inverted(solid):
             # The normal of the cylinder is going inside
             return True
     elif str(face.Surface) == "<Cone object>":
-        dist1 = face.Surface.value(u, v).distanceToLine(
-            face.Surface.Apex, face.Surface.Axis
-        )
+        dist1 = face.Surface.value(u, v).distanceToLine(face.Surface.Apex, face.Surface.Axis)
         dist2 = (
             face.Surface.value(u, v)
             .add(face.Surface.normal(u, v).multiply(1.0e-6))
@@ -129,11 +123,7 @@ def is_inverted(solid):
     elif str(face.Surface)[0:6] == "Sphere":
         # radii = point - center
         radii = face.Surface.value(u, v).add(face.Surface.Center.multiply(-1))
-        radii_b = (
-            face.Surface.value(u, v)
-            .add(face.Surface.normal(u, v).multiply(1.0e-6))
-            .add(face.Surface.Center.multiply(-1))
-        )
+        radii_b = face.Surface.value(u, v).add(face.Surface.normal(u, v).multiply(1.0e-6)).add(face.Surface.Center.multiply(-1))
         # radii_b  = radii.add( face.Surface.normal(u,v).multiply(1.0e-6) )
         if (radii_b.Length - radii.Length) < 0.0:
             # An increasing of the radii vector in the normal direction decreases the radii: oposite normal direction
@@ -141,9 +131,7 @@ def is_inverted(solid):
 
     elif str(face.Surface) == "<Plane object>":
         dist1 = face.CenterOfMass.distanceToPoint(solid.BoundBox.Center)
-        dist2 = face.CenterOfMass.add(
-            face.normalAt(u, v).multiply(1.0e-6)
-        ).distanceToPoint(solid.BoundBox.Center)
+        dist2 = face.CenterOfMass.add(face.normalAt(u, v).multiply(1.0e-6)).distanceToPoint(solid.BoundBox.Center)
         point2 = face.CenterOfMass.add(face.normalAt(u, v).multiply(1.0e-6))
         if solid.isInside(point2, 1e-7, False):
             return True
@@ -187,10 +175,7 @@ def get_closed_ranges(solid, face_index):
             del closed_range[-1]
 
             if len(closed_range) == 1:
-                if (
-                    abs(closed_range[0][1][0] - closed_range[0][0][0] - 2.0 * math.pi)
-                    < 1e-2
-                ):
+                if abs(closed_range[0][1][0] - closed_range[0][0][0] - 2.0 * math.pi) < 1e-2:
                     closed_face = True
                 else:
                     closed_face = False
@@ -268,10 +253,7 @@ def gen_plane_sphere(face, solid):
     for f in solid.Faces:
         if f.isEqual(face) or str(f.Surface) != "Sphere":
             continue
-        if (
-            f.Surface.Center == face.Surface.Center
-            and f.Surface.Radius == face.Surface.Radius
-        ):
+        if f.Surface.Center == face.Surface.Center and f.Surface.Radius == face.Surface.Radius:
             # print 'Warning: coincident sphere faces are the same'
             for f2 in same_faces:
                 if f.distToShape(f2)[0] < 1e-6:
@@ -307,9 +289,7 @@ def gen_plane_cylinder(face, solid, tolerances):
             if (
                 face2.Surface.Axis.isEqual(face.Surface.Axis, 1e-5)
                 and face2.Surface.Radius == rad
-                and is_in_line(
-                    face2.Surface.Center, face.Surface.Axis, face.Surface.Center
-                )
+                and is_in_line(face2.Surface.Center, face.Surface.Axis, face.Surface.Center)
             ):
                 # print 'Warning: coincident cylinder faces are the same'
                 face_index.append(i)
@@ -357,9 +337,7 @@ def gen_plane_cylinder_old(face, solid, tolerances):
             if (
                 face2.Surface.Axis.isEqual(face.Surface.Axis, 1e-5)
                 and face2.Surface.Radius == rad
-                and is_in_line(
-                    face2.Surface.Center, face.Surface.Axis, face.Surface.Center
-                )
+                and is_in_line(face2.Surface.Center, face.Surface.Axis, face.Surface.Center)
             ):
                 # print 'Warning: coincident cylinder faces are the same'
                 face_index.append(i)
@@ -775,14 +753,9 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
                 surface_type = "Sphere"
 
             # cone additional plane is added afterward
-            if (
-                surface_type in ("<Cylinder object>", "<Cone object>", "Sphere")
-                and orient == "Reversed"
-            ):
+            if surface_type in ("<Cylinder object>", "<Cone object>", "Sphere") and orient == "Reversed":
                 # cone additional plane is added afterward
-                id_face = get_id(
-                    face.Surface, surfaces, options, tolerances, numeric_format
-                )
+                id_face = get_id(face.Surface, surfaces, options, tolerances, numeric_format)
                 if surface_type == "<Cone object>":
                     cones.add(id_face)
                 if str(id_face) not in surf_piece:
@@ -804,9 +777,7 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
                         Face="Build",
                     )
 
-                    id, exist = surfaces.add_plane(
-                        p, options, tolerances, numeric_format, False
-                    )
+                    id, exist = surfaces.add_plane(p, options, tolerances, numeric_format, False)
                     sign = sign_plane(face.CenterOfMass, p)
                     if exist:
                         pp = surfaces.get_surface(id)
@@ -825,20 +796,12 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
             elif surface_type == "<Toroid object>":
 
                 if (
-                    is_parallel(
-                        face.Surface.Axis, FreeCAD.Vector(1, 0, 0), tolerances.angle
-                    )
-                    or is_parallel(
-                        face.Surface.Axis, FreeCAD.Vector(0, 1, 0), tolerances.angle
-                    )
-                    or is_parallel(
-                        face.Surface.Axis, FreeCAD.Vector(0, 0, 1), tolerances.angle
-                    )
+                    is_parallel(face.Surface.Axis, FreeCAD.Vector(1, 0, 0), tolerances.angle)
+                    or is_parallel(face.Surface.Axis, FreeCAD.Vector(0, 1, 0), tolerances.angle)
+                    or is_parallel(face.Surface.Axis, FreeCAD.Vector(0, 0, 1), tolerances.angle)
                 ):
 
-                    idT = get_id(
-                        face.Surface, surfaces, options, tolerances, numeric_format
-                    )
+                    idT = get_id(face.Surface, surfaces, options, tolerances, numeric_format)
 
                     index, u_params = solid_gu.TorusUParams[iface]
                     if index == last_torus:
@@ -849,44 +812,26 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
                     u_closed, u_minMax = u_params
                     # u_closed = True
                     if not u_closed:
-                        planes, ORop = gen_torus_annex_u_planes(
-                            face, u_minMax, tolerances
-                        )
+                        planes, ORop = gen_torus_annex_u_planes(face, u_minMax, tolerances)
                         plane1, plane2 = planes
-                        plane = GeounedSurface(
-                            ("Plane", plane1), universe_box, Face="Build"
-                        )
-                        id1, exist = surfaces.add_plane(
-                            plane, options, tolerances, numeric_format, False
-                        )
+                        plane = GeounedSurface(("Plane", plane1), universe_box, Face="Build")
+                        id1, exist = surfaces.add_plane(plane, options, tolerances, numeric_format, False)
                         if exist:
                             p = surfaces.get_surface(id1)
-                            if is_opposite(
-                                plane.Surf.Axis, p.Surf.Axis, tolerances.pln_angle
-                            ):
+                            if is_opposite(plane.Surf.Axis, p.Surf.Axis, tolerances.pln_angle):
                                 id1 = -id1
 
                         if plane2 is None:
                             u_var = "%i" % id1
                         else:
-                            plane = GeounedSurface(
-                                ("Plane", plane2), universe_box, Face="Build"
-                            )
-                            id2, exist = surfaces.add_plane(
-                                plane, options, tolerances, numeric_format, False
-                            )
+                            plane = GeounedSurface(("Plane", plane2), universe_box, Face="Build")
+                            id2, exist = surfaces.add_plane(plane, options, tolerances, numeric_format, False)
                             if exist:
                                 p = surfaces.get_surface(id2)
-                                if is_opposite(
-                                    plane.Surf.Axis, p.Surf.Axis, tolerances.pln_angle
-                                ):
+                                if is_opposite(plane.Surf.Axis, p.Surf.Axis, tolerances.pln_angle):
                                     id2 = -id2
 
-                            u_var = (
-                                "(%i : %i)" % (id1, id2)
-                                if ORop
-                                else "%i %i" % (id1, id2)
-                            )
+                            u_var = "(%i : %i)" % (id1, id2) if ORop else "%i %i" % (id1, id2)
 
                     else:
                         u_var = ""
@@ -906,9 +851,7 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
                             )
 
                             if surf_type == "Cone":
-                                cone = GeounedSurface(
-                                    ("Cone", surf_params), universe_box, Face="Build"
-                                )
+                                cone = GeounedSurface(("Cone", surf_params), universe_box, Face="Build")
                                 id2, exist = surfaces.add_cone(cone, tolerances)
 
                             elif surf_type == "Cylinder":
@@ -917,17 +860,11 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
                                     universe_box,
                                     Face="Build",
                                 )
-                                id2, exist = surfaces.add_cylinder(
-                                    cyl, options, tolerances, numeric_format
-                                )
+                                id2, exist = surfaces.add_cylinder(cyl, options, tolerances, numeric_format)
 
                             elif surf_type == "Plane":
-                                plane = GeounedSurface(
-                                    ("Plane", surf_params), universe_box, Face="Build"
-                                )
-                                id2, exist = surfaces.add_plane(
-                                    plane, options, tolerances, numeric_format, False
-                                )
+                                plane = GeounedSurface(("Plane", surf_params), universe_box, Face="Build")
+                                id2, exist = surfaces.add_plane(plane, options, tolerances, numeric_format, False)
                                 if exist:
                                     p = surfaces.get_surface(id2)
                                     if is_opposite(
@@ -944,9 +881,7 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
                         surf_piece.append(var)
                         surf_obj.append(face)
                 else:
-                    logger.info(
-                        "Only Torus with axis along X, Y, Z axis can be reproduced"
-                    )
+                    logger.info("Only Torus with axis along X, Y, Z axis can be reproduced")
             else:
                 id = get_id(face.Surface, surfaces, options, tolerances, numeric_format)
                 if surface_type == "<Cone object>":
@@ -966,9 +901,7 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
                             universe_box,
                             Face="Build",
                         )
-                        id, exist = surfaces.add_plane(
-                            plane, options, tolerances, numeric_format, False
-                        )
+                        id, exist = surfaces.add_plane(plane, options, tolerances, numeric_format, False)
                         surf = plane.shape
                     elif surface_type == "<Cylinder object>":
                         dim_l = face.ParameterRange[3] - face.ParameterRange[2]
@@ -985,9 +918,7 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
                             universe_box,
                             Face="Build",
                         )
-                        id, exist = surfaces.add_cylinder(
-                            cylinder, options, tolerances, numeric_format
-                        )
+                        id, exist = surfaces.add_cylinder(cylinder, options, tolerances, numeric_format)
                         surf = cylinder.shape
 
                 if orient == "Reversed":
@@ -997,9 +928,7 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
 
                 if surface_type == "<Plane object>":
                     s = surfaces.get_surface(id)
-                    if is_opposite(
-                        face.Surface.Axis, s.Surf.Axis, tolerances.pln_angle
-                    ):
+                    if is_opposite(face.Surface.Axis, s.Surf.Axis, tolerances.pln_angle):
                         var = -var
 
                 if str(var) in surf_piece:
@@ -1188,12 +1117,8 @@ def extra_plane_cyl_face(face, box, surfaces, options, tolerances, numeric_forma
             else:
                 dim1 = e.Curve.Radius
                 dim2 = e.Curve.Radius
-            plane = GeounedSurface(
-                ("Plane", (center, dir, dim1, dim2)), box, Face="Build"
-            )
-            id, exist = surfaces.add_plane(
-                plane, options, tolerances, numeric_format, False
-            )
+            plane = GeounedSurface(("Plane", (center, dir, dim1, dim2)), box, Face="Build")
+            id, exist = surfaces.add_plane(plane, options, tolerances, numeric_format, False)
             if exist:
                 pp = surfaces.get_surface(id)
                 if is_opposite(plane.Surf.Axis, pp.Surf.Axis, tolerances.pln_angle):
@@ -1202,9 +1127,7 @@ def extra_plane_cyl_face(face, box, surfaces, options, tolerances, numeric_forma
     return planes_id
 
 
-def add_cone_plane(
-    definition, cones_list, surfaces, universe_box, options, tolerances, numeric_format
-):
+def add_cone_plane(definition, cones_list, surfaces, universe_box, options, tolerances, numeric_format):
     x_axis = FreeCAD.Vector(1, 0, 0)
     y_axis = FreeCAD.Vector(0, 1, 0)
     z_axis = FreeCAD.Vector(0, 0, 1)
@@ -1223,9 +1146,7 @@ def add_cone_plane(
             universe_box,
             Face="Build",
         )
-        pid, exist = surfaces.add_plane(
-            plane, options, tolerances, numeric_format, False
-        )
+        pid, exist = surfaces.add_plane(plane, options, tolerances, numeric_format, False)
 
         if exist:
             p = surfaces.get_surface(pid)

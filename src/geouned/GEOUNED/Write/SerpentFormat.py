@@ -160,9 +160,7 @@ class SerpentInput:
                 )
             else:
                 self.Materials.add(cell.Material)
-                cellHeader = (
-                    f'cell {index:<5d} {self.Options["Universe"]} {cell.Material:<5d} '
-                )
+                cellHeader = f'cell {index:<5d} {self.Options["Universe"]} {cell.Material:<5d} '
 
             serpent_cell = (
                 f"{cellHeader}{self.__cell_format__(cell.Definition, offset=len(cellHeader))}"
@@ -353,9 +351,7 @@ class SerpentInput:
     def __sorted_surfaces__(self, Surfaces):
         temp = SurfacesDict(Surfaces)
         surfList = []
-        for ind in range(
-            Surfaces.IndexOffset, Surfaces.surfaceNumber + Surfaces.IndexOffset
-        ):
+        for ind in range(Surfaces.IndexOffset, Surfaces.surfaceNumber + Surfaces.IndexOffset):
             s = temp.get_surface(ind + 1)
             if s is not None:
                 surfList.append(s)
@@ -365,9 +361,7 @@ class SerpentInput:
     def __change_surf_sign__(self, p):
 
         if p.Index not in self.surfaceTable.keys():
-            logger.info(
-                f"{p.Type} Surface {p.Index} not used in cell definition) {p.Surf.Axis} {p.Surf.Position}"
-            )
+            logger.info(f"{p.Type} Surface {p.Index} not used in cell definition) {p.Surf.Axis} {p.Surf.Position}")
             return
 
         for ic in self.surfaceTable[p.Index]:

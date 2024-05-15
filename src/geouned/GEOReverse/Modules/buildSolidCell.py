@@ -68,9 +68,7 @@ def BuildDepth(cell, cutShape, mode, baseBox, simplify=False, loop=0):
             if seq.operator == "AND":
                 part = CS
                 for e in cell.definition.elements:
-                    part = BuildDepth(
-                        cell.getSubCell(e), part, mode, cbaseBox, simplify, loop=loop
-                    )
+                    part = BuildDepth(cell.getSubCell(e), part, mode, cbaseBox, simplify, loop=loop)
                     cbaseBox = False
                 newCutShape.extend(part)
             else:
@@ -132,9 +130,7 @@ def BuildSolidParts(cell, base, mode):
         print("not cutting surfaces")
         return tuple(base.base), tuple()
     if mode == "solids":
-        full, cut = SplitSolid(
-            base, surfaces, cell, solidTool=True, tolerance=Options.splitTolerance
-        )
+        full, cut = SplitSolid(base, surfaces, cell, solidTool=True, tolerance=Options.splitTolerance)
     elif mode == "allSurfaces":
         full, cut = SplitSolid(base, surfaces, cell, tolerance=Options.splitTolerance)
 

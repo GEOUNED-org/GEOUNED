@@ -8,15 +8,9 @@ import re
 logger = logging.getLogger("general_logger")
 
 mostinner = re.compile(r"\([^\(^\)]*\)")  # identify most inner parentheses
-number = re.compile(
-    r"(?P<value>[-+]?\d+)"
-)  # identify signed integer and record its value in <value>
-mix = re.compile(
-    r"(?P<value>([-+]?\d+|\[0+\]))"
-)  # identify signed integer or [000...] pattern. Record the value.
-TFX = re.compile(
-    r"(?P<value>[FTXo]+)"
-)  # identify pattern incluinding F,T,X, or o sequence ( in any order).
+number = re.compile(r"(?P<value>[-+]?\d+)")  # identify signed integer and record its value in <value>
+mix = re.compile(r"(?P<value>([-+]?\d+|\[0+\]))")  # identify signed integer or [000...] pattern. Record the value.
+TFX = re.compile(r"(?P<value>[FTXo]+)")  # identify pattern incluinding F,T,X, or o sequence ( in any order).
 PValue = re.compile(r"P\d+")  # identify pattern "P" + integer pattern (e.g. P3915).
 NValue = re.compile(r"N\d+")  # identify pattern "N" + integer pattern (e.g. N3358).
 conversion = {
@@ -79,12 +73,7 @@ class BoolSequence:
             else:
                 level = s.level
                 if type(s.elements) is bool:
-                    if (
-                        self.operator == "AND"
-                        and not s.elements
-                        or self.operator == "OR"
-                        and s.elements
-                    ):
+                    if self.operator == "AND" and not s.elements or self.operator == "OR" and s.elements:
                         self.level = -1
                         self.elements = s.elements
                         return
@@ -179,9 +168,7 @@ class BoolSequence:
             self.join_operators()
             self.level_update()
 
-        if type(self.elements) is not bool and (
-            self.level > 0 or len(self.elements) > 1
-        ):
+        if type(self.elements) is not bool and (self.level > 0 or len(self.elements) > 1):
             levIn = self.level
             self.simplify_sequence(CT)
 
@@ -712,13 +699,7 @@ def outer_terms(expression, value="number"):
             cont = True
             if redundant(m, expr):
                 # remove redundant parentheses
-                expr = (
-                    expr[: m.start()]
-                    + " "
-                    + expr[m.start() + 1 : m.end() - 1]
-                    + " "
-                    + expr[m.end() :]
-                )
+                expr = expr[: m.start()] + " " + expr[m.start() + 1 : m.end() - 1] + " " + expr[m.end() :]
             else:
                 # replace no redundant parentheses by 0 and : by ;
                 zeros = "[" + nullVal * (m.end() - m.start() - 2) + "]"

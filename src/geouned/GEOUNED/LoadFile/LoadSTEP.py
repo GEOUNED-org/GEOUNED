@@ -65,11 +65,7 @@ def load_cad(filename, settings, options):
         if elem.TypeId == "Part::Feature":
             comment = LF.getCommentTree(elem, options)
             if not elem.Shape.Solids:
-                logger.warning(
-                    "Element {:} has no associated solid".format(
-                        comment + "/" + elem.Label
-                    )
-                )
+                logger.warning("Element {:} has no associated solid".format(comment + "/" + elem.Label))
                 continue
             else:
                 tempre_mat = None
@@ -81,21 +77,13 @@ def load_cad(filename, settings, options):
                 if elem.InList:
                     # MIO: lightly modification of label if required
                     label_in_list = LF.get_label(elem.InList[0].Label, options)
-                    encl_label = re.search(
-                        "enclosure(?P<encl>[0-9]+)_(?P<parent>[0-9]+)_", label_in_list
-                    )
+                    encl_label = re.search("enclosure(?P<encl>[0-9]+)_(?P<parent>[0-9]+)_", label_in_list)
                     if not encl_label:
-                        encl_label = re.search(
-                            "enclosure(?P<encl>[0-9]+)_(?P<parent>[0-9]+)_", label
-                        )
+                        encl_label = re.search("enclosure(?P<encl>[0-9]+)_(?P<parent>[0-9]+)_", label)
 
-                    envel_label = re.search(
-                        "envelope(?P<env>[0-9]+)_(?P<parent>[0-9]+)_", label_in_list
-                    )
+                    envel_label = re.search("envelope(?P<env>[0-9]+)_(?P<parent>[0-9]+)_", label_in_list)
                     if not envel_label:
-                        envel_label = re.search(
-                            "envelope(?P<env>[0-9]+)_(?P<parent>[0-9]+)_", label
-                        )
+                        envel_label = re.search("envelope(?P<env>[0-9]+)_(?P<parent>[0-9]+)_", label)
 
                     # tempre_mat = re.search("(m(?P<mat>\d+)_)",elem.Label)
                     # if not tempre_mat :
@@ -144,9 +132,7 @@ def load_cad(filename, settings, options):
                     if tempre_mat:
                         mat_label = int(tempre_mat.group("mat"))
                         if mat_label in m_dict.keys():
-                            meta_list[i_solid].set_material(
-                                mat_label, m_dict[mat_label][0], m_dict[mat_label][1]
-                            )
+                            meta_list[i_solid].set_material(mat_label, m_dict[mat_label][0], m_dict[mat_label][1])
                         else:
                             if mat_label == 0:
                                 meta_list[i_solid].set_material(mat_label, 0, 0)
@@ -166,26 +152,20 @@ def load_cad(filename, settings, options):
 
                     if encl_label is not None:
                         meta_list[i_solid].EnclosureID = int(encl_label.group("encl"))
-                        meta_list[i_solid].ParentEnclosureID = int(
-                            encl_label.group("parent")
-                        )
+                        meta_list[i_solid].ParentEnclosureID = int(encl_label.group("parent"))
                         meta_list[i_solid].IsEnclosure = True
                         meta_list[i_solid].CellType = "void"
 
                     if envel_label is not None:
                         meta_list[i_solid].EnclosureID = int(envel_label.group("env"))
-                        meta_list[i_solid].ParentEnclosureID = int(
-                            envel_label.group("parent")
-                        )
+                        meta_list[i_solid].ParentEnclosureID = int(envel_label.group("parent"))
                         meta_list[i_solid].IsEnclosure = True
                         meta_list[i_solid].CellType = "envelope"
                     i_solid += 1
 
     LF.joinEnvelopes(meta_list)
     if missing_mat:
-        logger.warning(
-            "At least one material in the CAD model is not present in the material file"
-        )
+        logger.warning("At least one material in the CAD model is not present in the material file")
         logger.info(f"List of not present materials: {missing_mat}")
 
     enclosure_list = LF.set_enclosure_solid_list(meta_list)

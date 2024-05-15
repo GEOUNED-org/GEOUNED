@@ -199,12 +199,8 @@ $ **************************************************************
         enclenvList = []
         with open(filename) as f:
             enclenvList = f.readlines()
-        enclLabel = re.search(
-            "enclosure(?P<encl>[0-9]+)_(?P<parent>[0-9]+)_", str(enclenvList)
-        )
-        envelLabel = re.search(
-            "envelope(?P<env>[0-9]+)_(?P<parent>[0-9]+)_", str(enclenvList)
-        )
+        enclLabel = re.search("enclosure(?P<encl>[0-9]+)_(?P<parent>[0-9]+)_", str(enclenvList))
+        envelLabel = re.search("envelope(?P<env>[0-9]+)_(?P<parent>[0-9]+)_", str(enclenvList))
         cond1 = enclLabel == None
         cond2 = envelLabel == None
         return cond1 and cond2
@@ -235,13 +231,9 @@ $ **************************************************************
                 if self.voidMat != []:
                     self.Materials.add(self.voidMat[0])
                     if abs(self.voidMat[1]) < 1e-2:
-                        cellHeader = "{:<5d} {:<5d} {:11.4e} ".format(
-                            index, self.voidMat[0], self.voidMat[1]
-                        )
+                        cellHeader = "{:<5d} {:<5d} {:11.4e} ".format(index, self.voidMat[0], self.voidMat[1])
                     else:
-                        cellHeader = "{:<5d} {:<5d} {:11.7f} ".format(
-                            index, self.voidMat[0], self.voidMat[1]
-                        )
+                        cellHeader = "{:<5d} {:<5d} {:11.7f} ".format(index, self.voidMat[0], self.voidMat[1])
                 else:
                     cellHeader = f"{index:<5d} {0:<5d}  "
 
@@ -254,13 +246,9 @@ $ **************************************************************
                 cellHeader = f"{index:<5d} {cell.Material:<5d} c{cell.Material:<5d} "
             else:
                 if abs(cell.Density) < 1e-2:
-                    cellHeader = "{:<5d} {:<5d} {:11.4e} ".format(
-                        index, cell.Material, cell.Density
-                    )
+                    cellHeader = "{:<5d} {:<5d} {:11.4e} ".format(index, cell.Material, cell.Density)
                 else:
-                    cellHeader = "{:<5d} {:<5d} {:11.7f} ".format(
-                        index, cell.Material, cell.Density
-                    )
+                    cellHeader = "{:<5d} {:<5d} {:11.7f} ".format(index, cell.Material, cell.Density)
 
         phitscell = "{}{}\n{}{}".format(
             cellHeader,
@@ -315,27 +303,19 @@ $ **************************************************************
                     cell.Comments = one_mervoid_str.format(startVoidIndex)
                 else:
                     some_mervoid_str = "VOID CELLs {}-{} merged, so the auto-genarated void definitions are eliminated\n"
-                    cell.Comments = some_mervoid_str.format(
-                        startVoidIndex, eliminated_endVoidIndex
-                    )
+                    cell.Comments = some_mervoid_str.format(startVoidIndex, eliminated_endVoidIndex)
                 if self.voidMat != []:
                     self.Materials.add(self.voidMat[0])
                     if abs(self.voidMat[1]) < 1e-2:
-                        cellHeader = "{:<5d} {:<5d} {:11.4e} ".format(
-                            index, self.voidMat[0], self.voidMat[1]
-                        )
+                        cellHeader = "{:<5d} {:<5d} {:11.4e} ".format(index, self.voidMat[0], self.voidMat[1])
                     else:
-                        cellHeader = "{:<5d} {:<5d} {:11.7f} ".format(
-                            index, self.voidMat[0], self.voidMat[1]
-                        )
+                        cellHeader = "{:<5d} {:<5d} {:11.7f} ".format(index, self.voidMat[0], self.voidMat[1])
                 else:
                     cellHeader = f"{index:<5d} {0:<5d}  "
 
                 phitscell = "{}{}\n{}{}\n".format(
                     cellHeader,
-                    self.__new_inner_void_def__(
-                        inclSolidCells, cell.Definition, offset=len(cellHeader)
-                    ),
+                    self.__new_inner_void_def__(inclSolidCells, cell.Definition, offset=len(cellHeader)),
                     self.__option_format__(cell),
                     self.__comment_format__(cell.Comments, cell.MatInfo),
                 )
@@ -368,13 +348,9 @@ $ **************************************************************
                 cellHeader = f"{index:<5d} {cell.Material:<5d} c{cell.Material:<5d} "
             else:
                 if abs(cell.Density) < 1e-2:
-                    cellHeader = "{:<5d} {:<5d} {:11.4e} ".format(
-                        index, cell.Material, cell.Density
-                    )
+                    cellHeader = "{:<5d} {:<5d} {:11.4e} ".format(index, cell.Material, cell.Density)
                 else:
-                    cellHeader = "{:<5d} {:<5d} {:11.7f} ".format(
-                        index, cell.Material, cell.Density
-                    )
+                    cellHeader = "{:<5d} {:<5d} {:11.7f} ".format(index, cell.Material, cell.Density)
 
         phitscell = "{}{}\n{}{}".format(
             cellHeader,
@@ -415,9 +391,7 @@ $ **************************************************************
                     MATID.append(cell.Material)
                     if self.Matfile == "" and cell.EnclosureID != 0:
                         mismat_comment = "$ Change dummyMat M{}, {} c{} g/cm3 is assigned\n M{:<6d} H 2 O 1\n"
-                        MATCARD += mismat_comment.format(
-                            cell.Material, cell.MatInfo, cell.Material, cell.Material
-                        )
+                        MATCARD += mismat_comment.format(cell.Material, cell.MatInfo, cell.Material, cell.Material)
                     else:
                         mat_comment = "$ Change dummyMat M{} to {}, Density = {}g/cm3\n M{:<6d} H 2 O 1\n"
                         MATCARD += mat_comment.format(
@@ -445,18 +419,12 @@ $ **************************************************************
                 if cell.__id__ is not None:
                     if cell.Void and startVoidIndex == eliminated_endVoidIndex:
                         if cell.label == startVoidIndex:
-                            logger.info(
-                                f"Eliminated the merged void cell {cell.label} from [VOLUME] section"
-                            )
+                            logger.info(f"Eliminated the merged void cell {cell.label} from [VOLUME] section")
                         else:
                             vol += f"{'':6s}{cell.label}{'':6s}1.0\n"
                     elif cell.Void:
-                        if cell.label in range(
-                            startVoidIndex, eliminated_endVoidIndex + 1
-                        ):
-                            logger.info(
-                                f"Eliminated the merged void cell {cell.label} from [VOLUME] section"
-                            )
+                        if cell.label in range(startVoidIndex, eliminated_endVoidIndex + 1):
+                            logger.info(f"Eliminated the merged void cell {cell.label} from [VOLUME] section")
                         else:
                             vol += f"{'':6s}{cell.label}{'':6s}1.0\n"
                     else:
@@ -468,9 +436,7 @@ $ **************************************************************
                         if cell.Void:
                             vol += f"{'':6s}{cell.label}{'':6s}1.0\n"
                         else:
-                            vol += "{:6s}{}{:6s}{:6e}\n".format(
-                                "", cell.label, "", cell.Volume * 1e-3
-                            )
+                            vol += "{:6s}{}{:6s}{:6e}\n".format("", cell.label, "", cell.Volume * 1e-3)
 
         self.inpfile.write(vol)
 
@@ -591,9 +557,7 @@ $ **************************************************************
     def __sorted_surfaces__(self, Surfaces):
         temp = SurfacesDict(Surfaces)
         surfList = []
-        for ind in range(
-            Surfaces.IndexOffset, Surfaces.surfaceNumber + Surfaces.IndexOffset
-        ):
+        for ind in range(Surfaces.IndexOffset, Surfaces.surfaceNumber + Surfaces.IndexOffset):
             s = temp.get_surface(ind + 1)
             if s is not None:
                 surfList.append(s)
@@ -603,9 +567,7 @@ $ **************************************************************
     def __change_surf_sign__(self, p):
 
         if p.Index not in self.surfaceTable.keys():
-            logger.info(
-                f"{p.Type} Surface {p.Index} not used in cell definition) {p.Surf.Axis} {p.Surf.Position}"
-            )
+            logger.info(f"{p.Type} Surface {p.Index} not used in cell definition) {p.Surf.Axis} {p.Surf.Position}")
             return
 
         for ic in self.surfaceTable[p.Index]:

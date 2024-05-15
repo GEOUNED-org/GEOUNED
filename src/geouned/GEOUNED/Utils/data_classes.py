@@ -80,9 +80,7 @@ class Options:
     @forceCylinder.setter
     def forceCylinder(self, value: bool):
         if not isinstance(value, bool):
-            raise TypeError(
-                f"geouned.Options.forceCylinder should be a bool, not a {type(value)}"
-            )
+            raise TypeError(f"geouned.Options.forceCylinder should be a bool, not a {type(value)}")
         self._forceCylinder = value
 
     @property
@@ -92,9 +90,7 @@ class Options:
     @newSplitPlane.setter
     def newSplitPlane(self, value: bool):
         if not isinstance(value, bool):
-            raise TypeError(
-                f"geouned.Options.newSplitPlane should be a bool, not a {type(value)}"
-            )
+            raise TypeError(f"geouned.Options.newSplitPlane should be a bool, not a {type(value)}")
         self._newSplitPlane = value
 
     @property
@@ -104,9 +100,7 @@ class Options:
     @delLastNumber.setter
     def delLastNumber(self, value: bool):
         if not isinstance(value, bool):
-            raise TypeError(
-                f"geouned.Options.delLastNumber should be a bool, not a {type(value)}"
-            )
+            raise TypeError(f"geouned.Options.delLastNumber should be a bool, not a {type(value)}")
         self._delLastNumber = value
 
     @property
@@ -116,13 +110,9 @@ class Options:
     @enlargeBox.setter
     def enlargeBox(self, value: Real):
         if not isinstance(value, Real):
-            raise TypeError(
-                f"geouned.Options.enlargeBox should be a Real, not a {type(value)}"
-            )
+            raise TypeError(f"geouned.Options.enlargeBox should be a Real, not a {type(value)}")
         if value < 0:
-            raise ValueError(
-                f"geouned.Options.enlargeBox should be above 0, not {value}"
-            )
+            raise ValueError(f"geouned.Options.enlargeBox should be above 0, not {value}")
         self._enlargeBox = value
 
     @property
@@ -132,9 +122,7 @@ class Options:
     @nPlaneReverse.setter
     def nPlaneReverse(self, value: int):
         if not isinstance(value, int):
-            raise TypeError(
-                f"geouned.Options.nPlaneReverse should be a int, not a {type(value)}"
-            )
+            raise TypeError(f"geouned.Options.nPlaneReverse should be a int, not a {type(value)}")
         self._nPlaneReverse = value
 
     @property
@@ -144,13 +132,9 @@ class Options:
     @splitTolerance.setter
     def splitTolerance(self, value: Real):
         if not isinstance(value, Real):
-            raise TypeError(
-                f"geouned.Options.splitTolerance should be a Real, not a {type(value)}"
-            )
+            raise TypeError(f"geouned.Options.splitTolerance should be a Real, not a {type(value)}")
         if value < 0:
-            raise ValueError(
-                f"geouned.Options.splitTolerance should be above 0, not {value}"
-            )
+            raise ValueError(f"geouned.Options.splitTolerance should be above 0, not {value}")
         self._splitTolerance = value
 
     @property
@@ -160,9 +144,7 @@ class Options:
     @scaleUp.setter
     def scaleUp(self, value: bool):
         if not isinstance(value, bool):
-            raise TypeError(
-                f"geouned.Options.scaleUp should be a bool, not a {type(value)}"
-            )
+            raise TypeError(f"geouned.Options.scaleUp should be a bool, not a {type(value)}")
         self._scaleUp = value
 
     @property
@@ -172,9 +154,7 @@ class Options:
     @quadricPY.setter
     def quadricPY(self, value: bool):
         if not isinstance(value, bool):
-            raise TypeError(
-                f"geouned.Options.quadricPY should be a bool, not a {type(value)}"
-            )
+            raise TypeError(f"geouned.Options.quadricPY should be a bool, not a {type(value)}")
         self._quadricPY = value
 
     @property
@@ -184,9 +164,7 @@ class Options:
     @Facets.setter
     def Facets(self, value: bool):
         if not isinstance(value, bool):
-            raise TypeError(
-                f"geouned.Options.Facets should be a bool, not a {type(value)}"
-            )
+            raise TypeError(f"geouned.Options.Facets should be a bool, not a {type(value)}")
         self._Facets = value
 
     @property
@@ -196,9 +174,7 @@ class Options:
     @prnt3PPlane.setter
     def prnt3PPlane(self, value: bool):
         if not isinstance(value, bool):
-            raise TypeError(
-                f"geouned.Options.prnt3PPlane should be a bool, not a {type(value)}"
-            )
+            raise TypeError(f"geouned.Options.prnt3PPlane should be a bool, not a {type(value)}")
         self._prnt3PPlane = value
 
     @property
@@ -208,9 +184,7 @@ class Options:
     @forceNoOverlap.setter
     def forceNoOverlap(self, value: bool):
         if not isinstance(value, bool):
-            raise TypeError(
-                f"geouned.Options.forceNoOverlap should be a bool, not a {type(value)}"
-            )
+            raise TypeError(f"geouned.Options.forceNoOverlap should be a bool, not a {type(value)}")
         self._forceNoOverlap = value
 
 
@@ -277,9 +251,7 @@ class Tolerances:
     @relativeTol.setter
     def relativeTol(self, value: bool):
         if not isinstance(value, bool):
-            raise TypeError(
-                f"geouned.Tolerances.relativeTol should be a bool, not a {type(value)}"
-            )
+            raise TypeError(f"geouned.Tolerances.relativeTol should be a bool, not a {type(value)}")
         self._relativeTol = value
 
     @property
@@ -289,9 +261,7 @@ class Tolerances:
     @relativePrecision.setter
     def relativePrecision(self, value: float):
         if not isinstance(value, float):
-            raise TypeError(
-                f"geouned.Tolerances.relativePrecision should be a float, not a {type(value)}"
-            )
+            raise TypeError(f"geouned.Tolerances.relativePrecision should be a float, not a {type(value)}")
         self._relativePrecision = value
 
     @property
@@ -301,9 +271,7 @@ class Tolerances:
     @value.setter
     def value(self, value: float):
         if not isinstance(value, float):
-            raise TypeError(
-                f"geouned.Tolerances.value should be a float, not a {type(value)}"
-            )
+            raise TypeError(f"geouned.Tolerances.value should be a float, not a {type(value)}")
         self._value = value
 
     @property
@@ -313,9 +281,7 @@ class Tolerances:
     @distance.setter
     def distance(self, distance: float):
         if not isinstance(distance, float):
-            raise TypeError(
-                f"geouned.Tolerances.distance should be a float, not a {type(distance)}"
-            )
+            raise TypeError(f"geouned.Tolerances.distance should be a float, not a {type(distance)}")
         self._distance = distance
 
     @property
@@ -325,9 +291,7 @@ class Tolerances:
     @angle.setter
     def angle(self, angle: float):
         if not isinstance(angle, float):
-            raise TypeError(
-                f"geouned.Tolerances.angle should be a float, not a {type(angle)}"
-            )
+            raise TypeError(f"geouned.Tolerances.angle should be a float, not a {type(angle)}")
         self._angle = angle
 
     @property
@@ -337,9 +301,7 @@ class Tolerances:
     @pln_distance.setter
     def pln_distance(self, pln_distance: float):
         if not isinstance(pln_distance, float):
-            raise TypeError(
-                f"geouned.Tolerances.pln_distance should be a float, not a {type(pln_distance)}"
-            )
+            raise TypeError(f"geouned.Tolerances.pln_distance should be a float, not a {type(pln_distance)}")
         self._pln_distance = pln_distance
 
     @property
@@ -349,9 +311,7 @@ class Tolerances:
     @cyl_distance.setter
     def cyl_distance(self, cyl_distance: float):
         if not isinstance(cyl_distance, float):
-            raise TypeError(
-                f"geouned.Tolerances.cyl_distance should be a float, not a {type(cyl_distance)}"
-            )
+            raise TypeError(f"geouned.Tolerances.cyl_distance should be a float, not a {type(cyl_distance)}")
         self._cyl_distance = cyl_distance
 
     @property
@@ -361,9 +321,7 @@ class Tolerances:
     @cyl_angle.setter
     def cyl_angle(self, cyl_angle: float):
         if not isinstance(cyl_angle, float):
-            raise TypeError(
-                f"geouned.Tolerances.cyl_angle should be a float, not a {type(cyl_angle)}"
-            )
+            raise TypeError(f"geouned.Tolerances.cyl_angle should be a float, not a {type(cyl_angle)}")
         self._cyl_angle = cyl_angle
 
     @property
@@ -373,9 +331,7 @@ class Tolerances:
     @sph_distance.setter
     def sph_distance(self, sph_distance: float):
         if not isinstance(sph_distance, float):
-            raise TypeError(
-                f"geouned.Tolerances.sph_distance should be a float, not a {type(sph_distance)}"
-            )
+            raise TypeError(f"geouned.Tolerances.sph_distance should be a float, not a {type(sph_distance)}")
         self._sph_distance = sph_distance
 
     @property
@@ -385,9 +341,7 @@ class Tolerances:
     @pln_angle.setter
     def pln_angle(self, pln_angle: float):
         if not isinstance(pln_angle, float):
-            raise TypeError(
-                f"geouned.Tolerances.pln_angle should be a float, not a {type(pln_angle)}"
-            )
+            raise TypeError(f"geouned.Tolerances.pln_angle should be a float, not a {type(pln_angle)}")
         self._pln_angle = pln_angle
 
     @property
@@ -397,9 +351,7 @@ class Tolerances:
     @kne_distance.setter
     def kne_distance(self, kne_distance: float):
         if not isinstance(kne_distance, float):
-            raise TypeError(
-                f"geouned.Tolerances.kne_distance should be a float, not a {type(kne_distance)}"
-            )
+            raise TypeError(f"geouned.Tolerances.kne_distance should be a float, not a {type(kne_distance)}")
         self._kne_distance = kne_distance
 
     @property
@@ -409,9 +361,7 @@ class Tolerances:
     @kne_angle.setter
     def kne_angle(self, kne_angle: float):
         if not isinstance(kne_angle, float):
-            raise TypeError(
-                f"geouned.Tolerances.kne_angle should be a float, not a {type(kne_angle)}"
-            )
+            raise TypeError(f"geouned.Tolerances.kne_angle should be a float, not a {type(kne_angle)}")
         self._kne_angle = kne_angle
 
     @property
@@ -421,9 +371,7 @@ class Tolerances:
     @tor_distance.setter
     def tor_distance(self, tor_distance: float):
         if not isinstance(tor_distance, float):
-            raise TypeError(
-                f"geouned.Tolerances.tor_distance should be a float, not a {type(tor_distance)}"
-            )
+            raise TypeError(f"geouned.Tolerances.tor_distance should be a float, not a {type(tor_distance)}")
         self._tor_distance = tor_distance
 
     @property
@@ -433,9 +381,7 @@ class Tolerances:
     @tor_angle.setter
     def tor_angle(self, tor_angle: float):
         if not isinstance(tor_angle, float):
-            raise TypeError(
-                f"geouned.Tolerances.tor_angle should be a float, not a {type(tor_angle)}"
-            )
+            raise TypeError(f"geouned.Tolerances.tor_angle should be a float, not a {type(tor_angle)}")
         self._tor_angle = tor_angle
 
     @property
@@ -445,9 +391,7 @@ class Tolerances:
     @min_area.setter
     def min_area(self, min_area: float):
         if not isinstance(min_area, float):
-            raise TypeError(
-                f"geouned.Tolerances.min_area should be a float, not a {type(min_area)}"
-            )
+            raise TypeError(f"geouned.Tolerances.min_area should be a float, not a {type(min_area)}")
         self._min_area = min_area
 
 
@@ -511,9 +455,7 @@ class NumericFormat:
     @P_abc.setter
     def P_abc(self, P_abc: str):
         if not isinstance(P_abc, str):
-            raise TypeError(
-                f"geouned.Tolerances.P_abc should be a str, not a {type(P_abc)}"
-            )
+            raise TypeError(f"geouned.Tolerances.P_abc should be a str, not a {type(P_abc)}")
         self._P_abc = P_abc
 
     @property
@@ -523,9 +465,7 @@ class NumericFormat:
     @P_d.setter
     def P_d(self, P_d: str):
         if not isinstance(P_d, str):
-            raise TypeError(
-                f"geouned.Tolerances.P_d should be a str, not a {type(P_d)}"
-            )
+            raise TypeError(f"geouned.Tolerances.P_d should be a str, not a {type(P_d)}")
         self._P_d = P_d
 
     @property
@@ -535,9 +475,7 @@ class NumericFormat:
     @P_xyz.setter
     def P_xyz(self, P_xyz: str):
         if not isinstance(P_xyz, str):
-            raise TypeError(
-                f"geouned.Tolerances.P_xyz should be a str, not a {type(P_xyz)}"
-            )
+            raise TypeError(f"geouned.Tolerances.P_xyz should be a str, not a {type(P_xyz)}")
         self._P_xyz = P_xyz
 
     @property
@@ -547,9 +485,7 @@ class NumericFormat:
     @S_r.setter
     def S_r(self, S_r: str):
         if not isinstance(S_r, str):
-            raise TypeError(
-                f"geouned.Tolerances.S_r should be a str, not a {type(S_r)}"
-            )
+            raise TypeError(f"geouned.Tolerances.S_r should be a str, not a {type(S_r)}")
         self._S_r = S_r
 
     @property
@@ -559,9 +495,7 @@ class NumericFormat:
     @S_xyz.setter
     def S_xyz(self, S_xyz: str):
         if not isinstance(S_xyz, str):
-            raise TypeError(
-                f"geouned.Tolerances.S_xyz should be a str, not a {type(S_xyz)}"
-            )
+            raise TypeError(f"geouned.Tolerances.S_xyz should be a str, not a {type(S_xyz)}")
         self._S_xyz = S_xyz
 
     @property
@@ -571,9 +505,7 @@ class NumericFormat:
     @C_r.setter
     def C_r(self, C_r: str):
         if not isinstance(C_r, str):
-            raise TypeError(
-                f"geouned.Tolerances.C_r should be a str, not a {type(C_r)}"
-            )
+            raise TypeError(f"geouned.Tolerances.C_r should be a str, not a {type(C_r)}")
         self._C_r = C_r
 
     @property
@@ -583,9 +515,7 @@ class NumericFormat:
     @C_xyz.setter
     def C_xyz(self, C_xyz: str):
         if not isinstance(C_xyz, str):
-            raise TypeError(
-                f"geouned.Tolerances.C_xyz should be a str, not a {type(C_xyz)}"
-            )
+            raise TypeError(f"geouned.Tolerances.C_xyz should be a str, not a {type(C_xyz)}")
         self._C_xyz = C_xyz
 
     @property
@@ -595,9 +525,7 @@ class NumericFormat:
     @K_xyz.setter
     def K_xyz(self, K_xyz: str):
         if not isinstance(K_xyz, str):
-            raise TypeError(
-                f"geouned.Tolerances.K_xyz should be a str, not a {type(K_xyz)}"
-            )
+            raise TypeError(f"geouned.Tolerances.K_xyz should be a str, not a {type(K_xyz)}")
         self._K_xyz = K_xyz
 
     @property
@@ -607,9 +535,7 @@ class NumericFormat:
     @K_tan2.setter
     def K_tan2(self, K_tan2: str):
         if not isinstance(K_tan2, str):
-            raise TypeError(
-                f"geouned.Tolerances.K_tan2 should be a str, not a {type(K_tan2)}"
-            )
+            raise TypeError(f"geouned.Tolerances.K_tan2 should be a str, not a {type(K_tan2)}")
         self._K_tan2 = K_tan2
 
     @property
@@ -619,9 +545,7 @@ class NumericFormat:
     @T_r.setter
     def T_r(self, T_r: str):
         if not isinstance(T_r, str):
-            raise TypeError(
-                f"geouned.Tolerances.T_r should be a str, not a {type(T_r)}"
-            )
+            raise TypeError(f"geouned.Tolerances.T_r should be a str, not a {type(T_r)}")
         self._T_r = T_r
 
     @property
@@ -631,9 +555,7 @@ class NumericFormat:
     @T_xyz.setter
     def T_xyz(self, T_xyz: str):
         if not isinstance(T_xyz, str):
-            raise TypeError(
-                f"geouned.Tolerances.T_xyz should be a str, not a {type(T_xyz)}"
-            )
+            raise TypeError(f"geouned.Tolerances.T_xyz should be a str, not a {type(T_xyz)}")
         self._T_xyz = T_xyz
 
     @property
@@ -643,9 +565,7 @@ class NumericFormat:
     @GQ_1to6.setter
     def GQ_1to6(self, GQ_1to6: str):
         if not isinstance(GQ_1to6, str):
-            raise TypeError(
-                f"geouned.Tolerances.GQ_1to6 should be a str, not a {type(GQ_1to6)}"
-            )
+            raise TypeError(f"geouned.Tolerances.GQ_1to6 should be a str, not a {type(GQ_1to6)}")
         self._GQ_1to6 = GQ_1to6
 
     @property
@@ -655,9 +575,7 @@ class NumericFormat:
     @GQ_7to9.setter
     def GQ_7to9(self, GQ_7to9: str):
         if not isinstance(GQ_7to9, str):
-            raise TypeError(
-                f"geouned.Tolerances.GQ_7to9 should be a str, not a {type(GQ_7to9)}"
-            )
+            raise TypeError(f"geouned.Tolerances.GQ_7to9 should be a str, not a {type(GQ_7to9)}")
         self._GQ_7to9 = GQ_7to9
 
     @property
@@ -667,9 +585,7 @@ class NumericFormat:
     @GQ_10.setter
     def GQ_10(self, GQ_10: str):
         if not isinstance(GQ_10, str):
-            raise TypeError(
-                f"geouned.Tolerances.GQ_10 should be a str, not a {type(GQ_10)}"
-            )
+            raise TypeError(f"geouned.Tolerances.GQ_10 should be a str, not a {type(GQ_10)}")
         self._GQ_10 = GQ_10
 
 
@@ -766,9 +682,7 @@ class Settings:
     @matFile.setter
     def matFile(self, matFile: str):
         if not isinstance(matFile, str):
-            raise TypeError(
-                f"geouned.Tolerances.matFile should be a str, not a {type(matFile)}"
-            )
+            raise TypeError(f"geouned.Tolerances.matFile should be a str, not a {type(matFile)}")
         self._matFile = matFile
 
     @property
@@ -778,9 +692,7 @@ class Settings:
     @voidGen.setter
     def voidGen(self, voidGen: bool):
         if not isinstance(voidGen, bool):
-            raise TypeError(
-                f"geouned.Tolerances.voidGen should be a bool, not a {type(voidGen)}"
-            )
+            raise TypeError(f"geouned.Tolerances.voidGen should be a bool, not a {type(voidGen)}")
         self._voidGen = voidGen
 
     @property
@@ -790,9 +702,7 @@ class Settings:
     @debug.setter
     def debug(self, debug: bool):
         if not isinstance(debug, bool):
-            raise TypeError(
-                f"geouned.Tolerances.debug should be a bool, not a {type(debug)}"
-            )
+            raise TypeError(f"geouned.Tolerances.debug should be a bool, not a {type(debug)}")
         self._debug = debug
 
     @property
@@ -802,9 +712,7 @@ class Settings:
     @compSolids.setter
     def compSolids(self, compSolids: bool):
         if not isinstance(compSolids, bool):
-            raise TypeError(
-                f"geouned.Tolerances.compSolids should be a bool, not a {type(compSolids)}"
-            )
+            raise TypeError(f"geouned.Tolerances.compSolids should be a bool, not a {type(compSolids)}")
         self._compSolids = compSolids
 
     @property
@@ -814,9 +722,7 @@ class Settings:
     @simplify.setter
     def simplify(self, simplify: str):
         if not isinstance(simplify, str):
-            raise TypeError(
-                f"geouned.Tolerances.simplify should be a str, not a {type(simplify)}"
-            )
+            raise TypeError(f"geouned.Tolerances.simplify should be a str, not a {type(simplify)}")
         self._simplify = simplify
 
     @property
@@ -826,14 +732,10 @@ class Settings:
     @cellRange.setter
     def cellRange(self, cellRange: list):
         if not isinstance(cellRange, list):
-            raise TypeError(
-                f"geouned.Tolerances.cellRange should be a list, not a {type(cellRange)}"
-            )
+            raise TypeError(f"geouned.Tolerances.cellRange should be a list, not a {type(cellRange)}")
         for entry in cellRange:
             if not isinstance(entry, int):
-                raise TypeError(
-                    f"geouned.Tolerances.cellRange should be a list of ints, not a {type(entry)}"
-                )
+                raise TypeError(f"geouned.Tolerances.cellRange should be a list of ints, not a {type(entry)}")
         self._cellRange = cellRange
 
     @property
@@ -843,9 +745,7 @@ class Settings:
     @exportSolids.setter
     def exportSolids(self, exportSolids: str):
         if not isinstance(exportSolids, str):
-            raise TypeError(
-                f"geouned.Tolerances.exportSolids should be a str, not a {type(exportSolids)}"
-            )
+            raise TypeError(f"geouned.Tolerances.exportSolids should be a str, not a {type(exportSolids)}")
         self._exportSolids = exportSolids
 
     @property
@@ -855,9 +755,7 @@ class Settings:
     @minVoidSize.setter
     def minVoidSize(self, minVoidSize: float):
         if not isinstance(minVoidSize, float):
-            raise TypeError(
-                f"geouned.Tolerances.minVoidSize should be a float, not a {type(minVoidSize)}"
-            )
+            raise TypeError(f"geouned.Tolerances.minVoidSize should be a float, not a {type(minVoidSize)}")
         self._minVoidSize = minVoidSize
 
     @property
@@ -867,9 +765,7 @@ class Settings:
     @maxSurf.setter
     def maxSurf(self, maxSurf: int):
         if not isinstance(maxSurf, int):
-            raise TypeError(
-                f"geouned.Tolerances.maxSurf should be a int, not a {type(maxSurf)}"
-            )
+            raise TypeError(f"geouned.Tolerances.maxSurf should be a int, not a {type(maxSurf)}")
         self._maxSurf = maxSurf
 
     @property
@@ -879,9 +775,7 @@ class Settings:
     @maxBracket.setter
     def maxBracket(self, maxBracket: int):
         if not isinstance(maxBracket, int):
-            raise TypeError(
-                f"geouned.Tolerances.maxBracket should be a int, not a {type(maxBracket)}"
-            )
+            raise TypeError(f"geouned.Tolerances.maxBracket should be a int, not a {type(maxBracket)}")
         self._maxBracket = maxBracket
 
     @property
@@ -891,14 +785,10 @@ class Settings:
     @voidMat.setter
     def voidMat(self, voidMat: list):
         if not isinstance(voidMat, list):
-            raise TypeError(
-                f"geouned.Tolerances.voidMat should be a list, not a {type(voidMat)}"
-            )
+            raise TypeError(f"geouned.Tolerances.voidMat should be a list, not a {type(voidMat)}")
         for entry in voidMat:
             if not isinstance(entry, int):
-                raise TypeError(
-                    f"geouned.Tolerances.voidMat should be a list of ints, not a {type(entry)}"
-                )
+                raise TypeError(f"geouned.Tolerances.voidMat should be a list of ints, not a {type(entry)}")
         self._voidMat = voidMat
 
     @property
@@ -908,14 +798,10 @@ class Settings:
     @voidExclude.setter
     def voidExclude(self, voidExclude: list):
         if not isinstance(voidExclude, list):
-            raise TypeError(
-                f"geouned.Tolerances.voidExclude should be a list, not a {type(voidExclude)}"
-            )
+            raise TypeError(f"geouned.Tolerances.voidExclude should be a list, not a {type(voidExclude)}")
         for entry in voidExclude:
             if not isinstance(entry, int):
-                raise TypeError(
-                    f"geouned.Tolerances.voidExclude should be a list of ints, not a {type(entry)}"
-                )
+                raise TypeError(f"geouned.Tolerances.voidExclude should be a list of ints, not a {type(entry)}")
         self._voidExclude = voidExclude
 
     @property
@@ -925,9 +811,7 @@ class Settings:
     @startCell.setter
     def startCell(self, startCell: int):
         if not isinstance(startCell, int):
-            raise TypeError(
-                f"geouned.Tolerances.startCell should be a int, not a {type(startCell)}"
-            )
+            raise TypeError(f"geouned.Tolerances.startCell should be a int, not a {type(startCell)}")
         self._startCell = startCell
 
     @property
@@ -937,9 +821,7 @@ class Settings:
     @startSurf.setter
     def startSurf(self, startSurf: int):
         if not isinstance(startSurf, int):
-            raise TypeError(
-                f"geouned.Tolerances.startSurf should be a int, not a {type(startSurf)}"
-            )
+            raise TypeError(f"geouned.Tolerances.startSurf should be a int, not a {type(startSurf)}")
         self._startSurf = startSurf
 
     @property
@@ -949,7 +831,5 @@ class Settings:
     @sort_enclosure.setter
     def sort_enclosure(self, sort_enclosure: bool):
         if not isinstance(sort_enclosure, bool):
-            raise TypeError(
-                f"geouned.Tolerances.sort_enclosure should be a bool, not a {type(sort_enclosure)}"
-            )
+            raise TypeError(f"geouned.Tolerances.sort_enclosure should be a bool, not a {type(sort_enclosure)}")
         self._sort_enclosure = sort_enclosure

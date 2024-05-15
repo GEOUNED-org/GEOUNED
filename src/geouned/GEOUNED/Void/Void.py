@@ -89,9 +89,7 @@ def void_generation(
             )
             voidList.append(voids)
 
-    voidList.append(
-        set_graveyard_cell(Surfaces, UniverseBox, options, tolerances, numeric_format)
-    )
+    voidList.append(set_graveyard_cell(Surfaces, UniverseBox, options, tolerances, numeric_format))
 
     return VF.update_void_list(init, voidList, NestedEnclosure, setting.sort_enclosure)
 
@@ -156,9 +154,7 @@ def get_void_def(
 
                 logger.info(f"build complementary {iloop} {iz}")
 
-                cell, CellIn = z.get_void_complementary(
-                    Surfaces, options, tolerances, numeric_format, simplify=simplifyVoid
-                )
+                cell, CellIn = z.get_void_complementary(Surfaces, options, tolerances, numeric_format, simplify=simplifyVoid)
                 if cell is not None:
                     VoidCell = (cell, (boxDim, CellIn))
                     VoidDef.append(VoidCell)
@@ -186,9 +182,7 @@ def get_void_def(
 def set_graveyard_cell(Surfaces, UniverseBox, options, tolerances, numeric_format):
     Universe = VoidBox([], UniverseBox)
 
-    externalBox = get_universe_complementary(
-        Universe, Surfaces, options, tolerances, numeric_format
-    )
+    externalBox = get_universe_complementary(Universe, Surfaces, options, tolerances, numeric_format)
     center = UniverseBox.Center
     radius = 0.51 * UniverseBox.DiagonalLength
     sphere = GeounedSurface(("Sphere", (center, radius)), UniverseBox)

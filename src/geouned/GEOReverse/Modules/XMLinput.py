@@ -157,9 +157,7 @@ def selectCells(cellList, config):
                     if c.MAT not in config["mat"][1]:
                         selected[name] = c
                 else:
-                    selected[name] = (
-                        c  # Fill cell are not tested against material number
-                    )
+                    selected[name] = c  # Fill cell are not tested against material number
         elif config["cell"][0] == "exclude":
             for name, c in cellList.items():
                 if c.FILL is None:
@@ -168,9 +166,7 @@ def selectCells(cellList, config):
                             selected[name] = c
                 else:
                     if name not in config["cell"][1]:
-                        selected[name] = (
-                            c  # Fill cell are not tested against material number
-                        )
+                        selected[name] = c  # Fill cell are not tested against material number
         elif config["cell"][0] == "include":
             for name, c in cellList.items():
                 if c.FILL is None:
@@ -179,9 +175,7 @@ def selectCells(cellList, config):
                             selected[name] = c
                 else:
                     if name in config["cell"][1]:
-                        selected[name] = (
-                            c  # Fill cell are not tested against material number
-                        )
+                        selected[name] = c  # Fill cell are not tested against material number
 
     # options are 'include' material
     elif config["mat"][0] == "include":
@@ -191,9 +185,7 @@ def selectCells(cellList, config):
                     if c.MAT in config["mat"][1]:
                         selected[name] = c
                 else:
-                    selected[name] = (
-                        c  # Fill cell are not tested against material number
-                    )
+                    selected[name] = c  # Fill cell are not tested against material number
         elif config["cell"][0] == "exclude":
             for c in cellList:
                 if c.FILL is None:
@@ -202,9 +194,7 @@ def selectCells(cellList, config):
                             selected[name] = c
                 else:
                     if name not in config["cell"][1]:
-                        selected[name] = (
-                            c  # Fill cell are not tested against material number
-                        )
+                        selected[name] = c  # Fill cell are not tested against material number
         elif config["cell"][0] == "include":
             for name, c in cellList.items():
                 if c.FILL is None:
@@ -213,18 +203,14 @@ def selectCells(cellList, config):
                             selected[name] = c
                 else:
                     if name in config["cell"][1]:
-                        selected[name] = (
-                            c  # Fill cell are not tested against material number
-                        )
+                        selected[name] = c  # Fill cell are not tested against material number
 
     # remove complementary in cell of the universe
     # for cname,c in selected.items() :
     #   c.geom = remove_hash(cellList,cname)
 
     if not selected:
-        raise ValueError(
-            "No cells selected. Check input or selection criteria in config file."
-        )
+        raise ValueError("No cells selected. Check input or selection criteria in config file.")
 
     return selected
 

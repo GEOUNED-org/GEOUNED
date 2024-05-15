@@ -37,9 +37,7 @@ interblk = re.compile(
 intercls = re.compile(
     r"(?P<previous>\))(?P<next>(( *| *((\n *)?\$|\nC)*\n *)[-+]?\d))"
 )  # closed parenthesis followed by number
-interopn = re.compile(
-    r"(?P<previous>\d)(?P<next>(( *| *((\n *)?\$|\nC)*\n *)\())"
-)  # number followed by opened parenthesis
+interopn = re.compile(r"(?P<previous>\d)(?P<next>(( *| *((\n *)?\$|\nC)*\n *)\())")  # number followed by opened parenthesis
 intercop = re.compile(
     r"(?P<previous>\))(?P<next>(( *| *((\n *)?\$|\nC)*\n *)\())"
 )  # closed parenthesis followed by opened parenthesis
@@ -49,29 +47,19 @@ colonamp = re.compile(r"[:&]")  # colon or ampersand
 mostinner = re.compile(r"\([^\(^\)]*\)")  # identify most inner parentheses
 bracketsemi = re.compile(r"[\]\[;]")  # square bracket or semicolon
 blnkline = re.compile(r"^ *\n", re.M)  # identify blank line
-contline = re.compile(
-    r"\n {0,4}(?P<start>[^c^ ])", re.I
-)  # identify character other than 'C' in fisrt 5 columns
+contline = re.compile(r"\n {0,4}(?P<start>[^c^ ])", re.I)  # identify character other than 'C' in fisrt 5 columns
 comdollar = re.compile(r"\n(?P<blnk> *)\$")  # identify dollar on 'blank line'
-startgeom = re.compile(
-    r"(?P<previous>^ *)(?P<start>[\-\+\d])"
-)  # identify beginning of the geomtric part
-endgeom = re.compile(
-    r"(?P<last>\d)(?P<next> *((\n *)?\$|\nc)?(\n *)?$)", re.I
-)  # identify end of the geomtric part
+startgeom = re.compile(r"(?P<previous>^ *)(?P<start>[\-\+\d])")  # identify beginning of the geomtric part
+endgeom = re.compile(r"(?P<last>\d)(?P<next> *((\n *)?\$|\nc)?(\n *)?$)", re.I)  # identify end of the geomtric part
 # endgeom=re.compile(r"(?P<last>\d)(?P<next> *(\$|\nc)?(\n *)?$)",re.I)                      # identify end of the geomtric part
 
 # other
-rehash = re.compile(
-    r"# *(\d+|\()"
-)  # find beginning of complementary operator (both cell and surf)
+rehash = re.compile(r"# *(\d+|\()")  # find beginning of complementary operator (both cell and surf)
 parent = re.compile(r"[\(|\)]")  # position of open and close parenthesis (get_hashcell)
 gline = re.compile(
     r"(^ ?[\(\):\-\+\d+\.\# ]+|\n {5}[\(\):\-\+\d+\.\# ]+)", re.I
 )  # valid geometric part of the line       (remove/restore_comments)
-comments = re.compile(
-    r"((\n *)?\$|\n *c)", re.I
-)  # begining of comment part               (remove/restore_comments)
+comments = re.compile(r"((\n *)?\$|\n *c)", re.I)  # begining of comment part               (remove/restore_comments)
 # comments=re.compile(r"\$|\n *c",re.I)                               # begining of comment part               (remove/restore_comments)
 lastCR = re.compile(r"\n *$")  # last newline "\n" on line string
 
@@ -150,13 +138,7 @@ def remove_redundant(geom):
             cont = True
             if redundant(m, geom):
                 # remove redundant parentheses
-                geom = (
-                    geom[: m.start()]
-                    + " "
-                    + geom[m.start() + 1 : m.end() - 1]
-                    + " "
-                    + geom[m.end() :]
-                )
+                geom = geom[: m.start()] + " " + geom[m.start() + 1 : m.end() - 1] + " " + geom[m.end() :]
             else:
                 # replace no redundant parentheses by [] and : by ;
                 term = geom[m.start() + 1 : m.end() - 1].replace(":", ";")

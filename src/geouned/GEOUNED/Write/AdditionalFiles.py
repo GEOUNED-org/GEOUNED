@@ -28,32 +28,28 @@ def summary_write(name, MetaList):
                 )
             else:
                 if abs(m.Density) < 1e-2:
-                    line = (
-                        " {:>8d}{:3s}{:>8d}{:3s}{:11.4e}{:3s}{:11.4e}{:3s}{}\n".format(
-                            index,
-                            "",
-                            m.Material,
-                            "",
-                            m.Density,
-                            "",
-                            Vol,
-                            "",
-                            m.Comments,
-                        )
+                    line = " {:>8d}{:3s}{:>8d}{:3s}{:11.4e}{:3s}{:11.4e}{:3s}{}\n".format(
+                        index,
+                        "",
+                        m.Material,
+                        "",
+                        m.Density,
+                        "",
+                        Vol,
+                        "",
+                        m.Comments,
                     )
                 else:
-                    line = (
-                        " {:>8d}{:3s}{:>8d}{:3s}{:11.7f}{:3s}{:11.4e}{:3s}{}\n".format(
-                            index,
-                            "",
-                            m.Material,
-                            "",
-                            m.Density,
-                            "",
-                            Vol,
-                            "",
-                            m.Comments,
-                        )
+                    line = " {:>8d}{:3s}{:>8d}{:3s}{:11.7f}{:3s}{:11.4e}{:3s}{}\n".format(
+                        index,
+                        "",
+                        m.Material,
+                        "",
+                        m.Density,
+                        "",
+                        Vol,
+                        "",
+                        m.Comments,
                     )
 
             outfile.write(line)
