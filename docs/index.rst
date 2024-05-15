@@ -13,7 +13,7 @@ Supported codes include OpenMC, PHITS, Serpent and MCNP.
 .. toctree::
    :maxdepth: 3
 
-   install
+   install/index
    usage/index
    python_api
    methodology
