@@ -4,10 +4,10 @@
 import logging
 from datetime import datetime
 from pathlib import Path
+from importlib.metadata import version
 
 import FreeCAD
 
-from ..code_version import *
 from ..utils.basic_functions_part1 import is_opposite, points_to_coeffs
 from ..utils.functions import SurfacesDict
 from .functions import change_surf_sign, serpent_surface, write_serpent_cell_def
@@ -101,15 +101,13 @@ class SerpentInput:
 
     def __write_header__(self):
 
-        version = GEOUNED_Version
-        releaseDate = GEOUNED_ReleaseDate
         freeCAD_Version = "{V[0]:}.{V[1]:}.{V[2]:}".format(V=FreeCAD.Version())
 
         Header = f"""{self.Title}
 %   ______ _______  _____      _     _ __   _ _______ ______  
 %  |  ____ |______ |     | ___ |     | | \\  | |______ |     \\ 
 %  |_____| |______ |_____|     |_____| |  \\_| |______ |_____/
-% Version : {version}     {releaseDate}
+% Version : {version('geouned')}
 % FreeCAD Version : {freeCAD_Version} 
 """
 

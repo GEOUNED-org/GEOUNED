@@ -15,10 +15,10 @@ import logging
 import re
 from datetime import datetime
 from pathlib import Path
+from importlib.metadata import version
 
 import FreeCAD
 
-from ..code_version import *
 from ..utils.basic_functions_part1 import is_opposite, points_to_coeffs
 from ..utils.functions import SurfacesDict
 from .functions import (
@@ -143,8 +143,6 @@ $
 
     def __write_phits_header__(self):
 
-        version = GEOUNED_Version
-        releaseDate = GEOUNED_ReleaseDate
         freeCAD_Version = "{V[0]:}.{V[1]:}.{V[2]:}".format(V=FreeCAD.Version())
 
         Header = (
@@ -153,10 +151,10 @@ $
 $   ______ _______  _____      _     _ __   _ _______ ______  
 $  |  ____ |______ |     | ___ |     | | \  | |______ |     \ 
 $  |_____| |______ |_____|     |_____| |  \_| |______ |_____/
-$ Version : {}     {}
+$ Version : {}
 $ FreeCAD Version : {} 
 $ PHITSFormat Version :  0.0.2.3     06/03/2024\n""".format(
-                self.Title, version, releaseDate, freeCAD_Version
+                self.Title, version('geouned'), freeCAD_Version
             )
         )
 
