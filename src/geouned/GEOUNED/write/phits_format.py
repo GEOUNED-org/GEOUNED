@@ -18,10 +18,10 @@ from pathlib import Path
 
 import FreeCAD
 
-from ..CodeVersion import *
-from ..Utils.BasicFunctions_part1 import is_opposite, points_to_coeffs
-from ..Utils.Functions import SurfacesDict
-from ..Write.Functions import (
+from ..code_version import *
+from ..utils.basic_functions_part1 import is_opposite, points_to_coeffs
+from ..utils.functions import SurfacesDict
+from .functions import (
     CellString,
     change_surf_sign,
     phits_surface,

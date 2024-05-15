@@ -9,8 +9,8 @@ import FreeCAD
 import Part
 from FreeCAD import Import
 
-from ..Utils import Functions as UF
-from . import LoadFunctions as LF
+from ..utils import functions as UF
+from . import load_functions as LF
 
 logger = logging.getLogger("general_logger")
 

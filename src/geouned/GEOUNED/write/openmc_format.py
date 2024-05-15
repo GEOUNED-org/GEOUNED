@@ -7,9 +7,9 @@ from pathlib import Path
 
 import FreeCAD
 
-from ..CodeVersion import *
-from ..Utils.Functions import SurfacesDict
-from .Functions import change_surf_sign, open_mc_surface, write_openmc_region
+from ..code_version import *
+from ..utils.functions import SurfacesDict
+from .functions import change_surf_sign, open_mc_surface, write_openmc_region
 
 logger = logging.getLogger("general_logger")
 

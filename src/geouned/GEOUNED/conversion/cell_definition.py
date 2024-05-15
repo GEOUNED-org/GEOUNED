@@ -7,19 +7,19 @@ import math
 import FreeCAD
 import Part
 
-from ..Utils import BasicFunctions_part2 as BF
-from ..Utils import Functions as UF
-from ..Utils import Geometry_GU as GU
-from ..Utils.BasicFunctions_part1 import (
+from ..utils import basic_functions_part2 as BF
+from ..utils import functions as UF
+from ..utils import geometry_gu as GU
+from ..utils.basic_functions_part1 import (
     is_in_line,
     is_opposite,
     is_parallel,
     is_same_value,
     sign_plane,
 )
-from ..Utils.booleanFunction import BoolSequence, insert_in_sequence
-from ..Utils.BooleanSolids import build_c_table_from_solids, remove_extra_surfaces
-from ..Utils.Functions import GeounedSurface
+from ..utils.boolean_function import BoolSequence, insert_in_sequence
+from ..utils.boolean_solids import build_c_table_from_solids, remove_extra_surfaces
+from ..utils.functions import GeounedSurface
 
 logger = logging.getLogger("general_logger")
 

@@ -11,7 +11,7 @@ except ImportError:
 
 from .GEOReverse import *
 from .GEOUNED import *
-from .GEOUNED.Utils.log_utils import setup_logger
+from .GEOUNED.utils.log_utils import setup_logger
 
 setup_logger("general_logger", "geouned_general_log.log")
 setup_logger("fuzzy_logger", "geouned_fuzzy_log.log")

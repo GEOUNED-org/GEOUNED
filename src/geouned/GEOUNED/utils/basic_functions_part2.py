@@ -6,7 +6,7 @@ import math
 
 import FreeCAD
 
-from ..Utils.BasicFunctions_part1 import (
+from .basic_functions_part1 import (
     is_in_line,
     is_in_plane,
     is_in_tolerance,
@@ -14,7 +14,7 @@ from ..Utils.BasicFunctions_part1 import (
     is_parallel,
     is_same_value,
 )
-from ..Write.Functions import mcnp_surface
+from ..write.functions import mcnp_surface
 
 
 def Fuzzy(index, dtype, surf1, surf2, val, tol, options, tolerances, numeric_format):

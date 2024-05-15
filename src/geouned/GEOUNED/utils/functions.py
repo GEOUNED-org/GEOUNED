@@ -11,7 +11,7 @@ import Part
 
 logger = logging.getLogger("general_logger")
 
-from ..Utils.BasicFunctions_part1 import (
+from .basic_functions_part1 import (
     ConeParams,
     CylinderParams,
     Plane3PtsParams,
@@ -20,7 +20,7 @@ from ..Utils.BasicFunctions_part1 import (
     TorusParams,
     is_parallel,
 )
-from . import BasicFunctions_part2 as BF
+from . import basic_functions_part2 as BF
 
 
 def get_box(comp, options):

@@ -1,8 +1,8 @@
-from . import AdditionalFiles as OutFiles
-from .MCNPFormat import McnpInput
-from .OpenMCFormat import OpenmcInput
-from .PHITSFormat import PhitsInput
-from .SerpentFormat import SerpentInput
+from . import additional_files as OutFiles
+from .mcnp_format import McnpInput
+from .openmc_format import OpenmcInput
+from .phits_format import PhitsInput
+from .serpent_format import SerpentInput
 
 
 def write_geometry(
