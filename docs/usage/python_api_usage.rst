@@ -104,8 +104,8 @@ The following example shows a usage with every attributes specified.
         title="Converted with GEOUNED",
         geometryName="csg",
         outFormat=(
-            "openMC_XML",
-            "openMC_PY",
+            "openmc_xml",
+            "openmc_py",
             "serpent",
             "phits",
             "mcnp",
