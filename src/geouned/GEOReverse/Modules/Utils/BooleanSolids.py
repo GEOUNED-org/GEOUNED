@@ -30,9 +30,7 @@ class CTelement:
     def get_transpose(self):
         if self.diagonal:
             return self.val
-        return CTelement(
-            (self.val[0], self.val[3], self.val[2], self.val[1]), self.S2, self.S1
-        )
+        return CTelement((self.val[0], self.val[3], self.val[2], self.val[1]), self.S2, self.S1)
 
     def get_dependence(self):
         if self.diagonal:
@@ -360,9 +358,7 @@ def split_solid_fast(solid, surf, box):
 
     if box:
         if surf.shape:
-            comsolid = BOPTools.SplitAPI.slice(
-                solid, [surf.shape], "Split", tolerance=0
-            )
+            comsolid = BOPTools.SplitAPI.slice(solid, [surf.shape], "Split", tolerance=0)
         else:
             return check_sign(solid, surf), None
 

@@ -37,19 +37,13 @@ def is_in_points(point, points, tolerance=1e-5):
 def is_in_edge(edge1, edge2, tolerance=1e-8):
     ver1 = edge1.Vertexes
     ver2 = edge2.Vertexes
-    con1 = ver1[0].Point.isEqual(ver2[0].Point, tolerance) or ver1[0].Point.isEqual(
-        ver2[1].Point, tolerance
-    )
-    con2 = ver1[1].Point.isEqual(ver2[0].Point, tolerance) or ver1[1].Point.isEqual(
-        ver2[1].Point, tolerance
-    )
+    con1 = ver1[0].Point.isEqual(ver2[0].Point, tolerance) or ver1[0].Point.isEqual(ver2[1].Point, tolerance)
+    con2 = ver1[1].Point.isEqual(ver2[0].Point, tolerance) or ver1[1].Point.isEqual(ver2[1].Point, tolerance)
     return con1 and con2
 
 
 def is_in_plane(point, plane, d_tolerance=1e-7):
-    return (
-        abs(point.distanceToPlane(plane.Surf.Position, plane.Surf.Axis)) < d_tolerance
-    )
+    return abs(point.distanceToPlane(plane.Surf.Position, plane.Surf.Axis)) < d_tolerance
 
 
 def is_in_tolerance(val, tol, fuzzy_low, fuzzy_high):
@@ -86,9 +80,7 @@ def points_to_coeffs(points):
         k -= 1
         j -= 1
         tpp[i - 1] = (
-            scf[j] * (scf[k + 3] - scf[k + 6])
-            + scf[j + 3] * (scf[k + 6] - scf[k])
-            + scf[j + 6] * (scf[k] - scf[k + 3])
+            scf[j] * (scf[k + 3] - scf[k + 6]) + scf[j + 3] * (scf[k + 6] - scf[k]) + scf[j + 6] * (scf[k] - scf[k + 3])
         )
         tpp[3] += scf[i - 1] * (scf[j + 3] * scf[k + 6] - scf[j + 6] * scf[k + 3])
 

@@ -37,10 +37,7 @@ def reverse(optFile="configRevese.ini"):
     elif inFormat == "openMC_XML":
         geom = XmlInput(geomfile)
     else:
-        msg = (
-            f"input format type {inFormat} is not supported."
-            'Supported options are "mcnp" or "openMC_XML"'
-        )
+        msg = f"input format type {inFormat} is not supported." 'Supported options are "mcnp" or "openMC_XML"'
         raise ValueError(msg)
 
     CADCells, fails = buildCAD(UnivCell, geom, CADselection)

@@ -207,9 +207,7 @@ class GeounedSolid:
                 try:
                     distShape = sol1.distToShape(sol2)[0]
                 except:
-                    logger.info(
-                        "Failed solid1.distToshape(solid2), try with inverted solids"
-                    )
+                    logger.info("Failed solid1.distToshape(solid2), try with inverted solids")
                     distShape = sol2.distToShape(sol1)[0]
                     logger.info(f"inverted disToShape OK {distShape}")
                 dist = min(dist, distShape)
@@ -238,9 +236,7 @@ class GeounedSurface:
         self.__boundBox__ = boundBox
         if params[0] == "Plane":
             self.Type = "Plane"
-            self.Surf = PlaneParams(
-                params[1]
-            )  # plane point defined as the shortest distance to origin
+            self.Surf = PlaneParams(params[1])  # plane point defined as the shortest distance to origin
         elif params[0] == "Plane3Pts":
             self.Type = "Plane"
             self.Surf = Plane3PtsParams(params[1])  # plane point defined with 3 points
@@ -310,9 +306,7 @@ class GeounedSurface:
                 orden.append((phi, i))
             orden.sort()
 
-            self.shape = Part.Face(
-                Part.makePolygon([pointEdge[p[1]] for p in orden], True)
-            )
+            self.shape = Part.Face(Part.makePolygon([pointEdge[p[1]] for p in orden], True))
 
             return
 
@@ -647,15 +641,11 @@ def split_bop(solid, tools, tolerance, options, scale=0.1):
             tol = 1e-13 if options.splitTolerance == 0 else options.splitTolerance
             compSolid = split_bop(solid, tools, tol / scale, options, 1.0 / scale)
         else:
-            compSolid = BOPTools.SplitAPI.slice(
-                solid, tools, "Split", tolerance=tolerance
-            )
+            compSolid = BOPTools.SplitAPI.slice(solid, tools, "Split", tolerance=tolerance)
 
     else:
         try:
-            compSolid = BOPTools.SplitAPI.slice(
-                solid, tools, "Split", tolerance=tolerance
-            )
+            compSolid = BOPTools.SplitAPI.slice(solid, tools, "Split", tolerance=tolerance)
         except:
             compSolid = split_bop(solid, tools, tolerance * scale, options, scale)
 

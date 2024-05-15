@@ -87,9 +87,7 @@ def get_id(face_in, Surfaces, options, tolerances, numeric_format):
     return 0
 
 
-def translate(
-    meta_list, surfaces, universe_box, setting, options, tolerances, numeric_format
-):
+def translate(meta_list, surfaces, universe_box, setting, options, tolerances, numeric_format):
     tot_solid = len(meta_list)
     for i, m in enumerate(meta_list):
         if m.IsEnclosure:

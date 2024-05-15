@@ -90,9 +90,7 @@ def runMCNP(path, inpFile):
     inp = inpFile
     out = inpFile[0:-1] + "o"
     mctal = inpFile[0:-1] + "m"
-    cmd = "cd {} && {} i={} o={} mctal={} xsdir={}".format(
-        path, code, inp, out, mctal, xsdir
-    )
+    cmd = "cd {} && {} i={} o={} mctal={} xsdir={}".format(path, code, inp, out, mctal, xsdir)
     os.system(cmd)
 
 

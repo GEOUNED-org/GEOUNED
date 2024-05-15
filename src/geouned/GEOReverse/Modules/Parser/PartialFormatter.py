@@ -24,9 +24,7 @@ class PartialFormatter(string.Formatter):
 
     def format(*args, **kwargs):
         if not args:
-            raise TypeError(
-                "descriptor 'format' of 'Formatter' object " "needs an argument"
-            )
+            raise TypeError("descriptor 'format' of 'Formatter' object " "needs an argument")
         self, args = args[0], args[1:]  # allow the "self" keyword be passed
         try:
             format_string, args = (
@@ -37,22 +35,15 @@ class PartialFormatter(string.Formatter):
             if "format_string" in kwargs:
                 format_string = kwargs.pop("format_string")
             else:
-                raise TypeError(
-                    "format() missing 1 required positional "
-                    "argument: 'format_string'"
-                )
+                raise TypeError("format() missing 1 required positional " "argument: 'format_string'")
         return string.Formatter.vformat(self, format_string, args, SafeDict(kwargs))
 
-    def _vformat(
-        self, format_string, args, kwargs, used_args, recursion_depth, auto_arg_index=0
-    ):
+    def _vformat(self, format_string, args, kwargs, used_args, recursion_depth, auto_arg_index=0):
         """Clone from Python3 version to fix Python2 mess with unnamed {} format specifiers"""
         if recursion_depth < 0:
             raise ValueError("Max string recursion exceeded")
         result = []
-        for literal_text, field_name, format_spec, conversion in self.parse(
-            format_string
-        ):
+        for literal_text, field_name, format_spec, conversion in self.parse(format_string):
 
             # output the literal text
             if literal_text:
@@ -66,20 +57,12 @@ class PartialFormatter(string.Formatter):
                 # handle arg indexing when empty field_names are given.
                 if field_name == "":
                     if auto_arg_index is False:
-                        raise ValueError(
-                            "cannot switch from manual field "
-                            "specification to automatic field "
-                            "numbering"
-                        )
+                        raise ValueError("cannot switch from manual field " "specification to automatic field " "numbering")
                     field_name = str(auto_arg_index)
                     auto_arg_index += 1
                 elif field_name.isdigit():
                     if auto_arg_index:
-                        raise ValueError(
-                            "cannot switch from manual field "
-                            "specification to automatic field "
-                            "numbering"
-                        )
+                        raise ValueError("cannot switch from manual field " "specification to automatic field " "numbering")
                     # disable auto arg incrementing, if it gets
                     # used later on, then an exception will be raised
                     auto_arg_index = False

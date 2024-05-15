@@ -39,12 +39,7 @@ class BoolSequence:
             else:
                 level = s.level
                 if type(s.elements) is bool:
-                    if (
-                        self.operator == "AND"
-                        and s.elements is False
-                        or self.operator == "OR"
-                        and s.elements is True
-                    ):
+                    if self.operator == "AND" and s.elements is False or self.operator == "OR" and s.elements is True:
                         self.level = 0
                         self.elements = s.elements
                         return
@@ -142,12 +137,7 @@ class BoolSequence:
             for e in reversed(self.elements):
                 e.simplify(CT, loop=0)
                 if type(e.elements) is bool:
-                    if (
-                        self.operator == "AND"
-                        and e.elements is False
-                        or self.operator == "OR"
-                        and e.elements is True
-                    ):
+                    if self.operator == "AND" and e.elements is False or self.operator == "OR" and e.elements is True:
                         self.elements = e.elements
                         self.level = 0
                         break
@@ -566,13 +556,7 @@ def outer_terms(expression, value="number"):
             cont = True
             if redundant(m, expr):
                 # remove redundant parentheses
-                expr = (
-                    expr[: m.start()]
-                    + " "
-                    + expr[m.start() + 1 : m.end() - 1]
-                    + " "
-                    + expr[m.end() :]
-                )
+                expr = expr[: m.start()] + " " + expr[m.start() + 1 : m.end() - 1] + " " + expr[m.end() :]
             else:
                 # replace no redundant parentheses by 0 and : by ;
                 zeros = "[" + nullVal * (m.end() - m.start() - 2) + "]"

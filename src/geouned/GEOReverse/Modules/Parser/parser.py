@@ -24,9 +24,7 @@ re_prm = re.compile(r"[it]mp:*[npe]*[=\s]+\S+", flags=re.IGNORECASE)
 re_prm = re.compile(r"([it]mp:*[npe]*[=\s]+)(\S+)", flags=re.IGNORECASE)
 
 # fill keyword
-re_fll = re.compile(
-    r"\*{0,1}fill[=\s]+", flags=re.IGNORECASE
-)  # TODO: this will also match fill===
+re_fll = re.compile(r"\*{0,1}fill[=\s]+", flags=re.IGNORECASE)  # TODO: this will also match fill===
 
 
 # If type specifier not given, any data type can be formatted:
@@ -217,9 +215,7 @@ class Card(object):
                     if self.debug:
                         self.print_debug("get_input: bad char in input cards", "")
                     else:
-                        raise ValueError(
-                            "Bad character in input file. " + "Run with --debug option."
-                        )
+                        raise ValueError("Bad character in input file. " + "Run with --debug option.")
 
         if self.ctype in (CID.comment, CID.blankline):
             # nothing to do for comments or blanklines:
@@ -308,11 +304,7 @@ class Card(object):
                 inpt = inpt.replace(s, "!", 1)
             d["!"] = sbl
 
-        if (
-            self.ctype == CID.data
-            and inpt.lstrip().lower()[0] == "f"
-            and inpt.lstrip()[1].isdigit()
-        ):
+        if self.ctype == CID.data and inpt.lstrip().lower()[0] == "f" and inpt.lstrip()[1].isdigit():
             # this is tally card. Hide indexes in square brackets
             sbl = re_ind.findall(inpt)
             if sbl:
@@ -648,9 +640,7 @@ class Card(object):
                                     il.append(i[:k])
                                     tl.append("\n")
                                     i = indent + i[k:]
-                                    self.print_debug(
-                                        "card wrap=True" + repr(il[-1]) + repr(i), ""
-                                    )
+                                    self.print_debug("card wrap=True" + repr(il[-1]) + repr(i), "")
                                     break
                             else:
                                 # there is no proper place to wrap.
@@ -973,9 +963,7 @@ def _split_cell(input_, self):
 
                 # add all strings, values, formats and types:
                 for vs, vv, vf, vt in zip(vsl, vvl, vfl, vtl):
-                    inpt_parm = inpt_parm.replace(
-                        vs, tp, 1
-                    )  # TODO: here only parm part of inpt should be modified.
+                    inpt_parm = inpt_parm.replace(vs, tp, 1)  # TODO: here only parm part of inpt should be modified.
                     vals.append((vv, vt))
                     fmts.append(vf)
 
@@ -1088,12 +1076,7 @@ def _split_data(input_):
         inpt = inpt.replace(ns, tp, 1)
         vals.append((int(ns), "tr"))
         fmts.append(fmt_d(ns))
-    elif (
-        t[0][0].lower() == "m"
-        and "mode" not in t[0].lower()
-        and "mesh" not in t[0].lower()
-        and "mphys" not in t[0].lower()
-    ):
+    elif t[0][0].lower() == "m" and "mode" not in t[0].lower() and "mesh" not in t[0].lower() and "mphys" not in t[0].lower():
         # This is the Mn, MTn or MPNn card
         ms = _get_int(t[0])
         inpt = inpt.replace(ms, tp, 1)

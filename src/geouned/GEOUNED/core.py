@@ -269,10 +269,7 @@ class CadToCsg:
                     if key in attributes_and_types.keys():
                         if attributes_and_types[key] is bool:
                             value = config.getboolean("Options", key)
-                        elif (
-                            attributes_and_types[key] is float
-                            or attributes_and_types[key] is int
-                        ):
+                        elif attributes_and_types[key] is float or attributes_and_types[key] is int:
                             value = config.getfloat("Options", key)
                         setattr(self.options, key, value)
 
@@ -371,9 +368,7 @@ class CadToCsg:
 
         logger.info("start")
         freecad_version = ".".join(FreeCAD.Version()[:3])
-        logger.info(
-            f"GEOUNED version {GEOUNED_Version} {GEOUNED_ReleaseDate} \nFreeCAD version {freecad_version}"
-        )
+        logger.info(f"GEOUNED version {GEOUNED_Version} {GEOUNED_ReleaseDate} \nFreeCAD version {freecad_version}")
 
         if self.stepFile == "":
             raise ValueError("Cannot run the code. Step file name is missing")
@@ -409,9 +404,7 @@ class CadToCsg:
 
         # Select a specific solid range from original STEP solids
         if self.settings.cellRange:
-            self.MetaList = self.MetaList[
-                self.settings.cellRange[0] : self.settings.cellRange[1]
-            ]
+            self.MetaList = self.MetaList[self.settings.cellRange[0] : self.settings.cellRange[1]]
 
         # export in STEP format solids read from input file
         # terminate excution
@@ -422,10 +415,7 @@ class CadToCsg:
                     continue
                 solids.extend(m.Solids)
             Part.makeCompound(solids).exportStep(self.settings.exportSolids)
-            msg = (
-                f"Solids exported in file {self.settings.exportSolids}\n"
-                "GEOUNED Finish. No solid translation performed."
-            )
+            msg = f"Solids exported in file {self.settings.exportSolids}\n" "GEOUNED Finish. No solid translation performed."
             raise ValueError(msg)
 
         # set up Universe
@@ -584,9 +574,7 @@ class CadToCsg:
                 c.Definition.simplify(CT)
                 c.Definition.clean()
                 if type(c.Definition.elements) is bool:
-                    logger.info(
-                        f"unexpected constant cell {c.__id__} :{c.Definition.elements}"
-                    )
+                    logger.info(f"unexpected constant cell {c.__id__} :{c.Definition.elements}")
 
         tempTime2 = datetime.now()
         logger.info(f"build Time: {tempTime2} - {tempTime1}")
@@ -696,14 +684,10 @@ def decompose_solids(
             if not path.exists("Suspicious_solids"):
                 mkdir("Suspicious_solids")
             if m.IsEnclosure:
-                Part.CompSolid(m.Solids).exportStep(
-                    f"Suspicious_solids/Enclosure_original_{i}.stp"
-                )
+                Part.CompSolid(m.Solids).exportStep(f"Suspicious_solids/Enclosure_original_{i}.stp")
                 comsolid.exportStep(f"Suspicious_solids/Enclosure_split_{i}.stp")
             else:
-                Part.CompSolid(m.Solids).exportStep(
-                    f"Suspicious_solids/Solid_original_{i}.stp"
-                )
+                Part.CompSolid(m.Solids).exportStep(f"Suspicious_solids/Solid_original_{i}.stp")
                 comsolid.exportStep(f"Suspicious_solids/Solid_split_{i}.stp")
 
             warningSolids.append(i)
@@ -742,9 +726,7 @@ def update_comment(meta, idLabel):
     meta.set_comments(Void.void_comment_line((meta.__commentInfo__[0], newLabel)))
 
 
-def process_cones(
-    MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances, numeric_format
-):
+def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances, numeric_format):
     cellId = tuple(coneInfo.keys())
     for m in MetaList:
         if m.__id__ not in cellId and not m.Void:

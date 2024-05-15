@@ -71,9 +71,7 @@ def test_transport(input_step_file):
     )
 
     source = openmc.IndependentSource()
-    source.space = openmc.stats.Box(
-        lower_left=(llx, lly, llz), upper_right=(urx, ury, urz)
-    )
+    source.space = openmc.stats.Box(lower_left=(llx, lly, llz), upper_right=(urx, ury, urz))
     source.energy = openmc.stats.Discrete([14e6], [1])
 
     materials = openmc.Materials()

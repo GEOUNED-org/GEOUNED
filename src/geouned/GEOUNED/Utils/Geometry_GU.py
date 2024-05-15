@@ -158,10 +158,7 @@ class SolidGu:
                 removeList = [temp[0]]
                 while len(temp) > 0 and i < len(current):
                     for tindex in temp:
-                        if (
-                            self.Faces[current[i]].distToShape(self.Faces[tindex])[0]
-                            < self.tolerances.distance
-                        ):
+                        if self.Faces[current[i]].distToShape(self.Faces[tindex])[0] < self.tolerances.distance:
                             if tindex not in current:
                                 current.append(tindex)
                                 removeList.append(tindex)
@@ -213,9 +210,9 @@ class SolidGu:
         if arcLength >= two_pi * (1.0 - self.tolerances.relativePrecision):
             mergedParams = (True, (V0, V0 + two_pi))
         else:
-            if is_same_value(
-                V0, 0.0, self.tolerances.relativePrecision
-            ) and is_same_value(V1, two_pi, self.tolerances.relativePrecision):
+            if is_same_value(V0, 0.0, self.tolerances.relativePrecision) and is_same_value(
+                V1, two_pi, self.tolerances.relativePrecision
+            ):
                 for i in range(len(params) - 1):
                     if not is_same_value(
                         params[i][1],
@@ -240,9 +237,7 @@ class FaceGu(object):
     def __init__(self, face, Plane3Pts=False):
         # GEOUNED based atributes
         self.__face__ = face
-        self.Surface = define_surface(
-            face, Plane3Pts
-        )  # Define the appropiate GU Surface of the face
+        self.Surface = define_surface(face, Plane3Pts)  # Define the appropiate GU Surface of the face
 
         # FreeCAD based Atributes
         self.Area = face.Area

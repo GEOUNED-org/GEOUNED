@@ -66,9 +66,7 @@ class McnpInput:
             sphereId = data[0][0]
             radius = data[0][1]
             wgt = math.pi * radius * radius * 1e-2
-            sdef = "SDEF PAR={} NRM=-1 SUR={} WGT={:13.7e} DIR=d1\n".format(
-                self.part, sphereId, wgt
-            )
+            sdef = "SDEF PAR={} NRM=-1 SUR={} WGT={:13.7e} DIR=d1\n".format(self.part, sphereId, wgt)
             SI1 = "SI1 0 1\n"
             SP1 = "SP1 -21 1\n"
             self.SDEF_sphere = (sdef, SI1, SP1)
@@ -342,9 +340,7 @@ C **************************************************************
     def __sorted_surfaces__(self, Surfaces):
         temp = SurfacesDict(Surfaces)
         surfList = []
-        for ind in range(
-            Surfaces.IndexOffset, Surfaces.surfaceNumber + Surfaces.IndexOffset
-        ):
+        for ind in range(Surfaces.IndexOffset, Surfaces.surfaceNumber + Surfaces.IndexOffset):
             s = temp.get_surface(ind + 1)
             if s is not None:
                 surfList.append(s)
@@ -354,9 +350,7 @@ C **************************************************************
     def __change_surf_sign__(self, p):
 
         if p.Index not in self.surfaceTable.keys():
-            logger.info(
-                f"{p.Type} Surface {p.Index} not used in cell definition) {p.Surf.Axis} {p.Surf.Position}"
-            )
+            logger.info(f"{p.Type} Surface {p.Index} not used in cell definition) {p.Surf.Axis} {p.Surf.Position}")
             return
 
         for ic in self.surfaceTable[p.Index]:

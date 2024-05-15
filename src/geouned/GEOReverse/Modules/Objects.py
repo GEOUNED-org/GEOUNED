@@ -132,13 +132,9 @@ class CadCell:
 
     def makeBox(self, boundBox):
         box_origin = FreeCAD.Vector(boundBox.XMin, boundBox.YMin, boundBox.ZMin)
-        return Part.makeBox(
-            boundBox.XLength, boundBox.YLength, boundBox.ZLength, box_origin
-        )
+        return Part.makeBox(boundBox.XLength, boundBox.YLength, boundBox.ZLength, box_origin)
 
-    def buildShape(
-        self, boundBox, force=False, surfTR=None, simplify=False, fuse=False
-    ):
+    def buildShape(self, boundBox, force=False, surfTR=None, simplify=False, fuse=False):
 
         if self.shape is not None and not force:
             return
@@ -520,9 +516,7 @@ class EllipticCylinder:
             self.shape = makeEllipticCylinder(point, radii, rAxes, axis, height)
         else:
             height = axis.Length
-            self.shape = makeEllipticCylinder(
-                center, radii, rAxes, axis / height, height
-            )
+            self.shape = makeEllipticCylinder(center, radii, rAxes, axis / height, height)
 
 
 class HyperbolicCylinder:
@@ -615,15 +609,11 @@ class Torus:
         self.params = (p, v, Ra, Rb, Rc)
 
     def buildShape(self, boundBox):
-        center, axis, Ra, Rb, Rc = (
-            self.params
-        )  # Ra distance from torus axis; R radius of toroidal-cylinder
+        center, axis, Ra, Rb, Rc = self.params  # Ra distance from torus axis; R radius of toroidal-cylinder
         if (abs(Rb - Rc) < 1e-5) and Ra > 0:
             self.shape = Part.makeTorus(Ra, Rb, center, axis)  # FreeCAD circular Torus
         else:
-            self.shape = makeEllipticTorus(
-                Ra, Rb, Rc, center, axis
-            )  # Home made elliptic Torus
+            self.shape = makeEllipticTorus(Ra, Rb, Rc, center, axis)  # Home made elliptic Torus
 
 
 class Box:
@@ -735,15 +725,11 @@ def makeHyperboloid(center, radii, rAxes, axis, onesht, length):
 
     Y = length
     X = radii[1] * math.sqrt((Y / radii[0]) ** 2 + 1)
-    point = (
-        center + X * radii[1] + Y * radii[0]
-    )  # point in taken as length is always counted on minor axis
+    point = center + X * radii[1] + Y * radii[0]  # point in taken as length is always counted on minor axis
     parameter = abs(hyperbola.parameter(point))
 
     if onesht:
-        shape = hyperbola.toBSpline(-parameter, parameter).toShape(
-            -parameter, parameter
-        )
+        shape = hyperbola.toBSpline(-parameter, parameter).toShape(-parameter, parameter)
         hyperFace = shape.revolve(center, axis, 360)
 
         StartPoint = hyperFace.Surface.BasisCurve.StartPoint - center
@@ -794,9 +780,7 @@ def makeHyperbolicCylinder(center, radii, rAxes, axis, length):
 
     Y = length
     X = radii[1] * math.sqrt((Y / radii[0]) ** 2 + 1)
-    point = (
-        center + X * rAxes[1] + Y * rAxes[0]
-    )  # point in taken as length is always counted on minor axis
+    point = center + X * rAxes[1] + Y * rAxes[0]  # point in taken as length is always counted on minor axis
     parameter = abs(hyperbola1.parameter(point))
 
     shape1 = hyperbola1.toBSpline(-parameter, parameter).toShape(-parameter, parameter)
@@ -864,9 +848,7 @@ def makeEllipticTorus(R, RZ, RX, center, ZAxis):
         p2 = ellipse.parameter(pz2)
         if p2 < p1:
             p2 += 2 * math.pi
-        shape = ellipse.toBSpline(p1, p2).toShape(
-            p1, p2
-        )  # revolution around Major axis
+        shape = ellipse.toBSpline(p1, p2).toShape(p1, p2)  # revolution around Major axis
         rev = shape.revolve(center, ZAxis, 360)
     else:
         shape = ellipse.toBSpline().toShape()  # revolution around Minor axis

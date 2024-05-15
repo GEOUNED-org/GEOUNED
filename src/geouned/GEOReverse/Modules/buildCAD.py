@@ -20,9 +20,7 @@ def buildCAD(UnivCell, data, config):
     else:
         factor = 1
 
-    modelSurfaces = data.GetSurfaces(
-        scale=factor
-    )  # scale change cm in mcnp to mm in CAD Obj
+    modelSurfaces = data.GetSurfaces(scale=factor)  # scale change cm in mcnp to mm in CAD Obj
 
     # read Cells and group into universes
     print(config)
@@ -98,9 +96,7 @@ def get_universe_containers(levels, Universes):
     return Ucontainer
 
 
-def BuildUniverse(
-    startInfo, ContainerCell, AllUniverses, universeCut=True, duplicate=False
-):
+def BuildUniverse(startInfo, ContainerCell, AllUniverses, universeCut=True, duplicate=False):
     CADUniverse = []
 
     Ustart, levelMax = startInfo
@@ -169,9 +165,7 @@ def BuildUniverse(
             if ContainerCell.CurrentTR:
                 cell.CurrentTR = ContainerCell.CurrentTR.multiply(cell.TRFL)
             cell.level = ContainerCell.level + 1
-            univ, ff = BuildUniverse(
-                (cell.FILL, levelMax), cell, AllUniverses, universeCut=universeCut
-            )
+            univ, ff = BuildUniverse((cell.FILL, levelMax), cell, AllUniverses, universeCut=universeCut)
             CADUniverse.append(univ)
             fails.extend(ff)
 

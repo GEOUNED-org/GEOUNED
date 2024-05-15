@@ -81,18 +81,12 @@ class OpenmcInput:
     def __write_xml_surfaces__(self, surface, boundary=False):
         """Write the surfaces in xml OpenMC format"""
 
-        surfType, coeffs = open_mc_surface(
-            surface.Type, surface.Surf, self.tolerances, self.numeric_format
-        )
+        surfType, coeffs = open_mc_surface(surface.Type, surface.Surf, self.tolerances, self.numeric_format)
 
         if not boundary:
-            OMCsurf = '  <surface id="{}" type="{}" coeffs="{}" />\n'.format(
-                surface.Index, surfType, coeffs
-            )
+            OMCsurf = '  <surface id="{}" type="{}" coeffs="{}" />\n'.format(surface.Index, surfType, coeffs)
         else:
-            OMCsurf = '  <surface id="{}" type="{}" coeffs="{}" boundary="vacuum" />\n'.format(
-                surface.Index, surfType, coeffs
-            )
+            OMCsurf = '  <surface id="{}" type="{}" coeffs="{}" boundary="vacuum" />\n'.format(surface.Index, surfType, coeffs)
 
         self.inpfile.write(OMCsurf)
         return
@@ -169,9 +163,7 @@ import openmc
         if not boundary:
             OMCsurf = f"S{surface.Index} = openmc.{surfType}({coeffs})\n"
         else:
-            OMCsurf = 'S{} = openmc.{}({}, boundary_type="vacuum")\n'.format(
-                surface.Index, surfType, coeffs
-            )
+            OMCsurf = 'S{} = openmc.{}({}, boundary_type="vacuum")\n'.format(surface.Index, surfType, coeffs)
 
         self.inpfile.write(OMCsurf)
         return
@@ -187,11 +179,7 @@ import openmc
                 continue
             cellNames.append(f"C{cell.label}")
 
-        geometry = (
-            "\ngeometry = openmc.Geometry([{}])\ngeometry.export_to_xml()\n".format(
-                ", ".join(cellNames)
-            )
-        )
+        geometry = "\ngeometry = openmc.Geometry([{}])\ngeometry.export_to_xml()\n".format(", ".join(cellNames))
 
         self.inpfile.write(geometry)
         return
@@ -264,9 +252,7 @@ import openmc
     def __sorted_surfaces__(self, Surfaces):
         temp = SurfacesDict(Surfaces)
         surfList = []
-        for ind in range(
-            Surfaces.IndexOffset, Surfaces.surfaceNumber + Surfaces.IndexOffset
-        ):
+        for ind in range(Surfaces.IndexOffset, Surfaces.surfaceNumber + Surfaces.IndexOffset):
             s = temp.get_surface(ind + 1)
             if s is not None:
                 surfList.append(s)
@@ -276,9 +262,7 @@ import openmc
     def __change_surf_sign__(self, p):
 
         if p.Index not in self.surfaceTable.keys():
-            logger.info(
-                f"{p.Type} Surface {p.Index} not used in cell definition {p.Surf.Axis} {p.Surf.Position}"
-            )
+            logger.info(f"{p.Type} Surface {p.Index} not used in cell definition {p.Surf.Axis} {p.Surf.Position}")
             return
 
         for ic in self.surfaceTable[p.Index]:

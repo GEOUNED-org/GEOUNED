@@ -1,8 +1,6 @@
 import logging
 
-formatter = logging.Formatter(
-    "%(asctime)s :: %(levelname)s :: %(funcName)s :: %(lineno)d :: %(message)s"
-)
+formatter = logging.Formatter("%(asctime)s :: %(levelname)s :: %(funcName)s :: %(lineno)d :: %(message)s")
 
 
 def setup_logger(name, log_file, level=logging.DEBUG):
