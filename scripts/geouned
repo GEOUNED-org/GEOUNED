@@ -10,7 +10,7 @@ sys.path.append(geo_path)
 # linux distribution
 sys.path.append('/usr/lib64/freecad/lib64/')
 
-import geouned
+from geouned import CadToCsg
 from geouned.GEOReverse import reverse
 
 runReverse = False
@@ -38,8 +38,8 @@ else:
 
 
 if not runReverse :
-  GEO = GEOUNED.GEOUNED(inifile)
-  GEO.SetOptions()
+  GEO = CadToCsg()
+  GEO.set_configuration(inifile)
   GEO.Start()
 
 else:

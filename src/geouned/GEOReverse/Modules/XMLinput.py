@@ -7,11 +7,11 @@ import FreeCAD
 import numpy as np
 from numpy import linalg as LA
 
-from .Objects import *
+from .Objects import CadCell, Cone, Cylinder, Plane, Sphere, Torus
 from .XMLParser import get_cards
 
 
-class XMLinput:
+class XmlInput:
     def __init__(self, name):
         if not os.path.isfile(name):
             raise FileNotFoundError(f"File {name} does not exist")
@@ -61,7 +61,7 @@ class XMLinput:
             # set cell as CAD cell Object
             for cname, c in universe.items():
                 # print(cname,c.geom.str)
-                universe[cname] = CADCell(c)
+                universe[cname] = CadCell(c)
 
         return levels, FilteredCells, newSurfaces
 
@@ -157,9 +157,7 @@ def selectCells(cellList, config):
                     if c.MAT not in config["mat"][1]:
                         selected[name] = c
                 else:
-                    selected[name] = (
-                        c  # Fill cell are not tested against material number
-                    )
+                    selected[name] = c  # Fill cell are not tested against material number
         elif config["cell"][0] == "exclude":
             for name, c in cellList.items():
                 if c.FILL is None:
@@ -168,9 +166,7 @@ def selectCells(cellList, config):
                             selected[name] = c
                 else:
                     if name not in config["cell"][1]:
-                        selected[name] = (
-                            c  # Fill cell are not tested against material number
-                        )
+                        selected[name] = c  # Fill cell are not tested against material number
         elif config["cell"][0] == "include":
             for name, c in cellList.items():
                 if c.FILL is None:
@@ -179,9 +175,7 @@ def selectCells(cellList, config):
                             selected[name] = c
                 else:
                     if name in config["cell"][1]:
-                        selected[name] = (
-                            c  # Fill cell are not tested against material number
-                        )
+                        selected[name] = c  # Fill cell are not tested against material number
 
     # options are 'include' material
     elif config["mat"][0] == "include":
@@ -191,9 +185,7 @@ def selectCells(cellList, config):
                     if c.MAT in config["mat"][1]:
                         selected[name] = c
                 else:
-                    selected[name] = (
-                        c  # Fill cell are not tested against material number
-                    )
+                    selected[name] = c  # Fill cell are not tested against material number
         elif config["cell"][0] == "exclude":
             for c in cellList:
                 if c.FILL is None:
@@ -202,9 +194,7 @@ def selectCells(cellList, config):
                             selected[name] = c
                 else:
                     if name not in config["cell"][1]:
-                        selected[name] = (
-                            c  # Fill cell are not tested against material number
-                        )
+                        selected[name] = c  # Fill cell are not tested against material number
         elif config["cell"][0] == "include":
             for name, c in cellList.items():
                 if c.FILL is None:
@@ -213,18 +203,14 @@ def selectCells(cellList, config):
                             selected[name] = c
                 else:
                     if name in config["cell"][1]:
-                        selected[name] = (
-                            c  # Fill cell are not tested against material number
-                        )
+                        selected[name] = c  # Fill cell are not tested against material number
 
     # remove complementary in cell of the universe
     # for cname,c in selected.items() :
     #   c.geom = remove_hash(cellList,cname)
 
     if not selected:
-        raise ValueError(
-            "No cells selected. Check input or selection criteria in config file."
-        )
+        raise ValueError("No cells selected. Check input or selection criteria in config file.")
 
     return selected
 

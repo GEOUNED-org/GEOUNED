@@ -3,10 +3,10 @@ import Import
 
 from .CodeVersion import *
 from .Modules.buildCAD import buildCAD, makeTree
-from .Modules.MCNPinput import MCNPinput
-from .Modules.Objects import CADCell
+from .Modules.MCNPinput import McnpInput
+from .Modules.Objects import CadCell
 from .Modules.processInp import setOptions
-from .Modules.XMLinput import XMLinput
+from .Modules.XMLinput import XmlInput
 
 
 def reverse(optFile="configRevese.ini"):
@@ -28,19 +28,16 @@ def reverse(optFile="configRevese.ini"):
         "format": setting["inFormat"],
     }
 
-    UnivCell = CADCell()
+    UnivCell = CadCell()
     UnivCell.shape = UnivCell.makeBox(FreeCAD.BoundBox(*outBox))
 
     # get geometry definition from MCNP input
     if inFormat == "mcnp":
-        geom = MCNPinput(geomfile)
-    elif inFormat == "openMC_XML":
-        geom = XMLinput(geomfile)
+        geom = McnpInput(geomfile)
+    elif inFormat == "openmc_xml":
+        geom = XmlInput(geomfile)
     else:
-        msg = (
-            f"input format type {inFormat} is not supported."
-            'Supported options are "mcnp" or "openMC_XML"'
-        )
+        msg = f"input format type {inFormat} is not supported." 'Supported options are "mcnp" or "openmc_xml"'
         raise ValueError(msg)
 
     CADCells, fails = buildCAD(UnivCell, geom, CADselection)

@@ -5,7 +5,7 @@ import FreeCAD
 import Part
 
 
-class splitBase:
+class SplitBase:
     def __init__(self, base, knownSurf={}):
         self.base = base
         self.knownSurf = knownSurf
@@ -31,9 +31,10 @@ def joinBase(baseList):
                     removedKeys.append(k)
 
     newbase = FuseSolid(shape)
-    return splitBase(newbase, surf)
+    return SplitBase(newbase, surf)
 
 
+# TODO rename this function as there are two with the name name
 def SplitSolid(base, surfacesCut, cellObj, solidTool=False, tolerance=0.01):  # 1e-2
     # split Base (shape Object or list/tuple of shapes)
     # with selected surfaces (list of surfaces objects) cutting the base(s) (surfacesCut)
@@ -63,9 +64,7 @@ def SplitSolid(base, surfacesCut, cellObj, solidTool=False, tolerance=0.01):  # 
     #    print(s.type,s.params,s.id)
     #    s.shape.exportStep('tool{}.stp'.format(s.id))
     # base.base.exportStep('base.stp')
-    Solids = BOPTools.SplitAPI.slice(
-        base.base, Tools, "Split", tolerance=tolerance
-    ).Solids
+    Solids = BOPTools.SplitAPI.slice(base.base, Tools, "Split", tolerance=tolerance).Solids
     if not Solids:
         Solids = [base.base]
     partPositions, partSolids = space_decomposition(Solids, surfacesCut)
@@ -88,9 +87,9 @@ def SplitSolid(base, surfacesCut, cellObj, solidTool=False, tolerance=0.01):  # 
         #  sol.exportStep('solid_{}{}.stp'.format(name,ii))
 
         if inSolid:
-            fullPart.append(splitBase(sol, pos))
+            fullPart.append(SplitBase(sol, pos))
         elif inSolid is None:
-            cutPart.append(splitBase(sol, pos))
+            cutPart.append(SplitBase(sol, pos))
     return fullPart, cutPart
 
 
@@ -164,7 +163,7 @@ def point_inside(solid):
     BBox = solid.optimalBoundingBox(False)
     box = [BBox.XMin, BBox.XMax, BBox.YMin, BBox.YMax, BBox.ZMin, BBox.ZMax]
 
-    boxes, centers = CutBox(box)
+    boxes, centers = cut_box(box)
     n = 0
 
     while True:
@@ -176,20 +175,20 @@ def point_inside(solid):
         subbox = []
         centers = []
         for b in boxes:
-            btab, ctab = CutBox(b)
+            btab, ctab = cut_box(b)
             subbox.extend(btab)
             centers.extend(ctab)
         boxes = subbox
         n = n + 1
 
         if n == cut_box:
-            print("Solid not found in bounding Box (Volume : {})".format(solid.Volume))
+            print(f"Solid not found in bounding Box (Volume : {solid.Volume})")
             print("Valid Solid : ", solid.isValid())
             return None
 
 
 # divide a box into 8 smaller boxes
-def CutBox(Box):
+def cut_box(Box):
     xmid = (Box[1] + Box[0]) * 0.5
     ymid = (Box[3] + Box[2]) * 0.5
     zmid = (Box[5] + Box[4]) * 0.5
@@ -371,7 +370,7 @@ def surface_side(p, surf):
                 break
 
     else:
-        print("surface type {} not considered".format(surf[0]))
+        print(f"surface type {surf[0]} not considered")
         return
 
     return inout > 0

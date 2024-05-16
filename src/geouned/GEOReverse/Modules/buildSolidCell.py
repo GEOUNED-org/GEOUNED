@@ -1,7 +1,7 @@
 import Part
 
 from .options import Options
-from .splitFunction import SplitSolid, joinBase, splitBase
+from .splitFunction import SplitBase, SplitSolid, joinBase
 from .Utils.booleanFunction import BoolSequence
 
 
@@ -21,7 +21,7 @@ def BuildSolid(cell, boundBox, mode="oneByOne", simplify=False):
     # cell.definition = BoolSequence(cell.definition.str)
     cell.cleanUndefined()
 
-    celParts = BuildDepth(cell, splitBase(cutCell), mode, True, simplify)
+    celParts = BuildDepth(cell, SplitBase(cutCell), mode, True, simplify)
 
     celParts = getPart(celParts)
     # print('celparts',len(celParts))
@@ -55,9 +55,9 @@ def BuildDepth(cell, cutShape, mode, baseBox, simplify=False, loop=0):
     for i, CS in enumerate(cutShape):
         cbaseBox = baseBox
         # CS.base.exportStep('CS_{}_{}.stp'.format(i,str(cell.definition)))
-        # CTable =buildCTableFromSolids(cell.makeBox(CS.base.BoundBox),cell.surfaces,option='full')
+        # CTable =build_c_table_from_solids(cell.makeBox(CS.base.BoundBox),cell.surfaces,option='full')
         # cell.definition.simplify(CTable)
-        cell.definition.groupSingle()
+        cell.definition.group_single()
 
         if type(cell.definition.elements) is not bool:
             if cell.definition.level == 0:
@@ -68,9 +68,7 @@ def BuildDepth(cell, cutShape, mode, baseBox, simplify=False, loop=0):
             if seq.operator == "AND":
                 part = CS
                 for e in cell.definition.elements:
-                    part = BuildDepth(
-                        cell.getSubCell(e), part, mode, cbaseBox, simplify, loop=loop
-                    )
+                    part = BuildDepth(cell.getSubCell(e), part, mode, cbaseBox, simplify, loop=loop)
                     cbaseBox = False
                 newCutShape.extend(part)
             else:
@@ -110,14 +108,16 @@ def BuildSolidParts(cell, base, mode):
     # print(boundBox)
 
     if mode == "solids":
-        # boundBox.enlarge(10)
-        if cell.definition.operator == "OR" and False:
-            Def = cell.definition
-            cell.definition = cell.definition.getComplementary()
-            cell.buildShape(boundBox, force=False, simplify=False)
-            cell.definition = Def
-        else:
-            cell.buildShape(boundBox, force=True, simplify=False, fuse=True)
+
+        # TODO consider making this buildShape call conditional
+        # if cell.definition.operator == "OR" and False:
+        #     Def = cell.definition
+        #     cell.definition = cell.definition.get_complementary()
+        #     cell.buildShape(boundBox, force=False, simplify=False)
+        #     cell.definition = Def
+        # else:
+        #     cell.buildShape(boundBox, force=True, simplify=False, fuse=True)
+        cell.buildShape(boundBox, force=True, simplify=False, fuse=True)
 
         # print('export')
         # base.base.exportStep('base.stp')
@@ -130,9 +130,7 @@ def BuildSolidParts(cell, base, mode):
         print("not cutting surfaces")
         return tuple(base.base), tuple()
     if mode == "solids":
-        full, cut = SplitSolid(
-            base, surfaces, cell, solidTool=True, tolerance=Options.splitTolerance
-        )
+        full, cut = SplitSolid(base, surfaces, cell, solidTool=True, tolerance=Options.splitTolerance)
     elif mode == "allSurfaces":
         full, cut = SplitSolid(base, surfaces, cell, tolerance=Options.splitTolerance)
 

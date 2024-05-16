@@ -12,11 +12,10 @@ try:
     import freecad  # importing conda package if present
 except:
     pass
+import openmc
 import Part
 import pytest
 from FreeCAD import Import
-import openmc
-import openmc
 
 openmc.config["cross_sections"] = Path("tests/cross_sections.xml").resolve()
 
@@ -34,6 +33,11 @@ step_files.remove(Path("testing/inputSTEP/placa2.stp"))
 step_files.remove(Path("testing/inputSTEP/DoubleCylinder/placa3.step"))
 step_files.remove(Path("testing/inputSTEP/DoubleCylinder/placa.stp"))
 # this face2.stp crashes when loading the geometry.xml
+
+# removing geometries that are particularly slow to convert from CI testing
+# these geometries remain in the test suite for locally testing
+if os.getenv("GITHUB_ACTIONS"):
+    step_files.remove(Path("testing/inputSTEP/large/Triangle.stp"))
 
 
 @pytest.mark.skipif(
@@ -67,9 +71,7 @@ def test_transport(input_step_file):
     )
 
     source = openmc.IndependentSource()
-    source.space = openmc.stats.Box(
-        lower_left=(llx, lly, llz), upper_right=(urx, ury, urz)
-    )
+    source.space = openmc.stats.Box(lower_left=(llx, lly, llz), upper_right=(urx, ury, urz))
     source.energy = openmc.stats.Discrete([14e6], [1])
 
     materials = openmc.Materials()
@@ -84,7 +86,7 @@ def test_transport(input_step_file):
     if os.getenv("GITHUB_ACTIONS"):
         settings.particles = 100_000
     else:
-        settings.particles = 10_000_000
+        settings.particles = 1_000_000
     settings.run_mode = "fixed source"
     settings.source = source
     model = openmc.Model(geometry, materials, settings)

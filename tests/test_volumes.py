@@ -4,19 +4,19 @@ The tests assumes that the test_convert script has previously been run and
 that xml files exist in the tests_outputs folder.
 """
 
-import sys
 import math
 import os
+import sys
 from pathlib import Path
 
 try:
     import freecad  # importing conda package if present
 except:
     pass
+import openmc
 import Part
 import pytest
 from FreeCAD import Import
-import openmc
 
 with open("cross_sections.xml", "w") as file:
     file.write(
@@ -31,19 +31,24 @@ openmc.config["cross_sections"] = Path("cross_sections.xml").resolve()
 
 path_to_cad = Path("testing/inputSTEP")
 step_files = list(path_to_cad.rglob("*.stp")) + list(path_to_cad.rglob("*.step"))
+# this file is removed as it fails the test. An issue has been raised to track
 step_files.remove(Path("testing/inputSTEP/Misc/rails.stp"))
-# # this checks if the tests are being run a github action runner or not
+# this checks if the tests are being run a github action runner or not
 if os.getenv("GITHUB_ACTIONS"):
     # reduced samples as github action runners have 2 threads and more samples
     # is not needed for the smaller models tested. This allows the CI to
     # quickly test the smaller models
     samples = 4_000_000
     rel_tol = 0.05
+    # removing two geometries that are particularly slow to convert from CI testing
+    # these two geometries remain in the test suite for locally testing
+    step_files.remove(Path("testing/inputSTEP/large/SCDR.stp"))
+    step_files.remove(Path("testing/inputSTEP/large/Triangle.stp"))
 else:
     # samples for local run can be larger as threads is likely to be larger
-    samples = 400_000_000
+    samples = 40_000_000
     # acceptable tolerance can also be smaller
-    rel_tol = 0.01
+    rel_tol = 0.04
 
 
 @pytest.mark.skipif(

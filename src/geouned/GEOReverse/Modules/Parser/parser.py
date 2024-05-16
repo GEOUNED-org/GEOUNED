@@ -4,22 +4,10 @@
 Functions for parsing MCNP input files.
 """
 
-import os
 import re
 import warnings
 
 from .PartialFormatter import PartialFormatter
-
-version = "3.6"
-
-try:
-    # This clause define the fallback for cPickle, which is an accelerated
-    # version of pickle in Python2. In Python3 the acceleration is considered
-    # to be package-internal details, therefore the whole clause is an overkill
-    # -- an accelerated version will be imported with pickle, if available.
-    import cPickle
-except ImportError:
-    import pickle as cPickle
 
 # integer with one prefix character
 re_int = re.compile(r"\D{0,1}\d+")
@@ -36,14 +24,12 @@ re_prm = re.compile(r"[it]mp:*[npe]*[=\s]+\S+", flags=re.IGNORECASE)
 re_prm = re.compile(r"([it]mp:*[npe]*[=\s]+)(\S+)", flags=re.IGNORECASE)
 
 # fill keyword
-re_fll = re.compile(
-    r"\*{0,1}fill[=\s]+", flags=re.IGNORECASE
-)  # TODO: this will also match fill===
+re_fll = re.compile(r"\*{0,1}fill[=\s]+", flags=re.IGNORECASE)  # TODO: this will also match fill===
 
 
 # If type specifier not given, any data type can be formatted:
 def fmt_gen(s):
-    return "{" + ":<{}".format(len(s)) + "}"
+    return "{" + f":<{len(s)}" + "}"
 
 
 fmt_d = fmt_gen
@@ -53,7 +39,7 @@ fmt_s = fmt_gen
 partial_formmatter = PartialFormatter()
 
 
-class __CIDClass(object):
+class CidClass(object):
     """
     There are two levels of card types. 1-st level is purely defined by card
     position in the input file.  There can be:
@@ -95,7 +81,7 @@ class __CIDClass(object):
             raise ValueError()
 
 
-CID = __CIDClass()
+CID = CidClass()
 
 
 class Card(object):
@@ -204,9 +190,7 @@ class Card(object):
         d = self.debug
         if d:
             print(
-                "Line {}, {} card. {}".format(
-                    self.pos, CID.get_name(self.ctype), comment
-                ),
+                f"Line {self.pos}, {CID.get_name(self.ctype)} card. {comment}",
                 file=d,
             )
             if "t" in key:
@@ -231,9 +215,7 @@ class Card(object):
                     if self.debug:
                         self.print_debug("get_input: bad char in input cards", "")
                     else:
-                        raise ValueError(
-                            "Bad character in input file. " + "Run with --debug option."
-                        )
+                        raise ValueError("Bad character in input file. " + "Run with --debug option.")
 
         if self.ctype in (CID.comment, CID.blankline):
             # nothing to do for comments or blanklines:
@@ -322,11 +304,7 @@ class Card(object):
                 inpt = inpt.replace(s, "!", 1)
             d["!"] = sbl
 
-        if (
-            self.ctype == CID.data
-            and inpt.lstrip().lower()[0] == "f"
-            and inpt.lstrip()[1].isdigit()
-        ):
+        if self.ctype == CID.data and inpt.lstrip().lower()[0] == "f" and inpt.lstrip()[1].isdigit():
             # this is tally card. Hide indexes in square brackets
             sbl = re_ind.findall(inpt)
             if sbl:
@@ -662,16 +640,12 @@ class Card(object):
                                     il.append(i[:k])
                                     tl.append("\n")
                                     i = indent + i[k:]
-                                    self.print_debug(
-                                        "card wrap=True" + repr(il[-1]) + repr(i), ""
-                                    )
+                                    self.print_debug("card wrap=True" + repr(il[-1]) + repr(i), "")
                                     break
                             else:
                                 # there is no proper place to wrap.
                                 self.print_debug("Cannot wrap line " + repr(i), "")
-                                warnings.warn(
-                                    "Cannot wrap card" " on line {}".format(self.pos)
-                                )
+                                warnings.warn(f"Cannot wrap card on line {self.pos}")
                                 break
                         else:
                             # input i fits to one line. Do nothing.
@@ -989,9 +963,7 @@ def _split_cell(input_, self):
 
                 # add all strings, values, formats and types:
                 for vs, vv, vf, vt in zip(vsl, vvl, vfl, vtl):
-                    inpt_parm = inpt_parm.replace(
-                        vs, tp, 1
-                    )  # TODO: here only parm part of inpt should be modified.
+                    inpt_parm = inpt_parm.replace(vs, tp, 1)  # TODO: here only parm part of inpt should be modified.
                     vals.append((vv, vt))
                     fmts.append(vf)
 
@@ -1104,12 +1076,7 @@ def _split_data(input_):
         inpt = inpt.replace(ns, tp, 1)
         vals.append((int(ns), "tr"))
         fmts.append(fmt_d(ns))
-    elif (
-        t[0][0].lower() == "m"
-        and "mode" not in t[0].lower()
-        and "mesh" not in t[0].lower()
-        and "mphys" not in t[0].lower()
-    ):
+    elif t[0][0].lower() == "m" and "mode" not in t[0].lower() and "mesh" not in t[0].lower() and "mphys" not in t[0].lower():
         # This is the Mn, MTn or MPNn card
         ms = _get_int(t[0])
         inpt = inpt.replace(ms, tp, 1)
@@ -1215,64 +1182,21 @@ def is_blankline(l):
     return l.strip() == ""
 
 
-if version == "2.7":
+def get_cards(inp, debug=None, preservetabs=False):
+    """
+    Check first existence of a dump file
 
-    def get_cards(inp, debug=None, preservetabs=False):
-        """
-        Check first existence of a dump file
-
-        If dump exists and it is newwer than the input file, read the dump file
-        """
-        from os import stat
-
-        iname = inp
-        dname = ".{}.~".format(os.path.basename(inp))
-        try:
-            it = stat(iname).st_mtime
-        except OSError as e:
-            raise e
-
-        try:
-            dt = stat(dname).st_mtime
-        except OSError:
-            # print('No dump file exists')
-            dt = it - 1.0
-        if it < dt and debug is None:
-            # print('Reading from dump')
-            # dump is youger
-            dfile = open(dname, "r")
-            cl = cPickle.load(dfile)
-            for c in cl:
-                yield c
-        else:
-            # print('Reading from input')
-            cl = []
-            for c in get_cards_from_input(inp, debug=debug, preservetabs=preservetabs):
-                yield c
-                cl.append(c)
-        if debug is None:
-            # otherwise the instances of c contain the file object, which
-            # cannot be dumped.
-            dfile = open(dname, "w")
-            cPickle.dump(cl, dfile)
-
-else:
-
-    def get_cards(inp, debug=None, preservetabs=False):
-        """
-        Check first existence of a dump file
-
-        If dump exists and it is newwer than the input file, read the dump file
-        """
-        for c in get_cards_from_input(inp, debug=debug, preservetabs=preservetabs):
-            yield c
+    If dump exists and it is newwer than the input file, read the dump file
+    """
+    for c in get_cards_from_input(inp, debug=debug, preservetabs=preservetabs):
+        yield c
 
 
 def index_(line, chars="$&"):
     """
     Find the first index of one of the chars in line.
     """
-    r = re.compile("[{}]".format(chars))
+    r = re.compile(f"[{chars}]")
     m = r.search(line)
     if m:
         i = m.end() - 1
@@ -1303,7 +1227,7 @@ def get_cards_from_input(inp, debug=None, preservetabs=False):
             while "\t" in l:
                 i = l.index("\t")
                 ii = (i // ts + 1) * ts - i
-                print("c Line {}: tab replaced with {} spaces".format(cln + 1, ii))
+                print(f"c Line {cln + 1}: tab replaced with {ii} spaces")
                 l = l[:i] + " " * ii + l[i + 1 :]
             return l[:]
 
@@ -1505,7 +1429,7 @@ def are_close_lists(x, y, re=1e-6, pci=[]):
             for xx, yy in zip(xl, yl):
                 r = are_close_vals(xx, yy, re)
                 if not r:
-                    m = "diff at {}".format(n)
+                    m = f"diff at {n}"
                     break
             else:
                 m = "all elements are close or equal"

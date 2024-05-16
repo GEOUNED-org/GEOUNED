@@ -88,7 +88,7 @@ def getSetting(config):
         elif key == "inFormat":
             inFormat = config.get("Setting", key)
         else:
-            print("{} bad keyword. Ignored".format(key))
+            print(f"{key} bad keyword. Ignored")
 
     return fileIn, fileOut, outBox, inFormat
 
@@ -108,7 +108,7 @@ def getLevel(config):
         elif key == "UStart":
             UStart = config.getint("Levels", key)
         else:
-            print("{} bad keyword. Ignored".format(key))
+            print(f"{key} bad keyword. Ignored")
 
     return UStart, levMax
 
@@ -122,7 +122,7 @@ def getRange(section, config):
         elif key == "range":
             rawRange = config.get(section, key)
         else:
-            print("{} bad keyword. Ignored".format(key))
+            print(f"{key} bad keyword. Ignored")
 
     if rType is None:
         return None
@@ -132,7 +132,7 @@ def getRange(section, config):
     elif rType.lower() == "exclude" or rType.lower() == "include":
         ctRange = getRangeData(rawRange)
         if ctRange is None:
-            print("bad range in section {}".format(section))
+            print(f"bad range in section {section}")
             return None
         else:
             return (rType.lower(), ctRange)
@@ -198,7 +198,7 @@ def setSecOptions(config):
             tolerance = config.getfloat("Options", key)
             setattr(Options, key, tolerance)
         else:
-            print("{} bad keyword. Ignored".format(key))
+            print(f"{key} bad keyword. Ignored")
 
     return
 

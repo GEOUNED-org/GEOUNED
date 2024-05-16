@@ -6,12 +6,27 @@ import FreeCAD
 import numpy as np
 from numpy import linalg as LA
 
-from .Objects import *
+from .Objects import (
+    Box,
+    CadCell,
+    Cone,
+    Cylinder,
+    Ellipsoid,
+    EllipticCone,
+    EllipticCylinder,
+    HyperbolicCylinder,
+    Hyperboloid,
+    Paraboloid,
+    Plane,
+    Sphere,
+    Torus,
+)
 from .Parser import parser as mp
-from .remh import cell_card_string, remove_hash
+from .remh import CellCardString, remove_hash
 
 
-class MCNPinput:
+# TODO rename as there are two classes with this name
+class McnpInput:
     def __init__(self, name):
         if not os.path.isfile(name):
             raise FileNotFoundError(f"File {name} does not exist")
@@ -59,7 +74,7 @@ class MCNPinput:
             # set cell as CAD cell Object
             for cname, c in universe.items():
                 # print(cname,c.geom.str)
-                universe[cname] = CADCell(c)
+                universe[cname] = CadCell(c)
 
         return levels, FilteredCells, newSurfaces
 
@@ -72,7 +87,7 @@ class MCNPinput:
             if c.ctype != mp.CID.cell:
                 continue
             c.get_values()
-            cstr = cell_card_string("".join(c.lines))
+            cstr = CellCardString("".join(c.lines))
 
             if cstr.TRCL:
                 cstr.TRCL = TransformationMatrix(cstr.TRCL, self.Transformations)
@@ -161,6 +176,7 @@ class MCNPinput:
                 trl[c.name] = getTransMatrix(trValues, c.unit)
         return trl
 
+
 # fmt: off
 def getTransMatrix(trsf, unit="", scale=10.0):
 
@@ -184,6 +200,7 @@ def getTransMatrix(trsf, unit="", scale=10.0):
             coeff[2], coeff[5], coeff[8], trsf[2] * scale,
             0, 0, 0, 1,
         )
+    return trsfMat    
 # fmt: on
 
 
@@ -202,7 +219,7 @@ def substituteLikeCell(universe, Surfaces):
     for c in universe.values():
         if not c.TRCL:
             continue
-        cellSurf = c.geom.getSurfacesNumbers()
+        cellSurf = c.geom.get_surfaces_numbers()
         surfDict = {}
         for surf in cellSurf:
             newId += 1
@@ -252,9 +269,7 @@ def selectCells(cellList, config):
                     if c.MAT not in config["mat"][1]:
                         selected[name] = c
                 else:
-                    selected[name] = (
-                        c  # Fill cell are not tested against material number
-                    )
+                    selected[name] = c  # Fill cell are not tested against material number
         elif config["cell"][0] == "exclude":
             for name, c in cellList.items():
                 if c.FILL is None:
@@ -263,9 +278,7 @@ def selectCells(cellList, config):
                             selected[name] = c
                 else:
                     if name not in config["cell"][1]:
-                        selected[name] = (
-                            c  # Fill cell are not tested against material number
-                        )
+                        selected[name] = c  # Fill cell are not tested against material number
         elif config["cell"][0] == "include":
             for name, c in cellList.items():
                 if c.FILL is None:
@@ -274,9 +287,7 @@ def selectCells(cellList, config):
                             selected[name] = c
                 else:
                     if name in config["cell"][1]:
-                        selected[name] = (
-                            c  # Fill cell are not tested against material number
-                        )
+                        selected[name] = c  # Fill cell are not tested against material number
 
     # options are 'include' material
     elif config["mat"][0] == "include":
@@ -286,9 +297,7 @@ def selectCells(cellList, config):
                     if c.MAT in config["mat"][1]:
                         selected[name] = c
                 else:
-                    selected[name] = (
-                        c  # Fill cell are not tested against material number
-                    )
+                    selected[name] = c  # Fill cell are not tested against material number
         elif config["cell"][0] == "exclude":
             for name, c in cellList.items():
                 if c.FILL is None:
@@ -297,9 +306,7 @@ def selectCells(cellList, config):
                             selected[name] = c
                 else:
                     if name not in config["cell"][1]:
-                        selected[name] = (
-                            c  # Fill cell are not tested against material number
-                        )
+                        selected[name] = c  # Fill cell are not tested against material number
         elif config["cell"][0] == "include":
             for name, c in cellList.items():
                 if c.FILL is None:
@@ -308,18 +315,14 @@ def selectCells(cellList, config):
                             selected[name] = c
                 else:
                     if name in config["cell"][1]:
-                        selected[name] = (
-                            c  # Fill cell are not tested against material number
-                        )
+                        selected[name] = c  # Fill cell are not tested against material number
 
     # remove complementary in cell of the universe
     for cname, c in selected.items():
         c.geom = remove_hash(cellList, cname)
 
     if not selected:
-        raise ValueError(
-            "No cells selected. Check input or selection criteria in config file."
-        )
+        raise ValueError("No cells selected. Check input or selection criteria in config file.")
 
     return selected
 
@@ -488,7 +491,7 @@ def Get_primitive_surfaces(mcnp_surfaces, scale=10.0):
                     normal = FreeCAD.Vector(MCNPparams[0:3])
                     params = (normal, MCNPparams[3] * scale)
                 else:
-                    coeffs = pointsToCoeffs(MCNPparams[0:9])
+                    coeffs = points_to_coeffs(MCNPparams[0:9])
                     normal = FreeCAD.Vector(coeffs[0:3])
                     point = coeffs[3] / normal.Length
                     normal.normalize()
@@ -737,9 +740,7 @@ def Get_primitive_surfaces(mcnp_surfaces, scale=10.0):
                 if (abs(MCNPparams[1] - MCNPparams[3])) > 1.0e-12:
                     Stype = "cone"
                     dblsht = False
-                    t = (MCNPparams[3] - MCNPparams[1]) / (
-                        MCNPparams[2] - MCNPparams[0]
-                    )
+                    t = (MCNPparams[3] - MCNPparams[1]) / (MCNPparams[2] - MCNPparams[0])
                     x = MCNPparams[0] - MCNPparams[1] / t
                     if (MCNPparams[0] - x) * (MCNPparams[2] - x) > 0:
                         p = FreeCAD.Vector(x, 0.0, 0.0)
@@ -761,9 +762,7 @@ def Get_primitive_surfaces(mcnp_surfaces, scale=10.0):
                         R *= scale
                     params = (origin, X_vec, MCNPparams[1])
             else:
-                print(
-                    "not implemented surfaces defined by point with more than 2couples of value"
-                )
+                print("not implemented surfaces defined by point with more than 2couples of value")
 
         elif MCNPtype == "Y":
             if len(MCNPparams) == 2:
@@ -773,9 +772,7 @@ def Get_primitive_surfaces(mcnp_surfaces, scale=10.0):
                 if (abs(MCNPparams[1] - MCNPparams[3])) > 1.0e-12:
                     Stype = "cone"
                     dblsht = False
-                    t = (MCNPparams[3] - MCNPparams[1]) / (
-                        MCNPparams[2] - MCNPparams[0]
-                    )
+                    t = (MCNPparams[3] - MCNPparams[1]) / (MCNPparams[2] - MCNPparams[0])
                     y = MCNPparams[0] - MCNPparams[1] / t
                     if (MCNPparams[0] - y) * (MCNPparams[2] - y) > 0:
                         p = FreeCAD.Vector(0.0, y, 0.0)
@@ -797,9 +794,7 @@ def Get_primitive_surfaces(mcnp_surfaces, scale=10.0):
                         R *= scale
                     params = (origin, Y_vec, MCNPparams[1])
             else:
-                print(
-                    "not implemented surfaces defined by point with more than 2couples of value"
-                )
+                print("not implemented surfaces defined by point with more than 2couples of value")
 
         elif MCNPtype == "Z":
             if len(MCNPparams) == 2:
@@ -809,9 +804,7 @@ def Get_primitive_surfaces(mcnp_surfaces, scale=10.0):
                 if (abs(MCNPparams[1] - MCNPparams[3])) > 1.0e-12:
                     Stype = "cone"
                     dblsht = False
-                    t = (MCNPparams[3] - MCNPparams[1]) / (
-                        MCNPparams[2] - MCNPparams[0]
-                    )
+                    t = (MCNPparams[3] - MCNPparams[1]) / (MCNPparams[2] - MCNPparams[0])
                     z = MCNPparams[0] - MCNPparams[1] / t
                     if (MCNPparams[0] - z) * (MCNPparams[2] - z) > 0:
                         p = FreeCAD.Vector(0.0, 0.0, z)
@@ -833,9 +826,7 @@ def Get_primitive_surfaces(mcnp_surfaces, scale=10.0):
                         R *= scale
                     params = (origin, Z_vec, MCNPparams[1])
             else:
-                print(
-                    "not implemented surfaces defined by point with more than 2couples of value"
-                )
+                print("not implemented surfaces defined by point with more than 2couples of value")
 
         elif MCNPtype == "BOX":
             Stype = "box"
@@ -949,7 +940,7 @@ def Get_primitive_surfaces(mcnp_surfaces, scale=10.0):
     return surfaces
 
 
-def pointsToCoeffs(scf):
+def points_to_coeffs(scf):
     # mcnp implementation to convert 3 point plane to
     # plane parameters
 
@@ -960,9 +951,7 @@ def pointsToCoeffs(scf):
         k -= 1
         j -= 1
         tpp[i - 1] = (
-            scf[j] * (scf[k + 3] - scf[k + 6])
-            + scf[j + 3] * (scf[k + 6] - scf[k])
-            + scf[j + 6] * (scf[k] - scf[k + 3])
+            scf[j] * (scf[k + 3] - scf[k + 6]) + scf[j + 3] * (scf[k + 6] - scf[k]) + scf[j + 6] * (scf[k] - scf[k + 3])
         )
         tpp[3] += scf[i - 1] * (scf[j + 3] * scf[k + 6] - scf[j + 6] * scf[k + 3])
 
@@ -1103,7 +1092,7 @@ def get_hyperboloid_parameters(eVal, eVect, T, k, iaxis):
     else:
         if ellipsoid:
             print("ellipical hyperboloid not implemented")
-            print("single radius from {} eigen Value will be used".format(minorRad))
+            print(f"single radius from {minorRad} eigen Value will be used")
         return "hyperboloid", (
             pos,
             axis,
@@ -1168,9 +1157,7 @@ def getGQAxis(eVal, k):
     e2 = eVal[(iaxis + 2) % 3]
 
     if k == 0:  # k == 0
-        if (
-            e0 == 0
-        ):  # e1*X^2 + e2*Y^2             = 0    Intersecting  planes (real or imaginary)
+        if e0 == 0:  # e1*X^2 + e2*Y^2             = 0    Intersecting  planes (real or imaginary)
             ek = None
         elif np.sign(e0) == np.sign(e1) and np.sign(e1) == np.sign(
             e2
@@ -1181,9 +1168,7 @@ def getGQAxis(eVal, k):
 
     elif np.sign(k) == np.sign(e1):  # e1 and k same sign  (e1 > 0)
         if e0 == 0:
-            if np.sign(e1) == np.sign(
-                e2
-            ):  # e1*X^2 + e2*Y^2          + |k| = 0  Imaginary Elliptic cylinder
+            if np.sign(e1) == np.sign(e2):  # e1*X^2 + e2*Y^2          + |k| = 0  Imaginary Elliptic cylinder
                 ek = None
             else:  # e1*X^2 - e2*Y^2          + |k| = 0  Hyperpolic cylinder
                 ek = (0, -1)
@@ -1197,9 +1182,7 @@ def getGQAxis(eVal, k):
     else:  # e1 and k different sign
         if e0 == 0:  # e1*X^2 + e2*Y^2          - |k| = 0  Elliptic cylinder
             ek = (0, -1)
-        elif np.sign(e0) == np.sign(e1) and np.sign(e1) == np.sign(
-            e2
-        ):  # e1*X^2 + e2*Y^2 + e0*Z^2 - |k| = 0  Ellipsoid
+        elif np.sign(e0) == np.sign(e1) and np.sign(e1) == np.sign(e2):  # e1*X^2 + e2*Y^2 + e0*Z^2 - |k| = 0  Ellipsoid
             ek = (1, -1)
         else:  # e1*X^2 + e2*Y^2 - e0*Z^2 - |k| = 0  Hyperbpoloid
             ek = (-1, 1)
@@ -1265,12 +1248,8 @@ def gq2params(x):
     eVal, vect = LA.eigh(mat3)
     XD = np.matmul(X, vect)  # X in diagonalised base
 
-    Dinv = np.where(
-        abs(eVal) < 1e-8, eVal, 1 / eVal
-    )  # get inverse eigen value where eigen< 1e-8
-    zero = (
-        abs(eVal) < 1e-8
-    ).nonzero()  # index in eigen value vector where eigen < 1e-8
+    Dinv = np.where(abs(eVal) < 1e-8, eVal, 1 / eVal)  # get inverse eigen value where eigen< 1e-8
+    zero = (abs(eVal) < 1e-8).nonzero()  # index in eigen value vector where eigen < 1e-8
     TD = -XD * Dinv  # Translation vector in diagonalized base
 
     k = np.matmul(TD, XD) + x[9]

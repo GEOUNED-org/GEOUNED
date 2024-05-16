@@ -5,11 +5,11 @@ import numpy as np
 import Part
 
 from .buildSolidCell import BuildSolid
-from .remh import cline
-from .Utils.booleanFunction import BoolSequence, outterTerms
+from .remh import Cline
+from .Utils.booleanFunction import BoolSequence, outer_terms
 
 
-class CADCell:
+class CadCell:
     def __init__(self, stringCell=None):
 
         if not stringCell:
@@ -44,14 +44,14 @@ class CADCell:
             self.__setDefinition__(stringCell)
 
     def copy(self):
-        cpCell = CADCell()
+        cpCell = CadCell()
         cpCell.surfaceList = self.surfaceList[:]
         cpCell.surfaces = {}
         for name, s in self.surfaces.items():
             cpCell.surfaces[name] = s.copy()
 
-        if type(self.definition) is cline:
-            cpCell.definition = cline(self.definition.str)
+        if type(self.definition) is Cline:
+            cpCell.definition = Cline(self.definition.str)
 
         elif type(self.definition) is BoolSequence:
             cpCell.definition = self.definition.copy()
@@ -76,7 +76,7 @@ class CADCell:
         subCell = self.copy()
         subCell.definition = seq.copy()
         subCell.shape = None
-        subCell.surfaceList = subCell.definition.getSurfacesNumbers()
+        subCell.surfaceList = subCell.definition.get_surfaces_numbers()
         for s in tuple(subCell.surfaces.keys()):
             if s not in subCell.surfaceList:
                 del subCell.surfaces[s]
@@ -115,9 +115,9 @@ class CADCell:
     #        subCellList=[]
     #        for df in subDefList:
     #           subCell = self.copy()
-    #           subCell.definition= cline(df)
+    #           subCell.definition= Cline(df)
     #           subCell.shape = None
-    #           subCell.surfaceList  = subCell.definition.getSurfacesNumbers()
+    #           subCell.surfaceList  = subCell.definition.get_surfaces_numbers()
     #           for s in tuple(subCell.surfaces.keys()) :
     #               if s not in subCell.surfaceList: del(subCell.surfaces[s])
     #
@@ -127,18 +127,14 @@ class CADCell:
 
     def getOuterTerms(self):
         if not self.__defTerms__:
-            self.__defTerms__, self.__operator__ = outterTerms(self.definition.str)
+            self.__defTerms__, self.__operator__ = outer_terms(self.definition.str)
         return self.__defTerms__, self.__operator__
 
     def makeBox(self, boundBox):
         box_origin = FreeCAD.Vector(boundBox.XMin, boundBox.YMin, boundBox.ZMin)
-        return Part.makeBox(
-            boundBox.XLength, boundBox.YLength, boundBox.ZLength, box_origin
-        )
+        return Part.makeBox(boundBox.XLength, boundBox.YLength, boundBox.ZLength, box_origin)
 
-    def buildShape(
-        self, boundBox, force=False, surfTR=None, simplify=False, fuse=False
-    ):
+    def buildShape(self, boundBox, force=False, surfTR=None, simplify=False, fuse=False):
 
         if self.shape is not None and not force:
             return
@@ -147,10 +143,12 @@ class CADCell:
 
         cutShape = BuildSolid(self, boundBox, simplify=simplify)
 
-        if fuse or True:
-            self.shape = FuseSolid(cutShape)
-        else:
-            self.shape = Part.makeCompound(cutShape)
+        # TODO consider making this step conditional on fuse
+        # if fuse or True:
+        #     self.shape = FuseSolid(cutShape)
+        # else:
+        #     self.shape = Part.makeCompound(cutShape)
+        self.shape = FuseSolid(cutShape)
 
     def buildSurfaceShape(self, boundBox):
         for s in self.surfaces.values():
@@ -177,7 +175,7 @@ class CADCell:
 
     def cleanUndefined(self):
         undefined = []
-        for s in self.definition.getSurfacesNumbers():
+        for s in self.definition.get_surfaces_numbers():
             if self.surfaces[s].params is None:
                 undefined.append(s)
         if undefined:
@@ -193,7 +191,7 @@ class CADCell:
         self.definition.remove_cr()
         self.definition.remove_multispace()
         self.definition.remove_redundant()
-        self.surfaceList = self.definition.getSurfacesNumbers()
+        self.surfaceList = self.definition.get_surfaces_numbers()
 
 
 class Plane:
@@ -206,7 +204,7 @@ class Plane:
             self.transform(tr)
 
     def __str__(self):
-        return "plane : {}\nParameters : {}".format(self.id, self.params)
+        return f"plane : {self.id}\nParameters : {self.params}"
 
     def copy(self):
         return Plane(self.id, self.params)
@@ -518,9 +516,7 @@ class EllipticCylinder:
             self.shape = makeEllipticCylinder(point, radii, rAxes, axis, height)
         else:
             height = axis.Length
-            self.shape = makeEllipticCylinder(
-                center, radii, rAxes, axis / height, height
-            )
+            self.shape = makeEllipticCylinder(center, radii, rAxes, axis / height, height)
 
 
 class HyperbolicCylinder:
@@ -613,15 +609,11 @@ class Torus:
         self.params = (p, v, Ra, Rb, Rc)
 
     def buildShape(self, boundBox):
-        center, axis, Ra, Rb, Rc = (
-            self.params
-        )  # Ra distance from torus axis; R radius of toroidal-cylinder
+        center, axis, Ra, Rb, Rc = self.params  # Ra distance from torus axis; R radius of toroidal-cylinder
         if (abs(Rb - Rc) < 1e-5) and Ra > 0:
             self.shape = Part.makeTorus(Ra, Rb, center, axis)  # FreeCAD circular Torus
         else:
-            self.shape = makeEllipticTorus(
-                Ra, Rb, Rc, center, axis
-            )  # Home made elliptic Torus
+            self.shape = makeEllipticTorus(Ra, Rb, Rc, center, axis)  # Home made elliptic Torus
 
 
 class Box:
@@ -733,15 +725,11 @@ def makeHyperboloid(center, radii, rAxes, axis, onesht, length):
 
     Y = length
     X = radii[1] * math.sqrt((Y / radii[0]) ** 2 + 1)
-    point = (
-        center + X * radii[1] + Y * radii[0]
-    )  # point in taken as length is always counted on minor axis
+    point = center + X * radii[1] + Y * radii[0]  # point in taken as length is always counted on minor axis
     parameter = abs(hyperbola.parameter(point))
 
     if onesht:
-        shape = hyperbola.toBSpline(-parameter, parameter).toShape(
-            -parameter, parameter
-        )
+        shape = hyperbola.toBSpline(-parameter, parameter).toShape(-parameter, parameter)
         hyperFace = shape.revolve(center, axis, 360)
 
         StartPoint = hyperFace.Surface.BasisCurve.StartPoint - center
@@ -792,9 +780,7 @@ def makeHyperbolicCylinder(center, radii, rAxes, axis, length):
 
     Y = length
     X = radii[1] * math.sqrt((Y / radii[0]) ** 2 + 1)
-    point = (
-        center + X * rAxes[1] + Y * rAxes[0]
-    )  # point in taken as length is always counted on minor axis
+    point = center + X * rAxes[1] + Y * rAxes[0]  # point in taken as length is always counted on minor axis
     parameter = abs(hyperbola1.parameter(point))
 
     shape1 = hyperbola1.toBSpline(-parameter, parameter).toShape(-parameter, parameter)
@@ -862,9 +848,7 @@ def makeEllipticTorus(R, RZ, RX, center, ZAxis):
         p2 = ellipse.parameter(pz2)
         if p2 < p1:
             p2 += 2 * math.pi
-        shape = ellipse.toBSpline(p1, p2).toShape(
-            p1, p2
-        )  # revolution around Major axis
+        shape = ellipse.toBSpline(p1, p2).toShape(p1, p2)  # revolution around Major axis
         rev = shape.revolve(center, ZAxis, 360)
     else:
         shape = ellipse.toBSpline().toShape()  # revolution around Minor axis

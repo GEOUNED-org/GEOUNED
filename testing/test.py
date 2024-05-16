@@ -1,12 +1,12 @@
-import sys
 import os
 import subprocess
+import sys
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).parents[1] / "src"))
 sys.path.append("/usr/lib64/freecad/lib64/")
 
-from geouned import GEOUNED
+from geouned import CadToCsg
 
 
 def setInput(inName, inpDir, outDir):
@@ -23,8 +23,8 @@ def setInput(inName, inpDir, outDir):
     if outDir == "":
         outDir = "."
 
-    inName = "{}/{}".format(inpDir, inName)
-    outName = "{}/{}".format(outDir, filename)
+    inName = f"{inpDir}/{inName}"
+    outName = f"{outDir}/{filename}"
 
     template = """[Files]
 title    = Input Test
@@ -52,9 +52,8 @@ nPlaneReverse = 0
         inName, outName
     )
 
-    file = open("config.ini", "w")
-    file.write(template)
-    file.close()
+    with open(file="config.ini", mode="w", encoding="utf-8") as outfile:
+        outfile.write(template)
 
 
 def getInputList(folder, ext=None):
@@ -91,9 +90,7 @@ def runMCNP(path, inpFile):
     inp = inpFile
     out = inpFile[0:-1] + "o"
     mctal = inpFile[0:-1] + "m"
-    cmd = "cd {} && {} i={} o={} mctal={} xsdir={}".format(
-        path, code, inp, out, mctal, xsdir
-    )
+    cmd = "cd {} && {} i={} o={} mctal={} xsdir={}".format(path, code, inp, out, mctal, xsdir)
     os.system(cmd)
 
 
@@ -157,8 +154,8 @@ def printResults(f, res, lost):
 def mkGEOInp(inpDir, outDir):
     for f in getInputList(inpDir, ("stp", "step")):
         setInput(f, inpDir, outDir)
-        GEO = GEOUNED(inifile)
-        GEO.SetOptions()
+        GEO = CadToCsg()
+        GEO.set_configuration(inifile)
         GEO.Start()
         del GEO
 

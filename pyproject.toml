@@ -17,8 +17,12 @@ readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: GNU General Public License v3.0",
+    "License :: OSI Approved :: European Union Public Licence 1.2 (EUPL 1.2)",
     "Operating System :: OS Independent",
+]
+dependencies = [
+  "tqdm",
+  "numpy",
 ]
 
 [project.urls]
@@ -29,4 +33,17 @@ Documentation = "https://github.com/GEOUNED-org/GEOUNED/docs"
 [project.optional-dependencies]
 tests = [
     "pytest",
+    "black==24.4.2",
 ]
+docs = [
+  "sphinx",
+  "sphinx_rtd_theme",
+  "sphinx_autodoc_typehints",
+  "sphinx_rtd_theme",
+]
+
+[project.scripts]
+geouned_cadtocsg = "geouned.GEOUNED.scripts.geouned_cadtocsg:main"
+
+[tool.black]
+line-length = 128

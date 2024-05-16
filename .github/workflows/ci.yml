@@ -5,6 +5,12 @@ on:
       branches:
         - dev
         - main
+      paths-ignore:
+        - "**.md"
+        - "**.txt"
+        - "**.cff"
+        - 'docs/**'
+        - '.gitignore'
     push:
       branches:
         - main
@@ -44,13 +50,17 @@ jobs:
           run: |
             python -m pip install --upgrade pip
             python -m pip install .
+            geouned_cadtocsg --help
             python -c 'import geouned'
-            python -c 'from geouned import GEOUNED'
+            python -c 'from geouned import CadToCsg'
             python -c 'from geouned.GEOReverse import reverse'
             python -m pip install .[tests]
 
         - name: testing GEOUNED functionality
-          run: python -m pytest -v tests/test_convert.py
+          run: |
+            python -m pytest -v tests/test_convert.py
+            geouned_cadtocsg -i tests/config_complete_defaults.json
+            geouned_cadtocsg -i tests/config_non_defaults.json
 
         - name: install openmc
           if: ${{ matrix.os == 'ubuntu-latest'}}

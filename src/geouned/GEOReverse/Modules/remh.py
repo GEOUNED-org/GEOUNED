@@ -40,9 +40,7 @@ interblk = re.compile(
 intercls = re.compile(
     r"(?P<previous>\))(?P<next>(( *| *((\n *)?\$|\nC)*\n *)[-+]?\d))"
 )  # closed parenthesis followed by number
-interopn = re.compile(
-    r"(?P<previous>\d)(?P<next>(( *| *((\n *)?\$|\nC)*\n *)\())"
-)  # number followed by opened parenthesis
+interopn = re.compile(r"(?P<previous>\d)(?P<next>(( *| *((\n *)?\$|\nC)*\n *)\())")  # number followed by opened parenthesis
 intercop = re.compile(
     r"(?P<previous>\))(?P<next>(( *| *((\n *)?\$|\nC)*\n *)\())"
 )  # closed parenthesis followed by opened parenthesis
@@ -52,39 +50,25 @@ colonamp = re.compile(r"[:&]")  # colon or amperserand
 mostinner = re.compile(r"\([^\(^\)]*\)")  # identify most inner parentheses
 bracketsemi = re.compile(r"[\]\[;]")  # square bracket or semicolon
 blnkline = re.compile(r"^ *\n", re.M)  # identify blank line
-contline = re.compile(
-    r"\n {0,4}(?P<start>[^c^ ])", re.I
-)  # identify character other than 'C' in fisrt 5 columns
+contline = re.compile(r"\n {0,4}(?P<start>[^c^ ])", re.I)  # identify character other than 'C' in fisrt 5 columns
 comdollar = re.compile(r"\n(?P<blnk> *)\$")  # identify dollar on 'blank line'
-startgeom = re.compile(
-    r"(?P<previous>^ *)(?P<start>[\-\+\d])"
-)  # identify beginning of the geomtric part
-endgeom = re.compile(
-    r"(?P<last>\d)(?P<next> *((\n *)?\$|\nc)?(\n *)?$)", re.I
-)  # identify end of the geomtric part
+startgeom = re.compile(r"(?P<previous>^ *)(?P<start>[\-\+\d])")  # identify beginning of the geomtric part
+endgeom = re.compile(r"(?P<last>\d)(?P<next> *((\n *)?\$|\nc)?(\n *)?$)", re.I)  # identify end of the geomtric part
 # endgeom=re.compile(r"(?P<last>\d)(?P<next> *(\$|\nc)?(\n *)?$)",re.I)                      # identify end of the geomtric part
 
 # other
-rehash = re.compile(
-    r"# *(\d+|\()"
-)  # find beginning of complementary operator (both cell and surf)
+rehash = re.compile(r"# *(\d+|\()")  # find beginning of complementary operator (both cell and surf)
 parent = re.compile(r"[\(|\)]")  # position of open and close parenthesis (get_hashcell)
 gline = re.compile(
     r"(^ ?[\(\):\-\+\d+\.\# ]+|\n {5}[\(\):\-\+\d+\.\# ]+)", re.I
 )  # valid geometric part of the line       (remove/restore_comments)
-comments = re.compile(
-    r"((\n *)?\$|\n *c)", re.I
-)  # begining of comment part               (remove/restore_comments)
+comments = re.compile(r"((\n *)?\$|\n *c)", re.I)  # begining of comment part               (remove/restore_comments)
 # comments=re.compile(r"\$|\n *c",re.I)                               # begining of comment part               (remove/restore_comments)
 celtrsf = re.compile(r"TRCL *= *", re.I)
 celuniverse = re.compile(r"U *= *", re.I)
 celfill = re.compile(r"FILL *= *", re.I)
-trfnumber = re.compile(
-    r"([-+]?(\d+\.\d+|\.\d+|\d+\.?)(e[+-]\d+)?)|\)", re.I
-)  # search for general number or close bracket )
-likemat = re.compile(
-    r"MAT *= *(?P<mat>\d+)", re.I
-)  # identify material value on like but card
+trfnumber = re.compile(r"([-+]?(\d+\.\d+|\.\d+|\d+\.?)(e[+-]\d+)?)|\)", re.I)  # search for general number or close bracket )
+likemat = re.compile(r"MAT *= *(?P<mat>\d+)", re.I)  # identify material value on like but card
 dollar = re.compile(r"\$.*\n", re.I)
 
 
@@ -190,7 +174,7 @@ def reverse_repl(m):
 
 def complementary(ccell, outter=True):
     """return the complementary cell"""
-    wrkcell = cline(ccell.str)
+    wrkcell = Cline(ccell.str)
     if wrkcell.str[-1] == "\n":
         wrkcell.str = wrkcell.str[:-1]
 
@@ -205,9 +189,7 @@ def complementary(ccell, outter=True):
     wrkcell.str = re.sub(
         interblk, r"\g<previous>&\g<next>", wrkcell.str
     )  # change intersection separate by blank space ie: "number number"
-    wrkcell.str = re.sub(
-        interblk, r"\g<previous>&\g<next>", wrkcell.str
-    )  # 2nd pass intersection blank space (require 2 pass)
+    wrkcell.str = re.sub(interblk, r"\g<previous>&\g<next>", wrkcell.str)  # 2nd pass intersection blank space (require 2 pass)
     wrkcell.str = re.sub(
         intercls, r"\g<previous>&\g<next>", wrkcell.str
     )  # change intersection close parenthesis ie: ") number"
@@ -237,14 +219,14 @@ def complementary(ccell, outter=True):
 
 
 ############################################################
-class cline:
+class Cline:
     def __init__(self, line):
         self.str = line
 
     def copy(self):
-        return cline(self.str)
+        return Cline(self.str)
 
-    def getSurfacesNumbers(self):
+    def get_surfaces_numbers(self):
         s = set(unsignedint.findall(self.str))
         return tuple(map(int, s))
 
@@ -300,8 +282,8 @@ class cline:
         self.str = "".join(celltab)
         return
 
-    def outterTerms(self):
-        cgeom = cline(self.str)
+    def outer_terms(self):
+        cgeom = Cline(self.str)
 
         cgeom.remove_comments(full=True)
         cgeom.remove_redundant()
@@ -322,13 +304,7 @@ class cline:
                 cont = True
                 if redundant(m, geom):
                     # remove redundant parentheses
-                    geom = (
-                        geom[: m.start()]
-                        + " "
-                        + geom[m.start() + 1 : m.end() - 1]
-                        + " "
-                        + geom[m.end() :]
-                    )
+                    geom = geom[: m.start()] + " " + geom[m.start() + 1 : m.end() - 1] + " " + geom[m.end() :]
                 else:
                     # replace no redundant parentheses by 0 and : by ;
                     zeros = "0" * (m.end() - m.start())
@@ -384,13 +360,7 @@ class cline:
                 cont = True
                 if redundant(m, geom):
                     # remove redundant parentheses
-                    geom = (
-                        geom[: m.start()]
-                        + " "
-                        + geom[m.start() + 1 : m.end() - 1]
-                        + " "
-                        + geom[m.end() :]
-                    )
+                    geom = geom[: m.start()] + " " + geom[m.start() + 1 : m.end() - 1] + " " + geom[m.end() :]
                 else:
                     # replace no redundant parentheses by [] and : by ;
                     term = geom[m.start() + 1 : m.end() - 1].replace(":", ";")
@@ -434,7 +404,7 @@ class cline:
                 count -= 1
             if count == 0:
                 end = p.end()
-                cell = cline(self.str[start + 1 : end])
+                cell = Cline(self.str[start + 1 : end])
                 break
         return cell, end
 
@@ -452,7 +422,7 @@ class cline:
             self.str = self.str[0 : m.start()] + s2 + self.str[m.end() :]
             return m.start() + len(s2)
         else:
-            print("number {} not found".format(surf))
+            print(f"number {surf} not found")
             return -1
 
     def countP(self):
@@ -470,18 +440,10 @@ class cline:
         geom = re.sub(
             interblk, r"\g<previous>&\g<next>", geom
         )  # change intersection separate by blank space ie: "number number"
-        geom = re.sub(
-            interblk, r"\g<previous>&\g<next>", geom
-        )  # 2nd pass intersection blank space (require 2 pass)
-        geom = re.sub(
-            intercls, r"\g<previous>&\g<next>", geom
-        )  # change intersection close parenthesis ie: ") number"
-        geom = re.sub(
-            interopn, r"\g<previous>&\g<next>", geom
-        )  # change intersection open  parenthesis ie: "number ("
-        geom = re.sub(
-            intercop, r"\g<previous>&\g<next>", geom
-        )  # change intersection close-open  parenthesis ie: ") ("
+        geom = re.sub(interblk, r"\g<previous>&\g<next>", geom)  # 2nd pass intersection blank space (require 2 pass)
+        geom = re.sub(intercls, r"\g<previous>&\g<next>", geom)  # change intersection close parenthesis ie: ") number"
+        geom = re.sub(interopn, r"\g<previous>&\g<next>", geom)  # change intersection open  parenthesis ie: "number ("
+        geom = re.sub(intercop, r"\g<previous>&\g<next>", geom)  # change intersection close-open  parenthesis ie: ") ("
 
         parts = []
         block = ""
@@ -532,7 +494,7 @@ class cline:
 
 
 ############################################################
-class cell_card_string:
+class CellCardString:
 
     def __init__(self, card):
         self.stat = {"word": None, "hashcell": None, "hashsurf": None, "hash": None}
@@ -549,8 +511,8 @@ class cell_card_string:
     def __card_split__(self, cardin):
         """Split the card string in three parts :
            - headstr : string containing the cell name, mat number and density (if mat != 0) of the cell
-           - geom    : cline class containing the part of the geometric definition of the cell
-           - param    : cline class containing the cell parameters part
+           - geom    : Cline class containing the part of the geometric definition of the cell
+           - param    : Cline class containing the cell parameters part
         hproc is true if the complementary operator of the cell can be substituted"""
 
         m = celmat.match(cardin)
@@ -560,8 +522,8 @@ class cell_card_string:
         if m.group("scnd").lower() == "like":
             self.headstr = cardin[: m.start("scnd")]
             s = likebut.search(cardin, m.end("scnd"))
-            self.geom = cline(cardin[m.start("scnd") : s.end()])
-            self.parm = cline(cardin[s.end() :])
+            self.geom = Cline(cardin[m.start("scnd") : s.end()])
+            self.parm = Cline(cardin[s.end() :])
             self.hproc = False
             mc = unsignedint.search(self.geom.str)
             self.likeCell = int(mc.group())
@@ -578,7 +540,7 @@ class cell_card_string:
 
         if self.hproc:
             self.headstr = cardin[:cstart]
-            cellcard = cline(cardin[cstart:])
+            cellcard = Cline(cardin[cstart:])
             cellcard.remove_comments()
             m = param.search(cellcard.str)
             if m:
@@ -599,8 +561,8 @@ class cell_card_string:
 
             if m:
                 start = m.end(1)
-                self.geom = cline(cellcard.str[:start])
-                self.parm = cline(cellcard.str[start:])
+                self.geom = Cline(cellcard.str[:start])
+                self.parm = Cline(cellcard.str[start:])
 
                 # look for transformation in cell parameters
                 self.parm.remove_comments()
@@ -609,8 +571,8 @@ class cell_card_string:
                     self.hproc = False
                 self.parm.restore_comments()
             else:
-                self.geom = cline(cellcard.str)
-                self.parm = cline("")
+                self.geom = Cline(cellcard.str)
+                self.parm = Cline("")
 
         return
 
@@ -717,16 +679,14 @@ def remove_hash(cards, cname, keepComments=True):
         """remove complementary operator and subtitute by complementary cell"""
         if "parser.Card" in str(type(card)):
             celline = "".join(card.lines)
-            cardstr = cell_card_string(celline)
+            cardstr = CellCardString(celline)
         else:
             cardstr = card
         cardstr.get_stat()
         cardstr.geom.remove_comments(full=not keepComments)
         if (not cardstr.hproc) or (cardstr.stat["hash"] == 0):
-            return (
-                cardstr.geom
-            )  # no complementary operator or cannot be # cannot be removed
-        cell = cline(cardstr.geom.str)
+            return cardstr.geom  # no complementary operator or cannot be # cannot be removed
+        cell = Cline(cardstr.geom.str)
         # find all operators in the cell and
         # substitute all complementary operators
         # locate object in list to reverse iteration
@@ -753,24 +713,14 @@ def remove_hash(cards, cname, keepComments=True):
             if m.group(1) == "(":  # complementary cell defined as surface intersections
                 hcell, end = cell.get_hashcell(start)
                 cellmod = cell.str[0:start] + complementary(hcell) + cell.str[end:]
-                cell = cline(cellmod)
+                cell = Cline(cellmod)
             else:
-                hcname = int(
-                    m.group(1)
-                )  # complementary cell defined with other cell index
-                newdef = remove(
-                    cards[hcname], hcname, keepComments
-                )  # remove complementary operator in new cell if necessary
+                hcname = int(m.group(1))  # complementary cell defined with other cell index
+                newdef = remove(cards[hcname], hcname, keepComments)  # remove complementary operator in new cell if necessary
                 end = m.end()
-                cellmod = (
-                    cell.str[0:start]
-                    + "      "
-                    + complementary(newdef)
-                    + " "
-                    + cell.str[end:]
-                )
-                cell = cline(cellmod)
+                cellmod = cell.str[0:start] + "      " + complementary(newdef) + " " + cell.str[end:]
+                cell = Cline(cellmod)
         return cell
 
     newcell = remove(cards[cname], cname, keepComments)
-    return cline(newcell.str)
+    return Cline(newcell.str)

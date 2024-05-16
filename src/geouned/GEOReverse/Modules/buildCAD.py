@@ -20,9 +20,7 @@ def buildCAD(UnivCell, data, config):
     else:
         factor = 1
 
-    modelSurfaces = data.GetSurfaces(
-        scale=factor
-    )  # scale change cm in mcnp to mm in CAD Obj
+    modelSurfaces = data.GetSurfaces(scale=factor)  # scale change cm in mcnp to mm in CAD Obj
 
     # read Cells and group into universes
     print(config)
@@ -33,7 +31,7 @@ def buildCAD(UnivCell, data, config):
 
     #    print(UniverseCells[0][120].definition.str)
     #    print(UniverseCells[0][120].surfaces)
-    #    CT=buildCTableFromSolids(UnivCell.shape,UniverseCells[0][70],option='full')
+    #    CT=build_c_table_from_solids(UnivCell.shape,UniverseCells[0][70],option='full')
     #    print(CT)
     #    simply = BoolSequence(UniverseCells[0][70].definition.str)
     #    print('antesSimply',simply)
@@ -42,7 +40,7 @@ def buildCAD(UnivCell, data, config):
     # exit()
 
     # dictionnary of the cells filled with a given Universe U
-    # universeContainers = GetUniverseContainers(levels,UniverseCells)
+    # universeContainers = get_universe_containers(levels,UniverseCells)
 
     UnivCell.level = None
     levelMax = config["levelMax"]
@@ -86,7 +84,7 @@ def AssignSurfaceToCell(UniverseCells, modelSurfaces):
             c.setSurfaces(modelSurfaces)
 
 
-def GetUniverseContainers(levels, Universes):
+def get_universe_containers(levels, Universes):
     Ucontainer = {}
     for lev in range(1, len(levels)):
         for U, name in levels[lev]:
@@ -98,19 +96,13 @@ def GetUniverseContainers(levels, Universes):
     return Ucontainer
 
 
-def BuildUniverse(
-    startInfo, ContainerCell, AllUniverses, universeCut=True, duplicate=False
-):
+def BuildUniverse(startInfo, ContainerCell, AllUniverses, universeCut=True, duplicate=False):
     CADUniverse = []
 
     Ustart, levelMax = startInfo
     Universe = AllUniverses[Ustart]
 
-    print(
-        "Build Universe {} in container cell {}".format(
-            ContainerCell.FILL, ContainerCell.name
-        )
-    )
+    print(f"Build Universe {ContainerCell.FILL} in container cell {ContainerCell.name}")
     fails = []
     for NTcell in Universe.values():
         if duplicate:
@@ -136,7 +128,7 @@ def BuildUniverse(
             NTcell = NTcell.copy()
 
         if buildShape:
-            print("Level :{}  build Cell {} ".format(CC.level + 1, NTcell.name))
+            print(f"Level :{CC.level + 1}  build Cell {NTcell.name} ")
             if type(NTcell.definition) is not BoolSequence:
                 NTcell.definition = BoolSequence(NTcell.definition.str)
 
@@ -173,9 +165,7 @@ def BuildUniverse(
             if ContainerCell.CurrentTR:
                 cell.CurrentTR = ContainerCell.CurrentTR.multiply(cell.TRFL)
             cell.level = ContainerCell.level + 1
-            univ, ff = BuildUniverse(
-                (cell.FILL, levelMax), cell, AllUniverses, universeCut=universeCut
-            )
+            univ, ff = BuildUniverse((cell.FILL, levelMax), cell, AllUniverses, universeCut=universeCut)
             CADUniverse.append(univ)
             fails.extend(ff)
 
@@ -187,15 +177,15 @@ def makeTree(CADdoc, CADCells):
     label, universeCADCells = CADCells
     groupObj = CADdoc.addObject("App::Part", "Materials")
 
-    groupObj.Label = "Universe_{}_Container_{}".format(label[1], label[0])
+    groupObj.Label = f"Universe_{label[1]}_Container_{label[0]}"
 
     CADObj = {}
     for i, c in enumerate(universeCADCells):
         if type(c) is tuple:
             groupObj.addObject(makeTree(CADdoc, c))
         else:
-            featObj = CADdoc.addObject("Part::FeaturePython", "solid{}".format(i))
-            featObj.Label = "Cell_{}_{}".format(c.name, c.MAT)
+            featObj = CADdoc.addObject("Part::FeaturePython", f"solid{i}")
+            featObj.Label = f"Cell_{c.name}_{c.MAT}"
             featObj.Shape = c.shape
             if c.MAT not in CADObj.keys():
                 CADObj[c.MAT] = [featObj]
@@ -204,7 +194,7 @@ def makeTree(CADdoc, CADCells):
 
     for mat, matGroup in CADObj.items():
         groupMatObj = CADdoc.addObject("App::Part", "Materials")
-        groupMatObj.Label = "Material_{}".format(mat)
+        groupMatObj.Label = f"Material_{mat}"
         groupMatObj.addObjects(matGroup)
         groupObj.addObject(groupMatObj)
 
