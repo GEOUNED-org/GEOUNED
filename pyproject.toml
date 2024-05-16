@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools >= 69.4.1", "setuptools_scm[toml]>=8.0.1"]
+requires = ["setuptools >= 69.5.1", "setuptools_scm[toml]>=8.1.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -20,6 +20,7 @@ maintainers = [
 description = "Conversion tool from CAD to CGS/CGS to CAD for Monte Carlo particle transport codes (MCNP & OpenMC)"
 readme = "README.md"
 requires-python = ">=3.8"
+keywords = ["csg", "cad", "openmc", "serpent", "phits", "mcnp", "geometry"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: European Union Public Licence 1.2 (EUPL 1.2)",
@@ -55,3 +56,6 @@ line-length = 128
 
 [tool.setuptools_scm]
 write_to = "src/_version.py"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
