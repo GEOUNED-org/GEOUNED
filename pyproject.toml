@@ -4,6 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "geouned"
+license = {file = "LICENSE.txt"}
 dynamic = ["version"]
 authors = [
   { name="Juan-Pablo Catalan", email="jpcatalan@ind.uned.es" },
