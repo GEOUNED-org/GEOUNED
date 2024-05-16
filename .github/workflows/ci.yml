@@ -56,6 +56,10 @@ jobs:
             python -c 'from geouned.GEOReverse import reverse'
             python -m pip install .[tests]
 
+        - name: testing package version
+          run: |
+            python -m pytest -v tests/test_version.py
+            
         - name: testing GEOUNED functionality
           run: |
             python -m pytest -v tests/test_convert.py
