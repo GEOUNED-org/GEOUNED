@@ -5,10 +5,10 @@ import logging
 import math
 from datetime import datetime
 from pathlib import Path
+from importlib.metadata import version
 
 import FreeCAD
 
-from ..code_version import *
 from ..utils.basic_functions_part1 import is_opposite, points_to_coeffs
 from ..utils.functions import SurfacesDict
 from .functions import CardLine, change_surf_sign, mcnp_surface, write_mcnp_cell_def
@@ -107,15 +107,13 @@ C ##########################################################
 
     def __write_header__(self):
 
-        version = GEOUNED_Version
-        releaseDate = GEOUNED_ReleaseDate
         freeCAD_Version = "{V[0]:}.{V[1]:}.{V[2]:}".format(V=FreeCAD.Version())
 
         Header = f"""{self.Title}
 C   ______ _______  _____      _     _ __   _ _______ ______  
 C  |  ____ |______ |     | ___ |     | | \\  | |______ |     \\ 
 C  |_____| |______ |_____|     |_____| |  \\_| |______ |_____/
-C Version : {version}     {releaseDate}
+C Version : {version('geouned')}
 C FreeCAD Version : {freeCAD_Version} 
 """
 

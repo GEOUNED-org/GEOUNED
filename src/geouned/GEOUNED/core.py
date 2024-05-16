@@ -6,6 +6,7 @@ from datetime import datetime
 from os import mkdir, path
 from pathlib import Path
 from typing import get_type_hints
+from importlib.metadata import version
 
 import FreeCAD
 import Part
@@ -437,7 +438,7 @@ class CadToCsg:
 
         logger.info("start")
         freecad_version = ".".join(FreeCAD.Version()[:3])
-        logger.info(f"GEOUNED version {GEOUNED_Version} {GEOUNED_ReleaseDate} \nFreeCAD version {freecad_version}")
+        logger.info(f"GEOUNED version {version('geouned')} \nFreeCAD version {freecad_version}")
 
         if self.stepFile == "":
             raise ValueError("Cannot run the code. Step file name is missing")

@@ -1,6 +1,11 @@
+[build-system]
+requires = ["setuptools >= 69.5.1", "setuptools_scm[toml]>=8.1.0"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "geouned"
-version = "1.0.1"
+license = {file = "LICENSE.txt"}
+dynamic = ["version"]
 authors = [
   { name="Juan-Pablo Catalan", email="jpcatalan@ind.uned.es" },
   { name="Patrick Sauvan", email="psauvan@ind.uned.es" },
@@ -12,9 +17,10 @@ maintainers = [
   { name="Francisco Ogando", email="fogando@ind.uned.es" },
   { name="Javier Alguacil", email="jalguacil@ind.uned.es" },
 ]
-description = "Conversion tool from CAD to CGS/CGS to CAD for Monte Carlo particle transport codes (MCNP & OpenMC)"
+description = "Conversion tool from CAD to CGS/CGS to CAD for Monte Carlo particle transport codes (OpenMC, Phits, Serpent, MCNP)"
 readme = "README.md"
 requires-python = ">=3.8"
+keywords = ["csg", "cad", "openmc", "serpent", "phits", "mcnp", "geometry"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: European Union Public Licence 1.2 (EUPL 1.2)",
@@ -28,7 +34,7 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/GEOUNED-org"
 Repository = "https://github.com/GEOUNED-org/GEOUNED"
-Documentation = "https://github.com/GEOUNED-org/GEOUNED/docs"
+Documentation = "https://geouned-org.github.io/GEOUNED/index.html"
 
 [project.optional-dependencies]
 tests = [
@@ -47,3 +53,9 @@ geouned_cadtocsg = "geouned.GEOUNED.scripts.geouned_cadtocsg:main"
 
 [tool.black]
 line-length = 128
+
+[tool.setuptools_scm]
+write_to = "src/_version.py"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
