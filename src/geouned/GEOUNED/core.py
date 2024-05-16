@@ -70,15 +70,15 @@ class CadToCsg:
         title: str = "Converted with GEOUNED",
         geometryName: str = "csg",
         outFormat: typing.Tuple[str] = (
-            "openMC_XML",
-            "openMC_PY",
+            "openmc_xml",
+            "openmc_py",
             "serpent",
             "phits",
             "mcnp",
         ),
         volSDEF: bool = False,
         volCARD: bool = True,
-        UCARD: int = 101,
+        UCARD: typing.Union[int, type(None)] = 101,
         dummyMat: bool = False,
         cellCommentFile: bool = False,
         cellSummaryFile: bool = True,
@@ -91,8 +91,8 @@ class CadToCsg:
             geometryName (str, optional): the file stem of the output file(s).
                 Defaults to "converted_with_geouned".
             outFormat (typing.Tuple[str], optional): Format for the output
-                geometry. Available format are: "mcnp", "openMC_XML",
-                "openMC_PY", "phits" and "serpent". Several output format can
+                geometry. Available format are: "mcnp", "openmc_xml",
+                "openmc_py", "phits" and "serpent". Several output format can
                 be written in the same method call. Defaults to output all codes.
             volSDEF (bool, optional):  Write SDEF definition and tally of solid
                 cell for stochastic volume checking. Defaults to False.
@@ -110,6 +110,23 @@ class CadToCsg:
             cellSummaryFile (bool, optional): Write an additional file with
                information on the CAD cell translated. Defaults to True.
         """
+
+        if not isinstance(UCARD, int) and not isinstance(UCARD, type(None)):
+            raise TypeError(f"UCARD should be of type int or None not {type(UCARD)}")
+
+        for arg, arg_str in (
+            (volSDEF, "volSDEF"),
+            (volCARD, "volCARD"),
+            (dummyMat, "dummyMat"),
+            (cellCommentFile, "cellCommentFile"),
+            (cellSummaryFile, "cellSummaryFile"),
+        ):
+            if not isinstance(arg, bool):
+                raise TypeError(f"{arg} should be of type bool not {type(arg_str)}")
+
+        for arg, arg_str in ((title, "title"), (geometryName, "geometryName")):
+            if not isinstance(arg, str):
+                raise TypeError(f"{arg} should be of type str not {type(arg_str)}")
 
         write_geometry(
             UniverseBox=self.UniverseBox,
@@ -222,9 +239,9 @@ class CadToCsg:
                             if v.lower() == "mcnp":
                                 outFormat.append("mcnp")
                             elif v.lower() == "openmc_xml":
-                                outFormat.append("openMC_XML")
+                                outFormat.append("openmc_xml")
                             elif v.lower() == "openmc_py":
-                                outFormat.append("openMC_PY")
+                                outFormat.append("openmc_py")
                             elif v.lower() == "serpent":
                                 outFormat.append("serpent")
                             elif v.lower() == "phits":

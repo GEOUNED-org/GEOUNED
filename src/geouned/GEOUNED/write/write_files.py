@@ -25,10 +25,7 @@ def write_geometry(
     stepFile,
 ):
 
-    # Currently there are two was of setting outFormat (via a .set method and
-    # a class attribute. Once we have a single method then move this validating
-    # input code to the attribute @setter
-    supported_mc_codes = ("mcnp", "openMC_XML", "openMC_PY", "serpent", "phits")
+    supported_mc_codes = ("mcnp", "openmc_xml", "openmc_py", "serpent", "phits")
     for out_format in outFormat:
         if out_format not in supported_mc_codes:
             msg = f"outFormat {out_format} not in supported MC codes ({supported_mc_codes})"
@@ -71,14 +68,14 @@ def write_geometry(
         MCNPfile.set_sdef((outSphere, outBox))
         MCNPfile.write_input(mcnpFilename)
 
-    if "openMC_XML" in outFormat or "openMC_PY" in outFormat:
+    if "openmc_xml" in outFormat or "openmc_py" in outFormat:
         OMCFile = OpenmcInput(MetaList, Surfaces, options, tolerances, numeric_format)
 
-    if "openMC_XML" in outFormat:
+    if "openmc_xml" in outFormat:
         omcFilename = geometryName + ".xml"
         OMCFile.write_xml(omcFilename)
 
-    if "openMC_PY" in outFormat:
+    if "openmc_py" in outFormat:
         omcFilename = geometryName + ".py"
         OMCFile.write_py(omcFilename)
 
