@@ -6,6 +6,7 @@ from datetime import datetime
 from os import mkdir, path
 from pathlib import Path
 from typing import get_type_hints
+from importlib.metadata import version
 
 import FreeCAD
 import Part
@@ -63,6 +64,58 @@ class CadToCsg:
         self.tolerances = tolerances
         self.numeric_format = numeric_format
         self.settings = settings
+
+    @property
+    def stepFile(self):
+        return self._stepFile
+
+    @stepFile.setter
+    def stepFile(self, value: str):
+        if not isinstance(value, str):
+            raise TypeError(f"geouned.CadToCsg.stepFile should be a str, not a {type(value)}")
+        self._stepFile = value
+
+    @property
+    def options(self):
+        return self._options
+
+    @options.setter
+    def options(self, value: Options):
+        if not isinstance(value, Options):
+            raise TypeError(f"geouned.CadToCsg.options should be an instance of geouned.Options, not a {type(value)}")
+        self._options = value
+
+    @property
+    def tolerances(self):
+        return self._tolerances
+
+    @tolerances.setter
+    def tolerances(self, value: tolerances):
+        if not isinstance(value, Tolerances):
+            raise TypeError(f"geouned.CadToCsg.tolerances should be an instance of geouned.Tolerances, not a {type(value)}")
+        self._tolerances = value
+
+    @property
+    def numeric_format(self):
+        return self._numeric_format
+
+    @numeric_format.setter
+    def numeric_format(self, value: numeric_format):
+        if not isinstance(value, NumericFormat):
+            raise TypeError(
+                f"geouned.CadToCsg.numeric_format should be an instance of geouned.NumericFormat, not a {type(value)}"
+            )
+        self._numeric_format = value
+
+    @property
+    def settings(self):
+        return self._settings
+
+    @settings.setter
+    def settings(self, value: settings):
+        if not isinstance(value, Settings):
+            raise TypeError(f"geouned.CadToCsg.settings should be an instance of geouned.Settings, not a {type(value)}")
+        self._settings = value
 
     def export_csg(
         self,
@@ -385,7 +438,7 @@ class CadToCsg:
 
         logger.info("start")
         freecad_version = ".".join(FreeCAD.Version()[:3])
-        logger.info(f"GEOUNED version {GEOUNED_Version} {GEOUNED_ReleaseDate} \nFreeCAD version {freecad_version}")
+        logger.info(f"GEOUNED version {version('geouned')} \nFreeCAD version {freecad_version}")
 
         if self.stepFile == "":
             raise ValueError("Cannot run the code. Step file name is missing")
