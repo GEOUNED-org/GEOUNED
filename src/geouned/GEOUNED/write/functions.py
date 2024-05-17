@@ -43,11 +43,6 @@ class CellString:
     def add(self, string):
         self.str += string
 
-    # TODO check this is used
-    def del_ast_char(self):
-        self.str = self.str[0:-1]
-        self.__leftspace__ += 1
-
     def wrap_line(self, offset=0):
 
         self.str = self.str.strip()

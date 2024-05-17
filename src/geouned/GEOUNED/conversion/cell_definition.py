@@ -886,31 +886,6 @@ def no_overlapping_cell(metaList, surfaces, options):
             m.Definition.level_update()
 
 
-# TODO this function looks like it is not used in the code.
-def extra_plane_cyl_face(face, box, surfaces, options, tolerances, numeric_format):
-    wire = face.OuterWire
-    planes_id = []
-    for e in wire.OrderedEdges:
-        curve = str(e.Curve)
-        if curve[0:6] == "Circle" or curve == "<Ellipse object>":
-            dir = e.Curve.Axis
-            center = e.Curve.Center
-            if curve == "<Ellipse object>":
-                dim1 = e.Curve.MinorRadius
-                dim2 = e.Curve.MajorRadius
-            else:
-                dim1 = e.Curve.Radius
-                dim2 = e.Curve.Radius
-            plane = GeounedSurface(("Plane", (center, dir, dim1, dim2)), box, Face="Build")
-            id, exist = surfaces.add_plane(plane, options, tolerances, numeric_format, False)
-            if exist:
-                pp = surfaces.get_surface(id)
-                if is_opposite(plane.Surf.Axis, pp.Surf.Axis, tolerances.pln_angle):
-                    id = -id
-            planes_id.append(id)
-    return planes_id
-
-
 def add_cone_plane(definition, cones_list, surfaces, universe_box, options, tolerances, numeric_format):
     x_axis = FreeCAD.Vector(1, 0, 0)
     y_axis = FreeCAD.Vector(0, 1, 0)

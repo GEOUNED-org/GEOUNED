@@ -331,22 +331,7 @@ def extract_surfaces(solid, kind, universe_box, options, tolerances, numeric_for
     return surfaces
 
 
-# TODO check if this function is used as it appears to be not used elsewhere in the src folder
-def is_already_in_planes(plane, Array):
-
-    for elem in Array:
-        if plane.Surface.Axis.cross(elem.Surface.Axis) == FreeCAD.Vector(0, 0, 0) and is_in_plane(
-            plane.Surface.Position, elem.Surface
-        ):
-            return True
-
-    return False
-
-
-#
-#
 #   Check if to faces are joint
-#
 def contiguous_face(face1, face2, tolerances):
     return face1.distToShape(face2)[0] < tolerances.distance
 

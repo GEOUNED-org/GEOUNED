@@ -358,10 +358,6 @@ class VoidBox:
         else:
             return complementary, cellIn
 
-    # TODO check this is used in the code
-    def get_box_number(self):
-        return len(self.Objects)
-
     def get_numbers(self):
         ns = 0
         nb = 0
