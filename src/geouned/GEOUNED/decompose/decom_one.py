@@ -677,14 +677,7 @@ def plane_2nd_order(solid_GU, face, flag_inv, tolerances, convex=True):
     return planes
 
 
-def split_planes(Solids, universe_box, options, tolerances, numeric_format, newVersion=True):
-    if newVersion:
-        return split_planes_new(Solids, universe_box, options, tolerances, numeric_format)
-    else:
-        return split_planes_org(Solids, universe_box, options, tolerances, numeric_format)
-
-
-def split_planes_new(Solids, universe_box, options, tolerances, numeric_format):
+def split_planes(Solids, universe_box, options, tolerances, numeric_format):
     Bases = Solids[:]
     simpleSolid = []
 
@@ -703,96 +696,6 @@ def split_planes_new(Solids, universe_box, options, tolerances, numeric_format):
             Bases = newBases
 
     return simpleSolid, 0
-
-
-def split_planes_org(Solids, universe_box, options, tolerances, numeric_format):
-    Bases = []
-    err = 0
-    for sol in Solids:
-        Bases.append((sol, []))
-
-    # Loop  1 2 3   1 2 3  1 2 3   1 2 3   1 2 3  1 2 3
-    # order x y z   x z y  y x z   y z x   z x y  z y x
-    # index 0 0 0   0 1 0  1 0 0   1 1 0   2 0 0  2 1 0
-
-    # planes orthogonal to X,Y,Z axis
-    for iplane in range(3):
-        newBase = []
-        for item in Bases:
-
-            base = item[0]
-            index = item[1]
-            SPlanes = extract_surfaces(
-                base,
-                "Planes",
-                universe_box,
-                options,
-                tolerances,
-                numeric_format,
-                MakeObj=True,
-            )
-            Planes = [SPlanes["PX"], SPlanes["PY"], SPlanes["PZ"]]
-            for i in index:
-                del Planes[i]
-            pmin = len(Planes[0])
-            imin = 0
-            for i in range(2 - iplane):
-                if pmin > len(Planes[i + 1]):
-                    pmin = len(Planes[i + 1])
-                    imin = i + 1
-
-            if len(Planes[imin]) != 0:
-                Tools = []
-                for p in Planes[imin]:
-                    p.build_surface()
-                    Tools.append(p.shape)
-                comsolid = UF.split_bop(base, Tools, options.splitTolerance, options)
-                if len(comsolid.Solids) == 1:
-                    if abs(comsolid.Solids[0].Volume - base.Volume) / base.Volume > tolerances.relativePrecision:
-                        logger.warning(
-                            f"Part of the split object is missing original base is used instead {abs(comsolid.Solids[0].Volume - base.Volume) / base.Volume} {comsolid.Solids[0].Volume} {base.Volume}"
-                        )
-                        base.exportStep("tmp_base.stp")
-                        s = Part.Shape()
-                        s.read("tmp_base.stp")
-                        solid_list = s.Solids
-                        err = 1
-                    else:
-                        solid_list = comsolid.Solids
-                elif len(comsolid.Solids) > 1:
-                    solid_list = comsolid.Solids
-                else:
-                    solid_list = [base]
-            else:
-                solid_list = [base]
-
-            newindex = index[:]
-            newindex.append(imin)
-            for sol in solid_list:
-                newBase.append((sol, newindex))
-        Bases = newBase
-
-    XYZBases = []
-    for ii, s in enumerate(Bases):
-        XYZBases.append(s[0])
-
-    simpleSolid = []
-    Bases = XYZBases
-
-    # other planes
-    while True:
-        newBases = []
-        for base in Bases:
-            cut_solids = split_p_planes_org(base, universe_box)
-            if len(cut_solids) == 1:
-                simpleSolid.extend(cut_solids)
-            else:
-                newBases.extend(cut_solids)
-        if len(newBases) == 0:
-            break
-        else:
-            Bases = newBases
-    return simpleSolid, err
 
 
 class ParallelPlanes:
