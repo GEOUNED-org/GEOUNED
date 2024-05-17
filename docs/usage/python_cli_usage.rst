@@ -19,7 +19,7 @@ Then execute the command line interface tool to convert your STEP file to CSG fi
 
 .. code-block:: bash
 
-    geouned_cadtocsg -i config.json
+    geouned_cadtocsg.py -i config.json
 
 The following example shows a usage with every attributes specified in the config.json file.
 
@@ -112,4 +112,4 @@ This is converted in the same way as the minimal JSON config file
 
 .. code-block:: bash
 
-    geouned_cadtocsg -i config.json
+    geouned_cadtocsg.py -i config.json

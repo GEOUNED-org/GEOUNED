@@ -65,7 +65,7 @@ You will also be able to use the GEOUNED command line tool
 
 .. code-block:: bash
 
-    geouned_cadtocsg --help
+    geouned_cadtocsg.py --help
 
 User install with Conda
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -131,7 +131,7 @@ You will also be able to use the GEOUNED command line tool
 
 .. code-block:: bash
 
-    geouned_cadtocsg --help
+    geouned_cadtocsg.py --help
 
 
 Developer install with Mamba
@@ -216,7 +216,7 @@ You will also be able to use the GEOUNED command line tool
 
 .. code-block:: bash
 
-    geouned_cadtocsg --help
+    geouned_cadtocsg.py --help
 
 Checkout feature branches from dev and make local changes on you own branch
 

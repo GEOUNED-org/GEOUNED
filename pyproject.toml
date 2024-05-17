@@ -49,7 +49,7 @@ docs = [
 ]
 
 [project.scripts]
-geouned_cadtocsg = "geouned.GEOUNED.scripts.geouned_cadtocsg:main"
+geouned_cadtocsg.py = "geouned.GEOUNED.scripts.geouned_cadtocsg:main"
 
 [tool.black]
 line-length = 128
