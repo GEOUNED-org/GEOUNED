@@ -413,50 +413,6 @@ def gen_torus_annex_u_planes(face, u_params, tolerances):
         ), True  # (d1 : d2)
 
 
-def gen_torus_annex_u_planes_org(face, u_params, tolerances):
-
-    if is_parallel(face.Surface.Axis, FreeCAD.Vector(1, 0, 0), tolerances.tor_angle):
-        axis = FreeCAD.Vector(1, 0, 0)
-    elif is_parallel(face.Surface.Axis, FreeCAD.Vector(0, 1, 0), tolerances.tor_angle):
-        axis = FreeCAD.Vector(0, 1, 0)
-    elif is_parallel(face.Surface.Axis, FreeCAD.Vector(0, 0, 1), tolerances.tor_angle):
-        axis = FreeCAD.Vector(0, 0, 1)
-
-    center = face.Surface.Center
-    p1 = face.valueAt(u_params[0], 0.0)
-    p2 = face.valueAt(u_params[1], 0.0)
-    pmid = face.valueAt(0.5 * (u_params[0] + u_params[1]), 0.0)
-
-    if is_same_value(abs(u_params[1] - u_params[0]), math.pi, tolerances.value):
-        d = axis.cross(p2 - p1)
-        d.normalize()
-        if pmid.dot(d) < 0:
-            d = -d
-        return ((center, d, face.Surface.MajorRadius), None), False
-
-    else:
-        d1 = axis.cross(p1)
-        d1.normalize()
-        if pmid.dot(d1) < 0:
-            d1 = -d1
-
-        d2 = axis.cross(p2)
-        d2.normalize()
-        if pmid.dot(d2) < 0:
-            d2 = -d2
-
-        if u_params[1] - u_params[0] < math.pi:
-            return (
-                (center, d1, face.Surface.MajorRadius, face.Surface.MajorRadius),
-                (center, d2, face.Surface.MajorRadius, face.Surface.MajorRadius),
-            ), False  # ( d1 d2 )
-        else:
-            return (
-                (center, d1, face.Surface.MajorRadius, face.Surface.MajorRadius),
-                (center, d2, face.Surface.MajorRadius, face.Surface.MajorRadius),
-            ), True  # (d1 : d2)
-
-
 def gen_torus_annex_v_surface(face, v_params, tolerances, force_cylinder=False):
     if is_parallel(face.Surface.Axis, FreeCAD.Vector(1, 0, 0), tolerances.tor_angle):
         axis = FreeCAD.Vector(1, 0, 0)
