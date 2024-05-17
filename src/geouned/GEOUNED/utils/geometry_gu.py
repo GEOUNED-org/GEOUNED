@@ -301,11 +301,3 @@ def define_surface(face, plane3Pts):
         logger.info(f"bad Surface type {kind_surf}")
         Surf_GU = None
     return Surf_GU
-
-
-# TODO check if this function is being used as it doesn't appear to be used in the code
-def list_surfaces(Surfaces):
-    Faces = []
-    for elem in Surfaces:
-        Faces.extend(define_surface(face) for face in elem)
-    return Faces
