@@ -778,21 +778,6 @@ def split_p_planes_new(solid, universe_box, options, tolerances, numeric_format)
     return out_solid
 
 
-def split_p_planes_org(solid, universe_box, options, tolerances, numeric_format):
-    SPlanes = extract_surfaces(solid, "Planes", universe_box, options, tolerances, numeric_format, False)
-
-    if len(SPlanes["P"]) == 0:
-        return [solid]
-    out_solid = [solid]
-    for p in SPlanes["P"]:
-        p.build_surface()
-        comsolid = UF.split_bop(solid, [p.shape], options.splitTolerance, options)
-        if len(comsolid.Solids) > 1:
-            out_solid = comsolid.Solids
-            break
-    return out_solid
-
-
 def split_2nd_order(Solids, universe_box, options, tolerances, numeric_format):
     err = 0
     Base = Solids
