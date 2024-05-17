@@ -11,6 +11,7 @@ mostinner = re.compile(r"\([^\(^\)]*\)")  # identify most inner parentheses
 mix = re.compile(r"(?P<value>([-+]?\d+|\[0+\]))")  # identify signed integer or [000...] pattern. Record the value.
 TFX = re.compile(r"(?P<value>[FTXo]+)")  # identify pattern including F,T,X, or o sequence ( in any order).
 
+
 class BoolSequence:
     """Class storing Boolean expression and operating on it"""
 
