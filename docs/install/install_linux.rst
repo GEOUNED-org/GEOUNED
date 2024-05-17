@@ -7,6 +7,7 @@ User install with Mamba (recommended)
 First we need to install a Mamba distribution. There are a few options but here we opt for Miniforge3 as it includes Mamba.
 
 You can follow the install instructions for `Miniforge3 here <https://github.com/conda-forge/miniforge>`_ or follows the commands below.
+
 Download 
 
 .. code-block:: sh
@@ -16,17 +17,11 @@ Download
 
 Install Miniforge3
 
+At the end of the installation you will be prompted to update the shell profile. Answering yes to this will make mamba available in the shell when reopened
+
 .. code-block:: sh
 
     bash Miniforge3-Linux-x86_64.sh
-
-
-Activate the base environment in your current terminal
-
-.. code-block:: sh
-
-    mamba activate
-
 
 It is recommended to create a new environment
 
