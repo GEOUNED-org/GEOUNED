@@ -41,19 +41,11 @@ Activate the new environment
 
     mamba activate new_env
 
-We have aspirations to create a conda-forge package which will combine these final two steps, but for now FreeCAD and GEOUNED can be installed in two commands.
-Install FreeCAD which is the main dependency
+Install GEOUNED from conda-forge
 
 .. code-block:: sh
 
-    mamba install -c conda-forge freecad
-
-
-Install GEOUNED with pip, we also prefix this with "python -m" to ensure that pip install uses the correct Python interpreter.
-
-.. code-block:: sh
-
-    python -m pip install geouned
+    mamba install -c conda-forge geouned
 
 Then you will be able to run import GEOUNED from within Python
 
@@ -107,19 +99,11 @@ Activate the new environment
 
     conda activate new_env
 
-We have aspirations to create a conda-forge package which will combine these final two steps, but for now FreeCAD and GEOUNED can be installed in two commands.
-Install FreeCAD which is the main dependency
+Install GEOUNED from conda-forge
 
 .. code-block:: sh
 
-    conda install -c conda-forge freecad
-
-
-Install GEOUNED with pip, we also prefix this with "python -m" to ensure that pip install uses the correct Python interpreter.
-
-.. code-block:: sh
-
-    python -m pip install geouned
+    conda install -c conda-forge geouned
 
 Then you will be able to run import GEOUNED from within Python
 
