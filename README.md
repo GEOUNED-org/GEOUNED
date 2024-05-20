@@ -4,6 +4,9 @@
 [![documentation](https://github.com/GEOUNED-org/GEOUNED/actions/workflows/documentation.yml/badge.svg)](https://github.com/GEOUNED-org/GEOUNED/actions/workflows/documentation.yml)
 [![PyPI](https://img.shields.io/pypi/v/geouned?&label=PyPI)](https://pypi.org/project/geouned/)
 
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/geouned/badges/version.svg)](https://anaconda.org/fusion-energy/geouned)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/geouned/badges/platforms.svg)](https://anaconda.org/fusion-energy/geouned)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/geouned/badges/downloads.svg)](https://anaconda.org/fusion-energy/geouned)
 
 # GEOUNED
 A tool to convert from CAD to CSG & CSG to CAD for Monte Carlo transport codes (MCNP & OpenMC).

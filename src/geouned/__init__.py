@@ -1,4 +1,3 @@
-import logging
 from importlib.metadata import version
 
 # this try except attempts to import freecad (lowercase) which is the conda

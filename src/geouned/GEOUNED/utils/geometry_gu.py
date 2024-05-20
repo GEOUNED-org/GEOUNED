@@ -117,15 +117,15 @@ class SolidGu:
             toroidIndex.append(i)
 
         if len(toroidIndex) != 0:
-            tFaces = self.__same_torus_surf__(toroidIndex)
+            tFaces = self.same_torus_surf(toroidIndex)
             for i, tSet in enumerate(tFaces):
-                URange = self.__merge_periodic_uv__("U", tSet)
-                VRange = self.__merge_periodic_uv__("V", tSet)
+                URange = self.merge_periodic_uv("U", tSet)
+                VRange = self.merge_periodic_uv("V", tSet)
                 for t in tSet:
                     self.TorusVParams[t] = (i, VRange)
                     self.TorusUParams[t] = (i, URange)
 
-    def __same_torus_surf__(self, torusList):
+    def same_torus_surf(self, torusList):
         """group as a single face all the neighbour faces of the same torus"""
         sameTorusFace = []
         temp = torusList[:]
@@ -145,9 +145,9 @@ class SolidGu:
                 temp.remove(c)
             sameTorusFace.append(current)
 
-        return self.__separate_surfaces__(sameTorusFace)
+        return self.separate_surfaces(sameTorusFace)
 
-    def __separate_surfaces__(self, faceList):
+    def separate_surfaces(self, faceList):
         """group all faces in faceList forming a continuous surface"""
         sameSurfaces = []
         for tset in faceList:
@@ -171,7 +171,7 @@ class SolidGu:
         return sameSurfaces
 
     # TODO check if this function is used as it appears to be nut used in the code
-    def __merge_no_periodic_uv__(self, parameter, faceList):
+    def merge_no_periodic_uv(self, parameter, faceList):
         if parameter == "U":
             i1 = 0
             i2 = 2
@@ -188,7 +188,7 @@ class SolidGu:
 
         return mergedParams
 
-    def __merge_periodic_uv__(self, parameter, faceList):
+    def merge_periodic_uv(self, parameter, faceList):
         two_pi = 2.0 * math.pi
         if parameter == "U":
             i1 = 0
@@ -301,11 +301,3 @@ def define_surface(face, plane3Pts):
         logger.info(f"bad Surface type {kind_surf}")
         Surf_GU = None
     return Surf_GU
-
-
-# TODO check if this function is being used as it doesn't appear to be used in the code
-def list_surfaces(Surfaces):
-    Faces = []
-    for elem in Surfaces:
-        Faces.extend(define_surface(face) for face in elem)
-    return Faces
