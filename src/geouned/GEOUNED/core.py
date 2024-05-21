@@ -564,7 +564,7 @@ class CadToCsg:
         logger.info(tempstr1)
         tempTime = datetime.now()
 
-        # sets self.geometry_bounding_box
+        # sets self.geometry_bounding_box with default padding
         self.get_geometry_bounding_box()
 
         self.Surfaces = UF.SurfacesDict(offset=self.settings.startSurf - 1)
