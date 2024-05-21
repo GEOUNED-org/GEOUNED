@@ -460,7 +460,7 @@ class CadToCsg:
             step_files = filename
         else:
             step_files = [filename]
- 
+
         for step_file in step_files:
             if not Path(step_file).is_file():
                 raise FileNotFoundError(f"Step file {step_file} not found.")
