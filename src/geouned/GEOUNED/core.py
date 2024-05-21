@@ -700,12 +700,13 @@ class CadToCsg:
                 continue
             logger.info(f"Decomposing solid: {i + 1}/{totsolid}")
             if self.settings.debug:
+                debug_output_folder = Path("debug")
                 logger.info(m.Comments)
-                Path("debug").mkdir(parents=True, exist_ok=True)
+                debug_output_folder.mkdir(parents=True, exist_ok=True)
                 if m.IsEnclosure:
-                    m.Solids[0].exportStep(f"debug/origEnclosure_{i}.stp")
+                    m.Solids[0].exportStep(debug_output_folder / f"origEnclosure_{i}.stp")
                 else:
-                    m.Solids[0].exportStep(f"debug/origSolid_{i}.stp")
+                    m.Solids[0].exportStep(debug_output_folder / f"origSolid_{i}.stp")
 
             comsolid, err = Decom.SplitSolid(
                 Part.makeCompound(m.Solids),
@@ -716,21 +717,22 @@ class CadToCsg:
             )
 
             if err != 0:
-                Path("suspicious_solids").mkdir(parents=True, exist_ok=True)
+                sus_output_folder = Path("suspicious_solids")
+                sus_output_folder.mkdir(parents=True, exist_ok=True)
                 if m.IsEnclosure:
-                    Part.CompSolid(m.Solids).exportStep(f"Suspicious_solids/Enclosure_original_{i}.stp")
-                    comsolid.exportStep(f"Suspicious_solids/Enclosure_split_{i}.stp")
+                    Part.CompSolid(m.Solids).exportStep(sus_output_folder / f"Enclosure_original_{i}.stp")
+                    comsolid.exportStep(sus_output_folder / f"Enclosure_split_{i}.stp")
                 else:
-                    Part.CompSolid(m.Solids).exportStep(f"Suspicious_solids/Solid_original_{i}.stp")
-                    comsolid.exportStep(f"Suspicious_solids/Solid_split_{i}.stp")
+                    Part.CompSolid(m.Solids).exportStep(sus_output_folder / f"Solid_original_{i}.stp")
+                    comsolid.exportStep(sus_output_folder / f"Solid_split_{i}.stp")
 
                 warningSolids.append(i)
 
             if self.settings.debug:
                 if m.IsEnclosure:
-                    comsolid.exportStep(f"debug/compEnclosure_{i}.stp")
+                    comsolid.exportStep(debug_output_folder / f"compEnclosure_{i}.stp")
                 else:
-                    comsolid.exportStep(f"debug/compSolid_{i}.stp")
+                    comsolid.exportStep(debug_output_folder / f"compSolid_{i}.stp")
             self.Surfaces.extend(
                 Decom.extract_surfaces(
                     comsolid,
