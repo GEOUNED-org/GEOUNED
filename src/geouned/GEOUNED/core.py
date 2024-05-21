@@ -506,7 +506,7 @@ class CadToCsg:
         startTime = datetime.now()
 
         # sets the self.meta_list and self.enclosure_list
-        self._load_step_file(step_file=self.stepFile, cell_range=self.settings.cellRange)
+        self._load_step_file(filename=self.stepFile, cell_range=self.settings.cellRange)
 
         if self.settings.exportSolids:
             self._export_solids(filename=self.settings.exportSolids)
