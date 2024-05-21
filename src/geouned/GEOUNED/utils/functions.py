@@ -87,7 +87,7 @@ class GeounedSolid:
         self.EnclosureID = None
         self.ParentEnclosureID = None
         self.SonEnclosures = []
-        self.EnclosureList = None
+        self.enclosure_list = None
         self.CADSolid = None
         self.UniverseBox = None
         self.NullCell = True
