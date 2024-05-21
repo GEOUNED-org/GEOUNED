@@ -25,6 +25,8 @@ from .write.functions import write_mcnp_cell_def
 from .write.write_files import write_geometry
 
 logger = logging.getLogger("general_logger")
+logger.info(f"GEOUNED version {version('geouned')}")
+logger.info(f"FreeCAD version {'.'.join(FreeCAD.Version()[:3])}")
 
 
 class CadToCsg:
@@ -64,6 +66,8 @@ class CadToCsg:
         self.tolerances = tolerances
         self.numeric_format = numeric_format
         self.settings = settings
+
+        self.meta_list = []
 
     @property
     def stepFile(self):
@@ -434,29 +438,37 @@ class CadToCsg:
             else:
                 self.__dict__["geometryName"] == value[:-4]
 
-    def start(self):
+    def _load_step_file(
+        self,
+        step_file: str,
+        # TODO consider having discrete indexes (1,5,7) instead of range (1,7) as this offers more flexibility to the user
+        cell_range: typing.Union[type(None), typing.Tuple[int, int]] = None,
+    ):
+        """
+        Load STEP file(s) and extract solid volumes and enclosure volumes.
 
-        logger.info("start")
-        freecad_version = ".".join(FreeCAD.Version()[:3])
-        logger.info(f"GEOUNED version {version('geouned')} \nFreeCAD version {freecad_version}")
+        Args:
+            step_file (str): The path to the STEP file or a list of paths to multiple STEP files.
+            cell_range (tuple[int, int], optional): A tuple representing the range of solids to select from the original STEP solids. Defaults to None.
 
-        if self.stepFile == "":
-            raise ValueError("Cannot run the code. Step file name is missing")
+        Returns:
+            tuple: A tuple containing the solid volumes list and enclosure volumes list extracted from the STEP files.
+        """
 
-        if isinstance(self.stepFile, (tuple, list)):
-            for stp in self.stepFile:
+        logger.info("Start of step file loading phase")
+
+        if isinstance(step_file, (tuple, list)):
+            for stp in step_file:
                 if not path.isfile(stp):
                     raise FileNotFoundError(f"Step file {stp} not found.\nStop.")
         else:
-            if not path.isfile(self.stepFile):
-                raise FileNotFoundError(f"Step file {self.stepFile} not found.\nStop.")
+            if not path.isfile(step_file):
+                raise FileNotFoundError(f"Step file {step_file} not found.\nStop.")
 
-        startTime = datetime.now()
-
-        if isinstance(self.stepFile, (list, tuple)):
-            step_files = self.stepFile
+        if isinstance(step_file, (list, tuple)):
+            step_files = step_file
         else:
-            step_files = [self.stepFile]
+            step_files = [step_file]
         MetaChunk = []
         EnclosureChunk = []
         for stp in tqdm(step_files, desc="Loading CAD files"):
@@ -464,29 +476,49 @@ class CadToCsg:
             Meta, Enclosure = Load.load_cad(stp, self.settings, self.options)
             MetaChunk.append(Meta)
             EnclosureChunk.append(Enclosure)
-        self.meta_list: typing.List[UF.GeounedSolid] = join_meta_lists(MetaChunk)
-        self.enclosure_list: typing.List[UF.GeounedSolid] = join_meta_lists(EnclosureChunk)
+        self.meta_list = join_meta_lists(MetaChunk)
+        self.enclosure_list = join_meta_lists(EnclosureChunk)
+
+        # Select a specific solid range from original STEP solids
+        if cell_range:
+            self.meta_list = self.meta_list[cell_range[0] : cell_range[1]]
+
+        logger.info("End of step file loading phase")
+
+        return self.meta_list, self.enclosure_list
+
+    def _export_solids(self, filename: str):
+        """Export all the solid volumes from the loaded geometry to a STEP file.
+
+        Args:
+            filename (str): filepath of the output STEP file.
+        """
+        # export in STEP format solids read from input file
+        if self.meta_list == []:
+            raise ValueError(
+                "No solids in CadToCsg.meta_list to export. Try loading the STEP file first with CadToCsg._load_step_file"
+            )
+        solids = []
+        for m in self.meta_list:
+            if m.IsEnclosure:
+                continue
+            solids.extend(m.Solids)
+        Part.makeCompound(solids).exportStep(filename)
+
+    def start(self):
+
+        startTime = datetime.now()
+
+        # sets the self.meta_list and self.enclosure_list
+        self._load_step_file(step_file=self.stepFile, cell_range=self.settings.cellRange)
+
+        if self.settings.exportSolids:
+            self._export_solids(filename=self.settings.exportSolids)
 
         logger.info("End of loading phase")
         tempstr1 = str(datetime.now() - startTime)
         logger.info(tempstr1)
         tempTime = datetime.now()
-
-        # Select a specific solid range from original STEP solids
-        if self.settings.cellRange:
-            self.meta_list = self.meta_list[self.settings.cellRange[0] : self.settings.cellRange[1]]
-
-        # export in STEP format solids read from input file
-        # terminate excution
-        if self.settings.exportSolids != "":
-            solids = []
-            for m in self.meta_list:
-                if m.IsEnclosure:
-                    continue
-                solids.extend(m.Solids)
-            Part.makeCompound(solids).exportStep(self.settings.exportSolids)
-            msg = f"Solids exported in file {self.settings.exportSolids}\n" "GEOUNED Finish. No solid translation performed."
-            raise ValueError(msg)
 
         # set up Universe
         if self.enclosure_list:
@@ -851,7 +883,7 @@ def print_warning_solids(warnSolids, warnEnclosures):
         solids_logger.info(lines)
 
 
-def join_meta_lists(MList):
+def join_meta_lists(MList) -> typing.List[UF.GeounedSolid]:
 
     newMetaList = MList[0]
     if MList[0]:
