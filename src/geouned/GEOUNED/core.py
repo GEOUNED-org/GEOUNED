@@ -701,7 +701,7 @@ class CadToCsg:
             logger.info(f"Decomposing solid: {i + 1}/{totsolid}")
             if self.settings.debug:
                 logger.info(m.Comments)
-                Path('debug').mkdir(parents=True, exist_ok=True)
+                Path("debug").mkdir(parents=True, exist_ok=True)
                 if m.IsEnclosure:
                     m.Solids[0].exportStep(f"debug/origEnclosure_{i}.stp")
                 else:
@@ -716,7 +716,7 @@ class CadToCsg:
             )
 
             if err != 0:
-                Path('suspicious_solids').mkdir(parents=True, exist_ok=True)
+                Path("suspicious_solids").mkdir(parents=True, exist_ok=True)
                 if m.IsEnclosure:
                     Part.CompSolid(m.Solids).exportStep(f"Suspicious_solids/Enclosure_original_{i}.stp")
                     comsolid.exportStep(f"Suspicious_solids/Enclosure_split_{i}.stp")
