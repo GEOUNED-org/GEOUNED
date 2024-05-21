@@ -1,3 +1,4 @@
+import typing
 from numbers import Real
 
 
@@ -648,7 +649,7 @@ class Settings:
         compSolids: bool = True,
         simplify: str = "no",
         cellRange: list = [],
-        exportSolids: str = "",
+        exportSolids: typing.Optional[str] = None,
         minVoidSize: float = 200.0,  # units mm
         maxSurf: int = 50,
         maxBracket: int = 30,
@@ -744,7 +745,9 @@ class Settings:
 
     @exportSolids.setter
     def exportSolids(self, exportSolids: str):
-        if not isinstance(exportSolids, str):
+        if exportSolids == None:
+            pass
+        elif not isinstance(exportSolids, str):
             raise TypeError(f"geouned.Tolerances.exportSolids should be a str, not a {type(exportSolids)}")
         self._exportSolids = exportSolids
 
