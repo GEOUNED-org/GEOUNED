@@ -3,7 +3,6 @@ import json
 import logging
 import typing
 from datetime import datetime
-from os import mkdir, path
 from pathlib import Path
 from typing import get_type_hints
 from importlib.metadata import version
@@ -445,11 +444,11 @@ class CadToCsg:
 
         if isinstance(self.stepFile, (tuple, list)):
             for stp in self.stepFile:
-                if not path.isfile(stp):
-                    raise FileNotFoundError(f"Step file {stp} not found.\nStop.")
+                if not Path(stp).is_file():
+                    raise FileNotFoundError(f"Step file {stp} not found.")
         else:
-            if not path.isfile(self.stepFile):
-                raise FileNotFoundError(f"Step file {self.stepFile} not found.\nStop.")
+            if not Path(self.stepFile).is_file():
+                raise FileNotFoundError(f"Step file {self.stepFile} not found.")
 
         startTime = datetime.now()
 
@@ -702,8 +701,7 @@ class CadToCsg:
             logger.info(f"Decomposing solid: {i + 1}/{totsolid}")
             if self.settings.debug:
                 logger.info(m.Comments)
-                if not path.exists("debug"):
-                    mkdir("debug")
+                Path('debug').mkdir(parents=True, exist_ok=True)
                 if m.IsEnclosure:
                     m.Solids[0].exportStep(f"debug/origEnclosure_{i}.stp")
                 else:
@@ -718,8 +716,7 @@ class CadToCsg:
             )
 
             if err != 0:
-                if not path.exists("Suspicious_solids"):
-                    mkdir("Suspicious_solids")
+                Path('suspicious_solids').mkdir(parents=True, exist_ok=True)
                 if m.IsEnclosure:
                     Part.CompSolid(m.Solids).exportStep(f"Suspicious_solids/Enclosure_original_{i}.stp")
                     comsolid.exportStep(f"Suspicious_solids/Enclosure_split_{i}.stp")
