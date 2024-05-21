@@ -25,7 +25,6 @@ from .write.functions import write_mcnp_cell_def
 from .write.write_files import write_geometry
 
 logger = logging.getLogger("general_logger")
-logger.info("start")
 logger.info(f"GEOUNED version {version('geouned')}")
 logger.info(f"FreeCAD version {'.'.join(FreeCAD.Version()[:3])}")
 
