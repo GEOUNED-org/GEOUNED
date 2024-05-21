@@ -27,14 +27,14 @@ def assignEnclosure(MetaList, NestedEnclosure):
 
             # stop loop if CAD solid outside all level i enclosure or intersecting one
             if not outside:
-                m.EnclosureList = dep
+                m.enclosure_list = dep
                 break
 
         if not dep:
             dep.add(-1)
             m.ParentEnclosureID = -1
         if outside:
-            m.EnclosureList = dep
+            m.enclosure_list = dep
     return
 
 
@@ -54,7 +54,7 @@ def select_solids(MetaList, LowLevelEnclosure, Enclosure):
     for m in MetaList:
         if m.IsEnclosure:
             continue
-        if enclID in m.EnclosureList:
+        if enclID in m.enclosure_list:
             newMetaList.append(m)
 
     return newMetaList
