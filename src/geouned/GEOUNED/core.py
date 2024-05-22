@@ -188,7 +188,7 @@ class CadToCsg:
 
         # if the geometry_bounding_box has not previuosly been calculated, then make a default one
         if self.geometry_bounding_box is None:
-            self.get_geometry_bounding_box()
+            self._get_geometry_bounding_box()
 
         write_geometry(
             UniverseBox=self.geometry_bounding_box,
@@ -511,7 +511,7 @@ class CadToCsg:
             solids.extend(m.Solids)
         Part.makeCompound(solids).exportStep(filename)
 
-    def get_geometry_bounding_box(self, padding: float = 10.0):
+    def _get_geometry_bounding_box(self, padding: float = 10.0):
         """
         Get the bounding box of the geometry.
 
@@ -565,7 +565,7 @@ class CadToCsg:
         tempTime = datetime.now()
 
         # sets self.geometry_bounding_box with default padding
-        self.get_geometry_bounding_box()
+        self._get_geometry_bounding_box()
 
         self.Surfaces = UF.SurfacesDict(offset=self.settings.startSurf - 1)
 
