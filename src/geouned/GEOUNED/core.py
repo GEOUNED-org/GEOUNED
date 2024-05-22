@@ -828,6 +828,15 @@ class CadToCsg:
         return warningSolids
 
 
+def update_comment(meta, idLabel):
+    if meta.__commentInfo__ is None:
+        return
+    if meta.__commentInfo__[1] is None:
+        return
+    newLabel = (idLabel[i] for i in meta.__commentInfo__[1])
+    meta.set_comments(void.void_comment_line((meta.__commentInfo__[0], newLabel)))
+
+
 def process_cones(MetaList, cone_info, Surfaces, UniverseBox, options, tolerances, numeric_format):
     cellId = tuple(cone_info.keys())
     for m in MetaList:
@@ -860,15 +869,6 @@ def process_cones(MetaList, cone_info, Surfaces, UniverseBox, options, tolerance
                 tolerances,
                 numeric_format,
             )
-
-
-def update_comment(meta, idLabel):
-    if meta.__commentInfo__ is None:
-        return
-    if meta.__commentInfo__[1] is None:
-        return
-    newLabel = (idLabel[i] for i in meta.__commentInfo__[1])
-    meta.set_comments(void.void_comment_line((meta.__commentInfo__[0], newLabel)))
 
 
 def print_warning_solids(warnSolids, warnEnclosures):
