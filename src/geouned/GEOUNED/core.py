@@ -670,7 +670,6 @@ class CadToCsg:
 
             self.meta_list.extend(meta_void)
 
-
         logger.info("Process finished")
         logger.info(datetime.now() - startTime)
 
@@ -760,7 +759,6 @@ class CadToCsg:
             self.numeric_format,
         )
 
-
     def _decompose_solids(self, meta: bool):
 
         if meta:
@@ -829,6 +827,7 @@ class CadToCsg:
 
         return warningSolids
 
+
 def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances, numeric_format):
     cellId = tuple(coneInfo.keys())
     for m in MetaList:
@@ -861,6 +860,7 @@ def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances
                 tolerances,
                 numeric_format,
             )
+
 
 def update_comment(meta, idLabel):
     if meta.__commentInfo__ is None:
