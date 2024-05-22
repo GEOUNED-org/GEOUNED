@@ -15,7 +15,7 @@ if os.getenv("GITHUB_ACTIONS"):
 suffixes = (".mcnp", ".xml", ".inp", ".py", ".serp")
 
 
-@pytest.mark.parametrize("input_step_file", step_files[:2])
+@pytest.mark.parametrize("input_step_file", step_files)
 def test_conversion(input_step_file):
     """Test that step files can be converted to openmc and mcnp files"""
 
