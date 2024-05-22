@@ -69,6 +69,7 @@ class CadToCsg:
         # define later when running the code
         self.geometry_bounding_box = None
         self.meta_list = []
+        self.cone_info = {}
 
     @property
     def stepFile(self):
@@ -670,6 +671,17 @@ class CadToCsg:
 
             self.meta_list.extend(meta_void)
 
+        # add plane definition to cone, currently needs to be done at the end of the process
+        process_cones(
+            self.meta_list,
+            self.cone_info,
+            self.Surfaces,
+            self.geometry_bounding_box,
+            self.options,
+            self.tolerances,
+            self.numeric_format,
+        )
+
         logger.info("Process finished")
         logger.info(datetime.now() - startTime)
 
@@ -681,7 +693,6 @@ class CadToCsg:
 
         warnSolids = []
         warnEnclosures = []
-        coneInfo = dict()
         if not self.options.Facets:
             # decompose all solids in elementary solids (convex ones)
             warningSolidList = self._decompose_solids(meta=True)
@@ -707,7 +718,7 @@ class CadToCsg:
                     self.numeric_format,
                 )
                 if cones:
-                    coneInfo[m.__id__] = cones
+                    self.cone_info[m.__id__] = cones
                 if j in warningSolidList:
                     warnSolids.append(m)
                 if not m.Solids:
@@ -742,22 +753,12 @@ class CadToCsg:
                     self.numeric_format,
                 )
                 if cones:
-                    coneInfo[m.__id__] = cones
+                    self.cone_info[m.__id__] = cones
                 if j in warningEnclosureList:
                     warnEnclosures.append(m)
 
         print_warning_solids(warnSolids, warnEnclosures)
 
-        # add plane definition to cone
-        process_cones(
-            self.meta_list,
-            coneInfo,
-            self.Surfaces,
-            self.geometry_bounding_box,
-            self.options,
-            self.tolerances,
-            self.numeric_format,
-        )
 
     def _decompose_solids(self, meta: bool):
 
@@ -828,8 +829,8 @@ class CadToCsg:
         return warningSolids
 
 
-def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances, numeric_format):
-    cellId = tuple(coneInfo.keys())
+def process_cones(MetaList, cone_info, Surfaces, UniverseBox, options, tolerances, numeric_format):
+    cellId = tuple(cone_info.keys())
     for m in MetaList:
         if m.__id__ not in cellId and not m.Void:
             continue
@@ -840,7 +841,7 @@ def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances
             cones = set()
             for Id in m.__commentInfo__[1]:
                 if Id in cellId:
-                    cones.update(-x for x in coneInfo[Id])
+                    cones.update(-x for x in cone_info[Id])
             Conv.add_cone_plane(
                 m.Definition,
                 cones,
@@ -853,7 +854,7 @@ def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances
         elif not m.Void:
             Conv.add_cone_plane(
                 m.Definition,
-                coneInfo[m.__id__],
+                cone_info[m.__id__],
                 Surfaces,
                 UniverseBox,
                 options,
