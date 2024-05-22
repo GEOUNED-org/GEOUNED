@@ -102,12 +102,13 @@ Here is a complete JSON file specification
             "outFormat": ["openmc_xml", "openmc_py", "serpent", "phits", "mcnp"],
             "volSDEF": false,
             "volCARD": true,
+            "UCARD": null,
             "dummyMat": false,
             "cellCommentFile": false,
             "cellSummaryFile": true
         }
     }
-
+Note that JSON requires ```null``` to be passed in which gets translated to ```None``` in Python.
 This is converted in the same way as the minimal JSON config file
 
 .. code-block:: bash

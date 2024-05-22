@@ -135,7 +135,7 @@ class CadToCsg:
         ),
         volSDEF: bool = False,
         volCARD: bool = True,
-        UCARD: typing.Union[int, type(None)] = 101,
+        UCARD: typing.Union[int, None] = None,
         dummyMat: bool = False,
         cellCommentFile: bool = False,
         cellSummaryFile: bool = True,

@@ -69,6 +69,7 @@
         "outFormat": ["openmc_xml", "openmc_py", "serpent", "phits", "mcnp"],
         "volSDEF": false,
         "volCARD": true,
+        "UCARD": null,
         "dummyMat": false,
         "cellCommentFile": false,
         "cellSummaryFile": true
