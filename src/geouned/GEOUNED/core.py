@@ -759,7 +759,6 @@ class CadToCsg:
 
         print_warning_solids(warnSolids, warnEnclosures)
 
-
     def _decompose_solids(self, meta: bool):
 
         if meta:
