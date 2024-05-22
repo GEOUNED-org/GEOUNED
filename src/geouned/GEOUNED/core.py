@@ -3,7 +3,6 @@ import json
 import logging
 import typing
 from datetime import datetime
-from os import mkdir, path
 from pathlib import Path
 from typing import get_type_hints
 from importlib.metadata import version
@@ -446,7 +445,7 @@ class CadToCsg:
 
     def _load_step_file(
         self,
-        step_file: str,
+        filename: str,
         # TODO consider having discrete indexes (1,5,7) instead of range (1,7) as this offers more flexibility to the user
         cell_range: typing.Union[None, typing.Tuple[int, int]] = None,
     ):
@@ -454,7 +453,7 @@ class CadToCsg:
         Load STEP file(s) and extract solid volumes and enclosure volumes.
 
         Args:
-            step_file (str): The path to the STEP file or a list of paths to multiple STEP files.
+            filename (str): The path to the STEP file or a list of paths to multiple STEP files.
             cell_range (tuple[int, int], optional): A tuple representing the range of solids to select from the original STEP solids. Defaults to None.
 
         Returns:
@@ -463,23 +462,20 @@ class CadToCsg:
 
         logger.info("Start of step file loading phase")
 
-        if isinstance(step_file, (tuple, list)):
-            for stp in step_file:
-                if not path.isfile(stp):
-                    raise FileNotFoundError(f"Step file {stp} not found.\nStop.")
+        if isinstance(filename, (list, tuple)):
+            step_files = filename
         else:
-            if not path.isfile(step_file):
-                raise FileNotFoundError(f"Step file {step_file} not found.\nStop.")
+            step_files = [filename]
 
-        if isinstance(step_file, (list, tuple)):
-            step_files = step_file
-        else:
-            step_files = [step_file]
+        for step_file in step_files:
+            if not Path(step_file).is_file():
+                raise FileNotFoundError(f"Step file {step_file} not found.")
+
         MetaChunk = []
         EnclosureChunk = []
-        for stp in tqdm(step_files, desc="Loading CAD files"):
-            logger.info(f"read step file : {stp}")
-            Meta, Enclosure = Load.load_cad(stp, self.settings, self.options)
+        for step_file in tqdm(step_files, desc="Loading CAD files"):
+            logger.info(f"read step file : {step_file}")
+            Meta, Enclosure = Load.load_cad(step_file, self.settings, self.options)
             MetaChunk.append(Meta)
             EnclosureChunk.append(Enclosure)
         self.meta_list = join_meta_lists(MetaChunk)
@@ -554,7 +550,7 @@ class CadToCsg:
         startTime = datetime.now()
 
         # sets the self.meta_list and self.enclosure_list
-        self._load_step_file(step_file=self.stepFile, cell_range=self.settings.cellRange)
+        self._load_step_file(filename=self.stepFile, cell_range=self.settings.cellRange)
 
         if self.settings.exportSolids:
             self._export_solids(filename=self.settings.exportSolids)
@@ -571,7 +567,7 @@ class CadToCsg:
 
         tempTime0 = datetime.now()
 
-        coneInfo = self._decompose_geometry()
+        self._decompose_geometry()
 
         tempstr2 = str(datetime.now() - tempTime)
         logger.info(tempstr2)
@@ -674,16 +670,6 @@ class CadToCsg:
 
             self.meta_list.extend(meta_void)
 
-        # add plane definition to cone
-        process_cones(
-            self.meta_list,
-            coneInfo,
-            self.Surfaces,
-            self.geometry_bounding_box,
-            self.options,
-            self.tolerances,
-            self.numeric_format,
-        )
 
         logger.info("Process finished")
         logger.info(datetime.now() - startTime)
@@ -692,6 +678,8 @@ class CadToCsg:
         logger.info(f"Translation time of void cells {tempTime2} - {tempTime1}")
 
     def _decompose_geometry(self):
+        """Decomposes the geometry of the current object."""
+
         warnSolids = []
         warnEnclosures = []
         coneInfo = dict()
@@ -760,8 +748,18 @@ class CadToCsg:
                     warnEnclosures.append(m)
 
         print_warning_solids(warnSolids, warnEnclosures)
-        
-        return coneInfo
+
+        # add plane definition to cone
+        process_cones(
+            self.meta_list,
+            coneInfo,
+            self.Surfaces,
+            self.geometry_bounding_box,
+            self.options,
+            self.tolerances,
+            self.numeric_format,
+        )
+
 
     def _decompose_solids(self, meta: bool):
 
@@ -779,13 +777,13 @@ class CadToCsg:
                 continue
             logger.info(f"Decomposing solid: {i + 1}/{totsolid}")
             if self.settings.debug:
+                debug_output_folder = Path("debug")
                 logger.info(m.Comments)
-                if not path.exists("debug"):
-                    mkdir("debug")
+                debug_output_folder.mkdir(parents=True, exist_ok=True)
                 if m.IsEnclosure:
-                    m.Solids[0].exportStep(f"debug/origEnclosure_{i}.stp")
+                    m.Solids[0].exportStep(str(debug_output_folder / f"origEnclosure_{i}.stp"))
                 else:
-                    m.Solids[0].exportStep(f"debug/origSolid_{i}.stp")
+                    m.Solids[0].exportStep(str(debug_output_folder / f"origSolid_{i}.stp"))
 
             comsolid, err = Decom.SplitSolid(
                 Part.makeCompound(m.Solids),
@@ -796,22 +794,22 @@ class CadToCsg:
             )
 
             if err != 0:
-                if not path.exists("Suspicious_solids"):
-                    mkdir("Suspicious_solids")
+                sus_output_folder = Path("suspicious_solids")
+                sus_output_folder.mkdir(parents=True, exist_ok=True)
                 if m.IsEnclosure:
-                    Part.CompSolid(m.Solids).exportStep(f"Suspicious_solids/Enclosure_original_{i}.stp")
-                    comsolid.exportStep(f"Suspicious_solids/Enclosure_split_{i}.stp")
+                    Part.CompSolid(m.Solids).exportStep(str(sus_output_folder / f"Enclosure_original_{i}.stp"))
+                    comsolid.exportStep(str(sus_output_folder / f"Enclosure_split_{i}.stp"))
                 else:
-                    Part.CompSolid(m.Solids).exportStep(f"Suspicious_solids/Solid_original_{i}.stp")
-                    comsolid.exportStep(f"Suspicious_solids/Solid_split_{i}.stp")
+                    Part.CompSolid(m.Solids).exportStep(str(sus_output_folder / f"Solid_original_{i}.stp"))
+                    comsolid.exportStep(str(sus_output_folder / f"Solid_split_{i}.stp"))
 
                 warningSolids.append(i)
 
             if self.settings.debug:
                 if m.IsEnclosure:
-                    comsolid.exportStep(f"debug/compEnclosure_{i}.stp")
+                    comsolid.exportStep(str(debug_output_folder / f"compEnclosure_{i}.stp"))
                 else:
-                    comsolid.exportStep(f"debug/compSolid_{i}.stp")
+                    comsolid.exportStep(str(debug_output_folder / f"compSolid_{i}.stp"))
             self.Surfaces.extend(
                 Decom.extract_surfaces(
                     comsolid,
@@ -830,16 +828,6 @@ class CadToCsg:
             m.update_solids(comsolid.Solids)
 
         return warningSolids
-
-
-def update_comment(meta, idLabel):
-    if meta.__commentInfo__ is None:
-        return
-    if meta.__commentInfo__[1] is None:
-        return
-    newLabel = (idLabel[i] for i in meta.__commentInfo__[1])
-    meta.set_comments(void.void_comment_line((meta.__commentInfo__[0], newLabel)))
-
 
 def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances, numeric_format):
     cellId = tuple(coneInfo.keys())
@@ -873,6 +861,14 @@ def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances
                 tolerances,
                 numeric_format,
             )
+
+def update_comment(meta, idLabel):
+    if meta.__commentInfo__ is None:
+        return
+    if meta.__commentInfo__[1] is None:
+        return
+    newLabel = (idLabel[i] for i in meta.__commentInfo__[1])
+    meta.set_comments(void.void_comment_line((meta.__commentInfo__[0], newLabel)))
 
 
 def print_warning_solids(warnSolids, warnEnclosures):
