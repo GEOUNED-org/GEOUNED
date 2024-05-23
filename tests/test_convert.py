@@ -14,8 +14,49 @@ if os.getenv("GITHUB_ACTIONS"):
     step_files.remove(Path("testing/inputSTEP/large/Triangle.stp"))
 suffixes = (".mcnp", ".xml", ".inp", ".py", ".serp")
 
+def compare_files_line_by_line(filename_new: Path, filename_original: Path):
 
-@pytest.mark.parametrize("input_step_file", step_files)
+    with open(filename_new, 'r') as f:
+        file_new = f.readlines()
+    with open(filename_original, 'r') as f:
+        file_original = f.readlines()
+
+    for line_counter, line_new in enumerate(file_new, start=1):
+        for line_original in file_original:
+            if line_new != line_original:
+                print(f"{filename_new} does not match {filename_original}")
+                print(f"Line {line_counter} different in files")
+                # else print that line from both files
+                print(f"\tFile 1: {line_new}", end='')
+                print(f"\tFile 2: {line_original}", end='')
+                assert False
+
+# @pytest.mark.parametrize("input_step_file", step_files[:2])
+# @pytest.mark.parametrize("suffix", suffixes)
+# def test_new_mc_files_match_original(suffix, input_step_file):
+"""Test that the text files produced for each MC code match the original files.
+If this test fails it might be due to an improved MC code output instead of 
+a mistake in the PR. You might want to update the MC text file in the regression
+test folder with the 'tests/update_regression_test_files.py' script."""
+
+suffix='.serp'
+input_step_file=step_files[0]
+# sets up an output folder for the results
+regression_test_file = Path("tests/regression_test") / input_step_file.stem/ input_step_file.with_suffix(suffix)  
+output_dir = Path("tests_outputs") / input_step_file.with_suffix("")
+output_filename_stem = output_dir / input_step_file.stem 
+output_filename = output_filename_stem.with_suffix(suffix)
+print(output_dir) #'tests_outputs/testing/inputSTEP/tuboshueco'
+print(input_step_file.stem)
+print(Path(input_step_file.stem).with_suffix(suffix))
+
+compare_files_line_by_line(output_filename, regression_test_file)
+
+print(output_dir)
+assert False
+# test_new_mc_files_match_original('.serp', step_files[0])
+
+@pytest.mark.parametrize("input_step_file", step_files[:2])
 def test_conversion(input_step_file):
     """Test that step files can be converted to openmc and mcnp files"""
 
