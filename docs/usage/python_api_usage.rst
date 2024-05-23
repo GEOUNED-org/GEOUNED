@@ -1,8 +1,7 @@
 Python Package Usage
 ====================
 
-The Python API has two main classes.
-The first main class is ``CadToCsg()`` which converts CAD geometry to Constructive Solid Geometry (CSG).
+The main class is ``CadToCsg()`` which converts CAD geometry to Constructive Solid Geometry (CSG).
 There are many arguments that can be passed into the ``CadToCsg()`` class which are documented in the `Python API reference section <../python_api.html>`_ of the documentation.
 
 
@@ -117,3 +116,15 @@ The following example shows a usage with every attributes specified.
         cellCommentFile=False,
         cellSummaryFile=False,
     )
+
+You can also load up JSON configuration files from the API.
+The JSON file format is also usable with the Geouned Command Line Interface  and there are more `complete examples of JSON files <python_cli_usage.html>`_ on that section of the documentation.
+For this example we assume you have a JSON file called 'config.json' in the same directory as the script.
+
+.. code-block:: python
+
+    import geouned
+
+    geo = geouned.CadToCsg.from_json("config.json")
+    geo.start()
+    geo.export_csg()
