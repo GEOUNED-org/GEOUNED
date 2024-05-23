@@ -226,6 +226,7 @@ def test_with_relative_tol_true():
     )
     geo.start()
 
+
 @pytest.mark.parametrize("input_step_file", step_files)
 @pytest.mark.parametrize("suffix", suffixes)
 def test_new_mc_files_match_original(suffix, input_step_file):
@@ -236,15 +237,20 @@ def test_new_mc_files_match_original(suffix, input_step_file):
     """
 
     # sets up an output folder for the results
-    regression_test_file = Path("tests/regression_test_files") / input_step_file.parts[-2] / Path(input_step_file.stem) / Path(input_step_file.name).with_suffix(suffix)  
+    regression_test_file = (
+        Path("tests/regression_test_files")
+        / input_step_file.parts[-2]
+        / Path(input_step_file.stem)
+        / Path(input_step_file.name).with_suffix(suffix)
+    )
     output_filename = Path("tests_outputs") / input_step_file.with_suffix("") / Path(input_step_file.stem).with_suffix(suffix)
 
-    with open(output_filename, 'r') as f:
+    with open(output_filename, "r") as f:
         file_new = f.readlines()
-    with open(regression_test_file, 'r') as f:
+    with open(regression_test_file, "r") as f:
         file_original = f.readlines()
     for line_new, line_original in zip(file_new, file_original):
-         # this lines in the output files are not expected to match as they have the creation data and time
-        if ' Creation Date' not in line_new and ' Creation Date' not in line_original:
+        # this lines in the output files are not expected to match as they have the creation data and time
+        if " Creation Date" not in line_new and " Creation Date" not in line_original:
             assert line_new == line_original
     assert len(file_new) == len(file_original)

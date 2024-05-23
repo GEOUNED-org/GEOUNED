@@ -53,6 +53,7 @@ geouned_cadtocsg = "geouned.GEOUNED.scripts.geouned_cadtocsg:main"
 
 [tool.black]
 line-length = 128
+exclude = '(tests/regression_test_files/.*|tests/regression_test_files)'
 
 [tool.setuptools_scm]
 write_to = "src/_version.py"
