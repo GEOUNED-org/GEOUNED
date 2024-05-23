@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2. Windows &mdash; GEOUNED 1.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=292eb321"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Usage" href="../usage/index.html" />
+    <link rel="prev" title="1. Linux" href="install_linux.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            GEOUNED
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Install</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="install_linux.html">1. Linux</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2. Windows</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#user-install-with-mamba-recommended">2.1. User install with Mamba (recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#user-install-with-conda">2.2. User install with Conda</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/index.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api.html">Python API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../methodology.html">Methodology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html">Developer guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">GEOUNED</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Install</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">2. </span>Windows</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com///blob/install/install_windows.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="windows">
+<h1><span class="section-number">2. </span>Windows<a class="headerlink" href="#windows" title="Link to this heading"></a></h1>
+<section id="user-install-with-mamba-recommended">
+<h2><span class="section-number">2.1. </span>User install with Mamba (recommended)<a class="headerlink" href="#user-install-with-mamba-recommended" title="Link to this heading"></a></h2>
+<p>First we need to install a Mamba distribution. There are a few options but here we opt for Miniforge3 as it includes Mamba.</p>
+<p>You can follow the install instructions for <a class="reference external" href="https://github.com/conda-forge/miniforge">Miniforge3 here</a> .</p>
+<p>Download and execute the Miniforge3 Windows installer</p>
+<p>You can get it from the Miniforge3 GitHub repository <a class="reference external" href="https://github.com/conda-forge/miniforge?tab=readme-ov-file#miniforge-pypy3">here</a> or from the link below</p>
+<p><a class="reference external" href="https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe">https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe</a></p>
+<p>Follow the prompts and complete the installation process</p>
+<p>Open “Miniforge Prompt” which will now be available on your start menu.</p>
+<p>It is recommended to create a new environment</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mamba<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>new_env<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.11
+</pre></div>
+</div>
+<p>Activate the new environment</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mamba<span class="w"> </span>activate<span class="w"> </span>new_env
+</pre></div>
+</div>
+<p>Install GEOUNED from conda-forge</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mamba<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>geouned
+</pre></div>
+</div>
+<p>Then you will be able to run import GEOUNED from within Python</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geouned</span>
+</pre></div>
+</div>
+<p>You will also be able to use the GEOUNED command line tool</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geouned_cadtocsg<span class="w"> </span>--help
+</pre></div>
+</div>
+</section>
+<section id="user-install-with-conda">
+<h2><span class="section-number">2.2. </span>User install with Conda<a class="headerlink" href="#user-install-with-conda" title="Link to this heading"></a></h2>
+<p>First we need to install a Conda distribution. There are a few options but we here we opt for <a class="reference external" href="https://docs.anaconda.com/free/miniconda/">MiniConda3</a> as it downloads quicker than the fuller <a class="reference external" href="https://www.anaconda.com/download">AnaConda</a>.</p>
+<p>You can follow the install instructions for <a class="reference external" href="https://docs.anaconda.com/free/miniconda/">MiniConda3</a></p>
+<p>Download and execute the Miniforge3 Windows installer</p>
+<p>You can get it from the Miniforge3 GitHub repository <a class="reference external" href="https://docs.anaconda.com/free/miniconda/">here</a> or from the link below</p>
+<p><a class="reference external" href="https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe">https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe</a></p>
+<p>Open “Anaconda Prompt (miniconda3)” which will now be available on your start menu.</p>
+<p>It is recommended to create a new environment</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>new_env<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.11
+</pre></div>
+</div>
+<p>Activate the new environment</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>activate<span class="w"> </span>new_env
+</pre></div>
+</div>
+<p>Install GEOUNED from conda-forge</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>geouned
+</pre></div>
+</div>
+<p>Then you will be able to run import GEOUNED from within Python</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geouned</span>
+</pre></div>
+</div>
+<p>You will also be able to use the GEOUNED command line tool</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geouned_cadtocsg<span class="w"> </span>--help
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="install_linux.html" class="btn btn-neutral float-left" title="1. Linux" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../usage/index.html" class="btn btn-neutral float-right" title="Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, UNED.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

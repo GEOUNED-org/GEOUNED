@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1. Python Package Usage &mdash; GEOUNED 1.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=292eb321"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2. Command Line Tool Usage" href="python_cli_usage.html" />
+    <link rel="prev" title="Usage" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            GEOUNED
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">Install</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Usage</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1. Python Package Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_cli_usage.html">2. Command Line Tool Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api.html">Python API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../methodology.html">Methodology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html">Developer guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">GEOUNED</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Usage</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1. </span>Python Package Usage</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com///blob/usage/python_api_usage.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="python-package-usage">
+<h1><span class="section-number">1. </span>Python Package Usage<a class="headerlink" href="#python-package-usage" title="Link to this heading"></a></h1>
+<p>The main class is <code class="docutils literal notranslate"><span class="pre">CadToCsg()</span></code> which converts CAD geometry to Constructive Solid Geometry (CSG).
+There are many arguments that can be passed into the <code class="docutils literal notranslate"><span class="pre">CadToCsg()</span></code> class which are documented in the <a class="reference external" href="../python_api.html">Python API reference section</a> of the documentation.</p>
+<p>If you have install GEOUNED and FreeCAD into your system Python then you can simply run a .py script with Python.
+The most minimal use case below shows GEOUNED being imported and the CadToCsg being used to convert a STEP CAD file called ‘cuboid.stp’ into a vanity of CSG format.
+The example makes use of default  attributes.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geouned</span>
+<span class="n">geo</span> <span class="o">=</span> <span class="n">geouned</span><span class="o">.</span><span class="n">CadToCsg</span><span class="p">(</span><span class="n">stepFile</span><span class="o">=</span><span class="s1">&#39;cuboid.stp&#39;</span><span class="p">)</span>
+<span class="n">geo</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">geo</span><span class="o">.</span><span class="n">export_csg</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Users can change <a class="reference internal" href="../python_api.html#geouned.Options" title="geouned.Options"><code class="xref py py-meth docutils literal notranslate"><span class="pre">geouned.Options()</span></code></a>, <a class="reference internal" href="../python_api.html#geouned.Settings" title="geouned.Settings"><code class="xref py py-meth docutils literal notranslate"><span class="pre">geouned.Settings()</span></code></a>, <a class="reference internal" href="../python_api.html#geouned.Tolerances" title="geouned.Tolerances"><code class="xref py py-meth docutils literal notranslate"><span class="pre">geouned.Tolerances()</span></code></a> and <a class="reference internal" href="../python_api.html#geouned.NumericFormat" title="geouned.NumericFormat"><code class="xref py py-meth docutils literal notranslate"><span class="pre">geouned.NumericFormat()</span></code></a> to suit the conversion desired.
+The following example shows a usage with every attributes specified.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geouned</span>
+
+<span class="n">my_options</span> <span class="o">=</span> <span class="n">geouned</span><span class="o">.</span><span class="n">Options</span><span class="p">(</span>
+    <span class="n">forceCylinder</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">newSplitPlane</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">delLastNumber</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">enlargeBox</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">nPlaneReverse</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">splitTolerance</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">scaleUp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">quadricPY</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">Facets</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">prnt3PPlane</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">forceNoOverlap</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">my_settings</span> <span class="o">=</span> <span class="n">geouned</span><span class="o">.</span><span class="n">Settings</span><span class="p">(</span>
+    <span class="n">matFile</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">voidGen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">compSolids</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">simplify</span><span class="o">=</span><span class="s2">&quot;no&quot;</span><span class="p">,</span>
+    <span class="n">cellRange</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">exportSolids</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">minVoidSize</span><span class="o">=</span><span class="mf">200.0</span><span class="p">,</span>
+    <span class="n">maxSurf</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">maxBracket</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+    <span class="n">voidMat</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">voidExclude</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">startCell</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">startSurf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">sort_enclosure</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">my_tolerances</span> <span class="o">=</span> <span class="n">geouned</span><span class="o">.</span><span class="n">Tolerances</span><span class="p">(</span>
+    <span class="n">relativeTol</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">relativePrecision</span><span class="o">=</span><span class="mf">0.000001</span><span class="p">,</span>
+    <span class="n">value</span><span class="o">=</span><span class="mf">0.000001</span><span class="p">,</span>
+    <span class="n">distance</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span>
+    <span class="n">angle</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span>
+    <span class="n">pln_distance</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span>
+    <span class="n">pln_angle</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span>
+    <span class="n">cyl_distance</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span>
+    <span class="n">cyl_angle</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span>
+    <span class="n">sph_distance</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span>
+    <span class="n">kne_distance</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span>
+    <span class="n">kne_angle</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span>
+    <span class="n">tor_distance</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span>
+    <span class="n">tor_angle</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span>
+    <span class="n">min_area</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">my_numeric_format</span> <span class="o">=</span> <span class="n">geouned</span><span class="o">.</span><span class="n">NumericFormat</span><span class="p">(</span>
+    <span class="n">P_abc</span><span class="o">=</span><span class="s2">&quot;14.7e&quot;</span><span class="p">,</span>
+    <span class="n">P_d</span><span class="o">=</span><span class="s2">&quot;14.7e&quot;</span><span class="p">,</span>
+    <span class="n">P_xyz</span><span class="o">=</span><span class="s2">&quot;14.7e&quot;</span><span class="p">,</span>
+    <span class="n">S_r</span><span class="o">=</span><span class="s2">&quot;14.7e&quot;</span><span class="p">,</span>
+    <span class="n">S_xyz</span><span class="o">=</span><span class="s2">&quot;14.7e&quot;</span><span class="p">,</span>
+    <span class="n">C_r</span><span class="o">=</span><span class="s2">&quot;12f&quot;</span><span class="p">,</span>
+    <span class="n">C_xyz</span><span class="o">=</span><span class="s2">&quot;12f&quot;</span><span class="p">,</span>
+    <span class="n">K_xyz</span><span class="o">=</span><span class="s2">&quot;13.6e&quot;</span><span class="p">,</span>
+    <span class="n">K_tan2</span><span class="o">=</span><span class="s2">&quot;12f&quot;</span><span class="p">,</span>
+    <span class="n">T_r</span><span class="o">=</span><span class="s2">&quot;14.7e&quot;</span><span class="p">,</span>
+    <span class="n">T_xyz</span><span class="o">=</span><span class="s2">&quot;14.7e&quot;</span><span class="p">,</span>
+    <span class="n">GQ_1to6</span><span class="o">=</span><span class="s2">&quot;18.15f&quot;</span><span class="p">,</span>
+    <span class="n">GQ_7to9</span><span class="o">=</span><span class="s2">&quot;18.15f&quot;</span><span class="p">,</span>
+    <span class="n">GQ_10</span><span class="o">=</span><span class="s2">&quot;18.15f&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">geo</span> <span class="o">=</span> <span class="n">geouned</span><span class="o">.</span><span class="n">CadToCsg</span><span class="p">(</span>
+    <span class="n">stepFile</span><span class="o">=</span><span class="s2">&quot;cuboid.stp,</span>
+    <span class="n">options</span><span class="o">=</span><span class="n">my_options</span><span class="p">,</span>
+    <span class="n">settings</span><span class="o">=</span><span class="n">my_settings</span><span class="p">,</span>
+    <span class="n">tolerances</span><span class="o">=</span><span class="n">my_tolerances</span><span class="p">,</span>
+    <span class="n">numeric_format</span><span class="o">=</span><span class="n">my_numeric_format</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">geo</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="n">geo</span><span class="o">.</span><span class="n">export_csg</span><span class="p">(</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Converted with GEOUNED&quot;</span><span class="p">,</span>
+    <span class="n">geometryName</span><span class="o">=</span><span class="s2">&quot;csg&quot;</span><span class="p">,</span>
+    <span class="n">outFormat</span><span class="o">=</span><span class="p">(</span>
+        <span class="s2">&quot;openmc_xml&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;openmc_py&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;serpent&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;phits&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mcnp&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">volSDEF</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">volCARD</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">UCARD</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">dummyMat</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">cellCommentFile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">cellSummaryFile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>You can also load up JSON configuration files from the API.
+The JSON file format is also usable with the Geouned Command Line Interface  and there are more <a class="reference external" href="python_cli_usage.html">complete examples of JSON files</a> on that section of the documentation.
+For this example we assume you have a JSON file called ‘config.json’ in the same directory as the script.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geouned</span>
+
+<span class="n">geo</span> <span class="o">=</span> <span class="n">geouned</span><span class="o">.</span><span class="n">CadToCsg</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="s2">&quot;config.json&quot;</span><span class="p">)</span>
+<span class="n">geo</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">geo</span><span class="o">.</span><span class="n">export_csg</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="python_cli_usage.html" class="btn btn-neutral float-right" title="2. Command Line Tool Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, UNED.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2. Command Line Tool Usage &mdash; GEOUNED 1.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=292eb321"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Python API reference" href="../python_api.html" />
+    <link rel="prev" title="1. Python Package Usage" href="python_api_usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            GEOUNED
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">Install</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Usage</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="python_api_usage.html">1. Python Package Usage</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2. Command Line Tool Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api.html">Python API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../methodology.html">Methodology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html">Developer guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">GEOUNED</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Usage</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">2. </span>Command Line Tool Usage</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com///blob/usage/python_cli_usage.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="command-line-tool-usage">
+<h1><span class="section-number">2. </span>Command Line Tool Usage<a class="headerlink" href="#command-line-tool-usage" title="Link to this heading"></a></h1>
+<p>GEOUNED can be used in the command line.</p>
+<p>These examples assumes you have a CAD STEP file in the current working directory of the terminal called “cuboid.stp”</p>
+<p>The most minimal use case below shows a minimal config.json file being used.</p>
+<p>First create a JSON file called “config.json” containing the following.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;stepFile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;cuboid.stp&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Then execute the command line interface tool to convert your STEP file to CSG files with the default configuration.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geouned_cadtocsg<span class="w"> </span>-i<span class="w"> </span>config.json
+</pre></div>
+</div>
+<p>The following example shows a usage with every attributes specified in the config.json file.</p>
+<p>The contents of the JSON file closely matches the Class arguments and method arguments when using the Python package.</p>
+<p>For a full description of each keyword see the <a class="reference external" href="../python_api.html">Python API reference section</a> of the documentation.</p>
+<p>Here is a complete JSON file specification</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;stepFile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;cuboid.stp&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;Options&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;forceCylinder&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;newSplitPlane&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;delLastNumber&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;enlargeBox&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;nPlaneReverse&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;splitTolerance&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;scaleUp&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;quadricPY&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;Facets&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;prnt3PPlane&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;forceNoOverlap&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;Tolerances&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;relativeTol&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;relativePrecision&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1e-06</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1e-06</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;distance&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0001</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;angle&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0001</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;pln_distance&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0001</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;pln_angle&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0001</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;cyl_distance&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0001</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;cyl_angle&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0001</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;sph_distance&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0001</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;kne_distance&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0001</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;kne_angle&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0001</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;tor_distance&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0001</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;tor_angle&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0001</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;min_area&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.01</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;NumericFormat&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;P_abc&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;14.7e&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;P_d&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;14.7e&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;P_xyz&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;14.7e&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;S_r&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;14.7e&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;S_xyz&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;14.7e&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;C_r&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;12f&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;C_xyz&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;12f&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;K_xyz&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;13.6e&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;K_tan2&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;12f&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;T_r&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;14.7e&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;T_xyz&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;14.7e&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;GQ_1to6&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;18.15f&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;GQ_7to9&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;18.15f&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;GQ_10&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;18.15f&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;Settings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;matFile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;voidGen&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;debug&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;compSolids&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;simplify&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;no&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;cellRange&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<span class="w">        </span><span class="nt">&quot;exportSolids&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;minVoidSize&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">200.0</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;maxSurf&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;maxBracket&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;voidMat&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<span class="w">        </span><span class="nt">&quot;voidExclude&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
+<span class="w">        </span><span class="nt">&quot;startCell&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;startSurf&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;sort_enclosure&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;export_csg&quot;</span><span class="p">:{</span>
+<span class="w">        </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Converted with GEOUNED&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;geometryName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;csg&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;outFormat&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;openmc_xml&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;openmc_py&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;serpent&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;phits&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;mcnp&quot;</span><span class="p">],</span>
+<span class="w">        </span><span class="nt">&quot;volSDEF&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;volCARD&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;UCARD&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;dummyMat&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;cellCommentFile&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;cellSummaryFile&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that JSON requires <code class="docutils literal notranslate"><span class="pre">`null`</span></code> to be passed in which gets translated to <code class="docutils literal notranslate"><span class="pre">`None`</span></code> in Python.
+This is converted in the same way as the minimal JSON config file</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geouned_cadtocsg<span class="w"> </span>-i<span class="w"> </span>config.json
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="python_api_usage.html" class="btn btn-neutral float-left" title="1. Python Package Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../python_api.html" class="btn btn-neutral float-right" title="Python API reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, UNED.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
