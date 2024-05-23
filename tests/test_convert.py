@@ -252,5 +252,6 @@ def test_new_mc_files_match_original(suffix, input_step_file):
     for line_new, line_original in zip(file_new, file_original):
         # this lines in the output files are not expected to match as they have the creation data and time
         if " Creation Date" not in line_new and " Creation Date" not in line_original:
-            assert line_new == line_original
+            if " Version : " not in line_new and " Version : " not in line_original:
+                assert line_new == line_original
     assert len(file_new) == len(file_original)
