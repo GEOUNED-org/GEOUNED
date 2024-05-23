@@ -1,0 +1,49 @@
+Converted with GEOUNED
+%   ______ _______  _____      _     _ __   _ _______ ______  
+%  |  ____ |______ |     | ___ |     | | \  | |______ |     \ 
+%  |_____| |______ |_____|     |_____| |  \_| |______ |_____/
+% Version : 1.0.2.dev9+gde280a7.d20240516
+% FreeCAD Version : 0.21.2 
+%
+% *************************************************************
+% Original Step file : /home/j/GEOUNED/testing/inputSTEP/Torus/placa1.stp
+%
+% Creation Date : 2024-05-23 22:49:47.234800
+% Solid Cells   : 1
+% Total Cells   : 4
+% Surfaces      : 14
+% Materials     : 0
+%
+% **************************************************************
+% --- CELL DEFINITIONS 
+cell 1     0 void 1 2 4 5 6 -7 -3% 
+% ##########################################################
+%              VOID CELLS
+% ##########################################################
+% 
+cell 2     0 void 8 -9 10 -11 12 -13 (-1:-2:-4:-5:-6:7:3)           %Automatic Generated Void Cell. Enclosure(-1.000, 10.287, -1.000, 10.287, -2.420, 2.420)
+           %Enclosed cells : (1)
+cell 3     0 void -14 (-8:9:-10:11:-12:13)           %Graveyard_in
+cell 4     0 outside 14           %Graveyard
+ 
+% --- SURFACE DEFINITIONS 
+surf 1 px  0.0000000e+00
+surf 2 py  0.0000000e+00
+surf 3 pz  5.0000000e-01
+surf 4 pz -5.0000000e-01
+surf 5 torz  0.0000000e+00  0.0000000e+00  0.0000000e+00
+       1.0000000e+01  2.0000000e+00  2.0000000e+00
+surf 6 plane  7.0710678e-01  7.0710678e-01 -0.0000000e+00  0.0000000e+00
+surf 7 cylz     8.063508
+surf 8 px -1.0000000e+00
+surf 9 px  1.0286925e+01
+surf 10 py -1.0000000e+00
+surf 11 py  1.0286925e+01
+surf 12 pz -2.4200000e+00
+surf 13 pz  2.4200000e+00
+surf 14 sph  4.6434625e+00  4.6434625e+00  0.0000000e+00  8.5066862e+00
+ 
+% 
+
+set nps 1e6
+set bc 1

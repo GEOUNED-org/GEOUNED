@@ -1,0 +1,67 @@
+$ Converted with GEOUNED
+$   ______ _______  _____      _     _ __   _ _______ ______  
+$  |  ____ |______ |     | ___ |     | | \  | |______ |     \ 
+$  |_____| |______ |_____|     |_____| |  \_| |______ |_____/
+$ Version : 1.0.2.dev9+gde280a7.d20240516
+$ FreeCAD Version : 0.21.2 
+$ PHITSFormat Version :  0.0.2.3     06/03/2024
+$
+$ *************************************************************
+$ Original Step file : /home/j/GEOUNED/testing/inputSTEP/Torus/torus.stp
+$
+$ Creation Date : 2024-05-23 22:49:43.928104
+$ Solid Cells   : 1
+$ Total Cells   : 4
+$ Surfaces      : 8
+$ Materials     : 0
+$
+$ **************************************************************
+
+
+$
+$ ##########################################################
+$                  CELL DEFINITION
+$ ##########################################################
+$
+[CELL]
+1     0     c0     -1
+$ 
+$ ##########################################################
+$              VOID CELLS
+$ ##########################################################
+$ 
+3     0      -8 #1
+           $Inner void
+           $VOID CELL 2 merged, so the auto-genarated void definition is eliminated
+
+4     -1     8
+           $Outer void
+ 
+$
+$ ##########################################################
+$                  SURFACE DEFINITION
+$ ##########################################################
+$
+[SURFACE]
+1      TZ   0.0000000e+00  0.0000000e+00  0.0000000e+00
+            1.0000000e+00  2.0000000e-01  2.0000000e-01
+2      PX  -2.2988706e+00
+3      PX   2.2988706e+00
+4      PY  -2.2988706e+00
+5      PY   2.2988706e+00
+6      PZ  -1.2000000e+00
+7      PZ   1.2000000e+00
+8      SO   3.5347985e+00
+ 
+$
+$ ##########################################################
+$                  MATERIAL DEFINITION
+$ ##########################################################
+$ All material labels present in this model are listed below
+$ Need to change the dummy material definition(H2O1) to appropriate one(s) 
+$
+[MATERIAL]
+$ Change dummyMat M0, None c0 g/cm3 is assigned
+ M0      H 2 O 1
+
+ 

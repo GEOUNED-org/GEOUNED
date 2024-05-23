@@ -1,0 +1,51 @@
+Converted with GEOUNED
+%   ______ _______  _____      _     _ __   _ _______ ______  
+%  |  ____ |______ |     | ___ |     | | \  | |______ |     \ 
+%  |_____| |______ |_____|     |_____| |  \_| |______ |_____/
+% Version : 1.0.2.dev9+gde280a7.d20240516
+% FreeCAD Version : 0.21.2 
+%
+% *************************************************************
+% Original Step file : /home/j/GEOUNED/testing/inputSTEP/DoubleCylinder/pieza2.stp
+%
+% Creation Date : 2024-05-23 22:49:48.573834
+% Solid Cells   : 1
+% Total Cells   : 4
+% Surfaces      : 17
+% Materials     : 0
+%
+% **************************************************************
+% --- CELL DEFINITIONS 
+cell 1     0 void 1 4 6 8 10 -5 -3 -2:-8 9 -5 6% 
+% ##########################################################
+%              VOID CELLS
+% ##########################################################
+% 
+cell 2     0 void 11 -12 13 -14 15 -16 ((8:-9) (-10:-4:3:2:-1:-8):5:-6)           %Automatic Generated Void Cell. Enclosure(-1.000, 2.000, -1.000, 2.000, -1.000, 2.000)
+           %Enclosed cells : (1)
+cell 3     0 void -17 (-11:12:-13:14:-15:16)           %Graveyard_in
+cell 4     0 outside 17           %Graveyard
+ 
+% --- SURFACE DEFINITIONS 
+surf 1 px  0.0000000e+00
+surf 2 px  1.0000000e+00
+surf 3 py  1.0000000e+00
+surf 4 py  0.0000000e+00
+surf 5 pz  1.0000000e+00
+surf 6 pz  0.0000000e+00
+surf 7 plane  7.0710678e-01  7.0710678e-01 -0.0000000e+00  0.0000000e+00
+surf 8 cylz     0.200000
+surf 9 cylz     0.090000
+surf 10 plane  7.0710678e-01  7.0710678e-01 -0.0000000e+00  1.4142136e-01
+surf 11 px -1.0000000e+00
+surf 12 px  2.0000000e+00
+surf 13 py -1.0000000e+00
+surf 14 py  2.0000000e+00
+surf 15 pz -1.0000000e+00
+surf 16 pz  2.0000000e+00
+surf 17 sph  5.0000000e-01  5.0000000e-01  5.0000000e-01  2.6500377e+00
+ 
+% 
+
+set nps 1e6
+set bc 1
