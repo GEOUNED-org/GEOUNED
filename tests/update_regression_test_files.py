@@ -11,9 +11,10 @@ step_files = list(path_to_cad.rglob("*.stp")) + list(path_to_cad.rglob("*.step")
 for input_step_file in step_files:
 
     # sets up an output folder for the results
-    output_dir = Path("tests/regression_test") / input_step_file.with_suffix("")
+    output_dir = Path("tests/regression_test_files") / input_step_file.parts[-2] / Path(input_step_file.name).with_suffix("")
     output_dir.mkdir(parents=True, exist_ok=True)
     output_filename_stem = output_dir / input_step_file.stem
+    print(output_filename_stem)
 
     # deletes the output MC files if they already exists
     for suffix in suffixes:
