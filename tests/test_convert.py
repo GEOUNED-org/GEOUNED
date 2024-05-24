@@ -257,7 +257,7 @@ def test_new_mc_files_match_original(suffix, input_step_file):
             and " Version : " not in line_new
             and " Version : " not in line_original
             and " Original Step file : " not in line_new
-            and " Original Step file :" not in line_original
+            and " Original Step file : " not in line_original
         ):
             assert line_new == line_original
     assert len(file_new) == len(file_original)
