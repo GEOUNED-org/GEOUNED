@@ -2,15 +2,16 @@
     {
         "name": "dev",
         "version": "dev",
-        "url": "https://geouned-org.github.io/GEOUNED/dev"
+        // "url": "https://geouned-org.github.io/GEOUNED/dev"
+        "url": "https://fusion-neutronics.github.io/GEOUNED/dev"
     },
     {
         "name": "1.1.0 (stable)",
         "version": "1.1.0",
-        "url": "https://geouned-org.github.io/GEOUNED/stable"
+        "url": "https://fusion-neutronics.github.io/GEOUNED/stable"
     },
     {
         "version": "1.0.1",
-        "url": "https://geouned-org.github.io/GEOUNED/1.0.1"
+        "url": "https://fusion-neutronics.github.io/GEOUNED/1.0.1"
     }
 ]
