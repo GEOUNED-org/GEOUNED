@@ -24,11 +24,10 @@ author = "Juan-Pablo Catalan and Patrick Sauvan"
 
 # The full version, including alpha/beta/rc tags
 # import geouned
-version='1.1.0'
+version = "1.1.0"
 # version = geouned.__version__
 # # The full version, including alpha/beta/rc tags.
 # release = geouned.__version__
-
 
 
 # -- General configuration ---------------------------------------------------
@@ -72,20 +71,20 @@ html_static_path = ["_static"]
 # html_favicon = "favicon.ico"
 
 # Version match must match the 'version' key in version_swticher.json
-pattern = re.compile(r'^[0-9]+\.[0-9]+')
+pattern = re.compile(r"^[0-9]+\.[0-9]+")
 version_match = pattern.search(version)
 if version_match:
     version_match = version_match.group() + ".x"
-elif 'dev' in version:
+elif "dev" in version:
     version_match = "dev"
 else:
     version_match = version
 
 html_theme_options = {
-    'switcher': {
-            'json_url': 'https://raw.githubusercontent.com/fusion-neutronics/GEOUNED/adding_version_support_to_docs/docs/version_switcher.json',
-            'version_match': '1.1.0',
-        },
-    'nav_title': 'Geouned',
-    'navbar_start': ['version-switcher', 'navbar-icon-links'],
+    "switcher": {
+        "json_url": "https://raw.githubusercontent.com/fusion-neutronics/GEOUNED/adding_version_support_to_docs/docs/version_switcher.json",
+        "version_match": "1.1.0",
+    },
+    "nav_title": "Geouned",
+    "navbar_start": ["version-switcher", "navbar-icon-links"],
 }
