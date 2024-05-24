@@ -24,6 +24,7 @@ author = "Juan-Pablo Catalan and Patrick Sauvan"
 
 # The full version, including alpha/beta/rc tags
 import geouned
+
 version = geouned.__version__
 release = geouned.__version__
 
