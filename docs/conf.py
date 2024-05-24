@@ -22,7 +22,7 @@ copyright = "2024, UNED"
 author = "Juan-Pablo Catalan and Patrick Sauvan"
 
 # The full version, including alpha/beta/rc tags
-release = "1.0.1"
+version = "1.1.0"
 
 
 # -- General configuration ---------------------------------------------------
@@ -51,10 +51,16 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # -- Options for HTML output -------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-html_theme = "sphinx_rtd_theme"
+# The theme to use for HTML and HTML Help pages.
+# this theme supports versions https://github.com/pydata/pydata-sphinx-theme
+html_theme = "pydata_sphinx_theme"
+
+html_theme_options = {
+    'switcher': {
+            'json_url': 'https://jni.github.io/skan/dev/_static/version_switcher.json',
+            'version_match': version,
+        },
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
