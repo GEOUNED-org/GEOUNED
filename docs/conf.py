@@ -11,6 +11,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
+import re
 import sys
 
 sys.path.insert(0, os.path.abspath("../../src"))
@@ -22,7 +23,12 @@ copyright = "2024, UNED"
 author = "Juan-Pablo Catalan and Patrick Sauvan"
 
 # The full version, including alpha/beta/rc tags
-version = "1.1.0"
+# import geouned
+version='1.1.0'
+# version = geouned.__version__
+# # The full version, including alpha/beta/rc tags.
+# release = geouned.__version__
+
 
 
 # -- General configuration ---------------------------------------------------
@@ -55,19 +61,31 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # this theme supports versions https://github.com/pydata/pydata-sphinx-theme
 html_theme = "pydata_sphinx_theme"
 
-html_theme_options = {
-    'switcher': {
-            'json_url': 'https://jni.github.io/skan/dev/_static/version_switcher.json',
-            'version_match': version,
-        },
-}
-
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 
-html_context = {
-    "display_github": True,
-}
+# html_context = {
+#     "display_github": True,
+# }
 # html_favicon = "favicon.ico"
+
+# Version match must match the 'version' key in version_swticher.json
+pattern = re.compile(r'^[0-9]+\.[0-9]+')
+version_match = pattern.search(version)
+if version_match:
+    version_match = version_match.group() + ".x"
+elif 'dev' in version:
+    version_match = "dev"
+else:
+    version_match = version
+
+html_theme_options = {
+    'switcher': {
+            'json_url': 'https://raw.githubusercontent.com/fusion-neutronics/GEOUNED/adding_version_support_to_docs/docs/version_switcher.json',
+            'version_match': '1.1.0',
+        },
+    'nav_title': 'Geouned',
+    'navbar_start': ['version-switcher', 'navbar-icon-links'],
+}
