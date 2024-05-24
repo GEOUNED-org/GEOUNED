@@ -63,9 +63,7 @@ html_theme = "pydata_sphinx_theme"
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 
-html_context = {
-    "display_github": True,
-}
+# TODO add logo
 # html_favicon = "favicon.ico"
 
 # Version match must match the 'version' key in version_swticher.json
@@ -79,6 +77,7 @@ else:
     version_match = version
 
 html_theme_options = {
+    "github_url": "https://github.com/GEOUNED-org/GEOUNED",
     "switcher": {
         "json_url": "https://raw.githubusercontent.com/fusion-neutronics/GEOUNED/adding_version_support_to_docs/docs/version_switcher.json",
         "version_match": version_match,
