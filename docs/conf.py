@@ -82,7 +82,7 @@ else:
 html_theme_options = {
     "switcher": {
         "json_url": "https://raw.githubusercontent.com/fusion-neutronics/GEOUNED/adding_version_support_to_docs/docs/version_switcher.json",
-        "version_match": "1.1.0",
+        "version_match": version_match,
     },
     "nav_title": "Geouned",
     "navbar_start": ["version-switcher", "navbar-icon-links"],
