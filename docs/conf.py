@@ -25,7 +25,6 @@ author = "Juan-Pablo Catalan and Patrick Sauvan"
 # The full version, including alpha/beta/rc tags
 import geouned
 version = geouned.__version__
-# # The full version, including alpha/beta/rc tags.
 release = geouned.__version__
 
 
@@ -64,9 +63,9 @@ html_theme = "pydata_sphinx_theme"
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 
-# html_context = {
-#     "display_github": True,
-# }
+html_context = {
+    "display_github": True,
+}
 # html_favicon = "favicon.ico"
 
 # Version match must match the 'version' key in version_swticher.json
