@@ -1,14 +1,9 @@
-name: documentation
+name: documentation update
 
 on:
-  pull_request:
-    branches:
-      - dev
-      - main
   push:
-    branches:
-      - main
-      - dev
+    tags:
+      - '*'
 
 permissions:
   contents: write
@@ -42,6 +37,7 @@ jobs:
       - name: Sphinx build
         run: |
           sphinx-build docs _build
+          cp _build _build/${{  github.ref_name }}
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v4
@@ -49,4 +45,5 @@ jobs:
           publish_branch: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: _build/
-          force_orphan: true
+          # force_orphan: true https://github.com/peaceiris/actions-gh-pages/issues/455
+          keep_files: true
