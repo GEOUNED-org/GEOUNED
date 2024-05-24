@@ -23,11 +23,10 @@ copyright = "2024, UNED"
 author = "Juan-Pablo Catalan and Patrick Sauvan"
 
 # The full version, including alpha/beta/rc tags
-# import geouned
-version = "1.1.0"
-# version = geouned.__version__
+import geouned
+version = geouned.__version__
 # # The full version, including alpha/beta/rc tags.
-# release = geouned.__version__
+release = geouned.__version__
 
 
 # -- General configuration ---------------------------------------------------
