@@ -90,7 +90,7 @@ The following example shows a usage with every attributes specified.
     )
 
     geo = geouned.CadToCsg(
-        stepFile="cuboid.stp,
+        stepFile="cuboid.stp",
         options=my_options,
         settings=my_settings,
         tolerances=my_tolerances,
