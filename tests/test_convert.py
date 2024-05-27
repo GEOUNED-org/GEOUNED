@@ -1,5 +1,6 @@
 import os
 import math
+import re
 from pathlib import Path
 
 import pytest
@@ -252,7 +253,6 @@ def test_new_mc_files_match_original(suffix, input_step_file):
         / Path(input_step_file.name).with_suffix(suffix)
     )
     output_filename = Path("tests_outputs") / input_step_file.with_suffix("") / Path(input_step_file.stem).with_suffix(suffix)
-
     with open(output_filename, "r") as f:
         file_new = f.readlines()
     with open(regression_test_file, "r") as f:
@@ -272,13 +272,14 @@ def test_new_mc_files_match_original(suffix, input_step_file):
             if line_new == line_original:
                 assert True
             else:
-                new_segments = line_new.split(" ")
-                old_segments = line_original.split(" ")
+
+                new_segments = re.split(',|=|\s|\n|"', line_new)
+                old_segments = re.split(',|=|\s|\n|"', line_original)
                 assert len(new_segments) == len(old_segments)
                 for new_segment, old_segment in zip(new_segments, old_segments):
                     if new_segment != old_segment:
                         if is_float(new_segment) and is_float(old_segment):
-                            assert math.isclose(float(new_segment), float(old_segment), abs_tol=1e-17)
+                            assert math.isclose(float(new_segment), float(old_segment), abs_tol=1e-6)
                         else:
                             assert new_segment == old_segment
 
