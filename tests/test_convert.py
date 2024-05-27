@@ -1,4 +1,5 @@
 import os
+import math
 from pathlib import Path
 
 import pytest
@@ -236,6 +237,14 @@ def test_new_mc_files_match_original(suffix, input_step_file):
     You might want to update the MC text file in the regression test folder with the 'tests/update_regression_test_files.py' script.
     """
 
+
+    def is_float(n):
+        try:
+            float(n)
+        except ValueError:
+            return False
+        return True
+
     # sets up an output folder for the results
     regression_test_file = (
         Path("tests/regression_test_files")
@@ -259,5 +268,19 @@ def test_new_mc_files_match_original(suffix, input_step_file):
             and " Original Step file : " not in line_new
             and " Original Step file : " not in line_original
         ):
-            assert line_new == line_original
+
+            # checks the lines match or are close enough (within floating point accuracy)
+            if line_new == line_original:
+                assert True
+            else:
+                new_segments = line_new.split(' ')
+                old_segments = line_original.split(' ')
+                assert len(new_segments) == len(old_segments)
+                for new_segment, old_segment in zip(new_segments, old_segments):
+                    if new_segment != old_segment:
+                        if is_float(new_segment) and is_float(old_segment):
+                            assert math.isclose(float(new_segment), float(old_segment), rel_tol=1e-09)
+                        else:
+                            assert new_segment == old_segment
+
     assert len(file_new) == len(file_original)
