@@ -237,7 +237,6 @@ def test_new_mc_files_match_original(suffix, input_step_file):
     You might want to update the MC text file in the regression test folder with the 'tests/update_regression_test_files.py' script.
     """
 
-
     def is_float(n):
         try:
             float(n)
@@ -273,8 +272,8 @@ def test_new_mc_files_match_original(suffix, input_step_file):
             if line_new == line_original:
                 assert True
             else:
-                new_segments = line_new.split(' ')
-                old_segments = line_original.split(' ')
+                new_segments = line_new.split(" ")
+                old_segments = line_original.split(" ")
                 assert len(new_segments) == len(old_segments)
                 for new_segment, old_segment in zip(new_segments, old_segments):
                     if new_segment != old_segment:
