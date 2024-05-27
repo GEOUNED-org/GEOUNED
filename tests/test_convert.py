@@ -272,9 +272,8 @@ def test_new_mc_files_match_original(suffix, input_step_file):
             if line_new == line_original:
                 assert True
             else:
-
-                new_segments = re.split(',|=| |\n|"|\)|\(', line_new)
-                old_segments = re.split(',|=| |\n|"|\)|\(', line_original)
+                new_segments = re.findall(r'[ ,=()]|[^ ,=()]+', line_new)
+                old_segments = re.findall(r'[ ,=()]|[^ ,=()]+', line_original)
                 assert len(new_segments) == len(old_segments)
                 for new_segment, old_segment in zip(new_segments, old_segments):
                     if new_segment != old_segment:
