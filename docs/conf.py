@@ -67,11 +67,11 @@ html_static_path = ["_static"]
 # TODO add logo
 # html_favicon = "favicon.ico"
 
-# Version match must match the 'version' key in version_swticher.json
+# Version match must match the 'version' key in version_switcher.json
 pattern = re.compile(r"^[0-9]+\.[0-9]+")
 version_match = pattern.search(version)
 if version_match:
-    version_match = version_match.group() + ".x"
+    version_match = version_match.group()
 elif "dev" in version:
     version_match = "dev"
 else:
