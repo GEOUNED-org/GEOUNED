@@ -3,8 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-GEOUNED
-=======
+Geouned Documentation
+=====================
+
+**Version**: |version|
 
 GEOUNED converts CAD to Constructive Solid Geometry (CSG) formats for use in
 Monte Carlo transport codes.

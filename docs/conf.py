@@ -11,6 +11,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
+import re
 import sys
 
 sys.path.insert(0, os.path.abspath("../../src"))
@@ -22,7 +23,10 @@ copyright = "2024, UNED"
 author = "Juan-Pablo Catalan and Patrick Sauvan"
 
 # The full version, including alpha/beta/rc tags
-release = "1.0.1"
+import geouned
+
+version = geouned.__version__
+release = geouned.__version__
 
 
 # -- General configuration ---------------------------------------------------
@@ -51,17 +55,34 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # -- Options for HTML output -------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-html_theme = "sphinx_rtd_theme"
+# The theme to use for HTML and HTML Help pages.
+# this theme supports versions https://github.com/pydata/pydata-sphinx-theme
+html_theme = "pydata_sphinx_theme"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 
-html_context = {
-    "display_github": True,
-}
+# TODO add logo
 # html_favicon = "favicon.ico"
+
+# Version match must match the 'version' key in version_switcher.json
+pattern = re.compile(r"^[0-9]+\.[0-9]+")
+version_match = pattern.search(version)
+if version_match:
+    version_match = version_match.group()
+elif "dev" in version:
+    version_match = "dev"
+else:
+    version_match = version
+
+html_theme_options = {
+    "github_url": "https://github.com/GEOUNED-org/GEOUNED",
+    "switcher": {
+        "json_url": "https://raw.githubusercontent.com/fusion-neutronics/GEOUNED/adding_version_support_to_docs/docs/version_switcher.json",
+        "version_match": version_match,
+    },
+    "nav_title": "Geouned",
+    "navbar_start": ["version-switcher", "navbar-icon-links"],
+}

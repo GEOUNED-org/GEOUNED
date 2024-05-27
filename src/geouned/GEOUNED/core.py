@@ -135,7 +135,7 @@ class CadToCsg:
         ),
         volSDEF: bool = False,
         volCARD: bool = True,
-        UCARD: typing.Union[int, type(None)] = 101,
+        UCARD: typing.Union[int, None] = None,
         dummyMat: bool = False,
         cellCommentFile: bool = False,
         cellSummaryFile: bool = True,
@@ -170,6 +170,9 @@ class CadToCsg:
 
         if not isinstance(UCARD, int) and not isinstance(UCARD, type(None)):
             raise TypeError(f"UCARD should be of type int or None not {type(UCARD)}")
+        if isinstance(UCARD, int):
+            if UCARD < 0:
+                raise ValueError("UCARD should be a 0 or a positive integer ")
 
         for arg, arg_str in (
             (volSDEF, "volSDEF"),
