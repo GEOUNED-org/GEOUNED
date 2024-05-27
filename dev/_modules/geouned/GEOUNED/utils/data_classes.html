@@ -1,0 +1,1342 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>geouned.GEOUNED.utils.data_classes &#8212; GEOUNED 0.1.dev1+g721ed45 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../../../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../../../../_static/documentation_options.js?v=d387cf0f"></script>
+    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/geouned/GEOUNED/utils/data_classes';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.15.2';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/fusion-neutronics/GEOUNED/adding_version_support_to_docs/docs/version_switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.1';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+    
+      <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/GEOUNED-org/GEOUNED" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../install/index.html">
+                        Install
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../usage/index.html">
+                        Usage
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../python_api.html">
+                        Python API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../methodology.html">
+                        Methodology
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../developer_guide.html">
+                        Developer guide
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/GEOUNED-org/GEOUNED" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../install/index.html">
+                        Install
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../usage/index.html">
+                        Usage
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../python_api.html">
+                        Python API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../methodology.html">
+                        Methodology
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../developer_guide.html">
+                        Developer guide
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/GEOUNED-org/GEOUNED" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">geouned.GEOU...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for geouned.GEOUNED.utils.data_classes</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">typing</span>
+<span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Real</span>
+
+
+<div class="viewcode-block" id="Options">
+<a class="viewcode-back" href="../../../../python_api.html#geouned.Options">[docs]</a>
+<span class="k">class</span> <span class="nc">Options</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for containing conversion options</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        forceCylinder (bool, optional): Use cylinder (instead of cones) as</span>
+<span class="sd">            ancillary surface where unclosed torus surfaces are involved in</span>
+<span class="sd">            the solid definition. Defaults to False.</span>
+<span class="sd">        newSplitPlane (bool, optional): New method to consider plane as</span>
+<span class="sd">            cutting surface during the decomposition process. Former method</span>
+<span class="sd">            split first planes perpendicular to X,Y,Z axis and then the</span>
+<span class="sd">            other planes involved in the solid definition. New method group</span>
+<span class="sd">            all parallel planes independently whether their normal are</span>
+<span class="sd">            along X,Y,Z axes, and start the decomposition process cutting</span>
+<span class="sd">            first with the group having the highest number of parallel</span>
+<span class="sd">            planes. Defaults to True.</span>
+<span class="sd">        delLastNumber (bool, optional): Deleting the last word in the</span>
+<span class="sd">            comment if it is a number. Defaults to False.</span>
+<span class="sd">        enlargeBox (Real, optional): Enlarge box boundary when evaluating</span>
+<span class="sd">            the constraint table during the simplification of the void cell</span>
+<span class="sd">            definition. (unit is millimeter). Defaults to 2.</span>
+<span class="sd">        nPlaneReverse (int, optional): Threshold value to determine whether</span>
+<span class="sd">            cut with parallel planes should be carried out first. Defaults</span>
+<span class="sd">            to 0.</span>
+<span class="sd">        splitTolerance (Real, optional): Fuzzy tolerance value used in the</span>
+<span class="sd">            FreeCAD function “BOPTools.SplitAPI.slice”. This function is</span>
+<span class="sd">            used during the solid decomposition process. Defaults to 0.</span>
+<span class="sd">        scaleUp (bool, optional): Scale up Fuzzy tolerance once get below</span>
+<span class="sd">            1e-12. Defaults to True.</span>
+<span class="sd">        quadricPY (bool, optional): In openMC python script format, the</span>
+<span class="sd">            cones or cylinders no aligned with the X,Y, or Z axis can be</span>
+<span class="sd">            defined using the openmc.Cone or open.Cylinder methods but can</span>
+<span class="sd">            also be defined with their quadric parameter. If “quadricPY” is</span>
+<span class="sd">            11 True then all cones and cylinders will be defined in the</span>
+<span class="sd">            openMC python script format under their quadric form. Defaults</span>
+<span class="sd">            to False.</span>
+<span class="sd">        Facets (bool, optional): use alternative conversion module when</span>
+<span class="sd">            geometry is defined by cells compound by only triangular plane</span>
+<span class="sd">            faces. Defaults to False.</span>
+<span class="sd">        prnt3PPlane (bool, optional): print 3 point plane definition in</span>
+<span class="sd">            output as 3 points coordinates. Defaults to False.</span>
+<span class="sd">        forceNoOverlap (bool, optional): force no overlaping cell</span>
+<span class="sd">            definition. Adjacent cell definition are rested from current</span>
+<span class="sd">            cell definition. Defaults to False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">forceCylinder</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">newSplitPlane</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">delLastNumber</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">enlargeBox</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span>
+        <span class="n">nPlaneReverse</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">splitTolerance</span><span class="p">:</span> <span class="n">Real</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">scaleUp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">quadricPY</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">Facets</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">prnt3PPlane</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">forceNoOverlap</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">forceCylinder</span> <span class="o">=</span> <span class="n">forceCylinder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">newSplitPlane</span> <span class="o">=</span> <span class="n">newSplitPlane</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delLastNumber</span> <span class="o">=</span> <span class="n">delLastNumber</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enlargeBox</span> <span class="o">=</span> <span class="n">enlargeBox</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nPlaneReverse</span> <span class="o">=</span> <span class="n">nPlaneReverse</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">splitTolerance</span> <span class="o">=</span> <span class="n">splitTolerance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scaleUp</span> <span class="o">=</span> <span class="n">scaleUp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">quadricPY</span> <span class="o">=</span> <span class="n">quadricPY</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Facets</span> <span class="o">=</span> <span class="n">Facets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prnt3PPlane</span> <span class="o">=</span> <span class="n">prnt3PPlane</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">forceNoOverlap</span> <span class="o">=</span> <span class="n">forceNoOverlap</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">forceCylinder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forceCylinder</span>
+
+    <span class="nd">@forceCylinder</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">forceCylinder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Options.forceCylinder should be a bool, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_forceCylinder</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">newSplitPlane</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_newSplitPlane</span>
+
+    <span class="nd">@newSplitPlane</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">newSplitPlane</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Options.newSplitPlane should be a bool, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_newSplitPlane</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">delLastNumber</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_delLastNumber</span>
+
+    <span class="nd">@delLastNumber</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">delLastNumber</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Options.delLastNumber should be a bool, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_delLastNumber</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">enlargeBox</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enlargeBox</span>
+
+    <span class="nd">@enlargeBox</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">enlargeBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Real</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Options.enlargeBox should be a Real, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Options.enlargeBox should be above 0, not </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enlargeBox</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">nPlaneReverse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nPlaneReverse</span>
+
+    <span class="nd">@nPlaneReverse</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">nPlaneReverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Options.nPlaneReverse should be a int, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nPlaneReverse</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">splitTolerance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_splitTolerance</span>
+
+    <span class="nd">@splitTolerance</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">splitTolerance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Real</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Options.splitTolerance should be a Real, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Options.splitTolerance should be above 0, not </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_splitTolerance</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">scaleUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scaleUp</span>
+
+    <span class="nd">@scaleUp</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">scaleUp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Options.scaleUp should be a bool, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scaleUp</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">quadricPY</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quadricPY</span>
+
+    <span class="nd">@quadricPY</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">quadricPY</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Options.quadricPY should be a bool, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_quadricPY</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">Facets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Facets</span>
+
+    <span class="nd">@Facets</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">Facets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Options.Facets should be a bool, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Facets</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">prnt3PPlane</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prnt3PPlane</span>
+
+    <span class="nd">@prnt3PPlane</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">prnt3PPlane</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Options.prnt3PPlane should be a bool, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prnt3PPlane</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">forceNoOverlap</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forceNoOverlap</span>
+
+    <span class="nd">@forceNoOverlap</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">forceNoOverlap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Options.forceNoOverlap should be a bool, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_forceNoOverlap</span> <span class="o">=</span> <span class="n">value</span></div>
+
+
+
+<div class="viewcode-block" id="Tolerances">
+<a class="viewcode-back" href="../../../../python_api.html#geouned.Tolerances">[docs]</a>
+<span class="k">class</span> <span class="nc">Tolerances</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for containing tolerances values</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        relativeTol (bool, optional): _description_. Defaults to False.</span>
+<span class="sd">        relativePrecision (float, optional): relative precision. Defaults to 1.0e-6.</span>
+<span class="sd">        value (float, optional): Tolerance in single value comparison. Defaults to 1.0e-6.</span>
+<span class="sd">        distance (float, optional): General Distance Tolerance. Defaults to 1.0e-4.</span>
+<span class="sd">        angle (float, optional): General Angle Tolerance. Defaults to 1.0e-4.</span>
+<span class="sd">        pln_distance (float, optional): distance between planes equal planes if distance between parallel planes &lt; 1e-4 cm. Defaults to 1.0e-4.</span>
+<span class="sd">        pln_angle (float, optional): angle between axis. 1e-4 : planes separate each other 0.1mm each 1m. Defaults to 1.0e-4.</span>
+<span class="sd">        cyl_distance (float, optional): distance between radius/center. Defaults to 1.0e-4.</span>
+<span class="sd">        cyl_angle (float, optional): angle between axis. Defaults to 1.0e-4.</span>
+<span class="sd">        sph_distance (float, optional): distance between radius/center. Defaults to 1.0e-4.</span>
+<span class="sd">        kne_distance (float, optional): distance between apex. Defaults to 1.0e-4.</span>
+<span class="sd">        kne_angle (float, optional): angle between semiangles/axis. Defaults to 1.0e-4.</span>
+<span class="sd">        tor_distance (float, optional): distance between Major/Minor radii/center. Defaults to 1.0e-4.</span>
+<span class="sd">        tor_angle (float, optional): angle between axis. Defaults to 1.0e-4.</span>
+<span class="sd">        min_area (float, optional): minimum face area to consider in cell definition. Defaults to 1.0e-2.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">relativeTol</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">relativePrecision</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e-6</span><span class="p">,</span>
+        <span class="n">value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e-6</span><span class="p">,</span>
+        <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e-4</span><span class="p">,</span>
+        <span class="n">angle</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e-4</span><span class="p">,</span>
+        <span class="n">pln_distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e-4</span><span class="p">,</span>
+        <span class="n">pln_angle</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e-4</span><span class="p">,</span>
+        <span class="n">cyl_distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e-4</span><span class="p">,</span>
+        <span class="n">cyl_angle</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e-4</span><span class="p">,</span>
+        <span class="n">sph_distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e-4</span><span class="p">,</span>
+        <span class="n">kne_distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e-4</span><span class="p">,</span>
+        <span class="n">kne_angle</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e-4</span><span class="p">,</span>
+        <span class="n">tor_distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e-4</span><span class="p">,</span>
+        <span class="n">tor_angle</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e-4</span><span class="p">,</span>
+        <span class="n">min_area</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e-2</span><span class="p">,</span>
+    <span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">relativeTol</span> <span class="o">=</span> <span class="n">relativeTol</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relativePrecision</span> <span class="o">=</span> <span class="n">relativePrecision</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distance</span> <span class="o">=</span> <span class="n">distance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="n">angle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pln_distance</span> <span class="o">=</span> <span class="n">pln_distance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pln_angle</span> <span class="o">=</span> <span class="n">pln_angle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cyl_distance</span> <span class="o">=</span> <span class="n">cyl_distance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cyl_angle</span> <span class="o">=</span> <span class="n">cyl_angle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sph_distance</span> <span class="o">=</span> <span class="n">sph_distance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kne_distance</span> <span class="o">=</span> <span class="n">kne_distance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kne_angle</span> <span class="o">=</span> <span class="n">kne_angle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tor_distance</span> <span class="o">=</span> <span class="n">tor_distance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tor_angle</span> <span class="o">=</span> <span class="n">tor_angle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_area</span> <span class="o">=</span> <span class="n">min_area</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">relativeTol</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_relativeTol</span>
+
+    <span class="nd">@relativeTol</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">relativeTol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.relativeTol should be a bool, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_relativeTol</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">relativePrecision</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_relativePrecision</span>
+
+    <span class="nd">@relativePrecision</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">relativePrecision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.relativePrecision should be a float, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_relativePrecision</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
+
+    <span class="nd">@value</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.value should be a float, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">distance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distance</span>
+
+    <span class="nd">@distance</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.distance should be a float, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_distance</span> <span class="o">=</span> <span class="n">distance</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">angle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_angle</span>
+
+    <span class="nd">@angle</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">angle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angle</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">angle</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.angle should be a float, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_angle</span> <span class="o">=</span> <span class="n">angle</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pln_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pln_distance</span>
+
+    <span class="nd">@pln_distance</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">pln_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pln_distance</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pln_distance</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.pln_distance should be a float, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">pln_distance</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pln_distance</span> <span class="o">=</span> <span class="n">pln_distance</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cyl_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cyl_distance</span>
+
+    <span class="nd">@cyl_distance</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">cyl_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cyl_distance</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cyl_distance</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.cyl_distance should be a float, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">cyl_distance</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cyl_distance</span> <span class="o">=</span> <span class="n">cyl_distance</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cyl_angle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cyl_angle</span>
+
+    <span class="nd">@cyl_angle</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">cyl_angle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cyl_angle</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cyl_angle</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.cyl_angle should be a float, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">cyl_angle</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cyl_angle</span> <span class="o">=</span> <span class="n">cyl_angle</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sph_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sph_distance</span>
+
+    <span class="nd">@sph_distance</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">sph_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sph_distance</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sph_distance</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.sph_distance should be a float, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">sph_distance</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sph_distance</span> <span class="o">=</span> <span class="n">sph_distance</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pln_angle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pln_angle</span>
+
+    <span class="nd">@pln_angle</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">pln_angle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pln_angle</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pln_angle</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.pln_angle should be a float, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">pln_angle</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pln_angle</span> <span class="o">=</span> <span class="n">pln_angle</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">kne_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kne_distance</span>
+
+    <span class="nd">@kne_distance</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">kne_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kne_distance</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kne_distance</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.kne_distance should be a float, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">kne_distance</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kne_distance</span> <span class="o">=</span> <span class="n">kne_distance</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">kne_angle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kne_angle</span>
+
+    <span class="nd">@kne_angle</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">kne_angle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kne_angle</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kne_angle</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.kne_angle should be a float, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">kne_angle</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kne_angle</span> <span class="o">=</span> <span class="n">kne_angle</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tor_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tor_distance</span>
+
+    <span class="nd">@tor_distance</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">tor_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tor_distance</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tor_distance</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.tor_distance should be a float, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">tor_distance</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tor_distance</span> <span class="o">=</span> <span class="n">tor_distance</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tor_angle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tor_angle</span>
+
+    <span class="nd">@tor_angle</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">tor_angle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tor_angle</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tor_angle</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.tor_angle should be a float, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">tor_angle</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tor_angle</span> <span class="o">=</span> <span class="n">tor_angle</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">min_area</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_min_area</span>
+
+    <span class="nd">@min_area</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">min_area</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_area</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">min_area</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.min_area should be a float, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">min_area</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_min_area</span> <span class="o">=</span> <span class="n">min_area</span></div>
+
+
+
+<div class="viewcode-block" id="NumericFormat">
+<a class="viewcode-back" href="../../../../python_api.html#geouned.NumericFormat">[docs]</a>
+<span class="k">class</span> <span class="nc">NumericFormat</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Numerical format options for each of the surface types.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        P_abc (str, optional): Plane general a,b,c params. Defaults to &quot;14.7e&quot;.</span>
+<span class="sd">        P_d (str, optional): Plane general d params. Defaults to &quot;14.7e&quot;.</span>
+<span class="sd">        P_xyz (str, optional): PX/PY/PZ params. Defaults to &quot;14.7e&quot;.</span>
+<span class="sd">        S_r (str, optional): SO/SX/SY/SZ/S radius. Defaults to &quot;14.7e&quot;.</span>
+<span class="sd">        S_xyz (str, optional): SO/SX/SY/SZ/S center. Defaults to &quot;14.7e&quot;.</span>
+<span class="sd">        C_r (str, optional): Cylinder radius. Defaults to &quot;12f&quot;.</span>
+<span class="sd">        C_xyz (str, optional): Cylinder center. Defaults to &quot;12f&quot;.</span>
+<span class="sd">        K_xyz (str, optional): Cone apex. Defaults to &quot;13.6e&quot;.</span>
+<span class="sd">        K_tan2 (str, optional): Cone tan^2 value. Defaults to &quot;12f&quot;.</span>
+<span class="sd">        T_r (str, optional): Torus radii. Defaults to &quot;14.7e&quot;.</span>
+<span class="sd">        T_xyz (str, optional): Torus center. Defaults to &quot;14.7e&quot;.</span>
+<span class="sd">        GQ_1to6 (str, optional): GQ 1 to 6 coefficients (order 2 x2,y2,z2,xy,...). Defaults to &quot;18.15f&quot;.</span>
+<span class="sd">        GQ_7to9 (str, optional): GQ 7 to 9 coefficients (order 1 x,y,z). Defaults to &quot;18.15f&quot;.</span>
+<span class="sd">        GQ_10 (str, optional): GQ 10 coefficient. Defaults to &quot;18.15f&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">P_abc</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;14.7e&quot;</span><span class="p">,</span>
+        <span class="n">P_d</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;14.7e&quot;</span><span class="p">,</span>
+        <span class="n">P_xyz</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;14.7e&quot;</span><span class="p">,</span>
+        <span class="n">S_r</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;14.7e&quot;</span><span class="p">,</span>
+        <span class="n">S_xyz</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;14.7e&quot;</span><span class="p">,</span>
+        <span class="n">C_r</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;12f&quot;</span><span class="p">,</span>
+        <span class="n">C_xyz</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;12f&quot;</span><span class="p">,</span>
+        <span class="n">K_xyz</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;13.6e&quot;</span><span class="p">,</span>
+        <span class="n">K_tan2</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;12f&quot;</span><span class="p">,</span>
+        <span class="n">T_r</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;14.7e&quot;</span><span class="p">,</span>
+        <span class="n">T_xyz</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;14.7e&quot;</span><span class="p">,</span>
+        <span class="n">GQ_1to6</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;18.15f&quot;</span><span class="p">,</span>
+        <span class="n">GQ_7to9</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;18.15f&quot;</span><span class="p">,</span>
+        <span class="n">GQ_10</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;18.15f&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">P_abc</span> <span class="o">=</span> <span class="n">P_abc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">P_d</span> <span class="o">=</span> <span class="n">P_d</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">P_xyz</span> <span class="o">=</span> <span class="n">P_xyz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">S_r</span> <span class="o">=</span> <span class="n">S_r</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">S_xyz</span> <span class="o">=</span> <span class="n">S_xyz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">C_r</span> <span class="o">=</span> <span class="n">C_r</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">C_xyz</span> <span class="o">=</span> <span class="n">C_xyz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">K_xyz</span> <span class="o">=</span> <span class="n">K_xyz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">K_tan2</span> <span class="o">=</span> <span class="n">K_tan2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T_r</span> <span class="o">=</span> <span class="n">T_r</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T_xyz</span> <span class="o">=</span> <span class="n">T_xyz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GQ_1to6</span> <span class="o">=</span> <span class="n">GQ_1to6</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GQ_7to9</span> <span class="o">=</span> <span class="n">GQ_7to9</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GQ_10</span> <span class="o">=</span> <span class="n">GQ_10</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">P_abc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_P_abc</span>
+
+    <span class="nd">@P_abc</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">P_abc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">P_abc</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">P_abc</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.P_abc should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">P_abc</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_P_abc</span> <span class="o">=</span> <span class="n">P_abc</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">P_d</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_P_d</span>
+
+    <span class="nd">@P_d</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">P_d</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">P_d</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">P_d</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.P_d should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">P_d</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_P_d</span> <span class="o">=</span> <span class="n">P_d</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">P_xyz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_P_xyz</span>
+
+    <span class="nd">@P_xyz</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">P_xyz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">P_xyz</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">P_xyz</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.P_xyz should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">P_xyz</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_P_xyz</span> <span class="o">=</span> <span class="n">P_xyz</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">S_r</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_S_r</span>
+
+    <span class="nd">@S_r</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">S_r</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">S_r</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">S_r</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.S_r should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">S_r</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_S_r</span> <span class="o">=</span> <span class="n">S_r</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">S_xyz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_S_xyz</span>
+
+    <span class="nd">@S_xyz</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">S_xyz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">S_xyz</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">S_xyz</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.S_xyz should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">S_xyz</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_S_xyz</span> <span class="o">=</span> <span class="n">S_xyz</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">C_r</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_C_r</span>
+
+    <span class="nd">@C_r</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">C_r</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">C_r</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">C_r</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.C_r should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">C_r</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_C_r</span> <span class="o">=</span> <span class="n">C_r</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">C_xyz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_C_xyz</span>
+
+    <span class="nd">@C_xyz</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">C_xyz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">C_xyz</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">C_xyz</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.C_xyz should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">C_xyz</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_C_xyz</span> <span class="o">=</span> <span class="n">C_xyz</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">K_xyz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_K_xyz</span>
+
+    <span class="nd">@K_xyz</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">K_xyz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">K_xyz</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">K_xyz</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.K_xyz should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">K_xyz</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_K_xyz</span> <span class="o">=</span> <span class="n">K_xyz</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">K_tan2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_K_tan2</span>
+
+    <span class="nd">@K_tan2</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">K_tan2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">K_tan2</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">K_tan2</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.K_tan2 should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">K_tan2</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_K_tan2</span> <span class="o">=</span> <span class="n">K_tan2</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">T_r</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_T_r</span>
+
+    <span class="nd">@T_r</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">T_r</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">T_r</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">T_r</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.T_r should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">T_r</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_T_r</span> <span class="o">=</span> <span class="n">T_r</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">T_xyz</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_T_xyz</span>
+
+    <span class="nd">@T_xyz</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">T_xyz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">T_xyz</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">T_xyz</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.T_xyz should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">T_xyz</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_T_xyz</span> <span class="o">=</span> <span class="n">T_xyz</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">GQ_1to6</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_GQ_1to6</span>
+
+    <span class="nd">@GQ_1to6</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">GQ_1to6</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">GQ_1to6</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">GQ_1to6</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.GQ_1to6 should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">GQ_1to6</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_GQ_1to6</span> <span class="o">=</span> <span class="n">GQ_1to6</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">GQ_7to9</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_GQ_7to9</span>
+
+    <span class="nd">@GQ_7to9</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">GQ_7to9</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">GQ_7to9</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">GQ_7to9</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.GQ_7to9 should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">GQ_7to9</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_GQ_7to9</span> <span class="o">=</span> <span class="n">GQ_7to9</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">GQ_10</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_GQ_10</span>
+
+    <span class="nd">@GQ_10</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">GQ_10</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">GQ_10</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">GQ_10</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.GQ_10 should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">GQ_10</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_GQ_10</span> <span class="o">=</span> <span class="n">GQ_10</span></div>
+
+
+
+<div class="viewcode-block" id="Settings">
+<a class="viewcode-back" href="../../../../python_api.html#geouned.Settings">[docs]</a>
+<span class="k">class</span> <span class="nc">Settings</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Settings for changing the way the CAD to CSG conversion is done</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        stepFile (str, optional): Name of the CAD file (in STEP format) to</span>
+<span class="sd">            be converted. Defaults to &quot;&quot;.</span>
+<span class="sd">        matFile (str, optional): _description_. Defaults to &quot;&quot;.</span>
+<span class="sd">        voidGen (bool, optional): Generate voids of the geometry. Defaults</span>
+<span class="sd">            to True.</span>
+<span class="sd">        debug (bool, optional): Write step files of original and decomposed</span>
+<span class="sd">            solids, for each solid in the STEP file. Defaults to False.</span>
+<span class="sd">        compSolids (bool, optional): Join subsolids of STEP file as a single</span>
+<span class="sd">            compound solid. Step files generated with SpaceClaim have not</span>
+<span class="sd">            exactly the same level of solids as FreeCAD. It may a happened</span>
+<span class="sd">            that solids defined has separated solids are read by FreeCAD</span>
+<span class="sd">            as a single compound solid (and will produce only one MCNP</span>
+<span class="sd">            cell). In this case compSolids should be set to False. Defaults</span>
+<span class="sd">            to True.</span>
+<span class="sd">        simplify (str, optional): Simplify the cell definition considering</span>
+<span class="sd">            relative surfaces position and using Boolean logics. Available</span>
+<span class="sd">            options are: &quot;no&quot; no optimization, &quot;void&quot; only void cells are</span>
+<span class="sd">            simplified. Algorithm is faster but the simplification is not</span>
+<span class="sd">            optimal. &quot;voidfull&quot; : only void cells are simplified with the</span>
+<span class="sd">            most optimal algorithm. The time of the conversion can be</span>
+<span class="sd">            multiplied by 5 or more. &quot;full&quot; : all the cells (solids and</span>
+<span class="sd">            voids) are simplified. Defaults to &quot;No&quot;.</span>
+<span class="sd">        cellRange (list, optional): Range of cell to be converted (only one</span>
+<span class="sd">            range is allowed, e.g [100,220]). Default all solids are</span>
+<span class="sd">            converted. Defaults to [].</span>
+<span class="sd">        exportSolids (str, optional): Export CAD solid after reading.</span>
+<span class="sd">            The execution is stopped after export, the translation is not</span>
+<span class="sd">            carried out. Defaults to &quot;&quot;.</span>
+<span class="sd">        minVoidSize (float, optional): Minimum size of the edges of the</span>
+<span class="sd">            void cell. Units are in mm. Defaults to 200.0.</span>
+<span class="sd">        maxSurf (int, optional): #TODO</span>
+<span class="sd">        maxBracket (int, optional): Maximum number of brackets (solid</span>
+<span class="sd">            complementary) allowed in void cell definition. Defaults to 30.</span>
+<span class="sd">        voidMat (list, optional): Assign a material defined by the user</span>
+<span class="sd">            instead of void for cells without material definition and the</span>
+<span class="sd">            cells generated in the automatic void generation. The format</span>
+<span class="sd">            is a 3 valued tuple (mat_label, mat_density, mat_description).</span>
+<span class="sd">            Example (100,1e-3,&#39;Air assigned to Void&#39;). Defaults to [].</span>
+<span class="sd">        voidExclude (list, optional): #TODO see issue 87. Defaults to [].</span>
+<span class="sd">        startCell (int, optional): Starting cell numbering label. Defaults to 1.</span>
+<span class="sd">        startSurf (int, optional): Starting surface numbering label. Defaults to 1.</span>
+<span class="sd">        sort_enclosure (bool, optional): If enclosures are defined in the</span>
+<span class="sd">            CAD models, the voids cells of the enclosure will be located in</span>
+<span class="sd">            the output file in the same location where the enclosure solid</span>
+<span class="sd">            is located in the CAD solid tree.. Defaults to False.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">matFile</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">voidGen</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">compSolids</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">simplify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span>
+        <span class="n">cellRange</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[],</span>
+        <span class="n">exportSolids</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">minVoidSize</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">200.0</span><span class="p">,</span>  <span class="c1"># units mm</span>
+        <span class="n">maxSurf</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+        <span class="n">maxBracket</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+        <span class="n">voidMat</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[],</span>
+        <span class="n">voidExclude</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[],</span>
+        <span class="n">startCell</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">startSurf</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">sort_enclosure</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">matFile</span> <span class="o">=</span> <span class="n">matFile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">voidGen</span> <span class="o">=</span> <span class="n">voidGen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="n">debug</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compSolids</span> <span class="o">=</span> <span class="n">compSolids</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simplify</span> <span class="o">=</span> <span class="n">simplify</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cellRange</span> <span class="o">=</span> <span class="n">cellRange</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exportSolids</span> <span class="o">=</span> <span class="n">exportSolids</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minVoidSize</span> <span class="o">=</span> <span class="n">minVoidSize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxSurf</span> <span class="o">=</span> <span class="n">maxSurf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxBracket</span> <span class="o">=</span> <span class="n">maxBracket</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">voidMat</span> <span class="o">=</span> <span class="n">voidMat</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">voidExclude</span> <span class="o">=</span> <span class="n">voidExclude</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">startCell</span> <span class="o">=</span> <span class="n">startCell</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">startSurf</span> <span class="o">=</span> <span class="n">startSurf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sort_enclosure</span> <span class="o">=</span> <span class="n">sort_enclosure</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">matFile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_matFile</span>
+
+    <span class="nd">@matFile</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">matFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matFile</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">matFile</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.matFile should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">matFile</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_matFile</span> <span class="o">=</span> <span class="n">matFile</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">voidGen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_voidGen</span>
+
+    <span class="nd">@voidGen</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">voidGen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voidGen</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">voidGen</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.voidGen should be a bool, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">voidGen</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_voidGen</span> <span class="o">=</span> <span class="n">voidGen</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">debug</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_debug</span>
+
+    <span class="nd">@debug</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">debug</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">debug</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.debug should be a bool, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">debug</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_debug</span> <span class="o">=</span> <span class="n">debug</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">compSolids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compSolids</span>
+
+    <span class="nd">@compSolids</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">compSolids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">compSolids</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">compSolids</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.compSolids should be a bool, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">compSolids</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_compSolids</span> <span class="o">=</span> <span class="n">compSolids</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">simplify</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_simplify</span>
+
+    <span class="nd">@simplify</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">simplify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simplify</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">simplify</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.simplify should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">simplify</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_simplify</span> <span class="o">=</span> <span class="n">simplify</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cellRange</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cellRange</span>
+
+    <span class="nd">@cellRange</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">cellRange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cellRange</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cellRange</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.cellRange should be a list, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">cellRange</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">cellRange</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.cellRange should be a list of ints, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cellRange</span> <span class="o">=</span> <span class="n">cellRange</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">exportSolids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exportSolids</span>
+
+    <span class="nd">@exportSolids</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">exportSolids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exportSolids</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">exportSolids</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exportSolids</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.exportSolids should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">exportSolids</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exportSolids</span> <span class="o">=</span> <span class="n">exportSolids</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">minVoidSize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_minVoidSize</span>
+
+    <span class="nd">@minVoidSize</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">minVoidSize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">minVoidSize</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">minVoidSize</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.minVoidSize should be a float, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">minVoidSize</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_minVoidSize</span> <span class="o">=</span> <span class="n">minVoidSize</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">maxSurf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maxSurf</span>
+
+    <span class="nd">@maxSurf</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">maxSurf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxSurf</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">maxSurf</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.maxSurf should be a int, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">maxSurf</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_maxSurf</span> <span class="o">=</span> <span class="n">maxSurf</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">maxBracket</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maxBracket</span>
+
+    <span class="nd">@maxBracket</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">maxBracket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxBracket</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">maxBracket</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.maxBracket should be a int, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">maxBracket</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_maxBracket</span> <span class="o">=</span> <span class="n">maxBracket</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">voidMat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_voidMat</span>
+
+    <span class="nd">@voidMat</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">voidMat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voidMat</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">voidMat</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.voidMat should be a list, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">voidMat</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">voidMat</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.voidMat should be a list of ints, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_voidMat</span> <span class="o">=</span> <span class="n">voidMat</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">voidExclude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_voidExclude</span>
+
+    <span class="nd">@voidExclude</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">voidExclude</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voidExclude</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">voidExclude</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.voidExclude should be a list, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">voidExclude</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">voidExclude</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.voidExclude should be a list of ints, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_voidExclude</span> <span class="o">=</span> <span class="n">voidExclude</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">startCell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_startCell</span>
+
+    <span class="nd">@startCell</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">startCell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">startCell</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">startCell</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.startCell should be a int, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">startCell</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_startCell</span> <span class="o">=</span> <span class="n">startCell</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">startSurf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_startSurf</span>
+
+    <span class="nd">@startSurf</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">startSurf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">startSurf</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">startSurf</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.startSurf should be a int, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">startSurf</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_startSurf</span> <span class="o">=</span> <span class="n">startSurf</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sort_enclosure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sort_enclosure</span>
+
+    <span class="nd">@sort_enclosure</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">sort_enclosure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sort_enclosure</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sort_enclosure</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.sort_enclosure should be a bool, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">sort_enclosure</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sort_enclosure</span> <span class="o">=</span> <span class="n">sort_enclosure</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, UNED.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
