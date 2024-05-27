@@ -43,9 +43,8 @@ tests = [
 ]
 docs = [
   "sphinx",
-  "sphinx_rtd_theme",
+  "pydata-sphinx-theme",
   "sphinx_autodoc_typehints",
-  "sphinx_rtd_theme",
 ]
 
 [project.scripts]
