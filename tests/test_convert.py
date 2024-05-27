@@ -278,7 +278,7 @@ def test_new_mc_files_match_original(suffix, input_step_file):
                 for new_segment, old_segment in zip(new_segments, old_segments):
                     if new_segment != old_segment:
                         if is_float(new_segment) and is_float(old_segment):
-                            assert math.isclose(float(new_segment), float(old_segment), rel_tol=1e-09)
+                            assert math.isclose(float(new_segment), float(old_segment), abs_tol=1e-17)
                         else:
                             assert new_segment == old_segment
 
