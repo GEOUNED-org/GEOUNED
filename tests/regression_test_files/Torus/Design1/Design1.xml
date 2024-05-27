@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<geometry>
+  <cell id="1" material="void" name="" region="((1 3 6 12 13 14 -5 -4 -2))" universe="1"/>
+  <cell id="2" material="void" name="" region="((1 4 6 8 15 16 -7 -5))" universe="1"/>
+  <cell id="3" material="void" name="" region="((4 6 8 15 17 -9 -5 -2))" universe="1"/>
+  <cell id="4" material="void" name="" region="((1 6 14 18 19 -10 -8 -5 -2) | (1 6 10 14 20 -11 21 -5 -2))" universe="1"/>
+  <cell id="5" material="void" name="Automatic Generated Void Cell. Enclosure(-472.961, -218.071, -390.189, 283.947, 45.280, 228.205). Enclosed cells : (1, 2, 3, 4)" region="(22 -23 24 -25 26 -27 ((((-1) | (((((-19 | -18 | 8 | 10) (-21 | -20 | 11 | -10)) (-13 | -12 | -3 | 4)) | (2 | -14)) (-16 | 7 | -15 | -4 | -8))) (-17 | 9 | -4 | -8 | -15 | 2)) | (5 | -6)))" universe="1"/>
+  <cell id="6" material="void" name="" region="(-28 (-22 | 23 | -24 | 25 | -26 | 27))" universe="1"/>
+ 
+  <surface id="1" type="z-plane" coeffs="4.6300000e+01" />
+  <surface id="2" type="z-plane" coeffs="2.2718300e+02" />
+  <surface id="3" type="plane" coeffs="-9.3969263e-01 3.4202011e-01 2.4710295e-11 1.1780000e+02" />
+  <surface id="4" type="plane" coeffs="1.7452393e-02 9.9984770e-01 5.6281851e-12 -2.5800000e+01" />
+  <surface id="5" type="z-torus" coeffs="0.0000000e+00 0.0000000e+00 0.0000000e+00 1.3210000e+02 3.4300000e+02 3.4300000e+02" />
+  <surface id="6" type="z-torus" coeffs="0.0000000e+00 0.0000000e+00 0.0000000e+00 1.3210000e+02 3.4120000e+02 3.4120000e+02" />
+  <surface id="7" type="plane" coeffs="5.8061451e-01 -1.0134656e-02 8.1411552e-01 -1.8839683e+02" />
+  <surface id="8" type="plane" coeffs="-1.7452393e-02 -9.9984770e-01 -6.6094608e-12 -2.5800000e+01" />
+  <surface id="9" type="plane" coeffs="-5.8061451e-01 1.0134656e-02 -8.1411552e-01 1.3679683e+02" />
+  <surface id="10" type="plane" coeffs="1.9080900e-01 9.8162718e-01 -0.0000000e+00 5.1159077e-14" />
+  <surface id="11" type="plane" coeffs="6.5605903e-01 7.5470958e-01 -1.7585400e-11 -3.4300000e+01" />
+  <surface id="12" type="plane" coeffs="-8.7597013e-01 -4.8236535e-01 0.0000000e+00 0.0000000e+00" />
+  <surface id="13" type="plane" coeffs="-8.7615929e-01 -4.8202168e-01 0.0000000e+00 0.0000000e+00" />
+  <surface id="14" type="z-cone" coeffs="0.000000e+00 0.000000e+00 1.065060e+03 0.212970" />
+  <surface id="15" type="plane" coeffs="-9.9984770e-01 1.7452393e-02 -0.0000000e+00 0.0000000e+00" />
+  <surface id="16" type="z-cone" coeffs="0.000000e+00 0.000000e+00 2.240070e+03 0.045928" />
+  <surface id="17" type="z-cone" coeffs="0.000000e+00 0.000000e+00 8.110576e+02 0.438570" />
+  <surface id="18" type="plane" coeffs="-9.9129193e-01 1.3168259e-01 -0.0000000e+00 0.0000000e+00" />
+  <surface id="19" type="plane" coeffs="-9.9127800e-01 1.3178745e-01 -0.0000000e+00 0.0000000e+00" />
+  <surface id="20" type="plane" coeffs="-9.1413964e-01 4.0539946e-01 -0.0000000e+00 0.0000000e+00" />
+  <surface id="21" type="plane" coeffs="-9.1419670e-01 4.0527076e-01 -0.0000000e+00 0.0000000e+00" />
+  <surface id="22" type="x-plane" coeffs="-4.7296072e+02" />
+  <surface id="23" type="x-plane" coeffs="-2.1807141e+02" />
+  <surface id="24" type="y-plane" coeffs="-3.9018855e+02" />
+  <surface id="25" type="y-plane" coeffs="2.8394659e+02" />
+  <surface id="26" type="z-plane" coeffs="4.5279945e+01" />
+  <surface id="27" type="z-plane" coeffs="2.2820492e+02" />
+  <surface id="28" type="sphere" coeffs="-3.4551607e+02 -5.3120979e+01 1.3674243e+02 3.7921794e+02" boundary="vacuum" />
+</geometry>

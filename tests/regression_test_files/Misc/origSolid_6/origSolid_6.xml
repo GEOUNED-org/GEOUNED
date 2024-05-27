@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<geometry>
+  <cell id="1" material="void" name="" region="((8 -2 -7 -6 -5 -4 -3 -1))" universe="1"/>
+  <cell id="2" material="void" name="Automatic Generated Void Cell. Enclosure(628.551, 643.471, -827.865, -815.054, 80.573, 92.041). Enclosed cells : (1)" region="(9 -10 11 -12 13 -14 (-8 | 2 | 7 | 6 | 5 | 4 | 3 | 1))" universe="1"/>
+  <cell id="3" material="void" name="" region="(-15 (-9 | 10 | -11 | 12 | -13 | 14))" universe="1"/>
+ 
+  <surface id="1" type="plane" coeffs="3.3853268e-01 9.3676641e-01 -8.8681043e-02 -5.6015424e+02" />
+  <surface id="2" type="plane" coeffs="7.8442954e-02 6.5821454e-02 9.9474330e-01 8.6214244e+01" />
+  <surface id="3" type="plane" coeffs="-7.6201758e-01 -6.3940867e-01 1.0240005e-01 5.1562169e+01" />
+  <surface id="4" type="plane" coeffs="6.4278761e-01 -7.6604444e-01 0.0000000e+00 1.0430000e+03" />
+  <surface id="5" type="plane" coeffs="7.6201758e-01 6.3940867e-01 -1.0240000e-01 -4.5562165e+01" />
+  <surface id="6" type="plane" coeffs="-7.8442948e-02 -6.5821448e-02 -9.9474330e-01 -7.7314244e+01" />
+  <surface id="7" type="plane" coeffs="-9.9690517e-01 5.2041704e-18 7.8613466e-02 -6.2176728e+02" />
+  <surface id="8" type="quadric" coeffs="0.675456970604655 0.334326385353052 0.990216644042293 -0.929601487705500 0.161400395584951 0.112696405979379 -1629.935936336693430 1124.718862727931082 -110.281821747246809 983443.376736418576911" />
+  <surface id="9" type="x-plane" coeffs="6.2855145e+02" />
+  <surface id="10" type="x-plane" coeffs="6.4347121e+02" />
+  <surface id="11" type="y-plane" coeffs="-8.2786471e+02" />
+  <surface id="12" type="y-plane" coeffs="-8.1505414e+02" />
+  <surface id="13" type="z-plane" coeffs="8.0573392e+01" />
+  <surface id="14" type="z-plane" coeffs="9.2041008e+01" />
+  <surface id="15" type="sphere" coeffs="6.3601133e+02 -8.2145943e+02 8.6307200e+01 1.1609823e+01" boundary="vacuum" />
+</geometry>

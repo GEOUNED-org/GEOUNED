@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<geometry>
+  <cell id="1" material="void" name="" region="((-3 -1 -2))" universe="1"/>
+  <cell id="2" material="void" name="" region="((2 -5 4))" universe="1"/>
+  <cell id="3" material="void" name="" region="((-7 -6 1))" universe="1"/>
+  <cell id="4" material="void" name="Automatic Generated Void Cell. Enclosure(-1018.597, -907.453, 1441.408, 1569.037, -341.669, -277.000). Enclosed cells : (1, 2, 3)" region="(8 -9 10 -11 12 -13 ((3 | 1 | 2) (5 | -4 | -2) (7 | 6 | -1)))" universe="1"/>
+  <cell id="5" material="void" name="" region="(-14 (-8 | 9 | -10 | 11 | -12 | 13))" universe="1"/>
+ 
+  <surface id="1" type="plane" coeffs="4.6894500e-01 -4.2824262e-01 7.7246284e-01 -1.2896388e+03" />
+  <surface id="2" type="plane" coeffs="-5.2942417e-01 8.4236046e-01 -1.0069214e-01 1.8524828e+03" />
+  <surface id="3" type="quadric" coeffs="0.475121798920694 0.562280896571178 0.962597304508128 0.958643240388763 0.255905250720055 -0.280227475635713 -607.313968752089636 -671.842150709989482 -23.285402524201928 205173.837970565538853" />
+  <surface id="4" type="plane" coeffs="2.9237170e-01 -9.5630476e-01 8.1597751e-13 -1.7950806e+03" />
+  <surface id="5" type="quadric" coeffs="0.914518786277774 0.085481213722226 1.000000000000000 0.559192903469996 0.000000000001561 -0.000000000000477 978.838993379888052 299.261112484433113 674.088945993096900 375507.476328991760965" />
+  <surface id="6" type="z-plane" coeffs="-2.7799987e+02" />
+  <surface id="7" type="z-cylinder" coeffs="-912.949813 1446.933022 3.499650" />
+  <surface id="8" type="x-plane" coeffs="-1.0185970e+03" />
+  <surface id="9" type="x-plane" coeffs="-9.0745303e+02" />
+  <surface id="10" type="y-plane" coeffs="1.4414083e+03" />
+  <surface id="11" type="y-plane" coeffs="1.5690367e+03" />
+  <surface id="12" type="z-plane" coeffs="-3.4166937e+02" />
+  <surface id="13" type="z-plane" coeffs="-2.7700000e+02" />
+  <surface id="14" type="sphere" coeffs="-9.6302502e+02 1.5052225e+03 -3.0933468e+02 9.2398878e+01" boundary="vacuum" />
+</geometry>
