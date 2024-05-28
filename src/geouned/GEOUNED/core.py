@@ -69,6 +69,7 @@ class CadToCsg:
         # define later when running the code
         self.geometry_bounding_box = None
         self.meta_list = []
+        self.cone_info = {}
 
     @property
     def stepFile(self):
@@ -568,79 +569,14 @@ class CadToCsg:
 
         self.Surfaces = UF.SurfacesDict(offset=self.settings.startSurf - 1)
 
-        warnSolids = []
-        warnEnclosures = []
-        coneInfo = dict()
         tempTime0 = datetime.now()
-        if not self.options.Facets:
 
-            # decompose all solids in elementary solids (convex ones)
-            warningSolidList = self._decompose_solids(meta=True)
-
-            # decompose Enclosure solids
-            if self.settings.voidGen and self.enclosure_list:
-                warningEnclosureList = self._decompose_solids(meta=False)
-
-            logger.info("End of decomposition phase")
-
-            # start Building CGS cells phase
-
-            for j, m in enumerate(tqdm(self.meta_list, desc="Translating solid cells")):
-                if m.IsEnclosure:
-                    continue
-                logger.info(f"Building cell: {j+1}")
-                cones = Conv.cellDef(
-                    m,
-                    self.Surfaces,
-                    self.geometry_bounding_box,
-                    self.options,
-                    self.tolerances,
-                    self.numeric_format,
-                )
-                if cones:
-                    coneInfo[m.__id__] = cones
-                if j in warningSolidList:
-                    warnSolids.append(m)
-                if not m.Solids:
-                    logger.info(f"none {j}, {m.__id__}")
-                    logger.info(m.Definition)
-
-            if self.options.forceNoOverlap:
-                Conv.no_overlapping_cell(self.meta_list, self.Surfaces, self.options)
-
-        else:
-            translate(
-                self.meta_list,
-                self.Surfaces,
-                self.geometry_bounding_box,
-                self.settings,
-                self.options,
-                self.tolerances,
-            )
-            # decompose Enclosure solids
-            if self.settings.voidGen and self.enclosure_list:
-                warningEnclosureList = self._decompose_solids(meta=False)
+        self._decompose_geometry()
 
         tempstr2 = str(datetime.now() - tempTime)
         logger.info(tempstr2)
 
         #  building enclosure solids
-
-        if self.settings.voidGen and self.enclosure_list:
-            for j, m in enumerate(self.enclosure_list):
-                logger.info(f"Building Enclosure Cell: {j + 1}")
-                cones = Conv.cellDef(
-                    m,
-                    self.Surfaces,
-                    self.geometry_bounding_box,
-                    self.options,
-                    self.tolerances,
-                    self.numeric_format,
-                )
-                if cones:
-                    coneInfo[m.__id__] = cones
-                if j in warningEnclosureList:
-                    warnEnclosures.append(m)
 
         tempTime1 = datetime.now()
 
@@ -738,12 +674,10 @@ class CadToCsg:
 
             self.meta_list.extend(meta_void)
 
-        print_warning_solids(warnSolids, warnEnclosures)
-
-        # add plane definition to cone
+        # add plane definition to cone, currently needs to be done at the end of the process
         process_cones(
             self.meta_list,
-            coneInfo,
+            self.cone_info,
             self.Surfaces,
             self.geometry_bounding_box,
             self.options,
@@ -756,6 +690,77 @@ class CadToCsg:
 
         logger.info(f"Translation time of solid cells {tempTime1} - {tempTime0}")
         logger.info(f"Translation time of void cells {tempTime2} - {tempTime1}")
+
+    def _decompose_geometry(self):
+        """Decomposes the geometry of the current object."""
+
+        warnSolids = []
+        warnEnclosures = []
+        if not self.options.Facets:
+            # decompose all solids in elementary solids (convex ones)
+            warningSolidList = self._decompose_solids(meta=True)
+
+            # decompose Enclosure solids
+            if self.settings.voidGen and self.enclosure_list:
+                warningEnclosureList = self._decompose_solids(meta=False)
+
+            logger.info("End of decomposition phase")
+
+            # start Building CGS cells phase
+
+            for j, m in enumerate(tqdm(self.meta_list, desc="Translating solid cells")):
+                if m.IsEnclosure:
+                    continue
+                logger.info(f"Building cell: {j+1}")
+                cones = Conv.cellDef(
+                    m,
+                    self.Surfaces,
+                    self.geometry_bounding_box,
+                    self.options,
+                    self.tolerances,
+                    self.numeric_format,
+                )
+                if cones:
+                    self.cone_info[m.__id__] = cones
+                if j in warningSolidList:
+                    warnSolids.append(m)
+                if not m.Solids:
+                    logger.info(f"none {j}, {m.__id__}")
+                    logger.info(m.Definition)
+
+            if self.options.forceNoOverlap:
+                Conv.no_overlapping_cell(self.meta_list, self.Surfaces, self.options)
+
+        else:
+            translate(
+                self.meta_list,
+                self.Surfaces,
+                self.geometry_bounding_box,
+                self.settings,
+                self.options,
+                self.tolerances,
+            )
+            # decompose Enclosure solids
+            if self.settings.voidGen and self.enclosure_list:
+                warningEnclosureList = self._decompose_solids(meta=False)
+
+        if self.settings.voidGen and self.enclosure_list:
+            for j, m in enumerate(self.enclosure_list):
+                logger.info(f"Building Enclosure Cell: {j + 1}")
+                cones = Conv.cellDef(
+                    m,
+                    self.Surfaces,
+                    self.geometry_bounding_box,
+                    self.options,
+                    self.tolerances,
+                    self.numeric_format,
+                )
+                if cones:
+                    self.cone_info[m.__id__] = cones
+                if j in warningEnclosureList:
+                    warnEnclosures.append(m)
+
+        print_warning_solids(warnSolids, warnEnclosures)
 
     def _decompose_solids(self, meta: bool):
 
@@ -835,8 +840,8 @@ def update_comment(meta, idLabel):
     meta.set_comments(void.void_comment_line((meta.__commentInfo__[0], newLabel)))
 
 
-def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances, numeric_format):
-    cellId = tuple(coneInfo.keys())
+def process_cones(MetaList, cone_info, Surfaces, UniverseBox, options, tolerances, numeric_format):
+    cellId = tuple(cone_info.keys())
     for m in MetaList:
         if m.__id__ not in cellId and not m.Void:
             continue
@@ -847,7 +852,7 @@ def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances
             cones = set()
             for Id in m.__commentInfo__[1]:
                 if Id in cellId:
-                    cones.update(-x for x in coneInfo[Id])
+                    cones.update(-x for x in cone_info[Id])
             Conv.add_cone_plane(
                 m.Definition,
                 cones,
@@ -860,7 +865,7 @@ def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances
         elif not m.Void:
             Conv.add_cone_plane(
                 m.Definition,
-                coneInfo[m.__id__],
+                cone_info[m.__id__],
                 Surfaces,
                 UniverseBox,
                 options,
