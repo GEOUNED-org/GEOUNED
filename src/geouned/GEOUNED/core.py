@@ -32,8 +32,6 @@ class CadToCsg:
     """Base class for the conversion of CAD to CSG models
 
     Args:
-        stepFile (str, optional): Name of the CAD file (in STEP format) to
-            be converted. Defaults to "".
         options (geouned.Options, optional): An instance of a geouned.Options
             class with the attributes set for the desired conversion. Defaults
             to a geouned.Options with default attributes values.
@@ -53,14 +51,12 @@ class CadToCsg:
 
     def __init__(
         self,
-        stepFile: str = "",
         options: Options = Options(),
         tolerances: Tolerances = Tolerances(),
         numeric_format: NumericFormat = NumericFormat(),
         settings: Settings = Settings(),
     ):
 
-        self.stepFile = stepFile
         self.options = options
         self.tolerances = tolerances
         self.numeric_format = numeric_format
@@ -69,16 +65,8 @@ class CadToCsg:
         # define later when running the code
         self.geometry_bounding_box = None
         self.meta_list = []
-
-    @property
-    def stepFile(self):
-        return self._stepFile
-
-    @stepFile.setter
-    def stepFile(self, value: str):
-        if not isinstance(value, str):
-            raise TypeError(f"geouned.CadToCsg.stepFile should be a str, not a {type(value)}")
-        self._stepFile = value
+        self.filename = None
+        self.skip_solids = []
 
     @property
     def options(self):
@@ -209,7 +197,7 @@ class CadToCsg:
             volCARD=volCARD,
             UCARD=UCARD,
             dummyMat=dummyMat,
-            stepFile=self.stepFile,
+            step_filename=self.filename,
         )
 
         logger.info("End of Monte Carlo code translation phase")
@@ -238,10 +226,13 @@ class CadToCsg:
         with open(filename) as f:
             config = json.load(f)
 
-        cad_to_csg = cls(stepFile=config["stepFile"])
+        cad_to_csg = cls()
+
+        cad_to_csg.load_step_file(**config["load_step_file"])
+
         for key in config.keys():
 
-            if key in ["stepFile", "export_csg"]:
+            if key in ["load_step_file", "export_csg"]:
                 pass  # these two keys are used before or after this loop
 
             elif key == "Tolerances":
@@ -258,7 +249,7 @@ class CadToCsg:
 
             else:
                 raise ValueError(
-                    f"Invalid key '{key}' found in config file {filename}. Acceptable key names are 'stepFile', 'export_csg', 'Settings', 'Parameters', 'Tolerances' and 'NumericFormat'"
+                    f"Invalid key '{key}' found in config file {filename}. Acceptable key names are 'load_step_file', 'export_csg', 'Settings', 'Parameters', 'Tolerances' and 'NumericFormat'"
                 )
 
         cad_to_csg.start()
@@ -446,24 +437,38 @@ class CadToCsg:
             else:
                 self.__dict__["geometryName"] == value[:-4]
 
-    def _load_step_file(
+    def load_step_file(
         self,
-        filename: str,
-        # TODO consider having discrete indexes (1,5,7) instead of range (1,7) as this offers more flexibility to the user
-        cell_range: typing.Union[None, typing.Tuple[int, int]] = None,
+        filename: typing.Union[str, typing.Sequence[str]],
+        skip_solids: typing.Sequence[int] = [],
     ):
         """
         Load STEP file(s) and extract solid volumes and enclosure volumes.
 
         Args:
             filename (str): The path to the STEP file or a list of paths to multiple STEP files.
-            cell_range (tuple[int, int], optional): A tuple representing the range of solids to select from the original STEP solids. Defaults to None.
+            skip_solids (Sequence[int], optional): A sequence (list or tuple) of indexes of solids to not load for conversion.
 
         Returns:
             tuple: A tuple containing the solid volumes list and enclosure volumes list extracted from the STEP files.
         """
-
         logger.info("Start of step file loading phase")
+
+        if not isinstance(skip_solids, (list, tuple)):
+            raise TypeError(f"skip_solids should be a list, tuple of ints, not a {type(skip_solids)}")
+        for entry in skip_solids:
+            if not isinstance(entry, int):
+                raise TypeError(f"skip_solids should contain only ints, not a {type(entry)}")
+
+        if not isinstance(filename, (str, list, tuple)):
+            raise TypeError(f"filename should be a str or a sequence of str, not a {type(filename)}")
+        if isinstance(filename, (list, tuple)):
+            for entry in filename:
+                if not isinstance(entry, str):
+                    raise TypeError(f"filename should contain only str, not a {type(entry)}")
+
+        self.filename = filename
+        self.skip_solids = skip_solids
 
         if isinstance(filename, (list, tuple)):
             step_files = filename
@@ -484,9 +489,10 @@ class CadToCsg:
         self.meta_list = join_meta_lists(MetaChunk)
         self.enclosure_list = join_meta_lists(EnclosureChunk)
 
-        # Select a specific solid range from original STEP solids
-        if cell_range:
-            self.meta_list = self.meta_list[cell_range[0] : cell_range[1]]
+        # deleting the solid index in reverse order so the indexes don't change for subsequent deletions
+        for solid_index in sorted(skip_solids, reverse=True):
+            logger.info(f"Removing solid index: {solid_index} from list of {len(self.meta_list)} solids")
+            del self.meta_list[solid_index]
 
         logger.info("End of step file loading phase")
 
@@ -501,7 +507,7 @@ class CadToCsg:
         # export in STEP format solids read from input file
         if self.meta_list == []:
             raise ValueError(
-                "No solids in CadToCsg.meta_list to export. Try loading the STEP file first with CadToCsg._load_step_file"
+                "No solids in CadToCsg.meta_list to export. Try loading the STEP file first with CadToCsg.load_step_file"
             )
         solids = []
         for m in self.meta_list:
@@ -551,9 +557,6 @@ class CadToCsg:
     def start(self):
 
         startTime = datetime.now()
-
-        # sets the self.meta_list and self.enclosure_list
-        self._load_step_file(filename=self.stepFile, cell_range=self.settings.cellRange)
 
         if self.settings.exportSolids:
             self._export_solids(filename=self.settings.exportSolids)
