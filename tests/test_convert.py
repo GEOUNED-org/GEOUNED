@@ -149,13 +149,6 @@ def test_cad_to_csg_from_json_with_defaults(input_json_file):
     for suffix in suffixes:
         assert Path("csg").with_suffix(suffix).exists()
 
-    # deletes the output MC files if they already exists
-    for suffix in suffixes:
-        Path("csg").with_suffix(suffix).unlink(missing_ok=True)
-
-    my_cad_to_csg.start()
-    my_cad_to_csg.export_csg()
-
 
 def test_cad_to_csg_from_json_with_non_defaults():
 
@@ -174,13 +167,6 @@ def test_cad_to_csg_from_json_with_non_defaults():
 
     for suffix in suffixes:
         assert Path("csg").with_suffix(suffix).exists()
-
-    # deletes the output MC files if they already exists
-    for suffix in suffixes:
-        Path("csg").with_suffix(suffix).unlink(missing_ok=True)
-
-    my_cad_to_csg.start()
-    my_cad_to_csg.export_csg()
 
 
 def test_writing_to_new_folders():

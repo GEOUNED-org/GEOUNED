@@ -204,13 +204,16 @@ class CadToCsg:
 
     @classmethod
     def from_json(cls, filename: str):
-        """Creates a CadToCsg instance and returns the instance. Populating the
-        Options, Tolerance, Settings and NumericFormat attributes from matching
-        key names in the JSON. If export_to_csg key is present then this method
-        also runs .start() and .export_to_csg() on the instance.
+        """Creates a CadToCsg instance, runs CadToCsg.load_Step_file(), runs
+        CadToCsg.start() and returns the instance. Populating the arguments for
+        the methods that are run by looking for keys with the same name as the
+        method in the JSON file. For example CadToCsg.start() accepts arguments
+        for Options, Tolerance, Settings and NumericFormat and can be populated
+        from matching key names in the JSON. If export_to_csg key is present
+        then this method also runs CadToCsg.export_to_csg() on the instance.
 
         Args:
-            filename str: The filename of the config file. Defaults to "config.json".
+            filename str: The filename of the config file.
 
         Raises:
             FileNotFoundError: If the config file is not found
