@@ -856,7 +856,7 @@ def no_overlapping_cell(metaList, surfaces, options):
             CT = build_c_table_from_solids(
                 box,
                 (tuple(t_def.get_surfaces_numbers()), Surfs),
-                option="diag",
+                "diag",
                 options=options,
             )
 
@@ -866,7 +866,7 @@ def no_overlapping_cell(metaList, surfaces, options):
             CT = build_c_table_from_solids(
                 box,
                 (tuple(new_def.get_surfaces_numbers()), Surfs),
-                option="full",
+                "full",
                 options=options,
             )
 
