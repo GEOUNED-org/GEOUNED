@@ -38,49 +38,6 @@ def get_box(comp, options):
     )
 
 
-def make_plane(Plane, Boxin):
-
-    normal = Plane.Surf.Axis
-    p0 = Plane.Surf.Position.dot(normal)
-
-    Box = FreeCAD.BoundBox(Boxin)
-    Box.enlarge(10)
-
-    pointEdge = []
-    for i in range(12):
-        edge = Box.getEdge(i)
-        p1 = normal.dot(edge[0])
-        p2 = normal.dot(edge[1])
-        d0 = p0 - p1
-        d1 = p2 - p1
-        if d1 != 0:
-            a = d0 / d1
-            if a >= 0 and a <= 1:
-                pointEdge.append(edge[0] + a * (edge[1] - edge[0]))
-
-    if len(pointEdge) == 0:
-        return
-    s = FreeCAD.Vector((0, 0, 0))
-    for v in pointEdge:
-        s = s + v
-    s = s / len(pointEdge)
-
-    vtxvec = []
-    for v in pointEdge:
-        vtxvec.append(v - s)
-
-    X0 = vtxvec[0]
-    Y0 = normal.cross(X0)
-
-    orden = []
-    for i, v in enumerate(vtxvec):
-        phi = np.arctan2(v.dot(Y0), v.dot(X0))
-        orden.append((phi, i))
-    orden.sort()
-
-    return Part.Face(Part.makePolygon([pointEdge[p[1]] for p in orden], True))
-
-
 class GeounedSolid:
 
     def __init__(self, id, comsolid=None):
@@ -130,7 +87,7 @@ class GeounedSolid:
         self.EnclosureID = None
         self.ParentEnclosureID = None
         self.SonEnclosures = []
-        self.EnclosureList = None
+        self.enclosure_list = None
         self.CADSolid = None
         self.UniverseBox = None
         self.NullCell = True
@@ -147,13 +104,6 @@ class GeounedSolid:
         self.CADSolid = Part.makeCompound(self.Solids)
         self.Volume = self.CADSolid.Volume
         self.BoundBox = self.CADSolid.BoundBox
-
-    def set_universe_box(self, UniverseBox):
-        self.UniverseBox = UniverseBox
-
-    # TODO check this function is used in the code
-    def set_son_enclosures(self, sonEnclosures):
-        self.SonEnclosures = sonEnclosures
 
     def set_definition(self, definition, simplify=False):
 

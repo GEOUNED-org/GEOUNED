@@ -31,8 +31,8 @@ class VoidBox:
                 continue
             if m.BoundBox.isValid():
                 if self.BoundBox.intersect(m.BoundBox):
-                    Obj = self.__copy_meta__(m)
-                    self.__remove_extra_comp__(Obj, self.BoundBox)
+                    Obj = self.copy_meta(m)
+                    self.remove_extra_comp(Obj, self.BoundBox)
                     self.Objects.append(Obj)
         return
 
@@ -161,7 +161,7 @@ class VoidBox:
         )
 
         for m in self.Objects:
-            self.__remove_extra_comp__(m, Cube, mode="dist")
+            self.remove_extra_comp(m, Cube, mode="dist")
         return
 
     def get_void_complementary(self, Surfaces, options, tolerances, numeric_format, simplify="no"):
@@ -358,10 +358,6 @@ class VoidBox:
         else:
             return complementary, cellIn
 
-    # TODO check this is used in the code
-    def get_box_number(self):
-        return len(self.Objects)
-
     def get_numbers(self):
         ns = 0
         nb = 0
@@ -454,7 +450,7 @@ class VoidBox:
 
         return (PXMin, PXMax, PYMin, PYMax, PZMin, PZMax)
 
-    def __remove_extra_comp__(self, Obj, Box, mode="box"):
+    def remove_extra_comp(self, Obj, Box, mode="box"):
         reducedSol = []
         reducedDef = BoolSequence(operator="OR")
         if not Obj.Solids:
@@ -480,7 +476,7 @@ class VoidBox:
             Obj.set_definition(reducedDef)
         return
 
-    def __copy_meta__(self, m):
+    def copy_meta(self, m):
         solidsCopy = m.Solids[:]
         facesCopy = m.Faces[:]
         Meta = GeounedSolid(m.__id__, solidsCopy)

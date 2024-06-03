@@ -3,7 +3,6 @@ import json
 import logging
 import typing
 from datetime import datetime
-from os import mkdir, path
 from pathlib import Path
 from typing import get_type_hints
 from importlib.metadata import version
@@ -25,6 +24,8 @@ from .write.functions import write_mcnp_cell_def
 from .write.write_files import write_geometry
 
 logger = logging.getLogger("general_logger")
+logger.info(f"GEOUNED version {version('geouned')}")
+logger.info(f"FreeCAD version {'.'.join(FreeCAD.Version()[:3])}")
 
 
 class CadToCsg:
@@ -64,6 +65,10 @@ class CadToCsg:
         self.tolerances = tolerances
         self.numeric_format = numeric_format
         self.settings = settings
+
+        # define later when running the code
+        self.geometry_bounding_box = None
+        self.meta_list = []
 
     @property
     def stepFile(self):
@@ -130,7 +135,7 @@ class CadToCsg:
         ),
         volSDEF: bool = False,
         volCARD: bool = True,
-        UCARD: typing.Union[int, type(None)] = 101,
+        UCARD: typing.Union[int, None] = None,
         dummyMat: bool = False,
         cellCommentFile: bool = False,
         cellSummaryFile: bool = True,
@@ -165,6 +170,9 @@ class CadToCsg:
 
         if not isinstance(UCARD, int) and not isinstance(UCARD, type(None)):
             raise TypeError(f"UCARD should be of type int or None not {type(UCARD)}")
+        if isinstance(UCARD, int):
+            if UCARD < 0:
+                raise ValueError("UCARD should be a 0 or a positive integer ")
 
         for arg, arg_str in (
             (volSDEF, "volSDEF"),
@@ -180,9 +188,13 @@ class CadToCsg:
             if not isinstance(arg, str):
                 raise TypeError(f"{arg} should be of type str not {type(arg_str)}")
 
+        # if the geometry_bounding_box has not previuosly been calculated, then make a default one
+        if self.geometry_bounding_box is None:
+            self._get_geometry_bounding_box()
+
         write_geometry(
-            UniverseBox=self.UniverseBox,
-            MetaList=self.MetaList,
+            UniverseBox=self.geometry_bounding_box,
+            MetaList=self.meta_list,
             Surfaces=self.Surfaces,
             settings=self.settings,
             options=self.options,
@@ -434,65 +446,125 @@ class CadToCsg:
             else:
                 self.__dict__["geometryName"] == value[:-4]
 
-    def start(self):
+    def _load_step_file(
+        self,
+        filename: str,
+        # TODO consider having discrete indexes (1,5,7) instead of range (1,7) as this offers more flexibility to the user
+        cell_range: typing.Union[None, typing.Tuple[int, int]] = None,
+    ):
+        """
+        Load STEP file(s) and extract solid volumes and enclosure volumes.
 
-        logger.info("start")
-        freecad_version = ".".join(FreeCAD.Version()[:3])
-        logger.info(f"GEOUNED version {version('geouned')} \nFreeCAD version {freecad_version}")
+        Args:
+            filename (str): The path to the STEP file or a list of paths to multiple STEP files.
+            cell_range (tuple[int, int], optional): A tuple representing the range of solids to select from the original STEP solids. Defaults to None.
 
-        if self.stepFile == "":
-            raise ValueError("Cannot run the code. Step file name is missing")
+        Returns:
+            tuple: A tuple containing the solid volumes list and enclosure volumes list extracted from the STEP files.
+        """
 
-        if isinstance(self.stepFile, (tuple, list)):
-            for stp in self.stepFile:
-                if not path.isfile(stp):
-                    raise FileNotFoundError(f"Step file {stp} not found.\nStop.")
+        logger.info("Start of step file loading phase")
+
+        if isinstance(filename, (list, tuple)):
+            step_files = filename
         else:
-            if not path.isfile(self.stepFile):
-                raise FileNotFoundError(f"Step file {self.stepFile} not found.\nStop.")
+            step_files = [filename]
+
+        for step_file in step_files:
+            if not Path(step_file).is_file():
+                raise FileNotFoundError(f"Step file {step_file} not found.")
+
+        MetaChunk = []
+        EnclosureChunk = []
+        for step_file in tqdm(step_files, desc="Loading CAD files"):
+            logger.info(f"read step file : {step_file}")
+            Meta, Enclosure = Load.load_cad(step_file, self.settings, self.options)
+            MetaChunk.append(Meta)
+            EnclosureChunk.append(Enclosure)
+        self.meta_list = join_meta_lists(MetaChunk)
+        self.enclosure_list = join_meta_lists(EnclosureChunk)
+
+        # Select a specific solid range from original STEP solids
+        if cell_range:
+            self.meta_list = self.meta_list[cell_range[0] : cell_range[1]]
+
+        logger.info("End of step file loading phase")
+
+        return self.meta_list, self.enclosure_list
+
+    def _export_solids(self, filename: str):
+        """Export all the solid volumes from the loaded geometry to a STEP file.
+
+        Args:
+            filename (str): filepath of the output STEP file.
+        """
+        # export in STEP format solids read from input file
+        if self.meta_list == []:
+            raise ValueError(
+                "No solids in CadToCsg.meta_list to export. Try loading the STEP file first with CadToCsg._load_step_file"
+            )
+        solids = []
+        for m in self.meta_list:
+            if m.IsEnclosure:
+                continue
+            solids.extend(m.Solids)
+        Part.makeCompound(solids).exportStep(filename)
+
+    def _get_geometry_bounding_box(self, padding: float = 10.0):
+        """
+        Get the bounding box of the geometry.
+
+        Args:
+            padding (float): The padding value to add to the bounding box dimensions.
+
+        Returns:
+            FreeCAD.BoundBox: The universe bounding box.
+        """
+        # set up Universe
+        meta_list = self.meta_list
+        if self.enclosure_list:
+            meta_list += self.enclosure_list
+
+        Box = meta_list[0].BoundBox
+        xmin = Box.XMin
+        xmax = Box.XMax
+        ymin = Box.YMin
+        ymax = Box.YMax
+        zmin = Box.ZMin
+        zmax = Box.ZMax
+        for m in meta_list[1:]:
+            # MIO. This was removed since in HELIAS the enclosure cell is the biggest one
+            # if m.IsEnclosure: continue
+            xmin = min(m.BoundBox.XMin, xmin)
+            xmax = max(m.BoundBox.XMax, xmax)
+            ymin = min(m.BoundBox.YMin, ymin)
+            ymax = max(m.BoundBox.YMax, ymax)
+            zmin = min(m.BoundBox.ZMin, zmin)
+            zmax = max(m.BoundBox.ZMax, zmax)
+
+        self.geometry_bounding_box = FreeCAD.BoundBox(
+            FreeCAD.Vector(xmin - padding, ymin - padding, zmin - padding),
+            FreeCAD.Vector(xmax + padding, ymax + padding, zmax + padding),
+        )
+        return self.geometry_bounding_box
+
+    def start(self):
 
         startTime = datetime.now()
 
-        if isinstance(self.stepFile, (list, tuple)):
-            step_files = self.stepFile
-        else:
-            step_files = [self.stepFile]
-        MetaChunk = []
-        EnclosureChunk = []
-        for stp in tqdm(step_files, desc="Loading CAD files"):
-            logger.info(f"read step file : {stp}")
-            Meta, Enclosure = Load.load_cad(stp, self.settings, self.options)
-            MetaChunk.append(Meta)
-            EnclosureChunk.append(Enclosure)
-        self.MetaList = join_meta_lists(MetaChunk)
-        EnclosureList = join_meta_lists(EnclosureChunk)
+        # sets the self.meta_list and self.enclosure_list
+        self._load_step_file(filename=self.stepFile, cell_range=self.settings.cellRange)
+
+        if self.settings.exportSolids:
+            self._export_solids(filename=self.settings.exportSolids)
 
         logger.info("End of loading phase")
         tempstr1 = str(datetime.now() - startTime)
         logger.info(tempstr1)
         tempTime = datetime.now()
 
-        # Select a specific solid range from original STEP solids
-        if self.settings.cellRange:
-            self.MetaList = self.MetaList[self.settings.cellRange[0] : self.settings.cellRange[1]]
-
-        # export in STEP format solids read from input file
-        # terminate excution
-        if self.settings.exportSolids != "":
-            solids = []
-            for m in self.MetaList:
-                if m.IsEnclosure:
-                    continue
-                solids.extend(m.Solids)
-            Part.makeCompound(solids).exportStep(self.settings.exportSolids)
-            msg = f"Solids exported in file {self.settings.exportSolids}\n" "GEOUNED Finish. No solid translation performed."
-            raise ValueError(msg)
-
-        # set up Universe
-        if EnclosureList:
-            self.UniverseBox = get_universe(self.MetaList + EnclosureList)
-        else:
-            self.UniverseBox = get_universe(self.MetaList)
+        # sets self.geometry_bounding_box with default padding
+        self._get_geometry_bounding_box()
 
         self.Surfaces = UF.SurfacesDict(offset=self.settings.startSurf - 1)
 
@@ -503,44 +575,24 @@ class CadToCsg:
         if not self.options.Facets:
 
             # decompose all solids in elementary solids (convex ones)
-            warningSolidList = decompose_solids(
-                self.MetaList,
-                self.Surfaces,
-                self.UniverseBox,
-                self.settings,
-                True,
-                self.options,
-                self.tolerances,
-                self.numeric_format,
-                "Decomposing solids",
-            )
+            warningSolidList = self._decompose_solids(meta=True)
 
             # decompose Enclosure solids
-            if self.settings.voidGen and EnclosureList:
-                warningEnclosureList = decompose_solids(
-                    EnclosureList,
-                    self.Surfaces,
-                    self.UniverseBox,
-                    self.settings,
-                    False,
-                    self.options,
-                    self.tolerances,
-                    self.numeric_format,
-                    "Decomposing enclosure solids",
-                )
+            if self.settings.voidGen and self.enclosure_list:
+                warningEnclosureList = self._decompose_solids(meta=False)
 
             logger.info("End of decomposition phase")
 
             # start Building CGS cells phase
 
-            for j, m in enumerate(tqdm(self.MetaList, desc="Translating solid cells")):
+            for j, m in enumerate(tqdm(self.meta_list, desc="Translating solid cells")):
                 if m.IsEnclosure:
                     continue
                 logger.info(f"Building cell: {j+1}")
                 cones = Conv.cellDef(
                     m,
                     self.Surfaces,
-                    self.UniverseBox,
+                    self.geometry_bounding_box,
                     self.options,
                     self.tolerances,
                     self.numeric_format,
@@ -554,43 +606,33 @@ class CadToCsg:
                     logger.info(m.Definition)
 
             if self.options.forceNoOverlap:
-                Conv.no_overlapping_cell(self.MetaList, self.Surfaces, self.options)
+                Conv.no_overlapping_cell(self.meta_list, self.Surfaces, self.options)
 
         else:
             translate(
-                self.MetaList,
+                self.meta_list,
                 self.Surfaces,
-                self.UniverseBox,
+                self.geometry_bounding_box,
                 self.settings,
                 self.options,
                 self.tolerances,
             )
             # decompose Enclosure solids
-            if self.settings.voidGen and EnclosureList:
-                warningEnclosureList = decompose_solids(
-                    EnclosureList,
-                    self.Surfaces,
-                    self.UniverseBox,
-                    self.settings,
-                    False,
-                    self.options,
-                    self.tolerances,
-                    self.numeric_format,
-                    "Decomposing enclosure solids",
-                )
+            if self.settings.voidGen and self.enclosure_list:
+                warningEnclosureList = self._decompose_solids(meta=False)
 
         tempstr2 = str(datetime.now() - tempTime)
         logger.info(tempstr2)
 
         #  building enclosure solids
 
-        if self.settings.voidGen and EnclosureList:
-            for j, m in enumerate(EnclosureList):
+        if self.settings.voidGen and self.enclosure_list:
+            for j, m in enumerate(self.enclosure_list):
                 logger.info(f"Building Enclosure Cell: {j + 1}")
                 cones = Conv.cellDef(
                     m,
                     self.Surfaces,
-                    self.UniverseBox,
+                    self.geometry_bounding_box,
                     self.options,
                     self.tolerances,
                     self.numeric_format,
@@ -603,24 +645,24 @@ class CadToCsg:
         tempTime1 = datetime.now()
 
         # void generation phase
-        MetaVoid = []
+        meta_void = []
         if self.settings.voidGen:
             logger.info("Build Void")
             logger.info(self.settings.voidExclude)
             if not self.settings.voidExclude:
-                MetaReduced = self.MetaList
+                meta_reduced = self.meta_list
             else:
-                MetaReduced = exclude_cells(self.MetaList, self.settings.voidExclude)
+                meta_reduced = exclude_cells(self.meta_list, self.settings.voidExclude)
 
-            if self.MetaList:
-                init = self.MetaList[-1].__id__ - len(EnclosureList)
+            if self.meta_list:
+                init = self.meta_list[-1].__id__ - len(self.enclosure_list)
             else:
                 init = 0
-            MetaVoid = void.void_generation(
-                MetaReduced,
-                EnclosureList,
+            meta_void = void.void_generation(
+                meta_reduced,
+                self.enclosure_list,
                 self.Surfaces,
-                self.UniverseBox,
+                self.geometry_bounding_box,
                 self.settings,
                 init,
                 self.options,
@@ -635,7 +677,7 @@ class CadToCsg:
                 for s in lst:
                     Surfs[s.Index] = s
 
-            for c in tqdm(self.MetaList, desc="Simplifying"):
+            for c in tqdm(self.meta_list, desc="Simplifying"):
                 if c.Definition.level == 0 or c.IsEnclosure:
                     continue
                 logger.info(f"simplify cell {c.__id__}")
@@ -652,18 +694,18 @@ class CadToCsg:
         logger.info(datetime.now() - startTime)
 
         cellOffSet = self.settings.startCell - 1
-        if EnclosureList and self.settings.sort_enclosure:
+        if self.enclosure_list and self.settings.sort_enclosure:
             # sort group solid cell / void cell sequence in each for each enclosure
             # if a solid belong to several enclosure, its definition will be written
             # for the highest enclosure level or if same enclosure level in the first
             # enclosure found
-            self.MetaList = sort_enclosure(self.MetaList, MetaVoid, cellOffSet)
+            self.meta_list = sort_enclosure(self.meta_list, meta_void, cellOffSet)
         else:
             # remove Null Cell and apply cell numbering offset
             deleted = []
             idLabel = {0: 0}
             icount = cellOffSet
-            for i, m in enumerate(self.MetaList):
+            for i, m in enumerate(self.meta_list):
                 if m.NullCell or m.IsEnclosure:
                     deleted.append(i)
                     continue
@@ -673,7 +715,7 @@ class CadToCsg:
                 idLabel[m.__id__] = m.label
 
             for i in reversed(deleted):
-                del self.MetaList[i]
+                del self.meta_list[i]
 
             lineComment = """\
 ##########################################################
@@ -681,10 +723,10 @@ class CadToCsg:
 ##########################################################"""
             mc = UF.GeounedSolid(None)
             mc.Comments = lineComment
-            self.MetaList.append(mc)
+            self.meta_list.append(mc)
 
             deleted = []
-            for i, m in enumerate(MetaVoid):
+            for i, m in enumerate(meta_void):
                 if m.NullCell:
                     deleted.append(i)
                     continue
@@ -692,18 +734,18 @@ class CadToCsg:
                 m.label = icount
                 update_comment(m, idLabel)
             for i in reversed(deleted):
-                del MetaVoid[i]
+                del meta_void[i]
 
-            self.MetaList.extend(MetaVoid)
+            self.meta_list.extend(meta_void)
 
         print_warning_solids(warnSolids, warnEnclosures)
 
         # add plane definition to cone
         process_cones(
-            self.MetaList,
+            self.meta_list,
             coneInfo,
             self.Surfaces,
-            self.UniverseBox,
+            self.geometry_bounding_box,
             self.options,
             self.tolerances,
             self.numeric_format,
@@ -715,76 +757,73 @@ class CadToCsg:
         logger.info(f"Translation time of solid cells {tempTime1} - {tempTime0}")
         logger.info(f"Translation time of void cells {tempTime2} - {tempTime1}")
 
+    def _decompose_solids(self, meta: bool):
 
-def decompose_solids(
-    MetaList,
-    Surfaces,
-    UniverseBox,
-    setting,
-    meta,
-    options,
-    tolerances,
-    numeric_format,
-    description,
-):
-    totsolid = len(MetaList)
-    warningSolids = []
-    for i, m in enumerate(tqdm(MetaList, desc=description)):
-        if meta and m.IsEnclosure:
-            continue
-        logger.info(f"Decomposing solid: {i + 1}/{totsolid}")
-        if setting.debug:
-            logger.info(m.Comments)
-            if not path.exists("debug"):
-                mkdir("debug")
-            if m.IsEnclosure:
-                m.Solids[0].exportStep(f"debug/origEnclosure_{i}.stp")
-            else:
-                m.Solids[0].exportStep(f"debug/origSolid_{i}.stp")
+        if meta:
+            meta_list = self.meta_list
+            description = "Decomposing solids"
+        else:
+            meta_list = self.enclosure_list
+            description = "Decomposing enclosure solids"
 
-        comsolid, err = Decom.SplitSolid(
-            Part.makeCompound(m.Solids),
-            UniverseBox,
-            options,
-            tolerances,
-            numeric_format,
-        )
+        totsolid = len(meta_list)
+        warningSolids = []
+        for i, m in enumerate(tqdm(meta_list, desc=description)):
+            if meta and m.IsEnclosure:
+                continue
+            logger.info(f"Decomposing solid: {i + 1}/{totsolid}")
+            if self.settings.debug:
+                debug_output_folder = Path("debug")
+                logger.info(m.Comments)
+                debug_output_folder.mkdir(parents=True, exist_ok=True)
+                if m.IsEnclosure:
+                    m.Solids[0].exportStep(str(debug_output_folder / f"origEnclosure_{i}.stp"))
+                else:
+                    m.Solids[0].exportStep(str(debug_output_folder / f"origSolid_{i}.stp"))
 
-        if err != 0:
-            if not path.exists("Suspicious_solids"):
-                mkdir("Suspicious_solids")
-            if m.IsEnclosure:
-                Part.CompSolid(m.Solids).exportStep(f"Suspicious_solids/Enclosure_original_{i}.stp")
-                comsolid.exportStep(f"Suspicious_solids/Enclosure_split_{i}.stp")
-            else:
-                Part.CompSolid(m.Solids).exportStep(f"Suspicious_solids/Solid_original_{i}.stp")
-                comsolid.exportStep(f"Suspicious_solids/Solid_split_{i}.stp")
+            comsolid, err = Decom.SplitSolid(
+                Part.makeCompound(m.Solids),
+                self.geometry_bounding_box,
+                self.options,
+                self.tolerances,
+                self.numeric_format,
+            )
 
-            warningSolids.append(i)
+            if err != 0:
+                sus_output_folder = Path("suspicious_solids")
+                sus_output_folder.mkdir(parents=True, exist_ok=True)
+                if m.IsEnclosure:
+                    Part.CompSolid(m.Solids).exportStep(str(sus_output_folder / f"Enclosure_original_{i}.stp"))
+                    comsolid.exportStep(str(sus_output_folder / f"Enclosure_split_{i}.stp"))
+                else:
+                    Part.CompSolid(m.Solids).exportStep(str(sus_output_folder / f"Solid_original_{i}.stp"))
+                    comsolid.exportStep(str(sus_output_folder / f"Solid_split_{i}.stp"))
 
-        if setting.debug:
-            if m.IsEnclosure:
-                comsolid.exportStep(f"debug/compEnclosure_{i}.stp")
-            else:
-                comsolid.exportStep(f"debug/compSolid_{i}.stp")
-        Surfaces.extend(
-            Decom.extract_surfaces(
-                comsolid,
-                "All",
-                UniverseBox,
-                options,
-                tolerances,
-                numeric_format,
-                MakeObj=True,
-            ),
-            options,
-            tolerances,
-            numeric_format,
-        )
-        m.set_cad_solid()
-        m.update_solids(comsolid.Solids)
+                warningSolids.append(i)
 
-    return warningSolids
+            if self.settings.debug:
+                if m.IsEnclosure:
+                    comsolid.exportStep(str(debug_output_folder / f"compEnclosure_{i}.stp"))
+                else:
+                    comsolid.exportStep(str(debug_output_folder / f"compSolid_{i}.stp"))
+            self.Surfaces.extend(
+                Decom.extract_surfaces(
+                    comsolid,
+                    "All",
+                    self.geometry_bounding_box,
+                    self.options,
+                    self.tolerances,
+                    self.numeric_format,
+                    MakeObj=True,
+                ),
+                self.options,
+                self.tolerances,
+                self.numeric_format,
+            )
+            m.set_cad_solid()
+            m.update_solids(comsolid.Solids)
+
+        return warningSolids
 
 
 def update_comment(meta, idLabel):
@@ -830,31 +869,6 @@ def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances
             )
 
 
-def get_universe(MetaList):
-    d = 10
-    Box = MetaList[0].BoundBox
-    xmin = Box.XMin
-    xmax = Box.XMax
-    ymin = Box.YMin
-    ymax = Box.YMax
-    zmin = Box.ZMin
-    zmax = Box.ZMax
-    for m in MetaList[1:]:
-        # MIO. This was removed since in HELIAS the enclosure cell is the biggest one
-        # if m.IsEnclosure: continue
-        xmin = min(m.BoundBox.XMin, xmin)
-        xmax = max(m.BoundBox.XMax, xmax)
-        ymin = min(m.BoundBox.YMin, ymin)
-        ymax = max(m.BoundBox.YMax, ymax)
-        zmin = min(m.BoundBox.ZMin, zmin)
-        zmax = max(m.BoundBox.ZMax, zmax)
-
-    return FreeCAD.BoundBox(
-        FreeCAD.Vector(xmin - d, ymin - d, zmin - d),
-        FreeCAD.Vector(xmax + d, ymax + d, zmax + d),
-    )
-
-
 def print_warning_solids(warnSolids, warnEnclosures):
 
     solids_logger = logging.getLogger("solids_logger")
@@ -884,7 +898,7 @@ def print_warning_solids(warnSolids, warnEnclosures):
         solids_logger.info(lines)
 
 
-def join_meta_lists(MList):
+def join_meta_lists(MList) -> typing.List[UF.GeounedSolid]:
 
     newMetaList = MList[0]
     if MList[0]:
@@ -913,10 +927,10 @@ def exclude_cells(MetaList, labelList):
     return voidMeta
 
 
-def sort_enclosure(MetaList, MetaVoid, offSet=0):
+def sort_enclosure(MetaList, meta_void, offSet=0):
 
     newList = {}
-    for m in MetaVoid:
+    for m in meta_void:
         if m.EnclosureID in newList.keys():
             newList[m.EnclosureID].append(m)
         else:

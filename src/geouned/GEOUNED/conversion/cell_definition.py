@@ -317,94 +317,6 @@ def gen_plane_cylinder(face, solid, tolerances):
     return plane
 
 
-def gen_plane_cylinder_old(face, solid, tolerances):
-
-    surf = face.Surface
-    rad = surf.Radius
-
-    if str(surf) != "<Cylinder object>":
-        return None
-
-    face_index = [solid.Faces.index(face)]
-
-    for i, face2 in enumerate(solid.Faces):
-        if face2.Area < tolerances.min_area:
-            logger.warning(
-                f"surface {str(surf)} removed from cell definition. Face area < Min area ({face2.Area} < {tolerances.min_area})"
-            )
-            continue
-        if str(face2.Surface) == "<Cylinder object>" and not (face2.isEqual(face)):
-            if (
-                face2.Surface.Axis.isEqual(face.Surface.Axis, 1e-5)
-                and face2.Surface.Radius == rad
-                and is_in_line(face2.Surface.Center, face.Surface.Axis, face.Surface.Center)
-            ):
-                # print 'Warning: coincident cylinder faces are the same'
-                face_index.append(i)
-
-    angle_range = 0.0
-    U_val = []
-    for index in face_index:
-        Range = solid.Faces[index].ParameterRange
-        angle_range = angle_range + abs(Range[1] - Range[0])
-        if not (Range[0] in U_val) and not (Range[1] in U_val):
-            U_val.append(Range[0])
-            U_val.append(Range[1])
-    if 2.0 * math.pi - angle_range < 1e-2:
-        return None
-
-    UVNodes = []
-    for index in face_index:
-        face2 = solid.Faces[index]
-        try:
-            UVNodes.append(face2.getUVNodes())
-        except RuntimeError:
-            UVNodes.append(face2.getUVNodes())
-
-    U_val_str_cl = []
-    for i, elem1 in enumerate(U_val):
-        num_str1 = f"{elem1:11.4E}"
-        if abs(elem1) < 1.0e-5:
-            num_str1 = "%11.4E" % 0.0
-        if not (BF.is_duplicate_in_list(num_str1, i, U_val)):
-            U_val_str_cl.append(num_str1)
-
-    face_index_2 = [face_index[0], face_index[0]]
-
-    node_min = UVNodes[0][0]
-    node_max = UVNodes[0][1]
-
-    dif1_0 = abs(float(U_val_str_cl[0]) - node_min[0])
-    dif2_0 = abs(float(U_val_str_cl[1]) - node_max[0])
-
-    # searching for minimum and maximum angle points
-    for j, Nodes in enumerate(UVNodes):
-        for elem in Nodes:
-            dif1 = abs(float(U_val_str_cl[0]) - elem[0])
-            dif2 = abs(float(U_val_str_cl[1]) - elem[0])
-
-            if dif1 < dif1_0:
-                node_min = elem
-                face_index_2[0] = face_index[j]
-                dif1_0 = dif1
-            if dif2 < dif2_0:
-                node_max = elem
-                face_index_2[1] = face_index[j]
-                dif2_0 = dif2
-
-    v_1 = solid.Faces[face_index_2[0]].valueAt(node_min[0], node_min[1])
-    v_2 = solid.Faces[face_index_2[1]].valueAt(node_max[0], node_max[1])
-
-    if v_1.isEqual(v_2, 1e-5):
-        logger.error("in the additional place definition")
-        return None
-
-    normal = v_2.sub(v_1).cross(face.Surface.Axis)
-    plane = Part.Plane(v_1, normal).toShape()
-
-    return plane
-
-
 def gen_plane_cone(face, solid, tolerances):
 
     Surf = face.Surface
@@ -446,90 +358,6 @@ def gen_plane_cone(face, solid, tolerances):
         return None
 
     plane = Part.Plane(p1, p2, face.Surface.Apex).toShape()
-
-    return plane
-
-
-def gen_plane_cone_old(face, solid, tolerances):
-
-    surf = face.Surface
-    if str(surf) != "<Cone object>":
-        return None
-
-    face_index = [solid.Faces.index(face)]
-
-    for i, face2 in enumerate(solid.Faces):
-        if face2.Area < tolerances.min_area:
-            logger.warning(
-                f"{str(surf)} surface removed from cell definition. Face area < Min area ({face2.Area} < {tolerances.min_area})"
-            )
-            continue
-        if str(face2.Surface) == "<Cone object>" and not (face2.isEqual(face)):
-            if (
-                face2.Surface.Axis.isEqual(face.Surface.Axis, 1e-5)
-                and face2.Surface.Apex.isEqual(face.Surface.Apex, 1e-5)
-                and (face2.Surface.SemiAngle - face.Surface.SemiAngle) < 1e-6
-            ):
-                face_index.append(i)
-
-    angle_range = 0.0
-    u_val = []
-    for index in face_index:
-        parameter_range = solid.Faces[index].ParameterRange
-        angle_range = angle_range + abs(parameter_range[1] - parameter_range[0])
-        u_val.append(parameter_range[0])
-        u_val.append(parameter_range[1])
-
-    if 2.0 * math.pi - angle_range < 1e-2:
-        return None
-
-    uv_nodes = []
-    for index in face_index:
-        face2 = solid.Faces[index]
-        try:
-            uv_nodes.append(face2.getUVNodes())
-        except RuntimeError:
-            face.tessellate(1.0, True)
-            uv_nodes.append(face2.getUVNodes())
-
-    u_val_str_cl = []
-
-    for i, elem1 in enumerate(u_val):
-        num_str1 = f"{elem1:11.4E}"
-        if abs(elem1) < 1.0e-5:
-            num_str1 = "%11.4E" % 0.0
-        if not (BF.is_duplicate_in_list(num_str1, i, u_val)):
-            u_val_str_cl.append(num_str1)
-
-    face_index_2 = [face_index[0], face_index[0]]
-
-    node_min = uv_nodes[0][0]
-    node_max = uv_nodes[0][1]
-    dif1_0 = abs(float(u_val_str_cl[0]) - node_min[0])
-    dif2_0 = abs(float(u_val_str_cl[1]) - node_max[0])
-
-    # searching for minimum and maximum angle points
-    for j, Nodes in enumerate(uv_nodes):
-        for elem in Nodes:
-            dif1 = abs(float(u_val_str_cl[0]) - elem[0])
-            dif2 = abs(float(u_val_str_cl[1]) - elem[0])
-            if dif1 < dif1_0:
-                node_min = elem
-                face_index_2[0] = face_index[j]
-                dif1_0 = dif1
-            if dif2 < dif2_0:
-                node_max = elem
-                face_index_2[1] = face_index[j]
-                dif2_0 = dif2
-
-    v_1 = solid.Faces[face_index_2[0]].valueAt(node_min[0], node_min[1])
-    v_2 = solid.Faces[face_index_2[1]].valueAt(node_max[0], node_max[1])
-
-    if v_1.isEqual(v_2, 1e-5):
-        logger.error("in the additional place definition")
-        return None
-
-    plane = Part.Plane(v_1, v_2, face.Surface.Apex).toShape()
 
     return plane
 
@@ -583,50 +411,6 @@ def gen_torus_annex_u_planes(face, u_params, tolerances):
             (center, d1, face.Surface.MajorRadius, face.Surface.MajorRadius),
             (center, d2, face.Surface.MajorRadius, face.Surface.MajorRadius),
         ), True  # (d1 : d2)
-
-
-def gen_torus_annex_u_planes_org(face, u_params, tolerances):
-
-    if is_parallel(face.Surface.Axis, FreeCAD.Vector(1, 0, 0), tolerances.tor_angle):
-        axis = FreeCAD.Vector(1, 0, 0)
-    elif is_parallel(face.Surface.Axis, FreeCAD.Vector(0, 1, 0), tolerances.tor_angle):
-        axis = FreeCAD.Vector(0, 1, 0)
-    elif is_parallel(face.Surface.Axis, FreeCAD.Vector(0, 0, 1), tolerances.tor_angle):
-        axis = FreeCAD.Vector(0, 0, 1)
-
-    center = face.Surface.Center
-    p1 = face.valueAt(u_params[0], 0.0)
-    p2 = face.valueAt(u_params[1], 0.0)
-    pmid = face.valueAt(0.5 * (u_params[0] + u_params[1]), 0.0)
-
-    if is_same_value(abs(u_params[1] - u_params[0]), math.pi, tolerances.value):
-        d = axis.cross(p2 - p1)
-        d.normalize()
-        if pmid.dot(d) < 0:
-            d = -d
-        return ((center, d, face.Surface.MajorRadius), None), False
-
-    else:
-        d1 = axis.cross(p1)
-        d1.normalize()
-        if pmid.dot(d1) < 0:
-            d1 = -d1
-
-        d2 = axis.cross(p2)
-        d2.normalize()
-        if pmid.dot(d2) < 0:
-            d2 = -d2
-
-        if u_params[1] - u_params[0] < math.pi:
-            return (
-                (center, d1, face.Surface.MajorRadius, face.Surface.MajorRadius),
-                (center, d2, face.Surface.MajorRadius, face.Surface.MajorRadius),
-            ), False  # ( d1 d2 )
-        else:
-            return (
-                (center, d1, face.Surface.MajorRadius, face.Surface.MajorRadius),
-                (center, d2, face.Surface.MajorRadius, face.Surface.MajorRadius),
-            ), True  # (d1 : d2)
 
 
 def gen_torus_annex_v_surface(face, v_params, tolerances, force_cylinder=False):
@@ -1100,31 +884,6 @@ def no_overlapping_cell(metaList, surfaces, options):
             m.set_definition(new_def)
             m.Definition.join_operators()
             m.Definition.level_update()
-
-
-# TODO this function looks like it is not used in the code.
-def extra_plane_cyl_face(face, box, surfaces, options, tolerances, numeric_format):
-    wire = face.OuterWire
-    planes_id = []
-    for e in wire.OrderedEdges:
-        curve = str(e.Curve)
-        if curve[0:6] == "Circle" or curve == "<Ellipse object>":
-            dir = e.Curve.Axis
-            center = e.Curve.Center
-            if curve == "<Ellipse object>":
-                dim1 = e.Curve.MinorRadius
-                dim2 = e.Curve.MajorRadius
-            else:
-                dim1 = e.Curve.Radius
-                dim2 = e.Curve.Radius
-            plane = GeounedSurface(("Plane", (center, dir, dim1, dim2)), box, Face="Build")
-            id, exist = surfaces.add_plane(plane, options, tolerances, numeric_format, False)
-            if exist:
-                pp = surfaces.get_surface(id)
-                if is_opposite(plane.Surf.Axis, pp.Surf.Axis, tolerances.pln_angle):
-                    id = -id
-            planes_id.append(id)
-    return planes_id
 
 
 def add_cone_plane(definition, cones_list, surfaces, universe_box, options, tolerances, numeric_format):

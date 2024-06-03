@@ -11,7 +11,7 @@ You can follow the install instructions for `Miniforge3 here <https://github.com
 
 Download and execute the Miniforge3 Windows installer
 
-You can get it from the Miniforge3 GitHub repository `here <https://github.com/conda-forge/miniforge?tab=readme-ov-file#miniforge-pypy3>`_ or from the link below
+You can get it from the `Miniforge3 GitHub repository here <https://github.com/conda-forge/miniforge?tab=readme-ov-file#miniforge-pypy3>`_ or from the link below
 
 `https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe <https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe>`_
 
@@ -31,19 +31,11 @@ Activate the new environment
 
     mamba activate new_env
 
-We have aspirations to create a conda-forge package which will combine these final two steps, but for now FreeCAD and GEOUNED can be installed in two commands.
-Install FreeCAD which is the main dependency
+Install GEOUNED from conda-forge
 
 .. code-block:: sh
 
-    mamba install -c conda-forge freecad
-
-
-Install GEOUNED with pip, we also prefix this with "python -m" to ensure that pip install uses the correct Python interpreter.
-
-.. code-block:: sh
-
-    python -m pip install geouned
+    mamba install -c conda-forge geouned
 
 Then you will be able to run import GEOUNED from within Python
 
@@ -66,7 +58,7 @@ You can follow the install instructions for `MiniConda3 <https://docs.anaconda.c
 
 Download and execute the Miniforge3 Windows installer
 
-You can get it from the Miniforge3 GitHub repository `here <https://docs.anaconda.com/free/miniconda/>`_ or from the link below
+You can get it from the `Miniforge3 GitHub repository here <https://docs.anaconda.com/free/miniconda/>`_ or from the link below
 
 `https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe <https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe>`_
 
@@ -84,19 +76,11 @@ Activate the new environment
 
     conda activate new_env
 
-We have aspirations to create a conda-forge package which will combine these final two steps, but for now FreeCAD and GEOUNED can be installed in two commands.
-Install FreeCAD which is the main dependency
+Install GEOUNED from conda-forge
 
 .. code-block:: sh
 
-    conda install -c conda-forge freecad
-
-
-Install GEOUNED with pip, we also prefix this with "python -m" to ensure that pip install uses the correct Python interpreter.
-
-.. code-block:: sh
-
-    python -m pip install geouned
+    conda install -c conda-forge geouned
 
 Then you will be able to run import GEOUNED from within Python
 

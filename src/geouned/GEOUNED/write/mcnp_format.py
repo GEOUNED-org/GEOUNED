@@ -52,10 +52,10 @@ class McnpInput:
         if isinstance(self.StepFile, (tuple, list)):
             self.StepFile = "; ".join(self.StepFile)
 
-        self.__get_surface_table__()
-        self.__simplify_planes__(Surfaces)
+        self.get_surface_table()
+        self.simplify_planes(Surfaces)
 
-        self.Surfaces = self.__sorted_surfaces__(Surfaces)
+        self.Surfaces = self.sorted_surfaces(Surfaces)
         self.Materials = set()
 
         return
@@ -87,8 +87,8 @@ class McnpInput:
         Path(filename).parent.mkdir(parents=True, exist_ok=True)
         logger.info(f"write MCNP file {filename}")
         self.inpfile = open(filename, "w", encoding="utf-8")
-        self.__write_header__()
-        self.__write_cell_block__()
+        self.write_header()
+        self.write_cell_block()
         self.inpfile.write(" \n")
 
         surfaceHeader = """\
@@ -97,15 +97,15 @@ C                  SURFACE DEFINITION
 C ##########################################################
 """
         self.inpfile.write(surfaceHeader)
-        self.__write_surface_block__()
+        self.write_surface_block()
         self.inpfile.write(" \n")
 
-        self.__write_source_block__()
+        self.write_source_block()
 
         self.inpfile.close()
         return
 
-    def __write_header__(self):
+    def write_header(self):
 
         freeCAD_Version = "{V[0]:}.{V[1]:}.{V[2]:}".format(V=FreeCAD.Version())
 
@@ -133,25 +133,25 @@ C **************************************************************
         self.inpfile.write(Information)
         return
 
-    def __write_cell_block__(self):
+    def write_cell_block(self):
 
         for i, cell in enumerate(self.Cells):
-            self.__write_cells__(cell)
+            self.write_cells(cell)
         return
 
-    def __write_surface_block__(self):
+    def write_surface_block(self):
 
         for surf in self.Surfaces:
-            self.__write_surfaces__(surf)
+            self.write_surfaces(surf)
 
-    def __write_cells__(self, cell):
+    def write_cells(self, cell):
 
         index = cell.label
 
         # if index is None objet not contain cell definition
         # but a comment to insert between cells
         if cell.__id__ is None:
-            comment = self.__comment_line__(cell.Comments)
+            comment = self.comment_line(cell.Comments)
             self.inpfile.write(comment)
             return
 
@@ -166,14 +166,14 @@ C **************************************************************
 
         mcnpcell = "{}{}\n{}{}".format(
             cellHeader,
-            self.__cell_format__(cell.Definition, offset=len(cellHeader)),
-            self.__option_format__(cell),
-            self.__comment_format__(cell.Comments, cell.MatInfo),
+            self.cell_format(cell.Definition, offset=len(cellHeader)),
+            self.option_format(cell),
+            self.comment_format(cell.Comments, cell.MatInfo),
         )
         self.inpfile.write(mcnpcell)
         return
 
-    def __write_surfaces__(self, surface):
+    def write_surfaces(self, surface):
         """Write the surfaces in MCNP format"""
 
         MCNP_def = mcnp_surface(
@@ -191,7 +191,7 @@ C **************************************************************
             logger.info(f"Surface {surface.Type} cannot be written in MCNP input")
         return
 
-    def __write_source_block__(self):
+    def write_source_block(self):
 
         if self.SDEF_sphere is None:
             return
@@ -214,7 +214,7 @@ C **************************************************************
             for line in self.SDEF_sphere:
                 Block += line
 
-            celList, volList = self.__get_solid_cell_volume__()
+            celList, volList = self.get_solid_cell_volume()
 
             F4Tally = CardLine(f"F4:{self.part} ")
             F4Tally.extend(celList)
@@ -234,10 +234,10 @@ C **************************************************************
 
         self.inpfile.write(Block)
 
-    def __cell_format__(self, Definition, offset=11):
+    def cell_format(self, Definition, offset=11):
         return write_mcnp_cell_def(Definition, tabspace=11, offset=offset)
 
-    def __option_format__(self, cell):
+    def option_format(self, cell):
 
         option = ""
         if self.Options["Volume"]:
@@ -259,7 +259,7 @@ C **************************************************************
 
         return option
 
-    def __comment_format__(self, cComment, mComment=None):
+    def comment_format(self, cComment, mComment=None):
 
         comment = ""
         if mComment:
@@ -275,7 +275,7 @@ C **************************************************************
                     comment += f"{'':11s}${c}\n"
         return comment
 
-    def __comment_line__(self, lineComment):
+    def comment_line(self, lineComment):
         lineComment = lineComment.strip().split("\n")
         comment = ""
         if lineComment:
@@ -286,7 +286,7 @@ C **************************************************************
             comment += "C \n"
         return comment
 
-    def __get_surface_table__(self):
+    def get_surface_table(self):
         self.surfaceTable = {}
         self.__solidCells__ = 0
         self.__cells__ = 0
@@ -309,33 +309,33 @@ C **************************************************************
                     self.surfaceTable[index] = {i}
         return
 
-    def __simplify_planes__(self, Surfaces):
+    def simplify_planes(self, Surfaces):
 
         for p in Surfaces["PX"]:
             if p.Surf.Axis[0] < 0:
                 p.Surf.Axis = FreeCAD.Vector(1, 0, 0)
-                self.__change_surf_sign__(p)
+                self.change_surf_sign(p)
 
         for p in Surfaces["PY"]:
             if p.Surf.Axis[1] < 0:
                 p.Surf.Axis = FreeCAD.Vector(0, 1, 0)
-                self.__change_surf_sign__(p)
+                self.change_surf_sign(p)
 
         for p in Surfaces["PZ"]:
             if p.Surf.Axis[2] < 0:
                 p.Surf.Axis = FreeCAD.Vector(0, 0, 1)
-                self.__change_surf_sign__(p)
+                self.change_surf_sign(p)
 
         if self.options.prnt3PPlane:
             for p in Surfaces["P"]:
                 if p.Surf.pointDef:
                     axis, d = points_to_coeffs(p.Surf.Points)
                     if is_opposite(axis, p.Surf.Axis):
-                        self.__change_surf_sign__(p)
+                        self.change_surf_sign(p)
 
         return
 
-    def __sorted_surfaces__(self, Surfaces):
+    def sorted_surfaces(self, Surfaces):
         temp = SurfacesDict(Surfaces)
         surfList = []
         for ind in range(Surfaces.IndexOffset, Surfaces.surfaceNumber + Surfaces.IndexOffset):
@@ -345,7 +345,7 @@ C **************************************************************
                 temp.del_surface(ind + 1)
         return surfList
 
-    def __change_surf_sign__(self, p):
+    def change_surf_sign(self, p):
 
         if p.Index not in self.surfaceTable.keys():
             logger.info(f"{p.Type} Surface {p.Index} not used in cell definition) {p.Surf.Axis} {p.Surf.Position}")
@@ -357,7 +357,7 @@ C **************************************************************
                 if s == p.Index:
                     change_surf_sign(s, self.Cells[ic].Definition)
 
-    def __get_solid_cell_volume__(self):
+    def get_solid_cell_volume(self):
 
         solidList = []
         volumeList = []
