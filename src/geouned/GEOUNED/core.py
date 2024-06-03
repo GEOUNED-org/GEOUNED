@@ -639,8 +639,8 @@ class CadToCsg:
                 if c.Definition.level == 0 or c.IsEnclosure:
                     continue
                 logger.info(f"simplify cell {c.__id__}")
-                Box = UF.get_box(c)
-                CT = build_c_table_from_solids(Box, (c.Surfaces, Surfs), option="full")
+                Box = UF.get_box(c,self.options)
+                CT = build_c_table_from_solids(Box, (c.Surfaces, Surfs), option="full",options=self.options)
                 c.Definition.simplify(CT)
                 c.Definition.clean()
                 if type(c.Definition.elements) is bool:

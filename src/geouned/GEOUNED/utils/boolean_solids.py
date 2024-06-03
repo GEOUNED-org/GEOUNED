@@ -439,7 +439,7 @@ def point_inside(solid):
         return point
 
     cut_line = 32
-    cut_box = 2
+    cutbox = 2
 
     v1 = solid.Vertexes[0].Point
     for vi in range(len(solid.Vertexes) - 1, 0, -1):
@@ -478,7 +478,7 @@ def point_inside(solid):
         boxes = subbox
         n = n + 1
 
-        if n == cut_box:
+        if n == cutbox:
             break
 
     return point_from_surface(solid)
