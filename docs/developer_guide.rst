@@ -6,6 +6,12 @@ Developer install with Mamba
 
 First we need to install a Mamba distribution. There are a few options but here we opt for Miniforge3 as it includes Mamba.
 
+Conda could be used instead of Mamba but Mamba is faster and more reliable. If you don't have permission to install Miniforge3 then you could try using Conda instead. For you could install mamba into conda with.
+
+.. code-block:: sh
+
+    conda install -c conda-forge mamba -y
+
 You can follow the install instructions for `Miniforge3 here <https://github.com/conda-forge/miniforge>`_ or follows the commands below.
 Download 
 
@@ -41,12 +47,11 @@ Activate the new environment
 
     mamba activate new_env
 
-We have aspirations to create a conda-forge package which will combine these final two steps, but for now FreeCAD and GEOUNED can be installed in two commands.
-Install FreeCAD which is the main dependency
+As our main dependency FreeCAD is not available on PYPi but we can install it from conda-forge.
 
 .. code-block:: sh
 
-    mamba install -c conda-forge freecad
+    mamba install -c conda-forge freecad -y
 
 Fork the GEOUNED-org/GEOUNED repository by clicking this link, unchecking the Copy the main branch only check box and clicking create fork
 
@@ -122,7 +127,7 @@ However we need one more dependency to run the tests.
 
 .. code-block:: sh
 
-    mamba install -c conda-forge openmc
+    mamba install -c conda-forge openmc -y
 
 Then we can run the tests with the following command from the root of the repository.
 
