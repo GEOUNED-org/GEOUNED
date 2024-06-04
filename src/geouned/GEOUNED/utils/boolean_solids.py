@@ -239,7 +239,7 @@ def combine_diag_elements(d1, d2):
         return CTelement((0, 0, 1, 0))
 
 
-def build_c_table_from_solids(Box, SurfInfo, option, options):
+def build_c_table_from_solids(Box, SurfInfo, simplification_mode, options):
 
     if type(SurfInfo) is dict:
         surfaces = SurfInfo
@@ -260,7 +260,7 @@ def build_c_table_from_solids(Box, SurfInfo, option, options):
             surfaces[s].buildShape(Box.BoundBox)
 
     CTable = ConstraintTable()
-    if option == "diag":
+    if simplification_mode == "diag":
         CTable.diagonal = True
     else:
         CTable.diagonal = False
@@ -270,7 +270,7 @@ def build_c_table_from_solids(Box, SurfInfo, option, options):
         # res,splitRegions = split_solid_fast(Box,Surfaces.get_surface(s1),True)
 
         CTable.add_element(s1, s1, CTelement(res, s1, s1))
-        if option == "diag":
+        if simplification_mode == "diag":
             continue
         if splitRegions is None:
             continue  # loop, no region to be split by s2
@@ -309,7 +309,7 @@ def build_c_table_from_solids(Box, SurfInfo, option, options):
             CTable.add_element(s1, s2, CTelement(val, s1, s2))
 
     # if some surfaces don't cross the box some elements in Constraint table are not filled
-    if option != "diag":
+    if simplification_mode != "diag":
         CTable.fill_missing_elements()
     return CTable
 
@@ -460,7 +460,7 @@ def point_inside(solid):
     BBox = solid.optimalBoundingBox(False)
     box = [BBox.XMin, BBox.XMax, BBox.YMin, BBox.YMax, BBox.ZMin, BBox.ZMax]
 
-    boxes, centers = cut_box(box)
+    boxes, centers = divide_box(box)
     n = 0
 
     while True:
@@ -472,7 +472,7 @@ def point_inside(solid):
         subbox = []
         centers = []
         for b in boxes:
-            btab, ctab = cut_box(b)
+            btab, ctab = divide_box(b)
             subbox.extend(btab)
             centers.extend(ctab)
         boxes = subbox
@@ -515,7 +515,7 @@ def point_from_surface(solid):
 
 
 # divide a box into 8 smaller boxes
-def cut_box(Box):
+def divide_box(Box):
     xmid = (Box[1] + Box[0]) * 0.5
     ymid = (Box[3] + Box[2]) * 0.5
     zmid = (Box[5] + Box[4]) * 0.5
