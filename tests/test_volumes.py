@@ -13,6 +13,7 @@ try:
     import freecad  # importing conda package if present
 except:
     pass
+import geouned
 import openmc
 import Part
 import pytest
@@ -124,3 +125,27 @@ def test_volumes(input_step_file):
         # converts from mm3 in cad to cm3 in csg
         volume_of_cad_cell = solid.Volume * 0.001
         assert math.isclose(volume_of_cad_cell, volume_of_csg_cell, rel_tol=rel_tol)
+
+
+@pytest.mark.parametrize("skip_solids,expected", [([], 12), ([1, 4, 6], 9)])
+def test_skip_solids_when_loading(skip_solids, expected):
+    """test to check that the correct number of cells are found in the CSG file when skip solids is set"""
+
+    geo = geouned.CadToCsg(settings=geouned.Settings(voidGen=False, compSolids=False))
+
+    # this geometry has 12 solids in it
+    geo.load_step_file(filename="testing/inputSTEP/Torus/example.stp", skip_solids=skip_solids)
+    geo.start()
+    assert geo.filename == "testing/inputSTEP/Torus/example.stp"
+    assert geo.skip_solids == skip_solids
+
+    geo.export_csg(
+        geometryName="tests_outputs/skip_solids/csg",
+        outFormat=["openmc_xml"],
+    )
+
+    materials = openmc.Materials()
+    geometry = openmc.Geometry.from_xml("tests_outputs/skip_solids/csg.xml", materials)
+    cells = geometry.get_all_cells()
+    all_cell_ids = cells.keys()
+    assert len(all_cell_ids) == expected
