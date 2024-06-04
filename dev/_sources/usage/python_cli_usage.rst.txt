@@ -12,7 +12,9 @@ First create a JSON file called "config.json" containing the following.
 .. code-block:: json
 
     {
-        "stepFile": "cuboid.stp"
+        "load_step_file": {
+            "filename":"cuboid.stp"
+        }
     }
 
 Then execute the command line interface tool to convert your STEP file to CSG files with the default configuration.
@@ -32,7 +34,10 @@ Here is a complete JSON file specification
 .. code-block:: json
 
     {
-        "stepFile": "cuboid.stp",
+        "load_step_file": {
+            "filename": "cuboid.stp",
+            "skip_solids": []
+        },
         "Options": {
             "forceCylinder": false,
             "newSplitPlane": true,
@@ -85,7 +90,6 @@ Here is a complete JSON file specification
             "debug": false,
             "compSolids": true,
             "simplify": "no",
-            "cellRange": [],
             "exportSolids": "",
             "minVoidSize": 200.0,
             "maxSurf": 50,

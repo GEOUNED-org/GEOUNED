@@ -7,39 +7,39 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>geouned.GEOUNED.utils.data_classes &#8212; GEOUNED 0.1.dev1+gef80ed2 documentation</title>
+    <title>geouned.GEOUNED.utils.data_classes &#8212; GEOUNED 0.1.dev1+g1762a3a documentation</title>
   
   
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="../../../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link href="../../../../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../../../../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
 
   
-  <link href="../../../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+  <link href="../../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
-<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
-  <script src="../../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../../../_static/documentation_options.js?v=c6d9c122"></script>
+    <script src="../../../../_static/documentation_options.js?v=b7b8f74b"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/geouned/GEOUNED/utils/data_classes';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.15.2';
+        DOCUMENTATION_OPTIONS.theme_version = '0.15.3';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/fusion-neutronics/GEOUNED/adding_version_support_to_docs/docs/version_switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.1';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
@@ -55,27 +55,23 @@
 
   
   
-  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>
-    Back to top
-  </button>
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -97,12 +93,17 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <label class="sidebar-toggle primary-toggle" for="__primary">
+  <button class="sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
-  </label>
+  </button>
   
   
   <div class="col-lg-3 navbar-header-items__start">
@@ -157,40 +158,40 @@ document.write(`
 <nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../../install/index.html">
-                        Install
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../../install/index.html">
+    Install
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../../usage/index.html">
-                        Usage
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../../python_api.html">
-                        Python API reference
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../../usage/index.html">
+    Usage
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../../methodology.html">
-                        Methodology
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../../developer_guide.html">
-                        Developer guide
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../../python_api.html">
+    Python API reference
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../../methodology.html">
+    Methodology
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../../developer_guide.html">
+    Developer guide
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -283,46 +284,49 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item">
+          
+          
+            <div class="navbar-item">
 <nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../../install/index.html">
-                        Install
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../../install/index.html">
+    Install
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../../usage/index.html">
-                        Usage
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../../python_api.html">
-                        Python API reference
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../../usage/index.html">
+    Usage
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../../methodology.html">
-                        Methodology
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../../developer_guide.html">
-                        Developer guide
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../../python_api.html">
+    Python API reference
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../../methodology.html">
+    Methodology
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../../developer_guide.html">
+    Developer guide
+  </a>
+</li>
+
   </ul>
 </nav></div>
+          
         
       </div>
     
@@ -371,13 +375,13 @@ document.write(`
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
@@ -386,7 +390,7 @@ document.write(`
 
 
 
-<nav aria-label="Breadcrumb">
+<nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
     <li class="breadcrumb-item breadcrumb-home">
@@ -1022,8 +1026,6 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Settings for changing the way the CAD to CSG conversion is done</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        stepFile (str, optional): Name of the CAD file (in STEP format) to</span>
-<span class="sd">            be converted. Defaults to &quot;&quot;.</span>
 <span class="sd">        matFile (str, optional): _description_. Defaults to &quot;&quot;.</span>
 <span class="sd">        voidGen (bool, optional): Generate voids of the geometry. Defaults</span>
 <span class="sd">            to True.</span>
@@ -1044,9 +1046,6 @@ document.write(`
 <span class="sd">            most optimal algorithm. The time of the conversion can be</span>
 <span class="sd">            multiplied by 5 or more. &quot;full&quot; : all the cells (solids and</span>
 <span class="sd">            voids) are simplified. Defaults to &quot;No&quot;.</span>
-<span class="sd">        cellRange (list, optional): Range of cell to be converted (only one</span>
-<span class="sd">            range is allowed, e.g [100,220]). Default all solids are</span>
-<span class="sd">            converted. Defaults to [].</span>
 <span class="sd">        exportSolids (str, optional): Export CAD solid after reading.</span>
 <span class="sd">            The execution is stopped after export, the translation is not</span>
 <span class="sd">            carried out. Defaults to &quot;&quot;.</span>
@@ -1076,7 +1075,6 @@ document.write(`
         <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">compSolids</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">simplify</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span>
-        <span class="n">cellRange</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[],</span>
         <span class="n">exportSolids</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">minVoidSize</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">200.0</span><span class="p">,</span>  <span class="c1"># units mm</span>
         <span class="n">maxSurf</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
@@ -1093,7 +1091,6 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="n">debug</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">compSolids</span> <span class="o">=</span> <span class="n">compSolids</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">simplify</span> <span class="o">=</span> <span class="n">simplify</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cellRange</span> <span class="o">=</span> <span class="n">cellRange</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">exportSolids</span> <span class="o">=</span> <span class="n">exportSolids</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">minVoidSize</span> <span class="o">=</span> <span class="n">minVoidSize</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">maxSurf</span> <span class="o">=</span> <span class="n">maxSurf</span>
@@ -1111,7 +1108,7 @@ document.write(`
     <span class="nd">@matFile</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">matFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">matFile</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">matFile</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.matFile should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">matFile</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Settings.matFile should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">matFile</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_matFile</span> <span class="o">=</span> <span class="n">matFile</span>
 
     <span class="nd">@property</span>
@@ -1121,7 +1118,7 @@ document.write(`
     <span class="nd">@voidGen</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">voidGen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voidGen</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">voidGen</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.voidGen should be a bool, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">voidGen</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Settings.voidGen should be a bool, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">voidGen</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_voidGen</span> <span class="o">=</span> <span class="n">voidGen</span>
 
     <span class="nd">@property</span>
@@ -1131,7 +1128,7 @@ document.write(`
     <span class="nd">@debug</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">debug</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">debug</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.debug should be a bool, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">debug</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Settings.debug should be a bool, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">debug</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_debug</span> <span class="o">=</span> <span class="n">debug</span>
 
     <span class="nd">@property</span>
@@ -1141,7 +1138,7 @@ document.write(`
     <span class="nd">@compSolids</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">compSolids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">compSolids</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">compSolids</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.compSolids should be a bool, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">compSolids</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Settings.compSolids should be a bool, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">compSolids</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_compSolids</span> <span class="o">=</span> <span class="n">compSolids</span>
 
     <span class="nd">@property</span>
@@ -1151,21 +1148,8 @@ document.write(`
     <span class="nd">@simplify</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">simplify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simplify</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">simplify</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.simplify should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">simplify</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Settings.simplify should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">simplify</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_simplify</span> <span class="o">=</span> <span class="n">simplify</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">cellRange</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cellRange</span>
-
-    <span class="nd">@cellRange</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">cellRange</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cellRange</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cellRange</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.cellRange should be a list, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">cellRange</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">cellRange</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.cellRange should be a list of ints, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cellRange</span> <span class="o">=</span> <span class="n">cellRange</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">exportSolids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1176,7 +1160,7 @@ document.write(`
         <span class="k">if</span> <span class="n">exportSolids</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">pass</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exportSolids</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.exportSolids should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">exportSolids</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Settings.exportSolids should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">exportSolids</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_exportSolids</span> <span class="o">=</span> <span class="n">exportSolids</span>
 
     <span class="nd">@property</span>
@@ -1186,7 +1170,7 @@ document.write(`
     <span class="nd">@minVoidSize</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">minVoidSize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">minVoidSize</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">minVoidSize</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.minVoidSize should be a float, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">minVoidSize</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Settings.minVoidSize should be a float, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">minVoidSize</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_minVoidSize</span> <span class="o">=</span> <span class="n">minVoidSize</span>
 
     <span class="nd">@property</span>
@@ -1196,7 +1180,7 @@ document.write(`
     <span class="nd">@maxSurf</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">maxSurf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxSurf</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">maxSurf</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.maxSurf should be a int, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">maxSurf</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Settings.maxSurf should be a int, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">maxSurf</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_maxSurf</span> <span class="o">=</span> <span class="n">maxSurf</span>
 
     <span class="nd">@property</span>
@@ -1206,7 +1190,7 @@ document.write(`
     <span class="nd">@maxBracket</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">maxBracket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxBracket</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">maxBracket</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.maxBracket should be a int, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">maxBracket</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Settings.maxBracket should be a int, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">maxBracket</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_maxBracket</span> <span class="o">=</span> <span class="n">maxBracket</span>
 
     <span class="nd">@property</span>
@@ -1216,10 +1200,10 @@ document.write(`
     <span class="nd">@voidMat</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">voidMat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voidMat</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">voidMat</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.voidMat should be a list, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">voidMat</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Settings.voidMat should be a list, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">voidMat</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">voidMat</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.voidMat should be a list of ints, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Settings.voidMat should be a list of ints, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_voidMat</span> <span class="o">=</span> <span class="n">voidMat</span>
 
     <span class="nd">@property</span>
@@ -1229,10 +1213,10 @@ document.write(`
     <span class="nd">@voidExclude</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">voidExclude</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voidExclude</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">voidExclude</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.voidExclude should be a list, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">voidExclude</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Settings.voidExclude should be a list, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">voidExclude</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">voidExclude</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.voidExclude should be a list of ints, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Settings.voidExclude should be a list of ints, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_voidExclude</span> <span class="o">=</span> <span class="n">voidExclude</span>
 
     <span class="nd">@property</span>
@@ -1242,7 +1226,7 @@ document.write(`
     <span class="nd">@startCell</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">startCell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">startCell</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">startCell</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.startCell should be a int, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">startCell</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Settings.startCell should be a int, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">startCell</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_startCell</span> <span class="o">=</span> <span class="n">startCell</span>
 
     <span class="nd">@property</span>
@@ -1252,7 +1236,7 @@ document.write(`
     <span class="nd">@startSurf</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">startSurf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">startSurf</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">startSurf</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.startSurf should be a int, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">startSurf</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Settings.startSurf should be a int, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">startSurf</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_startSurf</span> <span class="o">=</span> <span class="n">startSurf</span>
 
     <span class="nd">@property</span>
@@ -1262,7 +1246,7 @@ document.write(`
     <span class="nd">@sort_enclosure</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">sort_enclosure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sort_enclosure</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sort_enclosure</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Tolerances.sort_enclosure should be a bool, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">sort_enclosure</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.Settings.sort_enclosure should be a bool, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">sort_enclosure</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sort_enclosure</span> <span class="o">=</span> <span class="n">sort_enclosure</span></div>
 
 </pre></div>
@@ -1273,7 +1257,7 @@ document.write(`
               
               
               
-                <footer class="prev-next-footer">
+                <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
 </div>
@@ -1282,8 +1266,6 @@ document.write(`
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"></div>
               
             
           </div>
@@ -1296,8 +1278,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
-<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+  <script src="../../../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1330,7 +1312,7 @@ document.write(`
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
 </p></div>
       
     </div>
