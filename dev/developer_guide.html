@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Developer guide &#8212; GEOUNED 0.1.dev1+g1762a3a documentation</title>
+    <title>Developer guide &#8212; GEOUNED 0.1.dev1+g58c245e documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="_static/documentation_options.js?v=b7b8f74b"></script>
+    <script src="_static/documentation_options.js?v=44e29435"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'developer_guide';</script>
@@ -433,6 +433,10 @@ document.write(`
 <section id="developer-install-with-mamba">
 <h2>Developer install with Mamba<a class="headerlink" href="#developer-install-with-mamba" title="Link to this heading">#</a></h2>
 <p>First we need to install a Mamba distribution. There are a few options but here we opt for Miniforge3 as it includes Mamba.</p>
+<p>Conda could be used instead of Mamba but Mamba is faster and more reliable. If you don’t have permission to install Miniforge3 then you could try using Conda instead. For you could install mamba into conda with.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>mamba<span class="w"> </span>-y
+</pre></div>
+</div>
 <p>You can follow the install instructions for <a class="reference external" href="https://github.com/conda-forge/miniforge">Miniforge3 here</a> or follows the commands below.
 Download</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-L<span class="w"> </span>-O<span class="w"> </span><span class="s2">&quot;https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-</span><span class="k">$(</span>uname<span class="k">)</span><span class="s2">-</span><span class="k">$(</span>uname<span class="w"> </span>-m<span class="k">)</span><span class="s2">.sh&quot;</span>
@@ -455,9 +459,8 @@ bash<span class="w"> </span>Miniforge3-<span class="k">$(</span>uname<span class
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mamba<span class="w"> </span>activate<span class="w"> </span>new_env
 </pre></div>
 </div>
-<p>We have aspirations to create a conda-forge package which will combine these final two steps, but for now FreeCAD and GEOUNED can be installed in two commands.
-Install FreeCAD which is the main dependency</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mamba<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>freecad
+<p>As our main dependency FreeCAD is not available on PYPi but we can install it from conda-forge.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mamba<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>freecad<span class="w"> </span>-y
 </pre></div>
 </div>
 <p>Fork the GEOUNED-org/GEOUNED repository by clicking this link, unchecking the Copy the main branch only check box and clicking create fork</p>
@@ -509,7 +512,7 @@ sphinx-build<span class="w"> </span>docs<span class="w"> </span>_build
 </pre></div>
 </div>
 <p>However we need one more dependency to run the tests.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mamba<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>openmc
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mamba<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>openmc<span class="w"> </span>-y
 </pre></div>
 </div>
 <p>Then we can run the tests with the following command from the root of the repository.</p>
