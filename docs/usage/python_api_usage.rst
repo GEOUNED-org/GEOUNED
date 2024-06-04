@@ -12,7 +12,8 @@ The example makes use of default  attributes.
 .. code-block:: python
 
     import geouned
-    geo = geouned.CadToCsg(stepFile='cuboid.stp')
+    geo = geouned.CadToCsg()
+    geo.load_step_file(filename='cuboid.stp')
     geo.start()
     geo.export_csg()
 
@@ -43,7 +44,6 @@ The following example shows a usage with every attributes specified.
         debug=False,
         compSolids=True,
         simplify="no",
-        cellRange=[],
         exportSolids="",
         minVoidSize=200.0,
         maxSurf=50,
@@ -90,11 +90,15 @@ The following example shows a usage with every attributes specified.
     )
 
     geo = geouned.CadToCsg(
-        stepFile="cuboid.stp",
         options=my_options,
         settings=my_settings,
         tolerances=my_tolerances,
         numeric_format=my_numeric_format,
+    )
+
+    geo.load_step_file(
+        filename="cuboid.stp",
+        skip_solids=[],
     )
 
     geo.start()

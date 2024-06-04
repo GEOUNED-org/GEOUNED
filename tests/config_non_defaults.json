@@ -1,5 +1,7 @@
 {
-    "stepFile": "testing/inputSTEP/BC.stp",
+    "load_step_file": {
+        "filename":"testing/inputSTEP/BC.stp"
+    },
     "Options": {
         "forceCylinder": true 
     },

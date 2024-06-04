@@ -30,7 +30,7 @@ class McnpInput:
         volCARD,
         UCARD,
         dummyMat,
-        stepFile,
+        step_filename,
     ):
         self.Title = title
         self.VolSDEF = volSDEF
@@ -48,9 +48,9 @@ class McnpInput:
         }
         self.part = "P"
 
-        self.StepFile = stepFile
-        if isinstance(self.StepFile, (tuple, list)):
-            self.StepFile = "; ".join(self.StepFile)
+        self.step_filename = step_filename
+        if isinstance(self.step_filename, (tuple, list)):
+            self.step_filename = "; ".join(self.step_filename)
 
         self.get_surface_table()
         self.simplify_planes(Surfaces)
@@ -119,7 +119,7 @@ C FreeCAD Version : {freeCAD_Version}
 
         Information = f"""C
 C *************************************************************
-C Original Step file : {self.StepFile}
+C Original Step file : {self.step_filename}
 C
 C Creation Date : {datetime.now()}
 C Solid Cells   : {self.__solidCells__}
