@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>geouned.GEOUNED.core &#8212; GEOUNED 0.1.dev1+g58c245e documentation</title>
+    <title>geouned.GEOUNED.core &#8212; GEOUNED 0.1.dev1+g599fe67 documentation</title>
   
   
   
@@ -34,7 +34,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../../_static/documentation_options.js?v=44e29435"></script>
+    <script src="../../../_static/documentation_options.js?v=324cf792"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/geouned/GEOUNED/core';</script>
@@ -1119,8 +1119,8 @@ document.write(`
                 <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">Definition</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">c</span><span class="o">.</span><span class="n">IsEnclosure</span><span class="p">:</span>
                     <span class="k">continue</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;simplify cell </span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">__id__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">Box</span> <span class="o">=</span> <span class="n">UF</span><span class="o">.</span><span class="n">get_box</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-                <span class="n">CT</span> <span class="o">=</span> <span class="n">build_c_table_from_solids</span><span class="p">(</span><span class="n">Box</span><span class="p">,</span> <span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">Surfaces</span><span class="p">,</span> <span class="n">Surfs</span><span class="p">),</span> <span class="n">option</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">)</span>
+                <span class="n">Box</span> <span class="o">=</span> <span class="n">UF</span><span class="o">.</span><span class="n">get_box</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">enlargeBox</span><span class="p">)</span>
+                <span class="n">CT</span> <span class="o">=</span> <span class="n">build_c_table_from_solids</span><span class="p">(</span><span class="n">Box</span><span class="p">,</span> <span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">Surfaces</span><span class="p">,</span> <span class="n">Surfs</span><span class="p">),</span> <span class="s2">&quot;full&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
                 <span class="n">c</span><span class="o">.</span><span class="n">Definition</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">CT</span><span class="p">)</span>
                 <span class="n">c</span><span class="o">.</span><span class="n">Definition</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
                 <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">Definition</span><span class="o">.</span><span class="n">elements</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">bool</span><span class="p">:</span>
