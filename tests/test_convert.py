@@ -14,7 +14,6 @@ if os.getenv("GITHUB_ACTIONS"):
     step_files.remove(Path("testing/inputSTEP/large/Triangle.stp"))
 suffixes = (".mcnp", ".xml", ".inp", ".py", ".serp")
 
-
 @pytest.mark.parametrize("input_step_file", step_files)
 def test_conversion(input_step_file):
     """Test that step files can be converted to openmc and mcnp files"""
@@ -213,3 +212,9 @@ def test_with_relative_tol_true():
     )
     geo.load_step_file(filename=f"{step_files[1].resolve()}", skip_solids=[])
     geo.start()
+
+def test_error_handling_for_spine_geometry():
+
+    geo = geouned.CadToCsg()
+    with pytest.raises(ValueError, match="spines in CAD geometry"):
+        geo.load_step_file(filename="testing/solid_with_splines.step", skip_solids=[])
