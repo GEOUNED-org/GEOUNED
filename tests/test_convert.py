@@ -1,9 +1,12 @@
+import logging
 import os
 from pathlib import Path
 
 import pytest
 
 import geouned
+
+logger = logging.getLogger("general_logger")
 
 path_to_cad = Path("testing/inputSTEP")
 step_files = list(path_to_cad.rglob("*.stp")) + list(path_to_cad.rglob("*.step"))
@@ -213,11 +216,6 @@ def test_with_relative_tol_true():
     )
     geo.load_step_file(filename=f"{step_files[1].resolve()}", skip_solids=[])
     geo.start()
-
-
-import logging
-
-logger = logging.getLogger("general_logger")
 
 
 def test_error_handling_for_spline_geometry(caplog):
