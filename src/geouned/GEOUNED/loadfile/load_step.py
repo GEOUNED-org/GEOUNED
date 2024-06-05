@@ -31,14 +31,35 @@ def extract_materials(filename):
     return m_dict
 
 
-def check_solid_for_splines(solid) -> bool:
-    for edge in solid.Edges:
-        if edge.Curve.__class__.__name__ == "BSplineCurve":
-            return True
-    return False
+def check_solids_for_splines(solids, filename, skip_solids) -> bool:
+    solid_ids_with_splines = []
+    for i, solid in enumerate(solids):
+        if i not in skip_solids:
+            for edge in solid.Edges:
+                try:
+                    if edge.Curve.__class__.__name__ == "BSplineCurve":
+                        solid_ids_with_splines.append(i)
+                # catching type errors as sometimes edges fail with "TypeError: undefined curve type"
+                except TypeError:
+                    pass
+
+    if solid_ids_with_splines:
+        divider = "', '"
+        no_repetitions = list(set(solid_ids_with_splines))
+        logger.warning(
+            f"The solids {no_repetitions} contain splines in the CAD geometry {filename}\n"
+            "These splines might be used by the CAD geometry so this might not be an issue.\n"
+            "However if spines are used in the geometry then these are not directly convertible to Constructive Solid Geometry (CSG).\n"
+            f"You can use CadToCsg.load_cad(skip_solids=['{divider.join(str(s_id) for s_id in no_repetitions)}']) to exclude this solid from the conversion.\n"
+            "Or you could remove the volume from the CAD file manually.\n"
+            "Or you could replace the splines with polylines or arcs in the CAD file.\n"
+        )
+        return True
+    else:
+        return False
 
 
-def load_cad(filename, settings, options, skip_solids=[]):
+def load_cad(filename, settings, options, skip_solids):
 
     # Set document solid tree options when opening CAD differing from version 0.18
     if int(FreeCAD.Version()[1]) > 18:
@@ -60,23 +81,11 @@ def load_cad(filename, settings, options, skip_solids=[]):
     s.read(filename)
     Solids = s.Solids
     meta_list = []
-    solid_ids_with_splines = []
+
+    check_solids_for_splines(Solids, filename, skip_solids)
+
     for i, s in enumerate(Solids):
-        if i in skip_solids:
-            logger.info(f"Solid {i} in skip_solids so it is not loaded")
-        else:
-            if check_solid_for_splines(s):
-                solid_ids_with_splines.append(i)
-            meta_list.append(UF.GeounedSolid(i + 1, s))
-    if solid_ids_with_splines:
-        divider = "', '"
-        raise ValueError(
-            f"The solids {solid_ids_with_splines} contain splines in the CAD geometry {filename}\n"
-            "which are not directly convertible to Constructive Solid Geometry (CSG).\n"
-            f"You can use CadToCsg.load_cad(skip_solids=['{divider.join(str(s_id) for s_id in solid_ids_with_splines)}']) to exclude this solid from the conversion.\n"
-            "Or you could remove the volume from the CAD file manually.\n"
-            "Or you could replace the splines with polylines or arcs in the CAD file.\n"
-        )
+        meta_list.append(UF.GeounedSolid(i + 1, s))
 
     i_solid = 0
     missing_mat = set()
@@ -84,8 +93,6 @@ def load_cad(filename, settings, options, skip_solids=[]):
     doc_objects = cad_simplificado_doc.Objects
 
     for i, elem in enumerate(doc_objects):
-        if i in skip_solids:
-            continue
         if elem.TypeId == "Part::Feature":
             comment = LF.getCommentTree(elem, options)
             if not elem.Shape.Solids:

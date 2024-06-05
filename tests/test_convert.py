@@ -215,16 +215,20 @@ def test_with_relative_tol_true():
     geo.start()
 
 
-def test_error_handling_for_spline_geometry():
+import logging
 
+logger = logging.getLogger("general_logger")
+
+
+def test_error_handling_for_spline_geometry(caplog):
+    caplog.set_level(logging.WARNING)
     geo = geouned.CadToCsg()
-    with pytest.raises(ValueError, match="The solid 0 contains splines"):
-        # this should error as the cad file contains a single geometry with splines
-        geo.load_step_file(filename="tests/solid_with_splines.step", skip_solids=[])
 
-    with pytest.raises(ValueError, match="The solid 0 contains splines"):
-        # this should error as the cad file contains a two geometries and the first one has splines
-        geo.load_step_file(filename="tests/one_solid_with_spine_one_solid_without_spline.step", skip_solids=[])
+    geo.load_step_file(filename="tests/one_solid_with_spine_one_solid_without_spline.step", skip_solids=[1])
+    assert "contain splines in the CAD geometry" not in caplog.text
 
-    # this should pass as we are now skipping the spline solid
-    geo.load_step_file(filename="tests/one_solid_with_spine_one_solid_without_spline.step", skip_solids=[0])
+    geo.load_step_file(filename="tests/solid_with_splines.step", skip_solids=[])
+    assert "The solids [0] contain splines in the CAD geometry" in caplog.text
+
+    geo.load_step_file(filename="tests/one_solid_with_spine_one_solid_without_spline.step", skip_solids=[])
+    assert "The solids [1] contain splines in the CAD geometry" in caplog.text

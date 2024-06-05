@@ -492,6 +492,11 @@ class CadToCsg:
         self.meta_list = join_meta_lists(MetaChunk)
         self.enclosure_list = join_meta_lists(EnclosureChunk)
 
+        # deleting the solid index in reverse order so the indexes don't change for subsequent deletions
+        for solid_index in sorted(skip_solids, reverse=True):
+            logger.info(f"Removing solid index: {solid_index} from list of {len(self.meta_list)} solids")
+            del self.meta_list[solid_index]
+
         logger.info("End of step file loading phase")
 
         return self.meta_list, self.enclosure_list
