@@ -31,17 +31,11 @@ def extract_materials(filename):
     return m_dict
 
 
-def check_solid_for_splines(solid, solid_number):
+def check_solid_for_splines(solid) -> bool:
     for edge in solid.Edges:
         if edge.Curve.__class__.__name__ == "BSplineCurve":
-            msg = (
-                f"The solid {solid_number} contains splines in the CAD geometry\n"
-                "which are not directly convertible to Constructive Solid Geometry (CSG).\n"
-                "You can use the skip_solids argument on the CadToCsg.load_cad() method to exclude this solid from the conversion.\n"
-                "Or you could remove the volume from the CAD file manually.\n"
-                "Or you could convert the splines to polylines or arcs in the CAD file.\n"
-            )
-            raise ValueError(msg)
+            return True
+    return False
 
 
 def load_cad(filename, settings, options, skip_solids=[]):
@@ -66,12 +60,23 @@ def load_cad(filename, settings, options, skip_solids=[]):
     s.read(filename)
     Solids = s.Solids
     meta_list = []
+    solid_ids_with_splines = []
     for i, s in enumerate(Solids):
         if i in skip_solids:
             logger.info(f"Solid {i} in skip_solids so it is not loaded")
         else:
-            check_solid_for_splines(s, i)
+            if check_solid_for_splines(s):
+                solid_ids_with_splines.append(i)
             meta_list.append(UF.GeounedSolid(i + 1, s))
+    if solid_ids_with_splines:
+        divider = "', '"
+        raise ValueError(
+            f"The solids {solid_ids_with_splines} contain splines in the CAD geometry {filename}\n"
+            "which are not directly convertible to Constructive Solid Geometry (CSG).\n"
+            f"You can use CadToCsg.load_cad(skip_solids=['{divider.join(str(s_id) for s_id in solid_ids_with_splines)}']) to exclude this solid from the conversion.\n"
+            "Or you could remove the volume from the CAD file manually.\n"
+            "Or you could replace the splines with polylines or arcs in the CAD file.\n"
+        )
 
     i_solid = 0
     missing_mat = set()
