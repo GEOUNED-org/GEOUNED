@@ -77,7 +77,6 @@ def load_cad(filename, settings, options, skip_solids=[]):
     missing_mat = set()
 
     doc_objects = cad_simplificado_doc.Objects
-    print("doc_objects", doc_objects)
 
     for i, elem in enumerate(doc_objects):
         if i in skip_solids:
