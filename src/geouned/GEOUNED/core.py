@@ -486,16 +486,11 @@ class CadToCsg:
         EnclosureChunk = []
         for step_file in tqdm(step_files, desc="Loading CAD files"):
             logger.info(f"read step file : {step_file}")
-            Meta, Enclosure = Load.load_cad(step_file, self.settings, self.options)
+            Meta, Enclosure = Load.load_cad(step_file, self.settings, self.options, skip_solids)
             MetaChunk.append(Meta)
             EnclosureChunk.append(Enclosure)
         self.meta_list = join_meta_lists(MetaChunk)
         self.enclosure_list = join_meta_lists(EnclosureChunk)
-
-        # deleting the solid index in reverse order so the indexes don't change for subsequent deletions
-        for solid_index in sorted(skip_solids, reverse=True):
-            logger.info(f"Removing solid index: {solid_index} from list of {len(self.meta_list)} solids")
-            del self.meta_list[solid_index]
 
         logger.info("End of step file loading phase")
 

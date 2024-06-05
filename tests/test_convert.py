@@ -14,6 +14,7 @@ if os.getenv("GITHUB_ACTIONS"):
     step_files.remove(Path("testing/inputSTEP/large/Triangle.stp"))
 suffixes = (".mcnp", ".xml", ".inp", ".py", ".serp")
 
+
 @pytest.mark.parametrize("input_step_file", step_files)
 def test_conversion(input_step_file):
     """Test that step files can be converted to openmc and mcnp files"""
@@ -213,8 +214,17 @@ def test_with_relative_tol_true():
     geo.load_step_file(filename=f"{step_files[1].resolve()}", skip_solids=[])
     geo.start()
 
-def test_error_handling_for_spine_geometry():
+
+def test_error_handling_for_spline_geometry():
 
     geo = geouned.CadToCsg()
-    with pytest.raises(ValueError, match="spines in CAD geometry"):
-        geo.load_step_file(filename="testing/solid_with_splines.step", skip_solids=[])
+    with pytest.raises(ValueError, match="The solid 0 contains splines"):
+        # this should error as the cad file contains a single geometry with splines
+        geo.load_step_file(filename="tests/solid_with_splines.step", skip_solids=[])
+
+    with pytest.raises(ValueError, match="The solid 0 contains splines"):
+        # this should error as the cad file contains a two geometries and the first one has splines
+        geo.load_step_file(filename="tests/one_solid_with_spine_one_solid_without_spline.step", skip_solids=[])
+
+    # this should pass as we are now skipping the spline solid
+    geo.load_step_file(filename="tests/one_solid_with_spine_one_solid_without_spline.step", skip_solids=[0])
