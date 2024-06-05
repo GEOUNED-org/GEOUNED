@@ -92,7 +92,7 @@ def load_cad(filename, settings, options, skip_solids):
 
     doc_objects = cad_simplificado_doc.Objects
 
-    for i, elem in enumerate(doc_objects):
+    for elem in doc_objects:
         if elem.TypeId == "Part::Feature":
             comment = LF.getCommentTree(elem, options)
             if not elem.Shape.Solids:
