@@ -1,5 +1,8 @@
 {
-    "stepFile": "testing/inputSTEP/BC.stp",
+    "load_step_file": {
+        "filename": "testing/inputSTEP/BC.stp",
+        "skip_solids": []
+    },
     "Options": {
         "forceCylinder": false, 
         "newSplitPlane": true, 
@@ -52,7 +55,6 @@
         "debug": false, 
         "compSolids": true, 
         "simplify": "no", 
-        "cellRange": [], 
         "exportSolids": "", 
         "minVoidSize": 200.0, 
         "maxSurf": 50, 

@@ -83,7 +83,6 @@ def test_conversion(input_step_file):
         debug=False,
         compSolids=True,
         simplify="no",
-        cellRange=[],
         exportSolids="",
         minVoidSize=200.0,  # units mm
         maxSurf=50,
@@ -96,12 +95,13 @@ def test_conversion(input_step_file):
     )
 
     geo = geouned.CadToCsg(
-        stepFile=f"{input_step_file.resolve()}",
         options=my_options,
         settings=my_settings,
         tolerances=my_tolerances,
         numeric_format=my_numeric_format,
     )
+
+    geo.load_step_file(filename=f"{input_step_file.resolve()}", skip_solids=[])
 
     geo.start()
 
@@ -140,7 +140,7 @@ def test_cad_to_csg_from_json_with_defaults(input_json_file):
     my_cad_to_csg = geouned.CadToCsg.from_json(input_json_file)
     assert isinstance(my_cad_to_csg, geouned.CadToCsg)
 
-    assert my_cad_to_csg.stepFile == "testing/inputSTEP/BC.stp"
+    assert my_cad_to_csg.filename == "testing/inputSTEP/BC.stp"
     assert my_cad_to_csg.options.forceCylinder == False
     assert my_cad_to_csg.tolerances.relativeTol == False
     assert my_cad_to_csg.numeric_format.P_abc == "14.7e"
@@ -148,13 +148,6 @@ def test_cad_to_csg_from_json_with_defaults(input_json_file):
 
     for suffix in suffixes:
         assert Path("csg").with_suffix(suffix).exists()
-
-    # deletes the output MC files if they already exists
-    for suffix in suffixes:
-        Path("csg").with_suffix(suffix).unlink(missing_ok=True)
-
-    my_cad_to_csg.start()
-    my_cad_to_csg.export_csg()
 
 
 def test_cad_to_csg_from_json_with_non_defaults():
@@ -166,7 +159,7 @@ def test_cad_to_csg_from_json_with_non_defaults():
     my_cad_to_csg = geouned.CadToCsg.from_json("tests/config_non_defaults.json")
     assert isinstance(my_cad_to_csg, geouned.CadToCsg)
 
-    assert my_cad_to_csg.stepFile == "testing/inputSTEP/BC.stp"
+    assert my_cad_to_csg.filename == "testing/inputSTEP/BC.stp"
     assert my_cad_to_csg.options.forceCylinder == True
     assert my_cad_to_csg.tolerances.relativePrecision == 2e-6
     assert my_cad_to_csg.numeric_format.P_abc == "15.7e"
@@ -175,18 +168,12 @@ def test_cad_to_csg_from_json_with_non_defaults():
     for suffix in suffixes:
         assert Path("csg").with_suffix(suffix).exists()
 
-    # deletes the output MC files if they already exists
-    for suffix in suffixes:
-        Path("csg").with_suffix(suffix).unlink(missing_ok=True)
-
-    my_cad_to_csg.start()
-    my_cad_to_csg.export_csg()
-
 
 def test_writing_to_new_folders():
     """Checks that a folder is created prior to writing output files"""
 
-    geo = geouned.CadToCsg(stepFile="testing/inputSTEP/BC.stp")
+    geo = geouned.CadToCsg()
+    geo.load_step_file(filename="testing/inputSTEP/BC.stp", skip_solids=[])
     geo.start()
 
     for outformat in ["mcnp", "phits", "serpent", "openmc_xml", "openmc_py"]:
@@ -216,12 +203,13 @@ def test_with_relative_tol_true():
     # more details https://github.com/GEOUNED-org/GEOUNED/issues/154
 
     geo = geouned.CadToCsg(
-        stepFile=f"{step_files[1].resolve()}",
         tolerances=geouned.Tolerances(relativeTol=False),
     )
+    geo.load_step_file(filename=f"{step_files[1].resolve()}", skip_solids=[])
     geo.start()
+
     geo = geouned.CadToCsg(
-        stepFile=f"{step_files[1].resolve()}",
         tolerances=geouned.Tolerances(relativeTol=True),
     )
+    geo.load_step_file(filename=f"{step_files[1].resolve()}", skip_solids=[])
     geo.start()

@@ -35,7 +35,7 @@ Install GEOUNED from conda-forge
 
 .. code-block:: sh
 
-    mamba install -c conda-forge geouned
+    mamba install -c conda-forge geouned -y
 
 Then you will be able to run import GEOUNED from within Python
 
@@ -80,7 +80,7 @@ Install GEOUNED from conda-forge
 
 .. code-block:: sh
 
-    conda install -c conda-forge geouned
+    conda install -c conda-forge geouned -y
 
 Then you will be able to run import GEOUNED from within Python
 

@@ -44,7 +44,7 @@ class PhitsInput:
         volCARD,
         UCARD,
         dummyMat,
-        stepFile,
+        step_filename,
         matFile,
         voidMat,
         startCell,
@@ -63,12 +63,12 @@ class PhitsInput:
         self.options = options
         self.Options = {"Volume": self.VolCARD, "Universe": self.U0CARD}
 
-        self.StepFile = stepFile
-        if isinstance(self.StepFile, (tuple, list)):
-            self.StepFile = "; ".join(self.StepFile)
+        self.step_filename = step_filename
+        if isinstance(self.step_filename, (tuple, list)):
+            self.step_filename = "; ".join(self.step_filename)
 
         if self.Title == "":
-            self.Title = self.StepFile
+            self.Title = self.step_filename
 
         self.get_surface_table()
         self.simplify_planes(Surfaces)
@@ -160,7 +160,7 @@ $ PHITSFormat Version :  0.0.2.3     06/03/2024\n""".format(
 
         Information = f"""$
 $ *************************************************************
-$ Original Step file : {self.StepFile}
+$ Original Step file : {self.step_filename}
 $
 $ Creation Date : {datetime.now()}
 $ Solid Cells   : {self.__solidCells__}
@@ -180,7 +180,7 @@ $ **************************************************************
     def write_phits_cell_block(self):
 
         enclenvChk = []
-        enclenvChk = self.stepfile_label_chk(self.StepFile)
+        enclenvChk = self.step_filename_label_chk(self.step_filename)
 
         if enclenvChk:
             logger.info("Unified the inner void cell(s) definition")
@@ -192,7 +192,7 @@ $ **************************************************************
                 self.write_phits_cells(cell)
             return
 
-    def stepfile_label_chk(self, filename):
+    def step_filename_label_chk(self, filename):
 
         enclenvList = []
         with open(filename) as f:
@@ -410,7 +410,7 @@ $ **************************************************************
         eliminated_endVoidIndex = self.__cells__ + self.startCell - 3
 
         enclenvChk = []
-        enclenvChk = self.stepfile_label_chk(self.StepFile)
+        enclenvChk = self.step_filename_label_chk(self.step_filename)
 
         if enclenvChk and self.Options["Volume"]:
             for i, cell in enumerate(self.Cells):

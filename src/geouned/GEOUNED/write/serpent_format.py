@@ -28,7 +28,7 @@ class SerpentInput:
         volCARD,
         UCARD,
         dummyMat,
-        stepFile,
+        step_filename,
     ):
         self.options = options
         self.tolerances = tolerances
@@ -46,9 +46,9 @@ class SerpentInput:
         }
         self.part = "p"
 
-        self.StepFile = stepFile
-        if isinstance(self.StepFile, (tuple, list)):
-            self.StepFile = "; ".join(self.StepFile)
+        self.step_filename = step_filename
+        if isinstance(self.step_filename, (tuple, list)):
+            self.step_filename = "; ".join(self.step_filename)
 
         self.get_surface_table()
         self.simplify_planes(Surfaces)
@@ -113,7 +113,7 @@ class SerpentInput:
 
         Information = f"""%
 % *************************************************************
-% Original Step file : {self.StepFile}
+% Original Step file : {self.step_filename}
 %
 % Creation Date : {datetime.now()}
 % Solid Cells   : {self.__solidCells__}
