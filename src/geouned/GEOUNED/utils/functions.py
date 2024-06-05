@@ -23,9 +23,9 @@ from .basic_functions_part1 import (
 from . import basic_functions_part2 as BF
 
 
-def get_box(comp, options):
+def get_box(comp, enlargeBox):
     bb = FreeCAD.BoundBox(comp.BoundBox)
-    bb.enlarge(options.enlargeBox)
+    bb.enlarge(enlargeBox)
     xMin, yMin, zMin = bb.XMin, bb.YMin, bb.ZMin
     xLength, yLength, zLength = bb.XLength, bb.YLength, bb.ZLength
 
