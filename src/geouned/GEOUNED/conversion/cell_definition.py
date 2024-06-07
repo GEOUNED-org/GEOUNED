@@ -849,7 +849,7 @@ def no_overlapping_cell(metaList, surfaces, options):
         t_def, simplify = t_def_and_simplify
         if True in simplify:
             logger.info(f"reduce cell {m.__id__}")
-            box = UF.get_box(m)
+            box = UF.get_box(m, options.enlargeBox)
 
             # evaluate only diagonal elements of the Constraint Table (fastest) and remove surface not
             # crossing in the solid boundBox
