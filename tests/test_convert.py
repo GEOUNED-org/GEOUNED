@@ -1,9 +1,12 @@
+import logging
 import os
 from pathlib import Path
 
 import pytest
 
 import geouned
+
+logger = logging.getLogger("general_logger")
 
 path_to_cad = Path("testing/inputSTEP")
 step_files = list(path_to_cad.rglob("*.stp")) + list(path_to_cad.rglob("*.step"))
@@ -213,3 +216,17 @@ def test_with_relative_tol_true():
     )
     geo.load_step_file(filename=f"{step_files[1].resolve()}", skip_solids=[])
     geo.start()
+
+
+def test_error_handling_for_spline_geometry(caplog):
+    caplog.set_level(logging.WARNING)
+    geo = geouned.CadToCsg()
+
+    geo.load_step_file(filename="tests/one_solid_with_spine_one_solid_without_spline.step", skip_solids=[1])
+    assert "contain splines in the CAD geometry" not in caplog.text
+
+    geo.load_step_file(filename="tests/solid_with_splines.step", skip_solids=[])
+    assert "The solids [0] contain splines in the CAD geometry" in caplog.text
+
+    geo.load_step_file(filename="tests/one_solid_with_spine_one_solid_without_spline.step", skip_solids=[])
+    assert "The solids [1] contain splines in the CAD geometry" in caplog.text
