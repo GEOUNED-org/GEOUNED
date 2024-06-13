@@ -261,7 +261,6 @@ class CadToCsg:
             cad_to_csg.export_csg()
         return cad_to_csg
 
-
     def load_step_file(
         self,
         filename: typing.Union[str, typing.Sequence[str]],
