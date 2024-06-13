@@ -53,6 +53,12 @@ As our main dependency FreeCAD is not available on PYPi but we can install it fr
 
     mamba install -c conda-forge freecad -y
 
+To be able to run test cases and stochastic volume calculation, it is needed to install ``openmc`` and ``pytest`` from conda-forge.
+
+.. code-block:: sh
+
+    mamba install -c conda-forge pytest openmc
+
 Fork the GEOUNED-org/GEOUNED repository by clicking this link, unchecking the Copy the main branch only check box and clicking create fork
 
 `https://github.com/GEOUNED-org/GEOUNED/fork <https://github.com/GEOUNED-org/GEOUNED/fork>`_
