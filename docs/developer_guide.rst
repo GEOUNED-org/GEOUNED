@@ -2,7 +2,7 @@ Developer guide
 ===============
 
 Developer install with Mamba
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 First we need to install a Mamba distribution. There are a few options but here we opt for Miniforge3 as it includes Mamba.
 
@@ -235,3 +235,8 @@ Check the pull request and if the tests pass then merge the pull request.
 A Conda Forge package will be built and released to the conda-forge channel.
 
 Once released the package will be visaible on the `conda-forge channel <https://anaconda.org/conda-forge/geouned>`_. 
+
+Version Numbering
+~~~~~~~~~~~~~~~~~
+
+GEOUNED will use Semantic Versioning to number releases of the tool, in the form "Major.Minor.Patch", e.g., “3.15.9”.
