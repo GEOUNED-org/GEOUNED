@@ -11,17 +11,30 @@ from .Modules.XMLinput import XmlInput
 
 
 def CsgToCad():
-    
-    def __init__(
-        self,
-    ):
+
+    def __init__(self):
         pass
+
+    def load_csg_file(
+        self,
+        input_filename: str,
+        csg_format: str,     
+    ):
+
+        # get geometry definition from OpenMC XML or MCNP input
+        if csg_format == "mcnp":
+            geo = McnpInput(input_filename)
+        elif csg_format == "openmc_xml":
+            geo = XmlInput(input_filename)
+        else:
+            msg = f"input format type {csg_format} is not supported. Supported options are 'openmc_xml' or 'mcnp'"
+            raise ValueError(msg)
+        self.geo = geo
+        return geo
 
     def export_cad(
         self,
-        input_filename,
         output_filename,
-        csg_format: str,
         out_box: typing.Tuple[int, int, int, int, int, int] = (-100, -100, -100, 100, 100, 100),
         universe_start: int = 0,
         level_max: str = "all",
@@ -34,15 +47,6 @@ def CsgToCad():
         if Path(output_filename).suffix not in ['.stp', '.step']:
             raise ValueError(f"output file must have a .stp or .step extension, not {universe_start.suffix}")
 
-        # get geometry definition from OpenMC XML or MCNP input
-        if csg_format == "mcnp":
-            geo = McnpInput(input_filename)
-        elif csg_format == "openmc_xml":
-            geo = XmlInput(input_filename)
-        else:
-            msg = f"input format type {csg_format} is not supported. Supported options are 'openmc_xml' or 'mcnp'"
-            raise ValueError(msg)
-    
         UnivCell = CadCell()
         UnivCell.shape = UnivCell.makeBox(FreeCAD.BoundBox(*out_box))
 
@@ -55,7 +59,7 @@ def CsgToCad():
             "format": csg_format,
         }
 
-        # TODO don't return fails varible, just fail in the method and raise the error there
+        # TODO don't return fails variable, just fail in the method and raise the error there
         CADCells, fails = buildCAD(UnivCell, geo, CADselection)
 
         if fails:
