@@ -87,16 +87,17 @@ class CsgToCad:
         UnivCell.shape = UnivCell.makeBox(FreeCAD.BoundBox(*bounding_box))
 
         # TODO make these variable names lower case in the downstream code
+
         CADselection = {
             "Ustart": universe_start,
             "levelMax": level_max,
-            "cell": (cell_range_type, cell_range),
-            "mat": (mat_range_type, mat_range),
+            "cell": [cell_range_type, cell_range],
+            "mat": [mat_range_type, mat_range],
             "format": csg_format,
-            cell_range_type: cell_range_type,
-            cell_range: cell_range,
-            mat_range_type: mat_range_type,
-            mat_range: mat_range,
+            "cell_range_type": cell_range_type,
+            "cell_range": cell_range,
+            "mat_range_type": mat_range_type,
+            "mat_range": mat_range,
         }
 
         # TODO don't return fails variable, just fail in the method and raise the error there
