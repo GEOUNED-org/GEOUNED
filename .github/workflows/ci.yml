@@ -69,8 +69,8 @@ jobs:
         - name: testing GEOUNED CsgToCad functionality
           run: |
             python -m pytest -v tests/test_csgtocad.py
-            geouned_csgtocad -i tests/config_csgtocad_complete_defaults.json
-            geouned_csgtocad -i tests/config_csgtocad_non_defaults.json
+            geouned_csgtocad -i tests/config_csgtocad_complete.json
+            geouned_csgtocad -i tests/config_csgtocad_minimal.json
 
         - name: install openmc
           if: ${{ matrix.os == 'ubuntu-latest'}}
