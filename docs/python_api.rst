@@ -23,3 +23,7 @@ Python API reference
 .. autoclass:: Tolerances
     :members:
     :show-inheritance:
+
+.. autoclass:: CsgToCad
+    :members:
+    :show-inheritance:
