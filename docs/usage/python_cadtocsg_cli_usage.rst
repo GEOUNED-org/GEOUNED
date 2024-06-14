@@ -1,7 +1,7 @@
-Command Line Tool Usage
-=======================
+Command Line Tool Usage, CAD to CSG conversion
+==============================================
 
-GEOUNED can be used in the command line.
+GEOUNED CAD to CSG conversion can be performed in the command line.
 
 These examples assumes you have a CAD STEP file in the current working directory of the terminal called "cuboid.stp"
 
