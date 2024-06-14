@@ -271,7 +271,7 @@ class VoidBox:
                 surfaceDict = {}
                 for i in surfList:
                     surfaceDict[i] = Surfaces.get_surface(i)
-                CTable = build_c_table_from_solids(Box, surfaceDict, option=simplify, options=options)
+                CTable = build_c_table_from_solids(Box, surfaceDict, simplify, options=options)
             else:
                 if res is True:
                     return None, None

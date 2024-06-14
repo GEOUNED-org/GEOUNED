@@ -22,7 +22,7 @@ def write_geometry(
     volCARD,
     UCARD,
     dummyMat,
-    stepFile,
+    step_filename,
 ):
 
     supported_mc_codes = ("mcnp", "openmc_xml", "openmc_py", "serpent", "phits")
@@ -63,7 +63,7 @@ def write_geometry(
             volCARD,
             UCARD,
             dummyMat,
-            stepFile,
+            step_filename,
         )
         MCNPfile.set_sdef((outSphere, outBox))
         MCNPfile.write_input(mcnpFilename)
@@ -105,7 +105,7 @@ def write_geometry(
             volCARD,
             UCARD,
             dummyMat,
-            stepFile,
+            step_filename,
         )
         # Serpentfile.set_sdef((outSphere,outBox))
         Serpentfile.write_input(serpentFilename)
@@ -139,7 +139,7 @@ def write_geometry(
             volCARD,
             UCARD,
             dummyMat,
-            stepFile,
+            step_filename,
             matFile=settings.matFile,
             voidMat=settings.voidMat,
             startCell=settings.startCell,

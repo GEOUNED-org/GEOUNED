@@ -594,8 +594,6 @@ class Settings:
     """Settings for changing the way the CAD to CSG conversion is done
 
     Args:
-        stepFile (str, optional): Name of the CAD file (in STEP format) to
-            be converted. Defaults to "".
         matFile (str, optional): _description_. Defaults to "".
         voidGen (bool, optional): Generate voids of the geometry. Defaults
             to True.
@@ -616,9 +614,6 @@ class Settings:
             most optimal algorithm. The time of the conversion can be
             multiplied by 5 or more. "full" : all the cells (solids and
             voids) are simplified. Defaults to "No".
-        cellRange (list, optional): Range of cell to be converted (only one
-            range is allowed, e.g [100,220]). Default all solids are
-            converted. Defaults to [].
         exportSolids (str, optional): Export CAD solid after reading.
             The execution is stopped after export, the translation is not
             carried out. Defaults to "".
@@ -648,7 +643,6 @@ class Settings:
         debug: bool = False,
         compSolids: bool = True,
         simplify: str = "no",
-        cellRange: list = [],
         exportSolids: typing.Optional[str] = None,
         minVoidSize: float = 200.0,  # units mm
         maxSurf: int = 50,
@@ -665,7 +659,6 @@ class Settings:
         self.debug = debug
         self.compSolids = compSolids
         self.simplify = simplify
-        self.cellRange = cellRange
         self.exportSolids = exportSolids
         self.minVoidSize = minVoidSize
         self.maxSurf = maxSurf
@@ -683,7 +676,7 @@ class Settings:
     @matFile.setter
     def matFile(self, matFile: str):
         if not isinstance(matFile, str):
-            raise TypeError(f"geouned.Tolerances.matFile should be a str, not a {type(matFile)}")
+            raise TypeError(f"geouned.Settings.matFile should be a str, not a {type(matFile)}")
         self._matFile = matFile
 
     @property
@@ -693,7 +686,7 @@ class Settings:
     @voidGen.setter
     def voidGen(self, voidGen: bool):
         if not isinstance(voidGen, bool):
-            raise TypeError(f"geouned.Tolerances.voidGen should be a bool, not a {type(voidGen)}")
+            raise TypeError(f"geouned.Settings.voidGen should be a bool, not a {type(voidGen)}")
         self._voidGen = voidGen
 
     @property
@@ -703,7 +696,7 @@ class Settings:
     @debug.setter
     def debug(self, debug: bool):
         if not isinstance(debug, bool):
-            raise TypeError(f"geouned.Tolerances.debug should be a bool, not a {type(debug)}")
+            raise TypeError(f"geouned.Settings.debug should be a bool, not a {type(debug)}")
         self._debug = debug
 
     @property
@@ -713,7 +706,7 @@ class Settings:
     @compSolids.setter
     def compSolids(self, compSolids: bool):
         if not isinstance(compSolids, bool):
-            raise TypeError(f"geouned.Tolerances.compSolids should be a bool, not a {type(compSolids)}")
+            raise TypeError(f"geouned.Settings.compSolids should be a bool, not a {type(compSolids)}")
         self._compSolids = compSolids
 
     @property
@@ -723,21 +716,8 @@ class Settings:
     @simplify.setter
     def simplify(self, simplify: str):
         if not isinstance(simplify, str):
-            raise TypeError(f"geouned.Tolerances.simplify should be a str, not a {type(simplify)}")
+            raise TypeError(f"geouned.Settings.simplify should be a str, not a {type(simplify)}")
         self._simplify = simplify
-
-    @property
-    def cellRange(self):
-        return self._cellRange
-
-    @cellRange.setter
-    def cellRange(self, cellRange: list):
-        if not isinstance(cellRange, list):
-            raise TypeError(f"geouned.Tolerances.cellRange should be a list, not a {type(cellRange)}")
-        for entry in cellRange:
-            if not isinstance(entry, int):
-                raise TypeError(f"geouned.Tolerances.cellRange should be a list of ints, not a {type(entry)}")
-        self._cellRange = cellRange
 
     @property
     def exportSolids(self):
@@ -748,7 +728,7 @@ class Settings:
         if exportSolids == None:
             pass
         elif not isinstance(exportSolids, str):
-            raise TypeError(f"geouned.Tolerances.exportSolids should be a str, not a {type(exportSolids)}")
+            raise TypeError(f"geouned.Settings.exportSolids should be a str, not a {type(exportSolids)}")
         self._exportSolids = exportSolids
 
     @property
@@ -758,7 +738,7 @@ class Settings:
     @minVoidSize.setter
     def minVoidSize(self, minVoidSize: float):
         if not isinstance(minVoidSize, float):
-            raise TypeError(f"geouned.Tolerances.minVoidSize should be a float, not a {type(minVoidSize)}")
+            raise TypeError(f"geouned.Settings.minVoidSize should be a float, not a {type(minVoidSize)}")
         self._minVoidSize = minVoidSize
 
     @property
@@ -768,7 +748,7 @@ class Settings:
     @maxSurf.setter
     def maxSurf(self, maxSurf: int):
         if not isinstance(maxSurf, int):
-            raise TypeError(f"geouned.Tolerances.maxSurf should be a int, not a {type(maxSurf)}")
+            raise TypeError(f"geouned.Settings.maxSurf should be a int, not a {type(maxSurf)}")
         self._maxSurf = maxSurf
 
     @property
@@ -778,7 +758,7 @@ class Settings:
     @maxBracket.setter
     def maxBracket(self, maxBracket: int):
         if not isinstance(maxBracket, int):
-            raise TypeError(f"geouned.Tolerances.maxBracket should be a int, not a {type(maxBracket)}")
+            raise TypeError(f"geouned.Settings.maxBracket should be a int, not a {type(maxBracket)}")
         self._maxBracket = maxBracket
 
     @property
@@ -788,10 +768,10 @@ class Settings:
     @voidMat.setter
     def voidMat(self, voidMat: list):
         if not isinstance(voidMat, list):
-            raise TypeError(f"geouned.Tolerances.voidMat should be a list, not a {type(voidMat)}")
+            raise TypeError(f"geouned.Settings.voidMat should be a list, not a {type(voidMat)}")
         for entry in voidMat:
             if not isinstance(entry, int):
-                raise TypeError(f"geouned.Tolerances.voidMat should be a list of ints, not a {type(entry)}")
+                raise TypeError(f"geouned.Settings.voidMat should be a list of ints, not a {type(entry)}")
         self._voidMat = voidMat
 
     @property
@@ -801,10 +781,10 @@ class Settings:
     @voidExclude.setter
     def voidExclude(self, voidExclude: list):
         if not isinstance(voidExclude, list):
-            raise TypeError(f"geouned.Tolerances.voidExclude should be a list, not a {type(voidExclude)}")
+            raise TypeError(f"geouned.Settings.voidExclude should be a list, not a {type(voidExclude)}")
         for entry in voidExclude:
             if not isinstance(entry, int):
-                raise TypeError(f"geouned.Tolerances.voidExclude should be a list of ints, not a {type(entry)}")
+                raise TypeError(f"geouned.Settings.voidExclude should be a list of ints, not a {type(entry)}")
         self._voidExclude = voidExclude
 
     @property
@@ -814,7 +794,7 @@ class Settings:
     @startCell.setter
     def startCell(self, startCell: int):
         if not isinstance(startCell, int):
-            raise TypeError(f"geouned.Tolerances.startCell should be a int, not a {type(startCell)}")
+            raise TypeError(f"geouned.Settings.startCell should be a int, not a {type(startCell)}")
         self._startCell = startCell
 
     @property
@@ -824,7 +804,7 @@ class Settings:
     @startSurf.setter
     def startSurf(self, startSurf: int):
         if not isinstance(startSurf, int):
-            raise TypeError(f"geouned.Tolerances.startSurf should be a int, not a {type(startSurf)}")
+            raise TypeError(f"geouned.Settings.startSurf should be a int, not a {type(startSurf)}")
         self._startSurf = startSurf
 
     @property
@@ -834,5 +814,5 @@ class Settings:
     @sort_enclosure.setter
     def sort_enclosure(self, sort_enclosure: bool):
         if not isinstance(sort_enclosure, bool):
-            raise TypeError(f"geouned.Tolerances.sort_enclosure should be a bool, not a {type(sort_enclosure)}")
+            raise TypeError(f"geouned.Settings.sort_enclosure should be a bool, not a {type(sort_enclosure)}")
         self._sort_enclosure = sort_enclosure
