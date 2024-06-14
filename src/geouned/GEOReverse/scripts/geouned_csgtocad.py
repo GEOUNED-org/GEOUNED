@@ -31,7 +31,7 @@ def main():
         config = json.load(f)
         
     geo = geouned.CsgToCad()
-    geo.export_cad(**config)
+    geo.export_cad(**config['export_cad'])
 
 
 if __name__ == "__main__":

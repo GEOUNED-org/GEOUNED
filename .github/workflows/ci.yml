@@ -53,7 +53,7 @@ jobs:
             geouned_cadtocsg --help
             python -c 'import geouned'
             python -c 'from geouned import CadToCsg'
-            python -c 'from geouned.GEOReverse import reverse'
+            python -c 'from geouned import CsgToCad'
             python -m pip install .[tests]
 
         - name: testing package version

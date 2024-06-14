@@ -79,6 +79,8 @@ class CsgToCad():
         else:
             msg = f"input format type {csg_format} is not supported. Supported options are 'openmc_xml' or 'mcnp'"
             raise ValueError(msg)
+    
+        Path(output_filename).parent.mkdir(parents=True, exist_ok=True)
         
         UnivCell = CadCell()
         UnivCell.shape = UnivCell.makeBox(FreeCAD.BoundBox(*bounding_box))
