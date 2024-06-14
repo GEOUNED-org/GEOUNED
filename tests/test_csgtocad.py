@@ -4,12 +4,14 @@ import geouned
 
 @pytest.mark.parametrize("csg_format", ['mcnp', 'openmc_xml'])
 def test_cylbox_convertion(csg_format):
-    geo = geouned.CsgToCad()
 
     if csg_format == 'openmc_xml':
         suffix = '.xml'
     elif csg_format == 'mcnp':
         suffix = '.mcnp'
+
+    geo = geouned.CsgToCad()
+
     geo.export_cad(
         # csg file was made from testing/inputSTEP/cylBox.stp
         input_filename=f'tests/csg_files/cylinder_box{suffix}',

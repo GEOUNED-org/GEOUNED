@@ -70,8 +70,8 @@ Here is a complete JSON file specification
         "cell_range": [],
         "mat_range_type": "all",
         "mat_range": []
+        }
     }
-}
 
 .. code-block:: bash
 
