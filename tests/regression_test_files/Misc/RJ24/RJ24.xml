@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<geometry>
+  <cell id="1" material="void" name="" region="((-1 3 6 7 8 -5 -4) | (8 10 -11 -9 -6 -5 2) | (8 12 -11 -10 -6 2) | (-1 3 11 13 -12) | (-1 3 7 8 11 12 13 -6 2) | (7 11 12 -13 2))" universe="1"/>
+  <cell id="2" material="void" name="Automatic Generated Void Cell. Enclosure(412.741, 429.956, 6.780, 21.334, 383.870, 437.465). Enclosed cells : (1)" region="(14 -15 16 -17 18 -19 ((-8 | -12 | 11 | 10 | 6 | -2) (-7 | -11 | -12 | 13 | -2) (((-11 | -13 | 12) (((-2 | -13 | -12 | -11 | 6) (4 | 5 | -6)) | (-7 | -8))) | (1 | -3)) (9 | -8 | -10 | 11 | 6 | 5 | -2)))" universe="1"/>
+  <cell id="3" material="void" name="" region="(-20 (-14 | 15 | -16 | 17 | -18 | 19))" universe="1"/>
+ 
+  <surface id="1" type="y-plane" coeffs="2.0333628e+01" />
+  <surface id="2" type="y-plane" coeffs="7.7800000e+00" />
+  <surface id="3" type="plane" coeffs="-8.6629100e-01 6.1557669e-02 -4.9573235e-01 -5.8458749e+02" />
+  <surface id="4" type="plane" coeffs="9.6303116e-01 -8.6325508e-02 -2.5518402e-01 3.0106018e+02" />
+  <surface id="5" type="plane" coeffs="-2.5614020e-01 -6.2000000e-16 -9.6663964e-01 -4.7869301e+02" />
+  <surface id="6" type="plane" coeffs="9.6303116e-01 -8.6325508e-02 -2.5518402e-01 3.0026018e+02" />
+  <surface id="7" type="plane" coeffs="-8.3967930e-01 2.3852561e-01 -4.8789774e-01 -5.6785902e+02" />
+  <surface id="8" type="plane" coeffs="-9.1312229e-01 3.2812107e-01 2.4195917e-01 -2.8274884e+02" />
+  <surface id="9" type="plane" coeffs="-9.1312229e-01 3.2812107e-01 2.4195917e-01 -2.8194884e+02" />
+  <surface id="10" type="plane" coeffs="-8.3967930e-01 2.3852561e-01 -4.8789774e-01 -5.6705902e+02" />
+  <surface id="11" type="plane" coeffs="8.6617018e-01 -6.4111470e-02 4.9561975e-01 5.8359508e+02" />
+  <surface id="12" type="plane" coeffs="-5.3547422e-02 -7.0030003e-02 -9.9610666e-01 -4.5801088e+02" />
+  <surface id="13" type="plane" coeffs="-5.3667128e-02 -2.1216351e-02 -9.9833346e-01 -4.5850236e+02" />
+  <surface id="14" type="x-plane" coeffs="4.1274121e+02" />
+  <surface id="15" type="x-plane" coeffs="4.2995551e+02" />
+  <surface id="16" type="y-plane" coeffs="6.7800000e+00" />
+  <surface id="17" type="y-plane" coeffs="2.1334218e+01" />
+  <surface id="18" type="z-plane" coeffs="3.8386980e+02" />
+  <surface id="19" type="z-plane" coeffs="4.3746504e+02" />
+  <surface id="20" type="sphere" coeffs="4.2134836e+02 1.4057109e+01 4.1066742e+02 2.9652924e+01" boundary="vacuum" />
+</geometry>

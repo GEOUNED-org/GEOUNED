@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<geometry>
+  <cell id="1" material="void" name="" region="((1 2 9 10 -8 -7 -6 -5 -4 -3) | (11 -8 -7 -4 -3 -1))" universe="1"/>
+  <cell id="2" material="void" name="Automatic Generated Void Cell. Enclosure(-1.046, 2.236, -1.046, 2.236, -1.200, 1.200). Enclosed cells : (1)" region="(12 -13 14 -15 16 -17 (((-10 | -9 | 6 | 5 | -2 | -1) (1 | -11)) | (8 | 7 | 4 | 3)))" universe="1"/>
+  <cell id="3" material="void" name="" region="(-18 (-12 | 13 | -14 | 15 | -16 | 17))" universe="1"/>
+ 
+  <surface id="1" type="y-plane" coeffs="0.0000000e+00" />
+  <surface id="2" type="plane" coeffs="8.5355339e-01 -1.4644661e-01 -5.0000000e-01 -2.2928932e-01" />
+  <surface id="3" type="plane" coeffs="1.4644661e-01 -8.5355339e-01 5.0000000e-01 2.2928932e-01" />
+  <surface id="4" type="plane" coeffs="8.5355339e-01 -1.4644661e-01 -5.0000000e-01 7.7071068e-01" />
+  <surface id="5" type="plane" coeffs="5.0000000e-01 5.0000000e-01 7.0710678e-01 7.7426407e-01" />
+  <surface id="6" type="plane" coeffs="-1.4644661e-01 8.5355339e-01 -5.0000000e-01 7.7071068e-01" />
+  <surface id="7" type="plane" coeffs="-5.0000000e-01 -5.0000000e-01 -7.0710678e-01 -5.2426407e-01" />
+  <surface id="8" type="z-torus" coeffs="0.0000000e+00 0.0000000e+00 0.0000000e+00 1.0000000e+00 2.0000000e-01 2.0000000e-01" />
+  <surface id="9" type="plane" coeffs="6.9407992e-01 7.1989795e-01 -0.0000000e+00 0.0000000e+00" />
+  <surface id="10" type="plane" coeffs="7.0710678e-01 7.0710678e-01 -0.0000000e+00 0.0000000e+00" />
+  <surface id="11" type="plane" coeffs="9.9983334e-01 -1.8256104e-02 0.0000000e+00 0.0000000e+00" />
+  <surface id="12" type="x-plane" coeffs="-1.0464466e+00" />
+  <surface id="13" type="x-plane" coeffs="2.2360919e+00" />
+  <surface id="14" type="y-plane" coeffs="-1.0464466e+00" />
+  <surface id="15" type="y-plane" coeffs="2.2360919e+00" />
+  <surface id="16" type="z-plane" coeffs="-1.2001690e+00" />
+  <surface id="17" type="z-plane" coeffs="1.2001443e+00" />
+  <surface id="18" type="sphere" coeffs="5.9482264e-01 5.9482264e-01 -1.2339712e-05 2.6652867e+00" boundary="vacuum" />
+</geometry>

@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<geometry>
+  <cell id="1" material="void" name="" region="((2 4 5 -3 -1))" universe="1"/>
+  <cell id="2" material="void" name="Automatic Generated Void Cell. Enclosure(-3.706, 3.706, -3.706, 3.706, -1.177, 11.000). Enclosed cells : (1)" region="(6 -7 8 -9 10 -11 (-2 | -4 | -5 | 3 | 1))" universe="1"/>
+  <cell id="3" material="void" name="" region="(-12 (-6 | 7 | -8 | 9 | -10 | 11))" universe="1"/>
+ 
+  <surface id="1" type="z-plane" coeffs="1.0000000e+01" />
+  <surface id="2" type="z-plane" coeffs="0.0000000e+00" />
+  <surface id="3" type="z-cylinder" coeffs="0.000000 0.000000 2.500000" />
+  <surface id="4" type="z-cylinder" coeffs="0.000000 0.000000 2.000000" />
+  <surface id="5" type="z-torus" coeffs="0.0000000e+00 0.0000000e+00 0.0000000e+00 2.2500000e+00 2.5000000e-01 2.5000000e-01" />
+  <surface id="6" type="x-plane" coeffs="-3.7059805e+00" />
+  <surface id="7" type="x-plane" coeffs="3.7059805e+00" />
+  <surface id="8" type="y-plane" coeffs="-3.7059805e+00" />
+  <surface id="9" type="y-plane" coeffs="3.7059805e+00" />
+  <surface id="10" type="z-plane" coeffs="-1.1775000e+00" />
+  <surface id="11" type="z-plane" coeffs="1.1000000e+01" />
+  <surface id="12" type="sphere" coeffs="0.0000000e+00 0.0000000e+00 4.9112500e+00 8.1944453e+00" boundary="vacuum" />
+</geometry>

@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<geometry>
+  <cell id="1" material="void" name="" region="((6 10 11 -9 -5) | (1 6 7 9 10 -5 -3 -2) | (4 6 10 -8 -7 -5 -2) | (4 6 8 9 12 -5))" universe="1"/>
+  <cell id="2" material="void" name="Automatic Generated Void Cell. Enclosure(-1.000, 2.000, -1.000, 2.000, -1.000, 2.000). Enclosed cells : (1)" region="(13 -14 15 -16 17 -18 ((((-10) | (((2) | ((8 | -4 | 7) (3 | -1 | -9 | -7))) (9 | -11))) (-12 | -4 | -8 | -9)) | (5 | -6)))" universe="1"/>
+  <cell id="3" material="void" name="" region="(-19 (-13 | 14 | -15 | 16 | -17 | 18))" universe="1"/>
+ 
+  <surface id="1" type="x-plane" coeffs="0.0000000e+00" />
+  <surface id="2" type="x-plane" coeffs="1.0000000e+00" />
+  <surface id="3" type="y-plane" coeffs="1.0000000e+00" />
+  <surface id="4" type="y-plane" coeffs="0.0000000e+00" />
+  <surface id="5" type="z-plane" coeffs="1.0000000e+00" />
+  <surface id="6" type="z-plane" coeffs="0.0000000e+00" />
+  <surface id="7" type="plane" coeffs="-6.0861825e-01 7.9346318e-01 0.0000000e+00 1.5869264e-01" />
+  <surface id="8" type="plane" coeffs="-7.7144921e-01 -6.3629091e-01 0.0000000e+00 -4.6354735e-01" />
+  <surface id="9" type="z-cylinder" coeffs="0.200000 0.200000 0.200000" />
+  <surface id="10" type="z-cylinder" coeffs="0.320000 0.320000 0.100000" />
+  <surface id="11" type="plane" coeffs="-7.0710678e-01 -7.0710678e-01 0.0000000e+00 -4.5608387e-01" />
+  <surface id="12" type="plane" coeffs="7.9346318e-01 -6.0861825e-01 0.0000000e+00 1.5869264e-01" />
+  <surface id="13" type="x-plane" coeffs="-1.0000000e+00" />
+  <surface id="14" type="x-plane" coeffs="2.0000000e+00" />
+  <surface id="15" type="y-plane" coeffs="-1.0000000e+00" />
+  <surface id="16" type="y-plane" coeffs="2.0000000e+00" />
+  <surface id="17" type="z-plane" coeffs="-1.0000000e+00" />
+  <surface id="18" type="z-plane" coeffs="2.0000000e+00" />
+  <surface id="19" type="sphere" coeffs="5.0000000e-01 5.0000000e-01 5.0000000e-01 2.6500377e+00" boundary="vacuum" />
+</geometry>

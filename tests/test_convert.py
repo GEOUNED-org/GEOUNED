@@ -1,4 +1,6 @@
 import os
+import math
+import re
 from pathlib import Path
 
 import pytest
@@ -213,3 +215,59 @@ def test_with_relative_tol_true():
     )
     geo.load_step_file(filename=f"{step_files[1].resolve()}", skip_solids=[])
     geo.start()
+
+
+@pytest.mark.parametrize("input_step_file", step_files)
+@pytest.mark.parametrize("suffix", suffixes)
+def test_new_mc_files_match_original(suffix, input_step_file):
+    """
+    Regression test that the checks the text files produced for each MC code match the text files produced previously.
+    If this test fails it might be due to an improved MC code output instead of a mistake in the PR.
+    You might want to update the MC text file in the regression test folder with the 'tests/update_regression_test_files.py' script.
+    """
+
+    def is_float(n):
+        try:
+            float(n)
+        except ValueError:
+            return False
+        return True
+
+    # sets up an output folder for the results
+    regression_test_file = (
+        Path("tests/regression_test_files")
+        / input_step_file.parts[-2]
+        / Path(input_step_file.stem)
+        / Path(input_step_file.name).with_suffix(suffix)
+    )
+    output_filename = Path("tests_outputs") / input_step_file.with_suffix("") / Path(input_step_file.stem).with_suffix(suffix)
+    with open(output_filename, "r") as f:
+        file_new = f.readlines()
+    with open(regression_test_file, "r") as f:
+        file_original = f.readlines()
+    for line_new, line_original in zip(file_new, file_original):
+        # this lines in the output files are not expected to match
+        if (
+            " Creation Date" not in line_new
+            and " Creation Date" not in line_original
+            and " Version : " not in line_new
+            and " Version : " not in line_original
+            and " Original Step file : " not in line_new
+            and " Original Step file : " not in line_original
+        ):
+
+            # checks the lines match or are close enough (within floating point accuracy)
+            if line_new == line_original:
+                assert True
+            else:
+                new_segments = re.findall(r'[ ,=()]|[^ ,=()]+', line_new)
+                old_segments = re.findall(r'[ ,=()]|[^ ,=()]+', line_original)
+                assert len(new_segments) == len(old_segments)
+                for new_segment, old_segment in zip(new_segments, old_segments):
+                    if new_segment != old_segment:
+                        if is_float(new_segment) and is_float(old_segment):
+                            assert math.isclose(float(new_segment), float(old_segment), abs_tol=1e-6)
+                        else:
+                            assert new_segment == old_segment
+
+    assert len(file_new) == len(file_original)

@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<geometry>
+  <cell id="1" material="void" name="" region="((-1 4 14 -3 -2))" universe="1"/>
+  <cell id="2" material="void" name="" region="((8 -7 5 -6))" universe="1"/>
+  <cell id="3" material="void" name="" region="((-9 2 11 -10))" universe="1"/>
+  <cell id="4" material="void" name="" region="((13 15 -12 6 1))" universe="1"/>
+  <cell id="5" material="void" name="Automatic Generated Void Cell. Enclosure(-2.407, 2.407, -2.000, 4.000, -1.300, 1.300). Enclosed cells : (1, 2, 3, 4)" region="(16 -17 18 -19 20 -21 ((-8 | 7 | -5 | 6) (-11 | 10 | 9 | -2) (-14 | -4 | 3 | 1 | 2) (-15 | -13 | 12 | -6 | -1)))" universe="1"/>
+  <cell id="6" material="void" name="" region="(-22 (-16 | 17 | -18 | 19 | -20 | 21))" universe="1"/>
+ 
+  <surface id="1" type="x-plane" coeffs="-1.1100000e-16" />
+  <surface id="2" type="y-plane" coeffs="2.0000000e+00" />
+  <surface id="3" type="z-torus" coeffs="0.0000000e+00 2.0000000e+00 0.0000000e+00 1.0000000e+00 3.0000000e-01 3.0000000e-01" />
+  <surface id="4" type="z-torus" coeffs="0.0000000e+00 2.0000000e+00 0.0000000e+00 1.0000000e+00 2.0000000e-01 2.0000000e-01" />
+  <surface id="5" type="y-plane" coeffs="-1.0000000e+00" />
+  <surface id="6" type="y-plane" coeffs="0.0000000e+00" />
+  <surface id="7" type="y-cylinder" coeffs="1.000000 0.000000 0.300000" />
+  <surface id="8" type="y-cylinder" coeffs="1.000000 0.000000 0.200000" />
+  <surface id="9" type="y-plane" coeffs="3.0000000e+00" />
+  <surface id="10" type="y-cylinder" coeffs="-1.000000 0.000000 0.300000" />
+  <surface id="11" type="y-cylinder" coeffs="-1.000000 0.000000 0.200000" />
+  <surface id="12" type="z-torus" coeffs="0.0000000e+00 0.0000000e+00 0.0000000e+00 1.0000000e+00 3.0000000e-01 3.0000000e-01" />
+  <surface id="13" type="z-torus" coeffs="0.0000000e+00 0.0000000e+00 0.0000000e+00 1.0000000e+00 2.0000000e-01 2.0000000e-01" />
+  <surface id="14" type="plane" coeffs="-7.0710678e-01 -7.0710678e-01 0.0000000e+00 -1.4142136e+00" />
+  <surface id="15" type="plane" coeffs="7.0710678e-01 7.0710678e-01 -0.0000000e+00 0.0000000e+00" />
+  <surface id="16" type="x-plane" coeffs="-2.4071099e+00" />
+  <surface id="17" type="x-plane" coeffs="2.4071099e+00" />
+  <surface id="18" type="y-plane" coeffs="-2.0000000e+00" />
+  <surface id="19" type="y-plane" coeffs="4.0000000e+00" />
+  <surface id="20" type="z-plane" coeffs="-1.3000000e+00" />
+  <surface id="21" type="z-plane" coeffs="1.3000000e+00" />
+  <surface id="22" type="sphere" coeffs="0.0000000e+00 1.0000000e+00 0.0000000e+00 4.1412726e+00" boundary="vacuum" />
+</geometry>

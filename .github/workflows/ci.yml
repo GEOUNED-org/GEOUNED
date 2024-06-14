@@ -62,7 +62,7 @@ jobs:
             
         - name: testing GEOUNED functionality
           run: |
-            python -m pytest -v tests/test_convert.py
+            python -m pytest -vv tests/test_convert.py
             geouned_cadtocsg -i tests/config_complete_defaults.json
             geouned_cadtocsg -i tests/config_non_defaults.json
 

@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<geometry>
+  <cell id="1" material="void" name="" region="((2 -4 -3) | (-4 -2))" universe="1"/>
+  <cell id="2" material="void" name="Automatic Generated Void Cell. Enclosure(-1.216, 1.216, -1.216, 1.216, -0.050, 2.050). Enclosed cells : (1)" region="(5 -6 7 -8 9 -10 ((4) | (2 3)))" universe="1"/>
+  <cell id="3" material="void" name="" region="(-11 (-5 | 6 | -7 | 8 | -9 | 10))" universe="1"/>
+ 
+  <surface id="1" type="z-plane" coeffs="1.0500000e+00" />
+  <surface id="2" type="z-plane" coeffs="1.0000000e+00" />
+  <surface id="3" type="z-cylinder" coeffs="0.000000 0.000000 0.150000" />
+  <surface id="4" type="z-torus" coeffs="0.0000000e+00 0.0000000e+00 1.0000000e+00 1.5000000e-01 5.0000000e-02 5.0000000e-02" />
+  <surface id="5" type="x-plane" coeffs="-1.2164784e+00" />
+  <surface id="6" type="x-plane" coeffs="1.2164784e+00" />
+  <surface id="7" type="y-plane" coeffs="-1.2164784e+00" />
+  <surface id="8" type="y-plane" coeffs="1.2164784e+00" />
+  <surface id="9" type="z-plane" coeffs="-5.0000000e-02" />
+  <surface id="10" type="z-plane" coeffs="2.0500000e+00" />
+  <surface id="11" type="sphere" coeffs="0.0000000e+00 0.0000000e+00 1.0000000e+00 2.0557845e+00" boundary="vacuum" />
+</geometry>
