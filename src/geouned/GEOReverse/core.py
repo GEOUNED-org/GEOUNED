@@ -11,41 +11,7 @@ from .Modules.XMLinput import XmlInput
 
 
 class CsgToCad:
-    """Base class for the conversion of CSG to CAD models
-
-    Args:
-        input_filename (str): The filename and path of the input CSG text file.
-        csg_format (str): The format of the CSG input file, options are 'openmc_xml' or 'mcnp'
-        output_filename (str, optional): The filename stem and path of the output file created.
-            Two files will be created with the '.step' suffix and one with the 'FCStd' suffix.
-            Defaults to 'cad_from_csg'.
-        bounding_box (typing.Tuple[int, int, int, int, int, int], optional): The bounding box
-            coordinates of the CSG geometry. This should encompass the entire CSG geometry.
-            Format is (xmin, ymin, zmin, xmax, ymax, zmax) Defaults to (-1000, -1000, -1000,
-            1000, 1000, 1000).
-        universe_start (int, optional): The Universe ID to be converted to CAD. If universe_start
-            is left as 0 then all the universes and any nested universes are converted. If set
-            then the universe and all its nested universes are converted. Defaults to 0.
-        level_max (str, optional): Level maximum of nested universe to be translated. If
-            level_max < highest nested universe level, cells inside the container cell whose
-            level is level_max will not be translated. This container cell will be the CAD
-            solid written in the CAD file. Defaults to "all".
-        cell_range_type (str, optional): Define how to consider the range values.
-            setting to 'all' results in all the cells with any cell ID being converted (range a no effect).
-            setting to 'include' results in only cells defined in 'range' being converted.
-            setting to 'exclude' results in exclude all cells defined in range. Defaults to "all".
-        cell_range (typing.Tuple[int], optional): list of cells to be included/excluded for the conversion.
-            Defaults to ().
-        mat_range_type (str, optional): Define how to consider the range values.
-            setting to 'all' results in all the materials with any cell ID being converted (range a no effect).
-            setting to 'include' results in only materials defined in 'range' being converted.
-            setting to 'exclude' results in exclude all materials defined in range. Defaults to "all".
-        mat_range (typing.Tuple[int], optional): list of materials to be included/excluded for the conversion.
-            Defaults to ().
-
-    Raises:
-        ValueError: If the csg_format is not 'openmc_xml' or 'mcnp' then a ValueError is raised.
-    """
+    """Base class for the conversion of CSG to CAD models"""
 
     def __init__(self):
         pass
@@ -66,6 +32,41 @@ class CsgToCad:
         # splitTolerance in the Options class
         # mat =  this is in the CADselection dictionary but not in the docs https://github.com/GEOUNED-org/GEOUNED/blob/76ef697c7dca6a828c7498996ff3313859c872f2/docs/User_Guide_GEOUNED_v2.0.pdf
     ):
+        """export the CSG geometry in OpenMC or MCNP format to a CAD model.
+
+        Args:
+            input_filename (str): The filename and path of the input CSG text file.
+            csg_format (str): The format of the CSG input file, options are 'openmc_xml' or 'mcnp'
+            output_filename (str, optional): The filename stem and path of the output file created.
+                Two files will be created with the '.step' suffix and one with the 'FCStd' suffix.
+                Defaults to 'cad_from_csg'.
+            bounding_box (typing.Tuple[int, int, int, int, int, int], optional): The bounding box
+                coordinates of the CSG geometry. This should encompass the entire CSG geometry.
+                Format is (xmin, ymin, zmin, xmax, ymax, zmax) Defaults to (-1000, -1000, -1000,
+                1000, 1000, 1000).
+            universe_start (int, optional): The Universe ID to be converted to CAD. If universe_start
+                is left as 0 then all the universes and any nested universes are converted. If set
+                then the universe and all its nested universes are converted. Defaults to 0.
+            level_max (str, optional): Level maximum of nested universe to be translated. If
+                level_max < highest nested universe level, cells inside the container cell whose
+                level is level_max will not be translated. This container cell will be the CAD
+                solid written in the CAD file. Defaults to "all".
+            cell_range_type (str, optional): Define how to consider the range values.
+                setting to 'all' results in all the cells with any cell ID being converted (range a no effect).
+                setting to 'include' results in only cells defined in 'range' being converted.
+                setting to 'exclude' results in exclude all cells defined in range. Defaults to "all".
+            cell_range (typing.Tuple[int], optional): list of cells to be included/excluded for the conversion.
+                Defaults to ().
+            mat_range_type (str, optional): Define how to consider the range values.
+                setting to 'all' results in all the materials with any cell ID being converted (range a no effect).
+                setting to 'include' results in only materials defined in 'range' being converted.
+                setting to 'exclude' results in exclude all materials defined in range. Defaults to "all".
+            mat_range (typing.Tuple[int], optional): list of materials to be included/excluded for the conversion.
+                Defaults to ().
+
+        Raises:
+            ValueError: If the csg_format is not 'openmc_xml' or 'mcnp' then a ValueError is raised.
+        """
 
         # TODO check file extensions are correct
         # if Path(output_filename).suffix not in ['.stp', '.step']:
