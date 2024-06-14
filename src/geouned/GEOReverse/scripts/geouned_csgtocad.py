@@ -29,9 +29,9 @@ def main():
 
     with open(args.input) as f:
         config = json.load(f)
-        
+
     geo = geouned.CsgToCad()
-    geo.export_cad(**config['export_cad'])
+    geo.export_cad(**config["export_cad"])
 
 
 if __name__ == "__main__":

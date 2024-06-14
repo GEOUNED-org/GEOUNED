@@ -10,7 +10,7 @@ from .Modules.Objects import CadCell
 from .Modules.XMLinput import XmlInput
 
 
-class CsgToCad():
+class CsgToCad:
     """Base class for the conversion of CSG to CAD models
 
     Args:
@@ -46,7 +46,7 @@ class CsgToCad():
     Raises:
         ValueError: If the csg_format is not 'openmc_xml' or 'mcnp' then a ValueError is raised.
     """
-    
+
     def __init__(self):
         pass
 
@@ -54,14 +54,14 @@ class CsgToCad():
         self,
         input_filename: str,
         csg_format: str,
-        output_filename: str = 'cad_from_csg',
+        output_filename: str = "cad_from_csg",
         bounding_box: typing.Tuple[int, int, int, int, int, int] = (-1000, -1000, -1000, 1000, 1000, 1000),
         universe_start: int = 0,
         level_max: str = "all",
-        cell_range_type:str = "all",
-        cell_range:typing.Tuple[int]=(),
-        mat_range_type: str = 'all',
-        mat_range:typing.Tuple[int]=(),
+        cell_range_type: str = "all",
+        cell_range: typing.Tuple[int] = (),
+        mat_range_type: str = "all",
+        mat_range: typing.Tuple[int] = (),
         # TODO add these to the method signature
         # splitTolerance in the Options class
         # mat =  this is in the CADselection dictionary but not in the docs https://github.com/GEOUNED-org/GEOUNED/blob/76ef697c7dca6a828c7498996ff3313859c872f2/docs/User_Guide_GEOUNED_v2.0.pdf
@@ -79,9 +79,9 @@ class CsgToCad():
         else:
             msg = f"input format type {csg_format} is not supported. Supported options are 'openmc_xml' or 'mcnp'"
             raise ValueError(msg)
-    
+
         Path(output_filename).parent.mkdir(parents=True, exist_ok=True)
-        
+
         UnivCell = CadCell()
         UnivCell.shape = UnivCell.makeBox(FreeCAD.BoundBox(*bounding_box))
 
@@ -92,10 +92,10 @@ class CsgToCad():
             "cell": (cell_range_type, cell_range),
             "mat": (mat_range_type, mat_range),
             "format": csg_format,
-            cell_range_type:cell_range_type,
-            cell_range:cell_range,
-            mat_range_type:mat_range_type,
-            mat_range:mat_range,
+            cell_range_type: cell_range_type,
+            cell_range: cell_range,
+            mat_range_type: mat_range_type,
+            mat_range: mat_range,
         }
 
         # TODO don't return fails variable, just fail in the method and raise the error there
@@ -107,5 +107,5 @@ class CsgToCad():
         CADdoc = FreeCAD.newDocument("converted_with_geouned")
 
         makeTree(CADdoc, CADCells)
-        Import.export(CADdoc.Objects[0:1], f'{output_filename}.step')
+        Import.export(CADdoc.Objects[0:1], f"{output_filename}.step")
         CADdoc.saveAs(f"{output_filename}.FCStd")
