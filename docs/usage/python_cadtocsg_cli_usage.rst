@@ -1,7 +1,7 @@
-Command Line Tool Usage
-=======================
+Command Line Tool Usage, CAD to CSG conversion
+==============================================
 
-GEOUNED can be used in the command line.
+GEOUNED CAD to CSG conversion can be performed in the command line.
 
 These examples assumes you have a CAD STEP file in the current working directory of the terminal called "cuboid.stp"
 
@@ -112,6 +112,7 @@ Here is a complete JSON file specification
             "cellSummaryFile": true
         }
     }
+
 Note that JSON requires ```null``` to be passed in which gets translated to ```None``` in Python.
 This is converted in the same way as the minimal JSON config file
 

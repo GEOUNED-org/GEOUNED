@@ -1,5 +1,5 @@
-Python Package Usage
-====================
+Python Package Usage, CAD to CSG conversion
+===========================================
 
 The main class is ``CadToCsg()`` which converts CAD geometry to Constructive Solid Geometry (CSG).
 There are many arguments that can be passed into the ``CadToCsg()`` class which are documented in the `Python API reference section <../python_api.html>`_ of the documentation.

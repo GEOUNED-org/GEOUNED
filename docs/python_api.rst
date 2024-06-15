@@ -4,6 +4,10 @@ Python API reference
 
 .. currentmodule:: geouned
 
+.. autoclass:: CsgToCad
+    :members:
+    :show-inheritance:
+
 .. autoclass:: CadToCsg
     :members:
     :show-inheritance:
