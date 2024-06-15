@@ -1,0 +1,13 @@
+{
+    "export_cad": {
+        "input_filename": "tests/csg_files/cylinder_box.xml",
+        "csg_format": "openmc_xml",
+        "output_filename": "cad_from_csg",
+        "bounding_box": [-1000, -1000, -1000, 1000, 1000, 1000],
+        "universe_start": 0,
+        "level_max": "all",
+        "cell_range_type": "all",
+        "cell_range": [1,2],
+        "mat_range_type": "all"
+    }
+}

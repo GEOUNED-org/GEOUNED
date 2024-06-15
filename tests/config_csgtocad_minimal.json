@@ -1,0 +1,6 @@
+{
+    "export_cad":{
+        "input_filename": "tests/csg_files/cylinder_box.xml",
+        "csg_format": "openmc_xml"
+    }
+}

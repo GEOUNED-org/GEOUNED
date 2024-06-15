@@ -53,18 +53,24 @@ jobs:
             geouned_cadtocsg --help
             python -c 'import geouned'
             python -c 'from geouned import CadToCsg'
-            python -c 'from geouned.GEOReverse import reverse'
+            python -c 'from geouned import CsgToCad'
             python -m pip install .[tests]
 
         - name: testing package version
           run: |
             python -m pytest -v tests/test_version.py
             
-        - name: testing GEOUNED functionality
+        - name: testing GEOUNED CadToCsg functionality
           run: |
-            python -m pytest -v tests/test_convert.py
-            geouned_cadtocsg -i tests/config_complete_defaults.json
-            geouned_cadtocsg -i tests/config_non_defaults.json
+            python -m pytest -v tests/test_cadtocsg.py
+            geouned_cadtocsg -i tests/config_cadtocsg_complete_defaults.json
+            geouned_cadtocsg -i tests/config_cadtocsg_non_defaults.json
+
+        - name: testing GEOUNED CsgToCad functionality
+          run: |
+            python -m pytest -v tests/test_csgtocad.py
+            geouned_csgtocad -i tests/config_csgtocad_complete.json
+            geouned_csgtocad -i tests/config_csgtocad_minimal.json
 
         - name: install openmc
           if: ${{ matrix.os == 'ubuntu-latest'}}
