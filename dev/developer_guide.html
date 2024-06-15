@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Developer guide &#8212; GEOUNED 0.1.dev1+gec9a61b documentation</title>
+    <title>Developer guide &#8212; GEOUNED 0.1.dev1+g08fc43b documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="_static/documentation_options.js?v=c9165867"></script>
+    <script src="_static/documentation_options.js?v=6ec41ef6"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'developer_guide';</script>
@@ -520,8 +520,17 @@ sphinx-build<span class="w"> </span>docs<span class="w"> </span>_build
 </pre></div>
 </div>
 <p>Then we can run the tests with the following command from the root of the repository.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pytest
+</pre></div>
+</div>
 <p>We can run individual test files by specifying the file path</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>tests/test_convert.py
+</pre></div>
+</div>
 <p>We can run individual test functions by specifying the file path and function name</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>tests/test_convert.py<span class="w"> </span>-k<span class="w"> </span><span class="s1">&#39;test_conversion&#39;</span>
+</pre></div>
+</div>
 <p>Additional pytest options that might be useful are including -s for standard output and -vv for very verbose output.</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>-s<span class="w"> </span>-vv
 </pre></div>

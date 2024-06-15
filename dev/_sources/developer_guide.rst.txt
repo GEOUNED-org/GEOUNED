@@ -138,16 +138,19 @@ However we need one more dependency to run the tests.
 Then we can run the tests with the following command from the root of the repository.
 
 .. code-block:: sh
+
     python -m pytest
 
 We can run individual test files by specifying the file path
 
 .. code-block:: sh
+
     python -m pytest tests/test_convert.py
 
 We can run individual test functions by specifying the file path and function name
 
 .. code-block:: sh
+
     python -m pytest tests/test_convert.py -k 'test_conversion'
 
 Additional pytest options that might be useful are including -s for standard output and -vv for very verbose output.
