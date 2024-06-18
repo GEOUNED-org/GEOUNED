@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Developer guide &#8212; GEOUNED 0.1.dev1+gf7f4279 documentation</title>
+    <title>Developer guide &#8212; GEOUNED 0.1.dev1+ge242565 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="_static/documentation_options.js?v=9381afc2"></script>
+    <script src="_static/documentation_options.js?v=68151e1d"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'developer_guide';</script>
@@ -541,7 +541,12 @@ sphinx-build<span class="w"> </span>docs<span class="w"> </span>_build
 <p>Pull requests should be made from feature branches on a fork of the repository to the dev branch.</p>
 <p>Tests checking the code will run automatically on the pull request.</p>
 <p>If the tests pass and at least one approver approves then the pull request can be merged.</p>
-<p>When a pull request is ready to be merged then the pull request should be <strong>squashed</strong> and merged into the dev branch.</p>
+<p>When updating the dev branch from a feature branch then a pull request is should be merged in with the <strong>squashed and merged*</strong> option.</p>
+<p>When updating the main branch from the dev branch then the pull request should be merged in with the <strong>create a merge commit</strong> option.</p>
+</section>
+<section id="version-numbering">
+<h2>Version numbering<a class="headerlink" href="#version-numbering" title="Link to this heading">#</a></h2>
+<p>GEOUNED will use Semantic Versioning to number releases of the tool, in the form “Major.Minor.Patch”, e.g., “3.15.9”.</p>
 </section>
 <section id="releasing-a-new-version">
 <h2>Releasing a new version<a class="headerlink" href="#releasing-a-new-version" title="Link to this heading">#</a></h2>
@@ -581,7 +586,7 @@ sphinx-build<span class="w"> </span>docs<span class="w"> </span>_build
 </pre></div>
 </div>
 <p>Then create a <a class="reference external" href="https://github.com/GEOUNED-org/GEOUNED/compare/main...dev">pull request from dev branch to main branch</a></p>
-<p>Once the tests for this pass then merge the pull request in. <strong>Do not squash</strong> this pull request as we want to keep the history of the version changes.</p>
+<p>Once the tests for this pass then merge the pull request in. Use the <strong>create a merge commit</strong> option when merging this pull request from dev to main.</p>
 <p>Then <a class="reference external" href="https://github.com/shimwell/GEOUNED/releases/new">create a new release on the main branch</a> with the version number and a description of the changes.</p>
 <p>Create a new tag with the version number (e.g. 1.2.3) and the release name (e.g. v1.2.3) and the release description.</p>
 <p>Press the Generate release notes button to get the release notes from the pull request descriptions.</p>
@@ -594,15 +599,11 @@ sphinx-build<span class="w"> </span>docs<span class="w"> </span>_build
 <section id="conda-forge-releasing">
 <h2>Conda Forge Releasing<a class="headerlink" href="#conda-forge-releasing" title="Link to this heading">#</a></h2>
 <p>The conda-forge package release is done after the PyPI release. This is because the conda-forge package is built from the PyPI package.</p>
-<p>Conda Forge has a bot thew generates a pull request to update the conda-forge recipe. This is done automatically when the PyPI package is released.</p>
-<p>The pull request will be generated in the <a class="reference external" href="https://github.com/conda-forge/geouned-feedstock/pulls">conda-forge/GEOUNED-feedstock</a> repository.</p>
+<p>Conda Forge has a bot that generates a pull request to update the conda-forge recipe. This is done automatically when the PyPI package is released.</p>
+<p>The pull request will be generated in the <a class="reference external" href="https://github.com/conda-forge/geouned-feedstock/pulls">conda-forge/GEOUNED-feedstock</a> repository a short while after the PyPI release.</p>
 <p>Check the pull request and if the tests pass then merge the pull request.</p>
 <p>A Conda Forge package will be built and released to the conda-forge channel.</p>
-<p>Once released the package will be visaible on the <a class="reference external" href="https://anaconda.org/conda-forge/geouned">conda-forge channel</a>.</p>
-</section>
-<section id="version-numbering">
-<h2>Version Numbering<a class="headerlink" href="#version-numbering" title="Link to this heading">#</a></h2>
-<p>GEOUNED will use Semantic Versioning to number releases of the tool, in the form “Major.Minor.Patch”, e.g., “3.15.9”.</p>
+<p>Once released the package will be visible on the <a class="reference external" href="https://anaconda.org/conda-forge/geouned">conda-forge channel</a>.</p>
 </section>
 </section>
 
@@ -647,9 +648,9 @@ sphinx-build<span class="w"> </span>docs<span class="w"> </span>_build
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-docs-locally">Building the docs locally</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-tests-locally">Running the tests locally</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#merging-a-pull-requests">Merging a pull requests</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-numbering">Version numbering</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#releasing-a-new-version">Releasing a new version</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conda-forge-releasing">Conda Forge Releasing</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-numbering">Version Numbering</a></li>
 </ul>
   </nav></div>
 
