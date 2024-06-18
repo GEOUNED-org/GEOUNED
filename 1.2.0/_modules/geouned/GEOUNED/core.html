@@ -1,0 +1,1328 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>geouned.GEOUNED.core &#8212; GEOUNED 1.2.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+
+    <script src="../../../_static/documentation_options.js?v=6efca38a"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/geouned/GEOUNED/core';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.15.3';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/GEOUNED-org/GEOUNED/dev/docs/version_switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.2';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+    
+      <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/GEOUNED-org/GEOUNED" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../install/index.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../usage/index.html">
+    Usage
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../python_api.html">
+    Python API reference
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../methodology.html">
+    Methodology
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../developer_guide.html">
+    Developer guide
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/GEOUNED-org/GEOUNED" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../install/index.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../usage/index.html">
+    Usage
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../python_api.html">
+    Python API reference
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../methodology.html">
+    Methodology
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../developer_guide.html">
+    Developer guide
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/GEOUNED-org/GEOUNED" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">geouned.GEOUNED.core</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for geouned.GEOUNED.core</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">typing</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">get_type_hints</span>
+<span class="kn">from</span> <span class="nn">importlib.metadata</span> <span class="kn">import</span> <span class="n">version</span>
+
+<span class="kn">import</span> <span class="nn">FreeCAD</span>
+<span class="kn">import</span> <span class="nn">Part</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span> <span class="nn">.code_version</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.conversion</span> <span class="kn">import</span> <span class="n">cell_definition</span> <span class="k">as</span> <span class="n">Conv</span>
+<span class="kn">from</span> <span class="nn">.cuboid.translate</span> <span class="kn">import</span> <span class="n">translate</span>
+<span class="kn">from</span> <span class="nn">.decompose</span> <span class="kn">import</span> <span class="n">decom_one</span> <span class="k">as</span> <span class="n">Decom</span>
+<span class="kn">from</span> <span class="nn">.loadfile</span> <span class="kn">import</span> <span class="n">load_step</span> <span class="k">as</span> <span class="n">Load</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">UF</span>
+<span class="kn">from</span> <span class="nn">.utils.boolean_solids</span> <span class="kn">import</span> <span class="n">build_c_table_from_solids</span>
+<span class="kn">from</span> <span class="nn">.utils.data_classes</span> <span class="kn">import</span> <span class="n">NumericFormat</span><span class="p">,</span> <span class="n">Options</span><span class="p">,</span> <span class="n">Settings</span><span class="p">,</span> <span class="n">Tolerances</span>
+<span class="kn">from</span> <span class="nn">.void</span> <span class="kn">import</span> <span class="n">void</span> <span class="k">as</span> <span class="n">void</span>
+<span class="kn">from</span> <span class="nn">.write.functions</span> <span class="kn">import</span> <span class="n">write_mcnp_cell_def</span>
+<span class="kn">from</span> <span class="nn">.write.write_files</span> <span class="kn">import</span> <span class="n">write_geometry</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;general_logger&quot;</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;GEOUNED version </span><span class="si">{</span><span class="n">version</span><span class="p">(</span><span class="s1">&#39;geouned&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;FreeCAD version </span><span class="si">{</span><span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FreeCAD</span><span class="o">.</span><span class="n">Version</span><span class="p">()[:</span><span class="mi">3</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="CadToCsg">
+<a class="viewcode-back" href="../../../python_api.html#geouned.CadToCsg">[docs]</a>
+<span class="k">class</span> <span class="nc">CadToCsg</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for the conversion of CAD to CSG models</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        options (geouned.Options, optional): An instance of a geouned.Options</span>
+<span class="sd">            class with the attributes set for the desired conversion. Defaults</span>
+<span class="sd">            to a geouned.Options with default attributes values.</span>
+<span class="sd">        tolerances (geouned.Tolerances, optional): An instance of a</span>
+<span class="sd">            geouned.Tolerances class with the attributes set for the desired</span>
+<span class="sd">            conversion. Defaults to a geouned.Tolerances with default</span>
+<span class="sd">            attributes values.</span>
+<span class="sd">        numeric_format (geouned.NumericFormat, optional): An instance of a</span>
+<span class="sd">            geouned.NumericFormat class with the attributes set for the desired</span>
+<span class="sd">            conversion. Defaults to a geouned.NumericFormat with default</span>
+<span class="sd">            attributes values.</span>
+<span class="sd">        settings (geouned.Settings, optional): An instance of a</span>
+<span class="sd">            geouned.Settings class with the attributes set for the desired</span>
+<span class="sd">            conversion. Defaults to a geouned.Settings with default</span>
+<span class="sd">            attributes values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">options</span><span class="p">:</span> <span class="n">Options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">(),</span>
+        <span class="n">tolerances</span><span class="p">:</span> <span class="n">Tolerances</span> <span class="o">=</span> <span class="n">Tolerances</span><span class="p">(),</span>
+        <span class="n">numeric_format</span><span class="p">:</span> <span class="n">NumericFormat</span> <span class="o">=</span> <span class="n">NumericFormat</span><span class="p">(),</span>
+        <span class="n">settings</span><span class="p">:</span> <span class="n">Settings</span> <span class="o">=</span> <span class="n">Settings</span><span class="p">(),</span>
+    <span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tolerances</span> <span class="o">=</span> <span class="n">tolerances</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numeric_format</span> <span class="o">=</span> <span class="n">numeric_format</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+
+        <span class="c1"># define later when running the code</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geometry_bounding_box</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skip_solids</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span>
+
+    <span class="nd">@options</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Options</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Options</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.CadToCsg.options should be an instance of geouned.Options, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tolerances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tolerances</span>
+
+    <span class="nd">@tolerances</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">tolerances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">tolerances</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Tolerances</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.CadToCsg.tolerances should be an instance of geouned.Tolerances, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tolerances</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">numeric_format</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_numeric_format</span>
+
+    <span class="nd">@numeric_format</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">numeric_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">numeric_format</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">NumericFormat</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;geouned.CadToCsg.numeric_format should be an instance of geouned.NumericFormat, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_numeric_format</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span>
+
+    <span class="nd">@settings</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">settings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">settings</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Settings</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.CadToCsg.settings should be an instance of geouned.Settings, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="CadToCsg.export_csg">
+<a class="viewcode-back" href="../../../python_api.html#geouned.CadToCsg.export_csg">[docs]</a>
+    <span class="k">def</span> <span class="nf">export_csg</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Converted with GEOUNED&quot;</span><span class="p">,</span>
+        <span class="n">geometryName</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;csg&quot;</span><span class="p">,</span>
+        <span class="n">outFormat</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;openmc_xml&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;openmc_py&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;serpent&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;phits&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mcnp&quot;</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">volSDEF</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">volCARD</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">UCARD</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">dummyMat</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">cellCommentFile</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">cellSummaryFile</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Writes out a CSG file in the requested Monte Carlo code format.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            title (str, optional): Title of the model written at the top of the</span>
+<span class="sd">                output file. Defaults to &quot;Geouned conversion&quot;.</span>
+<span class="sd">            geometryName (str, optional): the file stem of the output file(s).</span>
+<span class="sd">                Defaults to &quot;converted_with_geouned&quot;.</span>
+<span class="sd">            outFormat (typing.Tuple[str], optional): Format for the output</span>
+<span class="sd">                geometry. Available format are: &quot;mcnp&quot;, &quot;openmc_xml&quot;,</span>
+<span class="sd">                &quot;openmc_py&quot;, &quot;phits&quot; and &quot;serpent&quot;. Several output format can</span>
+<span class="sd">                be written in the same method call. Defaults to output all codes.</span>
+<span class="sd">            volSDEF (bool, optional):  Write SDEF definition and tally of solid</span>
+<span class="sd">                cell for stochastic volume checking. Defaults to False.</span>
+<span class="sd">            volCARD (bool, optional): Write the CAD calculated volume in the</span>
+<span class="sd">                cell definition using the VOL card. Defaults to True.</span>
+<span class="sd">            UCARD (int, optional): Write universe card in the cell definition</span>
+<span class="sd">                with the specified universe number (if value = 0 Universe card</span>
+<span class="sd">                is not written). Defaults to None.</span>
+<span class="sd">            dummyMat (bool, optional): Write dummy material definition card in</span>
+<span class="sd">               the MCNP output file for all material labels present in the</span>
+<span class="sd">               model. Dummy material definition is &quot;MX 1001 1&quot;. Defaults to False.</span>
+<span class="sd">            cellCommentFile (bool, optional): Write an additional file with</span>
+<span class="sd">               comment associated to each CAD cell in the MCNP output file.</span>
+<span class="sd">               Defaults to False.</span>
+<span class="sd">            cellSummaryFile (bool, optional): Write an additional file with</span>
+<span class="sd">               information on the CAD cell translated. Defaults to True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">UCARD</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">UCARD</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;UCARD should be of type int or None not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">UCARD</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">UCARD</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">UCARD</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;UCARD should be a 0 or a positive integer &quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">arg</span><span class="p">,</span> <span class="n">arg_str</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">volSDEF</span><span class="p">,</span> <span class="s2">&quot;volSDEF&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">volCARD</span><span class="p">,</span> <span class="s2">&quot;volCARD&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">dummyMat</span><span class="p">,</span> <span class="s2">&quot;dummyMat&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">cellCommentFile</span><span class="p">,</span> <span class="s2">&quot;cellCommentFile&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">cellSummaryFile</span><span class="p">,</span> <span class="s2">&quot;cellSummaryFile&quot;</span><span class="p">),</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2"> should be of type bool not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">arg_str</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">arg</span><span class="p">,</span> <span class="n">arg_str</span> <span class="ow">in</span> <span class="p">((</span><span class="n">title</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">),</span> <span class="p">(</span><span class="n">geometryName</span><span class="p">,</span> <span class="s2">&quot;geometryName&quot;</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2"> should be of type str not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">arg_str</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># if the geometry_bounding_box has not previuosly been calculated, then make a default one</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry_bounding_box</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_geometry_bounding_box</span><span class="p">()</span>
+
+        <span class="n">write_geometry</span><span class="p">(</span>
+            <span class="n">UniverseBox</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry_bounding_box</span><span class="p">,</span>
+            <span class="n">MetaList</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">,</span>
+            <span class="n">Surfaces</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Surfaces</span><span class="p">,</span>
+            <span class="n">settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span>
+            <span class="n">options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">,</span>
+            <span class="n">tolerances</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tolerances</span><span class="p">,</span>
+            <span class="n">numeric_format</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">numeric_format</span><span class="p">,</span>
+            <span class="n">geometryName</span><span class="o">=</span><span class="n">geometryName</span><span class="p">,</span>
+            <span class="n">outFormat</span><span class="o">=</span><span class="n">outFormat</span><span class="p">,</span>
+            <span class="n">cellCommentFile</span><span class="o">=</span><span class="n">cellCommentFile</span><span class="p">,</span>
+            <span class="n">cellSummaryFile</span><span class="o">=</span><span class="n">cellSummaryFile</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+            <span class="n">volSDEF</span><span class="o">=</span><span class="n">volSDEF</span><span class="p">,</span>
+            <span class="n">volCARD</span><span class="o">=</span><span class="n">volCARD</span><span class="p">,</span>
+            <span class="n">UCARD</span><span class="o">=</span><span class="n">UCARD</span><span class="p">,</span>
+            <span class="n">dummyMat</span><span class="o">=</span><span class="n">dummyMat</span><span class="p">,</span>
+            <span class="n">step_filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;End of Monte Carlo code translation phase&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CadToCsg.from_json">
+<a class="viewcode-back" href="../../../python_api.html#geouned.CadToCsg.from_json">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a CadToCsg instance, runs CadToCsg.load_Step_file(), runs</span>
+<span class="sd">        CadToCsg.start() and returns the instance. Populating the arguments for</span>
+<span class="sd">        the methods that are run by looking for keys with the same name as the</span>
+<span class="sd">        method in the JSON file. For example CadToCsg.start() accepts arguments</span>
+<span class="sd">        for Options, Tolerance, Settings and NumericFormat and can be populated</span>
+<span class="sd">        from matching key names in the JSON. If export_to_csg key is present</span>
+<span class="sd">        then this method also runs CadToCsg.export_to_csg() on the instance.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filename str: The filename of the config file.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            FileNotFoundError: If the config file is not found</span>
+<span class="sd">            ValueError: If the config JSON file is found to contain an invalid key</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            geouned.CadToCsg: returns a geouned CadToCsg class instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;config file </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> not found&quot;</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="n">cad_to_csg</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+
+        <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">load_step_file</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;load_step_file&quot;</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;load_step_file&quot;</span><span class="p">,</span> <span class="s2">&quot;export_csg&quot;</span><span class="p">]:</span>
+                <span class="k">pass</span>  <span class="c1"># these two keys are used before or after this loop</span>
+
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;Tolerances&quot;</span><span class="p">:</span>
+                <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">tolerances</span> <span class="o">=</span> <span class="n">Tolerances</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;Tolerances&quot;</span><span class="p">])</span>
+
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;Options&quot;</span><span class="p">:</span>
+                <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;Options&quot;</span><span class="p">])</span>
+
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;NumericFormat&quot;</span><span class="p">:</span>
+                <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">numeric_format</span> <span class="o">=</span> <span class="n">NumericFormat</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;NumericFormat&quot;</span><span class="p">])</span>
+
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;Settings&quot;</span><span class="p">:</span>
+                <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">Settings</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;Settings&quot;</span><span class="p">])</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Invalid key &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; found in config file </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">. Acceptable key names are &#39;load_step_file&#39;, &#39;export_csg&#39;, &#39;Settings&#39;, &#39;Parameters&#39;, &#39;Tolerances&#39; and &#39;NumericFormat&#39;&quot;</span>
+                <span class="p">)</span>
+
+        <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;export_csg&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">export_csg</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;export_csg&quot;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">export_csg</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">cad_to_csg</span></div>
+
+
+<div class="viewcode-block" id="CadToCsg.load_step_file">
+<a class="viewcode-back" href="../../../python_api.html#geouned.CadToCsg.load_step_file">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_step_file</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">filename</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">skip_solids</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load STEP file(s) and extract solid volumes and enclosure volumes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filename (str): The path to the STEP file or a list of paths to multiple STEP files.</span>
+<span class="sd">            skip_solids (Sequence[int], optional): A sequence (list or tuple) of indexes of solids to not load for conversion.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: A tuple containing the solid volumes list and enclosure volumes list extracted from the STEP files.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Start of step file loading phase&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">skip_solids</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;skip_solids should be a list, tuple of ints, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">skip_solids</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">skip_solids</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;skip_solids should contain only ints, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;filename should be a str or a sequence of str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;filename should contain only str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skip_solids</span> <span class="o">=</span> <span class="n">skip_solids</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="n">step_files</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">step_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">filename</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">step_file</span> <span class="ow">in</span> <span class="n">step_files</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">step_file</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Step file </span><span class="si">{</span><span class="n">step_file</span><span class="si">}</span><span class="s2"> not found.&quot;</span><span class="p">)</span>
+
+        <span class="n">MetaChunk</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">EnclosureChunk</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">step_file</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">step_files</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Loading CAD files&quot;</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;read step file : </span><span class="si">{</span><span class="n">step_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">Meta</span><span class="p">,</span> <span class="n">Enclosure</span> <span class="o">=</span> <span class="n">Load</span><span class="o">.</span><span class="n">load_cad</span><span class="p">(</span><span class="n">step_file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
+            <span class="n">MetaChunk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Meta</span><span class="p">)</span>
+            <span class="n">EnclosureChunk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Enclosure</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span> <span class="o">=</span> <span class="n">join_meta_lists</span><span class="p">(</span><span class="n">MetaChunk</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enclosure_list</span> <span class="o">=</span> <span class="n">join_meta_lists</span><span class="p">(</span><span class="n">EnclosureChunk</span><span class="p">)</span>
+
+        <span class="c1"># deleting the solid index in reverse order so the indexes don&#39;t change for subsequent deletions</span>
+        <span class="k">for</span> <span class="n">solid_index</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">skip_solids</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Removing solid index: </span><span class="si">{</span><span class="n">solid_index</span><span class="si">}</span><span class="s2"> from list of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">)</span><span class="si">}</span><span class="s2"> solids&quot;</span><span class="p">)</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">[</span><span class="n">solid_index</span><span class="p">]</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;End of step file loading phase&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">enclosure_list</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_export_solids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Export all the solid volumes from the loaded geometry to a STEP file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filename (str): filepath of the output STEP file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># export in STEP format solids read from input file</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;No solids in CadToCsg.meta_list to export. Try loading the STEP file first with CadToCsg.load_step_file&quot;</span>
+            <span class="p">)</span>
+        <span class="n">solids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">IsEnclosure</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">solids</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">Solids</span><span class="p">)</span>
+        <span class="n">Part</span><span class="o">.</span><span class="n">makeCompound</span><span class="p">(</span><span class="n">solids</span><span class="p">)</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_geometry_bounding_box</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">padding</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the bounding box of the geometry.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            padding (float): The padding value to add to the bounding box dimensions.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            FreeCAD.BoundBox: The universe bounding box.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># set up Universe</span>
+        <span class="n">meta_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enclosure_list</span><span class="p">:</span>
+            <span class="n">meta_list</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enclosure_list</span>
+
+        <span class="n">Box</span> <span class="o">=</span> <span class="n">meta_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">BoundBox</span>
+        <span class="n">xmin</span> <span class="o">=</span> <span class="n">Box</span><span class="o">.</span><span class="n">XMin</span>
+        <span class="n">xmax</span> <span class="o">=</span> <span class="n">Box</span><span class="o">.</span><span class="n">XMax</span>
+        <span class="n">ymin</span> <span class="o">=</span> <span class="n">Box</span><span class="o">.</span><span class="n">YMin</span>
+        <span class="n">ymax</span> <span class="o">=</span> <span class="n">Box</span><span class="o">.</span><span class="n">YMax</span>
+        <span class="n">zmin</span> <span class="o">=</span> <span class="n">Box</span><span class="o">.</span><span class="n">ZMin</span>
+        <span class="n">zmax</span> <span class="o">=</span> <span class="n">Box</span><span class="o">.</span><span class="n">ZMax</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">meta_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="c1"># MIO. This was removed since in HELIAS the enclosure cell is the biggest one</span>
+            <span class="c1"># if m.IsEnclosure: continue</span>
+            <span class="n">xmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">BoundBox</span><span class="o">.</span><span class="n">XMin</span><span class="p">,</span> <span class="n">xmin</span><span class="p">)</span>
+            <span class="n">xmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">BoundBox</span><span class="o">.</span><span class="n">XMax</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+            <span class="n">ymin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">BoundBox</span><span class="o">.</span><span class="n">YMin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">)</span>
+            <span class="n">ymax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">BoundBox</span><span class="o">.</span><span class="n">YMax</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+            <span class="n">zmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">BoundBox</span><span class="o">.</span><span class="n">ZMin</span><span class="p">,</span> <span class="n">zmin</span><span class="p">)</span>
+            <span class="n">zmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">BoundBox</span><span class="o">.</span><span class="n">ZMax</span><span class="p">,</span> <span class="n">zmax</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">geometry_bounding_box</span> <span class="o">=</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">BoundBox</span><span class="p">(</span>
+            <span class="n">FreeCAD</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">xmin</span> <span class="o">-</span> <span class="n">padding</span><span class="p">,</span> <span class="n">ymin</span> <span class="o">-</span> <span class="n">padding</span><span class="p">,</span> <span class="n">zmin</span> <span class="o">-</span> <span class="n">padding</span><span class="p">),</span>
+            <span class="n">FreeCAD</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">xmax</span> <span class="o">+</span> <span class="n">padding</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">+</span> <span class="n">padding</span><span class="p">,</span> <span class="n">zmax</span> <span class="o">+</span> <span class="n">padding</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry_bounding_box</span>
+
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">startTime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">exportSolids</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_export_solids</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">exportSolids</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;End of loading phase&quot;</span><span class="p">)</span>
+        <span class="n">tempstr1</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">startTime</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">tempstr1</span><span class="p">)</span>
+        <span class="n">tempTime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+        <span class="c1"># sets self.geometry_bounding_box with default padding</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_geometry_bounding_box</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Surfaces</span> <span class="o">=</span> <span class="n">UF</span><span class="o">.</span><span class="n">SurfacesDict</span><span class="p">(</span><span class="n">offset</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">startSurf</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">warnSolids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">warnEnclosures</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">coneInfo</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">tempTime0</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">Facets</span><span class="p">:</span>
+
+            <span class="c1"># decompose all solids in elementary solids (convex ones)</span>
+            <span class="n">warningSolidList</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decompose_solids</span><span class="p">(</span><span class="n">meta</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># decompose Enclosure solids</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">voidGen</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">enclosure_list</span><span class="p">:</span>
+                <span class="n">warningEnclosureList</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decompose_solids</span><span class="p">(</span><span class="n">meta</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;End of decomposition phase&quot;</span><span class="p">)</span>
+
+            <span class="c1"># start Building CGS cells phase</span>
+
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Translating solid cells&quot;</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">IsEnclosure</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Building cell: </span><span class="si">{</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">cones</span> <span class="o">=</span> <span class="n">Conv</span><span class="o">.</span><span class="n">cellDef</span><span class="p">(</span>
+                    <span class="n">m</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Surfaces</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">geometry_bounding_box</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tolerances</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">numeric_format</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">cones</span><span class="p">:</span>
+                    <span class="n">coneInfo</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">__id__</span><span class="p">]</span> <span class="o">=</span> <span class="n">cones</span>
+                <span class="k">if</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">warningSolidList</span><span class="p">:</span>
+                    <span class="n">warnSolids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="o">.</span><span class="n">Solids</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;none </span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">__id__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">Definition</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">forceNoOverlap</span><span class="p">:</span>
+                <span class="n">Conv</span><span class="o">.</span><span class="n">no_overlapping_cell</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Surfaces</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">translate</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Surfaces</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">geometry_bounding_box</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tolerances</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="c1"># decompose Enclosure solids</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">voidGen</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">enclosure_list</span><span class="p">:</span>
+                <span class="n">warningEnclosureList</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decompose_solids</span><span class="p">(</span><span class="n">meta</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">tempstr2</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">tempTime</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">tempstr2</span><span class="p">)</span>
+
+        <span class="c1">#  building enclosure solids</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">voidGen</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">enclosure_list</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">enclosure_list</span><span class="p">):</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Building Enclosure Cell: </span><span class="si">{</span><span class="n">j</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">cones</span> <span class="o">=</span> <span class="n">Conv</span><span class="o">.</span><span class="n">cellDef</span><span class="p">(</span>
+                    <span class="n">m</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Surfaces</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">geometry_bounding_box</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tolerances</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">numeric_format</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">cones</span><span class="p">:</span>
+                    <span class="n">coneInfo</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">__id__</span><span class="p">]</span> <span class="o">=</span> <span class="n">cones</span>
+                <span class="k">if</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">warningEnclosureList</span><span class="p">:</span>
+                    <span class="n">warnEnclosures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+        <span class="n">tempTime1</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+        <span class="c1"># void generation phase</span>
+        <span class="n">meta_void</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">voidGen</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Build Void&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">voidExclude</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">voidExclude</span><span class="p">:</span>
+                <span class="n">meta_reduced</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">meta_reduced</span> <span class="o">=</span> <span class="n">exclude_cells</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">voidExclude</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">:</span>
+                <span class="n">init</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">__id__</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">enclosure_list</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">init</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">meta_void</span> <span class="o">=</span> <span class="n">void</span><span class="o">.</span><span class="n">void_generation</span><span class="p">(</span>
+                <span class="n">meta_reduced</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">enclosure_list</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Surfaces</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">geometry_bounding_box</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span>
+                <span class="n">init</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tolerances</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">numeric_format</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="c1"># if self.settings.simplify == &#39;full&#39; and not self.options.forceNoOverlap:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">simplify</span> <span class="o">==</span> <span class="s2">&quot;full&quot;</span><span class="p">:</span>
+            <span class="n">Surfs</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">lst</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Surfaces</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">:</span>
+                    <span class="n">Surfs</span><span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">Index</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
+
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Simplifying&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">Definition</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">c</span><span class="o">.</span><span class="n">IsEnclosure</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;simplify cell </span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">__id__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">Box</span> <span class="o">=</span> <span class="n">UF</span><span class="o">.</span><span class="n">get_box</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">enlargeBox</span><span class="p">)</span>
+                <span class="n">CT</span> <span class="o">=</span> <span class="n">build_c_table_from_solids</span><span class="p">(</span><span class="n">Box</span><span class="p">,</span> <span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">Surfaces</span><span class="p">,</span> <span class="n">Surfs</span><span class="p">),</span> <span class="s2">&quot;full&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
+                <span class="n">c</span><span class="o">.</span><span class="n">Definition</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">CT</span><span class="p">)</span>
+                <span class="n">c</span><span class="o">.</span><span class="n">Definition</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">Definition</span><span class="o">.</span><span class="n">elements</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">bool</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unexpected constant cell </span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">__id__</span><span class="si">}</span><span class="s2"> :</span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">Definition</span><span class="o">.</span><span class="n">elements</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">tempTime2</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;build Time: </span><span class="si">{</span><span class="n">tempTime2</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">tempTime1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">startTime</span><span class="p">)</span>
+
+        <span class="n">cellOffSet</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">startCell</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enclosure_list</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">sort_enclosure</span><span class="p">:</span>
+            <span class="c1"># sort group solid cell / void cell sequence in each for each enclosure</span>
+            <span class="c1"># if a solid belong to several enclosure, its definition will be written</span>
+            <span class="c1"># for the highest enclosure level or if same enclosure level in the first</span>
+            <span class="c1"># enclosure found</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span> <span class="o">=</span> <span class="n">sort_enclosure</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">,</span> <span class="n">meta_void</span><span class="p">,</span> <span class="n">cellOffSet</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># remove Null Cell and apply cell numbering offset</span>
+            <span class="n">deleted</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">idLabel</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+            <span class="n">icount</span> <span class="o">=</span> <span class="n">cellOffSet</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">NullCell</span> <span class="ow">or</span> <span class="n">m</span><span class="o">.</span><span class="n">IsEnclosure</span><span class="p">:</span>
+                    <span class="n">deleted</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                    <span class="k">continue</span>
+
+                <span class="n">icount</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">m</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">icount</span>
+                <span class="n">idLabel</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">__id__</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">label</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">deleted</span><span class="p">):</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+            <span class="n">lineComment</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">##########################################################</span>
+<span class="s2">             VOID CELLS</span>
+<span class="s2">##########################################################&quot;&quot;&quot;</span>
+            <span class="n">mc</span> <span class="o">=</span> <span class="n">UF</span><span class="o">.</span><span class="n">GeounedSolid</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+            <span class="n">mc</span><span class="o">.</span><span class="n">Comments</span> <span class="o">=</span> <span class="n">lineComment</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+
+            <span class="n">deleted</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">meta_void</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">NullCell</span><span class="p">:</span>
+                    <span class="n">deleted</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="n">icount</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">m</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">icount</span>
+                <span class="n">update_comment</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">idLabel</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">deleted</span><span class="p">):</span>
+                <span class="k">del</span> <span class="n">meta_void</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">meta_void</span><span class="p">)</span>
+
+        <span class="n">print_warning_solids</span><span class="p">(</span><span class="n">warnSolids</span><span class="p">,</span> <span class="n">warnEnclosures</span><span class="p">)</span>
+
+        <span class="c1"># add plane definition to cone</span>
+        <span class="n">process_cones</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">,</span>
+            <span class="n">coneInfo</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Surfaces</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">geometry_bounding_box</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tolerances</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">numeric_format</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Process finished&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">startTime</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Translation time of solid cells </span><span class="si">{</span><span class="n">tempTime1</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">tempTime0</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Translation time of void cells </span><span class="si">{</span><span class="n">tempTime2</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">tempTime1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_decompose_solids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">meta</span><span class="p">:</span>
+            <span class="n">meta_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Decomposing solids&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">meta_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enclosure_list</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Decomposing enclosure solids&quot;</span>
+
+        <span class="n">totsolid</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">meta_list</span><span class="p">)</span>
+        <span class="n">warningSolids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="n">meta_list</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">description</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">meta</span> <span class="ow">and</span> <span class="n">m</span><span class="o">.</span><span class="n">IsEnclosure</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Decomposing solid: </span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">totsolid</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+                <span class="n">debug_output_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;debug&quot;</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">Comments</span><span class="p">)</span>
+                <span class="n">debug_output_folder</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">IsEnclosure</span><span class="p">:</span>
+                    <span class="n">m</span><span class="o">.</span><span class="n">Solids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">debug_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;origEnclosure_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp&quot;</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">m</span><span class="o">.</span><span class="n">Solids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">debug_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;origSolid_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp&quot;</span><span class="p">))</span>
+
+            <span class="n">comsolid</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">Decom</span><span class="o">.</span><span class="n">SplitSolid</span><span class="p">(</span>
+                <span class="n">Part</span><span class="o">.</span><span class="n">makeCompound</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">Solids</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">geometry_bounding_box</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tolerances</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">numeric_format</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">sus_output_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;suspicious_solids&quot;</span><span class="p">)</span>
+                <span class="n">sus_output_folder</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">IsEnclosure</span><span class="p">:</span>
+                    <span class="n">Part</span><span class="o">.</span><span class="n">CompSolid</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">Solids</span><span class="p">)</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">sus_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;Enclosure_original_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp&quot;</span><span class="p">))</span>
+                    <span class="n">comsolid</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">sus_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;Enclosure_split_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp&quot;</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">Part</span><span class="o">.</span><span class="n">CompSolid</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">Solids</span><span class="p">)</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">sus_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;Solid_original_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp&quot;</span><span class="p">))</span>
+                    <span class="n">comsolid</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">sus_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;Solid_split_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp&quot;</span><span class="p">))</span>
+
+                <span class="n">warningSolids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">IsEnclosure</span><span class="p">:</span>
+                    <span class="n">comsolid</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">debug_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;compEnclosure_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp&quot;</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">comsolid</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">debug_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;compSolid_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp&quot;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Surfaces</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="n">Decom</span><span class="o">.</span><span class="n">extract_surfaces</span><span class="p">(</span>
+                    <span class="n">comsolid</span><span class="p">,</span>
+                    <span class="s2">&quot;All&quot;</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">geometry_bounding_box</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tolerances</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">numeric_format</span><span class="p">,</span>
+                    <span class="n">MakeObj</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tolerances</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">numeric_format</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">set_cad_solid</span><span class="p">()</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">update_solids</span><span class="p">(</span><span class="n">comsolid</span><span class="o">.</span><span class="n">Solids</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">warningSolids</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">update_comment</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">idLabel</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">meta</span><span class="o">.</span><span class="n">__commentInfo__</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="n">meta</span><span class="o">.</span><span class="n">__commentInfo__</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">newLabel</span> <span class="o">=</span> <span class="p">(</span><span class="n">idLabel</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">meta</span><span class="o">.</span><span class="n">__commentInfo__</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">meta</span><span class="o">.</span><span class="n">set_comments</span><span class="p">(</span><span class="n">void</span><span class="o">.</span><span class="n">void_comment_line</span><span class="p">((</span><span class="n">meta</span><span class="o">.</span><span class="n">__commentInfo__</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">newLabel</span><span class="p">)))</span>
+
+
+<span class="k">def</span> <span class="nf">process_cones</span><span class="p">(</span><span class="n">MetaList</span><span class="p">,</span> <span class="n">coneInfo</span><span class="p">,</span> <span class="n">Surfaces</span><span class="p">,</span> <span class="n">UniverseBox</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">tolerances</span><span class="p">,</span> <span class="n">numeric_format</span><span class="p">):</span>
+    <span class="n">cellId</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">coneInfo</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">MetaList</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">__id__</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cellId</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">m</span><span class="o">.</span><span class="n">Void</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">Void</span> <span class="ow">and</span> <span class="n">m</span><span class="o">.</span><span class="n">__commentInfo__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">__commentInfo__</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">cones</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">Id</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">__commentInfo__</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">Id</span> <span class="ow">in</span> <span class="n">cellId</span><span class="p">:</span>
+                    <span class="n">cones</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">-</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">coneInfo</span><span class="p">[</span><span class="n">Id</span><span class="p">])</span>
+            <span class="n">Conv</span><span class="o">.</span><span class="n">add_cone_plane</span><span class="p">(</span>
+                <span class="n">m</span><span class="o">.</span><span class="n">Definition</span><span class="p">,</span>
+                <span class="n">cones</span><span class="p">,</span>
+                <span class="n">Surfaces</span><span class="p">,</span>
+                <span class="n">UniverseBox</span><span class="p">,</span>
+                <span class="n">options</span><span class="p">,</span>
+                <span class="n">tolerances</span><span class="p">,</span>
+                <span class="n">numeric_format</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">m</span><span class="o">.</span><span class="n">Void</span><span class="p">:</span>
+            <span class="n">Conv</span><span class="o">.</span><span class="n">add_cone_plane</span><span class="p">(</span>
+                <span class="n">m</span><span class="o">.</span><span class="n">Definition</span><span class="p">,</span>
+                <span class="n">coneInfo</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">__id__</span><span class="p">],</span>
+                <span class="n">Surfaces</span><span class="p">,</span>
+                <span class="n">UniverseBox</span><span class="p">,</span>
+                <span class="n">options</span><span class="p">,</span>
+                <span class="n">tolerances</span><span class="p">,</span>
+                <span class="n">numeric_format</span><span class="p">,</span>
+            <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">print_warning_solids</span><span class="p">(</span><span class="n">warnSolids</span><span class="p">,</span> <span class="n">warnEnclosures</span><span class="p">):</span>
+
+    <span class="n">solids_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;solids_logger&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">warnSolids</span> <span class="ow">or</span> <span class="n">warnEnclosures</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="k">if</span> <span class="n">warnSolids</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="s2">&quot;Solids :</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">for</span> <span class="n">sol</span> <span class="ow">in</span> <span class="n">warnSolids</span><span class="p">:</span>
+            <span class="n">lines</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">lines</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sol</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">lines</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sol</span><span class="o">.</span><span class="n">Comments</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">lines</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">write_mcnp_cell_def</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">Definition</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">solids_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">warnEnclosures</span><span class="p">:</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="s2">&quot;Enclosures :</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">for</span> <span class="n">sol</span> <span class="ow">in</span> <span class="n">warnEnclosures</span><span class="p">:</span>
+            <span class="n">lines</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">lines</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sol</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">lines</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sol</span><span class="o">.</span><span class="n">Comments</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">lines</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">write_mcnp_cell_def</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">Definition</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="n">solids_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">join_meta_lists</span><span class="p">(</span><span class="n">MList</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">UF</span><span class="o">.</span><span class="n">GeounedSolid</span><span class="p">]:</span>
+
+    <span class="n">newMetaList</span> <span class="o">=</span> <span class="n">MList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">MList</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">M</span> <span class="ow">in</span> <span class="n">MList</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">lastID</span> <span class="o">=</span> <span class="n">newMetaList</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">__id__</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">meta</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+                <span class="n">meta</span><span class="o">.</span><span class="n">__id__</span> <span class="o">=</span> <span class="n">lastID</span> <span class="o">+</span> <span class="n">i</span>
+                <span class="n">newMetaList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">newMetaList</span>
+
+
+<span class="k">def</span> <span class="nf">exclude_cells</span><span class="p">(</span><span class="n">MetaList</span><span class="p">,</span> <span class="n">labelList</span><span class="p">):</span>
+    <span class="n">voidMeta</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">MetaList</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">IsEnclosure</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labelList</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">Comments</span><span class="p">:</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+            <span class="n">voidMeta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">voidMeta</span>
+
+
+<span class="k">def</span> <span class="nf">sort_enclosure</span><span class="p">(</span><span class="n">MetaList</span><span class="p">,</span> <span class="n">meta_void</span><span class="p">,</span> <span class="n">offSet</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+
+    <span class="n">newList</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">meta_void</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">EnclosureID</span> <span class="ow">in</span> <span class="n">newList</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">newList</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">EnclosureID</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">newList</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">EnclosureID</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="p">]</span>
+
+    <span class="n">icount</span> <span class="o">=</span> <span class="n">offSet</span>
+    <span class="n">idLabel</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+    <span class="n">newMeta</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">MetaList</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">NullCell</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">IsEnclosure</span><span class="p">:</span>
+            <span class="n">lineComment</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;##########################################################</span>
+<span class="s2">             ENCLOSURE </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">EnclosureID</span><span class="si">}</span>
+<span class="s2">##########################################################&quot;&quot;&quot;</span>
+            <span class="n">mc</span> <span class="o">=</span> <span class="n">UF</span><span class="o">.</span><span class="n">GeounedSolid</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+            <span class="n">mc</span><span class="o">.</span><span class="n">Comments</span> <span class="o">=</span> <span class="n">lineComment</span>
+            <span class="n">newMeta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">newList</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">EnclosureID</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">NullCell</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">icount</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">e</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">icount</span>
+                <span class="n">idLabel</span><span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">__id__</span><span class="p">]</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">label</span>
+                <span class="n">newMeta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="n">lineComment</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;##########################################################</span>
+<span class="s2">            END  ENCLOSURE </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">EnclosureID</span><span class="si">}</span>
+<span class="s2">##########################################################&quot;&quot;&quot;</span>
+            <span class="n">mc</span> <span class="o">=</span> <span class="n">UF</span><span class="o">.</span><span class="n">GeounedSolid</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+            <span class="n">mc</span><span class="o">.</span><span class="n">Comments</span> <span class="o">=</span> <span class="n">lineComment</span>
+            <span class="n">newMeta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">icount</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">icount</span>
+            <span class="n">idLabel</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">__id__</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">label</span>
+            <span class="n">newMeta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+    <span class="n">lineComment</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">##########################################################</span>
+<span class="s2">             VOID CELLS </span>
+<span class="s2">##########################################################&quot;&quot;&quot;</span>
+    <span class="n">mc</span> <span class="o">=</span> <span class="n">UF</span><span class="o">.</span><span class="n">GeounedSolid</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">mc</span><span class="o">.</span><span class="n">Comments</span> <span class="o">=</span> <span class="n">lineComment</span>
+    <span class="n">newMeta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">newList</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">NullCell</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">icount</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">v</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">icount</span>
+        <span class="n">idLabel</span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">__id__</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">label</span>
+        <span class="n">newMeta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">newMeta</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="o">.</span><span class="n">Void</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">IsEnclosure</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">update_comment</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">idLabel</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">newMeta</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, UNED.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
