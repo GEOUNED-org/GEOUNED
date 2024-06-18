@@ -8,47 +8,47 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Python API reference &#8212; GEOUNED 1.1.0 documentation</title>
+    <title>Python API reference &#8212; GEOUNED 1.2.0 documentation</title>
   
   
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
-  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="_static/documentation_options.js?v=fc837d61"></script>
+    <script src="_static/documentation_options.js?v=6efca38a"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'python_api';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.15.2';
-        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/fusion-neutronics/GEOUNED/adding_version_support_to_docs/docs/version_switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.1';
+        DOCUMENTATION_OPTIONS.theme_version = '0.15.3';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/GEOUNED-org/GEOUNED/dev/docs/version_switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.2';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
         </script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Methodology" href="methodology.html" />
-    <link rel="prev" title="2. Command Line Tool Usage" href="usage/python_cli_usage.html" />
+    <link rel="prev" title="4. Command Line Tool Usage, CSG to CAD conversion" href="usage/python_csgtocad_cli_usage.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -58,27 +58,23 @@
 
   
   
-  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>
-    Back to top
-  </button>
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -100,12 +96,17 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <label class="sidebar-toggle primary-toggle" for="__primary">
+  <button class="sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
-  </label>
+  </button>
   
   
   <div class="col-lg-3 navbar-header-items__start">
@@ -160,40 +161,40 @@ document.write(`
 <nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="install/index.html">
-                        Install
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="install/index.html">
+    Install
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="usage/index.html">
-                        Usage
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="#">
-                        Python API reference
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="usage/index.html">
+    Usage
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="methodology.html">
-                        Methodology
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="developer_guide.html">
-                        Developer guide
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    Python API reference
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="methodology.html">
+    Methodology
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="developer_guide.html">
+    Developer guide
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -265,9 +266,9 @@ document.write(`
   
 
   
-    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+    <button class="sidebar-toggle secondary-toggle" aria-label="On this page">
       <span class="fa-solid fa-outdent"></span>
-    </label>
+    </button>
   
 </div>
 
@@ -288,46 +289,49 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item">
+          
+          
+            <div class="navbar-item">
 <nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="install/index.html">
-                        Install
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="install/index.html">
+    Install
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="usage/index.html">
-                        Usage
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="#">
-                        Python API reference
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="usage/index.html">
+    Usage
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="methodology.html">
-                        Methodology
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="developer_guide.html">
-                        Developer guide
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    Python API reference
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="methodology.html">
+    Methodology
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="developer_guide.html">
+    Developer guide
+  </a>
+</li>
+
   </ul>
 </nav></div>
+          
         
       </div>
     
@@ -385,13 +389,13 @@ document.write(`
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
@@ -400,7 +404,7 @@ document.write(`
 
 
 
-<nav aria-label="Breadcrumb">
+<nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
     <li class="breadcrumb-item breadcrumb-home">
@@ -428,15 +432,63 @@ document.write(`
   <section id="python-api-reference">
 <h1>Python API reference<a class="headerlink" href="#python-api-reference" title="Link to this heading">#</a></h1>
 <dl class="py class">
+<dt class="sig sig-object py" id="geouned.CsgToCad">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geouned.</span></span><span class="sig-name descname"><span class="pre">CsgToCad</span></span><a class="reference internal" href="_modules/geouned/GEOReverse/core.html#CsgToCad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geouned.CsgToCad" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for the conversion of CSG to CAD models</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geouned.CsgToCad.export_cad">
+<span class="sig-name descname"><span class="pre">export_cad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csg_format</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cad_from_csg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounding_box</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-1000,</span> <span class="pre">-1000,</span> <span class="pre">-1000,</span> <span class="pre">1000,</span> <span class="pre">1000,</span> <span class="pre">1000)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">universe_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_range_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat_range_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mat_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geouned/GEOReverse/core.html#CsgToCad.export_cad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geouned.CsgToCad.export_cad" title="Link to this definition">#</a></dt>
+<dd><p>export the CSG geometry in OpenMC or MCNP format to a CAD model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_filename</strong> (<em>str</em>) – The filename and path of the input CSG text file.</p></li>
+<li><p><strong>csg_format</strong> (<em>str</em>) – The format of the CSG input file, options are ‘openmc_xml’ or ‘mcnp’</p></li>
+<li><p><strong>output_filename</strong> (<em>str</em><em>, </em><em>optional</em>) – The filename stem and path of the output file created.
+Two files will be created with the ‘.step’ suffix and one with the ‘FCStd’ suffix.
+Defaults to ‘cad_from_csg’.</p></li>
+<li><p><strong>bounding_box</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>, </em><em>int</em><em>, </em><em>int</em><em>, </em><em>int</em><em>, </em><em>int</em><em>]</em><em>, </em><em>optional</em>) – The bounding box
+coordinates of the CSG geometry. This should encompass the entire CSG geometry.
+Format is (xmin, ymin, zmin, xmax, ymax, zmax) Defaults to (-1000, -1000, -1000,
+1000, 1000, 1000).</p></li>
+<li><p><strong>universe_start</strong> (<em>int</em><em>, </em><em>optional</em>) – The Universe ID to be converted to CAD. If universe_start
+is left as 0 then all the universes and any nested universes are converted. If set
+then the universe and all its nested universes are converted. Defaults to 0.</p></li>
+<li><p><strong>level_max</strong> (<em>str</em><em>, </em><em>optional</em>) – Level maximum of nested universe to be translated. If
+level_max &lt; highest nested universe level, cells inside the container cell whose
+level is level_max will not be translated. This container cell will be the CAD
+solid written in the CAD file. Defaults to “all”.</p></li>
+<li><p><strong>cell_range_type</strong> (<em>str</em><em>, </em><em>optional</em>) – Define how to consider the range values.
+setting to ‘all’ results in all the cells with any cell ID being converted (range a no effect).
+setting to ‘include’ results in only cells defined in ‘range’ being converted.
+setting to ‘exclude’ results in exclude all cells defined in range. Defaults to “all”.</p></li>
+<li><p><strong>cell_range</strong> (<em>Tuple</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – list of cells to be included/excluded for the conversion.
+Defaults to ().</p></li>
+<li><p><strong>mat_range_type</strong> (<em>str</em><em>, </em><em>optional</em>) – Define how to consider the range values.
+setting to ‘all’ results in all the materials with any cell ID being converted (range a no effect).
+setting to ‘include’ results in only materials defined in ‘range’ being converted.
+setting to ‘exclude’ results in exclude all materials defined in range. Defaults to “all”.</p></li>
+<li><p><strong>mat_range</strong> (<em>Tuple</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – list of materials to be included/excluded for the conversion.
+Defaults to ().</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the csg_format is not ‘openmc_xml’ or ‘mcnp’ then a ValueError is raised.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="geouned.CadToCsg">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geouned.</span></span><span class="sig-name descname"><span class="pre">CadToCsg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stepFile=''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options=&lt;geouned.GEOUNED.utils.data_classes.Options</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerances=&lt;geouned.GEOUNED.utils.data_classes.Tolerances</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numeric_format=&lt;geouned.GEOUNED.utils.data_classes.NumericFormat</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings=&lt;geouned.GEOUNED.utils.data_classes.Settings</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geouned/GEOUNED/core.html#CadToCsg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geouned.CadToCsg" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geouned.</span></span><span class="sig-name descname"><span class="pre">CadToCsg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">options=&lt;geouned.GEOUNED.utils.data_classes.Options</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerances=&lt;geouned.GEOUNED.utils.data_classes.Tolerances</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numeric_format=&lt;geouned.GEOUNED.utils.data_classes.NumericFormat</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings=&lt;geouned.GEOUNED.utils.data_classes.Settings</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geouned/GEOUNED/core.html#CadToCsg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geouned.CadToCsg" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Base class for the conversion of CAD to CSG models</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>stepFile</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the CAD file (in STEP format) to
-be converted. Defaults to “”.</p></li>
 <li><p><strong>options</strong> (<a class="reference internal" href="#geouned.Options" title="geouned.Options"><em>geouned.Options</em></a><em>, </em><em>optional</em>) – An instance of a geouned.Options
 class with the attributes set for the desired conversion. Defaults
 to a geouned.Options with default attributes values.</p></li>
@@ -457,7 +509,7 @@ attributes values.</p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="geouned.CadToCsg.export_csg">
-<span class="sig-name descname"><span class="pre">export_csg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Converted</span> <span class="pre">with</span> <span class="pre">GEOUNED'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geometryName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'csg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outFormat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('openmc_xml',</span> <span class="pre">'openmc_py',</span> <span class="pre">'serpent',</span> <span class="pre">'phits',</span> <span class="pre">'mcnp')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volSDEF</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volCARD</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">UCARD</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">101</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dummyMat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cellCommentFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cellSummaryFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geouned/GEOUNED/core.html#CadToCsg.export_csg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geouned.CadToCsg.export_csg" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">export_csg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Converted</span> <span class="pre">with</span> <span class="pre">GEOUNED'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geometryName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'csg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outFormat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('openmc_xml',</span> <span class="pre">'openmc_py',</span> <span class="pre">'serpent',</span> <span class="pre">'phits',</span> <span class="pre">'mcnp')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volSDEF</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volCARD</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">UCARD</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dummyMat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cellCommentFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cellSummaryFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geouned/GEOUNED/core.html#CadToCsg.export_csg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geouned.CadToCsg.export_csg" title="Link to this definition">#</a></dt>
 <dd><p>Writes out a CSG file in the requested Monte Carlo code format.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -493,13 +545,16 @@ information on the CAD cell translated. Defaults to True.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="geouned.CadToCsg.from_json">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geouned/GEOUNED/core.html#CadToCsg.from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geouned.CadToCsg.from_json" title="Link to this definition">#</a></dt>
-<dd><p>Creates a CadToCsg instance and returns the instance. Populating the
-Options, Tolerance, Settings and NumericFormat attributes from matching
-key names in the JSON. If export_to_csg key is present then this method
-also runs .start() and .export_to_csg() on the instance.</p>
+<dd><p>Creates a CadToCsg instance, runs CadToCsg.load_Step_file(), runs
+CadToCsg.start() and returns the instance. Populating the arguments for
+the methods that are run by looking for keys with the same name as the
+method in the JSON file. For example CadToCsg.start() accepts arguments
+for Options, Tolerance, Settings and NumericFormat and can be populated
+from matching key names in the JSON. If export_to_csg key is present
+then this method also runs CadToCsg.export_to_csg() on the instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>str</strong> (<em>filename</em>) – The filename of the config file. Defaults to “config.json”.</p>
+<dd class="field-odd"><p><strong>str</strong> (<em>filename</em>) – The filename of the config file.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
@@ -512,6 +567,26 @@ also runs .start() and .export_to_csg() on the instance.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#geouned.CadToCsg" title="geouned.CadToCsg">geouned.CadToCsg</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geouned.CadToCsg.load_step_file">
+<span class="sig-name descname"><span class="pre">load_step_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_solids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geouned/GEOUNED/core.html#CadToCsg.load_step_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geouned.CadToCsg.load_step_file" title="Link to this definition">#</a></dt>
+<dd><p>Load STEP file(s) and extract solid volumes and enclosure volumes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – The path to the STEP file or a list of paths to multiple STEP files.</p></li>
+<li><p><strong>skip_solids</strong> (<em>Sequence</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – A sequence (list or tuple) of indexes of solids to not load for conversion.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the solid volumes list and enclosure volumes list extracted from the STEP files.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
 </dd></dl>
@@ -599,14 +674,12 @@ cell definition. Defaults to False.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="geouned.Settings">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geouned.</span></span><span class="sig-name descname"><span class="pre">Settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voidGen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compSolids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simplify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'no'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cellRange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exportSolids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minVoidSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxSurf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxBracket</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voidMat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voidExclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startCell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startSurf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_enclosure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geouned/GEOUNED/utils/data_classes.html#Settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geouned.Settings" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geouned.</span></span><span class="sig-name descname"><span class="pre">Settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voidGen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compSolids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simplify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'no'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exportSolids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minVoidSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxSurf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxBracket</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voidMat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voidExclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startCell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startSurf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_enclosure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geouned/GEOUNED/utils/data_classes.html#Settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geouned.Settings" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Settings for changing the way the CAD to CSG conversion is done</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>stepFile</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the CAD file (in STEP format) to
-be converted. Defaults to “”.</p></li>
 <li><p><strong>matFile</strong> (<em>str</em><em>, </em><em>optional</em>) – _description_. Defaults to “”.</p></li>
 <li><p><strong>voidGen</strong> (<em>bool</em><em>, </em><em>optional</em>) – Generate voids of the geometry. Defaults
 to True.</p></li>
@@ -627,9 +700,6 @@ optimal. “voidfull” : only void cells are simplified with the
 most optimal algorithm. The time of the conversion can be
 multiplied by 5 or more. “full” : all the cells (solids and
 voids) are simplified. Defaults to “No”.</p></li>
-<li><p><strong>cellRange</strong> (<em>list</em><em>, </em><em>optional</em>) – Range of cell to be converted (only one
-range is allowed, e.g [100,220]). Default all solids are
-converted. Defaults to [].</p></li>
 <li><p><strong>exportSolids</strong> (<em>str</em><em>, </em><em>optional</em>) – Export CAD solid after reading.
 The execution is stopped after export, the translation is not
 carried out. Defaults to “”.</p></li>
@@ -692,16 +762,16 @@ is located in the CAD solid tree.. Defaults to False.</p></li>
               
               
               
-                <footer class="prev-next-footer">
+                <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="usage/python_cli_usage.html"
+       href="usage/python_csgtocad_cli_usage.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">2. </span>Command Line Tool Usage</p>
+        <p class="prev-next-title"><span class="section-number">4. </span>Command Line Tool Usage, CSG to CAD conversion</p>
       </div>
     </a>
     <a class="right-next"
@@ -731,9 +801,14 @@ is located in the CAD solid tree.. Defaults to False.</p></li>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#geouned.CsgToCad"><code class="docutils literal notranslate"><span class="pre">CsgToCad</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geouned.CsgToCad.export_cad"><code class="docutils literal notranslate"><span class="pre">CsgToCad.export_cad()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#geouned.CadToCsg"><code class="docutils literal notranslate"><span class="pre">CadToCsg</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geouned.CadToCsg.export_csg"><code class="docutils literal notranslate"><span class="pre">CadToCsg.export_csg()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geouned.CadToCsg.from_json"><code class="docutils literal notranslate"><span class="pre">CadToCsg.from_json()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geouned.CadToCsg.load_step_file"><code class="docutils literal notranslate"><span class="pre">CadToCsg.load_step_file()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#geouned.NumericFormat"><code class="docutils literal notranslate"><span class="pre">NumericFormat</span></code></a></li>
@@ -765,8 +840,8 @@ is located in the CAD solid tree.. Defaults to False.</p></li>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+  <script src="_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -799,7 +874,7 @@ is located in the CAD solid tree.. Defaults to False.</p></li>
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
 </p></div>
       
     </div>
