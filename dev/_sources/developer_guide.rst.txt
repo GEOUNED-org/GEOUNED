@@ -168,7 +168,14 @@ Tests checking the code will run automatically on the pull request.
 
 If the tests pass and at least one approver approves then the pull request can be merged.
 
-When a pull request is ready to be merged then the pull request should be **squashed** and merged into the dev branch.
+When updating the dev branch from a feature branch then a pull request is should be merged in with the **squashed and merged*** option.
+
+When updating the main branch from the dev branch then the pull request should be merged in with the **create a merge commit** option.
+
+Version numbering
+~~~~~~~~~~~~~~~~~
+
+GEOUNED will use Semantic Versioning to number releases of the tool, in the form "Major.Minor.Patch", e.g., “3.15.9”.
 
 Releasing a new version
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -214,7 +221,7 @@ For example adding version 1.2.3 would look like this
 
 Then create a `pull request from dev branch to main branch <https://github.com/GEOUNED-org/GEOUNED/compare/main...dev>`_
 
-Once the tests for this pass then merge the pull request in. **Do not squash** this pull request as we want to keep the history of the version changes.
+Once the tests for this pass then merge the pull request in. Use the **create a merge commit** option when merging this pull request from dev to main.
 
 Then `create a new release on the main branch <https://github.com/shimwell/GEOUNED/releases/new>`_ with the version number and a description of the changes.
  
@@ -235,17 +242,12 @@ Conda Forge Releasing
 
 The conda-forge package release is done after the PyPI release. This is because the conda-forge package is built from the PyPI package.
 
-Conda Forge has a bot thew generates a pull request to update the conda-forge recipe. This is done automatically when the PyPI package is released.
+Conda Forge has a bot that generates a pull request to update the conda-forge recipe. This is done automatically when the PyPI package is released.
 
-The pull request will be generated in the `conda-forge/GEOUNED-feedstock <https://github.com/conda-forge/geouned-feedstock/pulls>`_ repository.
+The pull request will be generated in the `conda-forge/GEOUNED-feedstock <https://github.com/conda-forge/geouned-feedstock/pulls>`_ repository a short while after the PyPI release.
 
 Check the pull request and if the tests pass then merge the pull request.
 
 A Conda Forge package will be built and released to the conda-forge channel.
 
-Once released the package will be visaible on the `conda-forge channel <https://anaconda.org/conda-forge/geouned>`_. 
-
-Version Numbering
-~~~~~~~~~~~~~~~~~
-
-GEOUNED will use Semantic Versioning to number releases of the tool, in the form "Major.Minor.Patch", e.g., “3.15.9”.
+Once released the package will be visible on the `conda-forge channel <https://anaconda.org/conda-forge/geouned>`_. 
