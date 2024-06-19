@@ -105,6 +105,19 @@ Checkout feature branches from dev and make local changes on you own branch
 
 Pull requests are welcome
 
+Keeping your fork tags up to date
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Note that your fork of the repository should have releases tags which conform to PEP440 i.e. semantic versioning.
+When installing, setuptools uses these tags to get the version of GEOUNED.
+Release versions in the central repository conform to this standard.
+You can keep the tags in your fork up to date with the main repository using:
+
+.. code-block:: sh
+
+   git fetch --tags https://github.com/GEOUNED-org/GEOUNED
+
+
 Building the docs locally
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
