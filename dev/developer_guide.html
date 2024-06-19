@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Developer guide &#8212; GEOUNED 0.1.dev1+g629ec26 documentation</title>
+    <title>Developer guide &#8212; GEOUNED 0.1.dev1+gc433561 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="_static/documentation_options.js?v=7df58888"></script>
+    <script src="_static/documentation_options.js?v=8d926bcb"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'developer_guide';</script>
@@ -499,6 +499,16 @@ git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </
 </div>
 <p>Pull requests are welcome</p>
 </section>
+<section id="keeping-your-fork-tags-up-to-date">
+<h2>Keeping your fork tags up to date<a class="headerlink" href="#keeping-your-fork-tags-up-to-date" title="Link to this heading">#</a></h2>
+<p>Note that your fork of the repository should have releases tags which conform to PEP440 i.e. semantic versioning.
+When installing, setuptools uses these tags to get the version of GEOUNED.
+Release versions in the central repository conform to this standard.
+You can keep the tags in your fork up to date with the main repository using:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>fetch<span class="w"> </span>--tags<span class="w"> </span>https://github.com/GEOUNED-org/GEOUNED
+</pre></div>
+</div>
+</section>
 <section id="building-the-docs-locally">
 <h2>Building the docs locally<a class="headerlink" href="#building-the-docs-locally" title="Link to this heading">#</a></h2>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="o">[</span>docs<span class="o">]</span>
@@ -645,6 +655,7 @@ sphinx-build<span class="w"> </span>docs<span class="w"> </span>_build
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#developer-install-with-mamba">Developer install with Mamba</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#keeping-your-fork-tags-up-to-date">Keeping your fork tags up to date</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-docs-locally">Building the docs locally</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-tests-locally">Running the tests locally</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#merging-a-pull-requests">Merging a pull requests</a></li>
