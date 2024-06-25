@@ -88,7 +88,7 @@ Here is a complete JSON file specification
             "matFile": "",
             "voidGen": true,
             "debug": false,
-            "compSolids": true,
+            "compSolids": false,
             "simplify": "no",
             "exportSolids": "",
             "minVoidSize": 200.0,

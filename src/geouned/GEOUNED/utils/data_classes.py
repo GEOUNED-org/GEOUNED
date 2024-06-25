@@ -605,7 +605,7 @@ class Settings:
             that solids defined has separated solids are read by FreeCAD
             as a single compound solid (and will produce only one MCNP
             cell). In this case compSolids should be set to False. Defaults
-            to True.
+            to False.
         simplify (str, optional): Simplify the cell definition considering
             relative surfaces position and using Boolean logics. Available
             options are: "no" no optimization, "void" only void cells are
@@ -641,7 +641,7 @@ class Settings:
         matFile: str = "",
         voidGen: bool = True,
         debug: bool = False,
-        compSolids: bool = True,
+        compSolids: bool = False,
         simplify: str = "no",
         exportSolids: typing.Optional[str] = None,
         minVoidSize: float = 200.0,  # units mm
