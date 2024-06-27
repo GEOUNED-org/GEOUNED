@@ -42,7 +42,7 @@ The following example shows a usage with every attributes specified.
         matFile="",
         voidGen=True,
         debug=False,
-        compSolids=True,
+        compSolids=False,
         simplify="no",
         exportSolids="",
         minVoidSize=200.0,
