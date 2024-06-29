@@ -251,7 +251,7 @@ class CadToCsg:
                 raise ValueError(
                     f"Invalid key '{key}' found in config file {filename}. Acceptable key names are 'load_step_file', 'export_csg', 'Settings', 'Parameters', 'Tolerances' and 'NumericFormat'"
                 )
-        
+
         cad_to_csg.load_step_file(**config["load_step_file"])
         cad_to_csg.start()
         if "export_csg" in config.keys():
