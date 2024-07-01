@@ -69,7 +69,7 @@ def void_generation(
     # Perform enclosure void
     # Loop until the lowest enclosure level
 
-    for i, Level in enumerate(tqdm(NestedEnclosure, desc="Void generation")):
+    for i, Level in enumerate(NestedEnclosure):
 
         logger.info("Build Void highest enclosure")
         for j, encl in enumerate(Level):
@@ -130,7 +130,7 @@ def get_void_def(
         nvoid = len(Initial)
         logger.info("Loop, Box to Split :{iloop}, {nvoid}")
 
-        for iz, z in enumerate(Initial):
+        for iz, z in enumerate(tqdm(Initial, desc=f"Void Generation Loop: {iloop}")):
             nsurfaces, nbrackets = z.get_numbers()
             logger.info(f"{iloop} {iz + 1}/{nvoid} {nsurfaces} {nbrackets}")
 
