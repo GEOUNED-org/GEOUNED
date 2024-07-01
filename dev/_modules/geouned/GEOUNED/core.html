@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>geouned.GEOUNED.core &#8212; GEOUNED 0.1.dev1+gc14ad1d documentation</title>
+    <title>geouned.GEOUNED.core &#8212; GEOUNED 0.1.dev1+g8f0b2a1 documentation</title>
   
   
   
@@ -34,7 +34,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=0012eee0"></script>
+    <script src="../../../_static/documentation_options.js?v=c2189bd0"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/geouned/GEOUNED/core';</script>
@@ -658,8 +658,6 @@ document.write(`
 
         <span class="n">cad_to_csg</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
 
-        <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">load_step_file</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;load_step_file&quot;</span><span class="p">])</span>
-
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
 
             <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;load_step_file&quot;</span><span class="p">,</span> <span class="s2">&quot;export_csg&quot;</span><span class="p">]:</span>
@@ -682,6 +680,7 @@ document.write(`
                     <span class="sa">f</span><span class="s2">&quot;Invalid key &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; found in config file </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">. Acceptable key names are &#39;load_step_file&#39;, &#39;export_csg&#39;, &#39;Settings&#39;, &#39;Parameters&#39;, &#39;Tolerances&#39; and &#39;NumericFormat&#39;&quot;</span>
                 <span class="p">)</span>
 
+        <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">load_step_file</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;load_step_file&quot;</span><span class="p">])</span>
         <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
         <span class="k">if</span> <span class="s2">&quot;export_csg&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">export_csg</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;export_csg&quot;</span><span class="p">])</span>
