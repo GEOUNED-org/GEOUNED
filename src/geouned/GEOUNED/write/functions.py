@@ -255,14 +255,14 @@ def mcnp_surface(id, Type, surf, options, tolerances, numeric_format):
             A = surf.Axis.x
             B = surf.Axis.y
             C = surf.Axis.z
-            D = surf.Axis.dot(surf.Position)
             if surf.Axis.isEqual(FreeCAD.Vector(1, 0, 0), tolerances.pln_angle):
-                mcnp_def = "{:<6d} PX  {:{x}}".format(id, D / 10.0, x=numeric_format.P_xyz)
+                mcnp_def = "{:<6d} PX  {:{x}}".format(id, surf.Position.x / 10.0, x=numeric_format.P_xyz)
             elif surf.Axis.isEqual(FreeCAD.Vector(0, 1, 0), tolerances.pln_angle):
-                mcnp_def = "{:<6d} PY  {:{y}}".format(id, D / 10.0, y=numeric_format.P_xyz)
+                mcnp_def = "{:<6d} PY  {:{y}}".format(id, surf.Position.y / 10.0, y=numeric_format.P_xyz)
             elif surf.Axis.isEqual(FreeCAD.Vector(0, 0, 1), tolerances.pln_angle):
-                mcnp_def = "{:<6d} PZ  {:{z}}".format(id, D / 10.0, z=numeric_format.P_xyz)
+                mcnp_def = "{:<6d} PZ  {:{z}}".format(id, surf.Position.z / 10.0, z=numeric_format.P_xyz)
             else:
+                D = surf.Axis.dot(surf.Position)
                 mcnp_def = "{:<6d} P   {:{abc}} {:{abc}} {:{abc}} {:{d}}".format(
                     id,
                     A,
@@ -493,8 +493,8 @@ def open_mc_surface(Type, surf, tolerances, numeric_format, out_xml=True, quadri
         A = surf.Axis.x
         B = surf.Axis.y
         C = surf.Axis.z
-        D = surf.Axis.dot(surf.Position) * 0.1
         if surf.Axis.isEqual(FreeCAD.Vector(1, 0, 0), tolerances.pln_angle):
+            D = surf.Position.x * 0.1
             if out_xml:
                 omc_surf = "x-plane"
                 coeffs = "{:{x}}".format(D, x=numeric_format.P_xyz)
@@ -503,6 +503,7 @@ def open_mc_surface(Type, surf, tolerances, numeric_format, out_xml=True, quadri
                 coeffs = f"x0={D}"
 
         elif surf.Axis.isEqual(FreeCAD.Vector(0, 1, 0), tolerances.pln_angle):
+            D = surf.Position.y * 0.1
             if out_xml:
                 omc_surf = "y-plane"
                 coeffs = "{:{x}}".format(D, x=numeric_format.P_xyz)
@@ -511,6 +512,7 @@ def open_mc_surface(Type, surf, tolerances, numeric_format, out_xml=True, quadri
                 coeffs = f"y0={D}"
 
         elif surf.Axis.isEqual(FreeCAD.Vector(0, 0, 1), tolerances.pln_angle):
+            D = surf.Position.z * 0.1
             if out_xml:
                 omc_surf = "z-plane"
                 coeffs = "{:{x}}".format(D, x=numeric_format.P_xyz)
@@ -519,6 +521,7 @@ def open_mc_surface(Type, surf, tolerances, numeric_format, out_xml=True, quadri
                 coeffs = f"z0={D}"
 
         else:
+            D = surf.Axis.dot(surf.Position) * 0.1
             if out_xml:
                 omc_surf = "plane"
                 coeffs = "{:{abc}} {:{abc}} {:{abc}} {:{d}}".format(A, B, C, D, abc=numeric_format.P_abc, d=numeric_format.P_d)
@@ -727,11 +730,11 @@ def serpent_surface(id, Type, surf, options, tolerance, numeric_format):
             C = surf.Axis.z
             D = surf.Axis.dot(surf.Position)
             if surf.Axis.isEqual(FreeCAD.Vector(1, 0, 0), tolerance.pln_angle):
-                serpent_def = f"surf {id} px {D/10:{numeric_format.P_xyz}}"
+                serpent_def = f"surf {id} px {surf.Position.x/10:{numeric_format.P_xyz}}"
             elif surf.Axis.isEqual(FreeCAD.Vector(0, 1, 0), tolerance.pln_angle):
-                serpent_def = f"surf {id} py {D/10:{numeric_format.P_xyz}}"
+                serpent_def = f"surf {id} py {surf.Position.y/10:{numeric_format.P_xyz}}"
             elif surf.Axis.isEqual(FreeCAD.Vector(0, 0, 1), tolerance.pln_angle):
-                serpent_def = f"surf {id} pz {D/10:{numeric_format.P_xyz}}"
+                serpent_def = f"surf {id} pz {surf.Position.z/10:{numeric_format.P_xyz}}"
             else:
                 serpent_def = f"surf {id} plane {A:{numeric_format.P_d}} {B:{numeric_format.P_d}} {C:{numeric_format.P_d}} {D/10:{numeric_format.P_d}}"
 
@@ -869,14 +872,14 @@ def phits_surface(id, Type, surf, options, tolerance, numeric_format):
             A = surf.Axis.x
             B = surf.Axis.y
             C = surf.Axis.z
-            D = surf.Axis.dot(surf.Position)
             if surf.Axis.isEqual(FreeCAD.Vector(1, 0, 0), tolerance.pln_angle):
-                phits_def = "{:<6d} PX  {:{x}}".format(id, D / 10.0, x=numeric_format.P_xyz)
+                phits_def = "{:<6d} PX  {:{x}}".format(id, surf.Position.x / 10.0, x=numeric_format.P_xyz)
             elif surf.Axis.isEqual(FreeCAD.Vector(0, 1, 0), tolerance.pln_angle):
-                phits_def = "{:<6d} PY  {:{y}}".format(id, D / 10.0, y=numeric_format.P_xyz)
+                phits_def = "{:<6d} PY  {:{y}}".format(id, surf.Position.y / 10.0, y=numeric_format.P_xyz)
             elif surf.Axis.isEqual(FreeCAD.Vector(0, 0, 1), tolerance.pln_angle):
-                phits_def = "{:<6d} PZ  {:{z}}".format(id, D / 10.0, z=numeric_format.P_xyz)
+                phits_def = "{:<6d} PZ  {:{z}}".format(id, surf.Position.z / 10.0, z=numeric_format.P_xyz)
             else:
+                D = surf.Axis.dot(surf.Position)
                 phits_def = "{:<6d} P   {:{abc}} {:{abc}} {:{abc}} {:{d}}".format(
                     id,
                     A,
