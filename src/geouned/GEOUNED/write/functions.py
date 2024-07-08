@@ -871,7 +871,7 @@ def phits_surface(id, Type, surf, options, tolerance, numeric_format):
         else:
             A = surf.Axis.x
             B = surf.Axis.y
-            C = surf.Axis.z            
+            C = surf.Axis.z
             if surf.Axis.isEqual(FreeCAD.Vector(1, 0, 0), tolerance.pln_angle):
                 phits_def = "{:<6d} PX  {:{x}}".format(id, surf.Position.x / 10.0, x=numeric_format.P_xyz)
             elif surf.Axis.isEqual(FreeCAD.Vector(0, 1, 0), tolerance.pln_angle):
