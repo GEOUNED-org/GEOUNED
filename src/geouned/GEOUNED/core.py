@@ -351,8 +351,6 @@ class CadToCsg:
         """
         # set up Universe
         meta_list = self.meta_list
-        if self.enclosure_list:
-            meta_list += self.enclosure_list
 
         Box = meta_list[0].BoundBox
         xmin = Box.XMin
