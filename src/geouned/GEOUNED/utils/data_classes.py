@@ -781,7 +781,7 @@ class Settings:
         elif len(voidMat) > 0:
             raise TypeError(f"geouned.Settings.voidMat should be a list with 3 elements or void list")
         self._voidMat = voidMat
-        
+
     @property
     def voidExclude(self):
         return self._voidExclude
