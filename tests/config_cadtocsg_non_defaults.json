@@ -13,6 +13,6 @@
     },
     "Settings": {
         "matFile": "non default",
-        "voidMat": [1, -1.0, "Water"]
+        "voidMat": [1, -1.29E-3, "Dry air"]
     }
 }
