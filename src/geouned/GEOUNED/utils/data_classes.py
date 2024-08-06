@@ -773,12 +773,12 @@ class Settings:
             self._voidMat = voidMat
         else:
             if not isinstance(voidMat[0], int):
-                raise TypeError(f"first entry of geouned.Settings.voidMat should be an int, not a {type(entry)}")
+                raise TypeError(f"first entry of geouned.Settings.voidMat should be an int, not a {type(voidMat[0])}")
             if not isinstance(voidMat[1], int):
                 if not isinstance(voidMat[1], float):
-                    raise TypeError(f"second entry of geouned.Settings.voidMat should be an int or float, not a {type(entry)}")
+                    raise TypeError(f"second entry of geouned.Settings.voidMat should be an int or float, not a {type(voidMat[1])}")
             if not isinstance(voidMat[2], str):
-                raise TypeError(f"third entry of geouned.Settings.voidMat should be a str, not a {type(entry)}")
+                raise TypeError(f"third entry of geouned.Settings.voidMat should be a str, not a {type(voidMat[2])}")
             self._voidMat = voidMat
 
     @property
