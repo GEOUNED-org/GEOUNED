@@ -12,6 +12,7 @@
         "P_abc": "15.7e"
     },
     "Settings": {
-        "matFile": "non default"
+        "matFile": "non default",
+        "voidMat": [1, -1.29E-3, "Dry air"]
     }
 }
