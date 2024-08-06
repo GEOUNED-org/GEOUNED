@@ -769,7 +769,7 @@ class Settings:
     def voidMat(self, voidMat: list):
         if not isinstance(voidMat, list):
             raise TypeError(f"geouned.Settings.voidMat should be a list, not a {type(voidMat)}")
-        if len(voidMat)==0:
+        if len(voidMat) == 0:
             self._voidMat = voidMat
         else:
             if not isinstance(voidMat[0], int):
