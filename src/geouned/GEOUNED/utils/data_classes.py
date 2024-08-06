@@ -769,18 +769,19 @@ class Settings:
     def voidMat(self, voidMat: list):
         if not isinstance(voidMat, list):
             raise TypeError(f"geouned.Settings.voidMat should be a list, not a {type(voidMat)}")
-        if len(voidMat) == 0:
-            self._voidMat = voidMat
-        else:
-            if not isinstance(voidMat[0], int):
-                raise TypeError(f"first entry of geouned.Settings.voidMat should be an int, not a {type(entry)}")
-            if not isinstance(voidMat[1], int):
-                if not isinstance(voidMat[1], float):
-                    raise TypeError(f"second entry of geouned.Settings.voidMat should be an int or float, not a {type(entry)}")
-            if not isinstance(voidMat[2], str):
-                raise TypeError(f"third entry of geouned.Settings.voidMat should be a str, not a {type(entry)}")
-            self._voidMat = voidMat
-
+        if len(voidMat) == 3:
+            entry0, entry1, entry2 = voidMat
+            if not isinstance(entry0, int):
+                raise TypeError(f"first entry of geouned.Settings.voidMat should be an int, not a {type(entry0)}")
+            if not isinstance(entry1, int):
+                if not isinstance(entry1, float):
+                    raise TypeError(f"second entry of geouned.Settings.voidMat should be an int or float, not a {type(entry1)}")
+            if not isinstance(entry2, str):
+                raise TypeError(f"third entry of geouned.Settings.voidMat should be a str, not a {type(entry2)}")
+        elif len(voidMat) > 0:
+            raise TypeError(f"geouned.Settings.voidMat should be a list with 3 elements or void list")
+        self._voidMat = voidMat
+        
     @property
     def voidExclude(self):
         return self._voidExclude
