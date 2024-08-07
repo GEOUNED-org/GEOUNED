@@ -23,7 +23,7 @@ class VoidBox:
             self.BoundBox = Enclosure
             self.PieceEnclosure = None
         else:
-            self.BoundBox = Enclosure.BoundBox
+            self.BoundBox = Enclosure.optimalBoundingBox()
             self.PieceEnclosure = Enclosure
 
         for m in MetaSolids:
