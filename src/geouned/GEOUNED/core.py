@@ -352,7 +352,7 @@ class CadToCsg:
         # set up Universe
         meta_list = self.meta_list
 
-        Box = meta_list[0].BoundBox
+        Box = meta_list[0].optimalBoundingBox()
         xmin = Box.XMin
         xmax = Box.XMax
         ymin = Box.YMin
@@ -362,12 +362,13 @@ class CadToCsg:
         for m in meta_list[1:]:
             # MIO. This was removed since in HELIAS the enclosure cell is the biggest one
             # if m.IsEnclosure: continue
-            xmin = min(m.BoundBox.XMin, xmin)
-            xmax = max(m.BoundBox.XMax, xmax)
-            ymin = min(m.BoundBox.YMin, ymin)
-            ymax = max(m.BoundBox.YMax, ymax)
-            zmin = min(m.BoundBox.ZMin, zmin)
-            zmax = max(m.BoundBox.ZMax, zmax)
+            optBox = m.optimalBoundingBox()
+            xmin = min(optBox.XMin, xmin)
+            xmax = max(optBox.XMax, xmax)
+            ymin = min(optBox.YMin, ymin)
+            ymax = max(optBox.YMax, ymax)
+            zmin = min(optBox.ZMin, zmin)
+            zmax = max(optBox.ZMax, zmax)
 
         self.geometry_bounding_box = FreeCAD.BoundBox(
             FreeCAD.Vector(xmin - padding, ymin - padding, zmin - padding),
