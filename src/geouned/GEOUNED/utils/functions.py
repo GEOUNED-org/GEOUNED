@@ -108,7 +108,7 @@ class GeounedSolid:
     def optimalBoundingBox(self):
         if self.CADSolid is None:
             self.set_cad_solid()
-        return self.CADSolid.optimalBoundingBox()    
+        return self.CADSolid.optimalBoundingBox()
 
     def set_definition(self, definition, simplify=False):
 
