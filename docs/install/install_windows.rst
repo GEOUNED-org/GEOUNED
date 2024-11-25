@@ -76,11 +76,17 @@ Activate the new environment
 
     conda activate new_env
 
-Install GEOUNED from conda-forge
+Since one of the GEOUNED dependencies is FreeCAD, classic conda solver of dependencies may significantly slow down the installation. For this reason, it is recommended to install and use conda-libmamba-solver
 
 .. code-block:: sh
 
-    conda install -c conda-forge geouned -y
+    conda install conda-libmamba-solver
+
+Install GEOUNED from conda-forge, forcing the use of libmamba solver
+
+.. code-block:: sh
+
+    conda install -c conda-forge geouned -y --solver=libmamba
 
 Then you will be able to run import GEOUNED from within Python
 
