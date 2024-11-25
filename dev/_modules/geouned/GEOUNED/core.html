@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>geouned.GEOUNED.core &#8212; GEOUNED 0.1.dev1+g5ffb122 documentation</title>
+    <title>geouned.GEOUNED.core &#8212; GEOUNED 0.1.dev1+g749ec0b documentation</title>
   
   
   
@@ -37,7 +37,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../_static/documentation_options.js?v=e07d9cd0"></script>
+    <script src="../../../_static/documentation_options.js?v=2dfd8590"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/geouned/GEOUNED/core';</script>
@@ -51,7 +51,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.dev1+g5ffb122" />
+  <meta name="docsearch:version" content="0.1.dev1+g749ec0b" />
   </head>
   
   
@@ -755,7 +755,7 @@
         <span class="c1"># set up Universe</span>
         <span class="n">meta_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span>
 
-        <span class="n">Box</span> <span class="o">=</span> <span class="n">meta_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">BoundBox</span>
+        <span class="n">Box</span> <span class="o">=</span> <span class="n">meta_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">optimalBoundingBox</span><span class="p">()</span>
         <span class="n">xmin</span> <span class="o">=</span> <span class="n">Box</span><span class="o">.</span><span class="n">XMin</span>
         <span class="n">xmax</span> <span class="o">=</span> <span class="n">Box</span><span class="o">.</span><span class="n">XMax</span>
         <span class="n">ymin</span> <span class="o">=</span> <span class="n">Box</span><span class="o">.</span><span class="n">YMin</span>
@@ -765,12 +765,13 @@
         <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">meta_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
             <span class="c1"># MIO. This was removed since in HELIAS the enclosure cell is the biggest one</span>
             <span class="c1"># if m.IsEnclosure: continue</span>
-            <span class="n">xmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">BoundBox</span><span class="o">.</span><span class="n">XMin</span><span class="p">,</span> <span class="n">xmin</span><span class="p">)</span>
-            <span class="n">xmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">BoundBox</span><span class="o">.</span><span class="n">XMax</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
-            <span class="n">ymin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">BoundBox</span><span class="o">.</span><span class="n">YMin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">)</span>
-            <span class="n">ymax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">BoundBox</span><span class="o">.</span><span class="n">YMax</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
-            <span class="n">zmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">BoundBox</span><span class="o">.</span><span class="n">ZMin</span><span class="p">,</span> <span class="n">zmin</span><span class="p">)</span>
-            <span class="n">zmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">BoundBox</span><span class="o">.</span><span class="n">ZMax</span><span class="p">,</span> <span class="n">zmax</span><span class="p">)</span>
+            <span class="n">optBox</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">optimalBoundingBox</span><span class="p">()</span>
+            <span class="n">xmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">optBox</span><span class="o">.</span><span class="n">XMin</span><span class="p">,</span> <span class="n">xmin</span><span class="p">)</span>
+            <span class="n">xmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">optBox</span><span class="o">.</span><span class="n">XMax</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+            <span class="n">ymin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">optBox</span><span class="o">.</span><span class="n">YMin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">)</span>
+            <span class="n">ymax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">optBox</span><span class="o">.</span><span class="n">YMax</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+            <span class="n">zmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">optBox</span><span class="o">.</span><span class="n">ZMin</span><span class="p">,</span> <span class="n">zmin</span><span class="p">)</span>
+            <span class="n">zmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">optBox</span><span class="o">.</span><span class="n">ZMax</span><span class="p">,</span> <span class="n">zmax</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">geometry_bounding_box</span> <span class="o">=</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">BoundBox</span><span class="p">(</span>
             <span class="n">FreeCAD</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">xmin</span> <span class="o">-</span> <span class="n">padding</span><span class="p">,</span> <span class="n">ymin</span> <span class="o">-</span> <span class="n">padding</span><span class="p">,</span> <span class="n">zmin</span> <span class="o">-</span> <span class="n">padding</span><span class="p">),</span>
