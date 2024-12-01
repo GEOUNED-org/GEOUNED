@@ -8,4 +8,5 @@ GEOUNED can be used as a Python package with the API or as a command line tool w
    :maxdepth: 2
 
    cad2csg/index
+   
    csg2cad/index

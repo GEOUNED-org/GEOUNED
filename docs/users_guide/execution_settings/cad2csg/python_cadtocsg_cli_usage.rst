@@ -1,5 +1,5 @@
-Command Line Tool Usage, CAD to CSG conversion
-==============================================
+Command Line Tool Usage
+=======================
 
 GEOUNED CAD to CSG conversion can be performed in the command line.
 

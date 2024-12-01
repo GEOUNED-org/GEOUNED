@@ -4,7 +4,7 @@ Quick Install Guide
 Linux
 ~~~~~
 
-First we need to install a Conda distribution. There are a few options but we here we opt for `MiniConda3 <https://docs.anaconda.com/free/miniconda/>`_ as it downloads quicker than the fuller `AnaConda <https://www.anaconda.com/download>`_.
+First we need to install a Conda distribution. There are a few options but we here we opt for `MiniConda3 <https://docs.anaconda.com/free/miniconda/>`_ as it downloads quicker than the fuller `Anaconda <https://www.anaconda.com/download>`_.
 
 You can follow the install instructions for `MiniConda3 <https://docs.anaconda.com/free/miniconda/>`_ or follow the commands below.
 Download.
@@ -63,7 +63,7 @@ You will also be able to use the GEOUNED command line tool
 Windows
 ~~~~~~~
 
-First we need to install a Conda distribution. There are a few options but we here we opt for `MiniConda3 <https://docs.anaconda.com/free/miniconda/>`_ as it downloads quicker than the fuller `AnaConda <https://www.anaconda.com/download>`_.
+First we need to install a Conda distribution. There are a few options but we here we opt for `MiniConda3 <https://docs.anaconda.com/free/miniconda/>`_ as it downloads quicker than the fuller `Anaconda <https://www.anaconda.com/download>`_.
 
 You can follow the install instructions for `MiniConda3 <https://docs.anaconda.com/free/miniconda/>`_ 
 
