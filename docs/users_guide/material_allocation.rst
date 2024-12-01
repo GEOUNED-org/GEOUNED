@@ -3,7 +3,7 @@ Material Allocation
 
 The material of the components can be assigned directly in the tree CAD by including a text with _mXX_ within the component name.
 
-.. image:: images/mat_tag.png
+.. image:: _static/mat_tag.png
    :alt: Example of a CAD tree with a _mXX_ tag.
    :align: center
    :width: 50%
@@ -12,7 +12,9 @@ The material assigned to the corresponding cell should be defined in the materia
 This file has the following format:
 
 # Materials and density
+
 # FORMAT: ID DENS NAME
+
 1 1.0 Water
 
 Where # is used for comments and the rest of the lines specifies the id of the material, the nominal density and the text to be included as a comment.
