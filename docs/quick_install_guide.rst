@@ -1,41 +1,51 @@
-Windows
-=======
+Quick Install Guide
+===================
+
+Linux
+~~~~~
+
+First we need to install a Conda distribution. There are a few options but we here we opt for `MiniConda3 <https://docs.anaconda.com/free/miniconda/>`_ as it downloads quicker than the fuller `AnaConda <https://www.anaconda.com/download>`_.
+
+You can follow the install instructions for `MiniConda3 <https://docs.anaconda.com/free/miniconda/>`_ or follow the commands below.
+Download.
+
+.. code-block:: sh
+
+    mkdir -p ~/miniconda3
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
+
+Install MiniConda3
+
+.. code-block:: sh
+
+    bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
 
 
-User install with Mamba (recommended)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Activate the base environment in your current terminal
 
-First we need to install a Mamba distribution. There are a few options but here we opt for Miniforge3 as it includes Mamba.
+.. code-block:: sh
 
-You can follow the install instructions for `Miniforge3 here <https://github.com/conda-forge/miniforge>`_ .
+    ~/miniconda3/bin/conda init bash
 
-Download and execute the Miniforge3 Windows installer
-
-You can get it from the `Miniforge3 GitHub repository here <https://github.com/conda-forge/miniforge?tab=readme-ov-file#miniforge-pypy3>`_ or from the link below
-
-`https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe <https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe>`_
-
-Follow the prompts and complete the installation process
-
-Open "Miniforge Prompt" which will now be available on your start menu.
 
 It is recommended to create a new environment
 
 .. code-block:: sh
 
-    mamba create --name new_env python=3.11
+    conda create --name new_env python=3.11
+
 
 Activate the new environment
 
 .. code-block:: sh
 
-    mamba activate new_env
+    conda activate new_env
 
 Install GEOUNED from conda-forge
 
 .. code-block:: sh
 
-    mamba install -c conda-forge geouned -y
+    conda install -c conda-forge geouned -y
 
 Then you will be able to run import GEOUNED from within Python
 
@@ -49,8 +59,9 @@ You will also be able to use the GEOUNED command line tool
 
     geouned_cadtocsg --help
 
-User install with Conda
-~~~~~~~~~~~~~~~~~~~~~~~
+
+Windows
+~~~~~~~
 
 First we need to install a Conda distribution. There are a few options but we here we opt for `MiniConda3 <https://docs.anaconda.com/free/miniconda/>`_ as it downloads quicker than the fuller `AnaConda <https://www.anaconda.com/download>`_.
 

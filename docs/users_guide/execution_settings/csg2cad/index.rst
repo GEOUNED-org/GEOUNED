@@ -1,5 +1,5 @@
-Execution Settings
-==================
+CSG to CAD Translation
+======================
 
 GEOUNED can be used as a Python package with the API or as a command line tool with the CLI.
 
@@ -7,5 +7,5 @@ GEOUNED can be used as a Python package with the API or as a command line tool w
 .. toctree::
    :maxdepth: 1
 
-   cad2csg
-   csg2cad
+   python_csgtocad_api_usage
+   python_csgtocad_cli_usage
