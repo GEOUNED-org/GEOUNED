@@ -10,7 +10,6 @@ Users have also had success installing FreeCAD and making use of the Python vers
 
 
 .. toctree::
-   :numbered:
    :maxdepth: 1
 
    install_linux
