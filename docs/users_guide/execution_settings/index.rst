@@ -5,7 +5,7 @@ GEOUNED can be used as a Python package with the API or as a command line tool w
 
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
-   cad2csg
-   csg2cad
+   cad2csg/index
+   csg2cad/index
