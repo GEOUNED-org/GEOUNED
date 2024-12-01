@@ -20,7 +20,6 @@ sys.path.insert(0, os.path.abspath("../../src"))
 
 project = "GEOUNED"
 copyright = "2024, UNED"
-author = "UNED & F4E"
 
 # The full version, including alpha/beta/rc tags
 import geouned
