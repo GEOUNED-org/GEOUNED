@@ -1,7 +1,7 @@
 .. usage
 
-Usage
-=====
+Execution Settings
+==================
 
 GEOUNED can be used as a Python package with the API or as a command line tool with the CLI.
 

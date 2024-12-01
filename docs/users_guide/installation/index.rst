@@ -1,7 +1,5 @@
-.. usage
-
-Install
-=======
+Installation
+============
 
 There are several options for installing GEOUNED package.
 The installation selected has implications for how you run GEOUNED Python scripts.
