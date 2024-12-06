@@ -72,7 +72,7 @@ def cut_full_cylinder(solid, options, tolerances, numeric_format):
                 surfaces.add_cylinder(cylinder, options, tolerances, numeric_format, False)
 
                 # add planes if cylinder axis is cut by a plane (plane quasi perpedicular to axis)
-                for p in cyl_bound_planes(face, universe_box):
+                for p in cyl_bound_planes(solid_gu, face, universe_box):
                     p.build_surface()
                     surfaces.add_plane(p, options, tolerances, numeric_format, False)
                 break
@@ -131,7 +131,16 @@ def gen_plane(pos, normal, diag):
     return plane_center
 
 
-def cyl_bound_planes(face, boundBox):
+def other_face_edge(current_edge, current_face, solid):
+    for face in solid.Faces:
+        if face.isSame(current_face):
+            continue
+        for edge in face.Edges:
+            if current_edge.isSame(edge):
+                return face
+
+
+def cyl_bound_planes(solid, face, boundBox):
     Edges = face.OuterWire.Edges
     planes = []
     for e in Edges:
@@ -139,6 +148,13 @@ def cyl_bound_planes(face, boundBox):
             curve = str(e.Curve)
         except:
             curve = "none"
+
+        adjacent_face = other_face_edge(e, face, solid)
+        if adjacent_face is not None:
+            if type(adjacent_face.Surface) is GU.TorusGu:
+                continue  # doesn't create plane if other face is a torus
+            if face.Surface.isSameSurface(adjacent_face.Surface):
+                continue  # doesn't create plane if other face has same surface
 
         if curve[0:6] == "Circle":
             dir = e.Curve.Axis
@@ -159,7 +175,7 @@ def cyl_bound_planes(face, boundBox):
     return planes
 
 
-def torus_bound_planes(face, boundBox, tolerances):
+def torus_bound_planes(solid, face, boundBox, tolerances):
     params = face.ParameterRange
     planes = []
     if is_same_value(params[1] - params[0], twoPi, tolerances.value):
@@ -172,6 +188,11 @@ def torus_bound_planes(face, boundBox, tolerances):
             curve = str(e.Curve)
         except:
             curve = "none"
+
+        adjacent_face = other_face_edge(e, face, solid)
+        if adjacent_face is not None:
+            if face.Surface.isSameSurface(adjacent_face.Surface):
+                continue  # doesn't create plane if other face has same surface
 
         if curve[0:6] == "Circle":
             dir = e.Curve.Axis
@@ -262,7 +283,7 @@ def extract_surfaces(solid, kind, universe_box, options, tolerances, numeric_for
 
                 if kind in ["Planes", "All"]:
                     # add planes if cylinder axis is cut by a plane (plane quasi perpedicular to axis)
-                    for p in cyl_bound_planes(face, universe_box):
+                    for p in cyl_bound_planes(solid_GU, face, universe_box):
                         if MakeObj:
                             p.build_surface()
                         surfaces.add_plane(p, options, tolerances, numeric_format, False)
@@ -280,7 +301,7 @@ def extract_surfaces(solid, kind, universe_box, options, tolerances, numeric_for
                     surfaces.add_cone(cone, tolerances)
 
                 if kind in ["Planes", "All"]:
-                    for p in cyl_bound_planes(face, universe_box):
+                    for p in cyl_bound_planes(solid_GU, face, universe_box):
                         if MakeObj:
                             p.build_surface()
                         surfaces.add_plane(p, options, tolerances, numeric_format, False)
@@ -294,7 +315,7 @@ def extract_surfaces(solid, kind, universe_box, options, tolerances, numeric_for
                 surfaces.add_sphere(sphere, tolerances)
 
                 if kind in ["Planes", "All"]:
-                    for p in cyl_bound_planes(face, universe_box):
+                    for p in cyl_bound_planes(solid_GU, face, universe_box):
                         if MakeObj:
                             p.build_surface()
                         surfaces.add_plane(p, options, tolerances, numeric_format, False)
@@ -311,7 +332,7 @@ def extract_surfaces(solid, kind, universe_box, options, tolerances, numeric_for
                     surfaces.add_torus(torus, tolerances)
 
                 if kind in ["Planes", "All"]:
-                    for p in torus_bound_planes(face, universe_box, tolerances):
+                    for p in torus_bound_planes(solid_GU, face, universe_box, tolerances):
                         if MakeObj:
                             p.build_surface()
                         surfaces.add_plane(p, options, tolerances, numeric_format, False)
