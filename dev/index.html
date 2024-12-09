@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Geouned Documentation &#8212; GEOUNED 0.1.dev1+gbc3829a documentation</title>
+    <title>GEOUNED Documentation &#8212; GEOUNED 0.1.dev1+gefc249b documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="_static/documentation_options.js?v=bd154a34"></script>
+    <script src="_static/documentation_options.js?v=062d4979"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
@@ -50,10 +50,10 @@
         </script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Install" href="install/index.html" />
+    <link rel="next" title="Quick Install Guide" href="quick_install_guide.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.dev1+gbc3829a" />
+  <meta name="docsearch:version" content="0.1.dev1+gefc249b" />
   </head>
   
   
@@ -149,15 +149,15 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="install/index.html">
-    Install
+  <a class="nav-link nav-internal" href="quick_install_guide.html">
+    Quick Install Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="usage/index.html">
-    Usage
+  <a class="nav-link nav-internal" href="users_guide/index.html">
+    Users Guide
   </a>
 </li>
 
@@ -170,15 +170,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="methodology.html">
-    Methodology
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="developer_guide.html">
-    Developer guide
+  <a class="nav-link nav-internal" href="developers_guide.html">
+    Developers guide
   </a>
 </li>
 
@@ -274,15 +267,15 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="install/index.html">
-    Install
+  <a class="nav-link nav-internal" href="quick_install_guide.html">
+    Quick Install Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="usage/index.html">
-    Usage
+  <a class="nav-link nav-internal" href="users_guide/index.html">
+    Users Guide
   </a>
 </li>
 
@@ -295,15 +288,8 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="methodology.html">
-    Methodology
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="developer_guide.html">
-    Developer guide
+  <a class="nav-link nav-internal" href="developers_guide.html">
+    Developers guide
   </a>
 </li>
 
@@ -369,60 +355,44 @@
                 <article class="bd-article">
                   
   <section id="geouned-documentation">
-<h1>Geouned Documentation<a class="headerlink" href="#geouned-documentation" title="Link to this heading">#</a></h1>
-<p><strong>Version</strong>: 0.1.dev1+gbc3829a</p>
+<h1>GEOUNED Documentation<a class="headerlink" href="#geouned-documentation" title="Link to this heading">#</a></h1>
+<p><strong>Version</strong>: 0.1.dev1+gefc249b</p>
 <p>GEOUNED converts CAD to Constructive Solid Geometry (CSG) formats for use in
 Monte Carlo transport codes.
 Supported codes include OpenMC, PHITS, Serpent and MCNP.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="install/index.html">Install</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="install/install_linux.html">1. Linux</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="install/install_linux.html#user-install-with-mamba-recommended">1.1. User install with Mamba (recommended)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="install/install_linux.html#user-install-with-conda">1.2. User install with Conda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_install_guide.html">Quick Install Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quick_install_guide.html#linux">Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick_install_guide.html#windows">Windows</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="install/install_windows.html">2. Windows</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="install/install_windows.html#user-install-with-mamba-recommended">2.1. User install with Mamba (recommended)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="install/install_windows.html#user-install-with-conda">2.2. User install with Conda</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="usage/index.html">Usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="usage/python_cadtocsg_api_usage.html">1. Python Package Usage, CAD to CSG conversion</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage/python_cadtocsg_cli_usage.html">2. Command Line Tool Usage, CAD to CSG conversion</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage/python_csgtocad_api_usage.html">3. Python Package Usage, CSG to CAD conversion</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage/python_csgtocad_cli_usage.html">4. Command Line Tool Usage, CSG to CAD conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users_guide/index.html">Users Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="users_guide/installation/index.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="users_guide/execution_settings/index.html">Execution Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="users_guide/simplification.html">Simplification of Geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="users_guide/material_allocation.html">Material Allocation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="users_guide/void_generation.html">Void Generation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="python_api.html">Python API reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="python_api.html#geouned.CsgToCad"><code class="docutils literal notranslate"><span class="pre">CsgToCad</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="python_api.html#geouned.CsgToCad.export_cad"><code class="docutils literal notranslate"><span class="pre">CsgToCad.export_cad()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="python_api.html#geouned.CadToCsg"><code class="docutils literal notranslate"><span class="pre">CadToCsg</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="python_api.html#geouned.CadToCsg.export_csg"><code class="docutils literal notranslate"><span class="pre">CadToCsg.export_csg()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python_api.html#geouned.CadToCsg.from_json"><code class="docutils literal notranslate"><span class="pre">CadToCsg.from_json()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="python_api.html#geouned.CadToCsg.load_step_file"><code class="docutils literal notranslate"><span class="pre">CadToCsg.load_step_file()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="python_api.html#geouned.CsgToCad"><code class="docutils literal notranslate"><span class="pre">CsgToCad</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="python_api.html#geouned.CadToCsg"><code class="docutils literal notranslate"><span class="pre">CadToCsg</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_api.html#geouned.NumericFormat"><code class="docutils literal notranslate"><span class="pre">NumericFormat</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_api.html#geouned.Options"><code class="docutils literal notranslate"><span class="pre">Options</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_api.html#geouned.Settings"><code class="docutils literal notranslate"><span class="pre">Settings</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="python_api.html#geouned.Tolerances"><code class="docutils literal notranslate"><span class="pre">Tolerances</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="methodology.html">Methodology</a></li>
-<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#developer-install-with-mamba">Developer install with Mamba</a></li>
-<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#keeping-your-fork-tags-up-to-date">Keeping your fork tags up to date</a></li>
-<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#building-the-docs-locally">Building the docs locally</a></li>
-<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#running-the-tests-locally">Running the tests locally</a></li>
-<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#merging-a-pull-requests">Merging a pull requests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#version-numbering">Version numbering</a></li>
-<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#releasing-a-new-version">Releasing a new version</a></li>
-<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#conda-forge-releasing">Conda Forge Releasing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers_guide.html">Developers guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="developers_guide.html#developer-install-with-mamba">Developer install with Mamba</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developers_guide.html#keeping-your-fork-tags-up-to-date">Keeping your fork tags up to date</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developers_guide.html#building-the-docs-locally">Building the docs locally</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developers_guide.html#running-the-tests-locally">Running the tests locally</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developers_guide.html#merging-a-pull-requests">Merging a pull requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developers_guide.html#version-numbering">Version numbering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developers_guide.html#releasing-a-new-version">Releasing a new version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developers_guide.html#conda-forge-releasing">Conda Forge Releasing</a></li>
 </ul>
 </li>
 </ul>
@@ -440,11 +410,11 @@ Supported codes include OpenMC, PHITS, Serpent and MCNP.</p>
                   
 <div class="prev-next-area">
     <a class="right-next"
-       href="install/index.html"
+       href="quick_install_guide.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Install</p>
+        <p class="prev-next-title">Quick Install Guide</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
