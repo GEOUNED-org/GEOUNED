@@ -408,7 +408,7 @@ class NumericFormat:
         C_r (str, optional): Cylinder radius. Defaults to "12f".
         C_xyz (str, optional): Cylinder center. Defaults to "12f".
         K_xyz (str, optional): Cone apex. Defaults to "13.6e".
-        K_tan2 (str, optional): Cone tan^2 value. Defaults to "12f".
+        K_tan2 (str, optional): Cone tan^2 value. Defaults to "13.6e".
         T_r (str, optional): Torus radii. Defaults to "14.7e".
         T_xyz (str, optional): Torus center. Defaults to "14.7e".
         GQ_1to6 (str, optional): GQ 1 to 6 coefficients (order 2 x2,y2,z2,xy,...). Defaults to "18.15f".
@@ -426,7 +426,7 @@ class NumericFormat:
         C_r: str = "12f",
         C_xyz: str = "12f",
         K_xyz: str = "13.6e",
-        K_tan2: str = "12f",
+        K_tan2: str = "13.6e",
         T_r: str = "14.7e",
         T_xyz: str = "14.7e",
         GQ_1to6: str = "18.15f",
