@@ -1,4 +1,4 @@
-Developer guide
+Developers guide
 ===============
 
 Developer install with Mamba
