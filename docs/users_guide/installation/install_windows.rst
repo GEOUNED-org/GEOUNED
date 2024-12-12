@@ -52,7 +52,7 @@ You will also be able to use the GEOUNED command line tool
 User install with Conda
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-First we need to install a Conda distribution. There are a few options but we here we opt for `MiniConda3 <https://docs.anaconda.com/free/miniconda/>`_ as it downloads quicker than the fuller `AnaConda <https://www.anaconda.com/download>`_.
+First we need to install a Conda distribution. There are a few options but we here we opt for `MiniConda3 <https://docs.anaconda.com/free/miniconda/>`_ as it downloads quicker than the fuller `Anaconda <https://www.anaconda.com/download>`_.
 
 You can follow the install instructions for `MiniConda3 <https://docs.anaconda.com/free/miniconda/>`_ 
 
@@ -76,11 +76,17 @@ Activate the new environment
 
     conda activate new_env
 
-Install GEOUNED from conda-forge
+Since one of the GEOUNED dependencies is FreeCAD, classic conda solver of dependencies may significantly slow down the installation. For this reason, it is recommended to install and use conda-libmamba-solver
 
 .. code-block:: sh
 
-    conda install -c conda-forge geouned -y
+    conda install conda-libmamba-solver
+
+Install GEOUNED from conda-forge, forcing the use of libmamba solver
+
+.. code-block:: sh
+
+    conda install -c conda-forge geouned -y --solver=libmamba
 
 Then you will be able to run import GEOUNED from within Python
 

@@ -20,7 +20,6 @@ sys.path.insert(0, os.path.abspath("../../src"))
 
 project = "GEOUNED"
 copyright = "2024, UNED"
-author = "Juan-Pablo Catalan and Patrick Sauvan"
 
 # The full version, including alpha/beta/rc tags
 import geouned
@@ -83,6 +82,6 @@ html_theme_options = {
         "json_url": "https://raw.githubusercontent.com/GEOUNED-org/GEOUNED/dev/docs/version_switcher.json",
         "version_match": version_match,
     },
-    "nav_title": "Geouned",
+    "nav_title": "GEOUNED",
     "navbar_start": ["version-switcher", "navbar-icon-links"],
 }

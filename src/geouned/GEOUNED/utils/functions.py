@@ -105,6 +105,11 @@ class GeounedSolid:
         self.Volume = self.CADSolid.Volume
         self.BoundBox = self.CADSolid.BoundBox
 
+    def optimalBoundingBox(self):
+        if self.CADSolid is None:
+            self.set_cad_solid()
+        return self.CADSolid.optimalBoundingBox()
+
     def set_definition(self, definition, simplify=False):
 
         if definition is None:

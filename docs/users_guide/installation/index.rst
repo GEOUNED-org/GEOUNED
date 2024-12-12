@@ -1,7 +1,5 @@
-.. usage
-
-Install
-=======
+Installation
+============
 
 There are several options for installing GEOUNED package.
 The installation selected has implications for how you run GEOUNED Python scripts.
@@ -12,7 +10,6 @@ Users have also had success installing FreeCAD and making use of the Python vers
 
 
 .. toctree::
-   :numbered:
    :maxdepth: 1
 
    install_linux

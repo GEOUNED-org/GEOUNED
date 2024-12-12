@@ -256,7 +256,7 @@ def gen_plane_sphere(face, solid):
         if f.Surface.Center == face.Surface.Center and f.Surface.Radius == face.Surface.Radius:
             # print 'Warning: coincident sphere faces are the same'
             for f2 in same_faces:
-                if f.distToShape(f2)[0] < 1e-6:
+                if f.__face__.distToShape(f2.__face__)[0] < 1e-6:
                     same_faces.append(f)
                     break
 
@@ -264,8 +264,20 @@ def gen_plane_sphere(face, solid):
     normal = FreeCAD.Vector(0, 0, 0)
     for f in same_faces:
         normal += f.Area * (f.CenterOfMass - face.Surface.Center)
+    normal.normalize()
+    tmp_plane = Part.Plane(face.Surface.Center, normal).toShape()
 
-    return Part.Plane(face.Surface.Center, normal).toShape()
+    dmin = 2 * face.Surface.Radius
+    for f in same_faces:
+        dist = tmp_plane.distToShape(f.__face__)[0]
+        dmin = min(dmin, dist)
+
+    if dmin > 1e-6:
+        center = face.Surface.Center + 0.95 * dmin * normal
+        plane = Part.Plane(center, normal).toShape()
+    else:
+        plane = None
+    return plane
 
 
 def gen_plane_cylinder(face, solid, tolerances):

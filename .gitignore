@@ -166,6 +166,9 @@ cython_debug/
 # testing folder
 tests_outputs/
 
+# work folder
+work/
+
 # debug output folders
 fuzzySurfaces
 Suspicious_solids/

@@ -50,6 +50,15 @@ class PlaneGu(SurfacesGu):
             self.dim1 = face.ParameterRange[1] - face.ParameterRange[0]
             self.dim2 = face.ParameterRange[3] - face.ParameterRange[2]
 
+    def isSameSurface(self, surface):
+        if type(surface) is not PlaneGu:
+            return False
+        if abs(self.Axis.dot(surface.Axis)) < 0.99999:
+            return False
+        if abs(self.Axis.dot(self.Position) - surface.Axis.dot(surface.Position)) > 1e-5:
+            return False
+        return True
+
 
 class CylinderGu(SurfacesGu):
     """GEOUNED Cylinder Class"""
@@ -60,6 +69,18 @@ class CylinderGu(SurfacesGu):
         self.Radius = face.Surface.Radius
         self.Center = face.Surface.Center
         self.dimL = face.ParameterRange[3] - face.ParameterRange[2]
+
+    def isSameSurface(self, surface):
+        if type(surface) is not CylinderGu:
+            return False
+        if abs(self.Radius - surface.Radius) > 1e-5:
+            return False
+        d = self.Center - surface.Center
+        if d.Length > 1e-5:
+            return False
+        if abs(self.Axis.dot(surface.Axis)) < 0.99999:
+            return False
+        return True
 
 
 class ConeGu(SurfacesGu):
@@ -74,6 +95,18 @@ class ConeGu(SurfacesGu):
         self.dimR = face.Surface.Radius
         self.Radius = face.Surface.Radius
 
+    def isSameSurface(self, surface):
+        if type(surface) is not ConeGu:
+            return False
+        if abs(self.SemiAngle - surface.SemiAngle) > 1e-5:
+            return False
+        d = self.Apex - surface.Apex
+        if d.Length > 1e-5:
+            return False
+        if abs(self.Axis.dot(surface.Axis)) < 0.99999:
+            return False
+        return True
+
 
 class SphereGu(SurfacesGu):
     """GEOUNED Sphere Class"""
@@ -83,6 +116,16 @@ class SphereGu(SurfacesGu):
         self.type = self.type[0:6]
         self.Center = face.Surface.Center
         self.Radius = face.Surface.Radius
+
+    def isSameSurface(self, surface):
+        if type(surface) is not SphereGu:
+            return False
+        if abs(self.Radius - surface.Radius) > 1e-5:
+            return False
+        d = self.Center - surface.Center
+        if d.Length > 1e-5:
+            return False
+        return True
 
 
 class TorusGu(SurfacesGu):
@@ -94,6 +137,20 @@ class TorusGu(SurfacesGu):
         self.Axis = face.Surface.Axis
         self.MajorRadius = face.Surface.MajorRadius
         self.MinorRadius = face.Surface.MinorRadius
+
+    def isSameSurface(self, surface):
+        if type(surface) is not TorusGu:
+            return False
+        if abs(self.MajorRadius - surface.MajorRadius) > 1e-5:
+            return False
+        if abs(self.MinorRadius - surface.MinorRadius) > 1e-5:
+            return False
+        d = self.Center - surface.Center
+        if d.Length > 1e-5:
+            return False
+        if abs(self.Axis.dot(surface.Axis)) < 0.99999:
+            return False
+        return True
 
 
 class SolidGu:
@@ -112,9 +169,8 @@ class SolidGu:
 
         toroidIndex = []
         for i, face in enumerate(self.Faces):
-            if str(face.Surface) != "<Toroid object>":
-                continue
-            toroidIndex.append(i)
+            if type(face.Surface) is TorusGu:
+                toroidIndex.append(i)
 
         if len(toroidIndex) != 0:
             tFaces = self.same_torus_surf(toroidIndex)
@@ -259,6 +315,9 @@ class FaceGu(object):
     def isEqual(self, face):
         return self.__face__.isEqual(face.__face__)
 
+    def isSame(self, face):
+        return self.__face__.isSame(face.__face__)
+
     def valueAt(self, u, v):
         return self.__face__.valueAt(u, v)
 
@@ -286,16 +345,16 @@ def define_list_face_gu(face_list, plane3Pts=False):
 
 
 def define_surface(face, plane3Pts):
-    kind_surf = str(face.Surface)
-    if kind_surf == "<Plane object>":
+    kind_surf = type(face.Surface)
+    if kind_surf is Part.Plane:
         Surf_GU = PlaneGu(face, plane3Pts)
-    elif kind_surf == "<Cylinder object>":
+    elif kind_surf is Part.Cylinder:
         Surf_GU = CylinderGu(face)
-    elif kind_surf == "<Cone object>":
+    elif kind_surf is Part.Cone:
         Surf_GU = ConeGu(face)
-    elif kind_surf[0:6] == "Sphere":
+    elif kind_surf is Part.Sphere:
         Surf_GU = SphereGu(face)
-    elif kind_surf == "<Toroid object>":
+    elif kind_surf is Part.Toroid:
         Surf_GU = TorusGu(face)
     else:
         logger.info(f"bad Surface type {kind_surf}")
