@@ -965,7 +965,7 @@ def points_to_coeffs(scf):
     # coeff [0:3] a,b,c plane parameters
     # coeff [3]   d plane parameter
     # normalization is d set to one if origin is not in the plane
-
+    return coeff
 
 def get_parabola_parameters(eVal, eVect, T, U):
     iaxis, comp = U[1]
