@@ -223,7 +223,8 @@ def torus_bound_planes(solid, face, boundBox, tolerances):
 def plane_spline_curve(edge, tolerances):
 
     normal = edge.derivative1At(0).cross(edge.derivative1At(0.5))
-    if normal.Length == 0 : return None
+    if normal.Length == 0:
+        return None
     normal.normalize()
     curve_2d = True
     for p in (0.25, 0.75, 1):
