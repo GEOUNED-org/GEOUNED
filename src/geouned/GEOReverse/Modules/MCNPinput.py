@@ -967,6 +967,7 @@ def points_to_coeffs(scf):
     # normalization is d set to one if origin is not in the plane
     return coeff
 
+
 def get_parabola_parameters(eVal, eVect, T, U):
     iaxis, comp = U[1]
     center = FreeCAD.Vector(T)
