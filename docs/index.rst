@@ -11,6 +11,7 @@ Supported codes include OpenMC, PHITS, Serpent and MCNP.
    :maxdepth: 2
 
    quick_install_guide
+   example_of_use
    users_guide/index
    python_api
    developers_guide
