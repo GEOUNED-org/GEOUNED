@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Python Package Usage &#8212; GEOUNED 0.1.dev1+ge5581d7 documentation</title>
+    <title>Python Package Usage &#8212; GEOUNED 0.1.dev1+ge8dfc35 documentation</title>
   
   
   
@@ -30,7 +30,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=af46a0b6"></script>
+    <script src="../../../_static/documentation_options.js?v=fe2f0cb9"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'users_guide/execution_settings/cad2csg/python_cadtocsg_api_usage';</script>
@@ -55,7 +55,7 @@
     <link rel="prev" title="CAD to CSG Translation" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.dev1+ge5581d7" />
+  <meta name="docsearch:version" content="0.1.dev1+ge8dfc35" />
   </head>
   
   
@@ -153,6 +153,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../quick_install_guide.html">
     Quick Install Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../example_of_use.html">
+    Example of use
   </a>
 </li>
 
@@ -269,6 +276,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../quick_install_guide.html">
     Quick Install Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../example_of_use.html">
+    Example of use
   </a>
 </li>
 
@@ -431,7 +445,7 @@ There are many arguments that can be passed into the <code class="docutils liter
 <p>If you have install GEOUNED and FreeCAD into your system Python then you can simply run a .py script with Python.
 The most minimal use case below shows GEOUNED being imported and the CadToCsg being used to convert a STEP CAD file called ‘cuboid.stp’ into a vanity of CSG format.
 The example makes use of default  attributes.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geouned</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geouned</span>
 <span class="n">geo</span> <span class="o">=</span> <span class="n">geouned</span><span class="o">.</span><span class="n">CadToCsg</span><span class="p">()</span>
 <span class="n">geo</span><span class="o">.</span><span class="n">load_step_file</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;cuboid.stp&#39;</span><span class="p">)</span>
 <span class="n">geo</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
@@ -440,7 +454,7 @@ The example makes use of default  attributes.</p>
 </div>
 <p>Users can change <a class="reference internal" href="../../../python_api.html#geouned.Options" title="geouned.Options"><code class="xref py py-meth docutils literal notranslate"><span class="pre">geouned.Options()</span></code></a>, <a class="reference internal" href="../../../python_api.html#geouned.Settings" title="geouned.Settings"><code class="xref py py-meth docutils literal notranslate"><span class="pre">geouned.Settings()</span></code></a>, <a class="reference internal" href="../../../python_api.html#geouned.Tolerances" title="geouned.Tolerances"><code class="xref py py-meth docutils literal notranslate"><span class="pre">geouned.Tolerances()</span></code></a> and <a class="reference internal" href="../../../python_api.html#geouned.NumericFormat" title="geouned.NumericFormat"><code class="xref py py-meth docutils literal notranslate"><span class="pre">geouned.NumericFormat()</span></code></a> to suit the conversion desired.
 The following example shows a usage with every attributes specified.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geouned</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geouned</span>
 
 <span class="n">my_options</span> <span class="o">=</span> <span class="n">geouned</span><span class="o">.</span><span class="n">Options</span><span class="p">(</span>
     <span class="n">forceCylinder</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -543,7 +557,7 @@ The following example shows a usage with every attributes specified.</p>
 <p>You can also load up JSON configuration files from the API.
 The JSON file format is also usable with the Geouned Command Line Interface  and there are more <a class="reference external" href="python_cli_usage.html">complete examples of JSON files</a> on that section of the documentation.
 For this example we assume you have a JSON file called ‘config.json’ in the same directory as the script.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geouned</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geouned</span>
 
 <span class="n">geo</span> <span class="o">=</span> <span class="n">geouned</span><span class="o">.</span><span class="n">CadToCsg</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="s2">&quot;config.json&quot;</span><span class="p">)</span>
 <span class="n">geo</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
