@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Example of use &#8212; GEOUNED 0.1.dev1+ge8dfc35 documentation</title>
+    <title>Example of use &#8212; GEOUNED 0.1.dev1+gfa33c8a documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=fe2f0cb9"></script>
+    <script src="_static/documentation_options.js?v=c437f01f"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'example_of_use';</script>
@@ -55,7 +55,7 @@
     <link rel="prev" title="Quick Install Guide" href="quick_install_guide.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.dev1+ge8dfc35" />
+  <meta name="docsearch:version" content="0.1.dev1+gfa33c8a" />
   </head>
   
   
@@ -422,21 +422,20 @@ for use in MCNP. It includes the methodology and rationale behind the process.</
 <li><p><a class="reference internal" href="#suspicious-solids-and-debug">Suspicious solids and debug</a></p></li>
 <li><p><a class="reference internal" href="#void-check-verification">Void check verification</a></p></li>
 </ol>
-</section>
 <section id="cad-simplification">
-<span id="id1"></span><h1>CAD simplification<a class="headerlink" href="#cad-simplification" title="Link to this heading">#</a></h1>
+<span id="id1"></span><h2>CAD simplification<a class="headerlink" href="#cad-simplification" title="Link to this heading">#</a></h2>
 <p>The CAD model of the system should undergo a process of simplification. In this process,
 features that do not affect the radiation transport should be removed. The level of
 detail is usually decreased. Surfaces that are not allowed like splines are substituted
 by simpler surfaces like planes or cylinders.</p>
 </section>
 <section id="export-as-step">
-<span id="id2"></span><h1>Export as STEP<a class="headerlink" href="#export-as-step" title="Link to this heading">#</a></h1>
+<span id="id2"></span><h2>Export as STEP<a class="headerlink" href="#export-as-step" title="Link to this heading">#</a></h2>
 <p>Once the CAD is simplified, it is exported as a STEP file to be used as input by
 GEOUNED.</p>
 </section>
 <section id="conversion-to-csg">
-<span id="id3"></span><h1>Conversion to CSG<a class="headerlink" href="#conversion-to-csg" title="Link to this heading">#</a></h1>
+<span id="id3"></span><h2>Conversion to CSG<a class="headerlink" href="#conversion-to-csg" title="Link to this heading">#</a></h2>
 <p>The below code is run in a Python environment with GEOUNED installed. In the comments
 of the code there is an explanation of the parameters used.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geouned</span>
@@ -466,7 +465,7 @@ of the code there is an explanation of the parameters used.</p>
 </div>
 </section>
 <section id="suspicious-solids-and-debug">
-<span id="id4"></span><h1>Suspicious solids and debug<a class="headerlink" href="#suspicious-solids-and-debug" title="Link to this heading">#</a></h1>
+<span id="id4"></span><h2>Suspicious solids and debug<a class="headerlink" href="#suspicious-solids-and-debug" title="Link to this heading">#</a></h2>
 <p>Running the above code will generate a debug folder that contains each of the converted
 solids, both the original and the decomposed ones. Those bodies can be opened and
 examined in a CAD software to compare them to the original model. If the decomposed
@@ -478,7 +477,7 @@ potentially problematic. This can be useful to quickly identify the problematic 
 <p>After applying any fix necessary and exporting to STEP, the conversion can be run again.</p>
 </section>
 <section id="void-check-verification">
-<span id="id5"></span><h1>Void check verification<a class="headerlink" href="#void-check-verification" title="Link to this heading">#</a></h1>
+<span id="id5"></span><h2>Void check verification<a class="headerlink" href="#void-check-verification" title="Link to this heading">#</a></h2>
 <p>Once the conversion is finished, it is recommended to stocastically check the volume
 of the solids and to make some plots.</p>
 <p>In this example, the <em>UCARD</em> was used to make the model a filler universe. For these
@@ -497,6 +496,7 @@ mean that the volume of the solid is not correct.</p>
 achieve an acceptable statistical error. An usually number is 1e9 particles. Always
 check that the statistical error of the tallies is below 0.1.</p>
 </div>
+</section>
 </section>
 
 
@@ -546,14 +546,12 @@ check that the statistical error of the tallies is below 0.1.</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Example of use</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#cad-simplification">CAD simplification</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#export-as-step">Export as STEP</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#conversion-to-csg">Conversion to CSG</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#suspicious-solids-and-debug">Suspicious solids and debug</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#void-check-verification">Void check verification</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cad-simplification">CAD simplification</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#export-as-step">Export as STEP</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conversion-to-csg">Conversion to CSG</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#suspicious-solids-and-debug">Suspicious solids and debug</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#void-check-verification">Void check verification</a></li>
 </ul>
-
   </nav></div>
 
   <div class="sidebar-secondary-item">
@@ -599,7 +597,7 @@ check that the statistical error of the tallies is below 0.1.</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.0.
     <br/>
   </p>
 </div>

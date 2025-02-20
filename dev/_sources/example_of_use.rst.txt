@@ -16,7 +16,7 @@ for use in MCNP. It includes the methodology and rationale behind the process.
 .. _CAD simplification:
 
 CAD simplification
-==================
+~~~~~~~~~~~~~~~~~~
 
 The CAD model of the system should undergo a process of simplification. In this process,
 features that do not affect the radiation transport should be removed. The level of 
@@ -26,7 +26,7 @@ by simpler surfaces like planes or cylinders.
 .. _Export as STEP:
 
 Export as STEP
-==============
+~~~~~~~~~~~~~~
 
 Once the CAD is simplified, it is exported as a STEP file to be used as input by 
 GEOUNED.
@@ -34,7 +34,7 @@ GEOUNED.
 .. _Conversion to CSG:
 
 Conversion to CSG
-=================
+~~~~~~~~~~~~~~~~~
 
 The below code is run in a Python environment with GEOUNED installed. In the comments
 of the code there is an explanation of the parameters used.
@@ -68,7 +68,7 @@ of the code there is an explanation of the parameters used.
 .. _Suspicious solids and debug:
 
 Suspicious solids and debug
-===========================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Running the above code will generate a debug folder that contains each of the converted 
 solids, both the original and the decomposed ones. Those bodies can be opened and 
@@ -85,7 +85,7 @@ After applying any fix necessary and exporting to STEP, the conversion can be ru
 .. _Void check verification:
 
 Void check verification
-=======================
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Once the conversion is finished, it is recommended to stocastically check the volume
 of the solids and to make some plots.
