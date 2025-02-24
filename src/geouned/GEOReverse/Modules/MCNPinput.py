@@ -395,10 +395,10 @@ def getTransMatrix(trsf, unit="", scale=10.0):
             coeff = tuple(map(math.cos, coeff))
         else:
             coeff = trsf[3:9]
-        
+
         axis = FreeCAD.Vector(coeff[0:3]).cross(FreeCAD.Vector(coeff[3:6]))
         coeff = coeff + (axis.x, axis.y, axis.z)
-        
+
         trsfMat = FreeCAD.Matrix(
             coeff[0],
             coeff[3],
