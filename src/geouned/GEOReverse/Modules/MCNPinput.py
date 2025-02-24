@@ -396,8 +396,8 @@ def getTransMatrix(trsf, unit="", scale=10.0):
         else:
             coeff = trsf[3:9]
         
-        ax3 = FreeCAD.Vector(coeff[0:3]).cross(FreeCAD.Vector(coeff[3:6]))
-        coeff = coeff + (ax3.x, ax3.y, ax3.z)
+        axis = FreeCAD.Vector(coeff[0:3]).cross(FreeCAD.Vector(coeff[3:6]))
+        coeff = coeff + (axis.x, axis.y, axis.z)
         
         trsfMat = FreeCAD.Matrix(
             coeff[0],
