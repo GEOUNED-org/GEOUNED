@@ -1250,6 +1250,7 @@ def gq2params(x):
 
     Dinv = np.where(abs(eVal) < 1e-8, eVal, 1 / eVal)  # get inverse eigen value where eigen< 1e-8
     zero = (abs(eVal) < 1e-8).nonzero()  # index in eigen value vector where eigen < 1e-8
+    zero = zero[0]  # nonzero return a tuple with array containing the nonzero indexes
     TD = -XD * Dinv  # Translation vector in diagonalized base
 
     k = np.matmul(TD, XD) + x[9]
