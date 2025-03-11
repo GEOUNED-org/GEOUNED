@@ -389,6 +389,34 @@ def getTransMatrix(trsf, unit="", scale=10.0):
             0,
             1,
         )
+    elif len(trsf) == 9:
+        if unit == "*":
+            coeff = tuple(map(math.radians, trsf[3:9]))
+            coeff = tuple(map(math.cos, coeff))
+        else:
+            coeff = trsf[3:9]
+
+        axis = FreeCAD.Vector(coeff[0:3]).cross(FreeCAD.Vector(coeff[3:6]))
+        coeff = coeff + (axis.x, axis.y, axis.z)
+
+        trsfMat = FreeCAD.Matrix(
+            coeff[0],
+            coeff[3],
+            coeff[6],
+            trsf[0] * scale,
+            coeff[1],
+            coeff[4],
+            coeff[7],
+            trsf[1] * scale,
+            coeff[2],
+            coeff[5],
+            coeff[8],
+            trsf[2] * scale,
+            0,
+            0,
+            0,
+            1,
+        )
     else:
         if unit == "*":
             coeff = tuple(map(math.radians, trsf[3:12]))
@@ -965,6 +993,7 @@ def points_to_coeffs(scf):
     # coeff [0:3] a,b,c plane parameters
     # coeff [3]   d plane parameter
     # normalization is d set to one if origin is not in the plane
+    return coeff
 
 
 def get_parabola_parameters(eVal, eVect, T, U):
@@ -1250,6 +1279,7 @@ def gq2params(x):
 
     Dinv = np.where(abs(eVal) < 1e-8, eVal, 1 / eVal)  # get inverse eigen value where eigen< 1e-8
     zero = (abs(eVal) < 1e-8).nonzero()  # index in eigen value vector where eigen < 1e-8
+    zero = zero[0]  # nonzero return a tuple with array containing the nonzero indexes
     TD = -XD * Dinv  # Translation vector in diagonalized base
 
     k = np.matmul(TD, XD) + x[9]
