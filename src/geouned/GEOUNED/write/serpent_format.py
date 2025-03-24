@@ -206,7 +206,8 @@ class SerpentInput:
 
         #       if self.SDEF_sphere is None:  return
         MODE = f"\nset nps 1e6\nset bc 1"
-        if self.dummyMat:
+        # temporal patch to remove issue 309 on conda-forge Package
+        if self.dummyMat and False:
             mat = list(self.Materials)
             mat.sort()
             MATCARD = ""
