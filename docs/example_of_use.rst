@@ -163,3 +163,20 @@ container cells.
 
     # export step with a new filename
     geo.export_cad('base_and_U100_U200.stp')    
+
+
+Cells or materials can be filtered for conversion (included or excluced). By default all cells are converted.
+The cell/materials selection is carried out using the `cell_filter`` and `material_filter` methods.
+
+.. code-block:: python
+
+    geo.material_filter('exclude',(0,11,400)) # any cells with material number 0, 11 or 400 will not be converted 
+                                              # (doesn't apply for containers)   
+    geo.build_universe()
+
+
+.. code-block:: python
+
+    cells = [i for i in range(1,101)]
+    geo.cell_filter('include',cells) # only cells will label from 1 to 100 will be converted
+    geo.build_universe()
