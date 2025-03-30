@@ -7,10 +7,15 @@ import Part
 from .buildSolidCell import BuildSolid
 from .remh import Cline
 from .Utils.booleanFunction import BoolSequence, outer_terms
+from .Utils.boundBox import solid_plane_box, myBox
+from .data_class import BoxSettings
 
 
 class CadCell:
-    def __init__(self, stringCell=None):
+    def __init__(self, stringCell: str = None, settings: BoxSettings = BoxSettings()):
+
+        self.settings = settings
+        self.boundBox = None
 
         if not stringCell:
             self.surfaces = {}
@@ -28,6 +33,10 @@ class CadCell:
             self.level = None
             self.__defTerms__ = None
             self.__operator__ = None
+            self.externalBox = None
+            self.solid_plane = None
+            self.boundBox = None
+
         else:
             self.surfaces = None
             self.shape = None
@@ -42,10 +51,17 @@ class CadCell:
             self.__defTerms__ = None
             self.__operator__ = None
             self.__setDefinition__(stringCell)
+            self.surfaceList = self.definition.get_surfaces_numbers()
+            self.externalBox = None
+            self.solid_plane = None
+            self.boundBox = None
 
     def copy(self):
-        cpCell = CadCell()
+        cpCell = CadCell(settings=self.settings)
+        cpCell.solid_plane = self.solid_plane.copy()
         cpCell.surfaceList = self.surfaceList[:]
+        cpCell.externalBox = self.externalBox
+        cpCell.boundBox = self.boundBox
         cpCell.surfaces = {}
         for name, s in self.surfaces.items():
             cpCell.surfaces[name] = s.copy()
@@ -76,6 +92,8 @@ class CadCell:
         subCell = self.copy()
         subCell.definition = seq.copy()
         subCell.shape = None
+        subCell.boundBox = None
+
         subCell.surfaceList = subCell.definition.get_surfaces_numbers()
         for s in tuple(subCell.surfaces.keys()):
             if s not in subCell.surfaceList:
@@ -83,71 +101,54 @@ class CadCell:
 
         return subCell
 
-    # not used
-    #
-    #    def split(self,nparts=2):
-    #
-    #        if nparts == 1:
-    #            return (self,None)
-    #        terms,operador = self.getOuterTerms()
-    #        nelemts = int(len(terms)/nparts)
-    #        subDefList = []
-    #
-    #        if operador == 'AND':
-    #          for i in range(nparts-1):
-    #             newdef = ') ('.join(terms[i*nelemts:(i+1)*nelemts])
-    #             newdef = '({})'.format(newdef)
-    #             subDefList.append(newdef)
-    #          newdef = ') ('.join(terms[(nparts-1)*nelemts:])
-    #          newdef = '({})'.format(newdef)
-    #          subDefList.append(newdef)
-    #
-    #        else:
-    #          for i in range(nparts-1):
-    #             newdef = '):('.join(terms[i*nelemts:(i+1)*nelemts])
-    #             newdef = '({})'.format(newdef)
-    #             subDefList.append(newdef)
-    #          newdef = '):('.join(terms[(nparts-1)*nelemts:])
-    #          newdef = '({})'.format(newdef)
-    #          subDefList.append(newdef)
-    #
-    #
-    #        subCellList=[]
-    #        for df in subDefList:
-    #           subCell = self.copy()
-    #           subCell.definition= Cline(df)
-    #           subCell.shape = None
-    #           subCell.surfaceList  = subCell.definition.get_surfaces_numbers()
-    #           for s in tuple(subCell.surfaces.keys()) :
-    #               if s not in subCell.surfaceList: del(subCell.surfaces[s])
-    #
-    #           subCellList.append(subCell)
-    #
-    #        return subCellList,operador
-
     def getOuterTerms(self):
         if not self.__defTerms__:
             self.__defTerms__, self.__operator__ = outer_terms(self.definition.str)
         return self.__defTerms__, self.__operator__
 
-    def makeBox(self, boundBox):
+    def makeBox(self):
+        if self.boundBox.Orientation == "Forward":
+            if self.boundBox.Box is None:
+                boundBox = self.externalBox.Box
+            else:
+                boundBox = self.boundBox.Box
+        else:
+            boundBox = self.externalBox.Box
         box_origin = FreeCAD.Vector(boundBox.XMin, boundBox.YMin, boundBox.ZMin)
-        return Part.makeBox(boundBox.XLength, boundBox.YLength, boundBox.ZLength, box_origin)
+        if boundBox.XLength < 1e-6 or boundBox.YLength < 1e-6 or boundBox.ZLength < 1e-6:
+            return None
+        else:
+            return Part.makeBox(boundBox.XLength, boundBox.YLength, boundBox.ZLength, box_origin)
 
-    def buildShape(self, boundBox, force=False, surfTR=None, simplify=False, fuse=False):
+    def build_BoundBox(self, externalBox=None, enlarge=0):
+
+        if externalBox:
+            outBox = externalBox
+            self.externalBox = externalBox
+        elif self.externalBox:
+            outBox = self.externalBox
+        else:
+            r = self.settings.universe_radius
+            outBox = myBox(FreeCAD.BoundBox(-r, -r, -r, r, r, r), "Forward")
+            self.externalBox = outBox
+
+        if outBox.Box is None:
+            self.boundBox = outBox
+        else:
+            if self.solid_plane is None:
+                self.solid_plane = solid_plane_box(self, outbox=outBox)
+            elif not self.solid_plane.outBox.sameBox(outBox):
+                self.solid_plane = solid_plane_box(self, outbox=outBox)
+            self.boundBox = self.solid_plane.get_boundBox(enlarge=enlarge)
+
+    def buildShape(self, force=False, surfTR=None, simplify=False, fuse=False):
 
         if self.shape is not None and not force:
             return
         if surfTR:
             self.transformSurfaces(surfTR)
 
-        cutShape = BuildSolid(self, boundBox, simplify=simplify)
-
-        # TODO consider making this step conditional on fuse
-        # if fuse or True:
-        #     self.shape = FuseSolid(cutShape)
-        # else:
-        #     self.shape = Part.makeCompound(cutShape)
+        cutShape = BuildSolid(self)
         self.shape = FuseSolid(cutShape)
 
     def buildSurfaceShape(self, boundBox):
@@ -191,11 +192,11 @@ class CadCell:
         self.definition.remove_cr()
         self.definition.remove_multispace()
         self.definition.remove_redundant()
-        self.surfaceList = self.definition.get_surfaces_numbers()
 
 
 class Plane:
-    def __init__(self, Id, params, tr=None):
+    def __init__(self, label, Id, params, tr=None):
+        self.label = label
         self.type = "plane"
         self.id = Id
         self.shape = None
@@ -207,7 +208,7 @@ class Plane:
         return f"plane : {self.id}\nParameters : {self.params}"
 
     def copy(self):
-        return Plane(self.id, self.params)
+        return Plane(self.label, self.id, self.params)
 
     def transform(self, matrix):
         v, d = self.params
@@ -235,6 +236,7 @@ class Plane:
                     pointEdge.append(edge[0] + a * (edge[1] - edge[0]))
 
         if len(pointEdge) == 0:
+            self.shape = None
             return
         s = FreeCAD.Vector((0, 0, 0))
         for v in pointEdge:
@@ -258,16 +260,19 @@ class Plane:
 
 
 class Sphere:
-    def __init__(self, Id, params, tr=None):
+    def __init__(self, label, Id, params, tr=None):
+        self.label = label
         self.type = "sphere"
         self.id = Id
         self.shape = None
         self.params = params
+        if params[1] <= 0:
+            print(f"{self.type} surface {label} has a bad radius value: {params[1]}")
         if tr:
             self.transform(tr)
 
     def copy(self):
-        return Sphere(self.id, self.params)
+        return Sphere(self.label, self.id, self.params)
 
     def transform(self, matrix):
         p, R = self.params
@@ -280,17 +285,20 @@ class Sphere:
 
 
 class Cylinder:
-    def __init__(self, Id, params, tr=None, truncated=False):
+    def __init__(self, label, Id, params, tr=None, truncated=False):
+        self.label = label
         self.type = "cylinder"
         self.id = Id
         self.shape = None
         self.params = params
         self.truncated = truncated
+        if params[2] <= 0:
+            print(f"{self.type} surface {label} has a bad radius value: {params[2]}")
         if tr:
             self.transform(tr)
 
     def copy(self):
-        return Cylinder(self.id, self.params, truncated=self.truncated)
+        return Cylinder(self.label, self.id, self.params, truncated=self.truncated)
 
     def transform(self, matrix):
         p, v, R = self.params
@@ -326,17 +334,20 @@ class Cylinder:
 
 
 class Cone:
-    def __init__(self, Id, params, tr=None, truncated=False):
+    def __init__(self, label, Id, params, tr=None, truncated=False):
+        self.label = label
         self.type = "cone"
         self.id = Id
         self.shape = None
         self.params = params
         self.truncated = truncated
+        # if params[2] <= 0:
+        #    print(f"{self.type} surface {label} has a zero semi-angle value.")
         if tr:
             self.transform(tr)
 
     def copy(self):
-        return Cone(self.id, self.params, truncated=self.truncated)
+        return Cone(self.label, self.id, self.params, truncated=self.truncated)
 
     def transform(self, matrix):
         if not self.truncated:
@@ -377,16 +388,21 @@ class Cone:
 
 
 class EllipticCone:
-    def __init__(self, Id, params, tr=None):
+    def __init__(self, label, Id, params, tr=None):
+        self.label = label
         self.type = "cone_elliptic"
         self.id = Id
         self.shape = None
         self.params = params
+        if params[3][0] <= 0:
+            print(f"{self.type} surface {label} has a bad radius value: {params[3][0]}")
+        if params[3][1] <= 0:
+            print(f"{self.type} surface {label} has a bad radius value: {params[3][1]}")
         if tr:
             self.transform(tr)
 
     def copy(self):
-        return EllipticCone(self.id, self.params)
+        return EllipticCone(self.label, self.id, self.params)
 
     def transform(self, matrix):
         p, v, ra, radii, raxes, dbl = self.params
@@ -418,16 +434,21 @@ class EllipticCone:
 
 
 class Hyperboloid:
-    def __init__(self, Id, params, tr=None):
+    def __init__(self, label, Id, params, tr=None):
+        self.label = label
         self.type = "hyperboloid"
         self.id = Id
         self.shape = None
         self.params = params
+        if params[2][0] <= 0:
+            print(f"{self.type} surface {label} has a bad radius value: {params[2][0]}")
+        if params[2][1] <= 0:
+            print(f"{self.type} surface {label} has a bad radius value: {params[2][1]}")
         if tr:
             self.transform(tr)
 
     def copy(self):
-        return Hyperboloid(self.id, self.params)
+        return Hyperboloid(self.label, self.id, self.params)
 
     def transform(self, matrix):
         p, v, radii, raxes, onesht = self.params
@@ -452,16 +473,21 @@ class Hyperboloid:
 
 
 class Ellipsoid:
-    def __init__(self, Id, params, tr=None):
+    def __init__(self, label, Id, params, tr=None):
+        self.label = label
         self.type = "ellipsoid"
         self.id = Id
         self.shape = None
         self.params = params
+        if params[2][0] <= 0:
+            print(f"{self.type} surface {label} has a bad radius value: {params[2][0]}")
+        if params[2][1] <= 0:
+            print(f"{self.type} surface {label} has a bad radius value: {params[2][1]}")
         if tr:
             self.transform(tr)
 
     def copy(self):
-        return Ellipsoid(self.id, self.params)
+        return Ellipsoid(self.label, self.id, self.params)
 
     def transform(self, matrix):
         p, v, radii, raxes = self.params
@@ -477,17 +503,22 @@ class Ellipsoid:
 
 
 class EllipticCylinder:
-    def __init__(self, Id, params, tr=None, truncated=False):
+    def __init__(self, label, Id, params, tr=None, truncated=False):
+        self.label = label
         self.type = "cylinder_elliptic"
         self.id = Id
         self.shape = None
         self.params = params
         self.truncated = truncated
+        if params[2][0] <= 0:
+            print(f"{self.type} surface {label} has a bad radius value: {params[2][0]}")
+        if params[2][1] <= 0:
+            print(f"{self.type} surface {label} has a bad radius value: {params[2][1]}")
         if tr:
             self.transform(tr)
 
     def copy(self):
-        return EllipticCylinder(self.id, self.params, truncated=self.truncated)
+        return EllipticCylinder(self.label, self.id, self.params, truncated=self.truncated)
 
     def transform(self, matrix):
         p, v, radii, raxes = self.params
@@ -520,16 +551,22 @@ class EllipticCylinder:
 
 
 class HyperbolicCylinder:
-    def __init__(self, Id, params, tr=None):
+    def __init__(self, label, Id, params, tr=None):
+        self.label = label
         self.type = "cylinder_hyperbolic"
         self.id = Id
         self.shape = None
         self.params = params
+        if params[2][0] <= 0:
+            print(f"{self.type} surface {label} has a bad radius value: {params[2][0]}")
+        if params[2][1] <= 0:
+            print(f"{self.type} surface {label} has a bad radius value: {params[2][1]}")
+
         if tr:
             self.transform(tr)
 
     def copy(self):
-        return HyperbolicCylinder(self.id, self.params)
+        return HyperbolicCylinder(self.label, self.id, self.params)
 
     def transform(self, matrix):
         p, v, radii, raxes = self.params
@@ -559,16 +596,20 @@ class HyperbolicCylinder:
 
 
 class Paraboloid:
-    def __init__(self, Id, params, tr=None):
+    def __init__(self, label, Id, params, tr=None):
+        self.label = label
         self.type = "paraboloid"
         self.id = Id
         self.shape = None
         self.params = params
+        if params[2] == 0:
+            print(f"{self.type} surface {label} has a zero focal")
+
         if tr:
             self.transform(tr)
 
     def copy(self):
-        return Paraboloid(self.id, self.params)
+        return Paraboloid(self.label, self.id, self.params)
 
     def transform(self, matrix):
         p, v, focal = self.params
@@ -578,29 +619,48 @@ class Paraboloid:
 
     def buildShape(self, boundBox):
         center, axis, focal = self.params
+        axis.normalize()
 
-        dmin = axis.dot(boundBox.getPoint(0) - center)
-        dmax = dmin
-        for i in range(1, 8):
+        dist = []
+        for i in range(8):
             d = axis.dot(boundBox.getPoint(i) - center)
-            dmin = min(d, dmin)
-            dmax = max(d, dmax)
+            dist.append(d)
+        dist.sort()
+        dmin, dmax = dist[0], dist[-1]
+        if dmax <= 0:
+            return
+        if dmin < 0:
+            dmin = 0
 
-        length = max(abs(dmin), abs(dmax))
-        self.shape = makeParaboloid(center, axis, focal, length)
+        rmin = math.sqrt(4 * focal * dmin)
+        rmax = math.sqrt(4 * focal * dmax)
+
+        if (rmax - rmin) / rmax < 0.01:
+            r = 0.5 * (rmin + rmax)
+            self.shape = Part.makeCylinder(r, dmax, center, axis, 360)
+        else:
+            self.shape = makeParaboloid(center, axis, focal, dmax)
 
 
 class Torus:
-    def __init__(self, Id, params, tr=None):
+    def __init__(self, label, Id, params, tr=None):
+        self.label = label
         self.type = "torus"
         self.id = Id
         self.shape = None
         self.params = params
+        if params[2] < 0:
+            print(f"{self.type} surface {label} has a negative major radius: {params[2]}")
+        if params[3] <= 0:
+            print(f"{self.type} surface {label} has a bad minor radius a value: {params[3]}")
+        if params[4] <= 0:
+            print(f"{self.type} surface {label} has a bad minor radius b value: {params[4]}")
+
         if tr:
             self.transform(tr)
 
     def copy(self):
-        return Torus(self.id, self.params)
+        return Torus(self.label, self.id, self.params)
 
     def transform(self, matrix):
         p, v, Ra, Rb, Rc = self.params
@@ -617,16 +677,24 @@ class Torus:
 
 
 class Box:
-    def __init__(self, Id, params, tr=None):
+    def __init__(self, label, Id, params, tr=None):
+        self.label = label
         self.type = "box"
         self.id = Id
         self.shape = None
         self.params = params
+        if params[1].Length <= 0:
+            print(f"{self.type} surface {label} has a bad X dimension: {params[1]}")
+        if params[2].Length <= 0:
+            print(f"{self.type} surface {label} has a bad Y dimension: {params[2]}")
+        if params[3].Length <= 0:
+            print(f"{self.type} surface {label} has a bad Z dimension: {params[3]}")
+
         if tr:
             self.transform(tr)
 
     def copy(self):
-        return Box(self.id, self.params)
+        return Box(self.label, self.id, self.params)
 
     def transform(self, matrix):
         p, v1, v2, v3 = self.params

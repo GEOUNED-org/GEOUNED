@@ -1,6 +1,8 @@
 import math
 import re
 
+from .Utils.booleanFunction import BoolSequence
+
 #########################################
 # define patterns to be found in string #
 #########################################
@@ -222,6 +224,7 @@ def complementary(ccell, outter=True):
 class Cline:
     def __init__(self, line):
         self.str = line
+        self.newLabel = False
 
     def copy(self):
         return Cline(self.str)
@@ -505,6 +508,8 @@ class CellCardString:
         self.FILL = None
         self.TR = None
         self.TRCL = None
+        self.hashDef = None
+        self.cellSeq = None
         self.__card_split__(card)
         self.__get_data__()
 
@@ -548,8 +553,6 @@ class CellCardString:
             else:
                 linecut = cellcard.str.count("\n")
 
-            cellcard.restore_comments()
-
             # look for the last line geometry string
             if linecut != 0:
                 pos = 0
@@ -569,7 +572,6 @@ class CellCardString:
                 m = trans.search(self.parm.str)
                 if m:
                     self.hproc = False
-                self.parm.restore_comments()
             else:
                 self.geom = Cline(cellcard.str)
                 self.parm = Cline("")
@@ -678,7 +680,8 @@ def remove_hash(cards, cname, keepComments=True):
     def remove(card, cname, keepComments):
         """remove complementary operator and subtitute by complementary cell"""
         if "parser.Card" in str(type(card)):
-            celline = "".join(card.lines)
+            card.get_input()
+            celline = "\n".join(card.input)
             cardstr = CellCardString(celline)
         else:
             cardstr = card
@@ -724,3 +727,65 @@ def remove_hash(cards, cname, keepComments=True):
 
     newcell = remove(cards[cname], cname, keepComments)
     return Cline(newcell.str)
+
+
+def hash_sequence(cards, cname):
+    def remove(card):
+        """remove complementary operator and subtitute by complementary cell"""
+
+        cellDef = {}
+        cellSeq = BoolSequence(operator="AND")
+        cellSeq.append(card.name)
+
+        if "parser.Card" in str(type(card)):
+            card.get_input()
+            celline = "\n".join(card.input)
+            cardstr = CellCardString(celline)
+        else:
+            cardstr = card
+        cardstr.get_stat()
+        cardstr.geom.remove_comments(full=False)
+        if (not cardstr.hproc) or (cardstr.stat["hash"] == 0):
+            return {card.name: cardstr.geom}, cellSeq  # no complementary operator or cannot be # cannot be removed
+        cell = Cline(cardstr.geom.str)
+        # find all operators in the cell and
+        # substitute all complementary operators
+        # locate object in list to reverse iteration
+        hashgroup = []
+        start = 0
+
+        lencel = len(cell.str)
+        while True:
+            ic = cell.str.lower().find("c", start)
+            idol = cell.str.find("$", start)
+            if idol < 0:
+                idol = lencel
+            if ic < 0:
+                ic = lencel
+            end = min(idol, ic)
+            for m in rehash.finditer(cell.str, start, end):
+                hashgroup.append(m)
+            start = cell.str.find("\n", end)
+            if end == lencel:
+                break
+
+        for m in hashgroup:
+            start = m.start()
+            if m.group(1) == "(":  # complementary cell defined as surface intersections
+                hcell, end = cell.get_hashcell(start)
+                cellmod = cell.str[0:start] + complementary(hcell) + cell.str[end:]
+                cell = Cline(cellmod)
+            else:
+                hcname = int(m.group(1))  # complementary cell defined with other cell index
+                def_dict, cSeq = remove(cards[hcname])  # remove complementary operator in new cell if necessary
+                cellSeq.append(cSeq.get_complementary())
+                cellDef.update(def_dict)
+                cellmod = cell.str[0 : m.start()] + cell.str[m.end() :]
+                cell = Cline(cellmod)
+        cellDef[card.name] = Cline(cell.str)
+        cellSeq.join_operators()
+        return cellDef, cellSeq
+
+    cellDef, cellSeq = remove(cards[cname])
+    cellSeq.simplify(None)
+    return cellDef, cellSeq

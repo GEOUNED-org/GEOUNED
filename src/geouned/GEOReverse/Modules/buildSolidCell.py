@@ -1,8 +1,9 @@
 import Part
+from .data_class import Options
 
-from .options import Options
 from .splitFunction import SplitBase, SplitSolid, joinBase
 from .Utils.booleanFunction import BoolSequence
+from .Utils.boundBox import myBox
 
 
 def getPart(slist):
@@ -15,223 +16,168 @@ def getPart(slist):
     return sol
 
 
-def BuildSolid(cell, boundBox, mode="oneByOne", simplify=False):
-
-    cutCell = cell.makeBox(boundBox)
-    # cell.definition = BoolSequence(cell.definition.str)
+def BuildSolid(cell):
     cell.cleanUndefined()
-
-    celParts = BuildDepth(cell, SplitBase(cutCell), mode, True, simplify)
-
+    celParts = BuildDepth(cell, base=None)
     celParts = getPart(celParts)
-    # print('celparts',len(celParts))
     shapeParts = []
     for i, s in enumerate(celParts):
         shapeParts.append(s.base)
-        # s.base.exportStep('solid{}.stp'.format(i))
-
-    #   tt = FuseSolid(shapeParts)
-    #   tt = tt.removeSplitter()
-    # tt=Part.makeCompound(shapeParts)
-    # tt.exportStep('cell{}.stp'.format(cell.name))
     return shapeParts
-    # return FuseSolid(shapeParts)
 
 
-def BuildDepth(cell, cutShape, mode, baseBox, simplify=False, loop=0):
+def BuildDepth(cell, base):
+    cell.definition.group_single()
+    if cell.definition.level == 0:
+        # if base is None build solid from cell boundBox
+        # else base is build solid split by cell surfaces
+        base, cut = BuildSolidParts(cell, base)
+        return base
 
-    loop += 1
-    seq = cell.definition
-    if seq.level == 0:
-        if baseBox:
-            cutShape, cut = BuildSolidParts(cell, cutShape, mode)
-        else:
-            cutShape, cut = BuildSolidParts(cell, cutShape, "solids")
-        return cutShape
+    if type(base) is not list:
+        base = [base]
+    newBase = []
 
-    if type(cutShape) is not list:
-        cutShape = [cutShape]
-    newCutShape = []
-    for i, CS in enumerate(cutShape):
-        cbaseBox = baseBox
-        # CS.base.exportStep('CS_{}_{}.stp'.format(i,str(cell.definition)))
-        # CTable =build_c_table_from_solids(cell.makeBox(CS.base.BoundBox),cell.surfaces,option='full')
-        # cell.definition.simplify(CTable)
-        cell.definition.group_single()
-
+    for CS in base:
         if type(cell.definition.elements) is not bool:
             if cell.definition.level == 0:
                 tmp = BoolSequence(operator=cell.definition.operator)
                 tmp.append(cell.definition)
                 cell.definition = tmp
 
-            if seq.operator == "AND":
+            if cell.definition.operator == "AND":
                 part = CS
                 for e in cell.definition.elements:
-                    part = BuildDepth(cell.getSubCell(e), part, mode, cbaseBox, simplify, loop=loop)
-                    cbaseBox = False
-                newCutShape.extend(part)
+                    subcell = cell.getSubCell(e)
+                    keep = []
+                    if part is not None:
+                        subcell.build_BoundBox(cell.externalBox, enlarge=10)
+                        if subcell.boundBox.Box is None:
+                            if subcell.boundBox.Orientation == "Reversed":
+                                continue
+                            else:
+                                part = []
+                                break
+
+                        part, keep = filterparts(part, subcell)
+                        if len(part) == 0:
+                            if len(keep) == 0:
+                                break
+                            else:
+                                part = keep
+                                continue
+                    part = BuildDepth(subcell, part)
+                    part.extend(keep)
+                newBase.extend(part)
             else:
                 cellParts = []
                 for e in cell.definition.elements:
-                    sub = cell.getSubCell(e)
-                    part = BuildDepth(sub, CS, mode, baseBox, simplify, loop=loop)
+                    subcell = cell.getSubCell(e)
+                    if CS is not None:
+                        subcell.build_BoundBox(cell.externalBox, enlarge=10)
+                        if subcell.boundBox.Box is None:
+                            if subcell.boundBox.Orientation == "Reversed":
+                                if type(CS) is SplitBase:
+                                    cellParts.append(CS)
+                                else:
+                                    cellParts.extend(CS)
+                            continue
+                        part, keep = filterparts(CS, subcell)
+                        cellParts.extend(keep)
+                        if len(part) == 0:
+                            continue
+                    else:
+                        part = CS
+                    part = BuildDepth(subcell, part)
                     cellParts.extend(part)
 
+                # newBase.extend(cellParts)
                 JB = joinBase(cellParts)
                 if JB.base is not None:
-                    newCutShape.append(JB)
+                    newBase.append(JB)
 
         elif cell.definition.elements:
-            newCutShape.append(CS)
+            newBase.append(CS)
 
-    cutShape = newCutShape
-    return cutShape
+    return newBase
 
 
-def BuildSolidParts(cell, base, mode):
+def BuildSolidParts(cell, base):
 
     # part if several base in input
-    if type(base) is list or type(base) is tuple:
+    if isinstance(base, (list, tuple)):
         fullPart = []
         cutPart = []
+
         for b in base:
-            fullList, cutList = BuildSolidParts(cell, b, mode)
+            fullList, cutList = BuildSolidParts(cell, b)
             fullPart.extend(fullList)
             cutPart.extend(cutList)
+
+        # if len(fullPart) > 1:
+        #     fullPart = [joinBase(fullPart)]
+        # if len(cutPart) > 1:
+        #     cutPart = [joinBase(cutPart)]
+
         return fullPart, cutPart
 
-    boundBox = base.base.BoundBox
-    surfaces = tuple(cell.surfaces.values())
-    # print('\nbuild Parts :',mode)
-    # print(cell.definition)
-    # print(boundBox)
-
-    if mode == "solids":
-
-        # TODO consider making this buildShape call conditional
-        # if cell.definition.operator == "OR" and False:
-        #     Def = cell.definition
-        #     cell.definition = cell.definition.get_complementary()
-        #     cell.buildShape(boundBox, force=False, simplify=False)
-        #     cell.definition = Def
-        # else:
-        #     cell.buildShape(boundBox, force=True, simplify=False, fuse=True)
-        cell.buildShape(boundBox, force=True, simplify=False, fuse=True)
-
-        # print('export')
-        # base.base.exportStep('base.stp')
-        # name=''.join(str(cell.definition))
-        # cell.shape.exportStep('sol{}.stp'.format(name))
+    if base:
+        boundBox = base.base.BoundBox
+        if boundBox.XLength < 1e-6 or boundBox.YLength < 1e-6 or boundBox.ZLength < 1e-6:
+            return [], []
     else:
-        cell.buildSurfaceShape(boundBox)
+        if cell.boundBox is None:
+            cell.build_BoundBox(cell.externalBox, enlarge=0.2)
+        if cell.boundBox.Orientation == "Reversed":
+            boundBox = cell.externalBox.Box
+        else:
+            boundBox = cell.boundBox.Box
+
+    if boundBox is None:
+        return [], []
+
+    surfaces = tuple(cell.surfaces.values())
+    cell.buildSurfaceShape(boundBox)
 
     if not surfaces:
         print("not cutting surfaces")
         return tuple(base.base), tuple()
-    if mode == "solids":
-        full, cut = SplitSolid(base, surfaces, cell, solidTool=True, tolerance=Options.splitTolerance)
-    elif mode == "allSurfaces":
-        full, cut = SplitSolid(base, surfaces, cell, tolerance=Options.splitTolerance)
 
-    elif mode == "planeFirst":
-        planes = []
-        others = []
-        for s in surfaces:
-            # s.buildShape( boundBox)
-            # s.shape.exportStep('Tool_{}_{}.stp'.format(s.type,s.id))
-            if s.type == "plane":
-                planes.append(s)
-            else:
-                others.append(s)
+    if base is None:
+        cellBox = cell.makeBox()
+        if cellBox is None:
+            return [], []
+        base = SplitBase(cellBox, orientation=cell.boundBox.Orientation)
 
-        if planes:
-
-            full, cut = SplitSolid(base, planes, cell, tolerance=Options.splitTolerance)
-            # for i,s in enumerate(full):
-            #    s.exportStep('fullplane_{}.stp'.format(i))
-            # for i,s in enumerate(cut):
-            #    s.base.exportStep('cutplane_{}.stp'.format(i))
-            # print('planes',full)
-            # print('planes',cut)
+    planes = []
+    others = []
+    for s in surfaces:
+        if s.type == "plane":
+            planes.append(s)
         else:
-            full = []
-            cut = base
+            others.append(s)
 
-        if others:
-            newf, cut = SplitSolid(cut, others, cell, tolerance=Options.splitTolerance)
-            # print('others',newf)
-            # print('others',cut)
-        else:
-            newf = []
+    cut = base
+    full = []
+    for p in planes:
+        newf, cut = SplitSolid(cut, (p,), cell, tolerance=Options.splitTolerance)
         full.extend(newf)
+        if len(cut) == 0:
+            break
 
-    elif mode == "otherFirst":
-        planes = []
-        others = []
-        for s in surfaces:
-            # s.buildShape( boundBox)
-            if s.type == "plane":
-                planes.append(s)
-            else:
-                others.append(s)
-
-        if others:
-            full, cut = SplitSolid(base, others, cell, tolerance=Options.splitTolerance)
-            # print('others',full)
-            # print('others',cut)
-        else:
-            full = []
-            cut = base
-
-        if planes:
-            newf, cut = SplitSolid(cut, planes, cell, tolerance=Options.splitTolerance)
-            # print('planes',newf)
-            # print('planes',cut)
-
-        else:
-            newf = []
-
+    for surf in others:
+        newf, cut = SplitSolid(cut, (surf,), cell, tolerance=Options.splitTolerance)
         full.extend(newf)
+        if len(cut) == 0:
+            break
 
-    elif mode == "oneByOne":
-        planes = []
-        others = []
-        for s in surfaces:
-            if s.type == "plane":
-                planes.append(s)
-            else:
-                others.append(s)
+    if type(cut) is SplitBase:
+        cut = [cut]
 
-        if planes:
-            full, cut = SplitSolid(base, planes, cell, tolerance=Options.splitTolerance)
-        else:
-            full = []
-            cut = base
-
-        # cut[0].base.exportStep('cutPlane.stp')
-        for surf in others:
-            newf, cut = SplitSolid(cut, (surf,), cell, tolerance=Options.splitTolerance)
-            full.extend(newf)
-
-    elif mode == "otherOneByOne":
-        planes = []
-        others = []
-        for s in surfaces:
-            if s.type == "plane":
-                planes.append(s)
-            else:
-                others.append(s)
-
-        cut = base
-        full = []
-        for surf in others:
-            newf, cut = SplitSolid(cut, (surf,), cell, tolerance=Options.splitTolerance)
-            full.extend(newf)
-
-        for surf in planes:
-            newf, cut = SplitSolid(cut, (surf,), cell, tolerance=Options.splitTolerance)
-            full.extend(newf)
+    # if len(full) > 1:
+    #    full = [joinBase(full)]
+    # if len(cut) > 1:
+    #    cut = [joinBase(cut)]
 
     return full, cut
 
@@ -269,15 +215,34 @@ def FuseSolid(parts):
     return solid
 
 
-def noOR(Seq):
-    if len(Seq.elements) == 1:
-        # Seq.operator = 'AND'
-        return Seq
-    newOR = BoolSequence(operator="OR")
-    neg = []
-    for e in Seq.elements:
-        AND = BoolSequence(operator="AND")
-        AND.append(*neg, e)
-        newOR.append(AND)
-        neg.append(-e)
-    return newOR
+def filterparts(parts, cell):
+    process_part = []
+    keep_part = []
+    cellBox = cell.boundBox
+    built = False
+    if type(parts) is SplitBase:
+        parts = (parts,)
+    for p in parts:
+        if p is None:
+            process_part.append(p)
+            continue
+        cBox = myBox(cellBox.Box, "Forward")
+        pbb = p.base.BoundBox
+
+        pBox = myBox(pbb, "Forward")
+        cBox.mult(pBox)
+        if cBox.Box is None:
+            if p.orientation == "Forward":
+                if cellBox.Orientation == "Reversed":
+                    keep_part.append(p)
+            else:
+                if cellBox.Orientation == "Reversed":
+                    # process_part.append(p)
+                    keep_part.append(p)
+                    if not built:
+                        built = True
+                        cellpart = BuildDepth(cell, None)
+                        keep_part.extend(cellpart)
+        else:
+            process_part.append(p)
+    return process_part, keep_part

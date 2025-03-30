@@ -33,5 +33,10 @@
         "name": "1.5.3",
         "version": "1.5.3",
         "url": "https://geouned-org.github.io/GEOUNED/1.5.3"
+    },
+    {
+        "name": "1.6.0",
+        "version": "1.6.0",
+        "url": "https://geouned-org.github.io/GEOUNED/1.6.0"
     }
 ]

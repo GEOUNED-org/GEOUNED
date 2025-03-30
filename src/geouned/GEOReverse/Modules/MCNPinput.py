@@ -22,7 +22,8 @@ from .Objects import (
     Torus,
 )
 from .Parser import parser as mp
-from .remh import CellCardString, remove_hash
+from .remh import CellCardString, remove_hash, hash_sequence
+from .Objects import CadCell
 
 
 # TODO rename as there are two classes with this name
@@ -34,39 +35,47 @@ class McnpInput:
         self.Transformations = self.__getTransList__()
         return
 
-    def GetFilteredCells(self, Surfaces, config):
-        levels, contLevels, Universes = self.GetLevelStructure()
+    def GetFilteredCells(self, Ustart, depth, matcel_list, settings):
+
+        if depth == 0:
+            Ukeys = (Ustart,)
+        else:
+            subUniverses = getSubUniverses(Ustart, self.Universes)
+            subUniverses.add(Ustart)
+
+            for lev, Univ in self.levels.items():
+                if Ustart in Univ:
+                    break
+            else:
+                raise ValueError(f"Universe {Ustart} not found in the model")
+
+            if depth == -1:
+                levelMax = len(self.levels) - 1
+            else:
+                levelMax = min(lev + depth, len(self.levels) - 1)
+
+            levelUniverse = set()
+            for clev in range(lev, levelMax + 1):
+                for U in self.levels[clev]:
+                    levelUniverse.add(U)
+
+            # select only universes wich are subuniverse of Ustart
+            subUniverses = subUniverses.intersection(levelUniverse)
+            Ukeys = list(self.Universes.keys())
+            for U in reversed(Ukeys):
+                if U not in subUniverses:
+                    Ukeys.remove(U)
 
         FilteredCells = {}
-
-        Ustart = config["Ustart"]
-        subUniverses = getSubUniverses(Ustart, Universes)
-        subUniverses.add(Ustart)
-
-        if config["levelMax"] == "all":
-            levelMax = len(levels)
-        else:
-            levelMax = config["levelMax"] + 1
-
-        levelUniverse = set()
-        for lev in range(0, levelMax):
-            for U in levels[lev]:
-                levelUniverse.add(U)
-        subUniverses = subUniverses.intersection(levelUniverse)
-
-        for U in list(Universes.keys()):
-            if U not in subUniverses:
-                del Universes[U]
-
-        for U in Universes.keys():
-            FilteredCells[U] = selectCells(Universes[U], config)
-            processSurfaces(FilteredCells[U], Surfaces)
+        for U in Ukeys:
+            FilteredCells[U] = selectCells(self.Universes[U], matcel_list)
+            processSurfaces(FilteredCells[U], self.surfaces)
 
         # change the surface name in surface dict
         newSurfaces = {}
-        for k in Surfaces.keys():
-            newkey = Surfaces[k].id
-            newSurfaces[newkey] = Surfaces[k]
+        for k in self.surfaces.keys():
+            newkey = self.surfaces[k].id
+            newSurfaces[newkey] = self.surfaces[k]
 
         for U, universe in FilteredCells.items():
             substituteLikeCell(universe, newSurfaces)
@@ -74,9 +83,9 @@ class McnpInput:
             # set cell as CAD cell Object
             for cname, c in universe.items():
                 # print(cname,c.geom.str)
-                universe[cname] = CadCell(c)
+                universe[cname] = CadCell(c, settings=settings)
 
-        return levels, FilteredCells, newSurfaces
+        return FilteredCells, newSurfaces
 
     def GetLevelStructure(self):
         containers = []
@@ -87,7 +96,8 @@ class McnpInput:
             if c.ctype != mp.CID.cell:
                 continue
             c.get_values()
-            cstr = CellCardString("".join(c.lines))
+            c.get_input()
+            cstr = CellCardString("\n".join(c.input))
 
             if cstr.TRCL:
                 cstr.TRCL = TransformationMatrix(cstr.TRCL, self.Transformations)
@@ -96,6 +106,7 @@ class McnpInput:
             cellCards[c.name] = cstr
 
         setExplicitCellDefinition(cellCards)
+        containers_label = set()
         for cname, c in cellCards.items():
             if c.U is None:
                 c.U = 0
@@ -105,24 +116,34 @@ class McnpInput:
 
             if c.FILL:
                 containers.append(c)
+                containers_label.add(c.FILL)
 
-        currentLevel = [0]
+        if 0 in Universe_dict.keys():
+            root_universe = 0
+        else:
+            for k in Universe_dict.keys():
+                if k not in containers_label:
+                    root_universe = k
+                    break
+
+        # check all Universe have container cell
+        for k in Universe_dict.keys():
+            if k not in containers_label and k != root_universe:
+                raise RuntimeError(f"Universe {k} has not container cell.")
+
+        currentLevel = [root_universe]
         nextLevel = []
-        contLevel = {0: [(0, 0)]}
-        univLevel = {0: {0}}
+        univLevel = {0: {root_universe}}
         level = 0
 
         while True:
             level += 1
-            contLevel[level] = []
             univLevel[level] = set()
             for c in reversed(containers):
                 if c.U in currentLevel:
                     c.Level = level
                     nextLevel.append(c.FILL)
-                    contLevel[level].append((c.U, c.name))
                     univLevel[level].add(c.FILL)
-
                     containers.remove(c)
 
             if nextLevel == []:
@@ -130,7 +151,46 @@ class McnpInput:
             currentLevel = nextLevel
             nextLevel = []
 
-        return univLevel, contLevel, Universe_dict
+        lmax = len(univLevel)
+        del univLevel[lmax - 1]
+        for k in univLevel.keys():
+            univLevel[k] = tuple(univLevel[k])
+        self.levels = univLevel
+        self.Universes = Universe_dict
+
+    def GetCell(self, name, settings, process=True):
+        for c in self.__inputcards__:
+            if c.ctype != mp.CID.cell:
+                continue
+            c.get_values()
+            if c.name != name:
+                continue
+
+            c.get_input()
+            c = CellCardString("\n".join(c.input))
+            if c.TRCL:
+                c.TRCL = TransformationMatrix(c.TRCL, self.Transformations)
+            if c.TR:
+                c.TR = TransformationMatrix(c.TR, self.Transformations)
+            setExplicitCellDefinition({c.name: c})
+
+            if not process:
+                return c
+
+            processSurfaces({c.name: c}, self.surfaces)
+            newSurfaces = {}
+            for k in self.surfaces.keys():
+                newkey = self.surfaces[k].id
+                newSurfaces[newkey] = self.surfaces[k]
+
+            if c.likeCell:
+                c.geom = self.getCell(c.likeCell, settings, process=False).geom
+                c.likeCell = None
+                substituteLikeCell({c.name: c}, newSurfaces)
+
+            c = CadCell(c, settings=settings)
+            c.setSurfaces(newSurfaces)
+            return c
 
     def GetCells(self, U=None, Fill=None):
         cell_cards = {}
@@ -146,12 +206,12 @@ class McnpInput:
                 cell_cards[c.name] = c
             elif Fill_cell == Fill and Fill is not None:
                 cell_cards[c.name] = c
-
         return cell_cards
 
-    def GetSurfaces(self, scale=1.0):
+    def GetSurfaces(self):
         surf_cards = {}
         number = 1
+        scale = 10  # change cm units to mm
         for c in self.__inputcards__:
             if c.ctype != mp.CID.surface:
                 continue
@@ -160,8 +220,7 @@ class McnpInput:
             surf_cards[c.name] = (c.stype, c.scoefs, c.TR, number)
             number += 1
 
-        # return surface as surface Objects type
-        return Get_primitive_surfaces(surf_cards, scale)
+        self.surfaces = Get_primitive_surfaces(surf_cards, scale)
 
     def __getTransList__(self):
         trl = {}
@@ -317,12 +376,11 @@ def selectCells(cellList, config):
                     if name in config["cell"][1]:
                         selected[name] = c  # Fill cell are not tested against material number
 
-    # remove complementary in cell of the universe
     for cname, c in selected.items():
         c.geom = remove_hash(cellList, cname)
 
-    if not selected:
-        raise ValueError("No cells selected. Check input or selection criteria in config file.")
+    #    if not selected:
+    #        raise ValueError("No cells selected. Check input or selection criteria in config file.")
 
     return selected
 
@@ -353,6 +411,7 @@ def processSurfaces(UCells, Surfaces):
     for cname, c in UCells.items():
         c.geom.remove_comments(full=True)
         pos = 0
+        c.geom.newLabel = True
         while True:
             m = number.search(c.geom.str, pos)
             if not m:
@@ -383,34 +442,6 @@ def getTransMatrix(trsf, unit="", scale=10.0):
             0,
             0,
             1,
-            trsf[2] * scale,
-            0,
-            0,
-            0,
-            1,
-        )
-    elif len(trsf) == 9:
-        if unit == "*":
-            coeff = tuple(map(math.radians, trsf[3:9]))
-            coeff = tuple(map(math.cos, coeff))
-        else:
-            coeff = trsf[3:9]
-
-        axis = FreeCAD.Vector(coeff[0:3]).cross(FreeCAD.Vector(coeff[3:6]))
-        coeff = coeff + (axis.x, axis.y, axis.z)
-
-        trsfMat = FreeCAD.Matrix(
-            coeff[0],
-            coeff[3],
-            coeff[6],
-            trsf[0] * scale,
-            coeff[1],
-            coeff[4],
-            coeff[7],
-            trsf[1] * scale,
-            coeff[2],
-            coeff[5],
-            coeff[8],
             trsf[2] * scale,
             0,
             0,
@@ -938,29 +969,29 @@ def Get_primitive_surfaces(mcnp_surfaces, scale=10.0):
             params = (p, v, R1, R2)
 
         if Stype == "plane":
-            surfaces[Sid] = Plane(number, params, trsf)
+            surfaces[Sid] = Plane(Sid, number, params, trsf)
         elif Stype == "sphere":
-            surfaces[Sid] = Sphere(number, params, trsf)
+            surfaces[Sid] = Sphere(Sid, number, params, trsf)
         elif Stype == "cylinder" or Stype == "can":
-            surfaces[Sid] = Cylinder(number, params, trsf, Stype == "can")
+            surfaces[Sid] = Cylinder(Sid, number, params, trsf, Stype == "can")
         elif Stype == "cylinder_elliptic" or Stype == "ecan":
-            surfaces[Sid] = EllipticCylinder(number, params, trsf, Stype == "ecan")
+            surfaces[Sid] = EllipticCylinder(Sid, number, params, trsf, Stype == "ecan")
         elif Stype == "cylinder_hyperbolic":
-            surfaces[Sid] = HyperbolicCylinder(number, params, trsf)
+            surfaces[Sid] = HyperbolicCylinder(Sid, number, params, trsf)
         elif Stype == "cone" or Stype == "tcone":
-            surfaces[Sid] = Cone(number, params, trsf, Stype == "tcone")
+            surfaces[Sid] = Cone(Sid, number, params, trsf, Stype == "tcone")
         elif Stype == "cone_elliptic":
-            surfaces[Sid] = EllipticCone(number, params, trsf)
+            surfaces[Sid] = EllipticCone(Sid, number, params, trsf)
         elif Stype == "hyperboloid":
-            surfaces[Sid] = Hyperboloid(number, params, trsf)
+            surfaces[Sid] = Hyperboloid(Sid, number, params, trsf)
         elif Stype == "ellipsoid":
-            surfaces[Sid] = Ellipsoid(number, params, trsf)
+            surfaces[Sid] = Ellipsoid(Sid, number, params, trsf)
         elif Stype == "paraboloid":
-            surfaces[Sid] = Paraboloid(number, params, trsf)
+            surfaces[Sid] = Paraboloid(Sid, number, params, trsf)
         elif Stype == "torus":
-            surfaces[Sid] = Torus(number, params, trsf)
+            surfaces[Sid] = Torus(Sid, number, params, trsf)
         elif Stype == "box":
-            surfaces[Sid] = Box(number, params, trsf)
+            surfaces[Sid] = Box(Sid, number, params, trsf)
         else:
             print("Undefined", Sid, Stype)
             print(MCNPtype, number, MCNPparams)
@@ -993,13 +1024,12 @@ def points_to_coeffs(scf):
     # coeff [0:3] a,b,c plane parameters
     # coeff [3]   d plane parameter
     # normalization is d set to one if origin is not in the plane
-    return coeff
 
 
 def get_parabola_parameters(eVal, eVect, T, U):
     iaxis, comp = U[1]
     center = FreeCAD.Vector(T)
-    axis = FreeCAD.Vector(eVect[iaxis][0])
+    axis = FreeCAD.Vector(eVect[iaxis])
     e1 = eVal[(iaxis + 1) % 3]
     focal = comp / (4 * e1)
     if focal < 0:
@@ -1287,9 +1317,9 @@ def gq2params(x):
     if len(zero) != 0:
         iz = zero[0]
         comp = 2 * XD[iz]
-        if (
-            abs(comp) > 1e-6
-        ):  # zero eigenvalue but corresponding component in XD vector is non zero => paraboloid Curve => the k/comp value is the translation in this component direction
+        # zero eigenvalue but corresponding component in XD vector is non zero => paraboloid Curve
+        # => the k/comp value is the translation in this component direction
+        if abs(comp) > 1e-6:
             TD[iz] = -k / comp
             U = (k, (iz, comp))
         else:
