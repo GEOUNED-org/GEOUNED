@@ -102,21 +102,17 @@ class XmlInput:
 
         currentLevel = [root_universe]
         nextLevel = []
-        contLevel = {0: [(0, 0)]}
         univLevel = {0: {root_universe}}
-
         level = 0
+
         while True:
             level += 1
-            contLevel[level] = []
             univLevel[level] = set()
             for c in reversed(containers):
                 if c.U in currentLevel:
                     c.Level = level
                     nextLevel.append(c.FILL)
-                    contLevel[level].append((c.U, c.name))
                     univLevel[level].add(c.FILL)
-
                     containers.remove(c)
 
             if nextLevel == []:
@@ -128,8 +124,7 @@ class XmlInput:
         del univLevel[lmax - 1]
         for k in univLevel.keys():
             univLevel[k] = tuple(univLevel[k])
-
-        self.level = univLevel
+        self.levels = univLevel
         self.Universes = Universe_dict
         return
 
