@@ -257,23 +257,11 @@ def getTransMatrix(trsf, unit="", scale=10.0):
         coeff = coeff + (axis.x, axis.y, axis.z)
 
         trsfMat = FreeCAD.Matrix(
-            coeff[0],
-            coeff[3],
-            coeff[6],
-            trsf[0] * scale,
-            coeff[1],
-            coeff[4],
-            coeff[7],
-            trsf[1] * scale,
-            coeff[2],
-            coeff[5],
-            coeff[8],
-            trsf[2] * scale,
-            0,
-            0,
-            0,
-            1,
-        )   
+            coeff[0], coeff[3], coeff[6], trsf[0] * scale,
+            coeff[1], coeff[4], coeff[7], trsf[1] * scale,
+            coeff[2], coeff[5], coeff[8], trsf[2] * scale,
+            0, 0, 0, 1,
+        )    
     else:
         if unit == "*":
             coeff = tuple(map(math.radians, trsf[3:12]))
@@ -453,55 +441,6 @@ def processSurfaces(UCells, Surfaces):
                 print(m)
                 print(c.geom.str)
             pos = c.geom.replace(surf, Surfaces[surf].id, pos)
-
-
-def getTransMatrix(trsf, unit="", scale=10.0):
-
-    if len(trsf) == 3:
-        trsfMat = FreeCAD.Matrix(
-            1,
-            0,
-            0,
-            trsf[0] * scale,
-            0,
-            1,
-            0,
-            trsf[1] * scale,
-            0,
-            0,
-            1,
-            trsf[2] * scale,
-            0,
-            0,
-            0,
-            1,
-        )
-    else:
-        if unit == "*":
-            coeff = tuple(map(math.radians, trsf[3:12]))
-            coeff = tuple(map(math.cos, coeff))
-        else:
-            coeff = trsf[3:12]
-
-        trsfMat = FreeCAD.Matrix(
-            coeff[0],
-            coeff[3],
-            coeff[6],
-            trsf[0] * scale,
-            coeff[1],
-            coeff[4],
-            coeff[7],
-            trsf[1] * scale,
-            coeff[2],
-            coeff[5],
-            coeff[8],
-            trsf[2] * scale,
-            0,
-            0,
-            0,
-            1,
-        )
-    return trsfMat
 
 
 def TransformationMatrix(TRSF, Transformations):
@@ -1052,6 +991,7 @@ def points_to_coeffs(scf):
     # coeff [0:3] a,b,c plane parameters
     # coeff [3]   d plane parameter
     # normalization is d set to one if origin is not in the plane
+    return coeff
 
 
 def get_parabola_parameters(eVal, eVect, T, U):

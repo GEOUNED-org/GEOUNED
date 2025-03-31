@@ -508,8 +508,6 @@ class CellCardString:
         self.FILL = None
         self.TR = None
         self.TRCL = None
-        self.hashDef = None
-        self.cellSeq = None
         self.__card_split__(card)
         self.__get_data__()
 
