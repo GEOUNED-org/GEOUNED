@@ -178,5 +178,5 @@ The cell/materials selection is carried out using the `cell_filter`` and `materi
 .. code-block:: python
 
     cells = [i for i in range(1,101)]
-    geo.cell_filter('include',cells) # only cells will label from 1 to 100 will be converted
+    geo.cell_filter('include',cells) # only cells with label from 1 to 100 will be converted
     geo.build_universe()
