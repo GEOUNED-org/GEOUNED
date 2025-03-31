@@ -246,6 +246,34 @@ def getTransMatrix(trsf, unit="", scale=10.0):
             0, 0, 1, trsf[2] * scale,
             0, 0, 0, 1,
         )
+    elif len(trsf) == 9:
+        if unit == "*":
+            coeff = tuple(map(math.radians, trsf[3:9]))
+            coeff = tuple(map(math.cos, coeff))
+        else:
+            coeff = trsf[3:9]
+
+        axis = FreeCAD.Vector(coeff[0:3]).cross(FreeCAD.Vector(coeff[3:6]))
+        coeff = coeff + (axis.x, axis.y, axis.z)
+
+        trsfMat = FreeCAD.Matrix(
+            coeff[0],
+            coeff[3],
+            coeff[6],
+            trsf[0] * scale,
+            coeff[1],
+            coeff[4],
+            coeff[7],
+            trsf[1] * scale,
+            coeff[2],
+            coeff[5],
+            coeff[8],
+            trsf[2] * scale,
+            0,
+            0,
+            0,
+            1,
+        )   
     else:
         if unit == "*":
             coeff = tuple(map(math.radians, trsf[3:12]))
