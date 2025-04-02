@@ -6,16 +6,20 @@ import Part
 
 
 class SplitBase:
-    def __init__(self, base, knownSurf={}):
+    def __init__(self, base, knownSurf={}, orientation="Forward"):
         self.base = base
         self.knownSurf = knownSurf
+        self.orientation = orientation
 
 
 def joinBase(baseList):
     shape = []
     surf = {}
     removedKeys = []
+    fwd = True
     for b in baseList:
+        if b.orientation == "Reversed":
+            fwd = False
         if b.base is not None:
             shape.append(b.base)
         for k, v in b.knownSurf.items():
@@ -31,11 +35,12 @@ def joinBase(baseList):
                     removedKeys.append(k)
 
     newbase = FuseSolid(shape)
-    return SplitBase(newbase, surf)
+    orientation = "Forward" if fwd else "Reversed"
+    return SplitBase(newbase, surf, orientation)
 
 
 # TODO rename this function as there are two with the name name
-def SplitSolid(base, surfacesCut, cellObj, solidTool=False, tolerance=0.01):  # 1e-2
+def SplitSolid(base, surfacesCut, cellObj, tolerance=0.01):  # 1e-2
     # split Base (shape Object or list/tuple of shapes)
     # with selected surfaces (list of surfaces objects) cutting the base(s) (surfacesCut)
     # cellObj is the CAD object of the working cell to reconstruction.
@@ -47,6 +52,7 @@ def SplitSolid(base, surfacesCut, cellObj, solidTool=False, tolerance=0.01):  # 
     cutPart = []
 
     # part if several base in input
+
     if type(base) is list or type(base) is tuple:
         for b in base:
             fullList, cutList = SplitSolid(b, surfacesCut, cellObj, tolerance=tolerance)
@@ -55,26 +61,34 @@ def SplitSolid(base, surfacesCut, cellObj, solidTool=False, tolerance=0.01):  # 
         return fullPart, cutPart
 
     # part if base is shape object
-
-    if solidTool:
-        Tools = (cellObj.shape,)
+    # resulting cell orientation is "Reversed" only if both
+    # cells have reversed orientations
+    if cellObj.boundBox.Orientation == base.orientation:
+        orientation = cellObj.boundBox.Orientation
     else:
-        Tools = tuple(s.shape for s in surfacesCut)
-    # for s in surfacesCut:
-    #    print(s.type,s.params,s.id)
-    #    s.shape.exportStep('tool{}.stp'.format(s.id))
-    # base.base.exportStep('base.stp')
-    Solids = BOPTools.SplitAPI.slice(base.base, Tools, "Split", tolerance=tolerance).Solids
-    if not Solids:
+        orientation = "Forward"
+
+    if abs(base.base.Volume / base.base.Area) < 1e-2:
+        return fullPart, cutPart
+
+    Tools = tuple(s.shape for s in surfacesCut)
+    if Tools[0] is not None:
+        try:
+            Solids = BOPTools.SplitAPI.slice(base.base, Tools, "Split", tolerance=tolerance).Solids
+        except:
+            Solids = []
+        if not Solids:
+            Solids = [base.base]
+    else:
         Solids = [base.base]
+
     partPositions, partSolids = space_decomposition(Solids, surfacesCut)
 
     for pos, sol in zip(partPositions, partSolids):
         # fullPos = updateSurfacesValues(pos,cellObj.surfaces,base.knownSurf)
         # inSolid = cellObj.definition.evaluate(fullPos)
 
-        if not solidTool:
-            pos.update(base.knownSurf)
+        pos.update(base.knownSurf)
         inSolid = cellObj.definition.evaluate(pos)
 
         # if solidTool :
@@ -87,9 +101,9 @@ def SplitSolid(base, surfacesCut, cellObj, solidTool=False, tolerance=0.01):  # 
         #  sol.exportStep('solid_{}{}.stp'.format(name,ii))
 
         if inSolid:
-            fullPart.append(SplitBase(sol, pos))
+            fullPart.append(SplitBase(sol, pos, orientation))
         elif inSolid is None:
-            cutPart.append(SplitBase(sol, pos))
+            cutPart.append(SplitBase(sol, pos, orientation))
     return fullPart, cutPart
 
 
@@ -129,8 +143,30 @@ def space_decomposition(solids, surfaces):
     return component, good_solids
 
 
-# find one point inside a solid (region)
 def point_inside(solid):
+
+    point = solid.Solids[0].CenterOfMass
+    if solid.isInside(point, 0.0, False):
+        return point
+
+    L = 0.5 * abs(solid.Volume) ** 0.33333
+    for face in solid.Faces:
+        u0, u1, v0, v1 = face.ParameterRange
+        u = 0.5 * (u0 + u1)
+        v = 0.5 * (v0 + v1)
+        if face.isPartOfDomain(u, v):
+            normal = -face.normalAt(u, v)
+            pos = face.valueAt(u, v)
+            d = L
+            for i in range(12):
+                d = d * 0.5
+                point = pos + d * normal
+                if solid.isInside(point, 0.0, False):
+                    return point
+
+
+# find one point inside a solid (region)
+def point_inside_org(solid):
 
     cut_line = 32
     cut_box = 4

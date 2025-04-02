@@ -31,7 +31,20 @@ def main():
         config = json.load(f)
 
     geo = geouned.CsgToCad()
-    geo.export_cad(**config["export_cad"])
+    geo.read_csg_file(**config["read_csg"])
+
+    if "cell_filter" in config.keys():
+        geo.cell_filter(**config["cell_filter"])
+
+    if "mat_filter" in config.keys():
+        geo.material_filter(**config["mat_filter"])
+
+    geo.build_universe()
+
+    if "export_cad" in config.keys():
+        geo.export_cad(**config["export_cad"])
+    else:
+        geo.export_cad()
 
 
 if __name__ == "__main__":
