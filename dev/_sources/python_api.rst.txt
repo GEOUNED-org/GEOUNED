@@ -8,10 +8,6 @@ Python API reference
     :members:
     :show-inheritance:
 
-.. autoclass:: CadToCsg
-    :members:
-    :show-inheritance:
-
 .. autoclass:: NumericFormat
     :members:
     :show-inheritance:
@@ -25,5 +21,13 @@ Python API reference
     :show-inheritance:
 
 .. autoclass:: Tolerances
+    :members:
+    :show-inheritance:
+
+.. autoclass:: CadToCsg
+    :members:
+    :show-inheritance:
+
+.. autoclass:: BoxSettings
     :members:
     :show-inheritance:

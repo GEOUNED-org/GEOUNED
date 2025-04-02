@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Example of use &#8212; GEOUNED 0.1.dev1+gab6f34c documentation</title>
+    <title>Example of use &#8212; GEOUNED 0.1.dev1+g8a68641 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=979cb8d6"></script>
+    <script src="_static/documentation_options.js?v=71ad7e63"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'example_of_use';</script>
@@ -55,7 +55,7 @@
     <link rel="prev" title="Quick Install Guide" href="quick_install_guide.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.dev1+gab6f34c" />
+  <meta name="docsearch:version" content="0.1.dev1+g8a68641" />
   </head>
   
   
@@ -421,6 +421,7 @@ for use in MCNP. It includes the methodology and rationale behind the process.</
 <li><p><a class="reference internal" href="#conversion-to-csg">Conversion to CSG</a></p></li>
 <li><p><a class="reference internal" href="#suspicious-solids-and-debug">Suspicious solids and debug</a></p></li>
 <li><p><a class="reference internal" href="#void-check-verification">Void check verification</a></p></li>
+<li><p><a class="reference internal" href="#conversion-to-cad">Conversion to CAD</a></p></li>
 </ol>
 <section id="cad-simplification">
 <span id="id1"></span><h2>CAD simplification<a class="headerlink" href="#cad-simplification" title="Link to this heading">#</a></h2>
@@ -497,6 +498,66 @@ achieve an acceptable statistical error. An usually number is 1e9 particles. Alw
 check that the statistical error of the tallies is below 0.1.</p>
 </div>
 </section>
+<section id="conversion-to-cad">
+<span id="id6"></span><h2>Conversion to CAD<a class="headerlink" href="#conversion-to-cad" title="Link to this heading">#</a></h2>
+<p>The below code is run in a Python environment with GEOUNED installed. In the comments
+of the code there is an explanation of the parameters used. The following example is a
+basic use of conversion from CSG to CAD, it will convert all the cells present in the model.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geouned</span>
+
+<span class="n">geo</span> <span class="o">=</span> <span class="n">geouned</span><span class="o">.</span><span class="n">CsgToCad</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Read model&quot;</span><span class="p">)</span>
+<span class="n">geo</span><span class="o">.</span><span class="n">read_csg_file</span><span class="p">(</span><span class="s1">&#39;CSG_model.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;mcnp&#39;</span><span class="p">)</span>  <span class="c1"># Path to the CSG file, and code (MCNP/openMC) input type.</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Start conversion to CAD&quot;</span><span class="p">)</span>
+<span class="n">geo</span><span class="o">.</span><span class="n">build_universe</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Write stp file&quot;</span><span class="p">)</span>
+<span class="n">geo</span><span class="o">.</span><span class="n">export_cad</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Instead of translating the full model, only specific universes can be selected for conversion.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Universe 100 is converted, nested universes present in this universe will not be converted to CAD,</span>
+<span class="c1"># only the container cell will be represented.</span>
+<span class="n">geo</span><span class="o">.</span><span class="n">build_universe</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Universe 200 is converted, all the nested universes present in this universe (only one sublevel) will</span>
+<span class="c1"># be converted to CAD.</span>
+<span class="n">geo</span><span class="o">.</span><span class="n">build_universe</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Universe 300 is converted, all nested universes present in this universe (and all sub-universes, if any)</span>
+<span class="c1"># will be converted to CAD.</span>
+<span class="n">geo</span><span class="o">.</span><span class="n">build_universe</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">depth</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In the previous example universes are translated and CAD solids are built using the universe own system of coordinates.
+Using the method <cite>build_container</cite> the universe in build inside the container cell and located at the position incated
+by the container. In the following example level 0 cells are translated with the universes contained in the selected
+container cells.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Upper universe is converted. Nested universes are not converted</span>
+<span class="n">geo</span><span class="o">.</span><span class="n">build_universe</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Universe 100 contained in the cell 1100, and universe 200 contained in the cell 1200 are are converted.</span>
+<span class="c1"># For universe 100 all nested universes will be converted. For universe 200 only cells of this universe</span>
+<span class="c1"># will be converted (depth=0).</span>
+<span class="n">geo</span><span class="o">.</span><span class="n">build_container</span><span class="p">(</span><span class="mi">1100</span><span class="p">)</span>
+<span class="n">geo</span><span class="o">.</span><span class="n">build_container</span><span class="p">(</span><span class="mi">1200</span><span class="p">,</span><span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># export step with a new filename</span>
+<span class="n">geo</span><span class="o">.</span><span class="n">export_cad</span><span class="p">(</span><span class="s1">&#39;base_and_U100_U200.stp&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Cells or materials can be filtered for conversion (included or excluced). By default all cells are converted.
+The cell/materials selection is carried out using the <cite>cell_filter`</cite> and <cite>material_filter</cite> methods.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">geo</span><span class="o">.</span><span class="n">material_filter</span><span class="p">(</span><span class="s1">&#39;exclude&#39;</span><span class="p">,(</span><span class="mi">0</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">400</span><span class="p">))</span> <span class="c1"># any cells with material number 0, 11 or 400 will not be converted</span>
+                                          <span class="c1"># (doesn&#39;t apply for containers)</span>
+<span class="n">geo</span><span class="o">.</span><span class="n">build_universe</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cells</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">101</span><span class="p">)]</span>
+<span class="n">geo</span><span class="o">.</span><span class="n">cell_filter</span><span class="p">(</span><span class="s1">&#39;include&#39;</span><span class="p">,</span><span class="n">cells</span><span class="p">)</span> <span class="c1"># only cells with label from 1 to 100 will be converted</span>
+<span class="n">geo</span><span class="o">.</span><span class="n">build_universe</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
 </section>
 
 
@@ -551,6 +612,7 @@ check that the statistical error of the tallies is below 0.1.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conversion-to-csg">Conversion to CSG</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#suspicious-solids-and-debug">Suspicious solids and debug</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#void-check-verification">Void check verification</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conversion-to-cad">Conversion to CAD</a></li>
 </ul>
   </nav></div>
 

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>geouned.GEOReverse.core &#8212; GEOUNED 0.1.dev1+gab6f34c documentation</title>
+    <title>geouned.GEOReverse.core &#8212; GEOUNED 0.1.dev1+g8a68641 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=979cb8d6"></script>
+    <script src="../../../_static/documentation_options.js?v=71ad7e63"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/geouned/GEOReverse/core';</script>
@@ -52,7 +52,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.dev1+gab6f34c" />
+  <meta name="docsearch:version" content="0.1.dev1+g8a68641" />
   </head>
   
   
@@ -396,122 +396,262 @@
                 <article class="bd-article">
                   
   <h1>Source code for geouned.GEOReverse.core</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">FreeCAD</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">FreeCAD</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">Import</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.buildCAD</span><span class="w"> </span><span class="kn">import</span> <span class="n">buildCAD</span><span class="p">,</span> <span class="n">makeTree</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.MCNPinput</span><span class="w"> </span><span class="kn">import</span> <span class="n">McnpInput</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.buildCAD</span><span class="w"> </span><span class="kn">import</span> <span class="n">makeTree</span><span class="p">,</span> <span class="n">AssignSurfaceToCell</span><span class="p">,</span> <span class="n">BuildUniverseCells</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.Utils.booleanFunction</span><span class="w"> </span><span class="kn">import</span> <span class="n">BoolSequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.Utils.boundBox</span><span class="w"> </span><span class="kn">import</span> <span class="n">solid_plane_box</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.data_class</span><span class="w"> </span><span class="kn">import</span> <span class="n">BoxSettings</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.Objects</span><span class="w"> </span><span class="kn">import</span> <span class="n">CadCell</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.MCNPinput</span><span class="w"> </span><span class="kn">import</span> <span class="n">McnpInput</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.XMLinput</span><span class="w"> </span><span class="kn">import</span> <span class="n">XmlInput</span>
 
 
 <div class="viewcode-block" id="CsgToCad">
 <a class="viewcode-back" href="../../../python_api.html#geouned.CsgToCad">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CsgToCad</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for the conversion of CSG to CAD models&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for the conversion of CSG to CAD models</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
+<span class="sd">    Args:</span>
+<span class="sd">        BoxSettings (geouned.BoxSettings, optional): Adjust the default parameters</span>
+<span class="sd">        for the solid boundbox creation. Defaults to a geouned.BoxSettings with default</span>
+<span class="sd">        attributes values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="CsgToCad.export_cad">
-<a class="viewcode-back" href="../../../python_api.html#geouned.CsgToCad.export_cad">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">export_cad</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">input_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">csg_format</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">output_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cad_from_csg&quot;</span><span class="p">,</span>
-        <span class="n">bounding_box</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">),</span>
-        <span class="n">universe_start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="n">level_max</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
-        <span class="n">cell_range_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
-        <span class="n">cell_range</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
-        <span class="n">mat_range_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
-        <span class="n">mat_range</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
-        <span class="c1"># TODO add these to the method signature</span>
-        <span class="c1"># splitTolerance in the Options class</span>
-        <span class="c1"># mat =  this is in the CADselection dictionary but not in the docs https://github.com/GEOUNED-org/GEOUNED/blob/76ef697c7dca6a828c7498996ff3313859c872f2/docs/User_Guide_GEOUNED_v2.0.pdf</span>
-    <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;export the CSG geometry in OpenMC or MCNP format to a CAD model.</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">BoxSettings</span> <span class="o">=</span> <span class="n">BoxSettings</span><span class="p">()):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_range_type</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_range</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mat_range_type</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mat_range</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buildCAD_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="CsgToCad.read_csg_file">
+<a class="viewcode-back" href="../../../python_api.html#geouned.CsgToCad.read_csg_file">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_csg_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">csg_format</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reads the geometry definition from MCNP or OpenMC XML input.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            input_filename (str): The filename and path of the input CSG text file.</span>
-<span class="sd">            csg_format (str): The format of the CSG input file, options are &#39;openmc_xml&#39; or &#39;mcnp&#39;</span>
-<span class="sd">            output_filename (str, optional): The filename stem and path of the output file created.</span>
-<span class="sd">                Two files will be created with the &#39;.step&#39; suffix and one with the &#39;FCStd&#39; suffix.</span>
-<span class="sd">                Defaults to &#39;cad_from_csg&#39;.</span>
-<span class="sd">            bounding_box (typing.Tuple[int, int, int, int, int, int], optional): The bounding box</span>
-<span class="sd">                coordinates of the CSG geometry. This should encompass the entire CSG geometry.</span>
-<span class="sd">                Format is (xmin, ymin, zmin, xmax, ymax, zmax) Defaults to (-1000, -1000, -1000,</span>
-<span class="sd">                1000, 1000, 1000).</span>
-<span class="sd">            universe_start (int, optional): The Universe ID to be converted to CAD. If universe_start</span>
-<span class="sd">                is left as 0 then all the universes and any nested universes are converted. If set</span>
-<span class="sd">                then the universe and all its nested universes are converted. Defaults to 0.</span>
-<span class="sd">            level_max (str, optional): Level maximum of nested universe to be translated. If</span>
-<span class="sd">                level_max &lt; highest nested universe level, cells inside the container cell whose</span>
-<span class="sd">                level is level_max will not be translated. This container cell will be the CAD</span>
-<span class="sd">                solid written in the CAD file. Defaults to &quot;all&quot;.</span>
-<span class="sd">            cell_range_type (str, optional): Define how to consider the range values.</span>
-<span class="sd">                setting to &#39;all&#39; results in all the cells with any cell ID being converted (range a no effect).</span>
-<span class="sd">                setting to &#39;include&#39; results in only cells defined in &#39;range&#39; being converted.</span>
-<span class="sd">                setting to &#39;exclude&#39; results in exclude all cells defined in range. Defaults to &quot;all&quot;.</span>
-<span class="sd">            cell_range (typing.Tuple[int], optional): list of cells to be included/excluded for the conversion.</span>
-<span class="sd">                Defaults to ().</span>
-<span class="sd">            mat_range_type (str, optional): Define how to consider the range values.</span>
-<span class="sd">                setting to &#39;all&#39; results in all the materials with any cell ID being converted (range a no effect).</span>
-<span class="sd">                setting to &#39;include&#39; results in only materials defined in &#39;range&#39; being converted.</span>
-<span class="sd">                setting to &#39;exclude&#39; results in exclude all materials defined in range. Defaults to &quot;all&quot;.</span>
-<span class="sd">            mat_range (typing.Tuple[int], optional): list of materials to be included/excluded for the conversion.</span>
-<span class="sd">                Defaults to ().</span>
+<span class="sd">            csg_format (str): The format of the CSG input file, options are &#39;mcnp&#39; or &#39;openmc_xml&#39;</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">            ValueError: If the csg_format is not &#39;openmc_xml&#39; or &#39;mcnp&#39; then a ValueError is raised.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">            ValueError: If the csg_format is not &#39;openmc_xml&#39; or &#39;mcnp&#39; then a ValueError is raised.&quot;&quot;&quot;</span>
 
-        <span class="c1"># TODO check file extensions are correct</span>
-        <span class="c1"># if Path(output_filename).suffix not in [&#39;.stp&#39;, &#39;.step&#39;]:</span>
-        <span class="c1">#     raise ValueError(f&quot;output file must have a .stp or .step extension, not {universe_start.suffix}&quot;)</span>
-
-        <span class="c1"># get geometry definition from OpenMC XML or MCNP input</span>
         <span class="k">if</span> <span class="n">csg_format</span> <span class="o">==</span> <span class="s2">&quot;mcnp&quot;</span><span class="p">:</span>
-            <span class="n">geo</span> <span class="o">=</span> <span class="n">McnpInput</span><span class="p">(</span><span class="n">input_filename</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">McnpInput</span><span class="p">(</span><span class="n">input_filename</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">csg_format</span> <span class="o">==</span> <span class="s2">&quot;openmc_xml&quot;</span><span class="p">:</span>
-            <span class="n">geo</span> <span class="o">=</span> <span class="n">XmlInput</span><span class="p">(</span><span class="n">input_filename</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">XmlInput</span><span class="p">(</span><span class="n">input_filename</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;input format type </span><span class="si">{</span><span class="n">csg_format</span><span class="si">}</span><span class="s2"> is not supported. Supported options are &#39;openmc_xml&#39; or &#39;mcnp&#39;&quot;</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="c1"># read all surfaces definition</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_filename</span> <span class="o">=</span> <span class="n">input_filename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">GetSurfaces</span><span class="p">()</span>  <span class="c1"># scale units change are carried out in GetSurfaces method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">GetLevelStructure</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="CsgToCad.cell_filter">
+<a class="viewcode-back" href="../../../python_api.html#geouned.CsgToCad.cell_filter">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cell_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">cells</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Selects the cells to build from the CSG geometry in MCNP or OpenMC format and export to the CAD model.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            type (str, optional): Filtering type. Allowed values &quot;all&quot;, &quot;include&quot;, &quot;exclude&quot;. Default to all.</span>
+<span class="sd">            cells (None, list, tuple, optional): List of cells to include or exclude. If type is &quot;all&quot; has no effect. Default to None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">type</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;include&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cell_range_type</span> <span class="o">=</span> <span class="nb">type</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cell_range_type</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;bad cells range type. Ignored&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">cells</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cell_range</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_range_type</span> <span class="o">==</span> <span class="s2">&quot;exclude&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cell_range_type</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span></div>
+
+
+<div class="viewcode-block" id="CsgToCad.material_filter">
+<a class="viewcode-back" href="../../../python_api.html#geouned.CsgToCad.material_filter">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">material_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">materials</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Selects the materials of the cells to build from the CSG geometry in MCNP or OpenMC format and export to the CAD model.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            type (str, optional): Filtering type. Allowed values &quot;all&quot;, &quot;include&quot;, &quot;exclude&quot;. Default to all.</span>
+<span class="sd">            materials (None, list, tuple, optional): List of cells to include or exclude. If type is &quot;all&quot; has no effect. Default to None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">type</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;include&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mat_range_type</span> <span class="o">=</span> <span class="nb">type</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mat_range_type</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;bad cells range type. Ignored&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">materials</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mat_range</span> <span class="o">=</span> <span class="n">materials</span><span class="p">[:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat_range_type</span> <span class="o">==</span> <span class="s2">&quot;exclude&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mat_range_type</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span></div>
+
+
+<div class="viewcode-block" id="CsgToCad.build_container">
+<a class="viewcode-back" href="../../../python_api.html#geouned.CsgToCad.build_container">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build_container</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell_label</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build the universe contained in the cell &quot;cell_label&quot;. The level of nested universes to consider is</span>
+<span class="sd">        controlled by the parameter &quot;depth&quot;. The universe is located inside the container cell according to the transformation.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cell_label (int): Label of the cell containing the universe to convert.</span>
+<span class="sd">            depth (int, optional): Depth level of the nested to considered. Default to -1 (all nested universes).&quot;&quot;&quot;</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Build container cell </span><span class="si">{</span><span class="n">cell_label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># get and build container universe</span>
+        <span class="n">UnivCell</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">GetCell</span><span class="p">(</span><span class="n">cell_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">)</span>
+        <span class="n">UnivCell</span><span class="o">.</span><span class="n">definition</span> <span class="o">=</span> <span class="n">BoolSequence</span><span class="p">(</span><span class="n">UnivCell</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">str</span><span class="p">)</span>
+
+        <span class="n">UnivCell</span><span class="o">.</span><span class="n">build_BoundBox</span><span class="p">(</span><span class="n">enlarge</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">UnivCell</span><span class="o">.</span><span class="n">boundBox</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span> <span class="ow">and</span> <span class="n">UnivCell</span><span class="o">.</span><span class="n">boundBox</span><span class="o">.</span><span class="n">Box</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">UnivCell</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cell </span><span class="si">{</span><span class="n">UnivCell</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> BoundBox is null&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">UnivCell</span><span class="o">.</span><span class="n">boundBox</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span><span class="p">:</span>
+                <span class="n">UnivCell</span><span class="o">.</span><span class="n">externalBox</span> <span class="o">=</span> <span class="n">UnivCell</span><span class="o">.</span><span class="n">boundBox</span>
+
+        <span class="n">debug</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="n">UnivCell</span><span class="o">.</span><span class="n">buildShape</span><span class="p">(</span><span class="n">simplify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">UnivCell</span><span class="o">.</span><span class="n">buildShape</span><span class="p">(</span><span class="n">simplify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;fail converting cell </span><span class="si">{</span><span class="n">UnivCell</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># generate universe cells inside container</span>
+        <span class="n">matcel_list</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;mat&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mat_range_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat_range</span><span class="p">),</span>
+            <span class="s2">&quot;cell&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_range_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_range</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="n">UniverseCells</span><span class="p">,</span> <span class="n">modelSurfaces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">GetFilteredCells</span><span class="p">(</span><span class="n">UnivCell</span><span class="o">.</span><span class="n">FILL</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">matcel_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">)</span>
+        <span class="n">AssignSurfaceToCell</span><span class="p">(</span><span class="n">UniverseCells</span><span class="p">,</span> <span class="n">modelSurfaces</span><span class="p">)</span>
+
+        <span class="n">Ustart</span> <span class="o">=</span> <span class="n">UnivCell</span><span class="o">.</span><span class="n">FILL</span>
+        <span class="n">UnivCell</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">lev</span><span class="p">,</span> <span class="n">Univ</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">levels</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">Ustart</span> <span class="ow">in</span> <span class="n">Univ</span><span class="p">:</span>
+                <span class="n">UnivCell</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">lev</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">depth</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">levelMax</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">levels</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">levelMax</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">lev</span> <span class="o">+</span> <span class="n">depth</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">levels</span><span class="p">))</span>
+
+        <span class="n">startInfo</span> <span class="o">=</span> <span class="p">(</span><span class="n">Ustart</span><span class="p">,</span> <span class="n">levelMax</span><span class="p">)</span>
+        <span class="n">CADCells</span><span class="p">,</span> <span class="n">fails</span> <span class="o">=</span> <span class="n">BuildUniverseCells</span><span class="p">(</span><span class="n">startInfo</span><span class="p">,</span> <span class="n">UnivCell</span><span class="p">,</span> <span class="n">UniverseCells</span><span class="p">,</span> <span class="n">universeCut</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fails</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;failed cell conversion:&quot;</span><span class="p">,</span> <span class="n">fails</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buildCAD_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CADCells</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CsgToCad.build_universe">
+<a class="viewcode-back" href="../../../python_api.html#geouned.CsgToCad.build_universe">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build_universe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">U</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build the universe U. The level of nested universes is to consider is controlled by the parameter &quot;depth&quot;.</span>
+<span class="sd">        The universe is build in its own coordinate system.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            U (int, optional): Value of the universe to convert. Default to None (root universe).</span>
+<span class="sd">            depth (int, optional): Depth level of the nested to considered. Default to -1 (all nested universes).&quot;&quot;&quot;</span>
+
+        <span class="n">UniverseCut</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1"># UnivCell is the virtual(infinite) cell container</span>
+        <span class="n">UnivCell</span> <span class="o">=</span> <span class="n">CadCell</span><span class="p">(</span><span class="n">settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">U</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">root_universe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">levels</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">root_universe</span> <span class="o">=</span> <span class="n">U</span>
+
+        <span class="n">UnivCell</span><span class="o">.</span><span class="n">FILL</span> <span class="o">=</span> <span class="n">root_universe</span>
+        <span class="n">UnivCell</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">UnivCell</span><span class="o">.</span><span class="n">MAT</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># read Cells and group into universes</span>
+        <span class="n">matcel_list</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;mat&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mat_range_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat_range</span><span class="p">),</span>
+            <span class="s2">&quot;cell&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_range_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_range</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="c1"># get all cells of the universe U and subuniverses in the FILL cell of universe U</span>
+        <span class="c1"># depth level for searching for nested universes</span>
+        <span class="n">UniverseCells</span><span class="p">,</span> <span class="n">modelSurfaces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">GetFilteredCells</span><span class="p">(</span><span class="n">root_universe</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">matcel_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">)</span>
+
+        <span class="c1"># assign to each cell the surfaces belonging to the cell</span>
+        <span class="n">AssignSurfaceToCell</span><span class="p">(</span><span class="n">UniverseCells</span><span class="p">,</span> <span class="n">modelSurfaces</span><span class="p">)</span>
+
+        <span class="n">Ustart</span> <span class="o">=</span> <span class="n">root_universe</span>
+        <span class="n">UnivCell</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">lev</span><span class="p">,</span> <span class="n">Univ</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">levels</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">Ustart</span> <span class="ow">in</span> <span class="n">Univ</span><span class="p">:</span>
+                <span class="n">UnivCell</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">lev</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">depth</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">levelMax</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">levels</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">levelMax</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">lev</span> <span class="o">+</span> <span class="n">depth</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">levels</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">startInfo</span> <span class="o">=</span> <span class="p">(</span><span class="n">Ustart</span><span class="p">,</span> <span class="n">levelMax</span><span class="p">)</span>
+        <span class="n">CADCells</span><span class="p">,</span> <span class="n">fails</span> <span class="o">=</span> <span class="n">BuildUniverseCells</span><span class="p">(</span><span class="n">startInfo</span><span class="p">,</span> <span class="n">UnivCell</span><span class="p">,</span> <span class="n">UniverseCells</span><span class="p">,</span> <span class="n">universeCut</span><span class="o">=</span><span class="n">UniverseCut</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buildCAD_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CADCells</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fails</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;failed cell conversion:&quot;</span><span class="p">,</span> <span class="n">fails</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CsgToCad.export_cad">
+<a class="viewcode-back" href="../../../python_api.html#geouned.CsgToCad.export_cad">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">export_cad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;export the CSG geometry in OpenMC or MCNP format to a CAD model.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            output_filename (str, optional): The filename stem and path of the output file created.</span>
+<span class="sd">                Two files will be created with the &#39;.step&#39; suffix and one with the &#39;FCStd&#39; suffix.</span>
+<span class="sd">                Defaults to name of the csg file + stp.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">output_filename</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">output_filename</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_filename</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
 
         <span class="n">Path</span><span class="p">(</span><span class="n">output_filename</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="n">UnivCell</span> <span class="o">=</span> <span class="n">CadCell</span><span class="p">()</span>
-        <span class="n">UnivCell</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">UnivCell</span><span class="o">.</span><span class="n">makeBox</span><span class="p">(</span><span class="n">FreeCAD</span><span class="o">.</span><span class="n">BoundBox</span><span class="p">(</span><span class="o">*</span><span class="n">bounding_box</span><span class="p">))</span>
+        <span class="n">fullname</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_filename</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">suffix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_filename</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span>
+        <span class="k">if</span> <span class="n">suffix</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">barename</span> <span class="o">=</span> <span class="n">fullname</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">suffix</span><span class="p">)]</span>
+            <span class="n">output_filename</span> <span class="o">=</span> <span class="n">output_filename</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">suffix</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">barename</span> <span class="o">=</span> <span class="n">fullname</span>
 
-        <span class="c1"># TODO make these variable names lower case in the downstream code</span>
-
-        <span class="n">CADselection</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;Ustart&quot;</span><span class="p">:</span> <span class="n">universe_start</span><span class="p">,</span>
-            <span class="s2">&quot;levelMax&quot;</span><span class="p">:</span> <span class="n">level_max</span><span class="p">,</span>
-            <span class="s2">&quot;cell&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">cell_range_type</span><span class="p">,</span> <span class="n">cell_range</span><span class="p">],</span>
-            <span class="s2">&quot;mat&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">mat_range_type</span><span class="p">,</span> <span class="n">mat_range</span><span class="p">],</span>
-            <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="n">csg_format</span><span class="p">,</span>
-            <span class="s2">&quot;cell_range_type&quot;</span><span class="p">:</span> <span class="n">cell_range_type</span><span class="p">,</span>
-            <span class="s2">&quot;cell_range&quot;</span><span class="p">:</span> <span class="n">cell_range</span><span class="p">,</span>
-            <span class="s2">&quot;mat_range_type&quot;</span><span class="p">:</span> <span class="n">mat_range_type</span><span class="p">,</span>
-            <span class="s2">&quot;mat_range&quot;</span><span class="p">:</span> <span class="n">mat_range</span><span class="p">,</span>
-        <span class="p">}</span>
-
-        <span class="c1"># TODO don&#39;t return fails variable, just fail in the method and raise the error there</span>
-        <span class="n">CADCells</span><span class="p">,</span> <span class="n">fails</span> <span class="o">=</span> <span class="n">buildCAD</span><span class="p">(</span><span class="n">UnivCell</span><span class="p">,</span> <span class="n">geo</span><span class="p">,</span> <span class="n">CADselection</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">fails</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;failed in conversion&quot;</span><span class="p">,</span> <span class="n">fails</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">suffix</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;.stp&quot;</span><span class="p">,</span> <span class="s2">&quot;.step&quot;</span><span class="p">):</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;.stp&quot;</span>
 
         <span class="n">CADdoc</span> <span class="o">=</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">newDocument</span><span class="p">(</span><span class="s2">&quot;converted_with_geouned&quot;</span><span class="p">)</span>
 
-        <span class="n">makeTree</span><span class="p">(</span><span class="n">CADdoc</span><span class="p">,</span> <span class="n">CADCells</span><span class="p">)</span>
-        <span class="n">Import</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">CADdoc</span><span class="o">.</span><span class="n">Objects</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">output_filename</span><span class="si">}</span><span class="s2">.step&quot;</span><span class="p">)</span>
+        <span class="n">CADobj</span> <span class="o">=</span> <span class="n">CADdoc</span><span class="o">.</span><span class="n">addObject</span><span class="p">(</span><span class="s2">&quot;App::Part&quot;</span><span class="p">,</span> <span class="s2">&quot;Universes&quot;</span><span class="p">)</span>
+        <span class="n">CADobj</span><span class="o">.</span><span class="n">Label</span> <span class="o">=</span> <span class="n">barename</span>
+
+        <span class="k">for</span> <span class="n">CAD</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">buildCAD_list</span><span class="p">:</span>
+            <span class="n">CADobj</span><span class="o">.</span><span class="n">addObject</span><span class="p">(</span><span class="n">makeTree</span><span class="p">(</span><span class="n">CADdoc</span><span class="p">,</span> <span class="n">CAD</span><span class="p">))</span>
+
+        <span class="n">Import</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">CADdoc</span><span class="o">.</span><span class="n">Objects</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">],</span> <span class="n">output_filename</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">)</span>
         <span class="n">CADdoc</span><span class="o">.</span><span class="n">saveAs</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">output_filename</span><span class="si">}</span><span class="s2">.FCStd&quot;</span><span class="p">)</span></div>
 </div>
 

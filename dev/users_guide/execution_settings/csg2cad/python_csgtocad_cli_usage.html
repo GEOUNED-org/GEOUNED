@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Command Line Tool Usage &#8212; GEOUNED 0.1.dev1+gab6f34c documentation</title>
+    <title>Command Line Tool Usage &#8212; GEOUNED 0.1.dev1+g8a68641 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=979cb8d6"></script>
+    <script src="../../../_static/documentation_options.js?v=71ad7e63"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'users_guide/execution_settings/csg2cad/python_csgtocad_cli_usage';</script>
@@ -55,7 +55,7 @@
     <link rel="prev" title="Python Package Usage" href="python_csgtocad_api_usage.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.dev1+gab6f34c" />
+  <meta name="docsearch:version" content="0.1.dev1+g8a68641" />
   </head>
   
   
@@ -440,60 +440,7 @@
                   
   <section id="command-line-tool-usage">
 <h1>Command Line Tool Usage<a class="headerlink" href="#command-line-tool-usage" title="Link to this heading">#</a></h1>
-<p>GEOUNED CSG to CAD conversion can be performed in the command line.</p>
-<p>Both OpenMC XML CSG and MCNP CSG formats are supported.</p>
-<p>The first example assumes you have an OpenMC XML CSG file in the current working directory of the terminal called “cylinder_box.xml”.</p>
-<p>The most minimal use case below shows a minimal config_openmc.json file being used.</p>
-<p>First create a JSON file called “config_openmc.json” containing the following.</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;export_cad&quot;</span><span class="p">:{</span>
-<span class="w">        </span><span class="nt">&quot;input_filename&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;cylinder_box.xml&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;csg_format&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;openmc_xml&quot;</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>Then execute the command line interface tool to convert your OpenMC XML CSG file to a STEP CAD file with the default configuration.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geouned_csgtocad<span class="w"> </span>-i<span class="w"> </span>config_openmc.json
-</pre></div>
-</div>
-<p>MCNP CSG files can also be converted, this example assumes you have a MCNP CSG file in te current working directory called “cylinder_box.mcnp”.</p>
-<p>For MCNP CSG files, the JSON config file should be as follows and is assumed to be named “config_mcnp.json”.</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;export_cad&quot;</span><span class="p">:{</span>
-<span class="w">        </span><span class="nt">&quot;input_filename&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;cylinder_box.mcnp&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;csg_format&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;mcnp&quot;</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>Then execute the command line interface tool to convert your MCNP CSG file to a STEP CAD file with the default configuration.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geouned_csgtocad<span class="w"> </span>-i<span class="w"> </span>config_mcnp.json
-</pre></div>
-</div>
-<p>The following example shows a usage with every attributes specified in the config.json file.</p>
-<p>The contents of the JSON file closely matches the Class arguments and method arguments when using the Python package.</p>
-<p>For a full description of each keyword see the <a class="reference external" href="../python_api.html">Python API reference section</a> of the documentation.</p>
-<p>Here is a complete JSON file specification</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="nt">&quot;export_cad&quot;</span><span class="p">:{</span>
-<span class="w">    </span><span class="nt">&quot;input_filename&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tests/csg_files/cylinder_box.xml&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;csg_format&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;openmc_xml&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;output_filename&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;cad_from_csg&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;bounding_box&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">-1000</span><span class="p">,</span><span class="w"> </span><span class="mi">-1000</span><span class="p">,</span><span class="w"> </span><span class="mi">-1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">],</span>
-<span class="w">    </span><span class="nt">&quot;universe_start&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;level_max&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;cell_range_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;cell_range&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span>
-<span class="w">    </span><span class="nt">&quot;mat_range_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;mat_range&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geouned_csgtocad<span class="w"> </span>-i<span class="w"> </span>config.json
-</pre></div>
-</div>
+<p>GEOUNED CSG to CAD conversion is not yet available with the new implementation.</p>
 </section>
 
 
