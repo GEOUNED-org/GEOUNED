@@ -5,9 +5,9 @@ def comments_write(name_path, MetaList):
     """Function to write in an independent file the comment strings"""
 
     Path(name_path).parent.mkdir(parents=True, exist_ok=True)
-    name = name_path.parent.absolute() / (name_path.name + "_summary.txt")
+    name = name_path.parent.absolute() / (name_path.name + "_comments.txt")
 
-    with open(file=name + "_comments.txt", mode="w", encoding="utf-8") as outfile:
+    with open(file=name, mode="w", encoding="utf-8") as outfile:
         for m in MetaList:
             outfile.write(m.Comments + "\n")
 
