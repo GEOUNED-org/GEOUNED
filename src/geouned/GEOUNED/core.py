@@ -11,6 +11,7 @@ import Part
 from tqdm import tqdm
 
 from .code_version import *
+from .utils.log_utils import setup_logger
 from .conversion import cell_definition as Conv
 from .cuboid.translate import translate
 from .decompose import decom_one as Decom
@@ -23,8 +24,6 @@ from .write.functions import write_mcnp_cell_def
 from .write.write_files import write_geometry
 
 logger = logging.getLogger("general_logger")
-logger.info(f"GEOUNED version {version('geouned')}")
-logger.info(f"FreeCAD version {'.'.join(FreeCAD.Version()[:3])}")
 
 
 class CadToCsg:
@@ -66,6 +65,14 @@ class CadToCsg:
         self.meta_list = []
         self.filename = None
         self.skip_solids = []
+
+        log_path = Path(self.settings.outPath) / "log_files"
+        log_path.mkdir(parents=True, exist_ok=True)
+        setup_logger("general_logger", log_path / "geouned_general.log")
+        setup_logger("fuzzy_logger", log_path / "geouned_fuzzy.log")
+        setup_logger("solids_logger", log_path / "geouned_solids.log")
+        logger.info(f"GEOUNED version {version('geouned')}")
+        logger.info(f"FreeCAD version {'.'.join(FreeCAD.Version()[:3])}")
 
     @property
     def options(self):
@@ -598,9 +605,9 @@ class CadToCsg:
                 continue
             logger.info(f"Decomposing solid: {i + 1}/{totsolid}")
             if self.settings.debug:
-                debug_output_folder = Path("debug")
-                logger.info(m.Comments)
+                debug_output_folder = Path(self.settings.outPath) / "debug"
                 debug_output_folder.mkdir(parents=True, exist_ok=True)
+                logger.info(m.Comments)
                 if m.IsEnclosure:
                     m.Solids[0].exportStep(str(debug_output_folder / f"origEnclosure_{i}.stp"))
                 else:
@@ -615,7 +622,7 @@ class CadToCsg:
             )
 
             if err != 0:
-                sus_output_folder = Path("suspicious_solids")
+                sus_output_folder = Path(self.settings.outPath) / "suspicious_solids"
                 sus_output_folder.mkdir(parents=True, exist_ok=True)
                 if m.IsEnclosure:
                     Part.CompSolid(m.Solids).exportStep(str(sus_output_folder / f"Enclosure_original_{i}.stp"))
