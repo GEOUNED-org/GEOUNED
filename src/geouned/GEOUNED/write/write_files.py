@@ -1,3 +1,4 @@
+from pathlib import Path
 from . import additional_files as OutFiles
 from .mcnp_format import McnpInput
 from .openmc_format import OpenmcInput
@@ -31,14 +32,17 @@ def write_geometry(
             msg = f"outFormat {out_format} not in supported MC codes ({supported_mc_codes})"
             raise ValueError(msg)
 
+    filePath = Path(settings.outPath)
+    pathName = filePath / geometryName
+
     # write cells comments in file
     if cellCommentFile:
-        OutFiles.comments_write(geometryName, MetaList)
+        OutFiles.comments_write(pathName, MetaList)
     if cellSummaryFile:
-        OutFiles.summary_write(geometryName, MetaList)
+        OutFiles.summary_write(pathName, MetaList)
 
     if "mcnp" in outFormat:
-        mcnpFilename = geometryName + ".mcnp"
+        mcnpFilename = filePath / (geometryName + ".mcnp")
         outBox = (
             UniverseBox.XMin,
             UniverseBox.XMax,
@@ -72,15 +76,15 @@ def write_geometry(
         OMCFile = OpenmcInput(MetaList, Surfaces, options, tolerances, numeric_format)
 
     if "openmc_xml" in outFormat:
-        omcFilename = geometryName + ".xml"
+        omcFilename = filePath / (geometryName + ".xml")
         OMCFile.write_xml(omcFilename)
 
     if "openmc_py" in outFormat:
-        omcFilename = geometryName + ".py"
+        omcFilename = filePath / (geometryName + ".py")
         OMCFile.write_py(omcFilename)
 
     if "serpent" in outFormat:
-        serpentFilename = geometryName + ".serp"
+        serpentFilename = filePath / (geometryName + ".serp")
         outBox = (
             UniverseBox.XMin,
             UniverseBox.XMax,
@@ -111,7 +115,7 @@ def write_geometry(
         Serpentfile.write_input(serpentFilename)
 
     if "phits" in outFormat:
-        phitsFilename = geometryName + ".inp"
+        phitsFilename = filePath / (geometryName + ".inp")
         PHITS_outBox = (
             UniverseBox.XMin,
             UniverseBox.XMax,
