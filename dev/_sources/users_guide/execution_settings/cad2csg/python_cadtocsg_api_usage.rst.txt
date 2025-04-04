@@ -39,6 +39,7 @@ The following example shows a usage with every attributes specified.
     )
 
     my_settings = geouned.Settings(
+        outPath=".",
         matFile="",
         voidGen=True,
         debug=False,
