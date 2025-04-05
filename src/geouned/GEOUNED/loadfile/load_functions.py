@@ -66,9 +66,9 @@ def fuse_meta_obj(meta_list, init, end):
         if m.Solids is not None:
             solids.extend(m.Solids)
 
-    if len(solids) > 0 :
+    if len(solids) > 0:
         new_meta = GeounedSolid(init + 1, solids)
-    else:    
+    else:
         new_meta = GeounedSolid(init + 1)
     new_meta.EnclosureID = meta_list[init].EnclosureID
     new_meta.ParentEnclosureID = meta_list[init].ParentEnclosureID
@@ -371,9 +371,10 @@ def next_index(docList, lastIndex=None):
 
 def spline(solid):
     for f in solid.Faces:
-        if isinstance(f.Surface, (Part.BSplineSurface,  Part.SurfaceOfRevolution, Part.SurfaceOfExtrusion)) :
+        if isinstance(f.Surface, (Part.BSplineSurface, Part.SurfaceOfRevolution, Part.SurfaceOfExtrusion)):
             return True
-    return False    
+    return False
+
 
 # TODO check this function is used in the code
 def solid_generator(doclist):

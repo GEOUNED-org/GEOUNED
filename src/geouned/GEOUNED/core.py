@@ -271,7 +271,7 @@ class CadToCsg:
         self,
         filename: typing.Union[str, typing.Sequence[str]],
         skip_solids: typing.Sequence[int] = [],
-        spline_surfaces: str = 'stop'
+        spline_surfaces: str = "stop",
     ):
         """
         Load STEP file(s) and extract solid volumes and enclosure volumes.
@@ -279,7 +279,7 @@ class CadToCsg:
         Args:
             filename (str): The path to the STEP file or a list of paths to multiple STEP files.
             skip_solids (Sequence[int], optional): A sequence (list or tuple) of indexes of solids to not load for conversion.
-            spline_surfaces (str): Behavior of the code if solids with spline surface are considered: 'stop' execution, 'remove' solid, 
+            spline_surfaces (str): Behavior of the code if solids with spline surface are considered: 'stop' execution, 'remove' solid,
                                    'ignore' solid is included for translation (may lead to translation errors)
 
         Returns:
@@ -299,11 +299,11 @@ class CadToCsg:
             for entry in filename:
                 if not isinstance(entry, str):
                     raise TypeError(f"filename should contain only str, not a {type(entry)}")
-                
+
         if not isinstance(spline_surfaces, str):
             raise TypeError(f"filename should be a str, not a {type(filename)}")
-        if spline_surfaces.lower() not in ('stop', 'remove', 'ignore'):
-            raise TypeError(f"available values for spline_surfaces are: \"stop\", \"remove\" or \"ignore\" ")        
+        if spline_surfaces.lower() not in ("stop", "remove", "ignore"):
+            raise TypeError(f'available values for spline_surfaces are: "stop", "remove" or "ignore" ')
 
         self.filename = filename
         self.skip_solids = skip_solids
@@ -334,8 +334,8 @@ class CadToCsg:
 
         for m in reversed(self.enclosure_list):
             if m.Solids is None:
-                print('stop because spline surfaces found in enclosure solid')
-                exit ()
+                print("stop because spline surfaces found in enclosure solid")
+                exit()
 
         for m in reversed(self.meta_list):
             if m.Solids is None:
@@ -401,9 +401,9 @@ class CadToCsg:
         return self.geometry_bounding_box
 
     def start(self):
-        
+
         if len(self.meta_list) == 0:
-            print('no solid selected to translate')
+            print("no solid selected to translate")
             exit()
 
         startTime = datetime.now()

@@ -60,14 +60,14 @@ def load_cad(filename, spline_surf, settings, options):
             spline_solids.append(str(i))
             if loop:
                 meta_list.append(UF.GeounedSolid(i + 1))
-                continue            
+                continue
         meta_list.append(UF.GeounedSolid(i + 1, s))
 
     if len(spline_solids) > 0:
-        print('following solids have Spline surfaces:')
-        print(', '.join(spline_solids))
-        if spline_surf.lower() == 'stop':
-            print('spline surfaces found. Exit.')
+        print("following solids have Spline surfaces:")
+        print(", ".join(spline_solids))
+        if spline_surf.lower() == "stop":
+            print("spline surfaces found. Exit.")
             exit()
 
     i_solid = 0
