@@ -31,7 +31,7 @@ def extract_materials(filename):
     return m_dict
 
 
-def load_cad(filename, settings, options):
+def load_cad(filename, spline_surf, settings, options):
 
     # Set document solid tree options when opening CAD differing from version 0.18
     if int(FreeCAD.Version()[1]) > 18:
@@ -53,8 +53,22 @@ def load_cad(filename, settings, options):
     s.read(filename)
     Solids = s.Solids
     meta_list = []
+    spline_solids = []
+    loop = spline_surf.lower() in ("remove", "stop")
     for i, s in enumerate(Solids):
+        if LF.spline(s):
+            spline_solids.append(str(i))
+            if loop:
+                meta_list.append(UF.GeounedSolid(i + 1))
+                continue            
         meta_list.append(UF.GeounedSolid(i + 1, s))
+
+    if len(spline_solids) > 0:
+        print('following solids have Spline surfaces:')
+        print(', '.join(spline_solids))
+        if spline_surf.lower() == 'stop':
+            print('spline surfaces found. Exit.')
+            exit()
 
     i_solid = 0
     missing_mat = set()
