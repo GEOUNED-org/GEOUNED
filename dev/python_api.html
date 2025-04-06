@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Python API reference &#8212; GEOUNED 0.1.dev1+g31af217 documentation</title>
+    <title>Python API reference &#8212; GEOUNED 0.1.dev1+g89cea71 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=c8b0758d"></script>
+    <script src="_static/documentation_options.js?v=58431279"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'python_api';</script>
@@ -55,7 +55,7 @@
     <link rel="prev" title="Void Generation" href="users_guide/void_generation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.dev1+g31af217" />
+  <meta name="docsearch:version" content="0.1.dev1+g89cea71" />
   </head>
   
   
@@ -768,13 +768,15 @@ then this method also runs CadToCsg.export_to_csg() on the instance.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geouned.CadToCsg.load_step_file">
-<span class="sig-name descname"><span class="pre">load_step_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_solids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geouned/GEOUNED/core.html#CadToCsg.load_step_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geouned.CadToCsg.load_step_file" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">load_step_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_solids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spline_surfaces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'stop'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geouned/GEOUNED/core.html#CadToCsg.load_step_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geouned.CadToCsg.load_step_file" title="Link to this definition">#</a></dt>
 <dd><p>Load STEP file(s) and extract solid volumes and enclosure volumes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<em>str</em>) – The path to the STEP file or a list of paths to multiple STEP files.</p></li>
 <li><p><strong>skip_solids</strong> (<em>Sequence</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – A sequence (list or tuple) of indexes of solids to not load for conversion.</p></li>
+<li><p><strong>spline_surfaces</strong> (<em>str</em>) – Behavior of the code if solids with spline surface are considered: ‘stop’ execution, ‘remove’ solid,
+‘ignore’ solid is included for translation (may lead to translation errors)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

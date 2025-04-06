@@ -100,6 +100,7 @@ The following example shows a usage with every attributes specified.
     geo.load_step_file(
         filename="cuboid.stp",
         skip_solids=[],
+        spline_surfaces='stop',
     )
 
     geo.start()
