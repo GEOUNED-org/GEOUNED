@@ -2,6 +2,7 @@ import logging
 import re
 
 import FreeCAD
+import Part
 
 from ..utils.functions import GeounedSolid
 
@@ -62,9 +63,13 @@ def fuse_meta_obj(meta_list, init, end):
         return
     solids = []
     for m in meta_list[init:end]:
-        solids.extend(m.Solids)
+        if m.Solids is not None:
+            solids.extend(m.Solids)
 
-    new_meta = GeounedSolid(init + 1, solids)
+    if len(solids) > 0:
+        new_meta = GeounedSolid(init + 1, solids)
+    else:
+        new_meta = GeounedSolid(init + 1)
     new_meta.EnclosureID = meta_list[init].EnclosureID
     new_meta.ParentEnclosureID = meta_list[init].ParentEnclosureID
     new_meta.IsEnclosure = meta_list[init].IsEnclosure
@@ -362,6 +367,13 @@ def next_index(docList, lastIndex=None):
             move = True
             if len(tmp) == 0:
                 return None
+
+
+def spline(solid):
+    for f in solid.Faces:
+        if isinstance(f.Surface, (Part.BSplineSurface, Part.SurfaceOfRevolution, Part.SurfaceOfExtrusion)):
+            return True
+    return False
 
 
 # TODO check this function is used in the code
