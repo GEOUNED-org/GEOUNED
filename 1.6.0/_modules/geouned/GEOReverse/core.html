@@ -1,0 +1,731 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>geouned.GEOReverse.core &#8212; GEOUNED 1.6.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=72d88caf"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/geouned/GEOReverse/core';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/GEOUNED-org/GEOUNED/dev/docs/version_switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.6';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.6.0" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+    
+      <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/GEOUNED-org/GEOUNED" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quick_install_guide.html">
+    Quick Install Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../example_of_use.html">
+    Example of use
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../users_guide/index.html">
+    Users Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../python_api.html">
+    Python API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developers_guide.html">
+    Developers guide
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/GEOUNED-org/GEOUNED" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quick_install_guide.html">
+    Quick Install Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../example_of_use.html">
+    Example of use
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../users_guide/index.html">
+    Users Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../python_api.html">
+    Python API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developers_guide.html">
+    Developers guide
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/GEOUNED-org/GEOUNED" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">geouned.GEOReverse.core</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for geouned.GEOReverse.core</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">FreeCAD</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">Import</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.buildCAD</span><span class="w"> </span><span class="kn">import</span> <span class="n">makeTree</span><span class="p">,</span> <span class="n">AssignSurfaceToCell</span><span class="p">,</span> <span class="n">BuildUniverseCells</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.Utils.booleanFunction</span><span class="w"> </span><span class="kn">import</span> <span class="n">BoolSequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.Utils.boundBox</span><span class="w"> </span><span class="kn">import</span> <span class="n">solid_plane_box</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.data_class</span><span class="w"> </span><span class="kn">import</span> <span class="n">BoxSettings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.Objects</span><span class="w"> </span><span class="kn">import</span> <span class="n">CadCell</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.MCNPinput</span><span class="w"> </span><span class="kn">import</span> <span class="n">McnpInput</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.XMLinput</span><span class="w"> </span><span class="kn">import</span> <span class="n">XmlInput</span>
+
+
+<div class="viewcode-block" id="CsgToCad">
+<a class="viewcode-back" href="../../../python_api.html#geouned.CsgToCad">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CsgToCad</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for the conversion of CSG to CAD models</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        BoxSettings (geouned.BoxSettings, optional): Adjust the default parameters</span>
+<span class="sd">        for the solid boundbox creation. Defaults to a geouned.BoxSettings with default</span>
+<span class="sd">        attributes values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">BoxSettings</span> <span class="o">=</span> <span class="n">BoxSettings</span><span class="p">()):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_range_type</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_range</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mat_range_type</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mat_range</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buildCAD_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="CsgToCad.read_csg_file">
+<a class="viewcode-back" href="../../../python_api.html#geouned.CsgToCad.read_csg_file">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_csg_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">csg_format</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reads the geometry definition from MCNP or OpenMC XML input.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            input_filename (str): The filename and path of the input CSG text file.</span>
+<span class="sd">            csg_format (str): The format of the CSG input file, options are &#39;mcnp&#39; or &#39;openmc_xml&#39;</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the csg_format is not &#39;openmc_xml&#39; or &#39;mcnp&#39; then a ValueError is raised.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">csg_format</span> <span class="o">==</span> <span class="s2">&quot;mcnp&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">McnpInput</span><span class="p">(</span><span class="n">input_filename</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">csg_format</span> <span class="o">==</span> <span class="s2">&quot;openmc_xml&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">XmlInput</span><span class="p">(</span><span class="n">input_filename</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;input format type </span><span class="si">{</span><span class="n">csg_format</span><span class="si">}</span><span class="s2"> is not supported. Supported options are &#39;openmc_xml&#39; or &#39;mcnp&#39;&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="c1"># read all surfaces definition</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_filename</span> <span class="o">=</span> <span class="n">input_filename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">GetSurfaces</span><span class="p">()</span>  <span class="c1"># scale units change are carried out in GetSurfaces method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">GetLevelStructure</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="CsgToCad.cell_filter">
+<a class="viewcode-back" href="../../../python_api.html#geouned.CsgToCad.cell_filter">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cell_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">cells</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Selects the cells to build from the CSG geometry in MCNP or OpenMC format and export to the CAD model.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            type (str, optional): Filtering type. Allowed values &quot;all&quot;, &quot;include&quot;, &quot;exclude&quot;. Default to all.</span>
+<span class="sd">            cells (None, list, tuple, optional): List of cells to include or exclude. If type is &quot;all&quot; has no effect. Default to None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">type</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;include&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cell_range_type</span> <span class="o">=</span> <span class="nb">type</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cell_range_type</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;bad cells range type. Ignored&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">cells</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cell_range</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_range_type</span> <span class="o">==</span> <span class="s2">&quot;exclude&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cell_range_type</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span></div>
+
+
+<div class="viewcode-block" id="CsgToCad.material_filter">
+<a class="viewcode-back" href="../../../python_api.html#geouned.CsgToCad.material_filter">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">material_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">materials</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Selects the materials of the cells to build from the CSG geometry in MCNP or OpenMC format and export to the CAD model.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            type (str, optional): Filtering type. Allowed values &quot;all&quot;, &quot;include&quot;, &quot;exclude&quot;. Default to all.</span>
+<span class="sd">            materials (None, list, tuple, optional): List of cells to include or exclude. If type is &quot;all&quot; has no effect. Default to None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">type</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;exclude&quot;</span><span class="p">,</span> <span class="s2">&quot;include&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mat_range_type</span> <span class="o">=</span> <span class="nb">type</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mat_range_type</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;bad cells range type. Ignored&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">materials</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mat_range</span> <span class="o">=</span> <span class="n">materials</span><span class="p">[:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat_range_type</span> <span class="o">==</span> <span class="s2">&quot;exclude&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mat_range_type</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span></div>
+
+
+<div class="viewcode-block" id="CsgToCad.build_container">
+<a class="viewcode-back" href="../../../python_api.html#geouned.CsgToCad.build_container">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build_container</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell_label</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build the universe contained in the cell &quot;cell_label&quot;. The level of nested universes to consider is</span>
+<span class="sd">        controlled by the parameter &quot;depth&quot;. The universe is located inside the container cell according to the transformation.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cell_label (int): Label of the cell containing the universe to convert.</span>
+<span class="sd">            depth (int, optional): Depth level of the nested to considered. Default to -1 (all nested universes).&quot;&quot;&quot;</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Build container cell </span><span class="si">{</span><span class="n">cell_label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># get and build container universe</span>
+        <span class="n">UnivCell</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">GetCell</span><span class="p">(</span><span class="n">cell_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">)</span>
+        <span class="n">UnivCell</span><span class="o">.</span><span class="n">definition</span> <span class="o">=</span> <span class="n">BoolSequence</span><span class="p">(</span><span class="n">UnivCell</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">str</span><span class="p">)</span>
+
+        <span class="n">UnivCell</span><span class="o">.</span><span class="n">build_BoundBox</span><span class="p">(</span><span class="n">enlarge</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">UnivCell</span><span class="o">.</span><span class="n">boundBox</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span> <span class="ow">and</span> <span class="n">UnivCell</span><span class="o">.</span><span class="n">boundBox</span><span class="o">.</span><span class="n">Box</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">UnivCell</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cell </span><span class="si">{</span><span class="n">UnivCell</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> BoundBox is null&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">UnivCell</span><span class="o">.</span><span class="n">boundBox</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span><span class="p">:</span>
+                <span class="n">UnivCell</span><span class="o">.</span><span class="n">externalBox</span> <span class="o">=</span> <span class="n">UnivCell</span><span class="o">.</span><span class="n">boundBox</span>
+
+        <span class="n">debug</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="n">UnivCell</span><span class="o">.</span><span class="n">buildShape</span><span class="p">(</span><span class="n">simplify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">UnivCell</span><span class="o">.</span><span class="n">buildShape</span><span class="p">(</span><span class="n">simplify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;fail converting cell </span><span class="si">{</span><span class="n">UnivCell</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># generate universe cells inside container</span>
+        <span class="n">matcel_list</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;mat&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mat_range_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat_range</span><span class="p">),</span>
+            <span class="s2">&quot;cell&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_range_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_range</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="n">UniverseCells</span><span class="p">,</span> <span class="n">modelSurfaces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">GetFilteredCells</span><span class="p">(</span><span class="n">UnivCell</span><span class="o">.</span><span class="n">FILL</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">matcel_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">)</span>
+        <span class="n">AssignSurfaceToCell</span><span class="p">(</span><span class="n">UniverseCells</span><span class="p">,</span> <span class="n">modelSurfaces</span><span class="p">)</span>
+
+        <span class="n">Ustart</span> <span class="o">=</span> <span class="n">UnivCell</span><span class="o">.</span><span class="n">FILL</span>
+        <span class="n">UnivCell</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">lev</span><span class="p">,</span> <span class="n">Univ</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">levels</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">Ustart</span> <span class="ow">in</span> <span class="n">Univ</span><span class="p">:</span>
+                <span class="n">UnivCell</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">lev</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">depth</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">levelMax</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">levels</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">levelMax</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">lev</span> <span class="o">+</span> <span class="n">depth</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">levels</span><span class="p">))</span>
+
+        <span class="n">startInfo</span> <span class="o">=</span> <span class="p">(</span><span class="n">Ustart</span><span class="p">,</span> <span class="n">levelMax</span><span class="p">)</span>
+        <span class="n">CADCells</span><span class="p">,</span> <span class="n">fails</span> <span class="o">=</span> <span class="n">BuildUniverseCells</span><span class="p">(</span><span class="n">startInfo</span><span class="p">,</span> <span class="n">UnivCell</span><span class="p">,</span> <span class="n">UniverseCells</span><span class="p">,</span> <span class="n">universeCut</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fails</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;failed cell conversion:&quot;</span><span class="p">,</span> <span class="n">fails</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buildCAD_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CADCells</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CsgToCad.build_universe">
+<a class="viewcode-back" href="../../../python_api.html#geouned.CsgToCad.build_universe">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build_universe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">U</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build the universe U. The level of nested universes is to consider is controlled by the parameter &quot;depth&quot;.</span>
+<span class="sd">        The universe is build in its own coordinate system.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            U (int, optional): Value of the universe to convert. Default to None (root universe).</span>
+<span class="sd">            depth (int, optional): Depth level of the nested to considered. Default to -1 (all nested universes).&quot;&quot;&quot;</span>
+
+        <span class="n">UniverseCut</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1"># UnivCell is the virtual(infinite) cell container</span>
+        <span class="n">UnivCell</span> <span class="o">=</span> <span class="n">CadCell</span><span class="p">(</span><span class="n">settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">U</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">root_universe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">levels</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">root_universe</span> <span class="o">=</span> <span class="n">U</span>
+
+        <span class="n">UnivCell</span><span class="o">.</span><span class="n">FILL</span> <span class="o">=</span> <span class="n">root_universe</span>
+        <span class="n">UnivCell</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">UnivCell</span><span class="o">.</span><span class="n">MAT</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># read Cells and group into universes</span>
+        <span class="n">matcel_list</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;mat&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mat_range_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat_range</span><span class="p">),</span>
+            <span class="s2">&quot;cell&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_range_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_range</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="c1"># get all cells of the universe U and subuniverses in the FILL cell of universe U</span>
+        <span class="c1"># depth level for searching for nested universes</span>
+        <span class="n">UniverseCells</span><span class="p">,</span> <span class="n">modelSurfaces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">GetFilteredCells</span><span class="p">(</span><span class="n">root_universe</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">matcel_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">)</span>
+
+        <span class="c1"># assign to each cell the surfaces belonging to the cell</span>
+        <span class="n">AssignSurfaceToCell</span><span class="p">(</span><span class="n">UniverseCells</span><span class="p">,</span> <span class="n">modelSurfaces</span><span class="p">)</span>
+
+        <span class="n">Ustart</span> <span class="o">=</span> <span class="n">root_universe</span>
+        <span class="n">UnivCell</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">lev</span><span class="p">,</span> <span class="n">Univ</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">levels</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">Ustart</span> <span class="ow">in</span> <span class="n">Univ</span><span class="p">:</span>
+                <span class="n">UnivCell</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">lev</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">depth</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">levelMax</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">levels</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">levelMax</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">lev</span> <span class="o">+</span> <span class="n">depth</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">levels</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">startInfo</span> <span class="o">=</span> <span class="p">(</span><span class="n">Ustart</span><span class="p">,</span> <span class="n">levelMax</span><span class="p">)</span>
+        <span class="n">CADCells</span><span class="p">,</span> <span class="n">fails</span> <span class="o">=</span> <span class="n">BuildUniverseCells</span><span class="p">(</span><span class="n">startInfo</span><span class="p">,</span> <span class="n">UnivCell</span><span class="p">,</span> <span class="n">UniverseCells</span><span class="p">,</span> <span class="n">universeCut</span><span class="o">=</span><span class="n">UniverseCut</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buildCAD_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CADCells</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fails</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;failed cell conversion:&quot;</span><span class="p">,</span> <span class="n">fails</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CsgToCad.export_cad">
+<a class="viewcode-back" href="../../../python_api.html#geouned.CsgToCad.export_cad">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">export_cad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;export the CSG geometry in OpenMC or MCNP format to a CAD model.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            output_filename (str, optional): The filename stem and path of the output file created.</span>
+<span class="sd">                Two files will be created with the &#39;.step&#39; suffix and one with the &#39;FCStd&#39; suffix.</span>
+<span class="sd">                Defaults to name of the csg file + stp.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">output_filename</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">output_filename</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_filename</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="n">Path</span><span class="p">(</span><span class="n">output_filename</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">fullname</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_filename</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">suffix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_filename</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span>
+        <span class="k">if</span> <span class="n">suffix</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">barename</span> <span class="o">=</span> <span class="n">fullname</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">suffix</span><span class="p">)]</span>
+            <span class="n">output_filename</span> <span class="o">=</span> <span class="n">output_filename</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">suffix</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">barename</span> <span class="o">=</span> <span class="n">fullname</span>
+
+        <span class="k">if</span> <span class="n">suffix</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;.stp&quot;</span><span class="p">,</span> <span class="s2">&quot;.step&quot;</span><span class="p">):</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;.stp&quot;</span>
+
+        <span class="n">CADdoc</span> <span class="o">=</span> <span class="n">FreeCAD</span><span class="o">.</span><span class="n">newDocument</span><span class="p">(</span><span class="s2">&quot;converted_with_geouned&quot;</span><span class="p">)</span>
+
+        <span class="n">CADobj</span> <span class="o">=</span> <span class="n">CADdoc</span><span class="o">.</span><span class="n">addObject</span><span class="p">(</span><span class="s2">&quot;App::Part&quot;</span><span class="p">,</span> <span class="s2">&quot;Universes&quot;</span><span class="p">)</span>
+        <span class="n">CADobj</span><span class="o">.</span><span class="n">Label</span> <span class="o">=</span> <span class="n">barename</span>
+
+        <span class="k">for</span> <span class="n">CAD</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">buildCAD_list</span><span class="p">:</span>
+            <span class="n">CADobj</span><span class="o">.</span><span class="n">addObject</span><span class="p">(</span><span class="n">makeTree</span><span class="p">(</span><span class="n">CADdoc</span><span class="p">,</span> <span class="n">CAD</span><span class="p">))</span>
+
+        <span class="n">Import</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">CADdoc</span><span class="o">.</span><span class="n">Objects</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">],</span> <span class="n">output_filename</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">)</span>
+        <span class="n">CADdoc</span><span class="o">.</span><span class="n">saveAs</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">output_filename</span><span class="si">}</span><span class="s2">.FCStd&quot;</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, UNED.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
