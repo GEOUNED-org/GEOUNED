@@ -4,11 +4,7 @@
 import logging
 import math
 
-import FreeCAD
-
 from .basic_functions_part1 import (
-    is_in_line,
-    is_in_plane,
     is_in_tolerance,
     is_opposite,
     is_parallel,

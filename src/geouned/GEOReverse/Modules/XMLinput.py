@@ -22,52 +22,59 @@ class XmlInput:
         self.__inputcards__ = list(get_cards(root))
         return
 
-    def GetFilteredCells(self, Surfaces, config):
-        levels, contLevels, Universes = self.GetLevelStructure()
+    def GetFilteredCells(self, Ustart, depth, matcel_list, settings):
+
+        if depth == 0:
+            Ukeys = (Ustart,)
+        else:
+            subUniverses = getSubUniverses(Ustart, self.Universes)
+            subUniverses.add(Ustart)
+
+            for lev, Univ in self.levels.items():
+                if Ustart in Univ:
+                    break
+            else:
+                raise ValueError(f"Universe {Ustart} not found in the model")
+
+            if depth == -1:
+                levelMax = len(self.levels) - 1
+            else:
+                levelMax = min(lev + depth, len(self.levels) - 1)
+
+            levelUniverse = set()
+            for clev in range(lev, levelMax + 1):
+                for U in self.levels[clev]:
+                    levelUniverse.add(U)
+
+            # select only universes wich are subuniverse of Ustart
+            subUniverses = subUniverses.intersection(levelUniverse)
+            Ukeys = list(self.Universes.keys())
+            for U in Ukeys:
+                if U not in subUniverses:
+                    Ukeys.remove(U)
 
         FilteredCells = {}
-
-        Ustart = config["Ustart"]
-        subUniverses = getSubUniverses(Ustart, Universes)
-        subUniverses.add(Ustart)
-
-        if config["levelMax"] == "all":
-            levelMax = len(levels)
-        else:
-            levelMax = config["levelMax"] + 1
-
-        levelUniverse = set()
-        for lev in range(0, levelMax):
-            for U in levels[lev]:
-                levelUniverse.add(U)
-        subUniverses = subUniverses.intersection(levelUniverse)
-
-        for U in list(Universes.keys()):
-            if U not in subUniverses:
-                del Universes[U]
-
-        for U in Universes.keys():
-            FilteredCells[U] = selectCells(Universes[U], config)
-            processSurfaces(FilteredCells[U], Surfaces)
+        for U in Ukeys:
+            FilteredCells[U] = selectCells(self.Universes[U], matcel_list)
+            processSurfaces(FilteredCells[U], self.surfaces)
 
         # change the surface name in surface dict
         newSurfaces = {}
-        for k in Surfaces.keys():
-            newkey = Surfaces[k].id
-            newSurfaces[newkey] = Surfaces[k]
+        for k in self.surfaces.keys():
+            newkey = self.surfaces[k].id
+            newSurfaces[newkey] = self.surfaces[k]
 
         for U, universe in FilteredCells.items():
-
             # set cell as CAD cell Object
             for cname, c in universe.items():
-                # print(cname,c.geom.str)
-                universe[cname] = CadCell(c)
+                universe[cname] = CadCell(c, settings=settings)
 
-        return levels, FilteredCells, newSurfaces
+        return FilteredCells, newSurfaces
 
     def GetLevelStructure(self):
         containers = []
         Universe_dict = {}
+        containers_label = set()
 
         for c in self.__inputcards__:
             if c.type != "cell":
@@ -78,24 +85,34 @@ class XmlInput:
 
             if c.FILL:
                 containers.append(c)
+                containers_label.append(c.FILL)
 
-        currentLevel = [0]
+        if 0 in Universe_dict.keys():
+            root_universe = 0
+        else:
+            for k in Universe_dict.keys():
+                if k not in containers_label:
+                    root_universe = k
+                    break
+
+        # check all Universe have container cell
+        for k in Universe_dict.keys():
+            if k not in containers_label and k != root_universe:
+                raise RuntimeError(f"Universe {k} has not container cell.")
+
+        currentLevel = [root_universe]
         nextLevel = []
-        contLevel = {0: [(0, 0)]}
-        univLevel = {0: {0}}
+        univLevel = {0: {root_universe}}
         level = 0
 
         while True:
             level += 1
-            contLevel[level] = []
             univLevel[level] = set()
             for c in reversed(containers):
                 if c.U in currentLevel:
                     c.Level = level
                     nextLevel.append(c.FILL)
-                    contLevel[level].append((c.U, c.name))
                     univLevel[level].add(c.FILL)
-
                     containers.remove(c)
 
             if nextLevel == []:
@@ -103,7 +120,30 @@ class XmlInput:
             currentLevel = nextLevel
             nextLevel = []
 
-        return univLevel, contLevel, Universe_dict
+        lmax = len(univLevel)
+        del univLevel[lmax - 1]
+        for k in univLevel.keys():
+            univLevel[k] = tuple(univLevel[k])
+        self.levels = univLevel
+        self.Universes = Universe_dict
+        return
+
+    def GetCell(self, name, settings):
+        for c in self.__inputcards__:
+            if c.ctype != "cell":
+                continue
+            if c.name != name:
+                continue
+
+            processSurfaces({c.name: c}, self.surfaces)
+            newSurfaces = {}
+            for k in self.surfaces.keys():
+                newkey = self.surfaces[k].id
+                newSurfaces[newkey] = self.surfaces[k]
+
+            c = CadCell(c, settings=settings)
+            c.setSurfaces(newSurfaces)
+            return c
 
     def GetCells(self, U=None, Fill=None):
         cell_cards = {}
@@ -121,17 +161,17 @@ class XmlInput:
 
         return cell_cards
 
-    def GetSurfaces(self, scale=1.0):
+    def GetSurfaces(self):
         surf_cards = {}
         number = 1
+        scale = 1.0  # don't change CAD units
         for c in self.__inputcards__:
             if c.type != "surface":
                 continue
             surf_cards[c.name] = (c.stype, c.scoefs, number)
             number += 1
 
-        # return surface as surface Objects type
-        return Get_primitive_surfaces(surf_cards, scale)
+        self.surfaces = Get_primitive_surfaces(surf_cards, scale)
 
 
 def selectCells(cellList, config):
@@ -393,15 +433,15 @@ def Get_primitive_surfaces(mcnp_surfaces, scale=10.0):
         #                get_quadric_surface(params)
 
         if Stype == "plane":
-            surfaces[Sid] = Plane(number, params)
+            surfaces[Sid] = Plane(Sid, number, params)
         elif Stype == "sphere":
-            surfaces[Sid] = Sphere(number, params)
+            surfaces[Sid] = Sphere(Sid, number, params)
         elif Stype == "cylinder":
-            surfaces[Sid] = Cylinder(number, params)
+            surfaces[Sid] = Cylinder(Sid, number, params)
         elif Stype == "cone":
-            surfaces[Sid] = Cone(number, params)
+            surfaces[Sid] = Cone(Sid, number, params)
         elif Stype == "torus":
-            surfaces[Sid] = Torus(number, params)
+            surfaces[Sid] = Torus(Sid, number, params)
         else:
             print("Undefined", Sid)
             print(MCNPtype, number, MCNPparams)

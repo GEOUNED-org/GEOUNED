@@ -39,6 +39,7 @@ The following example shows a usage with every attributes specified.
     )
 
     my_settings = geouned.Settings(
+        outPath=".",
         matFile="",
         voidGen=True,
         debug=False,
@@ -99,6 +100,7 @@ The following example shows a usage with every attributes specified.
     geo.load_step_file(
         filename="cuboid.stp",
         skip_solids=[],
+        spline_surfaces='stop',
     )
 
     geo.start()

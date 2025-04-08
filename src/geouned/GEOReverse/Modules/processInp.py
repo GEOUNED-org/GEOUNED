@@ -1,6 +1,6 @@
 import configparser
 
-from .options import Options
+from .data_class import Options
 
 
 def setOptions(optionFile):

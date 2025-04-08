@@ -12,6 +12,7 @@ for use in MCNP. It includes the methodology and rationale behind the process.
 3. `Conversion to CSG`_
 4. `Suspicious solids and debug`_
 5. `Void check verification`_
+6. `Conversion to CAD`_
 
 .. _CAD simplification:
 
@@ -105,3 +106,77 @@ mean that the volume of the solid is not correct.
 .. warning:: The void check simulation should be run with a high number of particles to 
     achieve an acceptable statistical error. An usually number is 1e9 particles. Always
     check that the statistical error of the tallies is below 0.1.
+
+.. _Conversion to CAD:
+
+Conversion to CAD
+~~~~~~~~~~~~~~~~~
+
+The below code is run in a Python environment with GEOUNED installed. In the comments
+of the code there is an explanation of the parameters used. The following example is a
+basic use of conversion from CSG to CAD, it will convert all the cells present in the model.
+
+.. code-block:: python
+
+    import geouned
+
+    geo = geouned.CsgToCad()
+    print("Read model")
+    geo.read_csg_file('CSG_model.txt', 'mcnp')  # Path to the CSG file, and code (MCNP/openMC) input type.
+    print("Start conversion to CAD")
+    geo.build_universe()
+    print("Write stp file")
+    geo.export_cad()
+    
+
+Instead of translating the full model, only specific universes can be selected for conversion.
+
+.. code-block:: python
+
+    # Universe 100 is converted, nested universes present in this universe will not be converted to CAD,
+    # only the container cell will be represented.   
+    geo.build_universe(100, depth=0)
+
+    # Universe 200 is converted, all the nested universes present in this universe (only one sublevel) will
+    # be converted to CAD.    
+    geo.build_universe(200, depth=1) 
+
+        # Universe 300 is converted, all nested universes present in this universe (and all sub-universes, if any)
+    # will be converted to CAD.   
+    geo.build_universe(300, depth=-1) 
+
+In the previous example universes are translated and CAD solids are built using the universe own system of coordinates.
+Using the method `build_container` the universe in build inside the container cell and located at the position incated
+by the container. In the following example level 0 cells are translated with the universes contained in the selected 
+container cells.
+
+.. code-block:: python
+
+    # Upper universe is converted. Nested universes are not converted   
+    geo.build_universe(0, depth=0)
+
+    # Universe 100 contained in the cell 1100, and universe 200 contained in the cell 1200 are are converted.
+    # For universe 100 all nested universes will be converted. For universe 200 only cells of this universe 
+    # will be converted (depth=0).    
+    geo.build_container(1100)
+    geo.build_container(1200,depth=0)
+
+    # export step with a new filename
+    geo.export_cad('base_and_U100_U200.stp')    
+
+
+Cells or materials can be filtered for conversion (included or excluced). By default all cells are converted.
+The cell/materials selection is carried out using the `cell_filter`` and `material_filter` methods.
+
+.. code-block:: python
+
+    geo.material_filter('exclude',(0,11,400)) # any cells with material number 0, 11 or 400 will not be converted 
+                                              # (doesn't apply for containers)   
+    geo.build_universe()
+
+
+.. code-block:: python
+
+    cells = [i for i in range(1,101)]
+    geo.cell_filter('include',cells) # only cells with label from 1 to 100 will be converted
+    geo.build_universe()

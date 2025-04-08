@@ -11,6 +11,7 @@ import Part
 from tqdm import tqdm
 
 from .code_version import *
+from .utils.log_utils import setup_logger
 from .conversion import cell_definition as Conv
 from .cuboid.translate import translate
 from .decompose import decom_one as Decom
@@ -23,8 +24,6 @@ from .write.functions import write_mcnp_cell_def
 from .write.write_files import write_geometry
 
 logger = logging.getLogger("general_logger")
-logger.info(f"GEOUNED version {version('geouned')}")
-logger.info(f"FreeCAD version {'.'.join(FreeCAD.Version()[:3])}")
 
 
 class CadToCsg:
@@ -66,6 +65,14 @@ class CadToCsg:
         self.meta_list = []
         self.filename = None
         self.skip_solids = []
+
+        log_path = Path(self.settings.outPath) / "log_files"
+        log_path.mkdir(parents=True, exist_ok=True)
+        setup_logger("general_logger", log_path / "geouned_general.log")
+        setup_logger("fuzzy_logger", log_path / "geouned_fuzzy.log")
+        setup_logger("solids_logger", log_path / "geouned_solids.log")
+        logger.info(f"GEOUNED version {version('geouned')}")
+        logger.info(f"FreeCAD version {'.'.join(FreeCAD.Version()[:3])}")
 
     @property
     def options(self):
@@ -264,6 +271,7 @@ class CadToCsg:
         self,
         filename: typing.Union[str, typing.Sequence[str]],
         skip_solids: typing.Sequence[int] = [],
+        spline_surfaces: str = "stop",
     ):
         """
         Load STEP file(s) and extract solid volumes and enclosure volumes.
@@ -271,6 +279,8 @@ class CadToCsg:
         Args:
             filename (str): The path to the STEP file or a list of paths to multiple STEP files.
             skip_solids (Sequence[int], optional): A sequence (list or tuple) of indexes of solids to not load for conversion.
+            spline_surfaces (str): Behavior of the code if solids with spline surface are considered: 'stop' execution, 'remove' solid,
+                                   'ignore' solid is included for translation (may lead to translation errors)
 
         Returns:
             tuple: A tuple containing the solid volumes list and enclosure volumes list extracted from the STEP files.
@@ -290,6 +300,11 @@ class CadToCsg:
                 if not isinstance(entry, str):
                     raise TypeError(f"filename should contain only str, not a {type(entry)}")
 
+        if not isinstance(spline_surfaces, str):
+            raise TypeError(f"filename should be a str, not a {type(filename)}")
+        if spline_surfaces.lower() not in ("stop", "remove", "ignore"):
+            raise TypeError(f'available values for spline_surfaces are: "stop", "remove" or "ignore" ')
+
         self.filename = filename
         self.skip_solids = skip_solids
 
@@ -306,7 +321,7 @@ class CadToCsg:
         EnclosureChunk = []
         for step_file in tqdm(step_files, desc="Loading CAD files"):
             logger.info(f"read step file : {step_file}")
-            Meta, Enclosure = Load.load_cad(step_file, self.settings, self.options)
+            Meta, Enclosure = Load.load_cad(step_file, spline_surfaces, self.settings, self.options)
             MetaChunk.append(Meta)
             EnclosureChunk.append(Enclosure)
         self.meta_list = join_meta_lists(MetaChunk)
@@ -316,6 +331,15 @@ class CadToCsg:
         for solid_index in sorted(skip_solids, reverse=True):
             logger.info(f"Removing solid index: {solid_index} from list of {len(self.meta_list)} solids")
             del self.meta_list[solid_index]
+
+        for m in reversed(self.enclosure_list):
+            if m.Solids is None:
+                print("stop because spline surfaces found in enclosure solid")
+                exit()
+
+        for m in reversed(self.meta_list):
+            if m.Solids is None:
+                self.meta_list.remove(m)
 
         logger.info("End of step file loading phase")
 
@@ -377,6 +401,10 @@ class CadToCsg:
         return self.geometry_bounding_box
 
     def start(self):
+
+        if len(self.meta_list) == 0:
+            print("no solid selected to translate")
+            exit()
 
         startTime = datetime.now()
 
@@ -598,9 +626,9 @@ class CadToCsg:
                 continue
             logger.info(f"Decomposing solid: {i + 1}/{totsolid}")
             if self.settings.debug:
-                debug_output_folder = Path("debug")
-                logger.info(m.Comments)
+                debug_output_folder = Path(self.settings.outPath) / "debug"
                 debug_output_folder.mkdir(parents=True, exist_ok=True)
+                logger.info(m.Comments)
                 if m.IsEnclosure:
                     m.Solids[0].exportStep(str(debug_output_folder / f"origEnclosure_{i}.stp"))
                 else:
@@ -615,7 +643,7 @@ class CadToCsg:
             )
 
             if err != 0:
-                sus_output_folder = Path("suspicious_solids")
+                sus_output_folder = Path(self.settings.outPath) / "suspicious_solids"
                 sus_output_folder.mkdir(parents=True, exist_ok=True)
                 if m.IsEnclosure:
                     Part.CompSolid(m.Solids).exportStep(str(sus_output_folder / f"Enclosure_original_{i}.stp"))
@@ -732,7 +760,6 @@ def join_meta_lists(MList) -> typing.List[UF.GeounedSolid]:
             for i, meta in enumerate(M):
                 meta.__id__ = lastID + i
                 newMetaList.append(meta)
-
     return newMetaList
 
 

@@ -101,9 +101,10 @@ class GeounedSolid:
             self.BoundBox.add(s.BoundBox)
 
     def set_cad_solid(self):
-        self.CADSolid = Part.makeCompound(self.Solids)
-        self.Volume = self.CADSolid.Volume
-        self.BoundBox = self.CADSolid.BoundBox
+        if self.Solids is not None:
+            self.CADSolid = Part.makeCompound(self.Solids)
+            self.Volume = self.CADSolid.Volume
+            self.BoundBox = self.CADSolid.BoundBox
 
     def optimalBoundingBox(self):
         if self.CADSolid is None:
