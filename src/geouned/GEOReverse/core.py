@@ -18,8 +18,8 @@ class CsgToCad:
 
     Args:
         BoxSettings (geouned.BoxSettings, optional): Adjust the default parameters
-        for the solid boundbox creation. Defaults to a geouned.BoxSettings with default
-        attributes values.
+            for the solid boundbox creation. Defaults to a geouned.BoxSettings with 
+            default attributes values.
     """
 
     def __init__(self, settings: BoxSettings = BoxSettings()):
