@@ -7,18 +7,18 @@ class BoxSettings:
     the translation time.
 
     Args:
-        universe_radius (float, optional): Maxium radius of the CAD universe.
-        Solids with coordinates x^2+y^2+z*2 > universe_radius^2 will be cut or not represented.
-        Units mm. Defaults to 1.0e8.
+        universe_radius (float, optional): Maximum radius of the CAD universe.
+            Solids with coordinates x^2+y^2+z*2 > universe_radius^2 will be cut or not represented.
+            Units mm. Defaults to 1.0e6.
         insolid_tolerance (float, optional): Maximum distance from the nearest
-        surface of the solid, for which a point outside the solid is assumed
-        inside the solid. Used only for boundbox generation. Units mm.
-        Defaults to 1 .
+            surface of the solid, for which a point outside the solid is assumed
+            inside the solid. Used only for boundbox generation. Units mm.
+            Defaults to 1.
     """
 
     def __init__(
         self,
-        universe_radius: float = 1.0e8,  # units mm
+        universe_radius: float = 1.0e6,  # units mm
         insolid_tolerance: float = 1,  # units mm
     ):
 
