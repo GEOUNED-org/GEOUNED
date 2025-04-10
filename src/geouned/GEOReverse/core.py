@@ -6,7 +6,6 @@ from pathlib import Path
 
 from .Modules.buildCAD import makeTree, AssignSurfaceToCell, BuildUniverseCells
 from .Modules.Utils.booleanFunction import BoolSequence
-from .Modules.Utils.boundBox import solid_plane_box
 from .Modules.data_class import BoxSettings
 from .Modules.Objects import CadCell
 from .Modules.MCNPinput import McnpInput
@@ -29,6 +28,7 @@ class CsgToCad:
         self.mat_range_type = "all"
         self.mat_range = None
         self.buildCAD_list = []
+        self.universe_box = settings.universe_box
 
     def read_csg_file(self, input_filename: str, csg_format: str):
         """Reads the geometry definition from MCNP or OpenMC XML input.
@@ -73,7 +73,7 @@ class CsgToCad:
             if self.cell_range_type == "exclude":
                 self.cell_range_type = "all"
 
-    def material_filter(self, type="all", materials=None):
+    def material_filter(self, type:str="all", materials:typing.Union[None,list, tuple]=None):
         """Selects the materials of the cells to build from the CSG geometry in MCNP or OpenMC format and export to the CAD model.
 
         Args:
@@ -106,7 +106,7 @@ class CsgToCad:
         UnivCell = self.geometry.GetCell(cell_label, self.settings)
         UnivCell.definition = BoolSequence(UnivCell.definition.str)
 
-        UnivCell.build_BoundBox(enlarge=0.2)
+        UnivCell.build_BoundBox(self.universe_box, enlarge=0.2)
         if UnivCell.boundBox.Orientation == "Forward" and UnivCell.boundBox.Box is None:
             UnivCell.shape = None
             print(f"Cell {UnivCell.name} BoundBox is null")
