@@ -1,5 +1,6 @@
 from .Modules.Utils.boundBox import myBox
 
+
 class Options:
     splitTolerance = 1.0e-2
 
@@ -22,20 +23,25 @@ class BoxSettings:
         self,
         universe_radius: float = 1.0e6,  # units mm
         insolid_tolerance: float = 1,  # units mm
-        box_dimemsions = None ,
+        box_dimemsions=None,
     ):
 
         self.universe_radius = universe_radius
         self.insolid_tolerance = insolid_tolerance
         if box_dimemsions is None:
-            self.universe_box = myBox(FreeCAD.BoundBox(-universe_radius,
-                                                       -universe_radius,
-                                                       -universe_radius,
-                                                       universe_radius,
-                                                       universe_radius,
-                                                       universe_radius,), "Forward")
+            self.universe_box = myBox(
+                FreeCAD.BoundBox(
+                    -universe_radius,
+                    -universe_radius,
+                    -universe_radius,
+                    universe_radius,
+                    universe_radius,
+                    universe_radius,
+                ),
+                "Forward",
+            )
         else:
-            self.universe_box = myBox(FreeCAD.BoundBox(box_dimemsions), "Forward")    
+            self.universe_box = myBox(FreeCAD.BoundBox(box_dimemsions), "Forward")
 
     @property
     def universe_radius(self):

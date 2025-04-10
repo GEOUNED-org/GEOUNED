@@ -73,7 +73,7 @@ class CsgToCad:
             if self.cell_range_type == "exclude":
                 self.cell_range_type = "all"
 
-    def material_filter(self, type:str="all", materials:typing.Union[None,list, tuple]=None):
+    def material_filter(self, type: str = "all", materials: typing.Union[None, list, tuple] = None):
         """Selects the materials of the cells to build from the CSG geometry in MCNP or OpenMC format and export to the CAD model.
 
         Args:
