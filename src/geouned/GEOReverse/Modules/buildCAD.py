@@ -79,7 +79,7 @@ def BuildUniverseCells(startInfo, ContainerCell, AllUniverses, universeCut=True)
                 if ContainerCell.CurrentTR:
                     external_box.Box = external_box.Box.transformed(ContainerCell.CurrentTR.inverse())
             else:
-                external_box = None
+                external_box = ContainerCell.externalBox
 
             debug = False
             if debug:

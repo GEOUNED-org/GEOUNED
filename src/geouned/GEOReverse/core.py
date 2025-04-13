@@ -6,7 +6,7 @@ from pathlib import Path
 
 from .Modules.buildCAD import makeTree, AssignSurfaceToCell, BuildUniverseCells
 from .Modules.Utils.booleanFunction import BoolSequence
-from .Modules.data_class import BoxSettings
+from .Modules.Utils.boundBox import BoxSettings
 from .Modules.Objects import CadCell
 from .Modules.MCNPinput import McnpInput
 from .Modules.XMLinput import XmlInput
@@ -170,6 +170,8 @@ class CsgToCad:
         UnivCell.FILL = root_universe
         UnivCell.name = None
         UnivCell.MAT = None
+        if UnivCell.externalBox is None :
+            UnivCell.externalBox = self.universe_box
 
         # read Cells and group into universes
         matcel_list = {
