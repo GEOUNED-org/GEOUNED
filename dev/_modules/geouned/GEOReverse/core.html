@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>geouned.GEOReverse.core &#8212; GEOUNED 0.1.dev1+g3a8dc41 documentation</title>
+    <title>geouned.GEOReverse.core &#8212; GEOUNED 0.1.dev1+ga9cb793 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=637d7284"></script>
+    <script src="../../../_static/documentation_options.js?v=b7d7603c"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/geouned/GEOReverse/core';</script>
@@ -52,7 +52,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.dev1+g3a8dc41" />
+  <meta name="docsearch:version" content="0.1.dev1+ga9cb793" />
   </head>
   
   
@@ -404,8 +404,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.buildCAD</span><span class="w"> </span><span class="kn">import</span> <span class="n">makeTree</span><span class="p">,</span> <span class="n">AssignSurfaceToCell</span><span class="p">,</span> <span class="n">BuildUniverseCells</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.Utils.booleanFunction</span><span class="w"> </span><span class="kn">import</span> <span class="n">BoolSequence</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.Utils.boundBox</span><span class="w"> </span><span class="kn">import</span> <span class="n">solid_plane_box</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.data_class</span><span class="w"> </span><span class="kn">import</span> <span class="n">BoxSettings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.Utils.boundBox</span><span class="w"> </span><span class="kn">import</span> <span class="n">BoxSettings</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.Objects</span><span class="w"> </span><span class="kn">import</span> <span class="n">CadCell</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.MCNPinput</span><span class="w"> </span><span class="kn">import</span> <span class="n">McnpInput</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.Modules.XMLinput</span><span class="w"> </span><span class="kn">import</span> <span class="n">XmlInput</span>
@@ -418,8 +417,8 @@
 
 <span class="sd">    Args:</span>
 <span class="sd">        BoxSettings (geouned.BoxSettings, optional): Adjust the default parameters</span>
-<span class="sd">        for the solid boundbox creation. Defaults to a geouned.BoxSettings with default</span>
-<span class="sd">        attributes values.</span>
+<span class="sd">            for the solid boundbox creation. Defaults to a geouned.BoxSettings with</span>
+<span class="sd">            default attributes values.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">BoxSettings</span> <span class="o">=</span> <span class="n">BoxSettings</span><span class="p">()):</span>
@@ -429,6 +428,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">mat_range_type</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mat_range</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">buildCAD_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">universe_box</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">universe_box</span>
 
 <div class="viewcode-block" id="CsgToCad.read_csg_file">
 <a class="viewcode-back" href="../../../python_api.html#geouned.CsgToCad.read_csg_file">[docs]</a>
@@ -481,7 +481,7 @@
 
 <div class="viewcode-block" id="CsgToCad.material_filter">
 <a class="viewcode-back" href="../../../python_api.html#geouned.CsgToCad.material_filter">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">material_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">materials</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">material_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">materials</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Selects the materials of the cells to build from the CSG geometry in MCNP or OpenMC format and export to the CAD model.</span>
 
 <span class="sd">        Args:</span>
@@ -517,7 +517,7 @@
         <span class="n">UnivCell</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">GetCell</span><span class="p">(</span><span class="n">cell_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">)</span>
         <span class="n">UnivCell</span><span class="o">.</span><span class="n">definition</span> <span class="o">=</span> <span class="n">BoolSequence</span><span class="p">(</span><span class="n">UnivCell</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">str</span><span class="p">)</span>
 
-        <span class="n">UnivCell</span><span class="o">.</span><span class="n">build_BoundBox</span><span class="p">(</span><span class="n">enlarge</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+        <span class="n">UnivCell</span><span class="o">.</span><span class="n">build_BoundBox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">universe_box</span><span class="p">,</span> <span class="n">enlarge</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">UnivCell</span><span class="o">.</span><span class="n">boundBox</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span> <span class="ow">and</span> <span class="n">UnivCell</span><span class="o">.</span><span class="n">boundBox</span><span class="o">.</span><span class="n">Box</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">UnivCell</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cell </span><span class="si">{</span><span class="n">UnivCell</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> BoundBox is null&quot;</span><span class="p">)</span>
@@ -584,6 +584,8 @@
         <span class="n">UnivCell</span><span class="o">.</span><span class="n">FILL</span> <span class="o">=</span> <span class="n">root_universe</span>
         <span class="n">UnivCell</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">UnivCell</span><span class="o">.</span><span class="n">MAT</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">UnivCell</span><span class="o">.</span><span class="n">externalBox</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">UnivCell</span><span class="o">.</span><span class="n">externalBox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">universe_box</span>
 
         <span class="c1"># read Cells and group into universes</span>
         <span class="n">matcel_list</span> <span class="o">=</span> <span class="p">{</span>

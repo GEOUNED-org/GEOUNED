@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Python API reference &#8212; GEOUNED 0.1.dev1+g3a8dc41 documentation</title>
+    <title>Python API reference &#8212; GEOUNED 0.1.dev1+ga9cb793 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=637d7284"></script>
+    <script src="_static/documentation_options.js?v=b7d7603c"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'python_api';</script>
@@ -55,7 +55,7 @@
     <link rel="prev" title="Void Generation" href="users_guide/void_generation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.dev1+g3a8dc41" />
+  <meta name="docsearch:version" content="0.1.dev1+ga9cb793" />
   </head>
   
   
@@ -688,16 +688,14 @@ is located in the CAD solid tree.. Defaults to False.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="geouned.CsgToCad">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geouned.</span></span><span class="sig-name descname"><span class="pre">CsgToCad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings=&lt;geouned.GEOReverse.Modules.data_class.BoxSettings</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geouned/GEOReverse/core.html#CsgToCad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geouned.CsgToCad" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geouned.</span></span><span class="sig-name descname"><span class="pre">CsgToCad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings=&lt;geouned.GEOReverse.Modules.Utils.boundBox.BoxSettings</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geouned/GEOReverse/core.html#CsgToCad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geouned.CsgToCad" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Base class for the conversion of CSG to CAD models</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>BoxSettings</strong> (<a class="reference internal" href="#geouned.BoxSettings" title="geouned.BoxSettings"><em>geouned.BoxSettings</em></a><em>, </em><em>optional</em>) – Adjust the default parameters</p></li>
-<li><p><strong>default</strong> (<em>for the solid boundbox creation. Defaults to a geouned.BoxSettings with</em>)</p></li>
-<li><p><strong>values.</strong> (<em>attributes</em>)</p></li>
-</ul>
+<dd class="field-odd"><p><strong>BoxSettings</strong> (<a class="reference internal" href="#geouned.BoxSettings" title="geouned.BoxSettings"><em>geouned.BoxSettings</em></a><em>, </em><em>optional</em>) – Adjust the default parameters
+for the solid boundbox creation. Defaults to a geouned.BoxSettings with
+default attributes values.</p>
 </dd>
 </dl>
 <dl class="py method">
@@ -792,7 +790,7 @@ Defaults to name of the csg file + stp.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="geouned.BoxSettings">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geouned.</span></span><span class="sig-name descname"><span class="pre">BoxSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">universe_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">insolid_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geouned/GEOReverse/Modules/data_class.html#BoxSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geouned.BoxSettings" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geouned.</span></span><span class="sig-name descname"><span class="pre">BoxSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">universe_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">insolid_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">box_dimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geouned/GEOReverse/Modules/Utils/boundBox.html#BoxSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geouned.BoxSettings" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Parameters used in the solids boundbox generation. Optimized dimensions can reduce
 the translation time.</p>
@@ -806,6 +804,10 @@ Units mm. Defaults to 1.0e6.</p></li>
 surface of the solid, for which a point outside the solid is assumed
 inside the solid. Used only for boundbox generation. Units mm.
 Defaults to 1.</p></li>
+<li><p><strong>box_dimensions</strong> (<em>None</em><em>,</em><em>tuple</em><em>,</em><em>list</em><em>, </em><em>optional</em>) – dimensions of the universe box in which solids
+will be converted to CAD. Dimensions are (Xmin, Ymin, Zmin, Xmax, Ymax, Zmax) of the box.
+If no box dimensions is provided, the universe dimension is given by the universe_radius parameter.
+Defaul to None.</p></li>
 </ul>
 </dd>
 </dl>
