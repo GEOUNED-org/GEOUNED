@@ -9,6 +9,7 @@ from .remh import Cline
 from .Utils.booleanFunction import BoolSequence, outer_terms
 from .Utils.boundBox import solid_plane_box, myBox, BoxSettings
 
+
 class CadCell:
     def __init__(self, stringCell: str = None, settings: BoxSettings = BoxSettings()):
 

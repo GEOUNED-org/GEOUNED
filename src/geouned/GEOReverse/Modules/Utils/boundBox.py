@@ -7,6 +7,7 @@ from .booleanFunction import BoolSequence
 
 twoPi = math.pi * 2
 
+
 class BoxSettings:
     """Parameters used in the solids boundbox generation. Optimized dimensions can reduce
     the translation time.
@@ -22,7 +23,7 @@ class BoxSettings:
         box_dimensions (None,tuple,list, optional): dimensions of the universe box in which solids
             will be converted to CAD. Dimensions are (Xmin, Ymin, Zmin, Xmax, Ymax, Zmax) of the box.
             If no box dimensions is provided, the universe dimension is given by the universe_radius parameter.
-            Defaul to None.     
+            Defaul to None.
     """
 
     def __init__(
@@ -65,18 +66,20 @@ class BoxSettings:
     def box_dimensions(self, box_dimensions: typing.Union[None, list, tuple]):
         if box_dimensions is None:
             self._box_dimensions = None
-        else:    
+        else:
             if not isinstance(box_dimensions, (list, tuple)):
                 raise TypeError(f"geoReverse.Settings.box_dimensions should be a list or tuple, not a {type(box_dimensions)}")
             for x in box_dimensions:
-                if not isinstance(x,(float,int)):
+                if not isinstance(x, (float, int)):
                     raise TypeError(f"geoReverse.Settings.box_dimensions elements should be floats, not a {type(x)}")
 
             for i in range(3):
-                vmin,vmax = box_dimensions[i],box_dimensions[i+3] 
+                vmin, vmax = box_dimensions[i], box_dimensions[i + 3]
                 if vmin >= vmax:
-                    raise TypeError(f"geoReverse.Settings.box_dimensions bad box limits. Limits should be (Xmin, Ymin, Zmin, Xmax, Ymax, Zmax).")
-  
+                    raise TypeError(
+                        f"geoReverse.Settings.box_dimensions bad box limits. Limits should be (Xmin, Ymin, Zmin, Xmax, Ymax, Zmax)."
+                    )
+
             self._box_dimensions = box_dimensions
 
     @property
@@ -98,8 +101,9 @@ class BoxSettings:
             )
         else:
             self._universe_box = myBox(FreeCAD.BoundBox(*self.box_dimensions), "Forward")
-            radius = max(map(abs,self.box_dimensions))
+            radius = max(map(abs, self.box_dimensions))
             self.universe_radius = radius
+
 
 class myBox:
     def __init__(self, boundBox=None, orientation=None):
@@ -209,7 +213,7 @@ class solid_plane_box:
 
             if orientation == "Undefined" and self.orientation != "Undefined":
                 self.definition = plane_definition(NTCell.definition.copy(), surf_to_plane_dict, self.orientation)
-        
+
         if outbox:
             self.outBox = outbox
         else:
@@ -798,12 +802,12 @@ def plane_intersect(plane_list, externalBox, cutBoundary):
             FreeCAD.Vector(0, 1, 0),
             FreeCAD.Vector(0, 0, 1),
         )
-        pxm = Part.Plane(FreeCAD.Vector(externalBox.XMin, 0, 0),XYZ[0])
-        pxp = Part.Plane(FreeCAD.Vector(externalBox.XMax, 0, 0),XYZ[0])
-        pym = Part.Plane(FreeCAD.Vector(0, externalBox.YMin, 0),XYZ[1])
-        pyp = Part.Plane(FreeCAD.Vector(0, externalBox.YMax, 0),XYZ[1])
-        pzm = Part.Plane(FreeCAD.Vector(0, 0, externalBox.ZMin),XYZ[2])
-        pzp = Part.Plane(FreeCAD.Vector(0, 0, externalBox.ZMax),XYZ[2])
+        pxm = Part.Plane(FreeCAD.Vector(externalBox.XMin, 0, 0), XYZ[0])
+        pxp = Part.Plane(FreeCAD.Vector(externalBox.XMax, 0, 0), XYZ[0])
+        pym = Part.Plane(FreeCAD.Vector(0, externalBox.YMin, 0), XYZ[1])
+        pyp = Part.Plane(FreeCAD.Vector(0, externalBox.YMax, 0), XYZ[1])
+        pzm = Part.Plane(FreeCAD.Vector(0, 0, externalBox.ZMin), XYZ[2])
+        pzp = Part.Plane(FreeCAD.Vector(0, 0, externalBox.ZMax), XYZ[2])
         PXYZ = (pxm, pxp, pym, pyp, pzm, pzp)
 
         for i, p1 in enumerate(plane_list[0:]):

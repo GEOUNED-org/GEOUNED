@@ -170,7 +170,7 @@ class CsgToCad:
         UnivCell.FILL = root_universe
         UnivCell.name = None
         UnivCell.MAT = None
-        if UnivCell.externalBox is None :
+        if UnivCell.externalBox is None:
             UnivCell.externalBox = self.universe_box
 
         # read Cells and group into universes
