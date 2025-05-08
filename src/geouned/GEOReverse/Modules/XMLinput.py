@@ -164,7 +164,7 @@ class XmlInput:
     def GetSurfaces(self):
         surf_cards = {}
         number = 1
-        scale = 1.0  # don't change CAD units
+        scale = 10  # change cm units to mm
         for c in self.__inputcards__:
             if c.type != "surface":
                 continue
