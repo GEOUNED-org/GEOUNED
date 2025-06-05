@@ -469,6 +469,7 @@ class CadToCsg:
                 self.settings,
                 self.options,
                 self.tolerances,
+                self.numeric_format,
             )
             # decompose Enclosure solids
             if self.settings.voidGen and self.enclosure_list:
