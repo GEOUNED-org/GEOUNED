@@ -109,13 +109,16 @@ def translate(meta_list, surfaces, universe_box, setting, options, tolerances, n
                 tolerances,
                 numeric_format,
                 MakeObj=False,
-            )
+            ),
+            options,
+            tolerances,
+            numeric_format,
         )
-        set_definition(m, surfaces, options, tolerances)
+        set_definition(m, surfaces, options, tolerances, numeric_format)
 
 
 # TODO rename this, but be careful as there are other functions in the code with the same name
-def set_definition(meta_obj, surfaces, options, tolerances):
+def set_definition(meta_obj, surfaces, options, tolerances, numeric_format):
     solids = meta_obj.Solids
     s_def = BoolSequence(operator="OR")
 
@@ -136,7 +139,7 @@ def set_definition(meta_obj, surfaces, options, tolerances):
             if face.Orientation not in ("Forward", "Reversed"):
                 continue
 
-            id = get_id(face.Surface, surfaces, options, tolerances)
+            id = get_id(face.Surface, surfaces, options, tolerances, numeric_format)
             s = surfaces.get_surface(id)
             if is_opposite(face.Surface.Axis, s.Surf.Axis, tolerances.pln_angle):
                 id = -id

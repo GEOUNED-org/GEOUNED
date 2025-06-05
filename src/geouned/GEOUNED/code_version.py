@@ -1,13 +1,13 @@
-""" Modification from 0.9.5 
+"""Modification from 0.9.5
   - volInput card name substituted by volSDEF card name
   - new card volCARD (values : True/False) used to insert the CAD cell volume into the cell definition
-    using the MCNP card VOL. Default value True  
+    using the MCNP card VOL. Default value True
   - Fixed bug. Code crashing when automatic void calculation was not enabled.
   - Fixed bug. Comment line might not be in the correct order following de CAD tree labels
 
 Modification in 0.9.6 Release Date 24/11/2022
   - Small change in the reading of material file.
-  - In "CellDefinition.py" file. "is_opposite" function is call with rhe correct tolerance value instead of default value of the is_opposite function.  
+  - In "CellDefinition.py" file. "is_opposite" function is call with rhe correct tolerance value instead of default value of the is_opposite function.
 
 Modification in 0.9.7 Release Date 06/12/2022
   - Compatibility with FreeCAD version higher than 0.18.
@@ -16,16 +16,16 @@ Modification in 0.9.7 Release Date 06/12/2022
 Modification in 0.9.7 Release Date 06/12/2022
   - Removed external packages Boolean. Subtituted by own make package
   - Full cell optimization using CTable approach and own factorization function
-  - Cylinders instead cones can be used  as auxillary surface for Torus surface definition 
+  - Cylinders instead cones can be used  as auxillary surface for Torus surface definition
   - fix bugs several additional planes for the same reversed surface
-  - new module for plane splitting in decomposition modules. All planes are considerer equivalent (PX,PY,PZ,P), parallel planes are grouped together. 
-    Decomposition is performed by splitting first with group of parallel planes with lowest number of elements. 
-    Old version module is still available by switching the option keyword "newSplitPlane" to False. 
+  - new module for plane splitting in decomposition modules. All planes are considerer equivalent (PX,PY,PZ,P), parallel planes are grouped together.
+    Decomposition is performed by splitting first with group of parallel planes with lowest number of elements.
+    Old version module is still available by switching the option keyword "newSplitPlane" to False.
   - New option added when enclosure are used. The option "sort_enclosure" True (Default False) will produce output file where solids and void of an enclosure
     are grouped together (first solid cell of the enclosure, then voids)
   - Options has been added to enlarge Box dimension when Constraint table is evaluated
- 
- Modification in 0.9.8 
+
+ Modification in 0.9.8
   - fix bug with two cylinders/cones intersection
   - Introduce splitting planes to cut rounded edges(edge made with cylinder)
   - fixed bug with torus (I hope so!)
@@ -40,7 +40,7 @@ Modification in 0.9.7 Release Date 06/12/2022
   - allow to convert geometry to openMC XML format and script input file
   - change the entry "mcnpfile" by "geometryName" in FILES section. Now geometryName is the generic name of output geometry file.
     mncp input file will have ".mcnp" extension and openMC XML the ".xml" extension.
-  - new entry "outFormat" is added in FILES section. "outFormat" is used to select the output geometry format (mcnp and/or openMC_xml). 
+  - new entry "outFormat" is added in FILES section. "outFormat" is used to select the output geometry format (mcnp and/or openMC_xml).
     Default value is only mcnp
   - new entry splitTolerance. Change the Tolerance value of the FreeCAD function split. Default Value  0.
   - new entry Verbose. Print on screen warning. Default False.
