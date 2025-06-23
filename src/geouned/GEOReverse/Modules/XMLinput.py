@@ -85,7 +85,7 @@ class XmlInput:
 
             if c.FILL:
                 containers.append(c)
-                containers_label.append(c.FILL)
+                containers_label.add(c.FILL)
 
         if 0 in Universe_dict.keys():
             root_universe = 0
