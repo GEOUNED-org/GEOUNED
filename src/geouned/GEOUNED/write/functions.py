@@ -126,6 +126,10 @@ def write_openmc_region(definition, options, w_type="XML"):
     if w_type == "PY":
         return write_sequence_omc_py(definition, options)
 
+    
+def write_mcdc_region(definition, options):
+    return write_sequence_mcdc(definition, options)
+
 
 def write_sequence_mcnp(Seq):
     if Seq.level == 0:
@@ -230,6 +234,30 @@ def write_sequence_omc_py(seq, options, prefix="S"):
                 terms.append(strSurf(e))
             else:
                 terms.append(write_sequence_omc_py(e, options))
+
+        if seq.operator == "AND":
+            line = f"({' & '.join(terms)})"
+        else:
+            line = f"({' | '.join(terms)})"
+    return line
+
+
+def write_sequence_mcdc(seq, options, prefix="s"):
+
+    strSurf = lambda surf: (f"-{prefix}{-surf}" if surf < 0 else f"+{prefix}{surf}")
+
+    if seq.level == 0:
+        if seq.operator == "AND":
+            line = f"({' & '.join(map(strSurf, seq.elements))})"
+        else:
+            line = f"({' | '.join(map(strSurf, seq.elements))})"
+    else:
+        terms = []
+        for e in seq.elements:
+            if type(e) is int:
+                terms.append(strSurf(e))
+            else:
+                terms.append(write_sequence_mcdc(e, options))
 
         if seq.operator == "AND":
             line = f"({' & '.join(terms)})"
@@ -1152,3 +1180,53 @@ def cut_line(line, lineLength):
         newLine = "{}\n{: <{n}}{}".format(line1, "", line2, n=tabNumber)
 
     return newLine
+
+def mcdc_surface(Type, surf, tolerances):
+    mcdc_def = ""
+
+    if Type == "Plane":
+        A = surf.Axis.x
+        B = surf.Axis.y
+        C = surf.Axis.z
+        if surf.Axis.isEqual(FreeCAD.Vector(1, 0, 0), tolerances.pln_angle):
+            mcdc_def = f'mcdc.surface("plane-x", x={surf.Position.x * 0.1})'
+        elif surf.Axis.isEqual(FreeCAD.Vector(0, 1, 0), tolerances.pln_angle):
+            mcdc_def = f'mcdc.surface("plane-y", y={surf.Position.y * 0.1})'
+        elif surf.Axis.isEqual(FreeCAD.Vector(0, 0, 1), tolerances.pln_angle):
+            mcdc_def = f'mcdc.surface("plane-z", z={surf.Position.z * 0.1})'
+        else:
+            D = surf.Axis.dot(surf.Position) * 0.1
+            mcdc_def = f'mcdc.surface("plane", A={A}, B={B}, C={C}, D={D})'
+
+    elif Type == "Cylinder":
+        Center = surf.Center * 0.1
+        Rad = surf.Radius * 0.1
+        Dir = FreeCAD.Vector(surf.Axis)
+        Dir.normalize()
+
+        if is_parallel(Dir, FreeCAD.Vector(1, 0, 0), tolerances.angle):
+            mcdc_def = f'mcdc.surface("cylinder-x", center=[{Center.y}, {Center.z}], radius={Rad})'
+        elif is_parallel(Dir, FreeCAD.Vector(0, 1, 0), tolerances.angle):
+            mcdc_def = f'mcdc.surface("cylinder-y", center=[{Center.x}, {Center.z}], radius={Rad})'
+        elif is_parallel(Dir, FreeCAD.Vector(0, 0, 1), tolerances.angle):
+            mcdc_def = f'mcdc.surface("cylinder-z", center=[{Center.x}, {Center.y}], radius={Rad})'
+        else:
+            raise ValueError("Unsupported Cylinder surface type")
+        
+    elif Type == "Sphere":
+        Center = surf.Center * 0.1
+        Rad = surf.Radius * 0.1
+        mcdc_def = f'mcdc.surface("sphere", center=[{Center.x}, {Center.y}, {Center.z}], radius={Rad})'
+
+    elif Type == "Quadric":
+        pos = surf.Center * 0.1
+        Rad = surf.Radius * 0.1
+        Dir = FreeCAD.Vector(surf.Axis)
+        Dir.normalize()
+        Q = q_form.q_form_cyl(Dir, pos, Rad)
+        mcdc_def = f'mcdc.surface("quadric", A={Q[0]}, B={Q[1]}, C={Q[2]}, D={Q[3]}, E={Q[4]}, F={Q[5]}, G={Q[6]}, H={Q[7]}, I={Q[8]}, J={Q[9]})'
+
+    else:
+        raise ValueError(f"Unsupported surface type: {Type}")
+    
+    return mcdc_def
