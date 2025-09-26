@@ -258,7 +258,9 @@ C **************************************************************
 
         if cell.fill is not None:
             option += f"fill={cell.fill}  "
-                
+            if cell.transform is not None:
+                option += f"({cell.transform})  "
+
         option += "\n"
 
         return option
