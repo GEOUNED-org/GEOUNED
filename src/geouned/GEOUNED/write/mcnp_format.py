@@ -255,6 +255,10 @@ C **************************************************************
 
         if self.Options["Universe"] is not None:
             option += f"U={self.Options['Universe']}  "
+
+        if cell.fill is not None:
+            option += f"fill={cell.fill}  "
+                
         option += "\n"
 
         return option

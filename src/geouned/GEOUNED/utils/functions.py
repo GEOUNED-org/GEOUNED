@@ -82,6 +82,7 @@ class GeounedSolid:
         self.MatInfo = None
         self.CellType = "solid"  # other types : 'void', 'enclosure', 'fill'
         self.Universe = 0
+        self.fill = None
         self.Void = False
         self.IsEnclosure = False
         self.EnclosureID = None
@@ -144,6 +145,10 @@ class GeounedSolid:
         else:
             if material != 0:
                 self.Density = None
+
+    def set_universe_fill(self, uni_num):
+        self.fill = uni_num
+        print(f"Set universe fill {uni_num} for solid {self.__id__}")
 
     def set_dilution(self, dilution):
         self.Dilution = dilution
