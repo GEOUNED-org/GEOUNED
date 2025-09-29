@@ -181,11 +181,11 @@ def load_cad(filename, spline_surf, settings, options):
                             meta_list[i_solid].set_material(*settings.voidMat)
 
                     if tempre_fill:
-                        meta_list[i_solid].set_universe_fill(int(tempre_fill.group("fill"))) 
-                    
+                        meta_list[i_solid].set_universe_fill(int(tempre_fill.group("fill")))
+
                     if tempre_trans:
                         meta_list[i_solid].set_transform(int(tempre_trans.group("trans")))
-                               
+
                     if tempre_dil:
                         meta_list[i_solid].set_dilution(float(tempre_dil.group("dil")))
 
