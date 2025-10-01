@@ -1,5 +1,5 @@
-Material Allocation
-===================
+Universe Fill and Transform
+===========================
 
 Components within a CAD geometry can be specified to be filled with a given universe number by assigned directly in the tree CAD by including text with _fXX_ within the component name. Where XX is the universe number to be used to fill the cell.
 A transform number can also be specified during by the additional of text with _tXX_ within the component (or a subcomponent) name. Where XX is the transform number to be applied to the filled universe. It is important to note that the transform number must be defined in the MCNP input file using the appropriate transform cards.
