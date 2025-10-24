@@ -108,24 +108,27 @@ class BoxSettings:
 class myBox:
     def __init__(self, boundBox=None, orientation=None):
 
-        if boundBox is not None:
-            if boundBox.XLength <= 1e-12:
-                self.Box = None
-            elif boundBox.YLength <= 1e-12:
-                self.Box = None
-            elif boundBox.ZLength <= 1e-12:
-                self.Box = None
+        if type(boundBox) is myBox:
+            self.Box = boundBox.Box
+            self.Orientation = boundBox.Orientation
+        else:    
+            if boundBox is not None:
+                if boundBox.XLength <= 1e-12:
+                    self.Box = None
+                elif boundBox.YLength <= 1e-12:
+                    self.Box = None
+                elif boundBox.ZLength <= 1e-12:
+                    self.Box = None
+                else:
+                    self.Box = boundBox
             else:
-                self.Box = boundBox
-        else:
-            self.Box = None
-        self.Orientation = orientation
+                self.Box = None
+            self.Orientation = orientation
+        if self.Orientation is None:
+            raise TypeError('myBox orientation cannot by None type')   
 
     def add(self, box):
-        if self.Orientation is None:
-            self.Box = box.Box
-            self.Orientation = box.Orientation
-        elif self.Box is None:
+        if self.Box is None:
             if self.Orientation == "Forward":
                 self.Box = box.Box
                 self.Orientation = box.Orientation
@@ -133,16 +136,10 @@ class myBox:
             if box.Orientation == "Reversed":
                 self.Box = None
                 self.Orientation = "Reversed"
-        elif self.Orientation == box.Orientation:
-            self.Box.add(box.Box)
         else:
-            # -A OR B == -(A AND -B)
-            if self.Orientation == "Forward":
-                Rbox, Fbox = self, box
-            else:
-                Rbox, Fbox = box, self
-            self.Box = box_intersect(Fbox, Rbox)
-            self.Orientation = "Reversed"
+            self.Box.add(box.Box)
+            if self.Orientation != box.Orientation:
+                self.Orientation = "Reversed"
 
     def mult(self, box):
         if self.Orientation is None:
@@ -156,19 +153,17 @@ class myBox:
             if box.Orientation == "Forward":
                 self.Box = None
                 self.Orientation = "Forward"
-        elif self.Orientation == box.Orientation:
-            inter = self.Box.intersected(box.Box)
-            if inter.isValid():
-                self.Box = inter
-            else:
-                self.Box = None
-        else:
-            if self.Orientation == "Forward":
-                Fbox, Rbox = self, box
-            else:
-                Fbox, Rbox = box, self
-            self.Box = box_intersect(Fbox, Rbox)
-            self.Orientation = "Forward"
+        else:        
+            if self.Orientation == "Reversed" or box.Orientation == "Reversed":
+                self.Box.add(box.Box)
+            else:    
+                inter = self.Box.intersected(box.Box)
+                if inter.isValid():
+                    self.Box = inter
+                else:
+                    self.Box = None
+            if self.Orientation != box.Orientation:
+                self.Orientation = "Forward"
 
     def sameBox(self, box):
         if self.Box is None or box.Box is None:
@@ -186,7 +181,7 @@ class myBox:
 
 
 class solid_plane_box:
-    def __init__(self, NTCell=None, outbox=None, orientation="Undefined"):
+    def __init__(self, NTCell=None, outbox=None):
         if NTCell is None:
             settings = BoxSettings()
             self.planes = None
@@ -197,21 +192,20 @@ class solid_plane_box:
             self.universe_box = settings.universe_radius
             self.orientation = None
         else:
+            test_orientation = "Forward"
             self.insolid_tolerance = NTCell.settings.insolid_tolerance
             self.universe_box = NTCell.settings.universe_box
             self.surfaces = NTCell.surfaces
-            plane_dict, surf_to_plane_dict = quadric_to_plane(NTCell.definition, NTCell.surfaces, orientation)
+            plane_dict, surf_to_plane_dict = quadric_to_plane(NTCell.definition, NTCell.surfaces, test_orientation)
             self.planes = plane_dict
             self.surf_to_plane = surf_to_plane_dict
-            self.definition = plane_definition(NTCell.definition.copy(), surf_to_plane_dict, orientation)
+            self.definition = plane_definition(NTCell.definition.copy(), surf_to_plane_dict, test_orientation)
             self.orientation = self.get_box_orientation()
 
-            if orientation != self.orientation:
+            if test_orientation != self.orientation:
                 plane_dict, surf_to_plane_dict = quadric_to_plane(NTCell.definition, NTCell.surfaces, self.orientation)
                 self.planes = plane_dict
                 self.surf_to_plane = surf_to_plane_dict
-
-            if orientation == "Undefined" and self.orientation != "Undefined":
                 self.definition = plane_definition(NTCell.definition.copy(), surf_to_plane_dict, self.orientation)
 
         if outbox:
@@ -313,14 +307,15 @@ class solid_plane_box:
                 box = cbox.build_box_depth()
                 box_list.append(box)
 
-            fullBox = myBox()
+            fullBox = myBox(box_list[0])      
+
             if self.definition.operator == "AND":
-                for box in box_list:
+                for box in box_list[1:]:
                     fullBox.mult(box)
                     if fullBox.Box is None and fullBox.Orientation == "Forward":
                         break
             else:
-                for box in box_list:
+                for box in box_list[1:]:
                     fullBox.add(box)
                     if fullBox.Box is None and fullBox.Orientation == "Reversed":
                         break
@@ -416,24 +411,24 @@ def quadric_to_plane(cellDef, surfaces, orientation):
     apex = []
 
     if orientation == "Reversed":
-        chg = True
+        fwd = False
     elif orientation == "Forward":
-        chg = False
+        fwd = True
     else:
-        chg = None
+        fwd = None    
 
     for s_index in surf_index:
-        s_index = abs(s_index)
-        s = surfaces[s_index]
+        s_label = abs(s_index)
+        s = surfaces[s_label]
         if s.type == "plane":
             normal, d = s.params
             position = normal * d
-            planes[s_index] = Part.Plane(position, normal)
+            planes[s_label] = Part.Plane(position, normal)
         else:
-            if chg is None:
+            if fwd is None:
                 pos = None
-            else:
-                pos = (s_index > 0) == chg
+            else:    
+                pos = (s_index > 0) == fwd
             surf_planes = convert_to_planes(s, pos)
             if s.type == "cone":
                 apex.append(s.params[0])
@@ -445,9 +440,9 @@ def quadric_to_plane(cellDef, surfaces, orientation):
                     next_index += 1
 
                 if dbl:
-                    surf_planes_dict[s_index] = ("dblcone", p_index)
+                    surf_planes_dict[s_label] = ("dblcone", p_index)
                 else:
-                    surf_planes_dict[s_index] = ("cone", p_index)
+                    surf_planes_dict[s_label] = ("cone", p_index)
 
             elif s.type == "torus":
                 extplanes, inplanes = surf_planes
@@ -461,14 +456,14 @@ def quadric_to_plane(cellDef, surfaces, orientation):
                     planes[next_index] = p
                     p_in.append(next_index)
                     next_index += 1
-                surf_planes_dict[s_index] = ("torus", p_ext, p_in)
+                surf_planes_dict[s_label] = ("torus", p_ext, p_in)
             else:
                 p_index = []
                 for p in surf_planes:
                     planes[next_index] = p
                     p_index.append(next_index)
                     next_index += 1
-                surf_planes_dict[s_index] = p_index
+                surf_planes_dict[s_label] = p_index
     return planes, surf_planes_dict
 
 
@@ -483,6 +478,8 @@ def convert_to_planes(s, pos):
         return torus_to_planes(s, pos)
     elif s.type == "paraboloid":
         return parabola_to_planes(s, pos)
+    elif s.type == "box":
+        return box_to_planes(s)
     else:
         print(f"{s.type} not implemented for boundbox")
         return []
@@ -657,6 +654,17 @@ def torus_to_planes(torus, pos):
         central_planes = tuple()
     return (external_planes, central_planes)
 
+def box_to_planes(box):
+
+    org,vec1,vec2,vec3 = box.params[:]
+    p1 = Part.Plane(org, vec1)
+    p2 = Part.Plane(org, vec2)
+    p3 = Part.Plane(org, vec3)
+    p4 = Part.Plane(org+vec1, -vec1)
+    p5 = Part.Plane(org+vec2, -vec2)
+    p6 = Part.Plane(org+vec3, -vec3)
+
+    return (p1, p2, p3, p4, p5, p6)
 
 def parabola_to_planes(parabola, pos):
     # parabola approximated by plane tanget to the curve
@@ -1029,7 +1037,7 @@ def inertia_matrix(points):
     return
 
 
-def box_intersect(Fbox, Rbox):
+def box_intersect_not_used(Fbox, Rbox):
     PX1 = (Fbox.Box.XMin, Fbox.Box.XMax)
     PX2 = (Rbox.Box.XMin, Rbox.Box.XMax)
     PY1 = (Fbox.Box.YMin, Fbox.Box.YMax)
@@ -1067,30 +1075,30 @@ def box_intersect(Fbox, Rbox):
         return None
 
 
-def plane_region(P1, P2, orient1):
-    p11, p12 = P1
-    p21, p22 = P2
+def plane_region_not_used(PF, PR, orient1):
+    pfmin, pfmax = PF
+    prmin, prmax = PR
 
-    if p11 >= p22:
-        return (p11, p12) if orient1 == "Forward" else (p21, p22)
-    elif p12 <= p21:
-        return (p11, p12) if orient1 == "Forward" else (p21, p22)
+    if pfmin >= prmax:
+        return (pfmin, pfmax) if orient1 == "Forward" else (prmin, prmax)
+    elif pfmax <= prmin:
+        return (pfmin, pfmax) if orient1 == "Forward" else (prmin, prmax)
     else:
-        if p11 < p21:
-            if p12 < p22:
-                return (p11, p21) if orient1 == "Forward" else (p12, p22)
+        if pfmin < prmin:
+            if pfmax < prmax:
+                return (pfmin, prmin) if orient1 == "Forward" else (pfmax, prmax)
             else:
-                return (p11, p12) if orient1 == "Forward" else (None, None)
-        elif p11 > p21:
-            if p12 <= p22:
-                return (None, None) if orient1 == "Forward" else (p21, p22)  # OK
+                return (pfmin, pfmax) if orient1 == "Forward" else (None, None)
+        elif pfmin > prmin:
+            if pfmax <= prmax:
+                return (None, None) if orient1 == "Forward" else (prmin, prmax)  # OK
             else:
-                return (p22, p12) if orient1 == "Forward" else (p21, p11)
+                return (prmax, pfmax) if orient1 == "Forward" else (prmin, pfmin)
         else:
-            if p12 < p22:
-                return (None, None) if orient1 == "Forward" else (p12, p22)
-            elif p12 > p22:
-                return (p22, p12) if orient1 == "Forward" else (None, None)
+            if pfmax < prmax:
+                return (None, None) if orient1 == "Forward" else (pfmax, prmax)
+            elif pfmax > prmax:
+                return (prmax, pfmax) if orient1 == "Forward" else (None, None)
             else:
                 return (None, None)
 
