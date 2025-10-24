@@ -111,7 +111,7 @@ class myBox:
         if type(boundBox) is myBox:
             self.Box = boundBox.Box
             self.Orientation = boundBox.Orientation
-        else:    
+        else:
             if boundBox is not None:
                 if boundBox.XLength <= 1e-12:
                     self.Box = None
@@ -125,7 +125,7 @@ class myBox:
                 self.Box = None
             self.Orientation = orientation
         if self.Orientation is None:
-            raise TypeError('myBox orientation cannot by None type')   
+            raise TypeError("myBox orientation cannot by None type")
 
     def add(self, box):
         if self.Box is None:
@@ -153,10 +153,10 @@ class myBox:
             if box.Orientation == "Forward":
                 self.Box = None
                 self.Orientation = "Forward"
-        else:        
+        else:
             if self.Orientation == "Reversed" or box.Orientation == "Reversed":
                 self.Box.add(box.Box)
-            else:    
+            else:
                 inter = self.Box.intersected(box.Box)
                 if inter.isValid():
                     self.Box = inter
@@ -307,7 +307,7 @@ class solid_plane_box:
                 box = cbox.build_box_depth()
                 box_list.append(box)
 
-            fullBox = myBox(box_list[0])      
+            fullBox = myBox(box_list[0])
 
             if self.definition.operator == "AND":
                 for box in box_list[1:]:
@@ -415,7 +415,7 @@ def quadric_to_plane(cellDef, surfaces, orientation):
     elif orientation == "Forward":
         fwd = True
     else:
-        fwd = None    
+        fwd = None
 
     for s_index in surf_index:
         s_label = abs(s_index)
@@ -427,7 +427,7 @@ def quadric_to_plane(cellDef, surfaces, orientation):
         else:
             if fwd is None:
                 pos = None
-            else:    
+            else:
                 pos = (s_index > 0) == fwd
             surf_planes = convert_to_planes(s, pos)
             if s.type == "cone":
@@ -654,17 +654,19 @@ def torus_to_planes(torus, pos):
         central_planes = tuple()
     return (external_planes, central_planes)
 
+
 def box_to_planes(box):
 
-    org,vec1,vec2,vec3 = box.params[:]
+    org, vec1, vec2, vec3 = box.params[:]
     p1 = Part.Plane(org, vec1)
     p2 = Part.Plane(org, vec2)
     p3 = Part.Plane(org, vec3)
-    p4 = Part.Plane(org+vec1, -vec1)
-    p5 = Part.Plane(org+vec2, -vec2)
-    p6 = Part.Plane(org+vec3, -vec3)
+    p4 = Part.Plane(org + vec1, -vec1)
+    p5 = Part.Plane(org + vec2, -vec2)
+    p6 = Part.Plane(org + vec3, -vec3)
 
     return (p1, p2, p3, p4, p5, p6)
+
 
 def parabola_to_planes(parabola, pos):
     # parabola approximated by plane tanget to the curve
