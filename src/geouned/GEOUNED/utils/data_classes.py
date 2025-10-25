@@ -806,8 +806,8 @@ class Settings:
         if not isinstance(voidExclude, list):
             raise TypeError(f"geouned.Settings.voidExclude should be a list, not a {type(voidExclude)}")
         for entry in voidExclude:
-            if not isinstance(entry, int):
-                raise TypeError(f"geouned.Settings.voidExclude should be a list of ints, not a {type(entry)}")
+            if not isinstance(entry, str):
+                raise TypeError(f"geouned.Settings.voidExclude should be a list of strs, not a {type(entry)}")
         self._voidExclude = voidExclude
 
     @property
