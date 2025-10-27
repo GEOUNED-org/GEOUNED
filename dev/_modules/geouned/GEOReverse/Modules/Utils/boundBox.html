@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>geouned.GEOReverse.Modules.Utils.boundBox &#8212; GEOUNED 0.1.dev1+gc46c5812e documentation</title>
+    <title>geouned.GEOReverse.Modules.Utils.boundBox &#8212; GEOUNED 0.1.dev1+gbed74118d documentation</title>
   
   
   
@@ -37,7 +37,7 @@
   <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../../_static/documentation_options.js?v=b4dcfbad"></script>
+    <script src="../../../../../_static/documentation_options.js?v=cce85dac"></script>
     <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/geouned/GEOReverse/Modules/Utils/boundBox';</script>
@@ -52,7 +52,7 @@
     <link rel="search" title="Search" href="../../../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.dev1+gc46c5812e" />
+  <meta name="docsearch:version" content="0.1.dev1+gbed74118d" />
   </head>
   
   
@@ -509,24 +509,27 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">myBox</span><span class="p">:</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boundBox</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-        <span class="k">if</span> <span class="n">boundBox</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">boundBox</span><span class="o">.</span><span class="n">XLength</span> <span class="o">&lt;=</span> <span class="mf">1e-12</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="k">elif</span> <span class="n">boundBox</span><span class="o">.</span><span class="n">YLength</span> <span class="o">&lt;=</span> <span class="mf">1e-12</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="k">elif</span> <span class="n">boundBox</span><span class="o">.</span><span class="n">ZLength</span> <span class="o">&lt;=</span> <span class="mf">1e-12</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="o">=</span> <span class="n">boundBox</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">boundBox</span><span class="p">)</span> <span class="ow">is</span> <span class="n">myBox</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="o">=</span> <span class="n">boundBox</span><span class="o">.</span><span class="n">Box</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">=</span> <span class="n">boundBox</span><span class="o">.</span><span class="n">Orientation</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">=</span> <span class="n">orientation</span>
+            <span class="k">if</span> <span class="n">boundBox</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">boundBox</span><span class="o">.</span><span class="n">XLength</span> <span class="o">&lt;=</span> <span class="mf">1e-12</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">elif</span> <span class="n">boundBox</span><span class="o">.</span><span class="n">YLength</span> <span class="o">&lt;=</span> <span class="mf">1e-12</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">elif</span> <span class="n">boundBox</span><span class="o">.</span><span class="n">ZLength</span> <span class="o">&lt;=</span> <span class="mf">1e-12</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="o">=</span> <span class="n">boundBox</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">=</span> <span class="n">orientation</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;myBox orientation cannot by None type&quot;</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">box</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">Box</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">Orientation</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">Box</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">Orientation</span>
@@ -534,16 +537,10 @@
             <span class="k">if</span> <span class="n">box</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">==</span> <span class="s2">&quot;Reversed&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">=</span> <span class="s2">&quot;Reversed&quot;</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">==</span> <span class="n">box</span><span class="o">.</span><span class="n">Orientation</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">box</span><span class="o">.</span><span class="n">Box</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># -A OR B == -(A AND -B)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span><span class="p">:</span>
-                <span class="n">Rbox</span><span class="p">,</span> <span class="n">Fbox</span> <span class="o">=</span> <span class="bp">self</span><span class="p">,</span> <span class="n">box</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">Rbox</span><span class="p">,</span> <span class="n">Fbox</span> <span class="o">=</span> <span class="n">box</span><span class="p">,</span> <span class="bp">self</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="o">=</span> <span class="n">box_intersect</span><span class="p">(</span><span class="n">Fbox</span><span class="p">,</span> <span class="n">Rbox</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">=</span> <span class="s2">&quot;Reversed&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">box</span><span class="o">.</span><span class="n">Box</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">!=</span> <span class="n">box</span><span class="o">.</span><span class="n">Orientation</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">=</span> <span class="s2">&quot;Reversed&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">mult</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">box</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -557,19 +554,17 @@
             <span class="k">if</span> <span class="n">box</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">=</span> <span class="s2">&quot;Forward&quot;</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">==</span> <span class="n">box</span><span class="o">.</span><span class="n">Orientation</span><span class="p">:</span>
-            <span class="n">inter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">intersected</span><span class="p">(</span><span class="n">box</span><span class="o">.</span><span class="n">Box</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">inter</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="o">=</span> <span class="n">inter</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span><span class="p">:</span>
-                <span class="n">Fbox</span><span class="p">,</span> <span class="n">Rbox</span> <span class="o">=</span> <span class="bp">self</span><span class="p">,</span> <span class="n">box</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">==</span> <span class="s2">&quot;Reversed&quot;</span> <span class="ow">or</span> <span class="n">box</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">==</span> <span class="s2">&quot;Reversed&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">box</span><span class="o">.</span><span class="n">Box</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">Fbox</span><span class="p">,</span> <span class="n">Rbox</span> <span class="o">=</span> <span class="n">box</span><span class="p">,</span> <span class="bp">self</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="o">=</span> <span class="n">box_intersect</span><span class="p">(</span><span class="n">Fbox</span><span class="p">,</span> <span class="n">Rbox</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">=</span> <span class="s2">&quot;Forward&quot;</span>
+                <span class="n">inter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">intersected</span><span class="p">(</span><span class="n">box</span><span class="o">.</span><span class="n">Box</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">inter</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="o">=</span> <span class="n">inter</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">!=</span> <span class="n">box</span><span class="o">.</span><span class="n">Orientation</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">=</span> <span class="s2">&quot;Forward&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">sameBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">box</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Box</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">box</span><span class="o">.</span><span class="n">Box</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -587,7 +582,7 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">solid_plane_box</span><span class="p">:</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">NTCell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">outbox</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">NTCell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">outbox</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">NTCell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">settings</span> <span class="o">=</span> <span class="n">BoxSettings</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">planes</span> <span class="o">=</span> <span class="kc">None</span>
@@ -598,21 +593,20 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">universe_box</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">universe_radius</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
+            <span class="n">test_orientation</span> <span class="o">=</span> <span class="s2">&quot;Forward&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">insolid_tolerance</span> <span class="o">=</span> <span class="n">NTCell</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">insolid_tolerance</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">universe_box</span> <span class="o">=</span> <span class="n">NTCell</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">universe_box</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">surfaces</span> <span class="o">=</span> <span class="n">NTCell</span><span class="o">.</span><span class="n">surfaces</span>
-            <span class="n">plane_dict</span><span class="p">,</span> <span class="n">surf_to_plane_dict</span> <span class="o">=</span> <span class="n">quadric_to_plane</span><span class="p">(</span><span class="n">NTCell</span><span class="o">.</span><span class="n">definition</span><span class="p">,</span> <span class="n">NTCell</span><span class="o">.</span><span class="n">surfaces</span><span class="p">,</span> <span class="n">orientation</span><span class="p">)</span>
+            <span class="n">plane_dict</span><span class="p">,</span> <span class="n">surf_to_plane_dict</span> <span class="o">=</span> <span class="n">quadric_to_plane</span><span class="p">(</span><span class="n">NTCell</span><span class="o">.</span><span class="n">definition</span><span class="p">,</span> <span class="n">NTCell</span><span class="o">.</span><span class="n">surfaces</span><span class="p">,</span> <span class="n">test_orientation</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">planes</span> <span class="o">=</span> <span class="n">plane_dict</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">surf_to_plane</span> <span class="o">=</span> <span class="n">surf_to_plane_dict</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">definition</span> <span class="o">=</span> <span class="n">plane_definition</span><span class="p">(</span><span class="n">NTCell</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">surf_to_plane_dict</span><span class="p">,</span> <span class="n">orientation</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">definition</span> <span class="o">=</span> <span class="n">plane_definition</span><span class="p">(</span><span class="n">NTCell</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">surf_to_plane_dict</span><span class="p">,</span> <span class="n">test_orientation</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_box_orientation</span><span class="p">()</span>
 
-            <span class="k">if</span> <span class="n">orientation</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">test_orientation</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span><span class="p">:</span>
                 <span class="n">plane_dict</span><span class="p">,</span> <span class="n">surf_to_plane_dict</span> <span class="o">=</span> <span class="n">quadric_to_plane</span><span class="p">(</span><span class="n">NTCell</span><span class="o">.</span><span class="n">definition</span><span class="p">,</span> <span class="n">NTCell</span><span class="o">.</span><span class="n">surfaces</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">planes</span> <span class="o">=</span> <span class="n">plane_dict</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">surf_to_plane</span> <span class="o">=</span> <span class="n">surf_to_plane_dict</span>
-
-            <span class="k">if</span> <span class="n">orientation</span> <span class="o">==</span> <span class="s2">&quot;Undefined&quot;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">definition</span> <span class="o">=</span> <span class="n">plane_definition</span><span class="p">(</span><span class="n">NTCell</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">surf_to_plane_dict</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">outbox</span><span class="p">:</span>
@@ -714,14 +708,15 @@
                 <span class="n">box</span> <span class="o">=</span> <span class="n">cbox</span><span class="o">.</span><span class="n">build_box_depth</span><span class="p">()</span>
                 <span class="n">box_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
 
-            <span class="n">fullBox</span> <span class="o">=</span> <span class="n">myBox</span><span class="p">()</span>
+            <span class="n">fullBox</span> <span class="o">=</span> <span class="n">myBox</span><span class="p">(</span><span class="n">box_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">operator</span> <span class="o">==</span> <span class="s2">&quot;AND&quot;</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">box</span> <span class="ow">in</span> <span class="n">box_list</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">box</span> <span class="ow">in</span> <span class="n">box_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
                     <span class="n">fullBox</span><span class="o">.</span><span class="n">mult</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">fullBox</span><span class="o">.</span><span class="n">Box</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">fullBox</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span><span class="p">:</span>
                         <span class="k">break</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">box</span> <span class="ow">in</span> <span class="n">box_list</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">box</span> <span class="ow">in</span> <span class="n">box_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
                     <span class="n">fullBox</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">fullBox</span><span class="o">.</span><span class="n">Box</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">fullBox</span><span class="o">.</span><span class="n">Orientation</span> <span class="o">==</span> <span class="s2">&quot;Reversed&quot;</span><span class="p">:</span>
                         <span class="k">break</span>
@@ -817,24 +812,24 @@
     <span class="n">apex</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">if</span> <span class="n">orientation</span> <span class="o">==</span> <span class="s2">&quot;Reversed&quot;</span><span class="p">:</span>
-        <span class="n">chg</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">fwd</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">elif</span> <span class="n">orientation</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span><span class="p">:</span>
-        <span class="n">chg</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">fwd</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">chg</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">fwd</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">for</span> <span class="n">s_index</span> <span class="ow">in</span> <span class="n">surf_index</span><span class="p">:</span>
-        <span class="n">s_index</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">s_index</span><span class="p">)</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">surfaces</span><span class="p">[</span><span class="n">s_index</span><span class="p">]</span>
+        <span class="n">s_label</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">s_index</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">surfaces</span><span class="p">[</span><span class="n">s_label</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;plane&quot;</span><span class="p">:</span>
             <span class="n">normal</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">params</span>
             <span class="n">position</span> <span class="o">=</span> <span class="n">normal</span> <span class="o">*</span> <span class="n">d</span>
-            <span class="n">planes</span><span class="p">[</span><span class="n">s_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Part</span><span class="o">.</span><span class="n">Plane</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">normal</span><span class="p">)</span>
+            <span class="n">planes</span><span class="p">[</span><span class="n">s_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">Part</span><span class="o">.</span><span class="n">Plane</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">normal</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">chg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fwd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">pos</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">s_index</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="n">chg</span>
+                <span class="n">pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">s_index</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="n">fwd</span>
             <span class="n">surf_planes</span> <span class="o">=</span> <span class="n">convert_to_planes</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;cone&quot;</span><span class="p">:</span>
                 <span class="n">apex</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -846,9 +841,9 @@
                     <span class="n">next_index</span> <span class="o">+=</span> <span class="mi">1</span>
 
                 <span class="k">if</span> <span class="n">dbl</span><span class="p">:</span>
-                    <span class="n">surf_planes_dict</span><span class="p">[</span><span class="n">s_index</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;dblcone&quot;</span><span class="p">,</span> <span class="n">p_index</span><span class="p">)</span>
+                    <span class="n">surf_planes_dict</span><span class="p">[</span><span class="n">s_label</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;dblcone&quot;</span><span class="p">,</span> <span class="n">p_index</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">surf_planes_dict</span><span class="p">[</span><span class="n">s_index</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;cone&quot;</span><span class="p">,</span> <span class="n">p_index</span><span class="p">)</span>
+                    <span class="n">surf_planes_dict</span><span class="p">[</span><span class="n">s_label</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;cone&quot;</span><span class="p">,</span> <span class="n">p_index</span><span class="p">)</span>
 
             <span class="k">elif</span> <span class="n">s</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;torus&quot;</span><span class="p">:</span>
                 <span class="n">extplanes</span><span class="p">,</span> <span class="n">inplanes</span> <span class="o">=</span> <span class="n">surf_planes</span>
@@ -862,14 +857,14 @@
                     <span class="n">planes</span><span class="p">[</span><span class="n">next_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span>
                     <span class="n">p_in</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">next_index</span><span class="p">)</span>
                     <span class="n">next_index</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="n">surf_planes_dict</span><span class="p">[</span><span class="n">s_index</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;torus&quot;</span><span class="p">,</span> <span class="n">p_ext</span><span class="p">,</span> <span class="n">p_in</span><span class="p">)</span>
+                <span class="n">surf_planes_dict</span><span class="p">[</span><span class="n">s_label</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;torus&quot;</span><span class="p">,</span> <span class="n">p_ext</span><span class="p">,</span> <span class="n">p_in</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">p_index</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">surf_planes</span><span class="p">:</span>
                     <span class="n">planes</span><span class="p">[</span><span class="n">next_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span>
                     <span class="n">p_index</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">next_index</span><span class="p">)</span>
                     <span class="n">next_index</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="n">surf_planes_dict</span><span class="p">[</span><span class="n">s_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">p_index</span>
+                <span class="n">surf_planes_dict</span><span class="p">[</span><span class="n">s_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">p_index</span>
     <span class="k">return</span> <span class="n">planes</span><span class="p">,</span> <span class="n">surf_planes_dict</span>
 
 
@@ -884,6 +879,8 @@
         <span class="k">return</span> <span class="n">torus_to_planes</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">s</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;paraboloid&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">parabola_to_planes</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">s</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;box&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">box_to_planes</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">s</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2"> not implemented for boundbox&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[]</span>
@@ -1057,6 +1054,19 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">central_planes</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">()</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">external_planes</span><span class="p">,</span> <span class="n">central_planes</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">box_to_planes</span><span class="p">(</span><span class="n">box</span><span class="p">):</span>
+
+    <span class="n">org</span><span class="p">,</span> <span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">,</span> <span class="n">vec3</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">params</span><span class="p">[:]</span>
+    <span class="n">p1</span> <span class="o">=</span> <span class="n">Part</span><span class="o">.</span><span class="n">Plane</span><span class="p">(</span><span class="n">org</span><span class="p">,</span> <span class="n">vec1</span><span class="p">)</span>
+    <span class="n">p2</span> <span class="o">=</span> <span class="n">Part</span><span class="o">.</span><span class="n">Plane</span><span class="p">(</span><span class="n">org</span><span class="p">,</span> <span class="n">vec2</span><span class="p">)</span>
+    <span class="n">p3</span> <span class="o">=</span> <span class="n">Part</span><span class="o">.</span><span class="n">Plane</span><span class="p">(</span><span class="n">org</span><span class="p">,</span> <span class="n">vec3</span><span class="p">)</span>
+    <span class="n">p4</span> <span class="o">=</span> <span class="n">Part</span><span class="o">.</span><span class="n">Plane</span><span class="p">(</span><span class="n">org</span> <span class="o">+</span> <span class="n">vec1</span><span class="p">,</span> <span class="o">-</span><span class="n">vec1</span><span class="p">)</span>
+    <span class="n">p5</span> <span class="o">=</span> <span class="n">Part</span><span class="o">.</span><span class="n">Plane</span><span class="p">(</span><span class="n">org</span> <span class="o">+</span> <span class="n">vec2</span><span class="p">,</span> <span class="o">-</span><span class="n">vec2</span><span class="p">)</span>
+    <span class="n">p6</span> <span class="o">=</span> <span class="n">Part</span><span class="o">.</span><span class="n">Plane</span><span class="p">(</span><span class="n">org</span> <span class="o">+</span> <span class="n">vec3</span><span class="p">,</span> <span class="o">-</span><span class="n">vec3</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span><span class="p">,</span> <span class="n">p4</span><span class="p">,</span> <span class="n">p5</span><span class="p">,</span> <span class="n">p6</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">parabola_to_planes</span><span class="p">(</span><span class="n">parabola</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>
@@ -1430,7 +1440,7 @@
     <span class="k">return</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">box_intersect</span><span class="p">(</span><span class="n">Fbox</span><span class="p">,</span> <span class="n">Rbox</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">box_intersect_not_used</span><span class="p">(</span><span class="n">Fbox</span><span class="p">,</span> <span class="n">Rbox</span><span class="p">):</span>
     <span class="n">PX1</span> <span class="o">=</span> <span class="p">(</span><span class="n">Fbox</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">XMin</span><span class="p">,</span> <span class="n">Fbox</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">XMax</span><span class="p">)</span>
     <span class="n">PX2</span> <span class="o">=</span> <span class="p">(</span><span class="n">Rbox</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">XMin</span><span class="p">,</span> <span class="n">Rbox</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">XMax</span><span class="p">)</span>
     <span class="n">PY1</span> <span class="o">=</span> <span class="p">(</span><span class="n">Fbox</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">YMin</span><span class="p">,</span> <span class="n">Fbox</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">YMax</span><span class="p">)</span>
@@ -1468,30 +1478,30 @@
         <span class="k">return</span> <span class="kc">None</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">plane_region</span><span class="p">(</span><span class="n">P1</span><span class="p">,</span> <span class="n">P2</span><span class="p">,</span> <span class="n">orient1</span><span class="p">):</span>
-    <span class="n">p11</span><span class="p">,</span> <span class="n">p12</span> <span class="o">=</span> <span class="n">P1</span>
-    <span class="n">p21</span><span class="p">,</span> <span class="n">p22</span> <span class="o">=</span> <span class="n">P2</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plane_region_not_used</span><span class="p">(</span><span class="n">PF</span><span class="p">,</span> <span class="n">PR</span><span class="p">,</span> <span class="n">orient1</span><span class="p">):</span>
+    <span class="n">pfmin</span><span class="p">,</span> <span class="n">pfmax</span> <span class="o">=</span> <span class="n">PF</span>
+    <span class="n">prmin</span><span class="p">,</span> <span class="n">prmax</span> <span class="o">=</span> <span class="n">PR</span>
 
-    <span class="k">if</span> <span class="n">p11</span> <span class="o">&gt;=</span> <span class="n">p22</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">p11</span><span class="p">,</span> <span class="n">p12</span><span class="p">)</span> <span class="k">if</span> <span class="n">orient1</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span> <span class="k">else</span> <span class="p">(</span><span class="n">p21</span><span class="p">,</span> <span class="n">p22</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">p12</span> <span class="o">&lt;=</span> <span class="n">p21</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">p11</span><span class="p">,</span> <span class="n">p12</span><span class="p">)</span> <span class="k">if</span> <span class="n">orient1</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span> <span class="k">else</span> <span class="p">(</span><span class="n">p21</span><span class="p">,</span> <span class="n">p22</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pfmin</span> <span class="o">&gt;=</span> <span class="n">prmax</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">pfmin</span><span class="p">,</span> <span class="n">pfmax</span><span class="p">)</span> <span class="k">if</span> <span class="n">orient1</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span> <span class="k">else</span> <span class="p">(</span><span class="n">prmin</span><span class="p">,</span> <span class="n">prmax</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">pfmax</span> <span class="o">&lt;=</span> <span class="n">prmin</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">pfmin</span><span class="p">,</span> <span class="n">pfmax</span><span class="p">)</span> <span class="k">if</span> <span class="n">orient1</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span> <span class="k">else</span> <span class="p">(</span><span class="n">prmin</span><span class="p">,</span> <span class="n">prmax</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">p11</span> <span class="o">&lt;</span> <span class="n">p21</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">p12</span> <span class="o">&lt;</span> <span class="n">p22</span><span class="p">:</span>
-                <span class="k">return</span> <span class="p">(</span><span class="n">p11</span><span class="p">,</span> <span class="n">p21</span><span class="p">)</span> <span class="k">if</span> <span class="n">orient1</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span> <span class="k">else</span> <span class="p">(</span><span class="n">p12</span><span class="p">,</span> <span class="n">p22</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pfmin</span> <span class="o">&lt;</span> <span class="n">prmin</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pfmax</span> <span class="o">&lt;</span> <span class="n">prmax</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">pfmin</span><span class="p">,</span> <span class="n">prmin</span><span class="p">)</span> <span class="k">if</span> <span class="n">orient1</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span> <span class="k">else</span> <span class="p">(</span><span class="n">pfmax</span><span class="p">,</span> <span class="n">prmax</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="p">(</span><span class="n">p11</span><span class="p">,</span> <span class="n">p12</span><span class="p">)</span> <span class="k">if</span> <span class="n">orient1</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span> <span class="k">else</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">p11</span> <span class="o">&gt;</span> <span class="n">p21</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">p12</span> <span class="o">&lt;=</span> <span class="n">p22</span><span class="p">:</span>
-                <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">orient1</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span> <span class="k">else</span> <span class="p">(</span><span class="n">p21</span><span class="p">,</span> <span class="n">p22</span><span class="p">)</span>  <span class="c1"># OK</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">pfmin</span><span class="p">,</span> <span class="n">pfmax</span><span class="p">)</span> <span class="k">if</span> <span class="n">orient1</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span> <span class="k">else</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">pfmin</span> <span class="o">&gt;</span> <span class="n">prmin</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pfmax</span> <span class="o">&lt;=</span> <span class="n">prmax</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">orient1</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span> <span class="k">else</span> <span class="p">(</span><span class="n">prmin</span><span class="p">,</span> <span class="n">prmax</span><span class="p">)</span>  <span class="c1"># OK</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="p">(</span><span class="n">p22</span><span class="p">,</span> <span class="n">p12</span><span class="p">)</span> <span class="k">if</span> <span class="n">orient1</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span> <span class="k">else</span> <span class="p">(</span><span class="n">p21</span><span class="p">,</span> <span class="n">p11</span><span class="p">)</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">prmax</span><span class="p">,</span> <span class="n">pfmax</span><span class="p">)</span> <span class="k">if</span> <span class="n">orient1</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span> <span class="k">else</span> <span class="p">(</span><span class="n">prmin</span><span class="p">,</span> <span class="n">pfmin</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">p12</span> <span class="o">&lt;</span> <span class="n">p22</span><span class="p">:</span>
-                <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">orient1</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span> <span class="k">else</span> <span class="p">(</span><span class="n">p12</span><span class="p">,</span> <span class="n">p22</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">p12</span> <span class="o">&gt;</span> <span class="n">p22</span><span class="p">:</span>
-                <span class="k">return</span> <span class="p">(</span><span class="n">p22</span><span class="p">,</span> <span class="n">p12</span><span class="p">)</span> <span class="k">if</span> <span class="n">orient1</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span> <span class="k">else</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">pfmax</span> <span class="o">&lt;</span> <span class="n">prmax</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">orient1</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span> <span class="k">else</span> <span class="p">(</span><span class="n">pfmax</span><span class="p">,</span> <span class="n">prmax</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">pfmax</span> <span class="o">&gt;</span> <span class="n">prmax</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">prmax</span><span class="p">,</span> <span class="n">pfmax</span><span class="p">)</span> <span class="k">if</span> <span class="n">orient1</span> <span class="o">==</span> <span class="s2">&quot;Forward&quot;</span> <span class="k">else</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
