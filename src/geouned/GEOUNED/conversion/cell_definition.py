@@ -324,9 +324,9 @@ def gen_plane_cylinder(face, solid, tolerances):
         return None
 
     normal = p2.sub(p1).cross(face.Surface.Axis)
-    plane = Part.Plane(p1, normal).toShape()
     if normal.Length < 1e-10:
         return None
+    plane = Part.Plane(p1, normal).toShape()
     return plane
 
 
