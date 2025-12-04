@@ -624,7 +624,7 @@ class BoolSequence:
     def get_surfaces_numbers(self):
         """Return the list of all surfaces in the BoolSequence definition."""
         if type(self.elements) is bool:
-            return tuple()
+            return set()
         surf = set()
         for e in self.elements:
             if type(e) is int:
