@@ -321,7 +321,7 @@ def remove_extra_surfaces(CellSeq, CTable):
 
     # Loop over all compound solids of the metaSolid
 
-    if CellSeq.level == 0 and len(CellSeq.elements) == 1:
+    if CellSeq.level == 0:
         return CellSeq
 
     if CellSeq.operator == "AND":
