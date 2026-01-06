@@ -84,6 +84,8 @@ def get_id(facein, surfaces, options, tolerances, numeric_format):
                 atol=tolerances.tor_angle,
                 rel_tol=tolerances.relativeTol,
             ):
+                if s.Surf.Degenerated:
+                    s.Surf.a_sign = facein.a_sign  # only one degenerated surface can be present at once
                 return s.Index
 
     return 0
@@ -591,7 +593,11 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
                             surf_obj.append(p.shape)
 
             elif surface_type == "<Toroid object>":
-
+                if face.Surface.Degenerated and face.Surface.a_sign < 0:
+                    if orient == "Forward":
+                        orient = "Reversed"
+                    else:
+                        orient = "Forward"
                 if (
                     is_parallel(face.Surface.Axis, FreeCAD.Vector(1, 0, 0), tolerances.angle)
                     or is_parallel(face.Surface.Axis, FreeCAD.Vector(0, 1, 0), tolerances.angle)
@@ -640,7 +646,7 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
                     else:
                         index, Vparams = solid_gu.TorusVParams[iface]
                         VClosed, VminMax = Vparams
-                        if VClosed:
+                        if VClosed or face.Surface.Degenerated:
                             v_var = "%i" % idT
                         else:
                             surf_params, surf_type, in_surf = gen_torus_annex_v_surface(

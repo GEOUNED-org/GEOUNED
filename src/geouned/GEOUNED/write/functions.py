@@ -442,6 +442,8 @@ def mcnp_surface(id, Type, surf, options, tolerances, numeric_format):
         Pos = surf.Center * 0.1
         radMaj = surf.MajorRadius * 0.1
         radMin = surf.MinorRadius * 0.1
+        if surf.Degenerated:
+            radMaj *= surf.a_sign
         if is_parallel(Dir, FreeCAD.Vector(1, 0, 0), tolerances.angle):
             mcnp_def = """\
 {:<6d} TX  {:{xyz}} {:{xyz}} {:{xyz}}
@@ -682,6 +684,8 @@ def open_mc_surface(Type, surf, tolerances, numeric_format, out_xml=True, quadri
         majRad = surf.MajorRadius * 0.1
         Dir = FreeCAD.Vector(surf.Axis)
         Dir.normalize()
+        if surf.Degenerated:
+            majRad *= surf.a_sign
         if out_xml:
             coeffs = "{:{xyz}} {:{xyz}} {:{xyz}} {:{r}} {:{r}} {:{r}}".format(
                 Center.x,
@@ -836,6 +840,9 @@ surf quadratic  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
         Pos = surf.Center * 0.1
         radMaj = surf.MajorRadius * 0.1
         radMin = surf.MinorRadius * 0.1
+        if surf.Degenerated:
+            radMaj *= surf.a_sign
+
         if is_parallel(Dir, FreeCAD.Vector(1, 0, 0), tolerance.angle):
             serpent_def = (
                 f"surf {id} torx {Pos.x:{numeric_format.T_xyz}} {Pos.y:{numeric_format.T_xyz}} {Pos.z:{numeric_format.T_xyz}}\n"
@@ -1059,6 +1066,8 @@ def phits_surface(id, Type, surf, options, tolerance, numeric_format):
         Pos = surf.Center * 0.1
         radMaj = surf.MajorRadius * 0.1
         radMin = surf.MinorRadius * 0.1
+        if surf.Degenerated:
+            radMaj *= surf.a_sign
         if is_parallel(Dir, FreeCAD.Vector(1, 0, 0), tolerance.angle):
             phits_def = """\
 {:<6d} TX  {:{xyz}} {:{xyz}} {:{xyz}}

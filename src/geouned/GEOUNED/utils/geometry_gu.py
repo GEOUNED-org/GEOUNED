@@ -137,6 +137,20 @@ class TorusGu(SurfacesGu):
         self.Axis = face.Surface.Axis
         self.MajorRadius = face.Surface.MajorRadius
         self.MinorRadius = face.Surface.MinorRadius
+        self.Degenerated = face.Surface.MinorRadius > face.Surface.MajorRadius
+        if self.Degenerated:
+            self.a_sign = self.degenerate_surface_type()
+        else:
+            self.a_sign = 1
+
+    def degenerate_surface_type(self):
+        vertex = self.face.Vertexes[0].Point
+        v = vertex - self.Surface.Center
+        R = v - v.dot(self.Surface.Axis) * self.Surface.Axis
+        R.normalize()
+        r = v - R * self.MajorRadius
+        diff = abs(r.Length - self.MinorRadius)
+        return 1 if diff < 1e-8 else -1
 
     def isSameSurface(self, surface):
         if type(surface) is not TorusGu:
@@ -149,6 +163,8 @@ class TorusGu(SurfacesGu):
         if d.Length > 1e-5:
             return False
         if abs(self.Axis.dot(surface.Axis)) < 0.99999:
+            return False
+        if self.a_sign != surface.a_sign:
             return False
         return True
 

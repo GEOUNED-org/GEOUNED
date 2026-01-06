@@ -188,6 +188,8 @@ class TorusParams:
         self.Axis = params[1]
         self.MajorRadius = params[2]
         self.MinorRadius = params[3]
+        self.Degenerated = self.MinorRadius > self.MajorRadius
+        self.a_sign = 1  # assumed default external surface for degenerated Torus
 
     def __str__(self):
         outstr = f"""Torus :
