@@ -89,6 +89,14 @@ class BoolSequence:
             self.level = -1
             return
 
+        if type(seq) is list or type(seq) is tuple:
+            if len(seq) > 1:
+                self.elements = list(*seq)
+                self.level_update()
+                return
+            else:
+                seq = seq[0]
+             
         self.operator = seq.operator
         self.elements = seq.elements
         self.level = seq.level
