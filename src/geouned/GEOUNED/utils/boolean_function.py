@@ -96,7 +96,7 @@ class BoolSequence:
                 return
             else:
                 seq = seq[0]
-             
+
         self.operator = seq.operator
         self.elements = seq.elements
         self.level = seq.level
