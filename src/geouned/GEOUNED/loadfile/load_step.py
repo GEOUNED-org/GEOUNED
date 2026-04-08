@@ -34,7 +34,7 @@ def extract_materials(filename):
 def load_cad(filename, spline_surf, settings, options):
 
     # Set document solid tree options when opening CAD differing from version 0.18
-    if int(FreeCAD.Version()[1]) > 18:
+    if int(FreeCAD.Version()[0]) > 0 or int(FreeCAD.Version()[1]) > 18:
         LF.set_doc_options()
 
     cad_simplificado_doc = FreeCAD.newDocument("CAD_simplificado")
