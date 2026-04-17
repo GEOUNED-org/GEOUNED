@@ -818,15 +818,15 @@ def split_2nd_order(Solids, universe_box, options, tolerances, numeric_format):
                                     compVol += s.Volume
                                     solidsInCom.append(s)
 
-                            sameVol = abs((solid.Volume-compVol)/solid.Volume) < 1.0e-5
+                            sameVol = abs((solid.Volume - compVol) / solid.Volume) < 1.0e-5
 
                             if len(solidsInCom) > 1 and sameVol:
                                 simple = False
                                 cutBase.extend(solidsInCom)
                                 break
-                            
-                            if not sameVol :
-                                logger.info("Failed split base with {s.shape.Faces[0].Surface} surface. Unsplit solid is used")    
+
+                            if not sameVol:
+                                logger.info("Failed split base with {s.shape.Faces[0].Surface} surface. Unsplit solid is used")
                         except:
                             logger.info("Failed split base with {s.shape.Faces[0].Surface} surface")
                             err += 2
