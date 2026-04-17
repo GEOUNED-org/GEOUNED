@@ -48,9 +48,7 @@ forceCylinder = False
 splitTolerance = 0
 newSplitPlane = True
 nPlaneReverse = 0
-""".format(
-        inName, outName
-    )
+""".format(inName, outName)
 
     with open(file="config.ini", mode="w", encoding="utf-8") as outfile:
         outfile.write(template)

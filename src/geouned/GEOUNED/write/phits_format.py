@@ -145,18 +145,13 @@ $
 
         freeCAD_Version = "{V[0]:}.{V[1]:}.{V[2]:}".format(V=FreeCAD.Version())
 
-        Header = (
-            "$ "
-            """{}
+        Header = "$ " """{}
 $   ______ _______  _____      _     _ __   _ _______ ______  
 $  |  ____ |______ |     | ___ |     | | \  | |______ |     \ 
 $  |_____| |______ |_____|     |_____| |  \_| |______ |_____/
 $ Version : {}
 $ FreeCAD Version : {} 
-$ PHITSFormat Version :  0.0.2.3     06/03/2024\n""".format(
-                self.Title, version("geouned"), freeCAD_Version
-            )
-        )
+$ PHITSFormat Version :  0.0.2.3     06/03/2024\n""".format(self.Title, version("geouned"), freeCAD_Version)
 
         Information = f"""$
 $ *************************************************************
