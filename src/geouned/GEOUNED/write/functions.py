@@ -248,9 +248,7 @@ def mcnp_surface(id, Type, surf, options, tolerances, numeric_format):
             P3 = surf.Points[2]
             mcnp_def = """{:<6d} P   {P1[0]:{d}} {P1[1]:{d}} {P1[2]:{d}} 
            {P2[0]:{d}} {P2[1]:{d}} {P2[2]:{d}}
-           {P3[0]:{d}} {P3[1]:{d}} {P3[2]:{d}}""".format(
-                id, P1=P1 / 10, P2=P2 / 10, P3=P3 / 10, d=numeric_format.P_d
-            )
+           {P3[0]:{d}} {P3[1]:{d}} {P3[2]:{d}}""".format(id, P1=P1 / 10, P2=P2 / 10, P3=P3 / 10, d=numeric_format.P_d)
         else:
             A = surf.Axis.x
             B = surf.Axis.y
@@ -872,9 +870,7 @@ def phits_surface(id, Type, surf, options, tolerance, numeric_format):
             P3 = surf.Points[2]
             phits_def = """{:<6d} P   {P1[0]:{d}} {P1[1]:{d}} {P1[2]:{d}} 
            {P2[0]:{d}} {P2[1]:{d}} {P2[2]:{d}}
-           {P3[0]:{d}} {P3[1]:{d}} {P3[2]:{d}}""".format(
-                id, P1=P1 / 10, P2=P2 / 10, P3=P3 / 10, d=numeric_format.P_d
-            )
+           {P3[0]:{d}} {P3[1]:{d}} {P3[2]:{d}}""".format(id, P1=P1 / 10, P2=P2 / 10, P3=P3 / 10, d=numeric_format.P_d)
         else:
             A = surf.Axis.x
             B = surf.Axis.y

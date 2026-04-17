@@ -377,7 +377,7 @@ def gen_plane_cone(face, solid, tolerances):
     return plane
 
 
-def gen_torus_annex_u_planes(face, u_params, tolerances):
+def gen_torus_annex_u_planes(face, u_params, vmid, tolerances):
 
     if is_parallel(face.Surface.Axis, FreeCAD.Vector(1, 0, 0), tolerances.tor_angle):
         axis = FreeCAD.Vector(1, 0, 0)
@@ -387,9 +387,9 @@ def gen_torus_annex_u_planes(face, u_params, tolerances):
         axis = FreeCAD.Vector(0, 0, 1)
 
     center = face.Surface.Center
-    p1 = face.valueAt(u_params[0], 0.0)
-    p2 = face.valueAt(u_params[1], 0.0)
-    pmid = face.valueAt(0.5 * (u_params[0] + u_params[1]), 0.0)
+    p1 = face.valueAt(u_params[0], vmid)
+    p2 = face.valueAt(u_params[1], vmid)
+    pmid = face.valueAt(0.5 * (u_params[0] + u_params[1]), vmid)
 
     if is_same_value(abs(u_params[1] - u_params[0]), math.pi, tolerances.value):
         d = axis.cross(p2 - p1)
@@ -607,6 +607,8 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
                     idT = get_id(face.Surface, surfaces, options, tolerances, numeric_format)
 
                     index, u_params = solid_gu.TorusUParams[iface]
+                    dummy, v_params = solid_gu.TorusVParams[iface]
+                    vmid = 0.5 * (v_params[1][0] + v_params[1][1])
                     if index == last_torus:
                         continue
                     last_torus = index
@@ -615,7 +617,7 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
                     u_closed, u_minMax = u_params
                     # u_closed = True
                     if not u_closed:
-                        planes, ORop = gen_torus_annex_u_planes(face, u_minMax, tolerances)
+                        planes, ORop = gen_torus_annex_u_planes(face, u_minMax, vmid, tolerances)
                         plane1, plane2 = planes
                         plane = GeounedSurface(("Plane", plane1), universe_box, Face="Build")
                         id1, exist = surfaces.add_plane(plane, options, tolerances, numeric_format, False)

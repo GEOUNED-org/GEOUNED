@@ -145,12 +145,9 @@ class TorusGu(SurfacesGu):
 
     def degenerate_surface_type(self):
         vertex = self.face.Vertexes[0].Point
-        v = vertex - self.Surface.Center
-        R = v - v.dot(self.Surface.Axis) * self.Surface.Axis
-        R.normalize()
-        r = v - R * self.MajorRadius
-        diff = abs(r.Length - self.MinorRadius)
-        return 1 if diff < 1e-8 else -1
+        r = vertex - self.Surface.Center
+        outer = r.Length > math.sqrt(self.MinorRadius**2 - self.MajorRadius**2)
+        return 1 if outer else -1
 
     def isSameSurface(self, surface):
         if type(surface) is not TorusGu:
