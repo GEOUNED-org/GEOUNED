@@ -344,10 +344,16 @@ class FaceGu(object):
         if shape1 is shape2:
             return (0,)
         else:
-            try:
-                dist2Shape = shape1.distToShape(shape2)
-            except:
-                dist2Shape = shape2.distToShape(shape1)
+            if shape1.BoundBox.intersect(shape2.BoundBox):
+                try:
+                    dist2Shape = shape1.distToShape(shape2)
+                except:
+                    dist2Shape = shape2.distToShape(shape1)
+            else:
+                c1 = shape1.BoundBox.Center
+                c2 = shape2.BoundBox.Center
+                d = c2-c1
+                dist2Shape = (d.Length,0)        
             return dist2Shape
 
 
