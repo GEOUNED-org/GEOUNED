@@ -10,3 +10,4 @@ jobs:
       - uses: psf/black@stable
         with:
           version: "26.1.0"
+
