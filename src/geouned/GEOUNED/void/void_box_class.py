@@ -119,7 +119,7 @@ class VoidBox:
 
         return VoidBoxTuple
 
-    def piece_enclosure_split(self, Box, Tolerance=1.0e-13):
+    def piece_enclosure_split(self, Box, Tolerance=1.0e-10):
         """This function creates a box-shaped solid with the new limits of given bounding box and
         it is intersected with the piece of nested enclosure to create the new void cell.
         If the limited region does not intersect with the piece, no void cell is created.
@@ -348,7 +348,12 @@ class VoidBox:
         else:
             compSeq.simplify(None)
             complementary.simplify(None)
-            complementary.append(compSeq)
+            if complementary.operator == "OR":
+                cc = BoolSequence(operator="AND")
+                cc.append(complementary,compSeq)
+                complementary = cc
+            else:    
+                complementary.append(compSeq)
 
         complementary.clean()
         complementary.level_update()
