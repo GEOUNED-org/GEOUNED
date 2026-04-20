@@ -350,9 +350,9 @@ class VoidBox:
             complementary.simplify(None)
             if complementary.operator == "OR":
                 cc = BoolSequence(operator="AND")
-                cc.append(complementary,compSeq)
+                cc.append(complementary, compSeq)
                 complementary = cc
-            else:    
+            else:
                 complementary.append(compSeq)
 
         complementary.clean()

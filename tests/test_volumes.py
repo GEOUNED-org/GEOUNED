@@ -20,14 +20,12 @@ import pytest
 from FreeCAD import Import
 
 with open("cross_sections.xml", "w") as file:
-    file.write(
-        """
+    file.write("""
         <?xml version='1.0' encoding='UTF-8'?>
         <cross_sections>
         <library materials="H1" path="" type="neutron"/>
         </cross_sections>
-    """
-    )
+    """)
 openmc.config["cross_sections"] = Path("cross_sections.xml").resolve()
 
 path_to_cad = Path("testing/inputSTEP")
