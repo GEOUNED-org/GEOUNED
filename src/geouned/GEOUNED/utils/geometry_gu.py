@@ -352,8 +352,8 @@ class FaceGu(object):
             else:
                 c1 = shape1.BoundBox.Center
                 c2 = shape2.BoundBox.Center
-                d = c2-c1
-                dist2Shape = (d.Length,0)        
+                d = c2 - c1
+                dist2Shape = (d.Length, 0)
             return dist2Shape
 
 
