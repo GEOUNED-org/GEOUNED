@@ -99,7 +99,7 @@ C ##########################################################
         self.inpfile.write(surfaceHeader)
         self.write_surface_block()
         self.inpfile.write(" \n")
-        self.write_mat_block(self)
+        self.write_mat_block()
         self.write_source_block()
 
         self.inpfile.close()
