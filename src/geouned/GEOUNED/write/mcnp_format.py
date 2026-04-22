@@ -192,7 +192,7 @@ C **************************************************************
         return
 
     def write_mat_block(self):
-        """ dummy material and control keywords """
+        """Dummy material and control keywords"""
         MODE = f"MODE {self.part}\nVOID \nNPS 1e6\n"
         if self.dummyMat:
             mat = list(self.Materials)
