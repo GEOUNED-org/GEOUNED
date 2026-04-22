@@ -99,7 +99,6 @@ C ##########################################################
         self.inpfile.write(surfaceHeader)
         self.write_surface_block()
         self.inpfile.write(" \n")
-        
         self.write_mat_block(self)
         self.write_source_block()
 
@@ -191,9 +190,9 @@ C **************************************************************
         else:
             logger.info(f"Surface {surface.Type} cannot be written in MCNP input")
         return
-        
+
     def write_mat_block(self):
-        """ """
+        """ dummy material and control keywords """
         MODE = f"MODE {self.part}\nVOID \nNPS 1e6\n"
         if self.dummyMat:
             mat = list(self.Materials)
@@ -204,18 +203,17 @@ C **************************************************************
             Block = MATCARD + "C \n" + MODE
         else:
             Block = MODE
-            
+
         self.inpfile.write(Block)
-            
+
     def write_source_block(self):
 
         if self.SDEF_sphere is None:
             return
-            
+
         Block = "PRDMP 2J -1\n"
 
         if self.VolSDEF:
-            
             for line in self.SDEF_box:
                 Block += "C " + line
             for line in self.SDEF_sphere:
