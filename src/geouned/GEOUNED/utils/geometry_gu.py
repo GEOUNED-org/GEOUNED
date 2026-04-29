@@ -382,5 +382,3 @@ def define_surface(face, plane3Pts):
         logger.info(f"bad Surface type {kind_surf}")
         Surf_GU = None
     return Surf_GU
-
-
