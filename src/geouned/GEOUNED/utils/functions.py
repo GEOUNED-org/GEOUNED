@@ -641,8 +641,8 @@ def myDistToShape(shape1, shape2):
                     if same:
                         break
                     for e2 in shape2.Edges:
-                        if e1.isSame(e2):
-                            dist2Shape = 0.0
+                        dist2Shape = e1.distToShape(e2)[0]
+                        if dist2Shape < 1e-6:
                             same = True
                             break
                 if not same:
