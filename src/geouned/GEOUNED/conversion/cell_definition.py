@@ -905,6 +905,11 @@ def no_overlapping_cell(metaList, surfaces, options):
                     comp.clean()
 
             m.set_definition(new_def)
+            for i in range(len(m.Definition.elements)):
+                if type(m.Definition.elements[i].elements) is bool:
+                    if not m.Definition.elements[i].elements and m.Definition.operator == "OR":
+                        logger.info(f"Removed a Solid {i} from cell {m.__id__}")
+                        m.Solids.pop(i)
             m.Definition.join_operators()
             m.Definition.level_update()
 
