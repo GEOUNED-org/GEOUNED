@@ -839,6 +839,8 @@ def no_overlapping_cell(metaList, surfaces, options):
     metaList[0].set_cad_solid()
 
     for i, m in enumerate(metaList[1:]):
+        if m.CellType != "solid" or m.IsEnclosure:
+            continue
         m.set_cad_solid()
 
         if m.Definition.operator == "AND":
