@@ -1137,7 +1137,7 @@ def phits_surface(id, Type, surf, options, tolerance, numeric_format):
 
     return trim(phits_def, 80)
 
-def mcdc_surface(Type, surf, tolerances, numeric_format=None, quadricForm=False):
+def mcdc_surface(Type, surf, tolerances, numeric_format=None):
     if Type == "Plane":
         A = surf.Axis.x
         B = surf.Axis.y
@@ -1162,6 +1162,38 @@ def mcdc_surface(Type, surf, tolerances, numeric_format=None, quadricForm=False)
             mcdc_surf = "Plane"
             D = -surf.Axis.dot(surf.Position) * 0.1
             coeffs = f"A={A},B={B},C={C},D={D}"
+
+        return mcdc_surf, coeffs
+
+    elif Type == "Cylinder":
+        pos = surf.Center * 0.1
+        Rad = surf.Radius * 0.1
+        Dir = FreeCAD.Vector(surf.Axis)
+        Dir.normalize()
+
+        if is_parallel(Dir, FreeCAD.Vector(1, 0, 0), tolerances.angle):
+            mcdc_surf = "CylinderX"
+            coeffs = f"center=[{pos.y}, {pos.z}], radius={Rad}"
+
+        elif is_parallel(Dir, FreeCAD.Vector(0, 1, 0), tolerances.angle):
+            mcdc_surf = "CylinderY"
+            coeffs = f"center=[{pos.x}, {pos.z}], radius={Rad}"
+
+        elif is_parallel(Dir, FreeCAD.Vector(0, 0, 1), tolerances.angle):
+            mcdc_surf = "CylinderZ"
+            coeffs = f"center=[{pos.x}, {pos.y}], radius={Rad}"
+
+        else:
+            mcdc_surf = "Cylinder"
+            coeffs = "radius={}, axis=[{}, {}, {}], point=[{}, {}, {}]".format(
+                Rad,
+                Dir.x,
+                Dir.y,
+                Dir.z,
+                pos.x,
+                pos.y,
+                pos.z,
+            )
 
         return mcdc_surf, coeffs
 
