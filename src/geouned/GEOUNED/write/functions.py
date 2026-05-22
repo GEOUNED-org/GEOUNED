@@ -1137,55 +1137,35 @@ def phits_surface(id, Type, surf, options, tolerance, numeric_format):
 
     return trim(phits_def, 80)
 
-def mcdc_surface(Type, surf, tolerances):
-    mcdc_def = ""
-
+def mcdc_surface(Type, surf, tolerances, numeric_format=None, quadricForm=False):
     if Type == "Plane":
         A = surf.Axis.x
         B = surf.Axis.y
         C = surf.Axis.z
+
         if surf.Axis.isEqual(FreeCAD.Vector(1, 0, 0), tolerances.pln_angle):
-            mcdc_def = f'"plane-x", x={surf.Position.x * 0.1}'
+            mcdc_surf = "PlaneX"
+            D = surf.Position.x * 0.1
+            coeffs = f"x={D}"
+
         elif surf.Axis.isEqual(FreeCAD.Vector(0, 1, 0), tolerances.pln_angle):
-            mcdc_def = f'"plane-y", y={surf.Position.y * 0.1}'
+            mcdc_surf = "PlaneY"
+            D = surf.Position.y * 0.1
+            coeffs = f"y={D}"
+
         elif surf.Axis.isEqual(FreeCAD.Vector(0, 0, 1), tolerances.pln_angle):
-            mcdc_def = f'"plane-z", z={surf.Position.z * 0.1}'
+            mcdc_surf = "PlaneZ"
+            D = surf.Position.z * 0.1
+            coeffs = f"z={D}"
+
         else:
-            D = surf.Axis.dot(surf.Position) * 0.1
-            mcdc_def = f'"plane", A={A}, B={B}, C={C}, D={D}'
+            mcdc_surf = "Plane"
+            D = -surf.Axis.dot(surf.Position) * 0.1
+            coeffs = f"A={A},B={B},C={C},D={D}"
 
-    elif Type == "Cylinder":
-        Center = surf.Center * 0.1
-        Rad = surf.Radius * 0.1
-        Dir = FreeCAD.Vector(surf.Axis)
-        Dir.normalize()
+        return mcdc_surf, coeffs
 
-        if is_parallel(Dir, FreeCAD.Vector(1, 0, 0), tolerances.angle):
-            mcdc_def = f'"cylinder-x", center=[{Center.y}, {Center.z}], radius={Rad}'
-        elif is_parallel(Dir, FreeCAD.Vector(0, 1, 0), tolerances.angle):
-            mcdc_def = f'"cylinder-y", center=[{Center.x}, {Center.z}], radius={Rad}'
-        elif is_parallel(Dir, FreeCAD.Vector(0, 0, 1), tolerances.angle):
-            mcdc_def = f'"cylinder-z", center=[{Center.x}, {Center.y}], radius={Rad}'
-        else:
-            raise ValueError("Unsupported Cylinder surface type")
-        
-    elif Type == "Sphere":
-        Center = surf.Center * 0.1
-        Rad = surf.Radius * 0.1
-        mcdc_def = f'"sphere", center=[{Center.x}, {Center.y}, {Center.z}], radius={Rad}'
-
-    elif Type == "Quadric":
-        pos = surf.Center * 0.1
-        Rad = surf.Radius * 0.1
-        Dir = FreeCAD.Vector(surf.Axis)
-        Dir.normalize()
-        Q = q_form.q_form_cyl(Dir, pos, Rad)
-        mcdc_def = f'"quadric", A={Q[0]}, B={Q[1]}, C={Q[2]}, D={Q[3]}, E={Q[4]}, F={Q[5]}, G={Q[6]}, H={Q[7]}, I={Q[8]}, J={Q[9]}'
-
-    else:
-        raise ValueError(f"Unsupported surface type: {Type}")
-    
-    return mcdc_def
+    raise ValueError(f"Unsupported MCDC surface type: {Type}")
 
 
 def trim(surfDef, lineLength=80):
@@ -1230,4 +1210,3 @@ def cut_line(line, lineLength):
         newLine = "{}\n{: <{n}}{}".format(line1, "", line2, n=tabNumber)
 
     return newLine
-
