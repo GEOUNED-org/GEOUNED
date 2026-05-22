@@ -26,10 +26,6 @@ class MCDCInput:
         self.Surfaces = self.sorted_surfaces(Surfaces)
 
         self.Materials = set()
-        for cell in self.Cells:
-            mat = getattr(cell, 'fill', None)
-            if mat is not None:
-                self.Materials.add(mat)
 
     def write_py(self, filename):
         logger.info(f"write MCDC python script {filename}")
@@ -66,51 +62,32 @@ class MCDCInput:
 
     def write_materials(self):
 
-        for idx, mat in enumerate(self.Materials, start=1):
+        matList = tuple(sorted(self.Materials))
+        strMat = []
+        for m in matList:
+            material = f"M{m} = None # TODO: replace with real material values\n"
+            self.inpfile.write(material)
 
-            cap    = mat.capture.tolist() if hasattr(mat, 'capture') else None
-            sca    = mat.scatter.tolist() if hasattr(mat, 'scatter') else None
-            fis    = mat.fission.tolist() if hasattr(mat, 'fission') else None
-            nu_s   = mat.nu_s.tolist()     if hasattr(mat, 'nu_s')    else None
-            nu_p   = mat.nu_p.tolist()     if hasattr(mat, 'nu_p')    else None
-            nu_d   = mat.nu_d.tolist()     if hasattr(mat, 'nu_d')    else None
-            chi_p  = mat.chi_p.tolist()    if hasattr(mat, 'chi_p')   else None
-            chi_d  = mat.chi_d.tolist()    if hasattr(mat, 'chi_d')   else None
-            speed  = mat.speed.tolist()    if hasattr(mat, 'speed')   else None
-            decay  = mat.decay.tolist()    if hasattr(mat, 'decay')   else None
-
-            line = (
-                f"M{idx} = mcdc.material("
-                f"capture={cap}, "
-                f"scatter={sca}, "
-                f"fission={fis}, "
-                f"nu_s={nu_s}, "
-                f"nu_p={nu_p}, "
-                f"nu_d={nu_d}, "
-                f"chi_p={chi_p}, "
-                f"chi_d={chi_d}, "
-                f"speed={speed}, "
-                f"decay={decay})\n"
-            )
-            self.inpfile.write(line + "\n")
+        self.inpfile.write(collect)
 
     def write_surface_block(self):
 
         for surf in self.Surfaces[:-1]:
-            self.write_surfaces(surf, boundary=False)
+            self.write_surfaces(surf)
         self.write_surfaces(self.Surfaces[-1], boundary=True)
         self.inpfile.write("\n")
 
     def write_surfaces(self, surface, boundary=False):
 
-        mcdc_sur_def = mcdc_surface(
+        surfType, coeffs = mcdc_surface(
             surface.Type,
             surface.Surf,
-            self.tolerances)
+            self.tolerances,
+            self.numeric_format)
         
         if not boundary:
-            line = f"{surface.Name} = mcdc.surface({mcdc_sur_def})\n"
+            line = f"s{surface.Index} = mcdc.Surface.{surfType}({coeffs})\n"
         else:
-            line = f"{surface.Name} = mcdc.surface({mcdc_sur_def}, bc=\"vacuum\")\n"
+            line = f"s{surface.Index} = mcdc.Surface.{surfType}({coeffs}, bc=\"vacuum\")\n"
 
         return line
