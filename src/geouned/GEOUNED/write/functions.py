@@ -1160,7 +1160,7 @@ def mcdc_surface(Type, surf, tolerances, numeric_format=None):
 
         else:
             mcdc_surf = "Plane"
-            D = -surf.Axis.dot(surf.Position) * 0.1
+            D = -surf.Axis.dot(surf.Position) * 0.1 # negative because MCDC plane equation is Ax + By + Cz + D = 0 instead of Ax + By + Cz = D in openMC
             coeffs = f"A={A},B={B},C={C},D={D}"
 
         return mcdc_surf, coeffs
