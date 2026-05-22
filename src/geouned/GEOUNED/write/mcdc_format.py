@@ -112,16 +112,57 @@ class MCDCInput:
             return
 
         if cell.Material == 0:
-            OMCcell = '{} = mcdc.Cell(fill=None, region={})\n'.format(
+            mcCell = '{} = mcdc.Cell(fill=None, region={})\n'.format(
                 cellName,
                 write_mcdc_region(cell.Definition, self.options),
             )
         else:
             matName = f"m{cell.Material}"
-            OMCcell = '{} = mcdc.Cell(fill={}, region={})\n'.format(
+            mcCell = '{} = mcdc.Cell(fill={}, region={})\n'.format(
                 cellName,
                 matName,
                 write_mcdc_region(cell.Definition, self.options),
             )
-        self.inpfile.write(OMCcell)
+        self.inpfile.write(mcCell)
+        return
+
+    def get_surface_table(self):
+        self.surfaceTable = {}
+        self.__solidCells__ = 0
+        self.__cells__ = 0
+        self.__materials__ = set()
+
+        for i, CellObj in enumerate(self.Cells):
+            if CellObj.__id__ is None:
+                continue
+            self.__cells__ += 1
+            if CellObj.Material != 0:
+                self.__materials__.add(CellObj.Material)
+
+            surf = CellObj.Definition.get_surfaces_numbers()
+            if not CellObj.Void:
+                self.__solidCells__ += 1
+            for index in surf:
+                if index in self.surfaceTable.keys():
+                    self.surfaceTable[index].add(i)
+                else:
+                    self.surfaceTable[index] = {i}
+        return
+
+    def simplify_planes(self, Surfaces):
+
+        for p in Surfaces["PX"]:
+            if p.Surf.Axis[0] < 0:
+                p.Surf.Axis = FreeCAD.Vector(1, 0, 0)
+                self.change_surf_sign(p)
+
+        for p in Surfaces["PY"]:
+            if p.Surf.Axis[1] < 0:
+                p.Surf.Axis = FreeCAD.Vector(0, 1, 0)
+                self.change_surf_sign(p)
+
+        for p in Surfaces["PZ"]:
+            if p.Surf.Axis[2] < 0:
+                p.Surf.Axis = FreeCAD.Vector(0, 0, 1)
+                self.change_surf_sign(p)
         return
