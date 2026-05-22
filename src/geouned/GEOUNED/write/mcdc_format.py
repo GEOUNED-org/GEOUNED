@@ -59,16 +59,15 @@ class MCDCInput:
         import numpy as np
         '''
         self.inpfile.write(Header)
+        return
 
     def write_materials(self):
 
         matList = tuple(sorted(self.Materials))
-        strMat = []
         for m in matList:
             material = f"m{m} = None # TODO: replace with real material values\n"
             self.inpfile.write(material)
-
-        self.inpfile.write(collect)
+        return
 
     def write_surface_block(self):
 
@@ -88,20 +87,17 @@ class MCDCInput:
         if not boundary:
             line = f"s{surface.Index} = mcdc.Surface.{surfType}({coeffs})\n"
         else:
-            line = f"s{surface.Index} = mcdc.Surface.{surfType}({coeffs}, bc=\"vacuum\")\n"
+            line = f's{surface.Index} = mcdc.Surface.{surfType}({coeffs}, boundary_condition="vacuum")\n'
 
         self.inpfile.write(line)
         return
 
     def write_cell_block(self):
 
-        cellNames = []
         for i, cell in enumerate(self.Cells):
             if cell.MatInfo == "Graveyard":
                 continue
             self.write_cells(cell)
-            if cell.__id__ is None:
-                continue
 
         return
 
@@ -112,13 +108,15 @@ class MCDCInput:
             return
 
         if cell.Material == 0:
-            mcCell = '{} = mcdc.Cell(fill=None, region={})\n'.format(
+            mcCell = 'c{} = mcdc.Cell(name={!r}, fill=None, region={})\n'.format(
+                index,
                 cellName,
                 write_mcdc_region(cell.Definition, self.options),
             )
         else:
-            matName = f"m{cell.Material}"
-            mcCell = '{} = mcdc.Cell(fill={}, region={})\n'.format(
+            matName = f"M{cell.Material}"
+            mcCell = 'c{} = mcdc.Cell(name={!r}, fill={}, region={})\n'.format(
+                index,
                 cellName,
                 matName,
                 write_mcdc_region(cell.Definition, self.options),
@@ -166,3 +164,25 @@ class MCDCInput:
                 p.Surf.Axis = FreeCAD.Vector(0, 0, 1)
                 self.change_surf_sign(p)
         return
+
+    def sorted_surfaces(self, Surfaces):
+        temp = SurfacesDict(Surfaces)
+        surfList = []
+        for ind in range(Surfaces.IndexOffset, Surfaces.surfaceNumber + Surfaces.IndexOffset):
+            s = temp.get_surface(ind + 1)
+            if s is not None:
+                surfList.append(s)
+                temp.del_surface(ind + 1)
+        return surfList
+
+    def change_surf_sign(self, p):
+
+        if p.Index not in self.surfaceTable.keys():
+            logger.info(f"{p.Type} Surface {p.Index} not used in cell definition {p.Surf.Axis} {p.Surf.Position}")
+            return
+
+        for ic in self.surfaceTable[p.Index]:
+            surf = self.Cells[ic].Definition.get_surfaces_numbers()
+            for s in surf:
+                if s == p.Index:
+                    change_surf_sign(s, self.Cells[ic].Definition)
