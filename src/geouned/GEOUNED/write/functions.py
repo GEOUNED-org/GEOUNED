@@ -1238,7 +1238,67 @@ def mcdc_surface(Type, surf, tolerances, numeric_format=None):
 
         return mcdc_surf, coeffs
 
-    raise ValueError(f"Unsupported MCDC surface type: {Type}")
+    elif Type == "Sphere":
+        Center = surf.Center * 0.1
+        Rad = surf.Radius * 0.1
+        mcdc_surf = "Sphere"
+        coeffs = f"center=[{Center.x}, {Center.y}, {Center.z}], radius={Rad}"
+
+        return mcdc_surf, coeffs
+
+    elif Type == "Torus":
+        Center = surf.Center * 0.1
+        minRad = surf.MinorRadius * 0.1
+        majRad = surf.MajorRadius * 0.1
+        Dir = FreeCAD.Vector(surf.Axis)
+        Dir.normalize()
+        if surf.Degenerated:
+            majRad *= surf.a_sign
+
+        if is_parallel(Dir, FreeCAD.Vector(1, 0, 0), tolerances.angle):
+            mcdc_surf = "TorusX"
+            coeffs = "A={}, B={}, C={}, R={}, r={}".format(
+                Center.x,
+                Center.y,
+                Center.z,
+                majRad,
+                minRad,
+            )
+
+        elif is_parallel(Dir, FreeCAD.Vector(0, 1, 0), tolerances.angle):
+            mcdc_surf = "TorusY"
+            coeffs = "A={}, B={}, C={}, R={}, r={}".format(
+                Center.x,
+                Center.y,
+                Center.z,
+                majRad,
+                minRad,
+            )
+
+        elif is_parallel(Dir, FreeCAD.Vector(0, 0, 1), tolerances.angle):
+            mcdc_surf = "TorusZ"
+            coeffs = "A={}, B={}, C={}, R={}, r={}".format(
+                Center.x,
+                Center.y,
+                Center.z,
+                majRad,
+                minRad,
+            )
+
+        else:
+            mcdc_surf = "Torus"
+            coeffs = "center=[{}, {}, {}], axis=[{}, {}, {}], R={}, r={}".format(
+                Center.x,
+                Center.y,
+                Center.z,
+                Dir.x,
+                Dir.y,
+                Dir.z,
+                majRad,
+                minRad,
+            )
+
+        return mcdc_surf, coeffs
 
 
 def trim(surfDef, lineLength=80):
