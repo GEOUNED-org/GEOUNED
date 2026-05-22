@@ -65,7 +65,7 @@ class MCDCInput:
         matList = tuple(sorted(self.Materials))
         strMat = []
         for m in matList:
-            material = f"M{m} = None # TODO: replace with real material values\n"
+            material = f"m{m} = None # TODO: replace with real material values\n"
             self.inpfile.write(material)
 
         self.inpfile.write(collect)
@@ -90,4 +90,38 @@ class MCDCInput:
         else:
             line = f"s{surface.Index} = mcdc.Surface.{surfType}({coeffs}, bc=\"vacuum\")\n"
 
-        return line
+        self.inpfile.write(line)
+        return
+
+    def write_cell_block(self):
+
+        cellNames = []
+        for i, cell in enumerate(self.Cells):
+            if cell.MatInfo == "Graveyard":
+                continue
+            self.write_cells(cell)
+            if cell.__id__ is None:
+                continue
+
+        return
+
+    def write_cells(self, cell):
+        index = cell.label
+        cellName = ". ".join(cell.Comments.splitlines())
+        if cell.__id__ is None:
+            return
+
+        if cell.Material == 0:
+            OMCcell = '{} = mcdc.Cell(fill=None, region={})\n'.format(
+                cellName,
+                write_mcdc_region(cell.Definition, self.options),
+            )
+        else:
+            matName = f"m{cell.Material}"
+            OMCcell = '{} = mcdc.Cell(fill={}, region={})\n'.format(
+                cellName,
+                matName,
+                write_mcdc_region(cell.Definition, self.options),
+            )
+        self.inpfile.write(OMCcell)
+        return
