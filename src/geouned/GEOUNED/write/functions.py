@@ -1197,6 +1197,47 @@ def mcdc_surface(Type, surf, tolerances, numeric_format=None):
 
         return mcdc_surf, coeffs
 
+    elif Type == "Cone":
+        Apex = surf.Apex * 0.1
+        Dir = FreeCAD.Vector(surf.Axis)
+        Dir.normalize()
+        tan = math.tan(surf.SemiAngle)
+        tan2 = tan * tan
+
+        X_dir = FreeCAD.Vector(1, 0, 0)
+        Y_dir = FreeCAD.Vector(0, 1, 0)
+        Z_dir = FreeCAD.Vector(0, 0, 1)
+
+        if is_parallel(Dir, X_dir, tolerances.angle):
+            mcdc_surf = "ConeX"
+            coeffs = f"apex=[{Apex.x}, {Apex.y}, {Apex.z}], t_sq={tan2}"
+
+        elif is_parallel(Dir, Y_dir, tolerances.angle):
+            mcdc_surf = "ConeY"
+            coeffs = f"apex=[{Apex.x}, {Apex.y}, {Apex.z}], t_sq={tan2}"
+
+        elif is_parallel(Dir, Z_dir, tolerances.angle):
+            mcdc_surf = "ConeZ"
+            coeffs = f"apex=[{Apex.x}, {Apex.y}, {Apex.z}], t_sq={tan2}"
+
+        else:
+            mcdc_surf = "Quadric"
+            Q = q_form.q_form_cone(Dir, Apex, tan)
+            coeffs = "A={}, B={}, C={}, D={}, E={}, F={}, G={}, H={}, I={}, J={}".format(
+                Q[0],
+                Q[1],
+                Q[2],
+                Q[3],
+                Q[4],
+                Q[5],
+                Q[6],
+                Q[7],
+                Q[8],
+                Q[9],
+            )
+
+        return mcdc_surf, coeffs
+
     raise ValueError(f"Unsupported MCDC surface type: {Type}")
 
 
