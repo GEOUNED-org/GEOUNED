@@ -5,7 +5,7 @@ GEOUNED Documentation
 
 GEOUNED converts CAD to Constructive Solid Geometry (CSG) formats for use in
 Monte Carlo transport codes.
-Supported codes include OpenMC, PHITS, Serpent and MCNP.
+Supported codes include OpenMC, PHITS, Serpent, MCNP and MCDC.
 
 .. toctree::
    :maxdepth: 2
