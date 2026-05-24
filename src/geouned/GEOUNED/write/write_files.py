@@ -153,6 +153,6 @@ def write_geometry(
         PHITSfile.write_phits(phitsFilename)
     
     if "mcdc" in outFormat:
-        mcdcFilename = filePath / (geometryName + "mcdc_" + ".py")
+        mcdcFilename = filePath / (geometryName + "_mcdc" + ".py")
         MCDCFile = MCDCInput(MetaList, Surfaces, options, tolerances, numeric_format)
         MCDCFile.write_py(mcdcFilename)
