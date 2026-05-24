@@ -65,7 +65,7 @@ class MCDCInput:
 
         matList = tuple(sorted(self.Materials))
         for m in matList:
-            material = f"m{m} = None # TODO: replace with real material values\n"
+            material = f"M{m} = None # TODO: replace with real material values\n"
             self.inpfile.write(material)
         return
 
@@ -85,9 +85,9 @@ class MCDCInput:
             self.numeric_format)
         
         if not boundary:
-            line = f"s{surface.Index} = mcdc.Surface.{surfType}({coeffs})\n"
+            line = f"S{surface.Index} = mcdc.Surface.{surfType}({coeffs})\n"
         else:
-            line = f's{surface.Index} = mcdc.Surface.{surfType}({coeffs}, boundary_condition="vacuum")\n'
+            line = f'S{surface.Index} = mcdc.Surface.{surfType}({coeffs}, boundary_condition="vacuum")\n'
 
         self.inpfile.write(line)
         return
@@ -108,14 +108,14 @@ class MCDCInput:
             return
 
         if cell.Material == 0:
-            mcCell = 'c{} = mcdc.Cell(name={!r}, fill=None, region={})\n'.format(
+            mcCell = 'C{} = mcdc.Cell(name={!r}, fill=None, region={})\n'.format(
                 index,
                 cellName,
                 write_mcdc_region(cell.Definition, self.options),
             )
         else:
             matName = f"M{cell.Material}"
-            mcCell = 'c{} = mcdc.Cell(name={!r}, fill={}, region={})\n'.format(
+            mcCell = 'C{} = mcdc.Cell(name={!r}, fill={}, region={})\n'.format(
                 index,
                 cellName,
                 matName,
