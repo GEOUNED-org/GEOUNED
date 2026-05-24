@@ -114,6 +114,7 @@ def test_conversion(input_step_file):
             "serpent",
             "phits",
             "mcnp",
+            "mcdc",
         ),
         volSDEF=True,  # changed from the default
         volCARD=False,  # changed from the default
@@ -176,7 +177,7 @@ def test_writing_to_new_folders():
     geo.load_step_file(filename="testing/inputSTEP/BC.stp", skip_solids=[])
     geo.start()
 
-    for outformat in ["mcnp", "phits", "serpent", "openmc_xml", "openmc_py"]:
+    for outformat in ["mcnp", "phits", "serpent", "openmc_xml", "openmc_py", "mcdc"]:
         geo.export_csg(
             geometryName=f"tests_outputs/new_folder_for_testing_{outformat}/csg",
             cellCommentFile=False,
