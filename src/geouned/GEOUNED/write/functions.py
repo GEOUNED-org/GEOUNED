@@ -242,7 +242,7 @@ def write_sequence_omc_py(seq, options, prefix="S"):
     return line
 
 
-def write_sequence_mcdc(seq, options, prefix="s"):
+def write_sequence_mcdc(seq, options, prefix="S"):
 
     strSurf = lambda surf: (f"-{prefix}{-surf}" if surf < 0 else f"+{prefix}{surf}")
 
