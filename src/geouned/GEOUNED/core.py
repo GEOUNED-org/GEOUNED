@@ -126,6 +126,7 @@ class CadToCsg:
             "serpent",
             "phits",
             "mcnp",
+            "mcdc"
         ),
         volSDEF: bool = False,
         volCARD: bool = True,
