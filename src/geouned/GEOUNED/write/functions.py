@@ -126,7 +126,7 @@ def write_openmc_region(definition, options, w_type="XML"):
     if w_type == "PY":
         return write_sequence_omc_py(definition, options)
 
-    
+
 def write_mcdc_region(definition, options):
     return write_sequence_mcdc(definition, options)
 
@@ -1137,6 +1137,7 @@ def phits_surface(id, Type, surf, options, tolerance, numeric_format):
 
     return trim(phits_def, 80)
 
+
 def mcdc_surface(Type, surf, tolerances, numeric_format=None):
     if Type == "Plane":
         A = surf.Axis.x
@@ -1160,7 +1161,9 @@ def mcdc_surface(Type, surf, tolerances, numeric_format=None):
 
         else:
             mcdc_surf = "Plane"
-            D = -surf.Axis.dot(surf.Position) * 0.1 # negative because MCDC plane equation is Ax + By + Cz + D = 0 instead of Ax + By + Cz = D in openMC
+            D = (
+                -surf.Axis.dot(surf.Position) * 0.1
+            )  # negative because MCDC plane equation is Ax + By + Cz + D = 0 instead of Ax + By + Cz = D in openMC
             coeffs = f"A={A},B={B},C={C},D={D}"
 
         return mcdc_surf, coeffs

@@ -78,12 +78,8 @@ import numpy as np
 
     def write_surfaces(self, surface, boundary=False):
 
-        surfType, coeffs = mcdc_surface(
-            surface.Type,
-            surface.Surf,
-            self.tolerances,
-            self.numeric_format)
-        
+        surfType, coeffs = mcdc_surface(surface.Type, surface.Surf, self.tolerances, self.numeric_format)
+
         if not boundary:
             line = f"S{surface.Index} = mcdc.Surface.{surfType}({coeffs})\n"
         else:
@@ -108,14 +104,14 @@ import numpy as np
             return
 
         if cell.Material == 0:
-            mcCell = 'C{} = mcdc.Cell(name={!r}, fill=None, region={})\n'.format(
+            mcCell = "C{} = mcdc.Cell(name={!r}, fill=None, region={})\n".format(
                 index,
                 cellName,
                 write_mcdc_region(cell.Definition, self.options),
             )
         else:
             matName = f"M{cell.Material}"
-            mcCell = 'C{} = mcdc.Cell(name={!r}, fill={}, region={})\n'.format(
+            mcCell = "C{} = mcdc.Cell(name={!r}, fill={}, region={})\n".format(
                 index,
                 cellName,
                 matName,
