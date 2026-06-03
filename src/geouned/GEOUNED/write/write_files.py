@@ -4,6 +4,7 @@ from .mcnp_format import McnpInput
 from .openmc_format import OpenmcInput
 from .phits_format import PhitsInput
 from .serpent_format import SerpentInput
+from .mcdc_format import MCDCInput
 
 
 def write_geometry(
@@ -26,7 +27,7 @@ def write_geometry(
     step_filename,
 ):
 
-    supported_mc_codes = ("mcnp", "openmc_xml", "openmc_py", "serpent", "phits")
+    supported_mc_codes = ("mcnp", "openmc_xml", "openmc_py", "serpent", "phits", "mcdc")
     for out_format in outFormat:
         if out_format not in supported_mc_codes:
             msg = f"outFormat {out_format} not in supported MC codes ({supported_mc_codes})"
@@ -150,3 +151,8 @@ def write_geometry(
         )
         # PHITSfile.setSDEF_PHITS((PHITS_outSphere,PHITS_outBox))
         PHITSfile.write_phits(phitsFilename)
+
+    if "mcdc" in outFormat:
+        mcdcFilename = filePath / (geometryName + "_mcdc" + ".py")
+        MCDCFile = MCDCInput(MetaList, Surfaces, options, tolerances, numeric_format)
+        MCDCFile.write_py(mcdcFilename)

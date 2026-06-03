@@ -126,6 +126,7 @@ class CadToCsg:
             "serpent",
             "phits",
             "mcnp",
+            "mcdc",
         ),
         volSDEF: bool = False,
         volCARD: bool = True,
@@ -143,8 +144,9 @@ class CadToCsg:
                 Defaults to "converted_with_geouned".
             outFormat (typing.Tuple[str], optional): Format for the output
                 geometry. Available format are: "mcnp", "openmc_xml",
-                "openmc_py", "phits" and "serpent". Several output format can
-                be written in the same method call. Defaults to output all codes.
+                "openmc_py", "phits", "serpent" and "mcdc". Several output
+                format can be written in the same method call. Defaults to
+                output all codes.
             volSDEF (bool, optional):  Write SDEF definition and tally of solid
                 cell for stochastic volume checking. Defaults to False.
             volCARD (bool, optional): Write the CAD calculated volume in the

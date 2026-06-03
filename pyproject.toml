@@ -17,10 +17,10 @@ maintainers = [
   { name="Francisco Ogando", email="fogando@ind.uned.es" },
   { name="Javier Alguacil", email="jalguacil@ind.uned.es" },
 ]
-description = "Conversion tool from CAD to CGS/CGS to CAD for Monte Carlo particle transport codes (OpenMC, Phits, Serpent, MCNP)"
+description = "Conversion tool from CAD to CGS/CGS to CAD for Monte Carlo particle transport codes (OpenMC, Phits, Serpent, MCNP, MCDC)"
 readme = "README.md"
 requires-python = ">=3.8"
-keywords = ["csg", "cad", "openmc", "serpent", "phits", "mcnp", "geometry"]
+keywords = ["csg", "cad", "openmc", "serpent", "phits", "mcnp", "mcdc", "geometry"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: European Union Public Licence 1.2 (EUPL 1.2)",
