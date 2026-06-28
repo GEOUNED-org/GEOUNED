@@ -12,6 +12,7 @@ import FreeCAD
 from ..utils.basic_functions_part1 import is_opposite, points_to_coeffs
 from ..utils.functions import SurfacesDict
 from .functions import CardLine, change_surf_sign, mcnp_surface, write_mcnp_cell_def
+from .oblique_torus_tr import ObliqueTorusRegistry
 
 logger = logging.getLogger("general_logger")
 
@@ -56,6 +57,13 @@ class McnpInput:
         self.simplify_planes(Surfaces)
 
         self.Surfaces = self.sorted_surfaces(Surfaces)
+
+        # Initialize oblique torus TR registry
+        # Start TR numbers above the max surface index to avoid collision
+        max_surf = Surfaces.surfaceNumber + Surfaces.IndexOffset
+        tr_start = max(9900, max_surf + 1000)
+        self.oblique_torus_registry = ObliqueTorusRegistry(tr_start=tr_start)
+
         self.Materials = set()
 
         return
@@ -100,6 +108,15 @@ C ##########################################################
         self.write_surface_block()
         self.inpfile.write(" \n")
         self.write_mat_block()
+
+        # TR cards for oblique tori (data block, before source)
+        tr_block = self.oblique_torus_registry.format_tr_cards(
+            fmt_origin=self.numeric_format.TR_o,
+            fmt_cosine=self.numeric_format.TR_cos,
+        )
+        if tr_block:
+            self.inpfile.write(tr_block)
+ ([Plan: T1.2-oblique-torus-TR] Task 2.2: McnpInput integrate oblique torus registry)
         self.write_source_block()
 
         self.inpfile.close()
@@ -183,6 +200,7 @@ C **************************************************************
             self.options,
             self.tolerances,
             self.numeric_format,
+            oblique_torus_registry=self.oblique_torus_registry,
         )
         if MCNP_def:
             MCNP_def += "\n"
