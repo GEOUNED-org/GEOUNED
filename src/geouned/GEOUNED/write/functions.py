@@ -5,7 +5,10 @@ import FreeCAD
 
 from ..utils import q_form as q_form
 from ..utils.basic_functions_part1 import is_opposite, is_parallel
+from .oblique_torus_tr import ObliqueTorusRegistry
 from .string_functions import remove_redundant
+
+logger = __import__("logging").getLogger("general_logger")
 
 
 class CardLine:
@@ -238,7 +241,7 @@ def write_sequence_omc_py(seq, options, prefix="S"):
     return line
 
 
-def mcnp_surface(id, Type, surf, options, tolerances, numeric_format):
+def mcnp_surface(id, Type, surf, options, tolerances, numeric_format, oblique_torus_registry=None):
     mcnp_def = ""
 
     if Type == "Plane":
@@ -484,6 +487,45 @@ def mcnp_surface(id, Type, surf, options, tolerances, numeric_format):
                 xyz=numeric_format.T_xyz,
                 r=numeric_format.T_r,
             )
+        else:
+            if (options.obliqueTorusStrategy == "tr"
+                    and oblique_torus_registry is not None):
+                # Oblique torus: emit TZ in local frame with surface-side TR
+                tr_id = oblique_torus_registry.register(id, Dir, Pos)
+                mcnp_def = """\
+{:<6d} {:<5d} TZ  {:{xyz}} {:{xyz}} {:{xyz}}
+           {:{r}} {:{r}} {:{r}}""".format(
+                    id,
+                    tr_id,
+                    0.0,
+                    0.0,
+                    0.0,
+                    radMaj,
+                    radMin,
+                    radMin,
+                    xyz=numeric_format.T_xyz,
+                    r=numeric_format.T_r,
+                )
+            else:
+                # Legacy fallback: circumscribed cylinder as GQ quadric (lossy)
+                logger.warning(
+                    f"Surface {id}: oblique torus approximated as GQ cylinder "
+                    f"(axis=({Dir.x:.4f},{Dir.y:.4f},{Dir.z:.4f}), "
+                    f"R_maj={radMaj:.4f}, R_min={radMin:.4f} cm). "
+                    f"Set options.obliqueTorusStrategy='tr' for exact treatment."
+                )
+                Q = q_form.q_form_cyl(Dir, Pos, radMaj + radMin)
+                mcnp_def = """\
+{:<6d} GQ  {v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}}
+          {v[3]:{aTof}} {v[4]:{aTof}} {v[5]:{aTof}}
+          {v[6]:{gToi}} {v[7]:{gToi}} {v[8]:{gToi}}
+          {v[9]:{j}} """.format(
+                    id,
+                    v=Q,
+                    aTof=numeric_format.GQ_1to6,
+                    gToi=numeric_format.GQ_7to9,
+                    j=numeric_format.GQ_10,
+                )
 
     return trim(mcnp_def, 80)
 
@@ -684,7 +726,41 @@ def open_mc_surface(Type, surf, tolerances, numeric_format, out_xml=True, quadri
         Dir.normalize()
         if surf.Degenerated:
             majRad *= surf.a_sign
-        if out_xml:
+        if is_parallel(Dir, FreeCAD.Vector(1, 0, 0), tolerances.angle):
+            omc_surf = "x-torus" if out_xml else "XTorus"
+        elif is_parallel(Dir, FreeCAD.Vector(0, 1, 0), tolerances.angle):
+            omc_surf = "y-torus" if out_xml else "YTorus"
+        elif is_parallel(Dir, FreeCAD.Vector(0, 0, 1), tolerances.angle):
+            omc_surf = "z-torus" if out_xml else "ZTorus"
+        else:
+            omc_surf = None
+
+        if omc_surf is None:
+            # Oblique torus fallback: OpenMC has no quartic surface type.
+            # Approximate with the circumscribed coaxial cylinder of radius
+            # (majRad + minRad). Lossy — cells using these surfaces should be
+            # reviewed before transport-grade analysis.
+            Q = q_form.q_form_cyl(Dir, Center, majRad + minRad)
+            if out_xml:
+                omc_surf = "quadric"
+                coeffs = (
+                    "{v[0]:{aTof}} {v[1]:{aTof}} {v[2]:{aTof}} "
+                    "{v[3]:{aTof}} {v[4]:{aTof}} {v[5]:{aTof}} "
+                    "{v[6]:{gToi}} {v[7]:{gToi}} {v[8]:{gToi}} "
+                    "{v[9]:{j}}"
+                ).format(
+                    v=Q,
+                    aTof=numeric_format.GQ_1to6,
+                    gToi=numeric_format.GQ_7to9,
+                    j=numeric_format.GQ_10,
+                )
+            else:
+                omc_surf = "Quadric"
+                coeffs = (
+                    "a={v[0]},b={v[1]},c={v[2]},d={v[3]},e={v[4]},"
+                    "f={v[5]},g={v[6]},h={v[7]},j={v[8]},k={v[9]}"
+                ).format(v=Q)
+        elif out_xml:
             coeffs = "{:{xyz}} {:{xyz}} {:{xyz}} {:{r}} {:{r}} {:{r}}".format(
                 Center.x,
                 Center.y,
@@ -697,15 +773,6 @@ def open_mc_surface(Type, surf, tolerances, numeric_format, out_xml=True, quadri
             )
         else:
             coeffs = "x0={},y0={},z0={},r={},r1={},r2={}".format(Center.x, Center.y, Center.z, majRad, minRad, minRad)
-
-        if is_parallel(Dir, FreeCAD.Vector(1, 0, 0), tolerances.angle):
-            omc_surf = "x-torus" if out_xml else "XTorus"
-        elif is_parallel(Dir, FreeCAD.Vector(0, 1, 0), tolerances.angle):
-            omc_surf = "y-torus" if out_xml else "YTorus"
-        elif is_parallel(Dir, FreeCAD.Vector(0, 0, 1), tolerances.angle):
-            omc_surf = "z-torus" if out_xml else "ZTorus"
-        else:
-            omc_surf = None
 
     if out_xml:
         coeffs = " ".join(coeffs.split())
