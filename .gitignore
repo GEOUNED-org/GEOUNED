@@ -186,3 +186,10 @@ docs/jupyter_execute
 
 # setuptools_scm dynamic version file
 src/_version.py
+
+# project-management & tooling artifacts
+.pm-project.json
+.pm-project
+graph/
+schedule/
+output/

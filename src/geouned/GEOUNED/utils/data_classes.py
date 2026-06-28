@@ -45,6 +45,10 @@ class Options:
         forceNoOverlap (bool, optional): force no overlaping cell
             definition. Adjacent cell definition are rested from current
             cell definition. Defaults to False.
+        obliqueTorusStrategy (str, optional): Strategy for oblique torus
+            surfaces in MCNP output. "tr" emits TZ with surface-side TR
+            card; "gq_fallback" emits GQ quadric approximation. Defaults
+            to "tr".
     """
 
     def __init__(
@@ -60,6 +64,7 @@ class Options:
         Facets: bool = False,
         prnt3PPlane: bool = False,
         forceNoOverlap: bool = False,
+        obliqueTorusStrategy: str = "tr",
     ):
 
         self.forceCylinder = forceCylinder
@@ -73,6 +78,7 @@ class Options:
         self.Facets = Facets
         self.prnt3PPlane = prnt3PPlane
         self.forceNoOverlap = forceNoOverlap
+        self.obliqueTorusStrategy = obliqueTorusStrategy
 
     @property
     def forceCylinder(self):
@@ -187,6 +193,23 @@ class Options:
         if not isinstance(value, bool):
             raise TypeError(f"geouned.Options.forceNoOverlap should be a bool, not a {type(value)}")
         self._forceNoOverlap = value
+
+    @property
+    def obliqueTorusStrategy(self):
+        return self._obliqueTorusStrategy
+
+    @obliqueTorusStrategy.setter
+    def obliqueTorusStrategy(self, value: str):
+        allowed = ("tr", "gq_fallback")
+        if not isinstance(value, str):
+            raise TypeError(
+                f"geouned.Options.obliqueTorusStrategy should be a str, not a {type(value)}"
+            )
+        if value not in allowed:
+            raise ValueError(
+                f"geouned.Options.obliqueTorusStrategy must be one of {allowed}, not '{value}'"
+            )
+        self._obliqueTorusStrategy = value
 
 
 class Tolerances:
@@ -414,6 +437,8 @@ class NumericFormat:
         GQ_1to6 (str, optional): GQ 1 to 6 coefficients (order 2 x2,y2,z2,xy,...). Defaults to "18.15f".
         GQ_7to9 (str, optional): GQ 7 to 9 coefficients (order 1 x,y,z). Defaults to "18.15f".
         GQ_10 (str, optional): GQ 10 coefficient. Defaults to "18.15f".
+        TR_o (str, optional): TR card origin coordinates format. Defaults to "14.7e".
+        TR_cos (str, optional): TR card direction cosines format. Defaults to "20.15e".
     """
 
     def __init__(
@@ -432,6 +457,8 @@ class NumericFormat:
         GQ_1to6: str = "18.15f",
         GQ_7to9: str = "18.15f",
         GQ_10: str = "18.15f",
+        TR_o: str = "14.7e",
+        TR_cos: str = "20.15e",
     ):
 
         self.P_abc = P_abc
@@ -448,6 +475,8 @@ class NumericFormat:
         self.GQ_1to6 = GQ_1to6
         self.GQ_7to9 = GQ_7to9
         self.GQ_10 = GQ_10
+        self.TR_o = TR_o
+        self.TR_cos = TR_cos
 
     @property
     def P_abc(self):
@@ -588,6 +617,26 @@ class NumericFormat:
         if not isinstance(GQ_10, str):
             raise TypeError(f"geouned.Tolerances.GQ_10 should be a str, not a {type(GQ_10)}")
         self._GQ_10 = GQ_10
+
+    @property
+    def TR_o(self):
+        return self._TR_o
+
+    @TR_o.setter
+    def TR_o(self, TR_o: str):
+        if not isinstance(TR_o, str):
+            raise TypeError(f"geouned.NumericFormat.TR_o should be a str, not a {type(TR_o)}")
+        self._TR_o = TR_o
+
+    @property
+    def TR_cos(self):
+        return self._TR_cos
+
+    @TR_cos.setter
+    def TR_cos(self, TR_cos: str):
+        if not isinstance(TR_cos, str):
+            raise TypeError(f"geouned.NumericFormat.TR_cos should be a str, not a {type(TR_cos)}")
+        self._TR_cos = TR_cos
 
 
 class Settings:
