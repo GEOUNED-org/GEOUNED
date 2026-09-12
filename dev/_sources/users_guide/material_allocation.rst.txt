@@ -6,7 +6,7 @@ The material of the components can be assigned directly in the tree CAD by inclu
 .. image:: /images/mat_tag.png
    :alt: Example of a CAD tree with a _mXX_ tag.
    :align: center
-   :width: 50%
+   :width: 30%
 
 The material assigned to the corresponding cell should be defined in the material definition file whose name is provided by the matFile keyword.
 This file has the following format:
@@ -14,7 +14,7 @@ This file has the following format:
 .. image:: /images/mat_list.png
    :alt: Example of a material list.
    :align: center
-   :width: 50%
+   :width: 30%
 
 Where # is used for comments and the rest of the lines specifies the id of the material, the nominal density and the text to be included as a comment.
 The nominal density value is multiplied by -1 so the criterium is inverted with respect to MCNP one (i.e. g/cm3 positive and atm/b/cm negative).

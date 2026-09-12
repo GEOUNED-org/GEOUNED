@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>geouned.GEOUNED.core &#8212; GEOUNED 0.1.dev1+g6fdd6ec3a documentation</title>
+    <title>geouned.GEOUNED.core &#8212; GEOUNED 0.1.dev1+gbe8e2d8cd documentation</title>
   
   
   
@@ -26,23 +26,23 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../../_static/documentation_options.js?v=abce89a0"></script>
+    <script src="../../../_static/documentation_options.js?v=18e71547"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/geouned/GEOUNED/core';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.17.1';
+        DOCUMENTATION_OPTIONS.theme_version = '0.21.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/GEOUNED-org/GEOUNED/dev/docs/version_switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.1';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
@@ -53,7 +53,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.dev1+g6fdd6ec3a" />
+  <meta name="docsearch:version" content="0.1.dev1+gbe8e2d8cd" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -139,8 +139,7 @@
           
           
           
-          <a href="https://github.com/GEOUNED-org/GEOUNED" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/GEOUNED-org/GEOUNED" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
     
@@ -209,11 +208,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -226,8 +232,7 @@
           
           
           
-          <a href="https://github.com/GEOUNED-org/GEOUNED" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/GEOUNED-org/GEOUNED" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
       
@@ -321,11 +326,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -338,8 +350,7 @@
           
           
           
-          <a href="https://github.com/GEOUNED-org/GEOUNED" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/GEOUNED-org/GEOUNED" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
         
@@ -428,13 +439,13 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.write.functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_mcnp_cell_def</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.write.write_files</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_geometry</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;general_logger&quot;</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"general_logger"</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="CadToCsg">
 <a class="viewcode-back" href="../../../python_api.html#geouned.CadToCsg">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CadToCsg</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for the conversion of CAD to CSG models</span>
+<span class="w">    </span><span class="sd">"""Base class for the conversion of CAD to CSG models</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        options (geouned.Options, optional): An instance of a geouned.Options</span>
@@ -452,7 +463,7 @@
 <span class="sd">            geouned.Settings class with the attributes set for the desired</span>
 <span class="sd">            conversion. Defaults to a geouned.Settings with default</span>
 <span class="sd">            attributes values.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -473,13 +484,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">skip_solids</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="n">log_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">outPath</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;log_files&quot;</span>
+        <span class="n">log_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">outPath</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"log_files"</span>
         <span class="n">log_path</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">setup_logger</span><span class="p">(</span><span class="s2">&quot;general_logger&quot;</span><span class="p">,</span> <span class="n">log_path</span> <span class="o">/</span> <span class="s2">&quot;geouned_general.log&quot;</span><span class="p">)</span>
-        <span class="n">setup_logger</span><span class="p">(</span><span class="s2">&quot;fuzzy_logger&quot;</span><span class="p">,</span> <span class="n">log_path</span> <span class="o">/</span> <span class="s2">&quot;geouned_fuzzy.log&quot;</span><span class="p">)</span>
-        <span class="n">setup_logger</span><span class="p">(</span><span class="s2">&quot;solids_logger&quot;</span><span class="p">,</span> <span class="n">log_path</span> <span class="o">/</span> <span class="s2">&quot;geouned_solids.log&quot;</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;GEOUNED version </span><span class="si">{</span><span class="n">version</span><span class="p">(</span><span class="s1">&#39;geouned&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;FreeCAD version </span><span class="si">{</span><span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FreeCAD</span><span class="o">.</span><span class="n">Version</span><span class="p">()[:</span><span class="mi">3</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">setup_logger</span><span class="p">(</span><span class="s2">"general_logger"</span><span class="p">,</span> <span class="n">log_path</span> <span class="o">/</span> <span class="s2">"geouned_general.log"</span><span class="p">)</span>
+        <span class="n">setup_logger</span><span class="p">(</span><span class="s2">"fuzzy_logger"</span><span class="p">,</span> <span class="n">log_path</span> <span class="o">/</span> <span class="s2">"geouned_fuzzy.log"</span><span class="p">)</span>
+        <span class="n">setup_logger</span><span class="p">(</span><span class="s2">"solids_logger"</span><span class="p">,</span> <span class="n">log_path</span> <span class="o">/</span> <span class="s2">"geouned_solids.log"</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"GEOUNED version </span><span class="si">{</span><span class="n">version</span><span class="p">(</span><span class="s1">'geouned'</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"FreeCAD version </span><span class="si">{</span><span class="s1">'.'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FreeCAD</span><span class="o">.</span><span class="n">Version</span><span class="p">()[:</span><span class="mi">3</span><span class="p">])</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -488,7 +499,7 @@
     <span class="nd">@options</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Options</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Options</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.CadToCsg.options should be an instance of geouned.Options, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"geouned.CadToCsg.options should be an instance of geouned.Options, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
@@ -498,7 +509,7 @@
     <span class="nd">@tolerances</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">tolerances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">tolerances</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Tolerances</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.CadToCsg.tolerances should be an instance of geouned.Tolerances, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"geouned.CadToCsg.tolerances should be an instance of geouned.Tolerances, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_tolerances</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
@@ -509,7 +520,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">numeric_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">numeric_format</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">NumericFormat</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;geouned.CadToCsg.numeric_format should be an instance of geouned.NumericFormat, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"geouned.CadToCsg.numeric_format should be an instance of geouned.NumericFormat, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_numeric_format</span> <span class="o">=</span> <span class="n">value</span>
 
@@ -520,21 +531,21 @@
     <span class="nd">@settings</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">settings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">settings</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Settings</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;geouned.CadToCsg.settings should be an instance of geouned.Settings, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"geouned.CadToCsg.settings should be an instance of geouned.Settings, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span> <span class="o">=</span> <span class="n">value</span>
 
 <div class="viewcode-block" id="CadToCsg.export_csg">
 <a class="viewcode-back" href="../../../python_api.html#geouned.CadToCsg.export_csg">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">export_csg</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Converted with GEOUNED&quot;</span><span class="p">,</span>
-        <span class="n">geometryName</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;csg&quot;</span><span class="p">,</span>
+        <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"Converted with GEOUNED"</span><span class="p">,</span>
+        <span class="n">geometryName</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"csg"</span><span class="p">,</span>
         <span class="n">outFormat</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;openmc_xml&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;openmc_py&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;serpent&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;phits&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;mcnp&quot;</span><span class="p">,</span>
+            <span class="s2">"openmc_xml"</span><span class="p">,</span>
+            <span class="s2">"openmc_py"</span><span class="p">,</span>
+            <span class="s2">"serpent"</span><span class="p">,</span>
+            <span class="s2">"phits"</span><span class="p">,</span>
+            <span class="s2">"mcnp"</span><span class="p">,</span>
         <span class="p">),</span>
         <span class="n">volSDEF</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">volCARD</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
@@ -543,16 +554,16 @@
         <span class="n">cellCommentFile</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">cellSummaryFile</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Writes out a CSG file in the requested Monte Carlo code format.</span>
+<span class="w">        </span><span class="sd">"""Writes out a CSG file in the requested Monte Carlo code format.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            title (str, optional): Title of the model written at the top of the</span>
-<span class="sd">                output file. Defaults to &quot;Geouned conversion&quot;.</span>
+<span class="sd">                output file. Defaults to "Geouned conversion".</span>
 <span class="sd">            geometryName (str, optional): the file stem of the output file(s).</span>
-<span class="sd">                Defaults to &quot;converted_with_geouned&quot;.</span>
+<span class="sd">                Defaults to "converted_with_geouned".</span>
 <span class="sd">            outFormat (typing.Tuple[str], optional): Format for the output</span>
-<span class="sd">                geometry. Available format are: &quot;mcnp&quot;, &quot;openmc_xml&quot;,</span>
-<span class="sd">                &quot;openmc_py&quot;, &quot;phits&quot; and &quot;serpent&quot;. Several output format can</span>
+<span class="sd">                geometry. Available format are: "mcnp", "openmc_xml",</span>
+<span class="sd">                "openmc_py", "phits" and "serpent". Several output format can</span>
 <span class="sd">                be written in the same method call. Defaults to output all codes.</span>
 <span class="sd">            volSDEF (bool, optional):  Write SDEF definition and tally of solid</span>
 <span class="sd">                cell for stochastic volume checking. Defaults to False.</span>
@@ -563,33 +574,33 @@
 <span class="sd">                is not written). Defaults to None.</span>
 <span class="sd">            dummyMat (bool, optional): Write dummy material definition card in</span>
 <span class="sd">               the MCNP output file for all material labels present in the</span>
-<span class="sd">               model. Dummy material definition is &quot;MX 1001 1&quot;. Defaults to False.</span>
+<span class="sd">               model. Dummy material definition is "MX 1001 1". Defaults to False.</span>
 <span class="sd">            cellCommentFile (bool, optional): Write an additional file with</span>
 <span class="sd">               comment associated to each CAD cell in the MCNP output file.</span>
 <span class="sd">               Defaults to False.</span>
 <span class="sd">            cellSummaryFile (bool, optional): Write an additional file with</span>
 <span class="sd">               information on the CAD cell translated. Defaults to True.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">UCARD</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">UCARD</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;UCARD should be of type int or None not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">UCARD</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"UCARD should be of type int or None not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">UCARD</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">UCARD</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">UCARD</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;UCARD should be a 0 or a positive integer &quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"UCARD should be a 0 or a positive integer "</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">arg</span><span class="p">,</span> <span class="n">arg_str</span> <span class="ow">in</span> <span class="p">(</span>
-            <span class="p">(</span><span class="n">volSDEF</span><span class="p">,</span> <span class="s2">&quot;volSDEF&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="n">volCARD</span><span class="p">,</span> <span class="s2">&quot;volCARD&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="n">dummyMat</span><span class="p">,</span> <span class="s2">&quot;dummyMat&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="n">cellCommentFile</span><span class="p">,</span> <span class="s2">&quot;cellCommentFile&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="n">cellSummaryFile</span><span class="p">,</span> <span class="s2">&quot;cellSummaryFile&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">volSDEF</span><span class="p">,</span> <span class="s2">"volSDEF"</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">volCARD</span><span class="p">,</span> <span class="s2">"volCARD"</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">dummyMat</span><span class="p">,</span> <span class="s2">"dummyMat"</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">cellCommentFile</span><span class="p">,</span> <span class="s2">"cellCommentFile"</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">cellSummaryFile</span><span class="p">,</span> <span class="s2">"cellSummaryFile"</span><span class="p">),</span>
         <span class="p">):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2"> should be of type bool not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">arg_str</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2"> should be of type bool not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">arg_str</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">arg</span><span class="p">,</span> <span class="n">arg_str</span> <span class="ow">in</span> <span class="p">((</span><span class="n">title</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">),</span> <span class="p">(</span><span class="n">geometryName</span><span class="p">,</span> <span class="s2">&quot;geometryName&quot;</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">arg</span><span class="p">,</span> <span class="n">arg_str</span> <span class="ow">in</span> <span class="p">((</span><span class="n">title</span><span class="p">,</span> <span class="s2">"title"</span><span class="p">),</span> <span class="p">(</span><span class="n">geometryName</span><span class="p">,</span> <span class="s2">"geometryName"</span><span class="p">)):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2"> should be of type str not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">arg_str</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2"> should be of type str not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">arg_str</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="c1"># if the geometry_bounding_box has not previuosly been calculated, then make a default one</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry_bounding_box</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -615,14 +626,14 @@
             <span class="n">step_filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;End of Monte Carlo code translation phase&quot;</span><span class="p">)</span></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"End of Monte Carlo code translation phase"</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="CadToCsg.from_json">
 <a class="viewcode-back" href="../../../python_api.html#geouned.CadToCsg.from_json">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a CadToCsg instance, runs CadToCsg.load_Step_file(), runs</span>
+<span class="w">        </span><span class="sd">"""Creates a CadToCsg instance, runs CadToCsg.load_Step_file(), runs</span>
 <span class="sd">        CadToCsg.start() and returns the instance. Populating the arguments for</span>
 <span class="sd">        the methods that are run by looking for keys with the same name as the</span>
 <span class="sd">        method in the JSON file. For example CadToCsg.start() accepts arguments</span>
@@ -639,10 +650,10 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            geouned.CadToCsg: returns a geouned CadToCsg class instance.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;config file </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> not found&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"config file </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> not found"</span><span class="p">)</span>
 
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
@@ -651,30 +662,30 @@
 
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
 
-            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;load_step_file&quot;</span><span class="p">,</span> <span class="s2">&quot;export_csg&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"load_step_file"</span><span class="p">,</span> <span class="s2">"export_csg"</span><span class="p">]:</span>
                 <span class="k">pass</span>  <span class="c1"># these two keys are used before or after this loop</span>
 
-            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;Tolerances&quot;</span><span class="p">:</span>
-                <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">tolerances</span> <span class="o">=</span> <span class="n">Tolerances</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;Tolerances&quot;</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"Tolerances"</span><span class="p">:</span>
+                <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">tolerances</span> <span class="o">=</span> <span class="n">Tolerances</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s2">"Tolerances"</span><span class="p">])</span>
 
-            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;Options&quot;</span><span class="p">:</span>
-                <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;Options&quot;</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"Options"</span><span class="p">:</span>
+                <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s2">"Options"</span><span class="p">])</span>
 
-            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;NumericFormat&quot;</span><span class="p">:</span>
-                <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">numeric_format</span> <span class="o">=</span> <span class="n">NumericFormat</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;NumericFormat&quot;</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"NumericFormat"</span><span class="p">:</span>
+                <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">numeric_format</span> <span class="o">=</span> <span class="n">NumericFormat</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s2">"NumericFormat"</span><span class="p">])</span>
 
-            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;Settings&quot;</span><span class="p">:</span>
-                <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">Settings</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;Settings&quot;</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"Settings"</span><span class="p">:</span>
+                <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">Settings</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s2">"Settings"</span><span class="p">])</span>
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Invalid key &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; found in config file </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">. Acceptable key names are &#39;load_step_file&#39;, &#39;export_csg&#39;, &#39;Settings&#39;, &#39;Parameters&#39;, &#39;Tolerances&#39; and &#39;NumericFormat&#39;&quot;</span>
+                    <span class="sa">f</span><span class="s2">"Invalid key '</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">' found in config file </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">. Acceptable key names are 'load_step_file', 'export_csg', 'Settings', 'Parameters', 'Tolerances' and 'NumericFormat'"</span>
                 <span class="p">)</span>
 
-        <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">load_step_file</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;load_step_file&quot;</span><span class="p">])</span>
+        <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">load_step_file</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s2">"load_step_file"</span><span class="p">])</span>
         <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-        <span class="k">if</span> <span class="s2">&quot;export_csg&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">export_csg</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;export_csg&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s2">"export_csg"</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">export_csg</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s2">"export_csg"</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">cad_to_csg</span><span class="o">.</span><span class="n">export_csg</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">cad_to_csg</span></div>
@@ -686,39 +697,39 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">filename</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
         <span class="n">skip_solids</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
-        <span class="n">spline_surfaces</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;stop&quot;</span><span class="p">,</span>
+        <span class="n">spline_surfaces</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"stop"</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Load STEP file(s) and extract solid volumes and enclosure volumes.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            filename (str): The path to the STEP file or a list of paths to multiple STEP files.</span>
 <span class="sd">            skip_solids (Sequence[int], optional): A sequence (list or tuple) of indexes of solids to not load for conversion.</span>
-<span class="sd">            spline_surfaces (str): Behavior of the code if solids with spline surface are considered: &#39;stop&#39; execution, &#39;remove&#39; solid,</span>
-<span class="sd">                                   &#39;ignore&#39; solid is included for translation (may lead to translation errors)</span>
+<span class="sd">            spline_surfaces (str): Behavior of the code if solids with spline surface are considered: 'stop' execution, 'remove' solid,</span>
+<span class="sd">                                   'ignore' solid is included for translation (may lead to translation errors)</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            tuple: A tuple containing the solid volumes list and enclosure volumes list extracted from the STEP files.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Start of step file loading phase&quot;</span><span class="p">)</span>
+<span class="sd">        """</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Start of step file loading phase"</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">skip_solids</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;skip_solids should be a list, tuple of ints, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">skip_solids</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"skip_solids should be a list, tuple of ints, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">skip_solids</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">skip_solids</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;skip_solids should contain only ints, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"skip_solids should contain only ints, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;filename should be a str or a sequence of str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"filename should be a str or a sequence of str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
             <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;filename should contain only str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"filename should contain only str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spline_surfaces</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;filename should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">spline_surfaces</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;stop&quot;</span><span class="p">,</span> <span class="s2">&quot;remove&quot;</span><span class="p">,</span> <span class="s2">&quot;ignore&quot;</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;available values for spline_surfaces are: &quot;stop&quot;, &quot;remove&quot; or &quot;ignore&quot; &#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"filename should be a str, not a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">spline_surfaces</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"stop"</span><span class="p">,</span> <span class="s2">"remove"</span><span class="p">,</span> <span class="s2">"ignore"</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">'available values for spline_surfaces are: "stop", "remove" or "ignore" '</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">skip_solids</span> <span class="o">=</span> <span class="n">skip_solids</span>
@@ -730,47 +741,47 @@
 
         <span class="k">for</span> <span class="n">step_file</span> <span class="ow">in</span> <span class="n">step_files</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">step_file</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Step file </span><span class="si">{</span><span class="n">step_file</span><span class="si">}</span><span class="s2"> not found.&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Step file </span><span class="si">{</span><span class="n">step_file</span><span class="si">}</span><span class="s2"> not found."</span><span class="p">)</span>
 
         <span class="n">MetaChunk</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">EnclosureChunk</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">step_file</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">step_files</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Loading CAD files&quot;</span><span class="p">):</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;read step file : </span><span class="si">{</span><span class="n">step_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">step_file</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">step_files</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">"Loading CAD files"</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"read step file : </span><span class="si">{</span><span class="n">step_file</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
             <span class="n">Meta</span><span class="p">,</span> <span class="n">Enclosure</span> <span class="o">=</span> <span class="n">Load</span><span class="o">.</span><span class="n">load_cad</span><span class="p">(</span><span class="n">step_file</span><span class="p">,</span> <span class="n">spline_surfaces</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
             <span class="n">MetaChunk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Meta</span><span class="p">)</span>
             <span class="n">EnclosureChunk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Enclosure</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span> <span class="o">=</span> <span class="n">join_meta_lists</span><span class="p">(</span><span class="n">MetaChunk</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">enclosure_list</span> <span class="o">=</span> <span class="n">join_meta_lists</span><span class="p">(</span><span class="n">EnclosureChunk</span><span class="p">)</span>
 
-        <span class="c1"># deleting the solid index in reverse order so the indexes don&#39;t change for subsequent deletions</span>
+        <span class="c1"># deleting the solid index in reverse order so the indexes don't change for subsequent deletions</span>
         <span class="k">for</span> <span class="n">solid_index</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">skip_solids</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Removing solid index: </span><span class="si">{</span><span class="n">solid_index</span><span class="si">}</span><span class="s2"> from list of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">)</span><span class="si">}</span><span class="s2"> solids&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Removing solid index: </span><span class="si">{</span><span class="n">solid_index</span><span class="si">}</span><span class="s2"> from list of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">)</span><span class="si">}</span><span class="s2"> solids"</span><span class="p">)</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">[</span><span class="n">solid_index</span><span class="p">]</span>
 
         <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">enclosure_list</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">Solids</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;stop because spline surfaces found in enclosure solid&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">"stop because spline surfaces found in enclosure solid"</span><span class="p">)</span>
                 <span class="n">exit</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">Solids</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;End of step file loading phase&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"End of step file loading phase"</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">enclosure_list</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_export_solids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Export all the solid volumes from the loaded geometry to a STEP file.</span>
+<span class="w">        </span><span class="sd">"""Export all the solid volumes from the loaded geometry to a STEP file.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            filename (str): filepath of the output STEP file.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># export in STEP format solids read from input file</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span> <span class="o">==</span> <span class="p">[]:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;No solids in CadToCsg.meta_list to export. Try loading the STEP file first with CadToCsg.load_step_file&quot;</span>
+                <span class="s2">"No solids in CadToCsg.meta_list to export. Try loading the STEP file first with CadToCsg.load_step_file"</span>
             <span class="p">)</span>
         <span class="n">solids</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">:</span>
@@ -780,7 +791,7 @@
         <span class="n">Part</span><span class="o">.</span><span class="n">makeCompound</span><span class="p">(</span><span class="n">solids</span><span class="p">)</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_geometry_bounding_box</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">padding</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Get the bounding box of the geometry.</span>
 
 <span class="sd">        Args:</span>
@@ -788,7 +799,7 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            FreeCAD.BoundBox: The universe bounding box.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># set up Universe</span>
         <span class="n">meta_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span>
 
@@ -819,7 +830,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;no solid selected to translate&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"no solid selected to translate"</span><span class="p">)</span>
             <span class="n">exit</span><span class="p">()</span>
 
         <span class="n">startTime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
@@ -827,7 +838,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">exportSolids</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_export_solids</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">exportSolids</span><span class="p">)</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;End of loading phase&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"End of loading phase"</span><span class="p">)</span>
         <span class="n">tempstr1</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">startTime</span><span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">tempstr1</span><span class="p">)</span>
         <span class="n">tempTime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
@@ -850,14 +861,14 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">voidGen</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">enclosure_list</span><span class="p">:</span>
                 <span class="n">warningEnclosureList</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decompose_solids</span><span class="p">(</span><span class="n">meta</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;End of decomposition phase&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"End of decomposition phase"</span><span class="p">)</span>
 
             <span class="c1"># start Building CGS cells phase</span>
 
-            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Translating solid cells&quot;</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">"Translating solid cells"</span><span class="p">)):</span>
                 <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">IsEnclosure</span><span class="p">:</span>
                     <span class="k">continue</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Building cell: </span><span class="si">{</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Building cell: </span><span class="si">{</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
                 <span class="n">cones</span> <span class="o">=</span> <span class="n">Conv</span><span class="o">.</span><span class="n">cellDef</span><span class="p">(</span>
                     <span class="n">m</span><span class="p">,</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">Surfaces</span><span class="p">,</span>
@@ -871,7 +882,7 @@
                 <span class="k">if</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">warningSolidList</span><span class="p">:</span>
                     <span class="n">warnSolids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="o">.</span><span class="n">Solids</span><span class="p">:</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;none </span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">__id__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"none </span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">__id__</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
                     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">Definition</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">forceNoOverlap</span><span class="p">:</span>
@@ -898,7 +909,7 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">voidGen</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">enclosure_list</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">enclosure_list</span><span class="p">):</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Building Enclosure Cell: </span><span class="si">{</span><span class="n">j</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Building Enclosure Cell: </span><span class="si">{</span><span class="n">j</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
                 <span class="n">cones</span> <span class="o">=</span> <span class="n">Conv</span><span class="o">.</span><span class="n">cellDef</span><span class="p">(</span>
                     <span class="n">m</span><span class="p">,</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">Surfaces</span><span class="p">,</span>
@@ -917,7 +928,7 @@
         <span class="c1"># void generation phase</span>
         <span class="n">meta_void</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">voidGen</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Build Void&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Build Void"</span><span class="p">)</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">voidExclude</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">voidExclude</span><span class="p">:</span>
                 <span class="n">meta_reduced</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span>
@@ -940,26 +951,26 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">numeric_format</span><span class="p">,</span>
             <span class="p">)</span>
 
-        <span class="c1"># if self.settings.simplify == &#39;full&#39; and not self.options.forceNoOverlap:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">simplify</span> <span class="o">==</span> <span class="s2">&quot;full&quot;</span><span class="p">:</span>
+        <span class="c1"># if self.settings.simplify == 'full' and not self.options.forceNoOverlap:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">simplify</span> <span class="o">==</span> <span class="s2">"full"</span><span class="p">:</span>
             <span class="n">Surfs</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="k">for</span> <span class="n">lst</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Surfaces</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                 <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">:</span>
                     <span class="n">Surfs</span><span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">Index</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
 
-            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Simplifying&quot;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">"Simplifying"</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">Definition</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">c</span><span class="o">.</span><span class="n">IsEnclosure</span><span class="p">:</span>
                     <span class="k">continue</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;simplify cell </span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">__id__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"simplify cell </span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">__id__</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
                 <span class="n">Box</span> <span class="o">=</span> <span class="n">UF</span><span class="o">.</span><span class="n">get_box</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">enlargeBox</span><span class="p">)</span>
-                <span class="n">CT</span> <span class="o">=</span> <span class="n">build_c_table_from_solids</span><span class="p">(</span><span class="n">Box</span><span class="p">,</span> <span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">Surfaces</span><span class="p">,</span> <span class="n">Surfs</span><span class="p">),</span> <span class="s2">&quot;full&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
+                <span class="n">CT</span> <span class="o">=</span> <span class="n">build_c_table_from_solids</span><span class="p">(</span><span class="n">Box</span><span class="p">,</span> <span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">Surfaces</span><span class="p">,</span> <span class="n">Surfs</span><span class="p">),</span> <span class="s2">"full"</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
                 <span class="n">c</span><span class="o">.</span><span class="n">Definition</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">CT</span><span class="p">)</span>
                 <span class="n">c</span><span class="o">.</span><span class="n">Definition</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
                 <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">Definition</span><span class="o">.</span><span class="n">elements</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">bool</span><span class="p">:</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unexpected constant cell </span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">__id__</span><span class="si">}</span><span class="s2"> :</span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">Definition</span><span class="o">.</span><span class="n">elements</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unexpected constant cell </span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">__id__</span><span class="si">}</span><span class="s2"> :</span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">Definition</span><span class="o">.</span><span class="n">elements</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="n">tempTime2</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;build Time: </span><span class="si">{</span><span class="n">tempTime2</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">tempTime1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"build Time: </span><span class="si">{</span><span class="n">tempTime2</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">tempTime1</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">startTime</span><span class="p">)</span>
 
@@ -987,10 +998,10 @@
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">deleted</span><span class="p">):</span>
                 <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
-            <span class="n">lineComment</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+            <span class="n">lineComment</span> <span class="o">=</span> <span class="s2">"""</span><span class="se">\</span>
 <span class="s2">##########################################################</span>
 <span class="s2">             VOID CELLS</span>
-<span class="s2">##########################################################&quot;&quot;&quot;</span>
+<span class="s2">##########################################################"""</span>
             <span class="n">mc</span> <span class="o">=</span> <span class="n">UF</span><span class="o">.</span><span class="n">GeounedSolid</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
             <span class="n">mc</span><span class="o">.</span><span class="n">Comments</span> <span class="o">=</span> <span class="n">lineComment</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
@@ -1021,35 +1032,35 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">numeric_format</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Process finished&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Process finished"</span><span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">startTime</span><span class="p">)</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Translation time of solid cells </span><span class="si">{</span><span class="n">tempTime1</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">tempTime0</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Translation time of void cells </span><span class="si">{</span><span class="n">tempTime2</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">tempTime1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Translation time of solid cells </span><span class="si">{</span><span class="n">tempTime1</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">tempTime0</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Translation time of void cells </span><span class="si">{</span><span class="n">tempTime2</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">tempTime1</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_decompose_solids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
 
         <span class="k">if</span> <span class="n">meta</span><span class="p">:</span>
             <span class="n">meta_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_list</span>
-            <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Decomposing solids&quot;</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="s2">"Decomposing solids"</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">meta_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enclosure_list</span>
-            <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Decomposing enclosure solids&quot;</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="s2">"Decomposing enclosure solids"</span>
 
         <span class="n">totsolid</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">meta_list</span><span class="p">)</span>
         <span class="n">warningSolids</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="n">meta_list</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">description</span><span class="p">)):</span>
             <span class="k">if</span> <span class="n">meta</span> <span class="ow">and</span> <span class="n">m</span><span class="o">.</span><span class="n">IsEnclosure</span><span class="p">:</span>
                 <span class="k">continue</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Decomposing solid: </span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">totsolid</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Decomposing solid: </span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">totsolid</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-                <span class="n">debug_output_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">outPath</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;debug&quot;</span>
+                <span class="n">debug_output_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">outPath</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"debug"</span>
                 <span class="n">debug_output_folder</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">Comments</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">IsEnclosure</span><span class="p">:</span>
-                    <span class="n">m</span><span class="o">.</span><span class="n">Solids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">debug_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;origEnclosure_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp&quot;</span><span class="p">))</span>
+                    <span class="n">m</span><span class="o">.</span><span class="n">Solids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">debug_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"origEnclosure_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp"</span><span class="p">))</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">m</span><span class="o">.</span><span class="n">Solids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">debug_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;origSolid_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp&quot;</span><span class="p">))</span>
+                    <span class="n">m</span><span class="o">.</span><span class="n">Solids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">debug_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"origSolid_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp"</span><span class="p">))</span>
 
             <span class="n">comsolid</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">Decom</span><span class="o">.</span><span class="n">SplitSolid</span><span class="p">(</span>
                 <span class="n">Part</span><span class="o">.</span><span class="n">makeCompound</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">Solids</span><span class="p">),</span>
@@ -1060,26 +1071,26 @@
             <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">sus_output_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">outPath</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;suspicious_solids&quot;</span>
+                <span class="n">sus_output_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">outPath</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"suspicious_solids"</span>
                 <span class="n">sus_output_folder</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">IsEnclosure</span><span class="p">:</span>
-                    <span class="n">Part</span><span class="o">.</span><span class="n">CompSolid</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">Solids</span><span class="p">)</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">sus_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;Enclosure_original_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp&quot;</span><span class="p">))</span>
-                    <span class="n">comsolid</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">sus_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;Enclosure_split_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp&quot;</span><span class="p">))</span>
+                    <span class="n">Part</span><span class="o">.</span><span class="n">CompSolid</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">Solids</span><span class="p">)</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">sus_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"Enclosure_original_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp"</span><span class="p">))</span>
+                    <span class="n">comsolid</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">sus_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"Enclosure_split_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp"</span><span class="p">))</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">Part</span><span class="o">.</span><span class="n">CompSolid</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">Solids</span><span class="p">)</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">sus_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;Solid_original_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp&quot;</span><span class="p">))</span>
-                    <span class="n">comsolid</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">sus_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;Solid_split_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp&quot;</span><span class="p">))</span>
+                    <span class="n">Part</span><span class="o">.</span><span class="n">CompSolid</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">Solids</span><span class="p">)</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">sus_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"Solid_original_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp"</span><span class="p">))</span>
+                    <span class="n">comsolid</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">sus_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"Solid_split_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp"</span><span class="p">))</span>
 
                 <span class="n">warningSolids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">IsEnclosure</span><span class="p">:</span>
-                    <span class="n">comsolid</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">debug_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;compEnclosure_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp&quot;</span><span class="p">))</span>
+                    <span class="n">comsolid</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">debug_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"compEnclosure_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp"</span><span class="p">))</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">comsolid</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">debug_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;compSolid_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp&quot;</span><span class="p">))</span>
+                    <span class="n">comsolid</span><span class="o">.</span><span class="n">exportStep</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">debug_output_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"compSolid_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.stp"</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Surfaces</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
                 <span class="n">Decom</span><span class="o">.</span><span class="n">extract_surfaces</span><span class="p">(</span>
                     <span class="n">comsolid</span><span class="p">,</span>
-                    <span class="s2">&quot;All&quot;</span><span class="p">,</span>
+                    <span class="s2">"All"</span><span class="p">,</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">geometry_bounding_box</span><span class="p">,</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">,</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">tolerances</span><span class="p">,</span>
@@ -1142,7 +1153,7 @@
 
 <span class="k">def</span><span class="w"> </span><span class="nf">print_warning_solids</span><span class="p">(</span><span class="n">warnSolids</span><span class="p">,</span> <span class="n">warnEnclosures</span><span class="p">):</span>
 
-    <span class="n">solids_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;solids_logger&quot;</span><span class="p">)</span>
+    <span class="n">solids_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"solids_logger"</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">warnSolids</span> <span class="ow">or</span> <span class="n">warnEnclosures</span><span class="p">:</span>
         <span class="k">pass</span>
@@ -1150,21 +1161,21 @@
         <span class="k">return</span>
 
     <span class="k">if</span> <span class="n">warnSolids</span><span class="p">:</span>
-        <span class="n">lines</span> <span class="o">=</span> <span class="s2">&quot;Solids :</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="s2">"Solids :</span><span class="se">\n</span><span class="s2">"</span>
         <span class="k">for</span> <span class="n">sol</span> <span class="ow">in</span> <span class="n">warnSolids</span><span class="p">:</span>
-            <span class="n">lines</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="n">lines</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sol</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="n">lines</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sol</span><span class="o">.</span><span class="n">Comments</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="n">lines</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">write_mcnp_cell_def</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">Definition</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">lines</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">lines</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">sol</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">lines</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">sol</span><span class="o">.</span><span class="n">Comments</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">lines</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">write_mcnp_cell_def</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">Definition</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
         <span class="n">solids_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">warnEnclosures</span><span class="p">:</span>
-        <span class="n">lines</span> <span class="o">=</span> <span class="s2">&quot;Enclosures :</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="s2">"Enclosures :</span><span class="se">\n</span><span class="s2">"</span>
         <span class="k">for</span> <span class="n">sol</span> <span class="ow">in</span> <span class="n">warnEnclosures</span><span class="p">:</span>
-            <span class="n">lines</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="n">lines</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sol</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="n">lines</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sol</span><span class="o">.</span><span class="n">Comments</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="n">lines</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">write_mcnp_cell_def</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">Definition</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">lines</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">lines</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">sol</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">lines</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">sol</span><span class="o">.</span><span class="n">Comments</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">lines</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">write_mcnp_cell_def</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">Definition</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
 
         <span class="n">solids_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
 
@@ -1213,9 +1224,9 @@
         <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">NullCell</span><span class="p">:</span>
             <span class="k">continue</span>
         <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">IsEnclosure</span><span class="p">:</span>
-            <span class="n">lineComment</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;##########################################################</span>
+            <span class="n">lineComment</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"""##########################################################</span>
 <span class="s2">             ENCLOSURE </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">EnclosureID</span><span class="si">}</span>
-<span class="s2">##########################################################&quot;&quot;&quot;</span>
+<span class="s2">##########################################################"""</span>
             <span class="n">mc</span> <span class="o">=</span> <span class="n">UF</span><span class="o">.</span><span class="n">GeounedSolid</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
             <span class="n">mc</span><span class="o">.</span><span class="n">Comments</span> <span class="o">=</span> <span class="n">lineComment</span>
             <span class="n">newMeta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
@@ -1226,9 +1237,9 @@
                 <span class="n">e</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">icount</span>
                 <span class="n">idLabel</span><span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">__id__</span><span class="p">]</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">label</span>
                 <span class="n">newMeta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-            <span class="n">lineComment</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;##########################################################</span>
+            <span class="n">lineComment</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"""##########################################################</span>
 <span class="s2">            END  ENCLOSURE </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">EnclosureID</span><span class="si">}</span>
-<span class="s2">##########################################################&quot;&quot;&quot;</span>
+<span class="s2">##########################################################"""</span>
             <span class="n">mc</span> <span class="o">=</span> <span class="n">UF</span><span class="o">.</span><span class="n">GeounedSolid</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
             <span class="n">mc</span><span class="o">.</span><span class="n">Comments</span> <span class="o">=</span> <span class="n">lineComment</span>
             <span class="n">newMeta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
@@ -1239,10 +1250,10 @@
             <span class="n">idLabel</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">__id__</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">label</span>
             <span class="n">newMeta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 
-    <span class="n">lineComment</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+    <span class="n">lineComment</span> <span class="o">=</span> <span class="s2">"""</span><span class="se">\</span>
 <span class="s2">##########################################################</span>
 <span class="s2">             VOID CELLS </span>
-<span class="s2">##########################################################&quot;&quot;&quot;</span>
+<span class="s2">##########################################################"""</span>
     <span class="n">mc</span> <span class="o">=</span> <span class="n">UF</span><span class="o">.</span><span class="n">GeounedSolid</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
     <span class="n">mc</span><span class="o">.</span><span class="n">Comments</span> <span class="o">=</span> <span class="n">lineComment</span>
     <span class="n">newMeta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
@@ -1292,8 +1303,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1327,7 +1338,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>
