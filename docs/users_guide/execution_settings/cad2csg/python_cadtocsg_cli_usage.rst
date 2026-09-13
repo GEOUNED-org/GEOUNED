@@ -103,7 +103,7 @@ Here is a complete JSON file specification
         "export_csg":{
             "title": "Converted with GEOUNED",
             "geometryName": "csg",
-            "outFormat": ["openmc_xml", "openmc_py", "serpent", "phits", "mcnp"],
+            "outFormat": ["openmc_xml", "openmc_py", "serpent", "phits", "mcnp", "mcdc"],
             "volSDEF": false,
             "volCARD": true,
             "UCARD": null,

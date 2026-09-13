@@ -127,6 +127,10 @@ def write_openmc_region(definition, options, w_type="XML"):
         return write_sequence_omc_py(definition, options)
 
 
+def write_mcdc_region(definition, options):
+    return write_sequence_mcdc(definition, options)
+
+
 def write_sequence_mcnp(Seq):
     if Seq.level == 0:
         if Seq.operator == "AND":
@@ -230,6 +234,30 @@ def write_sequence_omc_py(seq, options, prefix="S"):
                 terms.append(strSurf(e))
             else:
                 terms.append(write_sequence_omc_py(e, options))
+
+        if seq.operator == "AND":
+            line = f"({' & '.join(terms)})"
+        else:
+            line = f"({' | '.join(terms)})"
+    return line
+
+
+def write_sequence_mcdc(seq, options, prefix="S"):
+
+    strSurf = lambda surf: (f"-{prefix}{-surf}" if surf < 0 else f"+{prefix}{surf}")
+
+    if seq.level == 0:
+        if seq.operator == "AND":
+            line = f"({' & '.join(map(strSurf, seq.elements))})"
+        else:
+            line = f"({' | '.join(map(strSurf, seq.elements))})"
+    else:
+        terms = []
+        for e in seq.elements:
+            if type(e) is int:
+                terms.append(strSurf(e))
+            else:
+                terms.append(write_sequence_mcdc(e, options))
 
         if seq.operator == "AND":
             line = f"({' & '.join(terms)})"
@@ -1108,6 +1136,172 @@ def phits_surface(id, Type, surf, options, tolerance, numeric_format):
             )
 
     return trim(phits_def, 80)
+
+
+def mcdc_surface(Type, surf, tolerances, numeric_format=None):
+    if Type == "Plane":
+        A = surf.Axis.x
+        B = surf.Axis.y
+        C = surf.Axis.z
+
+        if surf.Axis.isEqual(FreeCAD.Vector(1, 0, 0), tolerances.pln_angle):
+            mcdc_surf = "PlaneX"
+            D = surf.Position.x * 0.1
+            coeffs = f"x={D}"
+
+        elif surf.Axis.isEqual(FreeCAD.Vector(0, 1, 0), tolerances.pln_angle):
+            mcdc_surf = "PlaneY"
+            D = surf.Position.y * 0.1
+            coeffs = f"y={D}"
+
+        elif surf.Axis.isEqual(FreeCAD.Vector(0, 0, 1), tolerances.pln_angle):
+            mcdc_surf = "PlaneZ"
+            D = surf.Position.z * 0.1
+            coeffs = f"z={D}"
+
+        else:
+            mcdc_surf = "Plane"
+            D = (
+                -surf.Axis.dot(surf.Position) * 0.1
+            )  # negative because MCDC plane equation is Ax + By + Cz + D = 0 instead of Ax + By + Cz = D in openMC
+            coeffs = f"A={A},B={B},C={C},D={D}"
+
+        return mcdc_surf, coeffs
+
+    elif Type == "Cylinder":
+        pos = surf.Center * 0.1
+        Rad = surf.Radius * 0.1
+        Dir = FreeCAD.Vector(surf.Axis)
+        Dir.normalize()
+
+        if is_parallel(Dir, FreeCAD.Vector(1, 0, 0), tolerances.angle):
+            mcdc_surf = "CylinderX"
+            coeffs = f"center=[{pos.y}, {pos.z}], radius={Rad}"
+
+        elif is_parallel(Dir, FreeCAD.Vector(0, 1, 0), tolerances.angle):
+            mcdc_surf = "CylinderY"
+            coeffs = f"center=[{pos.x}, {pos.z}], radius={Rad}"
+
+        elif is_parallel(Dir, FreeCAD.Vector(0, 0, 1), tolerances.angle):
+            mcdc_surf = "CylinderZ"
+            coeffs = f"center=[{pos.x}, {pos.y}], radius={Rad}"
+
+        else:
+            mcdc_surf = "Cylinder"
+            coeffs = "radius={}, axis=[{}, {}, {}], point=[{}, {}, {}]".format(
+                Rad,
+                Dir.x,
+                Dir.y,
+                Dir.z,
+                pos.x,
+                pos.y,
+                pos.z,
+            )
+
+        return mcdc_surf, coeffs
+
+    elif Type == "Cone":
+        Apex = surf.Apex * 0.1
+        Dir = FreeCAD.Vector(surf.Axis)
+        Dir.normalize()
+        tan = math.tan(surf.SemiAngle)
+        tan2 = tan * tan
+
+        X_dir = FreeCAD.Vector(1, 0, 0)
+        Y_dir = FreeCAD.Vector(0, 1, 0)
+        Z_dir = FreeCAD.Vector(0, 0, 1)
+
+        if is_parallel(Dir, X_dir, tolerances.angle):
+            mcdc_surf = "ConeX"
+            coeffs = f"apex=[{Apex.x}, {Apex.y}, {Apex.z}], t_sq={tan2}"
+
+        elif is_parallel(Dir, Y_dir, tolerances.angle):
+            mcdc_surf = "ConeY"
+            coeffs = f"apex=[{Apex.x}, {Apex.y}, {Apex.z}], t_sq={tan2}"
+
+        elif is_parallel(Dir, Z_dir, tolerances.angle):
+            mcdc_surf = "ConeZ"
+            coeffs = f"apex=[{Apex.x}, {Apex.y}, {Apex.z}], t_sq={tan2}"
+
+        else:
+            mcdc_surf = "Quadric"
+            Q = q_form.q_form_cone(Dir, Apex, tan)
+            coeffs = "A={}, B={}, C={}, D={}, E={}, F={}, G={}, H={}, I={}, J={}".format(
+                Q[0],
+                Q[1],
+                Q[2],
+                Q[3],
+                Q[4],
+                Q[5],
+                Q[6],
+                Q[7],
+                Q[8],
+                Q[9],
+            )
+
+        return mcdc_surf, coeffs
+
+    elif Type == "Sphere":
+        Center = surf.Center * 0.1
+        Rad = surf.Radius * 0.1
+        mcdc_surf = "Sphere"
+        coeffs = f"center=[{Center.x}, {Center.y}, {Center.z}], radius={Rad}"
+
+        return mcdc_surf, coeffs
+
+    elif Type == "Torus":
+        Center = surf.Center * 0.1
+        minRad = surf.MinorRadius * 0.1
+        majRad = surf.MajorRadius * 0.1
+        Dir = FreeCAD.Vector(surf.Axis)
+        Dir.normalize()
+        if surf.Degenerated:
+            majRad *= surf.a_sign
+
+        if is_parallel(Dir, FreeCAD.Vector(1, 0, 0), tolerances.angle):
+            mcdc_surf = "TorusX"
+            coeffs = "A={}, B={}, C={}, R={}, r={}".format(
+                Center.x,
+                Center.y,
+                Center.z,
+                majRad,
+                minRad,
+            )
+
+        elif is_parallel(Dir, FreeCAD.Vector(0, 1, 0), tolerances.angle):
+            mcdc_surf = "TorusY"
+            coeffs = "A={}, B={}, C={}, R={}, r={}".format(
+                Center.x,
+                Center.y,
+                Center.z,
+                majRad,
+                minRad,
+            )
+
+        elif is_parallel(Dir, FreeCAD.Vector(0, 0, 1), tolerances.angle):
+            mcdc_surf = "TorusZ"
+            coeffs = "A={}, B={}, C={}, R={}, r={}".format(
+                Center.x,
+                Center.y,
+                Center.z,
+                majRad,
+                minRad,
+            )
+
+        else:
+            mcdc_surf = "Torus"
+            coeffs = "center=[{}, {}, {}], axis=[{}, {}, {}], R={}, r={}".format(
+                Center.x,
+                Center.y,
+                Center.z,
+                Dir.x,
+                Dir.y,
+                Dir.z,
+                majRad,
+                minRad,
+            )
+
+        return mcdc_surf, coeffs
 
 
 def trim(surfDef, lineLength=80):

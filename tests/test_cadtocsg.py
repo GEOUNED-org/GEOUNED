@@ -12,7 +12,7 @@ step_files = list(path_to_cad.rglob("*.stp")) + list(path_to_cad.rglob("*.step")
 if os.getenv("GITHUB_ACTIONS"):
     step_files.remove(Path("testing/inputSTEP/large/SCDR.stp"))
     step_files.remove(Path("testing/inputSTEP/large/Triangle.stp"))
-suffixes = (".mcnp", ".xml", ".inp", ".py", ".serp")
+suffixes = (".mcnp", ".xml", ".inp", ".py", ".serp", "_mcdc.py")
 
 
 @pytest.mark.parametrize("input_step_file", step_files)
@@ -26,7 +26,7 @@ def test_conversion(input_step_file):
 
     # deletes the output MC files if they already exists
     for suffix in suffixes:
-        output_filename_stem.with_suffix(suffix).unlink(missing_ok=True)
+        Path(str(output_filename_stem) + suffix).unlink(missing_ok=True)
 
     my_options = geouned.Options(
         forceCylinder=False,
@@ -114,6 +114,7 @@ def test_conversion(input_step_file):
             "serpent",
             "phits",
             "mcnp",
+            "mcdc",
         ),
         volSDEF=True,  # changed from the default
         volCARD=False,  # changed from the default
@@ -124,7 +125,7 @@ def test_conversion(input_step_file):
     )
 
     for suffix in suffixes:
-        assert output_filename_stem.with_suffix(suffix).exists()
+        assert Path(str(output_filename_stem) + suffix).exists()
 
 
 @pytest.mark.parametrize(
@@ -135,7 +136,7 @@ def test_cad_to_csg_from_json_with_defaults(input_json_file):
 
     # deletes the output MC files if they already exists
     for suffix in suffixes:
-        Path("csg").with_suffix(suffix).unlink(missing_ok=True)
+        Path("csg" + suffix).unlink(missing_ok=True)
 
     my_cad_to_csg = geouned.CadToCsg.from_json(input_json_file)
     assert isinstance(my_cad_to_csg, geouned.CadToCsg)
@@ -147,14 +148,14 @@ def test_cad_to_csg_from_json_with_defaults(input_json_file):
     assert my_cad_to_csg.settings.matFile == ""
 
     for suffix in suffixes:
-        assert Path("csg").with_suffix(suffix).exists()
+        assert Path("csg" + suffix).exists()
 
 
 def test_cad_to_csg_from_json_with_non_defaults():
 
     # deletes the output MC files if they already exists
     for suffix in suffixes:
-        Path("csg").with_suffix(suffix).unlink(missing_ok=True)
+        Path("csg" + suffix).unlink(missing_ok=True)
 
     my_cad_to_csg = geouned.CadToCsg.from_json("tests/config_cadtocsg_non_defaults.json")
     assert isinstance(my_cad_to_csg, geouned.CadToCsg)
@@ -166,7 +167,7 @@ def test_cad_to_csg_from_json_with_non_defaults():
     assert my_cad_to_csg.settings.matFile == "non default"
 
     for suffix in suffixes:
-        assert Path("csg").with_suffix(suffix).exists()
+        assert Path("csg" + suffix).exists()
 
 
 def test_writing_to_new_folders():
@@ -176,7 +177,7 @@ def test_writing_to_new_folders():
     geo.load_step_file(filename="testing/inputSTEP/BC.stp", skip_solids=[])
     geo.start()
 
-    for outformat in ["mcnp", "phits", "serpent", "openmc_xml", "openmc_py"]:
+    for outformat in ["mcnp", "phits", "serpent", "openmc_xml", "openmc_py", "mcdc"]:
         geo.export_csg(
             geometryName=f"tests_outputs/new_folder_for_testing_{outformat}/csg",
             cellCommentFile=False,

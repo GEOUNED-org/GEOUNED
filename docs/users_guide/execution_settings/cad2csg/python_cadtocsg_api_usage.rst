@@ -114,6 +114,7 @@ The following example shows a usage with every attributes specified.
             "serpent",
             "phits",
             "mcnp",
+            "mcdc",
         ),
         volSDEF=True,
         volCARD=False,
