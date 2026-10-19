@@ -10,6 +10,9 @@
 
 # GEOUNED
 
+> [!WARNING]
+> Versions **v1.6.3** and **v1.6.4** introduced a known issue causing wrong conversions. Please use an earlier version like **v1.6.2** or lower. We are working on a fix for this issue, in a few days we will release a new version with the fix.
+
 A tool to convert from CAD to CSG & CSG to CAD for Monte Carlo transport codes (MCNP & OpenMC).
 This repository contains the implementation of the algorithm presented in the paper [GEOUNED: A new conversion tool from CAD to Monte Carlo geometry](https://doi.org/10.1016/j.net.2024.01.052).
 

@@ -66,6 +66,9 @@ class CadToCsg:
         self.filename = None
         self.skip_solids = []
 
+        self._cone_info = dict()
+        self._axis_cone_planes_added = False
+
         log_path = Path(self.settings.outPath) / "log_files"
         log_path.mkdir(parents=True, exist_ok=True)
         setup_logger("general_logger", log_path / "geouned_general.log")
@@ -185,6 +188,21 @@ class CadToCsg:
         # if the geometry_bounding_box has not previuosly been calculated, then make a default one
         if self.geometry_bounding_box is None:
             self._get_geometry_bounding_box()
+
+        # OpenMC x/y/z-cone surfaces are double-napped, unlike MCNP/Serpent cones
+        # that carry a sheet flag, so X, Y, Z aligned cones need their apex plane.
+        if ("openmc_xml" in outFormat or "openmc_py" in outFormat) and not self._axis_cone_planes_added:
+            process_cones(
+                self.meta_list,
+                self._cone_info,
+                self.Surfaces,
+                self.geometry_bounding_box,
+                self.options,
+                self.tolerances,
+                self.numeric_format,
+                axis_aligned=True,
+            )
+            self._axis_cone_planes_added = True
 
         write_geometry(
             UniverseBox=self.geometry_bounding_box,
@@ -595,6 +613,9 @@ class CadToCsg:
         print_warning_solids(warnSolids, warnEnclosures)
 
         # add plane definition to cone
+        # (cones aligned with X, Y, Z are handled in export_csg for OpenMC output)
+        self._cone_info = coneInfo
+        self._axis_cone_planes_added = False
         process_cones(
             self.meta_list,
             coneInfo,
@@ -689,7 +710,7 @@ def update_comment(meta, idLabel):
     meta.set_comments(void.void_comment_line((meta.__commentInfo__[0], newLabel)))
 
 
-def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances, numeric_format):
+def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances, numeric_format, axis_aligned=False):
     cellId = tuple(coneInfo.keys())
     for m in MetaList:
         if m.__id__ not in cellId and not m.Void:
@@ -710,6 +731,7 @@ def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances
                 options,
                 tolerances,
                 numeric_format,
+                axis_aligned,
             )
         elif not m.Void:
             Conv.add_cone_plane(
@@ -720,6 +742,7 @@ def process_cones(MetaList, coneInfo, Surfaces, UniverseBox, options, tolerances
                 options,
                 tolerances,
                 numeric_format,
+                axis_aligned,
             )
 
 

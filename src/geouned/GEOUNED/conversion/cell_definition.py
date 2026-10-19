@@ -909,18 +909,23 @@ def no_overlapping_cell(metaList, surfaces, options):
             m.Definition.level_update()
 
 
-def add_cone_plane(definition, cones_list, surfaces, universe_box, options, tolerances, numeric_format):
+def add_cone_plane(definition, cones_list, surfaces, universe_box, options, tolerances, numeric_format, axis_aligned=False):
     x_axis = FreeCAD.Vector(1, 0, 0)
     y_axis = FreeCAD.Vector(0, 1, 0)
     z_axis = FreeCAD.Vector(0, 0, 1)
 
     for cid in cones_list:
         cone = surfaces.get_surface(abs(cid))
-        if (
+        is_axis_cone = (
             is_parallel(cone.Surf.Axis, x_axis, tolerances.angle)
             or is_parallel(cone.Surf.Axis, y_axis, tolerances.angle)
             or is_parallel(cone.Surf.Axis, z_axis, tolerances.angle)
-        ):
+        )
+        # axis_aligned=False: handle only cones not aligned with X, Y, Z.
+        # axis_aligned=True: handle only X, Y, Z aligned cones (needed by OpenMC,
+        # whose x/y/z-cone surfaces are double-napped; MCNP and Serpent use a
+        # sheet flag instead).
+        if is_axis_cone != axis_aligned:
             continue
 
         plane = GeounedSurface(
