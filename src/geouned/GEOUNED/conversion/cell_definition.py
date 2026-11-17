@@ -444,6 +444,14 @@ def gen_torus_annex_v_surface(face, v_params, tolerances, force_cylinder=False):
     z2 = p2.dot(axis)
     d2 = p2.cross(axis).Length
 
+    if is_same_value(d1, 0.0, tolerances.distance) and is_same_value(d2, 0.0, tolerances.distance):
+        # Both V-parameter boundaries of this face sit exactly on the torus
+        # axis. For a degenerate (self-intersecting) torus, this is the
+        # lobe's own natural pinch point (profile circle crossing the axis),
+        # not a real trimmed boundary: the lobe is already a closed surface
+        # on its own and needs no additional bounding surface.
+        return None, None, None
+
     if is_same_value(z1, z2, tolerances.distance):
         surf_type = "Plane"
         center = face.Surface.Center + z1 * axis
@@ -648,38 +656,45 @@ def cellDef(meta_obj, surfaces, universe_box, options, tolerances, numeric_forma
                     else:
                         index, Vparams = solid_gu.TorusVParams[iface]
                         VClosed, VminMax = Vparams
-                        if VClosed or face.Surface.Degenerated:
+                        if VClosed:
                             v_var = "%i" % idT
                         else:
                             surf_params, surf_type, in_surf = gen_torus_annex_v_surface(
                                 face, VminMax, tolerances, options.forceCylinder
                             )
 
-                            if surf_type == "Cone":
-                                cone = GeounedSurface(("Cone", surf_params), universe_box, Face="Build")
-                                id2, exist = surfaces.add_cone(cone, tolerances)
+                            if surf_type is None:
+                                # Degenerate torus lobe whose open V-ends both
+                                # pinch on the torus axis: already a closed
+                                # surface, no annex bounding surface needed.
+                                v_var = "%i" % idT
 
-                            elif surf_type == "Cylinder":
-                                cyl = GeounedSurface(
-                                    ("Cylinder", surf_params),
-                                    universe_box,
-                                    Face="Build",
-                                )
-                                id2, exist = surfaces.add_cylinder(cyl, options, tolerances, numeric_format)
+                            else:
+                                if surf_type == "Cone":
+                                    cone = GeounedSurface(("Cone", surf_params), universe_box, Face="Build")
+                                    id2, exist = surfaces.add_cone(cone, tolerances)
 
-                            elif surf_type == "Plane":
-                                plane = GeounedSurface(("Plane", surf_params), universe_box, Face="Build")
-                                id2, exist = surfaces.add_plane(plane, options, tolerances, numeric_format, False)
-                                if exist:
-                                    p = surfaces.get_surface(id2)
-                                    if is_opposite(
-                                        plane.Surf.Axis,
-                                        p.Surf.Axis,
-                                        tolerances.pln_angle,
-                                    ):
-                                        id2 = -id2
+                                elif surf_type == "Cylinder":
+                                    cyl = GeounedSurface(
+                                        ("Cylinder", surf_params),
+                                        universe_box,
+                                        Face="Build",
+                                    )
+                                    id2, exist = surfaces.add_cylinder(cyl, options, tolerances, numeric_format)
 
-                            v_var = "%i %i" % (idT, -id2 if in_surf else id2)
+                                elif surf_type == "Plane":
+                                    plane = GeounedSurface(("Plane", surf_params), universe_box, Face="Build")
+                                    id2, exist = surfaces.add_plane(plane, options, tolerances, numeric_format, False)
+                                    if exist:
+                                        p = surfaces.get_surface(id2)
+                                        if is_opposite(
+                                            plane.Surf.Axis,
+                                            p.Surf.Axis,
+                                            tolerances.pln_angle,
+                                        ):
+                                            id2 = -id2
+
+                                v_var = "%i %i" % (idT, -id2 if in_surf else id2)
 
                     var = v_var if u_closed else " ".join((v_var, u_var))
                     if var not in surf_piece:
@@ -839,6 +854,8 @@ def no_overlapping_cell(metaList, surfaces, options):
     metaList[0].set_cad_solid()
 
     for i, m in enumerate(metaList[1:]):
+        if m.CellType != "solid" or m.IsEnclosure:
+            continue
         m.set_cad_solid()
 
         if m.Definition.operator == "AND":

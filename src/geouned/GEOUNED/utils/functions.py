@@ -171,7 +171,8 @@ class GeounedSolid:
         for sol1 in self.CADSolid.Solids:
             for sol2 in solid.Solids:
                 try:
-                    distShape = sol1.distToShape(sol2)[0]
+                    # distShape = sol1.distToShape(sol2)[0]
+                    distShape = myDistToShape(sol1, sol2)
                 except:
                     logger.info("Failed solid1.distToshape(solid2), try with inverted solids")
                     distShape = sol2.distToShape(sol1)[0]
@@ -616,3 +617,42 @@ def split_bop(solid, tools, tolerance, options, scale=0.1):
             compSolid = split_bop(solid, tools, tolerance * scale, options, scale)
 
     return compSolid
+
+
+def myDistToShape(shape1, shape2):
+    if shape1 is shape2:
+        return 0.0
+    else:
+        Boxinter = shape1.BoundBox.intersected(shape2.BoundBox)
+        intersect = Boxinter.XLength > -1e-6 and Boxinter.YLength > -1e-6 and Boxinter.ZLength > -1e-6
+        if intersect:
+            try:
+                # dist2Shape = shape1.distToShape(shape2)
+                inter = shape1.common(shape2)
+            except:
+                # dist2Shape = shape2.distToShape(shape1)
+                inter = shape2.common(shape1)
+
+            if abs(inter.Volume) > 1e-8 or len(inter.Solids) > 0 or len(inter.Faces) > 0 or len(inter.Edges) > 0:
+                dist2Shape = 0.0
+            else:
+                same = False
+                for e1 in shape1.Edges:
+                    if same:
+                        break
+                    for e2 in shape2.Edges:
+                        dist2Shape = e1.distToShape(e2)[0]
+                        if dist2Shape < 1e-6:
+                            same = True
+                            break
+                if not same:
+                    dist2Shape = 1.0
+        else:
+            c1 = shape1.BoundBox.Center
+            c2 = shape2.BoundBox.Center
+            d = c2 - c1
+            dist2Shape = d.Length
+        #            dts = shape1.distToShape(shape2)[0]
+        #            if (dist2Shape[0] == 0 and dts > 1e-8) or (dts < 1e-8 and dist2Shape[0] > 0 ):
+        #                print ('vamos a ver')
+        return dist2Shape
